@@ -39,6 +39,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         $event_data = trim(str_replace("'", '', Tools::file_get_contents('php://input')));
         $event_data = Tools::jsonDecode($event_data, true);
 
+        // We store the notification
         $notification_item = $event_data['notification'];
         $insert = array(
             'id_order' => 0,
@@ -53,7 +54,22 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
             $this->module->log('Payment notification received');
             $this->module->logNotification('Payment', $_GET);
             try {
-                $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
+
+                // If authorisation succeed, we create the order
+                if ($notification_item['event_code'] == 'AUTHORISATION' && $notification_item['success'] == 'true') {
+                    $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
+                }
+
+                // If cancellation is confirmed, we cancel the order
+                if ($notification_item['event_code'] == 'CANCELLATION' && $notification_item['success'] == 'true') {
+                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
+                }
+
+                // If cancellation is confirmed, we cancel the order
+                if ($notification_item['event_code'] == 'REFUND' && $notification_item['success'] == 'true') {
+                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
+                }
+
             } catch (Exception $e) {
                 $this->module->log($e->getMessage());
             }
@@ -61,6 +77,24 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         }
 
         die(Tools::jsonEncode(array('result' => 'ok')));
+    }
+
+    public function updateOrderStatus($id_cart, $id_order_state)
+    {
+        // Get order ID
+        $id_order = Order::getOrderByCartId($id_cart);
+
+        if ($id_order > 0 && $id_order_state > 0) {
+
+            // Create new OrderHistory
+            $history = new OrderHistory();
+            $history->id_order = $id_order;
+            $history->id_employee = 0;
+            $history->id_order_state = (int)$id_order_state;
+            $history->changeIdOrderState((int)$id_order_state, $id_order);
+            $history->add();
+
+        }
     }
 
     public function convertCartToOrder($payment_notification, $url_cart_hash)
