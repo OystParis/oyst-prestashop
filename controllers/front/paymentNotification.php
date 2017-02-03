@@ -65,7 +65,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
                 }
 
-                // If cancellation is confirmed, we cancel the order
+                // If refund is confirmed, we cancel the order
                 if ($notification_item['event_code'] == 'REFUND' && $notification_item['success'] == 'true') {
                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
                 }
