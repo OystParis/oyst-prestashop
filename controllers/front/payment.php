@@ -49,9 +49,9 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         }
         $urls = array(
             'notification' => $this->context->link->getModuleLink('oyst', 'paymentNotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash,
-            'cancel' => $this->context->link->getModuleLink('oyst', 'paymentError'),
+            'cancel' => 'http://www.ht26.com/fr/content/90-erreur-paiement',
             'error' => $this->context->link->getModuleLink('oyst', 'paymentError'),
-            'return' => $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key,
+            'return' => $this->context->link->getPageLink('order-confirmation',true),
         );
         $currency = new Currency($this->context->cart->id_currency);
         $total_amount = (int)round($this->context->cart->getOrderTotal() * 100);
