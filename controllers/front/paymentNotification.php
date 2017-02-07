@@ -56,17 +56,17 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
             try {
 
                 // If authorisation succeed, we create the order
-                if ($notification_item['event_code'] == 'AUTHORISATION' && $notification_item['success'] == 'true') {
+                if ($notification_item['event_code'] == 'AUTHORISATION' && $notification_item['success'] == 1) {
                     $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
                 }
 
                 // If cancellation is confirmed, we cancel the order
-                if ($notification_item['event_code'] == 'CANCELLATION' && $notification_item['success'] == 'true') {
+                if ($notification_item['event_code'] == 'CANCELLATION' && $notification_item['success'] == 1) {
                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
                 }
 
                 // If refund is confirmed, we cancel the order
-                if ($notification_item['event_code'] == 'REFUND' && $notification_item['success'] == 'true') {
+                if ($notification_item['event_code'] == 'REFUND' && $notification_item['success'] == 1) {
                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
                 }
 
