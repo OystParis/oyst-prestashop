@@ -60,15 +60,15 @@ class Oyst extends FroggyPaymentModule
      */
     public function __construct()
     {
-        $this->name = 'oyst';
+        $this->name = 'FreePay';
         $this->version = '0.8.8.2';
-        $this->author = 'Froggy Commerce / 23Prod';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
 
-        $this->displayName = $this->l('Oyst');
-        $this->description = $this->l('Oyst provides 1 click shopping advertising technology and creates a new ecosystem at the crossroads of customised advertising and online payment.');
+        $this->author = 'Oyst';
+        $this->displayName = $this->l('Freepay');
+        $this->description = $this->l('FreePay est une solution de paiement en ligne "full service" entièrement gratuite : 0% de commission, 0€ de frais d\'installation, 0€ d\'abonnement. Avec FreePay, éliminez vos coûts de transactions, augmentez vos marges.');
         $this->module_key = 'b79be2b346400227a9c886c9239470e4';
 
         // Set Oyst version as define
