@@ -101,7 +101,7 @@
                 {/if}
 
                 <p><b>{l s='Enable catalog feature:' mod='oyst'}</b></p>
-                <div class="margin-form" style="padding-left:15px"><input type="checkbox" id="FC_OYST_CATALOG_EXPORT_FEATURE" name="FC_OYST_CATALOG_EXPORT_FEATURE" value="1"{if $oyst.FC_OYST_CATALOG_EXPORT_FEATURE} checked="checked"{/if} /></div>
+                <div class="margin-form" style="padding-left:15px"><input type="checkbox" id="FC_OYST_CATALOG_FEATURE" name="FC_OYST_CATALOG_FEATURE" value="1"{if $oyst.FC_OYST_CATALOG_FEATURE} checked="checked"{/if} /></div>
                 <p class="help-block">{l s='Export your catalog to Oyst to increase the number of orders!' mod='oyst'}</p>
 
                 <p><b>{l s='Set the Oyst catalog endpoint:' mod='oyst'}</label></b></p>

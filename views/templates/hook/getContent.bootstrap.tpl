@@ -130,7 +130,7 @@
             <div class="form-group clearfix">
                 <label class="control-label col-lg-3 ">{l s='Enable export catalog feature:' mod='oyst'}</label>
                 <div class="col-lg-9">
-                    <input type="checkbox" id="FC_OYST_CATALOG_EXPORT_FEATURE" name="FC_OYST_CATALOG_EXPORT_FEATURE" value="1"{if $oyst.FC_OYST_CATALOG_EXPORT_FEATURE} checked="checked"{/if} />
+                    <input type="checkbox" id="FC_OYST_CATALOG_FEATURE" name="FC_OYST_CATALOG_FEATURE" value="1"{if $oyst.FC_OYST_CATALOG_FEATURE} checked="checked"{/if} />
                     <p class="help-block">{l s='Export your catalog to Oyst to increase the number of orders!' mod='oyst'}</p>
                 </div>
             </div>
