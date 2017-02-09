@@ -117,7 +117,7 @@ class Oyst extends FroggyPaymentModule
         $sql_content = file_get_contents($sql_file);
 
         // Replace prefix and store SQL command in array
-        $sql_content = str_replace('PREFIX_', _DB_PREFIX_, $sql_content);
+        $sql_content = str_replace('@PREFIX@', _DB_PREFIX_, $sql_content);
         $sql_requests = preg_split("/;\s*[\r\n]+/", $sql_content);
 
         // Execute each SQL statement
