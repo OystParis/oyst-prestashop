@@ -50,30 +50,32 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
             'date_event' => pSQL(Tools::substr(str_replace('T', '', $notification_item['event_date']), 0, 19)),
             'date_add' => date('Y-m-d H:i:s'),
         );
-        if (Db::getInstance()->insert('oyst_payment_notification', $insert)) {
-            $this->module->log('Payment notification received');
-            $this->module->logNotification('Payment', $_GET);
-            try {
+        Db::getInstance()->insert('oyst_payment_notification', $insert);
+
+        $this->module->log('Payment notification received');
+        $this->module->logNotification('Payment', $_GET);
+        try {
+
+            if ($notification_item['success'] == 1) {
 
                 // If authorisation succeed, we create the order
-                if ($notification_item['event_code'] == 'AUTHORISATION' && $notification_item['success'] == 1) {
+                if ($notification_item['event_code'] == 'AUTHORISATION') {
                     $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
                 }
 
                 // If cancellation is confirmed, we cancel the order
-                if ($notification_item['event_code'] == 'CANCELLATION' && $notification_item['success'] == 1) {
+                if ($notification_item['event_code'] == 'CANCELLATION') {
                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
                 }
 
                 // If refund is confirmed, we cancel the order
-                if ($notification_item['event_code'] == 'REFUND' && $notification_item['success'] == 1) {
+                if ($notification_item['event_code'] == 'REFUND') {
                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
                 }
-
-            } catch (Exception $e) {
-                $this->module->log($e->getMessage());
             }
 
+        } catch (Exception $e) {
+            $this->module->log($e->getMessage());
         }
 
         die(Tools::jsonEncode(array('result' => 'ok')));
