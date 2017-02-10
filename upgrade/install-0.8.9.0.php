@@ -19,10 +19,10 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-function upgrade_module_0_8_8_2($module)
+function upgrade_module_0_8_9_0($module)
 {
     // Update SQL table
-    $sql_file = dirname(__FILE__).'/sql/install-0.8.8.2.sql';
+    $sql_file = dirname(__FILE__).'/sql/install-0.8.9.0.sql';
     if (!$module->loadSQLFile($sql_file))
         return false;
 
