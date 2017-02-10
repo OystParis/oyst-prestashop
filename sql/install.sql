@@ -7,6 +7,5 @@ CREATE TABLE IF NOT EXISTS `@PREFIX@oyst_payment_notification` (
   `event_data` text NOT NULL,
   `date_event` datetime DEFAULT NULL,
   `date_add` datetime DEFAULT NULL,
-  PRIMARY KEY (`id_oyst_payment_notification`),
-  CONSTRAINT transaction_id UNIQUE (id_cart, payment_id)
+  PRIMARY KEY (`id_oyst_payment_notification`)
 ) ENGINE=@ENGINE@ DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

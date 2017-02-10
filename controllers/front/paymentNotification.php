@@ -39,6 +39,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         $event_data = trim(str_replace("'", '', Tools::file_get_contents('php://input')));
         $event_data = Tools::jsonDecode($event_data, true);
 
+        // We store the notification
         $notification_item = $event_data['notification'];
         $insert = array(
             'id_order' => 0,
@@ -49,18 +50,53 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
             'date_event' => pSQL(Tools::substr(str_replace('T', '', $notification_item['event_date']), 0, 19)),
             'date_add' => date('Y-m-d H:i:s'),
         );
-        if (Db::getInstance()->insert('oyst_payment_notification', $insert)) {
-            $this->module->log('Payment notification received');
-            $this->module->logNotification('Payment', $_GET);
-            try {
-                $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
-            } catch (Exception $e) {
-                $this->module->log($e->getMessage());
+        Db::getInstance()->insert('oyst_payment_notification', $insert);
+
+        $this->module->log('Payment notification received');
+        $this->module->logNotification('Payment', $_GET);
+        try {
+
+            if ($notification_item['success'] == 1) {
+
+                // If authorisation succeed, we create the order
+                if ($notification_item['event_code'] == 'AUTHORISATION') {
+                    $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
+                }
+
+                // If cancellation is confirmed, we cancel the order
+                if ($notification_item['event_code'] == 'CANCELLATION') {
+                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
+                }
+
+                // If refund is confirmed, we cancel the order
+                if ($notification_item['event_code'] == 'REFUND') {
+                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
+                }
             }
 
+        } catch (Exception $e) {
+            $this->module->log($e->getMessage());
         }
 
         die(Tools::jsonEncode(array('result' => 'ok')));
+    }
+
+    public function updateOrderStatus($id_cart, $id_order_state)
+    {
+        // Get order ID
+        $id_order = Order::getOrderByCartId($id_cart);
+
+        if ($id_order > 0 && $id_order_state > 0) {
+
+            // Create new OrderHistory
+            $history = new OrderHistory();
+            $history->id_order = $id_order;
+            $history->id_employee = 0;
+            $history->id_order_state = (int)$id_order_state;
+            $history->changeIdOrderState((int)$id_order_state, $id_order);
+            $history->add();
+
+        }
     }
 
     public function convertCartToOrder($payment_notification, $url_cart_hash)
