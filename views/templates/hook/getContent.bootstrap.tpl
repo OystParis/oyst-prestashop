@@ -44,24 +44,32 @@
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
 
-
 <form id="module_form" class="defaultForm form-horizontal" method="POST" action="#">
-
-    <p align="center">
-        <img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /><br>
-        Module version : {$oyst.module_version|escape:'html':'UTF-8'}
-    </p>
-
+    <div align="center">
+        <img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" />
+        <p id="motto" align="center" style="font-size: 16px;">
+            <br>
+            <b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}
+        </p>
+    </div>
+    <br/>
+    <div style="width: 430px;margin: auto;font-size: 14px;">
+        <p class="desc"><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/bullet_point.png" alt="Logo FreePay" width="20"/>&nbsp;&nbsp;{l s='Download and install the FreePay plug-in on Prestashop' mod='oyst'}</p>
+        <p class="desc"><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/bullet_point.png" alt="Logo FreePay" width="20"/>&nbsp;&nbsp;{l s='Create your back office on' mod='oyst'} <a href="https://admin.free-pay.com/signup">admin.free-pay.com</a></p>
+        <p class="desc"><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/bullet_point.png" alt="Logo FreePay" width="20"/>&nbsp;&nbsp;{l s='Insert your API key to activate the plug-in' mod='oyst'}</p>
+        <p class="desc"><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/bullet_point.png" alt="Logo FreePay" width="20"/>&nbsp;&nbsp;{l s='You are ready to cash in with no fees !' mod='oyst'}</p>
+    </div>
+    <br/>
     <div class="panel" class="oyst_fieldset">
         <div class="panel-heading">
-            <i class="icon-cogs"></i> {l s='Enable payment feature:' mod='oyst'}
+            <i class="icon-cogs"></i> {l s='Payment feature' mod='oyst'}
         </div>
         <div class="oyst-admin-tab">
             <div class="form-group clearfix">
-                <label class="control-label col-lg-3 ">{l s='Set your Oyst API key:' mod='oyst'}</label>
+                <label class="control-label col-lg-3 ">{l s='Set your Oyst API key' mod='oyst'}</label>
                 <div class="col-lg-9">
                     <input type="text" id="FC_OYST_API_PAYMENT_KEY" name="FC_OYST_API_PAYMENT_KEY" value="{$oyst.FC_OYST_API_PAYMENT_KEY|escape:'htmlall':'UTF-8'}" />
-                    <p class="help-block">{l s='You need this key to use Oyst payment.' mod='oyst'}</p>
+                    <p class="help-block">{l s='You don\'t have an API Key yet? Got to' mod='oyst'} <a href="https://admin.free-pay.com/signup">admin.free-pay.com</a></p>
                     {if isset($oyst.oyst_payment_connection_test.result)}
                         {if $oyst.oyst_payment_connection_test.result}
                             <div class="alert alert-success">{l s='Your key is valid!' mod='oyst'}</div>
@@ -79,19 +87,17 @@
                 </div>
             </div>
             <div class="form-group clearfix">
-                <label class="control-label col-lg-3 ">{l s='Enable payment feature:' mod='oyst'}</label>
+                <label class="control-label col-lg-3 ">{l s='Enable payment feature' mod='oyst'}</label>
                 <div class="col-lg-9">
                     <input type="checkbox" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
-                    <p class="help-block">{l s='Enable payment feature on your website' mod='oyst'}</p>
                 </div>
             </div>
-            <div class="form-group clearfix">
+            <!--<div class="form-group clearfix">
                 <label class="control-label col-lg-3 ">{l s='Set the Oyst payment endpoint:' mod='oyst'}</label>
                 <div class="col-lg-9">
                     <input type="text" id="FC_OYST_API_PAYMENT_ENDPOINT" name="FC_OYST_API_PAYMENT_ENDPOINT" value="{$oyst.FC_OYST_API_PAYMENT_ENDPOINT|escape:'htmlall':'UTF-8'}" />
-                    {* https://api.staging.uptain.eu/payment *}
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="panel-footer">
             <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-default pull-right">
@@ -100,8 +106,7 @@
         </div>
     </div>
 
-
-    <div class="panel" class="oyst_fieldset">
+    <!--<div class="panel" class="oyst_fieldset">
         <div class="panel-heading">
             <i class="icon-cogs"></i> {l s='Enable catalog feature:' mod='oyst'}
         </div>
@@ -146,8 +151,6 @@
                 <i class="process-icon-save"></i> {l s='Save' mod='oyst'}
             </button>
         </div>
-
-    </div>
+    </div>-->
 </form>
-
 {/if}
