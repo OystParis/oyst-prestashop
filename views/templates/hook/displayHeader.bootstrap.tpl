@@ -17,4 +17,4 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-<script src="https://tracker.uptain.com/"></script>
+<script src="https://trk.10ru.pt"></script>
