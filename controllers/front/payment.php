@@ -109,7 +109,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         // Make Oyst api call
         $oyst_api = new OystSDK();
         $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
-        $oyst_api->setApiKey(Configuration::get('FC_OYST_API_PAYMENT_KEY'));
+        $oyst_api->setApiKey(Configuration::get('FC_OYST_API_KEY'));
         $result = $oyst_api->paymentRequest($total_amount, $currency->iso_code, $this->context->cart->id, $urls, false, $user);
 
         // Result payment

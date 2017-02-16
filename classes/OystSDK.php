@@ -31,7 +31,7 @@ class OystSDK
     private $_api_key;
     private $_api_endpoint;
 
-    public function testPaymentRequest()
+    public function checkApiKey()
     {
         $data = array(
             'amount' => array(
@@ -117,6 +117,30 @@ class OystSDK
             'Content-Length: '.Tools::strlen($data_string),
             'User-Agent: OystPrestashop/'._PS_OYST_VERSION_.' (Prestashop '._PS_VERSION_.')',
             'Authorization: bearer '.$this->getApiKey(),
+        ));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 2000);
+
+        return curl_exec($ch);
+    }
+
+    static public function notifyOnSlack($name, $phone, $email)
+    {
+        $url  = Tools::getHttpHost(true).__PS_BASE_URI__;
+        $data = Tools::jsonEncode([
+            'text'     => $name.' du site '.$url.' a installé le module Freepay '._PS_OYST_VERSION_.'. Voici ses coordonnées : '.$phone.' et '.$email,
+            'username' => 'Prestashop',
+            'channel'  => '#plugin-alerts'
+        ]);
+
+        $ch = curl_init('https://hooks.slack.com/services/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');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: '.Tools::strlen($data),
+            'User-Agent: OystPrestashop/'._PS_OYST_VERSION_.' (Prestashop '._PS_VERSION_.')',
         ));
         curl_setopt($ch, CURLOPT_TIMEOUT, 2000);
 

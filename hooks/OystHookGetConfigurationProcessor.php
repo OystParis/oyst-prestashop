@@ -26,17 +26,16 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OystHookGetContentProcessor extends FroggyHookProcessor
+class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
     public $configuration_result = '';
     public $configurations = array(
-
-        'FC_OYST_PAYMENT_FEATURE' => 'int',
-        'FC_OYST_API_PAYMENT_KEY' => 'string',
+        'FC_OYST_GUEST'                => 'string',
+        'FC_OYST_API_KEY'              => 'string',
+        'FC_OYST_API_CHECK_ENDPOINT'   => 'string',
+        'FC_OYST_PAYMENT_FEATURE'      => 'int',
         'FC_OYST_API_PAYMENT_ENDPOINT' => 'string',
-
-        'FC_OYST_CATALOG_FEATURE' => 'int',
-        'FC_OYST_API_CATALOG_KEY' => 'string',
+        'FC_OYST_CATALOG_FEATURE'      => 'int',
         'FC_OYST_API_CATALOG_ENDPOINT' => 'string',
     );
 
@@ -76,6 +75,33 @@ class OystHookGetContentProcessor extends FroggyHookProcessor
 
     public function displayModuleConfiguration()
     {
+        $goToConf = (bool) Tools::getValue('go_to_conf');
+        $goToForm = (bool) Tools::getValue('go_to_form');
+
+        if (!$goToForm && !$goToConf) {
+            $goToForm = Configuration::get('FC_OYST_API_KEY') == '';
+        }
+
+        if ($goToConf) {
+            $goToForm = false;
+        }
+
+        if (Tools::isSubmit('form_get_apikey_submit')) {
+            Configuration::updateValue('FC_OYST_GUEST', true);
+            $goToForm = false;
+
+            $name  = Tools::getValue('form_get_apikey_name');
+            $phone = Tools::getValue('form_get_apikey_phone');
+            $email = Tools::getValue('form_get_apikey_email');
+
+            $response = OystSDK::notifyOnSlack($name, $phone, $email);
+
+            if ($response != 'ok') {
+                $goToForm = true;
+                // show error!
+            }
+        }
+
         $assign = array();
         $assign['module_dir'] = $this->path;
         foreach ($this->configurations as $conf => $format) {
@@ -92,23 +118,26 @@ class OystHookGetContentProcessor extends FroggyHookProcessor
         $assign['payment_notification_url'] = $this->context->link->getModuleLink('oyst', 'paymentNotification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['notification_url'] = $this->context->link->getModuleLink('oyst', 'notification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
 
-        if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '') {
+        if (Configuration::get('FC_OYST_API_KEY') != '') {
             $oyst_api = new OystSDK();
-            $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
-            $oyst_api->setApiKey(Configuration::get('FC_OYST_API_PAYMENT_KEY'));
-            $assign['oyst_payment_connection_test'] = $oyst_api->testPaymentRequest();
-        }
+            $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_CHECK_ENDPOINT'));
+            $oyst_api->setApiKey(Configuration::get('FC_OYST_API_KEY'));
+            $assign['oyst_connection_test'] = $oyst_api->checkApiKey();
 
-        if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '') {
-            $oyst_api = new OystSDK();
-            $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_CATALOG_ENDPOINT'));
-            $oyst_api->setApiKey(Configuration::get('FC_OYST_API_CATALOG_KEY'));
-            $assign['oyst_catalog_connection_test'] = $oyst_api->testCatalogRequest();
+            // First time merchant enter a key
+            if (Configuration::get('FC_OYST_GUEST')) {
+                Configuration::updateValue('FC_OYST_GUEST', false);
+            }
         }
 
         $this->smarty->assign($this->module->name, $assign);
+        $this->smarty->assign('configureLink', $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name);
 
-        return $this->module->fcdisplay(__FILE__, 'getContent.tpl');
+        if ($goToForm) {
+            return $this->module->fcdisplay(__FILE__, 'getGuestConfigure.tpl');
+        }
+
+        return $this->module->fcdisplay(__FILE__, 'getMerchantConfigure.tpl');
     }
 
     public function run()

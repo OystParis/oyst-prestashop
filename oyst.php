@@ -82,9 +82,15 @@ class Oyst extends FroggyPaymentModule
         }
 
         // If old configuration variable exists, we migrate it
-        if (Configuration::get('FC_OYST_API_KEY') != '') {
-            Configuration::updateValue('FC_OYST_API_PAYMENT_KEY', Configuration::get('FC_OYST_API_KEY'));
-            Configuration::deleteByName('FC_OYST_API_KEY');
+        if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
+            Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
+        }
+
+        // If old configuration variable exists, we migrate it
+        if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
+            Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
         }
     }
 
@@ -106,6 +112,10 @@ class Oyst extends FroggyPaymentModule
             Db::getInstance()->execute('
             UPDATE `'._DB_PREFIX_.'hook_module` SET `position`= 1
             WHERE `id_hook` = '.(int)$id_hook.' AND `id_module` = '.$id_module);
+        }
+
+        if (Configuration::get('FC_OYST_API_KEY') != '') {
+            Configuration::updateValue('FC_OYST_GUEST', false);
         }
 
         return $result;
@@ -139,7 +149,7 @@ class Oyst extends FroggyPaymentModule
      */
     public function getContent()
     {
-        return $this->hookGetContent();
+        return $this->hookGetConfiguration();
     }
 
     /**
