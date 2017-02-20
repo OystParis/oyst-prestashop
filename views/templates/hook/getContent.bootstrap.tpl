@@ -69,7 +69,7 @@
                 <label class="control-label col-lg-3 ">{l s='Set your Oyst API key' mod='oyst'}</label>
                 <div class="col-lg-9">
                     <input type="text" id="FC_OYST_API_PAYMENT_KEY" name="FC_OYST_API_PAYMENT_KEY" value="{$oyst.FC_OYST_API_PAYMENT_KEY|escape:'htmlall':'UTF-8'}" />
-                    <p class="help-block">{l s='You don\'t have an API Key yet? Got to' mod='oyst'} <a href="https://admin.free-pay.com/signup">admin.free-pay.com</a></p>
+                    <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup">admin.free-pay.com</a></p>
                     {if isset($oyst.oyst_payment_connection_test.result)}
                         {if $oyst.oyst_payment_connection_test.result}
                             <div class="alert alert-success">{l s='Your key is valid!' mod='oyst'}</div>

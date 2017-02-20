@@ -33,7 +33,7 @@ $_MODULE['<{oyst}prestashop>getcontent.bootstrap_43cae0bafa6293b454acaa711d8bb04
 $_MODULE['<{oyst}prestashop>getcontent.bootstrap_66db7c3f6ca7e886b67a19c9b7616d78'] = 'Vous êtes prêt à encaisser par carte sans aucun frais !';
 $_MODULE['<{oyst}prestashop>getcontent.bootstrap_dee943d0f232be3bd3a4f1e134c037bd'] = 'Paiement';
 $_MODULE['<{oyst}prestashop>getcontent.bootstrap_49a8970446a1efd6d7d14caba9f5b8d5'] = 'Clé API';
-$_MODULE['<{oyst}prestashop>getcontent.bootstrap_a3ac3988f34ff4050fe2a35c851365c6'] = 'Vous n\'avez pas encore de clé API? Rendez-vous sur';
+$_MODULE['<{oyst}prestashop>getcontent.bootstrap_104c53f712b567c6a55bd6e21511ad57'] = 'Vous n\'avez pas encore de clé API? Rendez-vous sur';
 $_MODULE['<{oyst}prestashop>getcontent.bootstrap_1e755a12eb9bf76c24d7a372a294b1d6'] = 'Votre clé API est valide !';
 $_MODULE['<{oyst}prestashop>getcontent.bootstrap_8166540c7fd52a23da06af9c9ea1b0ec'] = 'Votre clé API semble invalide !';
 $_MODULE['<{oyst}prestashop>getcontent.bootstrap_09aefe0659bf90c1bb498a6488e901d5'] = 'Activer le paiement sur votre boutique';
@@ -55,7 +55,7 @@ $_MODULE['<{oyst}prestashop>getcontent_43cae0bafa6293b454acaa711d8bb046'] = 'Ins
 $_MODULE['<{oyst}prestashop>getcontent_66db7c3f6ca7e886b67a19c9b7616d78'] = 'Vous êtes prêt à encaisser par carte sans aucun frais !';
 $_MODULE['<{oyst}prestashop>getcontent_dee943d0f232be3bd3a4f1e134c037bd'] = 'Paiement';
 $_MODULE['<{oyst}prestashop>getcontent_49a8970446a1efd6d7d14caba9f5b8d5'] = 'Clé API';
-$_MODULE['<{oyst}prestashop>getcontent_a3ac3988f34ff4050fe2a35c851365c6'] = 'Vousn \'avez pas encore de clé API? Rendez-vous sur';
+$_MODULE['<{oyst}prestashop>getcontent_104c53f712b567c6a55bd6e21511ad57'] = 'Vous n\'avez pas encore de clé API? Rendez-vous sur';
 $_MODULE['<{oyst}prestashop>getcontent_1e755a12eb9bf76c24d7a372a294b1d6'] = 'Votre clé API est valide !';
 $_MODULE['<{oyst}prestashop>getcontent_8166540c7fd52a23da06af9c9ea1b0ec'] = 'Votre clé API semble invalide !';
 $_MODULE['<{oyst}prestashop>getcontent_09aefe0659bf90c1bb498a6488e901d5'] = 'Activer le paiement sur votre boutique';
