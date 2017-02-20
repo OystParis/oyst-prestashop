@@ -9,6 +9,8 @@ $_MODULE['<{oyst}prestashop>paymentnotification_a495948365afdff85b1f0c6e95fc36f7
 $_MODULE['<{oyst}prestashop>error.bootstrap_d7d1f4fbae8289169d1d5b3779cef94a'] = 'Une erreur est survenue avec le système de paiement. Veuillez contacter le support.';
 $_MODULE['<{oyst}prestashop>return.bootstrap_52665408d5d22a492abb8b61844b0488'] = 'Nous n\'avons pas encore reçu la confirmation du paiement. Veuillez attendre quelques minutes pour rafraichir cette page.';
 $_MODULE['<{oyst}prestashop>return_52665408d5d22a492abb8b61844b0488'] = 'Nous n\'avons pas encore reçu la confirmation du paiement. Veuillez attendre quelques minutes pour rafraichir cette page.';
+$_MODULE['<{oyst}prestashop>displayadminorder.bootstrap_e1de9ac2d965b0e7c2b836927f6f704e'] = 'L\'annulation ou remboursement du paiement rattaché à cette commande ne sera pas pris en compte depuis votre Back Office Prestashop. Veuillez directement vous connecter à votre Back Office FreePay (https://admin.free-pay.com) afin de gérer vos paiements';
+$_MODULE['<{oyst}prestashop>displayadminorder_e1de9ac2d965b0e7c2b836927f6f704e'] = 'L\'annulation ou remboursement du paiement rattaché à cette commande ne sera pas pris en compte depuis votre Back Office Prestashop. Veuillez directement vous connecter à votre Back Office FreePay (https://admin.free-pay.com) afin de gérer vos paiements';
 $_MODULE['<{oyst}prestashop>displaypayment.bootstrap_e77bb171c7ae55bba8b2ed869fadfb19'] = 'Payer par carte bancaire';
 $_MODULE['<{oyst}prestashop>displaypayment_e77bb171c7ae55bba8b2ed869fadfb19'] = 'Payer par carte bancaire';
 $_MODULE['<{oyst}prestashop>displaypaymentreturn.bootstrap_e72f5db7df95fb92f69e9b5ac76f05fe'] = 'Votre commande %s a bien été enregistrée.';
