@@ -43,7 +43,7 @@
             <legend><img src="{$oyst.module_dir|escape:'html':'UTF-8'}logo.png" alt="" width="16" />{l s='API Key' mod='oyst'}</legend>
 
             <div class="margin-form" style="padding-left:15px">
-                <p><b>{l s='Set your Oyst API key' mod='oyst'}</b></p>
+                <p><b>{l s='API Key' mod='oyst'}</b></p>
                 <div class="margin-form" style="padding-left:15px"><input type="text" id="FC_OYST_API_KEY" name="FC_OYST_API_KEY" value="{$oyst.FC_OYST_API_KEY|escape:'htmlall':'UTF-8'}" style="width:400px" /></div>
                 <p class="help-block">{l s='You need this key to use Oyst payment.' mod='oyst'}</p>
 
@@ -103,4 +103,3 @@
         </fieldset>
     </form>
 {/if}
-

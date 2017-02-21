@@ -17,6 +17,7 @@
         "FC_OYST_HASH_KEY" : "",
 
         "FC_OYST_GUEST": "1",
+        "FC_OYST_MERCHANT_PHONE": "",
 
         "FC_OYST_API_CHECK_ENDPOINT" : "https://api.uptain.com/check",
         "FC_OYST_API_KEY" : "",

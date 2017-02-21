@@ -30,7 +30,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
     public $configuration_result = '';
     public $configurations = array(
-        'FC_OYST_GUEST'                => 'string',
         'FC_OYST_API_KEY'              => 'string',
         'FC_OYST_API_CHECK_ENDPOINT'   => 'string',
         'FC_OYST_PAYMENT_FEATURE'      => 'int',
@@ -88,6 +87,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         if (Tools::isSubmit('form_get_apikey_submit')) {
             Configuration::updateValue('FC_OYST_GUEST', true);
+
             $goToForm = false;
 
             $name  = Tools::getValue('form_get_apikey_name');
@@ -99,7 +99,28 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             if ($response != 'ok') {
                 $goToForm = true;
                 // show error!
+            } else {
+                Configuration::updateValue('FC_OYST_MERCHANT_PHONE', $phone);
             }
+        }
+
+        if (Configuration::get('FC_OYST_GUEST')) {
+            $dayOfTheWeek    = date('w');
+            $currentDateTime = date('Hi');
+            $message         = $this->module->l('A FreePay customer advisor shall contact you on');
+
+            if (in_array($dayOfTheWeek, [0, 1, 2, 3, 4]) && $currentDateTime > '2000') {// Dimanche ou Lundi, Mardi, Mercredi, Jeudi après 20h
+                $message = $this->module->l('A FreePay customer advisor shall contact you from tomorrow morning 8:30 am on');
+            } elseif (in_array($dayOfTheWeek, [1, 2, 3, 4, 5]) && $currentDateTime > '0000' && $currentDateTime < '0830') {// Lundi, Mardi, Mercredi, Jeudi, Vendredi entre 0h01 et 8h30
+                $message = $this->module->l('A FreePay customer advisor shall contact you this morning from 8:30 am on');
+            } elseif ($dayOfTheWeek == 5 && $currentDateTime > '1800' || $dayOfTheWeek == 6) {// Vendredi après 18h et samedi
+                $message = $this->module->l('A FreePay customer advisor shall contact you monday morning from 8:30 am on');
+            } elseif (in_array($dayOfTheWeek, [1, 2, 3, 4, 5]) && $currentDateTime > '1200' && $currentDateTime < '1400') {// Lundi, Mardi, Mercredi, Jeudi, Vendredi entre 12h et 14h
+                $message = $this->module->l('A FreePay customer advisor shall contact you this afternoon from 14:30 pm on');
+            }
+
+            $this->smarty->assign('message', $message);
+            $this->smarty->assign('phone', Configuration::get('FC_OYST_MERCHANT_PHONE'));
         }
 
         $assign = array();
@@ -132,6 +153,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $this->smarty->assign($this->module->name, $assign);
         $this->smarty->assign('configureLink', $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name);
+
 
         if ($goToForm) {
             return $this->module->fcdisplay(__FILE__, 'getGuestConfigure.tpl');

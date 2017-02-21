@@ -18,11 +18,11 @@
  * @license GNU GENERAL PUBLIC LICENSE
  *}
 
-{if isset($oyst.result) && $oyst.result eq 'ok'}
+{if isset($oyst.result) && $oyst.result eq 'ko'}
     <div class="bootstrap">
-        <div class="alert alert-success">
+        <div class="alert alert-danger">
             <button data-dismiss="alert" class="close" type="button">×</button>
-            {l s='The new configuration has been saved!' mod='oyst'}
+            {l s='An error occured!' mod='oyst'}
         </div>
     </div>
 {/if}
@@ -53,26 +53,31 @@
             <p>{l s='All you have to do now is enabling FreePay plugin to benefit from' mod='oyst'} <strong>{l s='credit card payment 100% free' mod='oyst'}</strong>!</p>
         </div>
         <div class="panel oyst_fieldset">
-            <div class="panel-heading">
-                <i class="icon-cogs"></i> {l s='Configure' mod='oyst'}
-            </div>
             <div class="oyst-admin-tab">
                 <div class="form-group clearfix">
                     <label class="control-label col-lg-4">{l s='Name' mod='oyst'}</label>
-                    <div class="col-lg-5">
+                    <div class="col-lg-4">
                         <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="" />
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <label class="control-label col-lg-4">{l s='Phone' mod='oyst'}</label>
-                    <div class="col-lg-5">
+                    <div class="col-lg-4">
                         <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="" />
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <label class="control-label col-lg-4">{l s='Email' mod='oyst'}</label>
-                    <div class="col-lg-5">
+                    <div class="col-lg-4">
                         <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="" />
+                    </div>
+                </div>
+                <div class="form-group clearfix">
+                    <label class="control-label col-lg-4"></label>
+                    <div class="col-lg-4">
+                        <button type="submit" value="1" id="form_get_apikey_submit" name="form_get_apikey_submit" class="btn btn-info form-control bigger-">
+                            <strong>{l s='Get my API Key' mod='oyst'}</strong>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -81,9 +86,6 @@
                     <i class="process-icon- icon-key"></i>
                     {l s='I have an API Key' mod='oyst'}
                 </a>
-                <button type="submit" value="1" id="form_get_apikey_submit" name="form_get_apikey_submit" class="btn btn-default">
-                    <i class="process-icon-envelope"></i> {l s='Send' mod='oyst'}
-                </button>
             </div>
         </div>
     </form>
