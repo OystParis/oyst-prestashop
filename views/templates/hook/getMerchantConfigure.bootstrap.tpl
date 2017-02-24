@@ -44,10 +44,10 @@
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
 <form id="module_form" class="defaultForm form-horizontal" method="POST" action="">
-    <p align="center">
-        <img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /><br>
-        Module version : {$oyst.module_version|escape:'html':'UTF-8'}
-    </p>
+    <div align="center" style="font-size: 16px;">
+        <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /></p>
+        <p><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
+    </div>
     {if $oyst.FC_OYST_GUEST}
     <div class="text-center">
         <p>{$message} <strong>{$phone}</strong></p>
@@ -73,6 +73,7 @@
                     <label class="control-label col-lg-3 ">{l s='API Key' mod='oyst'}</label>
                     <div class="col-lg-9">
                         <input type="text" id="FC_OYST_API_KEY" name="FC_OYST_API_KEY" value="{$oyst.FC_OYST_API_KEY|escape:'htmlall':'UTF-8'}" />
+                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup">admin.free-pay.com</a></p>
                         {if isset($oyst.oyst_connection_test.result)}
                             {if $oyst.oyst_connection_test.result}
                                 <div class="alert alert-success">{l s='Your key is valid!' mod='oyst'}</div>
