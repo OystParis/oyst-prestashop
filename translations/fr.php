@@ -39,7 +39,7 @@ $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_dadf4bfa99bdbb9db0a90c5d
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_23db425b00bb8abc79d362a36932a4a3'] = 'd\'abonnement';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_1a81759353d36dbd31059fc261af0aa2'] = 'Félicitations !';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_98a6790b1a51b50176a263eee5fed25d'] = 'Il ne reste plus qu\'à activer le plugin FreePay pour bénéficier du';
-$_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_9236005b57b46ecc7b2c0b58c8f60b7e'] = 'paiement par carte 100% GRATUIT';
+$_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_e2a41d008c2ba3350070e629fa0464a2'] = 'paiement par carte 100% GRATUIT';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_bcc254b55c4a1babdf1dcb82c207506b'] = 'Téléphone';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
@@ -53,11 +53,13 @@ $_MODULE['<{oyst}prestashop>getguestconfigure_dadf4bfa99bdbb9db0a90c5d688ad870']
 $_MODULE['<{oyst}prestashop>getguestconfigure_23db425b00bb8abc79d362a36932a4a3'] = 'd\'abonnement';
 $_MODULE['<{oyst}prestashop>getguestconfigure_1a81759353d36dbd31059fc261af0aa2'] = 'Félicitations !';
 $_MODULE['<{oyst}prestashop>getguestconfigure_98a6790b1a51b50176a263eee5fed25d'] = 'Il ne reste plus qu\'à activer le plugin FreePay pour bénéficier du';
-$_MODULE['<{oyst}prestashop>getguestconfigure_9236005b57b46ecc7b2c0b58c8f60b7e'] = 'paiement par carte 100% GRATUIT';
+$_MODULE['<{oyst}prestashop>getguestconfigure_e2a41d008c2ba3350070e629fa0464a2'] = 'paiement par carte 100% GRATUIT';
+$_MODULE['<{oyst}prestashop>getguestconfigure_0da13d0c5d57b8dd5767796e5d6f4af0'] = 'Oups!';
 $_MODULE['<{oyst}prestashop>getguestconfigure_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{oyst}prestashop>getguestconfigure_bcc254b55c4a1babdf1dcb82c207506b'] = 'Téléphone';
 $_MODULE['<{oyst}prestashop>getguestconfigure_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
 $_MODULE['<{oyst}prestashop>getguestconfigure_676474db2d25533c7053d3ba352023b0'] = 'Obtenir ma clé d\'activation';
+$_MODULE['<{oyst}prestashop>getguestconfigure_1d00e7dce692e8dc3f6877f035e3a616'] = 'OU';
 $_MODULE['<{oyst}prestashop>getguestconfigure_57dbc64d95a4615ed7ca6ba5843b22e6'] = 'J\'ai déjà une clé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4725c2b6db34f755b89b741c1d45bc71'] = 'La nouvelle configuration a été sauvegardée !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9b0c85b97abeed9539a4a27522f07b86'] = 'Vous devez activer l\'option \"allow_url_fopen\" sur votre serveur pour utiliser ce module !';
@@ -79,10 +81,6 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2fc67267713967297479b
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dee943d0f232be3bd3a4f1e134c037bd'] = 'Paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_473cb1e07af421fea996d3b504090ae0'] = 'Activer le paiement sur votre boutique';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dcef5e8edb13510777145bc8e5ac30d2'] = 'API de paiement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_55095047b14ad1b2e963379c6992b364'] = 'Catalogue';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_81245d9fcb48fcf192ae5cf24561900a'] = 'Activer l\'export catalogue';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_55864aa19ad755ef5f01d1e89b77a1b1'] = 'Exportez votre catalogue vers FreePay pour augmenter votre nombre de commandes !';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a21d1552c7f54ada486f79ed758f34f1'] = 'API de catalogue';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4578544e15448d2758f7c6ae4009253a'] = 'Cacher les options avancées';
@@ -107,10 +105,6 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_2fc67267713967297479ba69ff020fe
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_dee943d0f232be3bd3a4f1e134c037bd'] = 'Paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_473cb1e07af421fea996d3b504090ae0'] = 'Activer le paiement sur votre boutique';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_dcef5e8edb13510777145bc8e5ac30d2'] = 'API de paiement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_55095047b14ad1b2e963379c6992b364'] = 'Catalogue';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_81245d9fcb48fcf192ae5cf24561900a'] = 'Activer l\'export catalogue';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_55864aa19ad755ef5f01d1e89b77a1b1'] = 'Exportez votre catalogue vers FreePay pour augmenter votre nombre de commandes !';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_a21d1552c7f54ada486f79ed758f34f1'] = 'API de catalogue';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4578544e15448d2758f7c6ae4009253a'] = 'Cacher les options avancées';

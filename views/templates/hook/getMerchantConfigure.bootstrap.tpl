@@ -73,7 +73,7 @@
                     <label class="control-label col-lg-3 ">{l s='API Key' mod='oyst'}</label>
                     <div class="col-lg-9">
                         <input type="text" id="FC_OYST_API_KEY" name="FC_OYST_API_KEY" value="{$oyst.FC_OYST_API_KEY|escape:'htmlall':'UTF-8'}" />
-                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup">admin.free-pay.com</a></p>
+                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                         {if isset($oyst.oyst_connection_test.result)}
                             {if $oyst.oyst_connection_test.result}
                                 <div class="alert alert-success">{l s='Your key is valid!' mod='oyst'}</div>
@@ -116,26 +116,6 @@
                     </div>
                 </div>
             </fieldset>
-            <!--<fieldset>
-                <legend>{l s='Catalog feature' mod='oyst'}</legend>
-                <div class="oyst-admin-tab">
-                    <div class="form-group clearfix">
-                        <label class="control-label col-lg-3 ">{l s='Enable export catalog feature' mod='oyst'}</label>
-                        <div class="col-lg-9" style="height: 31px;">
-                            <label>
-                                <input type="checkbox" class="form-control" id="FC_OYST_CATALOG_FEATURE" name="FC_OYST_CATALOG_FEATURE" value="1"{if $oyst.FC_OYST_CATALOG_FEATURE} checked="checked"{/if} />
-                            </label>
-                            <p class="help-block">{l s='Export your catalog to Oyst to increase the number of orders!' mod='oyst'}</p>
-                        </div>
-                    </div>
-                    <div class="form-group clearfix">
-                        <label class="control-label col-lg-3 ">{l s='Set the Oyst catalog endpoint' mod='oyst'}</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="FC_OYST_API_CATALOG_ENDPOINT" name="FC_OYST_API_CATALOG_ENDPOINT" value="{$oyst.FC_OYST_API_CATALOG_ENDPOINT|escape:'htmlall':'UTF-8'}" />
-                        </div>
-                    </div>
-                </div>
-            </fieldset>-->
         </div>
         <div class="panel-footer">
             <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-default pull-right">

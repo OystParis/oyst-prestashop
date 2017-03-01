@@ -50,7 +50,7 @@
         </div>
         <div class="text-center">
             <h2>{l s='Congratulations!' mod='oyst'}</h2>
-            <p>{l s='All you have to do now is enabling FreePay plugin to benefit from' mod='oyst'} <strong>{l s='credit card payment 100% free' mod='oyst'}</strong>!</p>
+            <p>{l s='All you have to do now is enabling FreePay plugin to benefit from' mod='oyst'} <strong>{l s='credit card payment 100&#37 free' mod='oyst'}</strong>!</p>
         </div>
         <div class="panel oyst_fieldset">
             <div class="oyst-admin-tab">
