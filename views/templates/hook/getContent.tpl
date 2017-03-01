@@ -72,46 +72,8 @@
                 <p><b>{l s='Enable payment feature' mod='oyst'}</b></p>
                 <div class="margin-form" style="padding-left:15px"><input type="checkbox" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} /></div>
 
-                <!--<p><b>{l s='Set the Oyst payment endpoint:' mod='oyst'}</label></b></p>
-                <div class="margin-form" style="padding-left:15px"><input type="text" id="FC_OYST_API_PAYMENT_ENDPOINT" name="FC_OYST_API_PAYMENT_ENDPOINT" value="{$oyst.FC_OYST_API_PAYMENT_ENDPOINT|escape:'htmlall':'UTF-8'}" style="width:400px" /></div>-->
-
                 <br><p><input type="submit" name="submitOystConfiguration" value="{l s='Save' mod='oyst'}" name="oyst_ft_form" class="button" /></p>
             </div>
         </fieldset>
-
-        <!--<br><br>
-
-        <fieldset id="oyst_fieldset">
-            <legend><img src="{$oyst.module_dir|escape:'html':'UTF-8'}logo.png" alt="" width="16" />{l s='Enable catalog feature:' mod='oyst'}</legend>
-
-            <div class="margin-form" style="padding-left:15px">
-
-                <p><b>{l s='Set your Oyst API key:' mod='oyst'}</b></p>
-                <div class="margin-form" style="padding-left:15px"><input type="text" id="FC_OYST_API_CATALOG_KEY" name="FC_OYST_API_CATALOG_KEY" value="{$oyst.FC_OYST_API_CATALOG_KEY|escape:'htmlall':'UTF-8'}" style="width:400px" /></div>
-                <p class="help-block">{l s='You need this key to use export your catalog and import orders' mod='oyst'}</p>
-                {if isset($oyst.oyst_catalog_connection_test.result)}
-                    {if $oyst.oyst_catalog_connection_test.result}
-                        <p class="conf"><strong>{l s='Your key is valid!' mod='oyst'}</strong></p>
-                    {else}
-                        <p class="error"><strong>
-                            {l s='Your key seems invalid!' mod='oyst'}
-                            <br>
-                            <input type="checkbox" id="oyst_catalog_connection_debug" name="oyst_catalog_connection_debug" value="1"{if $smarty.post.oyst_catalog_connection_debug} checked="checked"{/if} /> Debug
-                            {if isset($smarty.post.oyst_catalog_connection_debug) && $smarty.post.oyst_catalog_connection_debug}
-                                <br><pre>{$oyst.oyst_catalog_connection_test.values|print_r|FroggyDisplaySafeHtml}</pre>
-                            {/if}
-                        </strong></p>
-                    {/if}
-                {/if}
-
-                <p><b>{l s='Enable catalog feature:' mod='oyst'}</b></p>
-                <div class="margin-form" style="padding-left:15px"><input type="checkbox" id="FC_OYST_CATALOG_FEATURE" name="FC_OYST_CATALOG_FEATURE" value="1"{if $oyst.FC_OYST_CATALOG_FEATURE} checked="checked"{/if} /></div>
-                <p class="help-block">{l s='Export your catalog to Oyst to increase the number of orders!' mod='oyst'}</p>
-
-                <p><b>{l s='Set the Oyst catalog endpoint:' mod='oyst'}</label></b></p>
-                <div class="margin-form" style="padding-left:15px"><input type="text" id="FC_OYST_API_CATALOG_ENDPOINT" name="FC_OYST_API_CATALOG_ENDPOINT" value="{$oyst.FC_OYST_API_CATALOG_ENDPOINT|escape:'htmlall':'UTF-8'}" style="width:400px" /></div>
-                <br><p><input type="submit" name="submitOystConfiguration" value="{l s='Save' mod='oyst'}" name="oyst_ft_form" class="button" /></p>
-                </div>
-        </fieldset>-->
     </form>
 {/if}
