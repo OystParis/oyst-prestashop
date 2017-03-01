@@ -33,11 +33,11 @@ class OystHookGetContentProcessor extends FroggyHookProcessor
 
         'FC_OYST_PAYMENT_FEATURE' => 'int',
         'FC_OYST_API_PAYMENT_KEY' => 'string',
-        'FC_OYST_API_PAYMENT_ENDPOINT' => 'string',
+        //'FC_OYST_API_PAYMENT_ENDPOINT' => 'string',
 
-        'FC_OYST_CATALOG_FEATURE' => 'int',
-        'FC_OYST_API_CATALOG_KEY' => 'string',
-        'FC_OYST_API_CATALOG_ENDPOINT' => 'string',
+        //'FC_OYST_CATALOG_FEATURE' => 'int',
+        //'FC_OYST_API_CATALOG_KEY' => 'string',
+        //'FC_OYST_API_CATALOG_ENDPOINT' => 'string',
     );
 
     public function init()
