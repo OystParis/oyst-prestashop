@@ -41,7 +41,7 @@
         <br/>
         <div style="width: 430px;margin: auto;font-size: 14px;">
             <p class="desc"><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/bullet_point.png" alt="Logo FreePay" width="20"/>&nbsp;&nbsp;{l s='Download and install the FreePay plug-in on Prestashop' mod='oyst'}</p>
-            <p class="desc"><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/bullet_point.png" alt="Logo FreePay" width="20"/>&nbsp;&nbsp;{l s='Create your back office on' mod='oyst'} <a href="https://admin.free-pay.com/signup">admin.free-pay.com</a></p>
+            <p class="desc"><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/bullet_point.png" alt="Logo FreePay" width="20"/>&nbsp;&nbsp;{l s='Create your back office on' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
             <p class="desc"><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/bullet_point.png" alt="Logo FreePay" width="20"/>&nbsp;&nbsp;{l s='Insert your API key to activate the plug-in' mod='oyst'}</p>
             <p class="desc"><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/bullet_point.png" alt="Logo FreePay" width="20"/>&nbsp;&nbsp;{l s='You are ready to cash in with no fees !' mod='oyst'}</p>
         </div>
@@ -53,7 +53,7 @@
 
                 <p><b>{l s='Set your Oyst API key' mod='oyst'}</b></p>
                 <div class="margin-form" style="padding-left:15px"><input type="text" id="FC_OYST_API_PAYMENT_KEY" name="FC_OYST_API_PAYMENT_KEY" value="{$oyst.FC_OYST_API_PAYMENT_KEY|escape:'htmlall':'UTF-8'}" style="width:400px" /></div>
-                <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup">admin.free-pay.com</a></p>
+                <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                 {if isset($oyst.oyst_payment_connection_test.result)}
                     {if $oyst.oyst_payment_connection_test.result}
                         <p class="conf"><strong>{l s='Your key is valid!' mod='oyst'}</strong></p>
