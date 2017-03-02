@@ -18,6 +18,10 @@
  * @license GNU GENERAL PUBLIC LICENSE
  *}
 
+<script>
+    var oyst_transaction_id = {$oyst.transaction_id};
+</script>
+<script type="text/javascript" src="{$oyst.module_dir}views/js/displayAdminOrder-1.5.js"></script>
 <div class="alert alert-info">
     L'annulation ou remboursement du paiement rattaché à cette commande ne sera pas pris en compte depuis votre Back Office Prestashop. Veuillez directement vous connecter à votre Back Office Oyst (https://pay.oyst.com) afin de gérer vos paiements
 </div>

@@ -36,8 +36,10 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             return '';
         }
 
-        $assign = array();
-        $assign['module_dir'] = $this->path;
+        $assign = array(
+            'module_dir' => $this->path,
+            'transaction_id' => $order->id_cart,
+        );
         $this->smarty->assign($this->module->name, $assign);
 
         return $this->module->fcdisplay(__FILE__, 'displayAdminOrder.tpl');
