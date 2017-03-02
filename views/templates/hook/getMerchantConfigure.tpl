@@ -58,27 +58,9 @@
             <div class="margin-form">
                 <input type="text" id="FC_OYST_API_KEY" name="FC_OYST_API_KEY" value="{$oyst.FC_OYST_API_KEY|escape:'htmlall':'UTF-8'}" style="width: 450px;"/>
                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                {if isset($oyst.oyst_connection_test.result)}
-                    {if $oyst.oyst_connection_test.result}
-                    <p class="conf" style="width: 415px;"><strong>{l s='Your key is valid!' mod='oyst'}</strong></p>
-                    {else}
-                    <p class="error" style="width: 415px;">
-                        <strong>
-                            {l s='Your key seems invalid!' mod='oyst'}
-                            <br>
-                            <input type="checkbox" id="oyst_connection_debug" name="oyst_connection_debug" value="1"{if $smarty.post.oyst_connection_debug} checked="checked"{/if} /> Debug
-                            {if isset($smarty.post.oyst_connection_debug) && $smarty.post.oyst_connection_debug}
-                                <br><pre>{$oyst.oyst_connection_test.values|print_r|FroggyDisplaySafeHtml}</pre>
-                            {/if}
-                        </strong>
-                    </p>
-                    {/if}
+                {if $oyst.oyst_apiKey_test_error}
+                <p class="error" style="width: 415px;"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                 {/if}
-            </div>
-
-            <label>{l s='Set the Oyst check endpoint' mod='oyst'}</label>
-            <div class="margin-form advancedOptions hide">
-                <input type="text" id="FC_OYST_API_CHECK_ENDPOINT" name="FC_OYST_API_CHECK_ENDPOINT" value="{$oyst.FC_OYST_API_CHECK_ENDPOINT|escape:'htmlall':'UTF-8'}" style="width: 450px;"/>
             </div>
 
             <h3>{l s='Payment feature' mod='oyst'}</h3>

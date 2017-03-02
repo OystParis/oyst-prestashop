@@ -31,42 +31,6 @@ class OystSDK
     private $_api_key;
     private $_api_endpoint;
 
-    public function checkApiKey()
-    {
-        $data = array(
-            'amount' => array(
-                'value' => 100,
-                'currency' => 'EUR',
-            ),
-            'is_3d' => false,
-            'label' => 'ConnectionTest',
-            'notification_url' => 'http://localhost.test',
-            'order_id' => 'ConnectionTest',
-            'redirects' => array(
-                'cancel_url' => 'http://localhost.test',
-                'error_url' => 'http://localhost.test',
-                'return_url' => 'http://localhost.test',
-            ),
-            'user' => array(
-                'addresses' => array(),
-                'billing_addresses' => array(),
-                'email' => Configuration::get('PS_SHOP_EMAIL'),
-                'first_name' => 'Test',
-                'language' => 'fr',
-                'last_name' => 'Test',
-                'phone' => '0100000000',
-            ),
-        );
-
-        $result = $this->_apiPostRequest($this->getApiEndpoint().'/payments', $data);
-        $result = Tools::jsonDecode($result, true);
-        if (isset($result['url']) && !empty($result['url'])) {
-            return array('result' => true);
-        }
-
-        return array('result' => false, 'values' => $result);
-    }
-
     public function testCatalogRequest()
     {
         // Get products

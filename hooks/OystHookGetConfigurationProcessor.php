@@ -32,7 +32,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
     public $configurations = array(
         'FC_OYST_GUEST'                => 'int',
         'FC_OYST_API_KEY'              => 'string',
-        'FC_OYST_API_CHECK_ENDPOINT'   => 'string',
         'FC_OYST_PAYMENT_FEATURE'      => 'int',
         'FC_OYST_API_PAYMENT_ENDPOINT' => 'string',
         'FC_OYST_CATALOG_FEATURE'      => 'int',
@@ -75,13 +74,14 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     public function displayModuleConfiguration()
     {
+        $apiKey   = Configuration::get('FC_OYST_API_KEY');
         $goToConf = (bool) Tools::getValue('go_to_conf');
         $goToForm = (bool) Tools::getValue('go_to_form');
         $hasError = false;
 
         // Merchant comes from the plugin list
         if (!$goToForm && !$goToConf) {
-            $goToForm = Configuration::get('FC_OYST_API_KEY') == '';
+            $goToForm = $apiKey == '';
         }
 
         if ($goToConf) {
@@ -111,11 +111,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['payment_notification_url'] = $this->context->link->getModuleLink('oyst', 'paymentNotification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['notification_url']         = $this->context->link->getModuleLink('oyst', 'notification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
 
-        if (Configuration::get('FC_OYST_API_KEY') != '') {
-            $oyst_api = new OystSDK();
-            $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_CHECK_ENDPOINT'));
-            $oyst_api->setApiKey(Configuration::get('FC_OYST_API_KEY'));
-            $assign['oyst_connection_test'] = $oyst_api->checkApiKey();
+        if ($apiKey != '') {
+            $assign['oyst_apiKey_test_error'] = strlen($apiKey) != 64;
 
             // First time merchant enter a key
             if (Configuration::get('FC_OYST_GUEST')) {
