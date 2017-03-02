@@ -60,8 +60,8 @@ class Oyst extends FroggyPaymentModule
      */
     public function __construct()
     {
-        $this->name = 'FreePay';
-        $this->version = '0.8.9.0';
+        $this->name = 'oyst';
+        $this->version = '0.8.11';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -114,7 +114,7 @@ class Oyst extends FroggyPaymentModule
     public function loadSQLFile($sql_file)
     {
         // Get install SQL file content
-        $sql_content = file_get_contents($sql_file);
+        $sql_content = Tools::file_get_contents($sql_file);
 
         // Replace prefix and store SQL command in array
         $sql_content = str_replace('@PREFIX@', _DB_PREFIX_, $sql_content);
@@ -122,7 +122,7 @@ class Oyst extends FroggyPaymentModule
 
         // Execute each SQL statement
         $result = true;
-        foreach($sql_requests as $request) {
+        foreach ($sql_requests as $request) {
             if (!empty($request)) {
                 $result &= Db::getInstance()->execute(trim($request));
             }

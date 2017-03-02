@@ -23,8 +23,9 @@ function upgrade_module_0_8_9_0($module)
 {
     // Update SQL table
     $sql_file = dirname(__FILE__).'/sql/install-0.8.9.0.sql';
-    if (!$module->loadSQLFile($sql_file))
+    if (!$module->loadSQLFile($sql_file)) {
         return false;
+    }
 
     // All went well!
     return true;

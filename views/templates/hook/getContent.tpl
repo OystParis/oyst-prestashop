@@ -36,7 +36,7 @@
 
         <p align="center">
             <img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /><br>
-            Module version : {$oyst.module_version}
+            Module version : {$oyst.module_version|escape:'html':'UTF-8'}
         </p>
 
         <fieldset id="oyst_fieldset">
@@ -57,7 +57,7 @@
                             <br>
                             <input type="checkbox" id="oyst_payment_connection_debug" name="oyst_payment_connection_debug" value="1"{if $smarty.post.oyst_payment_connection_debug} checked="checked"{/if} /> Debug
                             {if isset($smarty.post.oyst_payment_connection_debug) && $smarty.post.oyst_payment_connection_debug}
-                                <br><pre>{$oyst.oyst_payment_connection_test.values|print_r}</pre>
+                                <br><pre>{$oyst.oyst_payment_connection_test.values|print_r|FroggyDisplaySafeHtml}</pre>
                             {/if}
                         </strong></p>
                     {/if}
@@ -94,7 +94,7 @@
                             <br>
                             <input type="checkbox" id="oyst_catalog_connection_debug" name="oyst_catalog_connection_debug" value="1"{if $smarty.post.oyst_catalog_connection_debug} checked="checked"{/if} /> Debug
                             {if isset($smarty.post.oyst_catalog_connection_debug) && $smarty.post.oyst_catalog_connection_debug}
-                                <br><pre>{$oyst.oyst_catalog_connection_test.values|print_r}</pre>
+                                <br><pre>{$oyst.oyst_catalog_connection_test.values|print_r|FroggyDisplaySafeHtml}</pre>
                             {/if}
                         </strong></p>
                     {/if}
