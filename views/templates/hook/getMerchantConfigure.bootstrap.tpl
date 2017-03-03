@@ -17,6 +17,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
+<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
 
 {if isset($oyst.result) && $oyst.result eq 'ok'}
 <div class="bootstrap">
@@ -68,34 +69,28 @@
         </div>
         <div class="oyst-admin-tab">
             <fieldset>
-                <legend>{l s='API Key' mod='oyst'}</legend>
                 <div class="form-group clearfix">
-                    <label class="control-label col-lg-3 ">{l s='API Key' mod='oyst'}</label>
-                    <div class="col-lg-9">
+                    <label class="control-label col-md-3 col-lg-4">{l s='API Key' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
                         <input type="text" id="FC_OYST_API_KEY" name="FC_OYST_API_KEY" value="{$oyst.FC_OYST_API_KEY|escape:'htmlall':'UTF-8'}" />
-                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                        <p class="help-block" style="margin-bottom: 0;">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                         {if $oyst.oyst_apiKey_test_error}
-                        <div class="alert alert-danger">{l s='Your key seems invalid!' mod='oyst'}</div>
+                        <div class="alert alert-danger" style="margin: 10px 0 0;">{l s='Your key seems invalid!' mod='oyst'}</div>
                         {/if}
                     </div>
                 </div>
-            </fieldset>
-            <fieldset>
-                <legend>{l s='Payment feature' mod='oyst'}</legend>
-                <div class="oyst-admin-tab">
-                    <div class="form-group clearfix">
-                        <label class="control-label col-lg-3 ">{l s='Enable payment feature on your website' mod='oyst'}</label>
-                        <div class="col-lg-9" style="height: 31px;">
-                            <label>
-                                <input type="checkbox" class="form-control" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
-                            </label>
-                        </div>
+                <div class="form-group clearfix">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Enable FreePay' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4" style="height: 31px;">
+                        <label>
+                            <input type="checkbox" class="form-control" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
+                        </label>
                     </div>
-                    <div class="form-group clearfix advancedOptions hide">
-                        <label class="control-label col-lg-3 ">{l s='Set the Oyst payment endpoint' mod='oyst'}</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="FC_OYST_API_PAYMENT_ENDPOINT" name="FC_OYST_API_PAYMENT_ENDPOINT" value="{$oyst.FC_OYST_API_PAYMENT_ENDPOINT|escape:'htmlall':'UTF-8'}" />
-                        </div>
+                </div>
+                <div class="form-group clearfix advancedOptions">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Set the Oyst payment endpoint' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <input type="text" id="FC_OYST_API_PAYMENT_ENDPOINT" name="FC_OYST_API_PAYMENT_ENDPOINT" value="{$oyst.FC_OYST_API_PAYMENT_ENDPOINT|escape:'htmlall':'UTF-8'}" />
                     </div>
                 </div>
             </fieldset>
@@ -104,8 +99,8 @@
             <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-default pull-right">
                 <i class="process-icon-save"></i> {l s='Save' mod='oyst'}
             </button>
-            <button type="button" class="btn btn-default pull-right" onclick="$('.advancedOptions').toggleClass('hide');$('i', this).toggleClass('icon-eye').toggleClass('icon-eye-close');$('span', this).toggleClass('hide')">
-                <i class="process-icon- icon-eye"></i> <span>{l s='Show advanced options' mod='oyst'}</span><span class="hide">{l s='Hide advanced options' mod='oyst'}</span>
+            <button id="toggleConfig" type="button" class="btn btn-default pull-right">
+                <i class="process-icon- icon-eye"></i> <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
             </button>
             <a class="btn btn-default pull-right" href="{$configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }">
                 <i class="process-icon- icon-key"></i>

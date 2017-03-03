@@ -75,11 +75,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_350e17d65ded375d64325
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_254f642527b45bc260048e30704edb39'] = 'Configuration';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d876ff8da67c3731ae25d8335a4168b4'] = 'Clé API';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_104c53f712b567c6a55bd6e21511ad57'] = 'Vous n\'avez pas encore de clé API? Rendez-vous sur';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1e755a12eb9bf76c24d7a372a294b1d6'] = 'Votre clé API est valide !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8166540c7fd52a23da06af9c9ea1b0ec'] = 'Votre clé API semble invalide !';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2fc67267713967297479ba69ff020feb'] = 'API de vérification de la clé';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dee943d0f232be3bd3a4f1e134c037bd'] = 'Paiement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_473cb1e07af421fea996d3b504090ae0'] = 'Activer le paiement sur votre boutique';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_17e6e15f2ea6cb21136d16ad72e8361c'] = 'Activer FreePay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dcef5e8edb13510777145bc8e5ac30d2'] = 'API de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';
@@ -99,11 +96,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_350e17d65ded375d643259e7eed26e2
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_254f642527b45bc260048e30704edb39'] = 'Configuration';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d876ff8da67c3731ae25d8335a4168b4'] = 'Clé API';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_104c53f712b567c6a55bd6e21511ad57'] = 'Vous n\'avez pas encore de clé API? Rendez-vous sur';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_1e755a12eb9bf76c24d7a372a294b1d6'] = 'Votre clé API est valide !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8166540c7fd52a23da06af9c9ea1b0ec'] = 'Votre clé API semble invalide !';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_2fc67267713967297479ba69ff020feb'] = 'API de vérification de la clé';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_dee943d0f232be3bd3a4f1e134c037bd'] = 'Paiement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_473cb1e07af421fea996d3b504090ae0'] = 'Activer le paiement sur votre boutique';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_17e6e15f2ea6cb21136d16ad72e8361c'] = 'Activer FreePay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_dcef5e8edb13510777145bc8e5ac30d2'] = 'API de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';

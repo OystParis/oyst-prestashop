@@ -1,0 +1,39 @@
+.oyst .header {
+    text-align: center;
+}
+
+.oyst .header p {
+    font-size: 16px;
+}
+
+.oyst.contact input[type="text"] {
+    width: 250px;
+}
+
+.oyst.configuration input[type="text"] {
+    width: 450px;
+}
+
+.oyst .advancedOptions {
+    display: none;
+}
+
+.oyst a {
+    text-decoration: underline;
+}
+
+.oyst p.help-block {
+    margin-bottom: 0;
+}
+
+.oyst.contact #form {
+    width: 750px;
+    margin: auto;
+}
+
+.oyst.contact button[type=submit] {
+    background-color: #00aff0;
+    border-color: #008abd;
+    color: #FFF;
+    width: 100%;
+}
