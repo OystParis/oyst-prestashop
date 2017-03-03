@@ -74,14 +74,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     public function displayModuleConfiguration()
     {
-        $apiKey   = Configuration::get('FC_OYST_API_KEY');
-        $goToConf = (bool) Tools::getValue('go_to_conf');
-        $goToForm = (bool) Tools::getValue('go_to_form');
-        $hasError = false;
+        $isGuest     = Configuration::get('FC_OYST_GUEST');
+        $apiKey      = Configuration::get('FC_OYST_API_KEY');
+        $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
+        $goToConf    = (bool) Tools::getValue('go_to_conf');
+        $goToForm    = (bool) Tools::getValue('go_to_form');
+        $hasError    = false;
 
         // Merchant comes from the plugin list
         if (!$goToForm && !$goToConf) {
-            $goToForm = $apiKey == '';
+            $goToForm = $clientPhone == '' && !$isGuest;
         }
 
         if ($goToConf) {
@@ -93,7 +95,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->handleContactForm($hasError, $goToForm);
         }
 
-        if (Configuration::get('FC_OYST_GUEST')) {
+        if ($isGuest && $clientPhone) {
             $this->showMessageToMerchant();
         }
 
@@ -115,7 +117,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $assign['oyst_apiKey_test_error'] = strlen($apiKey) != 64;
 
             // First time merchant enter a key
-            if (Configuration::get('FC_OYST_GUEST')) {
+            if ($isGuest) {
                 Configuration::updateValue('FC_OYST_GUEST', false);
             }
         }
