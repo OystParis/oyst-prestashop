@@ -17,7 +17,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-<link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay.css" media="all">
+<link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay-1.5.css" media="all">
 
 {if isset($oyst.result) && $oyst.result eq 'ok'}
     <p class="conf"><strong>{l s='The new configuration has been saved!' mod='oyst'}</strong></p>
@@ -36,7 +36,7 @@
             <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /></p>
             <p class="sub-header"><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
         </div>
-        {if $oyst.FC_OYST_GUEST}
+        {if $oyst.FC_OYST_GUEST && $phone}
             <div class="header">
             <p>{$message} <strong>{$phone}</strong></p>
 
@@ -59,7 +59,7 @@
                 <input type="text" id="FC_OYST_API_KEY" name="FC_OYST_API_KEY" value="{$oyst.FC_OYST_API_KEY|escape:'htmlall':'UTF-8'}"/>
                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                 {if $oyst.oyst_apiKey_test_error}
-                <p class="error" style="width: 415px;"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                 {/if}
             </div>
 

@@ -17,7 +17,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-<link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay.css" media="all">
+<link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay-1.5.css" media="all">
 
 {if isset($oyst.result) && $oyst.result eq 'ok'}
     <p class="conf"><strong>{l s='The new configuration has been saved!' mod='oyst'}</strong></p>

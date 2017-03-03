@@ -1,0 +1,13 @@
+.oyst.configuration input[type="checkbox"] {
+    margin-top: 7px;
+    width: 18px;
+    height: 18px;
+}
+
+.oyst.configuration .help-block {
+    margin-bottom: 0;
+}
+
+.oyst.configuration .alert.alert-danger {
+    margin: 10px 0 0;
+}
