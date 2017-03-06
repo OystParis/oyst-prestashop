@@ -74,7 +74,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     public function displayModuleConfiguration()
     {
-        $isGuest     = Configuration::get('FC_OYST_GUEST');
         $apiKey      = Configuration::get('FC_OYST_API_KEY');
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $goToConf    = (bool) Tools::getValue('go_to_conf');
@@ -95,6 +94,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->handleContactForm($hasError, $goToForm);
         }
 
+        $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
+        $isGuest     = Configuration::get('FC_OYST_GUEST');
         if ($isGuest && $clientPhone) {
             $this->showMessageToMerchant();
         }
