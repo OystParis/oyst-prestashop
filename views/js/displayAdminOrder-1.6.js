@@ -19,6 +19,19 @@
  */
 
 $(document).ready(function() {
+
+    // Display FreePay transaction ID
     var panel_heading = $('.panel-heading-action');
     panel_heading.before('<span class="badge">Transaction FreePay n°' + oyst_transaction_id + '</span>');
+
+    // Hide partial and refund and display refund button
+    var partial_refund_button = $('#desc-order-partial_refund');
+    partial_refund_button.hide();
+    partial_refund_button.after('<a id="desc-order-freepay-refund" class="btn btn-default" href="#"> <i class="icon-exchange"></i>Remboursement standard </a>');
+    $('#desc-order-freepay-refund').click(function() {
+        if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {
+            
+        }
+        return false;
+    });
 });
