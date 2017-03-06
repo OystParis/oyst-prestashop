@@ -31,7 +31,7 @@
 {/if}
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
-    <form id="module_form" class="defaultForm form-horizontal oyst contact" method="POST" action="#">
+    <form id="module_form" class="defaultForm form-horizontal oyst contact" method="POST" action="{$oyst.configureLink|escape:'htmlall':'UTF-8'}">
         <div class="header">
             <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /></p>
             <p class="sub-header"><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
@@ -42,7 +42,7 @@
         </div>
         <fieldset class="panel oyst_fieldset">
             <div id="form">
-                {if isset($smarty.post.form_get_apikey_submit) && ($form_get_apikey_name_error !== '' || $form_get_apikey_phone_error !== '' || $form_get_apikey_email_error !== '')}
+                {if isset($smarty.post.form_get_apikey_submit) && ($oyst.form_get_apikey_name_error !== '' || $oyst.form_get_apikey_phone_error !== '' || $oyst.form_get_apikey_email_error !== '')}
                 <div class="margin-form error" style="width: 350px;margin: auto;margin-bottom: 10px;">
                     <span style="float:right">
                         <a id="hideError" href="#"><img alt="X" src="../img/admin/close.png"></a>
@@ -54,25 +54,25 @@
 
                 <label>{l s='Name' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="{$smarty.post.form_get_apikey_name|escape:'html':'UTF-8'}"/>
-                    {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_name_error !== ''}
-                    <div style="color: #CC0000;margin-top: 3px;">{$form_get_apikey_name_error|escape:'html':'UTF-8'}</div>
+                    <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="{$oyst.form_get_apikey_name|escape:'html':'UTF-8'}"/>
+                    {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_name_error !== ''}
+                    <div style="color: #CC0000;margin-top: 3px;">{$oyst.form_get_apikey_name_error|escape:'html':'UTF-8'}</div>
                     {/if}
                 </div>
 
                 <label>{l s='Phone' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$smarty.post.form_get_apikey_phone|escape:'html':'UTF-8'}" />
-                    {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_phone_error !== ''}
-                    <div style="color: #CC0000;margin-top: 3px;">{$form_get_apikey_phone_error|escape:'html':'UTF-8'}</div>
+                    <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$oyst.form_get_apikey_phone|escape:'html':'UTF-8'}" />
+                    {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_phone_error !== ''}
+                    <div style="color: #CC0000;margin-top: 3px;">{$oyst.form_get_apikey_phone_error|escape:'html':'UTF-8'}</div>
                     {/if}
                 </div>
 
                 <label>{l s='Email' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="{$smarty.post.form_get_apikey_email|escape:'html':'UTF-8'}"/>
-                    {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_email_error !== ''}
-                    <div style="color: #CC0000;margin-top: 3px;">{$form_get_apikey_email_error|escape:'html':'UTF-8'}</div>
+                    <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="{$oyst.form_get_apikey_email|escape:'html':'UTF-8'}"/>
+                    {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_email_error !== ''}
+                    <div style="color: #CC0000;margin-top: 3px;">{$oyst.form_get_apikey_email_error|escape:'html':'UTF-8'}</div>
                     {/if}
                 </div>
 
@@ -84,7 +84,7 @@
 
                 <div class="margin-form" style="width: 261px;text-align: center;"><p>{l s='OR' mod='oyst'}</p></div>
                 <div class="margin-form" style="width: 261px;text-align: center;padding-bottom: 0;">
-                    <a href="{$configureLink|cat:'&go_to_conf=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
+                    <a href="{$oyst.configureLink|cat:'&go_to_conf=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
                         <img src="../img/t/AdminAdmin.gif" alt="" style="vertical-align: text-bottom;">{l s='I have an API Key' mod='oyst'}
                     </a>
                 </div>

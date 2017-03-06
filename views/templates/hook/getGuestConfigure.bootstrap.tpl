@@ -43,7 +43,7 @@
 {/if}
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
-    <form id="form_get_apikey" class="defaultForm form-horizontal" method="POST" action="#">
+    <form id="form_get_apikey" class="defaultForm form-horizontal" method="POST" action="{$oyst.configureLink|escape:'htmlall':'UTF-8'}">
         <div class="text-center" style="font-size: 16px;">
             <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /></p>
             <p><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
@@ -54,30 +54,30 @@
         </div>
         <div class="panel oyst_fieldset">
             <div class="oyst-admin-tab">
-                <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_name_error !== ''} has-error{/if}">
+                <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_name_error !== ''} has-error{/if}">
                     <label class="control-label col-lg-4">{l s='Name' mod='oyst'}</label>
                     <div class="col-lg-4">
-                        <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="{$smarty.post.form_get_apikey_name|escape:'html':'UTF-8'}" />
-                        {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_name_error !== ''}
-                        <span class="help-block" style="margin-bottom: 0;">{$form_get_apikey_name_error|escape:'html':'UTF-8'}</span>
+                        <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="{$oyst.form_get_apikey_name|escape:'html':'UTF-8'}" />
+                        {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_name_error !== ''}
+                        <span class="help-block" style="margin-bottom: 0;">{$oyst.form_get_apikey_name_error|escape:'html':'UTF-8'}</span>
                         {/if}
                     </div>
                 </div>
-                <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_phone_error !== ''} has-error{/if}">
+                <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_phone_error !== ''} has-error{/if}">
                     <label class="control-label col-lg-4">{l s='Phone' mod='oyst'}</label>
                     <div class="col-lg-4">
-                        <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$smarty.post.form_get_apikey_phone|escape:'html':'UTF-8'}" />
-                        {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_phone_error !== ''}
-                        <span class="help-block" style="margin-bottom: 0;">{$form_get_apikey_phone_error|escape:'html':'UTF-8'}</span>
+                        <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$oyst.form_get_apikey_phone|escape:'html':'UTF-8'}" />
+                        {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_phone_error !== ''}
+                        <span class="help-block" style="margin-bottom: 0;">{$oyst.form_get_apikey_phone_error|escape:'html':'UTF-8'}</span>
                         {/if}
                     </div>
                 </div>
-                <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_email_error !== ''} has-error{/if}">
+                <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_email_error !== ''} has-error{/if}">
                     <label class="control-label col-lg-4">{l s='Email' mod='oyst'}</label>
                     <div class="col-lg-4">
-                        <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="{$smarty.post.form_get_apikey_email|escape:'html':'UTF-8'}" />
-                        {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_email_error !== ''}
-                        <span class="help-block" style="margin-bottom: 0;">{$form_get_apikey_email_error|escape:'html':'UTF-8'}</span>
+                        <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="{$oyst.form_get_apikey_email|escape:'html':'UTF-8'}" />
+                        {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_email_error !== ''}
+                        <span class="help-block" style="margin-bottom: 0;">{$oyst.form_get_apikey_email_error|escape:'html':'UTF-8'}</span>
                         {/if}
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                 </div>
             </div>
             <div class="panel-footer text-center">
-                <a class="btn btn-default" href="{$configureLink|cat:'&go_to_conf=1'|escape:'htmlall':'UTF-8' }">
+                <a class="btn btn-default" href="{$oyst.configureLink|cat:'&go_to_conf=1'|escape:'htmlall':'UTF-8'}">
                     <i class="process-icon- icon-key"></i>
                     {l s='I have an API Key' mod='oyst'}
                 </a>

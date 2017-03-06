@@ -36,11 +36,11 @@
             <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /></p>
             <p class="sub-header"><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
         </div>
-        {if $oyst.FC_OYST_GUEST && $phone}
+        {if $oyst.FC_OYST_GUEST && $oyst.phone}
             <div class="header">
-            <p>{$message|escape:'html':'UTF-8'} <strong>{$phone|escape:'html':'UTF-8'}</strong></p>
+            <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong></p>
 
-            <p><a href="{$configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
+            <p><a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
             <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
             <p>
                 {l s='Please, get these information ready:' mod='oyst'}<br>
@@ -58,7 +58,7 @@
             <div class="margin-form">
                 <input type="text" id="FC_OYST_API_KEY" name="FC_OYST_API_KEY" value="{$oyst.FC_OYST_API_KEY|escape:'htmlall':'UTF-8'}"/>
                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                {if $oyst.oyst_apiKey_test_error}
+                {if $oyst.apikey_test_error}
                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                 {/if}
             </div>
@@ -81,7 +81,7 @@
                         <span>{l s='Show advanced options' mod='oyst'}</span>
                         <span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
                     </button>
-                    <a href="{$configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
+                    <a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
                         <img src="../img/t/AdminAdmin.gif" alt="" style="vertical-align: text-bottom;">{l s='Get an API Key' mod='oyst'}
                     </a>
                 </p>

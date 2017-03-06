@@ -74,6 +74,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     public function displayModuleConfiguration()
     {
+        $assign      = array();
         $apiKey      = Configuration::get('FC_OYST_API_KEY');
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $goToConf    = (bool) Tools::getValue('go_to_conf');
@@ -89,23 +90,12 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $goToForm = false;
         }
 
-        // Merchant filled the contact form
-        if (Tools::isSubmit('form_get_apikey_submit')) {
-            $this->handleContactForm($hasError, $goToForm);
-        }
+        $this->handleContactForm($assign, $hasError, $goToForm);
 
-        $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
-        $isGuest     = Configuration::get('FC_OYST_GUEST');
-        if ($isGuest && $clientPhone) {
-            $this->showMessageToMerchant();
-        }
-
-        $assign = array();
-        $assign['module_dir'] = $this->path;
-        foreach ($this->configurations as $conf => $format) {
-            $assign[$conf] = Configuration::get($conf);
-        }
-
+        $assign['module_dir']               = $this->path;
+        $assign['message']                  = '';
+        $assign['phone']                    = Configuration::get('FC_OYST_MERCHANT_PHONE');
+        $assign['apikey_test_error']        = '';
         $assign['result']                   = $this->configuration_result;
         $assign['ps_version']               = Tools::substr(_PS_VERSION_, 0, 3);
         $assign['module_version']           = $this->module->version;
@@ -113,9 +103,17 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['curl_check']               = function_exists('curl_version');
         $assign['payment_notification_url'] = $this->context->link->getModuleLink('oyst', 'paymentNotification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['notification_url']         = $this->context->link->getModuleLink('oyst', 'notification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
+        $assign['configureLink']            = $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name;
+
+        $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
+        $isGuest     = Configuration::get('FC_OYST_GUEST');
+
+        if ($isGuest && $clientPhone) {
+            $this->showMessageToMerchant($assign);
+        }
 
         if ($apiKey != '') {
-            $assign['oyst_apiKey_test_error'] = Tools::strlen($apiKey) != 64;
+            $assign['apikey_test_error'] = Tools::strlen($apiKey) != 64;
 
             // First time merchant enter a key after submitting the contact form
             if ($isGuest) {
@@ -123,9 +121,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             }
         }
 
-        $this->smarty->assign($this->module->name, $assign);
-        $this->smarty->assign('configureLink', $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name);
+        foreach ($this->configurations as $conf => $format) {
+            $assign[$conf] = Configuration::get($conf);
+        }
 
+        $this->smarty->assign($this->module->name, $assign);
 
         if ($goToForm || $hasError) {
             return $this->module->fcdisplay(__FILE__, 'getGuestConfigure.tpl');
@@ -141,13 +141,34 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         return $this->displayModuleConfiguration();
     }
 
-    private function handleContactForm(&$hasError, &$goToForm)
+    /**
+     * @param $assign
+     * @param $hasError
+     * @param $goToForm
+     */
+    private function handleContactForm(&$assign, &$hasError, &$goToForm)
     {
+        $assign['form_get_apikey_name']  = '';
+        $assign['form_get_apikey_phone'] = '';
+        $assign['form_get_apikey_email'] = '';
+        $assign['form_get_apikey_name_error']  = '';
+        $assign['form_get_apikey_phone_error'] = '';
+        $assign['form_get_apikey_email_error'] = '';
+
+        // Merchant filled the contact form
+        if (!Tools::isSubmit('form_get_apikey_submit')) {
+            return;
+        }
+
         $goToForm = false;
 
         $name  = Tools::getValue('form_get_apikey_name');
         $phone = Tools::getValue('form_get_apikey_phone');
         $email = Tools::getValue('form_get_apikey_email');
+
+        $assign['form_get_apikey_name']  = $name;
+        $assign['form_get_apikey_phone'] = $phone;
+        $assign['form_get_apikey_email'] = $email;
 
         $nameError  = '';
         $phoneError = '';
@@ -168,16 +189,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $emailError = $this->module->l('Please enter a valid email', 'oysthookgetconfigurationprocessor');
         }
 
-        $this->smarty->assign('form_get_apikey_name_error', $nameError);
-        $this->smarty->assign('form_get_apikey_phone_error', $phoneError);
-        $this->smarty->assign('form_get_apikey_email_error', $emailError);
+        $assign['form_get_apikey_name_error'] = $nameError;
+        $assign['form_get_apikey_phone_error'] = $phoneError;
+        $assign['form_get_apikey_email_error'] = $emailError;
 
         if (!$hasError) {
             $response = OystSDK::notifyOnSlack($name, $phone, $email);
 
             if ($response != 'ok') {
                 $goToForm = true;
-                $this->smarty->assign('form_get_apikey_error', true);
+                $assign['form_get_apikey_error'] = true;
             } else {
                 Configuration::updateValue('FC_OYST_GUEST', true);
                 Configuration::updateValue('FC_OYST_MERCHANT_PHONE', $phone);
@@ -188,7 +209,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
     /**
      * Show a different message to the merchant according to the day of the week and the time
      */
-    private function showMessageToMerchant()
+    private function showMessageToMerchant(&$assign)
     {
         $dayOfTheWeek    = date('w');
         $currentDateTime = date('Hi');
@@ -204,7 +225,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $message = $this->module->l('A FreePay customer advisor shall contact you this afternoon from 14:30 pm on', 'oysthookgetconfigurationprocessor');
         }
 
-        $this->smarty->assign('message', $message);
-        $this->smarty->assign('phone', Configuration::get('FC_OYST_MERCHANT_PHONE'));
+        $assign['message'] = $message;
     }
 }
