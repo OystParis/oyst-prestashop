@@ -30,7 +30,16 @@ $(document).ready(function() {
     partial_refund_button.after('<a id="desc-order-freepay-refund" class="btn btn-default" href="#"> <i class="icon-exchange"></i>Remboursement standard </a>');
     $('#desc-order-freepay-refund').click(function() {
         if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {
-            
+            $.ajax({
+                method: "POST",
+                url: window.location.href,
+                data: { subaction: "freepay-refund" }
+            }).done(function( msg ) {
+                msg = JSON.parse(msg);
+                if (msg.result == 'success') {
+                    window.location.href = window.location.href;
+                }
+            });
         }
         return false;
     });

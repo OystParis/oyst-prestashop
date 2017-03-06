@@ -36,6 +36,11 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             return '';
         }
 
+        // Ajax refund
+        if (Tools::getValue('subaction') == 'freepay-refund') {
+            $this->refundOrder($order);
+        }
+
         $assign = array(
             'module_dir' => $this->path,
             'transaction_id' => $order->id_cart,
@@ -43,5 +48,21 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         $this->smarty->assign($this->module->name, $assign);
 
         return $this->module->fcdisplay(__FILE__, 'displayAdminOrder.tpl');
+    }
+
+    public function refundOrder($order)
+    {
+        // Clean buffer
+        ob_end_clean();
+
+        // Set refund status
+        $history = new OrderHistory();
+        $history->id_order = $order->id;
+        $history->id_employee = 0;
+        $history->id_order_state = (int)Configuration::get('PS_OS_REFUND');
+        $history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), $order->id);
+        $history->add();
+
+        die(Tools::jsonEncode(array('result' => 'success')));
     }
 }
