@@ -83,7 +83,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         // Merchant comes from the plugin list
         if (!$goToForm && !$goToConf) {
-            $goToForm = $clientPhone == '' && !$isGuest;
+            $goToForm = $clientPhone == '' && $apiKey == '';
         }
 
         if ($goToConf) {
@@ -116,7 +116,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         if ($apiKey != '') {
             $assign['oyst_apiKey_test_error'] = Tools::strlen($apiKey) != 64;
 
-            // First time merchant enter a key
+            // First time merchant enter a key after submitting the contact form
             if ($isGuest) {
                 Configuration::updateValue('FC_OYST_GUEST', false);
             }
