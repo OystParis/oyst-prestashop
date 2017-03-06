@@ -57,27 +57,27 @@
                 <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_name_error !== ''} has-error{/if}">
                     <label class="control-label col-lg-4">{l s='Name' mod='oyst'}</label>
                     <div class="col-lg-4">
-                        <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="{$smarty.post.form_get_apikey_name}" />
+                        <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="{$smarty.post.form_get_apikey_name|escape:'html':'UTF-8'}" />
                         {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_name_error !== ''}
-                        <span class="help-block" style="margin-bottom: 0;">{$form_get_apikey_name_error}</span>
+                        <span class="help-block" style="margin-bottom: 0;">{$form_get_apikey_name_error|escape:'html':'UTF-8'}</span>
                         {/if}
                     </div>
                 </div>
                 <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_phone_error !== ''} has-error{/if}">
                     <label class="control-label col-lg-4">{l s='Phone' mod='oyst'}</label>
                     <div class="col-lg-4">
-                        <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$smarty.post.form_get_apikey_phone}" />
+                        <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$smarty.post.form_get_apikey_phone|escape:'html':'UTF-8'}" />
                         {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_phone_error !== ''}
-                        <span class="help-block" style="margin-bottom: 0;">{$form_get_apikey_phone_error}</span>
+                        <span class="help-block" style="margin-bottom: 0;">{$form_get_apikey_phone_error|escape:'html':'UTF-8'}</span>
                         {/if}
                     </div>
                 </div>
                 <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_email_error !== ''} has-error{/if}">
                     <label class="control-label col-lg-4">{l s='Email' mod='oyst'}</label>
                     <div class="col-lg-4">
-                        <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="{$smarty.post.form_get_apikey_email}" />
+                        <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="{$smarty.post.form_get_apikey_email|escape:'html':'UTF-8'}" />
                         {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_email_error !== ''}
-                        <span class="help-block" style="margin-bottom: 0;">{$form_get_apikey_email_error}</span>
+                        <span class="help-block" style="margin-bottom: 0;">{$form_get_apikey_email_error|escape:'html':'UTF-8'}</span>
                         {/if}
                     </div>
                 </div>

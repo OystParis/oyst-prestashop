@@ -87,7 +87,7 @@ class OystSDK
         return curl_exec($ch);
     }
 
-    static public function notifyOnSlack($name, $phone, $email)
+    public static function notifyOnSlack($name, $phone, $email)
     {
         $url  = Tools::getHttpHost(true).__PS_BASE_URI__;
         $data = Tools::jsonEncode([

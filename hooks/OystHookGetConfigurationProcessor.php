@@ -114,7 +114,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['notification_url']         = $this->context->link->getModuleLink('oyst', 'notification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
 
         if ($apiKey != '') {
-            $assign['oyst_apiKey_test_error'] = strlen($apiKey) != 64;
+            $assign['oyst_apiKey_test_error'] = Tools::strlen($apiKey) != 64;
 
             // First time merchant enter a key
             if ($isGuest) {
@@ -152,7 +152,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $phoneError = '';
         $emailError = '';
 
-        if(!$name || !Validate::isName($name)) {
+        if (!$name || !Validate::isName($name)) {
             $hasError  = true;
             $nameError = $this->module->l('Please enter a valid name', 'oysthookgetconfigurationprocessor');
         }

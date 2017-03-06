@@ -54,25 +54,25 @@
 
                 <label>{l s='Name' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="{$smarty.post.form_get_apikey_name}"/>
+                    <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="{$smarty.post.form_get_apikey_name|escape:'html':'UTF-8'}"/>
                     {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_name_error !== ''}
-                    <div style="color: #CC0000;margin-top: 3px;">{$form_get_apikey_name_error}</div>
+                    <div style="color: #CC0000;margin-top: 3px;">{$form_get_apikey_name_error|escape:'html':'UTF-8'}</div>
                     {/if}
                 </div>
 
                 <label>{l s='Phone' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$smarty.post.form_get_apikey_phone}"/>
+                    <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$smarty.post.form_get_apikey_phone|escape:'html':'UTF-8'}" />
                     {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_phone_error !== ''}
-                    <div style="color: #CC0000;margin-top: 3px;">{$form_get_apikey_phone_error}</div>
+                    <div style="color: #CC0000;margin-top: 3px;">{$form_get_apikey_phone_error|escape:'html':'UTF-8'}</div>
                     {/if}
                 </div>
 
                 <label>{l s='Email' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="{$smarty.post.form_get_apikey_email}"/>
+                    <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="{$smarty.post.form_get_apikey_email|escape:'html':'UTF-8'}"/>
                     {if isset($smarty.post.form_get_apikey_submit) && $form_get_apikey_email_error !== ''}
-                    <div style="color: #CC0000;margin-top: 3px;">{$form_get_apikey_email_error}</div>
+                    <div style="color: #CC0000;margin-top: 3px;">{$form_get_apikey_email_error|escape:'html':'UTF-8'}</div>
                     {/if}
                 </div>
 

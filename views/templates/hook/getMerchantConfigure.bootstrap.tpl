@@ -51,7 +51,7 @@
     </div>
     {if $oyst.FC_OYST_GUEST && $phone}
     <div class="text-center">
-        <p>{$message} <strong>{$phone}</strong></p>
+        <p>{$message|escape:'html':'UTF-8'} <strong>{$phone|escape:'html':'UTF-8'}</strong></p>
 
         <p><a href="{$configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
         <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
