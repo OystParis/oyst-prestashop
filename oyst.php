@@ -60,8 +60,8 @@ class Oyst extends FroggyPaymentModule
      */
     public function __construct()
     {
-        $this->name = 'FreePay';
-        $this->version = '0.8.9.0';
+        $this->name = 'oyst';
+        $this->version = '0.8.11';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -82,9 +82,15 @@ class Oyst extends FroggyPaymentModule
         }
 
         // If old configuration variable exists, we migrate it
-        if (Configuration::get('FC_OYST_API_KEY') != '') {
-            Configuration::updateValue('FC_OYST_API_PAYMENT_KEY', Configuration::get('FC_OYST_API_KEY'));
-            Configuration::deleteByName('FC_OYST_API_KEY');
+        if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
+            Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
+        }
+
+        // If old configuration variable exists, we migrate it
+        if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
+            Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
         }
     }
 
@@ -108,13 +114,17 @@ class Oyst extends FroggyPaymentModule
             WHERE `id_hook` = '.(int)$id_hook.' AND `id_module` = '.$id_module);
         }
 
+        if (Configuration::get('FC_OYST_API_KEY') != '') {
+            Configuration::updateValue('FC_OYST_GUEST', false);
+        }
+
         return $result;
     }
 
     public function loadSQLFile($sql_file)
     {
         // Get install SQL file content
-        $sql_content = file_get_contents($sql_file);
+        $sql_content = Tools::file_get_contents($sql_file);
 
         // Replace prefix and store SQL command in array
         $sql_content = str_replace('@PREFIX@', _DB_PREFIX_, $sql_content);
@@ -122,7 +132,7 @@ class Oyst extends FroggyPaymentModule
 
         // Execute each SQL statement
         $result = true;
-        foreach($sql_requests as $request) {
+        foreach ($sql_requests as $request) {
             if (!empty($request)) {
                 $result &= Db::getInstance()->execute(trim($request));
             }
@@ -139,7 +149,7 @@ class Oyst extends FroggyPaymentModule
      */
     public function getContent()
     {
-        return $this->hookGetContent();
+        return $this->hookGetConfiguration();
     }
 
     /**

@@ -1,4 +1,4 @@
-{**
+/*
  * 2013-2016 Froggy Commerce
  *
  * NOTICE OF LICENSE
@@ -16,12 +16,9 @@
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
- *}
+ */
 
-<script>
-    var oyst_transaction_id = {$oyst.transaction_id|escape:'html':'UTF-8'};
-</script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder-1.5.js"></script>
-<div class="alert alert-info">
-    {l s='The cancellation or refund of the payment related to this order will not be taken into account from your Back Office Prestashop. Please directly log in to your Back Office FreePay (https://admin.free-pay.com) to manage your payments' mod='oyst'}
-</div>
+$(document).ready(function() {
+    var page_title = $('span .breadcrumb');
+    page_title.text(page_title.text() + ' - Transaction FreePay n°' + oyst_transaction_id);
+});

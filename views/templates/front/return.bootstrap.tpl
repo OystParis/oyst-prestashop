@@ -19,7 +19,7 @@
  *}
 
 <div>
-    <p><img src="{$base_dir}img/loader.gif" />
+    <p><img src="{$base_dir|escape:'html':'UTF-8'}img/loader.gif" />
     <strong>{l s='We did not receive the payment confirmation yet. Please wait a few minutes and refresh this page.' mod='oyst'}</strong></p>
 </div>
 

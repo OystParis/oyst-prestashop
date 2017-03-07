@@ -26,22 +26,20 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
+class OystHookAdvancedPaymentOptionsProcessor extends FroggyHookProcessor
 {
     public function run()
     {
-        // Check if order has been paid with Oyst
-        $order = new Order(Tools::getValue('id_order'));
-        if ($order->module != 'oyst') {
+        if (Configuration::get('FC_OYST_PAYMENT_FEATURE') != 1) {
             return '';
         }
 
-        $assign = array(
-            'module_dir' => $this->path,
-            'transaction_id' => $order->id_cart,
-        );
-        $this->smarty->assign($this->module->name, $assign);
+        $payment_option = new Core_Business_Payment_PaymentOption();
+        $payment_option->setCallToActionText($this->module->l('Pay by Credit Card'));
+        $payment_option->setLogo($this->path.'views/img/logo-horizontal-credit-card.png');
+        $payment_option->setAction($this->context->link->getModuleLink('oyst', 'payment'));
+        $payment_option->setModuleName($this->module->name);
 
-        return $this->module->fcdisplay(__FILE__, 'displayAdminOrder.tpl');
+        return array($payment_option);
     }
 }

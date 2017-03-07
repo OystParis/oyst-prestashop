@@ -18,6 +18,10 @@
  * @license GNU GENERAL PUBLIC LICENSE
  *}
 
+<script>
+    var oyst_transaction_id = {$oyst.transaction_id|escape:'html':'UTF-8'};
+</script>
+<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder-1.6.js"></script>
 <div class="alert alert-info">
-    L'annulation ou remboursement du paiement rattaché à cette commande ne sera pas pris en compte depuis votre Back Office Prestashop. Veuillez directement vous connecter à votre Back Office Oyst (https://pay.oyst.com) afin de gérer vos paiements
+    {l s='The cancellation or refund of the payment related to this order will not be taken into account from your Back Office Prestashop. Please directly log in to your Back Office FreePay (https://admin.free-pay.com) to manage your payments' mod='oyst'}
 </div>

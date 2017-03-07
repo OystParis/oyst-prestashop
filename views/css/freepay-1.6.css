@@ -1,0 +1,26 @@
+.oyst.configuration input[type="checkbox"] {
+    margin-top: 7px;
+    width: 18px;
+    height: 18px;
+}
+
+.oyst.configuration .help-block {
+    margin-bottom: 0;
+}
+
+.oyst.configuration .alert.alert-danger {
+    margin: 10px 0 0;
+}
+
+.oyst.configuration .panel-footer {
+    text-align: center;
+}
+
+.oyst.contact #form_get_apikey_submit, .oyst.configuration #module_form_submit_btn {
+    background-color: #00aff0;
+    border-color: #008abd;
+}
+
+.oyst.contact .help-block {
+    margin-bottom: 0;
+}
