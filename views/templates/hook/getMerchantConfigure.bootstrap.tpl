@@ -85,10 +85,43 @@
                         <input type="checkbox" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
                     </div>
                 </div>
-                <div class="form-group clearfix advancedOptions" style="display: none;">
+                <div class="form-group clearfix advancedOptions">
                     <label class="control-label col-md-3 col-lg-4">{l s='Set the Oyst payment endpoint' mod='oyst'}</label>
                     <div class="col-md-7 col-lg-4">
                         <input type="text" id="FC_OYST_API_PAYMENT_ENDPOINT" name="FC_OYST_API_PAYMENT_ENDPOINT" value="{$oyst.FC_OYST_API_PAYMENT_ENDPOINT|escape:'htmlall':'UTF-8'}" />
+                    </div>
+                </div>
+                <div class="form-group clearfix advancedOptions urlCustomization">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Success Url' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <select id="FC_OYST_REDIRECT_SUCCESS" name="FC_OYST_REDIRECT_SUCCESS">
+                        {foreach from=$oyst.redirect_success_urls key=url item=label}
+                            <option value="{$url}"{if $oyst.FC_OYST_REDIRECT_SUCCESS == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label}</option>
+                        {/foreach}
+                        </select>
+                        <input type="text" id="FC_OYST_REDIRECT_SUCCESS_CUSTOM" name="FC_OYST_REDIRECT_SUCCESS_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_SUCCESS_CUSTOM|escape:'htmlall':'UTF-8'}"/>
+                    </div>
+                </div>
+                <div class="form-group clearfix advancedOptions urlCustomization">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Error Url' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <select id="FC_OYST_REDIRECT_ERROR" name="FC_OYST_REDIRECT_ERROR">
+                        {foreach from=$oyst.redirect_error_urls key=url item=label}
+                            <option value="{$url}"{if $oyst.FC_OYST_REDIRECT_ERROR == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label}</option>
+                        {/foreach}
+                        </select>
+                        <input type="text" id="FC_OYST_REDIRECT_ERROR_CUSTOM" name="FC_OYST_REDIRECT_ERROR_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_ERROR_CUSTOM|escape:'htmlall':'UTF-8'}"/>
+                    </div>
+                </div>
+                <div class="form-group clearfix advancedOptions urlCustomization">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Cancel Url' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <select id="FC_OYST_REDIRECT_CANCEL" name="FC_OYST_REDIRECT_CANCEL">
+                        {foreach from=$oyst.redirect_cancel_urls key=url item=label}
+                            <option value="{$url}"{if $oyst.FC_OYST_REDIRECT_CANCEL == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label}</option>
+                        {/foreach}
+                        </select>
+                        <input type="text" id="FC_OYST_REDIRECT_CANCEL_CUSTOM" name="FC_OYST_REDIRECT_CANCEL_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_CANCEL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                     </div>
                 </div>
             </fieldset>

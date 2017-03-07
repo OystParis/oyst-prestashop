@@ -11,3 +11,12 @@
 .oyst.configuration .alert.alert-danger {
     margin: 10px 0 0;
 }
+
+.oyst.configuration .advancedOptions {
+    display: none;
+}
+
+.oyst.configuration .customUrlText {
+    display: none;
+    margin-top: 5px;
+}

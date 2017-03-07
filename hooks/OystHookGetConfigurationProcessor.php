@@ -30,19 +30,45 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
     public $configuration_result = '';
     public $configurations = array(
-        'FC_OYST_GUEST'                => 'int',
-        'FC_OYST_API_KEY'              => 'string',
-        'FC_OYST_PAYMENT_FEATURE'      => 'int',
-        'FC_OYST_API_PAYMENT_ENDPOINT' => 'string',
-        'FC_OYST_CATALOG_FEATURE'      => 'int',
-        'FC_OYST_API_CATALOG_ENDPOINT' => 'string',
+        'FC_OYST_GUEST'                   => 'int',
+        'FC_OYST_REDIRECT_SUCCESS'        => 'string',
+        'FC_OYST_REDIRECT_CANCEL'         => 'string',
+        'FC_OYST_REDIRECT_ERROR'          => 'string',
+        'FC_OYST_REDIRECT_SUCCESS_CUSTOM' => 'string',
+        'FC_OYST_REDIRECT_CANCEL_CUSTOM'  => 'string',
+        'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
+        'FC_OYST_API_KEY'                 => 'string',
+        'FC_OYST_PAYMENT_FEATURE'         => 'int',
+        'FC_OYST_API_PAYMENT_ENDPOINT'    => 'string',
+        'FC_OYST_CATALOG_FEATURE'         => 'int',
+        'FC_OYST_API_CATALOG_ENDPOINT'    => 'string',
     );
+    public $redirect_success_urls = array();
+    public $redirect_error_urls = array();
+    public $redirect_cancel_urls = array();
 
     public function init()
     {
         if (Configuration::get('FC_OYST_HASH_KEY') == '') {
             Configuration::updateValue('FC_OYST_HASH_KEY', md5(rand()._RIJNDAEL_IV_).'-'.date('YmdHis'));
         }
+
+        $this->redirect_success_urls = array(
+            'ORDER_HISTORY'      => $this->module->l('Order history', 'oysthookgetconfigurationprocessor'),
+            'ORDER_CONFIRMATION' => $this->module->l('Order confirmation', 'oysthookgetconfigurationprocessor'),
+            'CUSTOM'             => $this->module->l('Custom', 'oysthookgetconfigurationprocessor')
+        );
+        $this->redirect_error_urls = array(
+            'PAYMENT_ERROR' => $this->module->l('Payment error', 'oysthookgetconfigurationprocessor'),
+            'CART'          => $this->module->l('Cart', 'oysthookgetconfigurationprocessor'),
+            'CUSTOM'        => $this->module->l('Custom', 'oysthookgetconfigurationprocessor')
+        );
+        $this->redirect_cancel_urls = array(
+            'ORDER_HISTORY' => $this->module->l('Order history', 'oysthookgetconfigurationprocessor'),
+            'PAYMENT_ERROR' => $this->module->l('Payment error', 'oysthookgetconfigurationprocessor'),
+            'CART'          => $this->module->l('Cart', 'oysthookgetconfigurationprocessor'),
+            'CUSTOM'        => $this->module->l('Custom', 'oysthookgetconfigurationprocessor')
+        );
     }
 
     public function saveModuleConfiguration()
@@ -104,6 +130,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['payment_notification_url'] = $this->context->link->getModuleLink('oyst', 'paymentNotification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['notification_url']         = $this->context->link->getModuleLink('oyst', 'notification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['configureLink']            = $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name;
+        $assign['redirect_success_urls']    = $this->redirect_success_urls;
+        $assign['redirect_cancel_urls']     = $this->redirect_cancel_urls;
+        $assign['redirect_error_urls']      = $this->redirect_error_urls;
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');

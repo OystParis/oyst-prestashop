@@ -39,20 +39,8 @@ class OystPaymentModuleFrontController extends ModuleFrontController
 
     public function initContent()
     {
-        // Build hash
-        $cart_hash = md5(Tools::jsonEncode(array($this->context->cart->id, $this->context->cart->nbProducts())));
+        $urls = $this->getUrls();
 
-        // Build urls and amount
-        $glue = '&';
-        if (Configuration::get('PS_REWRITING_SETTINGS') == 1) {
-            $glue = '?';
-        }
-        $urls = array(
-            'notification' => $this->context->link->getModuleLink('oyst', 'paymentNotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash,
-            'cancel' => $this->context->link->getModuleLink('oyst', 'paymentError'),
-            'error' => $this->context->link->getModuleLink('oyst', 'paymentError'),
-            'return' => $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key,
-        );
         $currency = new Currency($this->context->cart->id_currency);
         $total_amount = (int)round($this->context->cart->getOrderTotal() * 100);
 
@@ -134,5 +122,59 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             )
         );
         Tools::redirect($urls['error']);
+    }
+
+    /**
+     * @return array
+     */
+    private function getUrls()
+    {
+        // Build hash
+        $cart_hash = md5(Tools::jsonEncode(array($this->context->cart->id, $this->context->cart->nbProducts())));
+
+        // Build urls and amount
+        $glue = '&';
+        if (Configuration::get('PS_REWRITING_SETTINGS') == 1) {
+            $glue = '?';
+        }
+
+        $notification = $this->context->link->getModuleLink('oyst', 'paymentNotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
+        $cancelUrl    = $this->getUrlByName($glue, Configuration::get('FC_OYST_REDIRECT_CANCEL'), Configuration::get('FC_OYST_REDIRECT_CANCEL_CUSTOM'));
+        $errorUrl     = $this->getUrlByName($glue, Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
+        $successUrl   = $this->getUrlByName($glue, Configuration::get('FC_OYST_REDIRECT_SUCCESS'), Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM'));
+
+        $urls = array(
+            'notification' => $notification,
+            'cancel'       => $cancelUrl,
+            'error'        => $errorUrl,
+            'return'       => $successUrl
+        );
+
+        return $urls;
+    }
+
+    private function getUrlByName($glue, $urlName, $customUrl)
+    {
+        $url = '';
+
+        switch($urlName) {
+            case 'ORDER_HISTORY':
+                $url = $this->context->link->getModuleLink('oyst', 'history');
+                break;
+            case 'ORDER_CONFIRMATION':
+                $url = $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
+                break;
+            case 'PAYMENT_ERROR':
+                $url = $this->context->link->getModuleLink('oyst', 'paymentError');
+                break;
+            case 'CART':
+                $url = $this->context->link->getModuleLink('oyst', 'cart');
+                break;
+            case 'CUSTOM':
+                $url = $customUrl;
+                break;
+        }
+
+        return $url;
     }
 }

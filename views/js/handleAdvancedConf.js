@@ -17,11 +17,27 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  */
-
 $(document).ready(function() {
     $('#toggleConfig').click(function() {
         $('.advancedOptions').toggle();
         $('i', this).toggleClass('icon-eye').toggleClass('icon-eye-close');
         $('span', this).toggle();
     });
+    $('.urlCustomization select').each(function() {
+        handleSelectOptions($(this));
+    }).change(function() {
+        handleSelectOptions($(this));
+    });
 });
+
+function handleSelectOptions(select) {
+    var parentDiv = select.parent();
+
+    $('option:selected', select).each(function() {
+        if ($(this).hasClass('customUrl')) {
+            $('input.customUrlText', parentDiv).show().removeAttr('disabled');
+        } else {
+            $('input.customUrlText', parentDiv).hide().attr('disabled', 'disabled');
+        }
+    });
+}
