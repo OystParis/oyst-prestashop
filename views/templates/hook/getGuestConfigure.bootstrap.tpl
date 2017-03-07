@@ -17,6 +17,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
+<link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay-1.6.css" media="all">
 
 {if isset($oyst.result) && $oyst.result eq 'ko'}
     <div class="bootstrap">
@@ -43,7 +44,7 @@
 {/if}
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
-    <form id="form_get_apikey" class="defaultForm form-horizontal" method="POST" action="{$oyst.configureLink|escape:'htmlall':'UTF-8'}">
+    <form id="form_get_apikey" class="defaultForm form-horizontal oyst contact" method="POST" action="{$oyst.configureLink|escape:'htmlall':'UTF-8'}">
         <div class="text-center" style="font-size: 16px;">
             <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /></p>
             <p><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
@@ -59,7 +60,7 @@
                     <div class="col-lg-4">
                         <input type="text" id="form_get_apikey_name" name="form_get_apikey_name" value="{$oyst.form_get_apikey_name|escape:'html':'UTF-8'}" />
                         {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_name_error !== ''}
-                        <span class="help-block" style="margin-bottom: 0;">{$oyst.form_get_apikey_name_error|escape:'html':'UTF-8'}</span>
+                        <span class="help-block">{$oyst.form_get_apikey_name_error|escape:'html':'UTF-8'}</span>
                         {/if}
                     </div>
                 </div>
@@ -68,7 +69,7 @@
                     <div class="col-lg-4">
                         <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$oyst.form_get_apikey_phone|escape:'html':'UTF-8'}" />
                         {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_phone_error !== ''}
-                        <span class="help-block" style="margin-bottom: 0;">{$oyst.form_get_apikey_phone_error|escape:'html':'UTF-8'}</span>
+                        <span class="help-block">{$oyst.form_get_apikey_phone_error|escape:'html':'UTF-8'}</span>
                         {/if}
                     </div>
                 </div>
@@ -77,14 +78,14 @@
                     <div class="col-lg-4">
                         <input type="text" id="form_get_apikey_email" name="form_get_apikey_email" value="{$oyst.form_get_apikey_email|escape:'html':'UTF-8'}" />
                         {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_email_error !== ''}
-                        <span class="help-block" style="margin-bottom: 0;">{$oyst.form_get_apikey_email_error|escape:'html':'UTF-8'}</span>
+                        <span class="help-block">{$oyst.form_get_apikey_email_error|escape:'html':'UTF-8'}</span>
                         {/if}
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <label class="control-label col-lg-4"></label>
                     <div class="col-lg-4">
-                        <button type="submit" value="1" id="form_get_apikey_submit" name="form_get_apikey_submit" class="btn btn-info form-control bigger-" style="background-color: #00aff0;border-color: #008abd;">
+                        <button type="submit" value="1" id="form_get_apikey_submit" name="form_get_apikey_submit" class="btn btn-info form-control bigger-">
                             <strong>{l s='Get my API Key' mod='oyst'}</strong>
                         </button>
                     </div>
