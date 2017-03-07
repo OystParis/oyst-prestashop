@@ -1,5 +1,5 @@
 {
-    "tab" : "payments_gateways",
+    "tab": "payments_gateways",
     "version": "0.8.11",
     "need_instance": 0,
 
@@ -8,18 +8,20 @@
         "1.6" : [ "advancedPaymentOptions" ]
     },
 
-    "sql" : {
-        "install" : [ "install.sql" ],
-        "uninstall" : [ "uninstall.sql" ]
+    "sql": {
+        "install": [ "install.sql" ],
+        "uninstall": [ "uninstall.sql" ]
     },
 
-    "configurations" : {
-        "FC_OYST_HASH_KEY" : "",
+    "configurations": {
+        "FC_OYST_HASH_KEY": "",
 
         "FC_OYST_GUEST": "1",
         "FC_OYST_MERCHANT_PHONE": "",
 
-        "FC_OYST_API_KEY" : "",
+        "FC_OYST_API_KEY": "",
+
+        "FC_OYST_TRACKER_URL": "https://trk.10ru.pt",
 
         "FC_OYST_REDIRECT_SUCCESS": "ORDER_CONFIRMATION",
         "FC_OYST_REDIRECT_CANCEL": "PAYMENT_ERROR",
@@ -29,14 +31,14 @@
         "FC_OYST_REDIRECT_CANCEL_CUSTOM": "",
         "FC_OYST_REDIRECT_ERROR_CUSTOM": "",
 
-        "FC_OYST_PAYMENT_FEATURE" : "0",
-        "FC_OYST_API_PAYMENT_ENDPOINT" : "https://api.uptain.com/payment",
+        "FC_OYST_PAYMENT_FEATURE": "0",
+        "FC_OYST_API_PAYMENT_ENDPOINT": "https://api.uptain.com/payment",
 
-        "FC_OYST_CATALOG_FEATURE" : "0",
-        "FC_OYST_API_CATALOG_ENDPOINT" : "https://api.uptain.com/catalog",
+        "FC_OYST_CATALOG_FEATURE": "0",
+        "FC_OYST_API_CATALOG_ENDPOINT": "https://api.uptain.com/catalog",
 
-        "FC_OYST_CUSTOMER_CONFIG" : "",
-        "FC_OYST_ADDRESS_CONFIG" : "",
-        "FC_OYST_CART_CONFIG" : ""
+        "FC_OYST_CUSTOMER_CONFIG": "",
+        "FC_OYST_ADDRESS_CONFIG": "",
+        "FC_OYST_CART_CONFIG": ""
     }
 }
