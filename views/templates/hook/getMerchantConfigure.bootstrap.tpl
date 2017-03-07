@@ -124,19 +124,26 @@
                         <input type="text" id="FC_OYST_REDIRECT_CANCEL_CUSTOM" name="FC_OYST_REDIRECT_CANCEL_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_CANCEL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                     </div>
                 </div>
+                <div class="form-group clearfix">
+                    <label class="control-label col-lg-4"></label>
+                    <div class="col-lg-4">
+                        <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info form-control bigger-">
+                            <strong>{l s='Save' mod='oyst'}</strong>
+                        </button>
+                    </div>
+                </div>
             </fieldset>
         </div>
         <div class="panel-footer">
-            <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-default pull-right">
-                <i class="process-icon-save"></i> {l s='Save' mod='oyst'}
-            </button>
-            <button id="toggleConfig" type="button" class="btn btn-default pull-right">
+            <button id="toggleConfig" type="button" class="btn btn-default">
                 <i class="process-icon- icon-eye"></i> <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
             </button>
-            <a class="btn btn-default pull-right" href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }">
+            {if !$oyst.FC_OYST_API_KEY}
+            <a class="btn btn-default" href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }">
                 <i class="process-icon- icon-key"></i>
                 {l s='Get an API Key' mod='oyst'}
             </a>
+            {/if}
         </div>
     </div>
 </form>

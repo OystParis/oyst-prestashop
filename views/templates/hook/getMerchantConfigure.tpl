@@ -81,9 +81,11 @@
                         <span>{l s='Show advanced options' mod='oyst'}</span>
                         <span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
                     </button>
+                    {if !$oyst.FC_OYST_API_KEY}
                     <a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
                         <img src="../img/t/AdminAdmin.gif" alt="" style="vertical-align: text-bottom;">{l s='Get an API Key' mod='oyst'}
                     </a>
+                    {/if}
                 </p>
             </div>
         </fieldset>
