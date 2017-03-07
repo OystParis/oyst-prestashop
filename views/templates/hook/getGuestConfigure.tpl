@@ -62,7 +62,7 @@
 
                 <label>{l s='Phone' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$oyst.form_get_apikey_phone|escape:'html':'UTF-8'}" />
+                    <input type="text" id="form_get_apikey_phone" name="form_get_apikey_phone" value="{$oyst.form_get_apikey_phone|escape:'html':'UTF-8'}"/>
                     {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_phone_error !== ''}
                     <div style="color: #CC0000;margin-top: 3px;">{$oyst.form_get_apikey_phone_error|escape:'html':'UTF-8'}</div>
                     {/if}

@@ -159,7 +159,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
 
         switch($urlName) {
             case 'ORDER_HISTORY':
-                $url = $this->context->link->getModuleLink('oyst', 'history');
+                $url = $this->context->link->getPageLink('history');
                 break;
             case 'ORDER_CONFIRMATION':
                 $url = $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
@@ -168,7 +168,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
                 $url = $this->context->link->getModuleLink('oyst', 'paymentError');
                 break;
             case 'CART':
-                $url = $this->context->link->getModuleLink('oyst', 'cart');
+                $url = $this->context->link->getPageLink('order');
                 break;
             case 'CUSTOM':
                 $url = $customUrl;
