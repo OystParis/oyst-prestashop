@@ -39,8 +39,6 @@ class OystPaymentModuleFrontController extends ModuleFrontController
 
     public function initContent()
     {
-        $urls = $this->getUrls();
-
         $currency = new Currency($this->context->cart->id_currency);
         $total_amount = (int)round($this->context->cart->getOrderTotal() * 100);
 
@@ -94,6 +92,8 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             'phone' => $main_phone,
         );
 
+        $urls = $this->getUrls();
+
         // Make Oyst api call
         $oyst_api = new OystSDK();
         $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
@@ -139,9 +139,9 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         }
 
         $notification = $this->context->link->getModuleLink('oyst', 'paymentNotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
-        $cancelUrl    = $this->getUrlByName($glue, Configuration::get('FC_OYST_REDIRECT_CANCEL'), Configuration::get('FC_OYST_REDIRECT_CANCEL_CUSTOM'));
-        $errorUrl     = $this->getUrlByName($glue, Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
-        $successUrl   = $this->getUrlByName($glue, Configuration::get('FC_OYST_REDIRECT_SUCCESS'), Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM'));
+        $cancelUrl    = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_CANCEL'), Configuration::get('FC_OYST_REDIRECT_CANCEL_CUSTOM'));
+        $errorUrl     = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
+        $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
 
         $urls = array(
             'notification' => $notification,
@@ -153,16 +153,13 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         return $urls;
     }
 
-    private function getUrlByName($glue, $urlName, $customUrl)
+    private function getUrlByName($urlName, $customUrl)
     {
         $url = '';
 
         switch($urlName) {
             case 'ORDER_HISTORY':
                 $url = $this->context->link->getPageLink('history');
-                break;
-            case 'ORDER_CONFIRMATION':
-                $url = $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
                 break;
             case 'PAYMENT_ERROR':
                 $url = $this->context->link->getModuleLink('oyst', 'paymentError');
