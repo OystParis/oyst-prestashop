@@ -18,6 +18,13 @@
  * @license GNU GENERAL PUBLIC LICENSE
  */
 $(document).ready(function() {
+    // Compatibility 1.5 and 1.6
+    var errorOnAdvancedOption = $('.urlCustomization p.error').length || $('.urlCustomization div.alert').length;
+
+    if (errorOnAdvancedOption) {
+        $('.advancedOptions').show();
+    }
+
     $('#toggleConfig').click(function() {
         $('.advancedOptions').toggle();
         $('i', this).toggleClass('icon-eye').toggleClass('icon-eye-close');
@@ -35,9 +42,11 @@ function handleSelectOptions(select) {
 
     $('option:selected', select).each(function() {
         if ($(this).hasClass('customUrl')) {
-            $('input.customUrlText', parentDiv).show().removeAttr('disabled');
+            $('.customUrlText', parentDiv).show();
+            $('input.customUrlText', parentDiv).removeAttr('disabled');
         } else {
-            $('input.customUrlText', parentDiv).hide().attr('disabled', 'disabled');
+            $('.customUrlText', parentDiv).hide();
+            $('input.customUrlText', parentDiv).attr('disabled', 'disabled');
         }
     });
 }

@@ -83,8 +83,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8166540c7fd52a23da06a
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_17e6e15f2ea6cb21136d16ad72e8361c'] = 'Activer FreePay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dcef5e8edb13510777145bc8e5ac30d2'] = 'API de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_429f48491bb134051b37e53a37c52221'] = 'Success URL';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_0b0d024907d191e6c2a1d4072a9b9726'] = 'Cancel URL';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_7c716ec85af8e22c87caffb6a007b358'] = 'Ce n\'est pas une URL valide!';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_aff51d15d8c554003463325f0eb4313f'] = 'Error URL';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_0b0d024907d191e6c2a1d4072a9b9726'] = 'Cancel URL';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4578544e15448d2758f7c6ae4009253a'] = 'Cacher les options avancées';

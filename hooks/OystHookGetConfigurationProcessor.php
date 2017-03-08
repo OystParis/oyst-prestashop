@@ -133,6 +133,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['redirect_success_urls']    = $this->redirect_success_urls;
         $assign['redirect_cancel_urls']     = $this->redirect_cancel_urls;
         $assign['redirect_error_urls']      = $this->redirect_error_urls;
+        $assign['custom_success_error']     = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM'));
+        $assign['custom_cancel_error']      = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_CANCEL_CUSTOM'));
+        $assign['custom_error_error']       = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');
