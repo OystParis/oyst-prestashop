@@ -19,10 +19,6 @@
  *}
 <link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay-1.5.css" media="all">
 
-{if isset($oyst.result) && $oyst.result eq 'ok'}
-    <p class="conf"><strong>{l s='The new configuration has been saved!' mod='oyst'}</strong></p>
-{/if}
-
 {if !$oyst.allow_url_fopen_check}
     <p class="error"><strong>{l s='You have to enable "allow_url_fopen" on your server to use this module!' mod='oyst'}</strong></p>
 {/if}
@@ -48,6 +44,15 @@
                         <a id="hideError" href="#"><img alt="X" src="../img/admin/close.png"></a>
                     </span>
                     {l s='Oups!' mod='oyst'}
+                </div>
+                <div class="clear"></div>
+                {/if}
+                {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_notify_error !== ''}
+                <div class="margin-form error" style="width: 350px;margin: auto;margin-bottom: 10px;">
+                    <span style="float:right">
+                        <a id="hideError" href="#"><img alt="X" src="../img/admin/close.png"></a>
+                    </span>
+                    {l s='Oups! An error occured while sending your information to FreePay.' mod='oyst'}
                 </div>
                 <div class="clear"></div>
                 {/if}

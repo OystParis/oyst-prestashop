@@ -221,16 +221,17 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $emailError = $this->module->l('Please enter a valid email', 'oysthookgetconfigurationprocessor');
         }
 
-        $assign['form_get_apikey_name_error'] = $nameError;
-        $assign['form_get_apikey_phone_error'] = $phoneError;
-        $assign['form_get_apikey_email_error'] = $emailError;
+        $assign['form_get_apikey_name_error']   = $nameError;
+        $assign['form_get_apikey_phone_error']  = $phoneError;
+        $assign['form_get_apikey_email_error']  = $emailError;
+        $assign['form_get_apikey_notify_error'] = false;
 
         if (!$hasError) {
-            $response = OystSDK::notifyOnSlack($name, $phone, $email);
+            $isSent = OystSDK::notify($name, $phone, $email);
 
-            if ($response != 'ok') {
+            if (!$isSent) {
                 $goToForm = true;
-                $assign['form_get_apikey_error'] = true;
+                $assign['form_get_apikey_notify_error'] = true;
             } else {
                 Configuration::updateValue('FC_OYST_GUEST', true);
                 Configuration::updateValue('FC_OYST_MERCHANT_PHONE', $phone);

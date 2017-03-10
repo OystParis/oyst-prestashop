@@ -87,28 +87,40 @@ class OystSDK
         return curl_exec($ch);
     }
 
-    public static function notifyOnSlack($name, $phone, $email)
+    /**
+     * @param string $name
+     * @param string $phone
+     * @param string $email
+     *
+     * @return bool
+     */
+    public static function notify($name, $phone, $email)
     {
-        $url  = Tools::getHttpHost(true).__PS_BASE_URI__;
-        $data = Tools::jsonEncode([
-            'text'     => $name.' du site '.$url.' a installé le module Freepay '._PS_OYST_VERSION_.'. Voici ses coordonnées : '.$phone.' et '.$email,
-            'username' => 'Prestashop',
-            'channel'  => '#plugin-alerts'
-        ]);
+        $psUrl  = 'https://partners-subscribe.prestashop.com/oyst/request.php';
+        $params = array(
+            'ps_version'   => _PS_VERSION_,
+            'oyst_version' => _PS_OYST_VERSION_,
+            'url'          => Tools::getHttpHost(true).__PS_BASE_URI__,
+            'name'         => $name,
+            'phone'        => $phone,
+            'email'        => $email,
+            'channel'      => 'plugin-alerts'
+        );
+        $urlToCall = $psUrl.'?'.http_build_query($params);
 
-        $ch = curl_init('https://hooks.slack.com/services/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');
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        $ch = curl_init($urlToCall);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Content-Length: '.Tools::strlen($data),
-            'User-Agent: OystPrestashop/'._PS_OYST_VERSION_.' (Prestashop '._PS_VERSION_.')',
-        ));
         curl_setopt($ch, CURLOPT_TIMEOUT, 2000);
 
-        return curl_exec($ch);
+        $return   = curl_exec($ch);
+        $response = Tools::jsonDecode($return, true);
+
+        if (isset($response['status']) && $response['status'] == 'OK') {
+            return true;
+        }
+
+        return false;
     }
 
     /**

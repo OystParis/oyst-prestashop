@@ -35,7 +35,6 @@ $_MODULE['<{oyst}prestashop>displaypaymentreturn_e72f5db7df95fb92f69e9b5ac76f05f
 $_MODULE['<{oyst}prestashop>displaypaymentreturn_101ca5088a7684efc2a4f4548f8eb353'] = 'Identifiant de transaction : %s';
 $_MODULE['<{oyst}prestashop>displaypaymentreturn_ca7e41a658753c87973936d7ce2429a8'] = 'Si vous avez une question, un commentaire ou besoin d\'aide, n\'hésitez pas à contacter notre';
 $_MODULE['<{oyst}prestashop>displaypaymentreturn_dfe239de8c0b2453a8e8f7657a191d5d'] = 'service client.';
-$_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_6fbad2e72aa530a696efd16995dd70bc'] = 'Une erreur est survenue!';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_9b0c85b97abeed9539a4a27522f07b86'] = 'Vous devez activer l\'option \"allow_url_fopen\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_1e9a47f645f877ccb0802c12a409fcdf'] = 'Vous devez activer l\'extension \"cURL\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_4f30368a3edc08d509761e391436f3a3'] = 'de frais d\'installation';
@@ -44,12 +43,12 @@ $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_23db425b00bb8abc79d362a3
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_1a81759353d36dbd31059fc261af0aa2'] = 'Félicitations !';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_98a6790b1a51b50176a263eee5fed25d'] = 'Il ne reste plus qu\'à activer le plugin FreePay pour bénéficier du';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_e2a41d008c2ba3350070e629fa0464a2'] = 'paiement par carte 100% GRATUIT';
+$_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_b96910967fe7912cdcffbd5c7cf21ff7'] = 'Oups! Une erreur est survenue lors de l\'envoi de vos informations à FreePay.';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_bcc254b55c4a1babdf1dcb82c207506b'] = 'Téléphone';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_676474db2d25533c7053d3ba352023b0'] = 'Obtenir ma clé d\'activation';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_57dbc64d95a4615ed7ca6ba5843b22e6'] = 'J\'ai déjà une clé';
-$_MODULE['<{oyst}prestashop>getguestconfigure_4725c2b6db34f755b89b741c1d45bc71'] = 'La nouvelle configuration a été sauvegardée !';
 $_MODULE['<{oyst}prestashop>getguestconfigure_9b0c85b97abeed9539a4a27522f07b86'] = 'Vous devez activer l\'option \"allow_url_fopen\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getguestconfigure_1e9a47f645f877ccb0802c12a409fcdf'] = 'Vous devez activer l\'extension \"cURL\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getguestconfigure_4f30368a3edc08d509761e391436f3a3'] = 'de frais d\'installation';
@@ -59,6 +58,7 @@ $_MODULE['<{oyst}prestashop>getguestconfigure_1a81759353d36dbd31059fc261af0aa2']
 $_MODULE['<{oyst}prestashop>getguestconfigure_98a6790b1a51b50176a263eee5fed25d'] = 'Il ne reste plus qu\'à activer le plugin FreePay pour bénéficier du';
 $_MODULE['<{oyst}prestashop>getguestconfigure_e2a41d008c2ba3350070e629fa0464a2'] = 'paiement par carte 100% GRATUIT';
 $_MODULE['<{oyst}prestashop>getguestconfigure_0da13d0c5d57b8dd5767796e5d6f4af0'] = 'Oups!';
+$_MODULE['<{oyst}prestashop>getguestconfigure_b96910967fe7912cdcffbd5c7cf21ff7'] = 'Oups! Une erreur est survenue lors de l\'envoi de vos informations à FreePay.';
 $_MODULE['<{oyst}prestashop>getguestconfigure_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{oyst}prestashop>getguestconfigure_bcc254b55c4a1babdf1dcb82c207506b'] = 'Téléphone';
 $_MODULE['<{oyst}prestashop>getguestconfigure_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
@@ -107,6 +107,10 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_104c53f712b567c6a55bd6e21511ad5
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8166540c7fd52a23da06af9c9ea1b0ec'] = 'Votre clé API semble invalide !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_17e6e15f2ea6cb21136d16ad72e8361c'] = 'Activer FreePay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_dcef5e8edb13510777145bc8e5ac30d2'] = 'API de paiement';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_429f48491bb134051b37e53a37c52221'] = 'Success URL';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_7c716ec85af8e22c87caffb6a007b358'] = 'Ce n\'est pas une URL valide!';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_aff51d15d8c554003463325f0eb4313f'] = 'Error URL';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_0b0d024907d191e6c2a1d4072a9b9726'] = 'Cancel URL';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4578544e15448d2758f7c6ae4009253a'] = 'Cacher les options avancées';

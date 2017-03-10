@@ -19,15 +19,6 @@
  *}
 <link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay-1.6.css" media="all">
 
-{if isset($oyst.result) && $oyst.result eq 'ko'}
-    <div class="bootstrap">
-        <div class="alert alert-danger">
-            <button data-dismiss="alert" class="close" type="button">×</button>
-            {l s='An error occured!' mod='oyst'}
-        </div>
-    </div>
-{/if}
-
 {if !$oyst.allow_url_fopen_check}
     <div class="bootstrap">
         <div class="alert alert-danger">
@@ -55,6 +46,13 @@
         </div>
         <div class="panel oyst_fieldset">
             <div class="oyst-admin-tab">
+                {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_notify_error !== ''}
+                <div class="bootstrap">
+                    <div class="alert alert-danger">
+                        {l s='Oups! An error occured while sending your information to FreePay.' mod='oyst'}
+                    </div>
+                </div>
+                {/if}
                 <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_name_error !== ''} has-error{/if}">
                     <label class="control-label col-lg-4">{l s='Name' mod='oyst'}</label>
                     <div class="col-lg-4">
