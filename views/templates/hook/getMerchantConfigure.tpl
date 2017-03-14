@@ -38,17 +38,17 @@
         </div>
         {if $oyst.FC_OYST_GUEST && $oyst.phone}
             <div class="header">
-            <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong></p>
+                <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong></p>
 
-            <p><a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
-            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
-            <p>
-                {l s='Please, get these information ready:' mod='oyst'}<br>
-                <strong>{l s='SIRET' mod='oyst'}</strong><br>
-                <strong>{l s='VAT Number' mod='oyst'}</strong><br>
-                <strong>{l s='IBAN' mod='oyst'}</strong>
-            </p>
-        </div>
+                <p><a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
+                <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
+                <p>
+                    {l s='Please, get these information ready:' mod='oyst'}<br>
+                    <strong>{l s='SIRET' mod='oyst'}</strong><br>
+                    <strong>{l s='VAT Number' mod='oyst'}</strong><br>
+                    <strong>{l s='IBAN' mod='oyst'}</strong>
+                </p>
+            </div>
         {/if}
         <fieldset class="panel">
             <legend>
@@ -59,7 +59,7 @@
                 <input type="text" id="FC_OYST_API_KEY" name="FC_OYST_API_KEY" value="{$oyst.FC_OYST_API_KEY|escape:'htmlall':'UTF-8'}"/>
                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                 {if $oyst.apikey_test_error}
-                <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                    <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                 {/if}
             </div>
 
@@ -80,7 +80,7 @@
                 </select>
                 <input type="text" id="FC_OYST_REDIRECT_SUCCESS_CUSTOM" name="FC_OYST_REDIRECT_SUCCESS_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_SUCCESS_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                 {if $oyst.custom_success_error}
-                <p class="error customUrlText"><strong>{l s='This is not a valid URL!' mod='oyst'}</strong></p>
+                    <p class="error customUrlText"><strong>{l s='This is not a valid URL!' mod='oyst'}</strong></p>
                 {/if}
             </div>
             <label class="advancedOptions">{l s='Error Url' mod='oyst'}</label>
@@ -92,7 +92,7 @@
                 </select>
                 <input type="text" id="FC_OYST_REDIRECT_ERROR_CUSTOM" name="FC_OYST_REDIRECT_ERROR_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_ERROR_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                 {if $oyst.custom_error_error}
-                <p class="error customUrlText"><strong>{l s='This is not a valid URL!' mod='oyst'}</strong></p>
+                    <p class="error customUrlText"><strong>{l s='This is not a valid URL!' mod='oyst'}</strong></p>
                 {/if}
             </div>
             <label class="advancedOptions">{l s='Cancel Url' mod='oyst'}</label>
@@ -104,7 +104,7 @@
                 </select>
                 <input type="text" id="FC_OYST_REDIRECT_CANCEL_CUSTOM" name="FC_OYST_REDIRECT_CANCEL_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_CANCEL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                 {if $oyst.custom_cancel_error}
-                <p class="error customUrlText"><strong>{l s='This is not a valid URL!' mod='oyst'}</strong></p>
+                    <p class="error customUrlText"><strong>{l s='This is not a valid URL!' mod='oyst'}</strong></p>
                 {/if}
             </div>
             <br>
@@ -118,11 +118,25 @@
                         <span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
                     </button>
                     {if !$oyst.FC_OYST_API_KEY}
-                    <a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
-                        <img src="../img/t/AdminAdmin.gif" alt="" style="vertical-align: text-bottom;">{l s='Get an API Key' mod='oyst'}
-                    </a>
+                        <a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
+                            <img src="../img/t/AdminAdmin.gif" alt="" style="vertical-align: text-bottom;">{l s='Get an API Key' mod='oyst'}
+                        </a>
                     {/if}
                 </p>
+            </div>
+        </fieldset>
+    </form>
+    <br />
+    <form method="POST">
+        <fieldset>
+            <legend>
+                <img src="{$oyst.module_dir|escape:'html':'UTF-8'}logo.png" alt="" width="16">{l s='Catalog' mod='oyst'}
+            </legend>
+
+            <label>{l s='Syncronize your products' mod='oyst'}</label>
+            <div class="margin-form">
+                <button type="submit" name="synchronizeProducts">{l s='Start' mod='oyst'}</button>
+                <span>{l s='Will start to synchronize your products'}</span>
             </div>
         </fieldset>
     </form>

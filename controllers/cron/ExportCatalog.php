@@ -46,7 +46,7 @@ class OystExportCatalogModuleCronController
     public function run()
     {
         // Get products
-        $oyst_product = new OystProduct();
+        $oyst_product = new OystProductOld();
         $result = $oyst_product->sendCatalog();
 
         // Display result
