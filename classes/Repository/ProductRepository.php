@@ -38,4 +38,21 @@ class ProductRepository
         $products = $this->db->executeS(str_replace('ps_', _DB_PREFIX_, $query));
         return $products;
     }
+
+    /**
+     * @param $products
+     * @param $importId
+     */
+    public function recordSentProducts($products, $importId)
+    {
+        $productIds = [];
+        foreach ($products as $product) {
+            $productIds[] = [
+                'productId' => $product['id_product'],
+                'productAttributeId' => $product['id_product_attribute'],
+                'importId' => $importId,
+            ];
+        }
+        $this->db->insert('oyst_exported_catalog', $productIds);
+    }
 }

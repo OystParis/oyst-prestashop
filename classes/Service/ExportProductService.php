@@ -72,18 +72,20 @@ class ExportProductService
     }
 
     /**
+     * @param array $products PrestaShop products
      * @return OystProduct[]
      * @throws Exception
      */
-    private function getOystProducts()
+    private function transformProducts($products)
     {
-        $products = $this->productRepository->getProductsNotExported();
         $product = new Product();
 
+        $this->context->cart = new Cart();
         if (!Validate::isLoadedObject($this->context->currency)) {
             throw new Exception('Bad Currency object, Did you forget to set it ?');
         }
 
+        $oystProducts = [];
         foreach ($products as $productInfo) {
 
             $oystProduct = new OystProduct();
@@ -96,7 +98,7 @@ class ExportProductService
                 }
             }
 
-            //$oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
+            $oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
 
             $categories = [];
             // Small cache to use avoid this process with attributes
@@ -121,20 +123,28 @@ class ExportProductService
             // Common fields
             $oystProduct->setActive($product->active);
             $oystProduct->setManufacturer($product->manufacturer_name);
-            $oystProduct->setSize(
-                'L'.$product->width.' '.$this->dimensionUnit.
-                'D'.$product->depth.' '.$this->dimensionUnit.
-                'H'.$product->height.' '.$this->dimensionUnit
-            );
+            $oystProduct->setSize([
+                'depth' => (int) $product->depth,
+                'width' => (int) $product->width,
+                'height' => (int) $product->height,
+            ]);
 
             $oystProduct->setCondition(($product->condition == 'used' ? 'reused' : $product->condition));
             $oystProduct->setCategories($categories[$product->id]);
-            //$oystProduct->setAmountIncludingTax($oystPrice);
+            $oystProduct->setAmountIncludingTax($oystPrice);
             $oystProduct->setAvailableQuantity(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
             $oystProduct->setDescription($product->description);
             $oystProduct->setShortDescription($product->description_short);
             $oystProduct->setUrl($this->context->link->getProductLink($product));
-            $oystProduct->setImages(ImageCore::getImages($this->context->language->id, $product->id, $combination->id));
+
+            $images = [];
+            foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
+                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+            }
+            if (empty($images)) {
+                $images = ['https://www.google.com/logos/doodles/2015/googles-new-logo-5078286822539264.3-hp2x.gif'];
+            }
+            $oystProduct->setImages($images);
 
             $oystProducts[] = clone $oystProduct;
         }
@@ -142,9 +152,22 @@ class ExportProductService
         return $oystProducts;
     }
 
-    public function export()
+    /**
+     * @param $importId
+     * @return bool
+     */
+    public function export($importId)
     {
-        $products = $this->getOystProducts();
+        // TODO: Maybe add some log information for this process and store it in a new table ?
+        $prestaShopProducts = $this->productRepository->getProductsNotExported();
+        $products = $this->transformProducts($prestaShopProducts);
         $this->oystCatalogAPI->postProducts($products);
+        $state = false;
+
+        if ($this->oystCatalogAPI->getLastHttpCode() == 200) {
+            $this->productRepository->recordSentProducts($prestaShopProducts, $importId);
+        }
+
+        return $state;
     }
 }

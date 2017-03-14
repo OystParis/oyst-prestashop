@@ -29,6 +29,7 @@ class ExportProductController
         $this->exportProductService->setWeightUnit(ConfigurationCore::get('PS_WEIGHT_UNIT'));
         $this->exportProductService->setDimensionUnit(ConfigurationCore::get('PS_CURRENCY_DEFAULT'));
 
-        $this->exportProductService->export();
+        // TODO: Handle importId properly when the process will be available
+        $this->exportProductService->export(rand());
     }
 }

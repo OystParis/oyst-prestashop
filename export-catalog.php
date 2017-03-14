@@ -8,7 +8,7 @@ require_once __DIR__ . '/external/autoload.php';
 $oyst = new Oyst();
 $context = Context::getContext();
 Context::getContext()->currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-$productRepository = new ProductRepository(Db::getInstance(_PS_USE_SQL_SLAVE_));
+$productRepository = new ProductRepository(Db::getInstance());
 $exportProductService = new ExportProductService(
     $context,
     $productRepository,
