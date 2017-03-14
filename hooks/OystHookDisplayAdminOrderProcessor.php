@@ -55,6 +55,19 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         // Clean buffer
         ob_end_clean();
 
+        // Make Oyst api call
+        $result = '';
+        $oyst_payment_notification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
+        if (Validate::isLoadedObject($oyst_payment_notification)) {
+            $oyst_api = new OystSDK();
+            $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
+            $oyst_api->setApiKey(Configuration::get('FC_OYST_API_KEY'));
+            $result = $oyst_api->cancelRefundRequest($oyst_payment_notification->payment_id);
+            if ($result) {
+                $result = Tools::jsonDecode($result);
+            }
+        }
+
         // Set refund status
         $history = new OrderHistory();
         $history->id_order = $order->id;
@@ -63,6 +76,6 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         $history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), $order->id);
         $history->add();
 
-        die(Tools::jsonEncode(array('result' => 'success')));
+        die(Tools::jsonEncode(array('result' => 'success', 'details' => $result)));
     }
 }
