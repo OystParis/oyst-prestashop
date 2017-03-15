@@ -22,7 +22,8 @@
     <div class="col-xs-12 col-md-12">
         <p class="payment_module">
             <a href="{$link->getModuleLink('oyst', 'payment')|escape:'htmlall':'UTF-8'}" class="oyst">
-                {l s='Pay by Credit Card' mod='oyst'}
+                <img src="{$oyst.module_dir|escape:'htmlall':'UTF-8'}views/img/logo-horizontal-credit-card.png" height="49" />
+                <span>{l s='Pay by Credit Card' mod='oyst'}</span>
             </a>
         </p>
     </div>
@@ -50,10 +51,17 @@
         line-height: 23px;
         color: #333;
         font-weight: bold;
-        padding: 33px 40px 34px 99px;
+        padding: 15px 40px 15px 15px;
         letter-spacing: -1px;
         position: relative;
-        background: #fbfbfb url("{$oyst.module_dir|escape:'htmlall':'UTF-8'}views/img/logo-horizontal-credit-card.png") no-repeat scroll 15px 15px;
-        padding-left: 390px;
+    }
+    p.payment_module a.oyst img {
+        max-width: 100%;
+        height: auto;
+    }
+    p.payment_module a.oyst span {
+        font-weight: inherit;
+        color: inherit;
+        white-space: nowrap;
     }
 </style>
