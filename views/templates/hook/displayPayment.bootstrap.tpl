@@ -43,6 +43,16 @@
         width: 14px;
     }
     p.payment_module a.oyst {
+        display: block;
+        border: 1px solid #d6d4d4;
+        border-radius: 4px;
+        font-size: 17px;
+        line-height: 23px;
+        color: #333;
+        font-weight: bold;
+        padding: 33px 40px 34px 99px;
+        letter-spacing: -1px;
+        position: relative;
         background: #fbfbfb url("{$oyst.module_dir|escape:'htmlall':'UTF-8'}views/img/logo-horizontal-credit-card.png") no-repeat scroll 15px 15px;
         padding-left: 390px;
     }
