@@ -34,6 +34,8 @@ $(document).ready(function() {
                 msg = JSON.parse(msg);
                 if (msg.result == 'success') {
                     window.location.href = window.location.href;
+                } else {
+                    alert('Une erreur s\'est produite lors du remboursement : ' + msg.details.statusCode + ' - ' + msg.details.error);
                 }
             });
         }

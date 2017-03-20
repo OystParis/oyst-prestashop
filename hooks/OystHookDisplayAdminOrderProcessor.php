@@ -76,6 +76,6 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         $history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), $order->id);
         $history->add();
 
-        die(Tools::jsonEncode(array('result' => 'success', 'details' => $result)));
+        die(Tools::jsonEncode(array('result' => ($result == 200 ? 'success' : 'failure'), 'details' => $result)));
     }
 }
