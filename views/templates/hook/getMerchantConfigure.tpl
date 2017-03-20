@@ -75,7 +75,7 @@
             <div class="margin-form advancedOptions urlCustomization">
                 <select id="FC_OYST_REDIRECT_SUCCESS" name="FC_OYST_REDIRECT_SUCCESS">
                 {foreach from=$oyst.redirect_success_urls key=url item=label}
-                    <option value="{$url}"{if $oyst.FC_OYST_REDIRECT_SUCCESS == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label}</option>
+                    <option value="{$url|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_REDIRECT_SUCCESS == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label|escape:'html':'UTF-8'}</option>
                 {/foreach}
                 </select>
                 <input type="text" id="FC_OYST_REDIRECT_SUCCESS_CUSTOM" name="FC_OYST_REDIRECT_SUCCESS_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_SUCCESS_CUSTOM|escape:'htmlall':'UTF-8'}"/>
@@ -87,7 +87,7 @@
             <div class="margin-form advancedOptions urlCustomization">
                 <select id="FC_OYST_REDIRECT_ERROR" name="FC_OYST_REDIRECT_ERROR">
                 {foreach from=$oyst.redirect_error_urls key=url item=label}
-                    <option value="{$url}"{if $oyst.FC_OYST_REDIRECT_ERROR == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label}</option>
+                    <option value="{$url|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_REDIRECT_ERROR == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label|escape:'html':'UTF-8'}</option>
                 {/foreach}
                 </select>
                 <input type="text" id="FC_OYST_REDIRECT_ERROR_CUSTOM" name="FC_OYST_REDIRECT_ERROR_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_ERROR_CUSTOM|escape:'htmlall':'UTF-8'}"/>
@@ -99,7 +99,7 @@
             <div class="margin-form advancedOptions urlCustomization">
                 <select id="FC_OYST_REDIRECT_CANCEL" name="FC_OYST_REDIRECT_CANCEL">
                 {foreach from=$oyst.redirect_cancel_urls key=url item=label}
-                    <option value="{$url}"{if $oyst.FC_OYST_REDIRECT_CANCEL == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label}</option>
+                    <option value="{$url|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_REDIRECT_CANCEL == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label|escape:'html':'UTF-8'}</option>
                 {/foreach}
                 </select>
                 <input type="text" id="FC_OYST_REDIRECT_CANCEL_CUSTOM" name="FC_OYST_REDIRECT_CANCEL_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_CANCEL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
