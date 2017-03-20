@@ -19,13 +19,10 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-function upgrade_module_1_0_0($module)
+function upgrade_module_1_0_0()
 {
-    // Update SQL table
-    $sql_file = dirname(__FILE__).'/sql/install-1.0.0.sql';
-    if (!$module->loadSQLFile($sql_file)) {
-        return false;
-    }
+    Configuration::updateValue('FC_OYST_API_PAYMENT_ENDPOINT', 'https://api.oyst.com/payment');
+    Configuration::updateValue('FC_OYST_API_CATALOG_ENDPOINT', 'https://api.oyst.com/catalog');
 
     // All went well!
     return true;
