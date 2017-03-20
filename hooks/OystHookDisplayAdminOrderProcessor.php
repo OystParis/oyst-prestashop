@@ -56,7 +56,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         ob_end_clean();
 
         // Make Oyst api call
-        $result = '';
+        $result = array('statusCode' => 404, 'error' => 'Transaction not found');
         $oyst_payment_notification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
         if (Validate::isLoadedObject($oyst_payment_notification)) {
             $oyst_api = new OystSDK();
@@ -66,16 +66,16 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             if ($result) {
                 $result = Tools::jsonDecode($result);
             }
+
+            // Set refund status
+            $history = new OrderHistory();
+            $history->id_order = $order->id;
+            $history->id_employee = 0;
+            $history->id_order_state = (int)Configuration::get('PS_OS_REFUND');
+            $history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), $order->id);
+            $history->add();
         }
 
-        // Set refund status
-        $history = new OrderHistory();
-        $history->id_order = $order->id;
-        $history->id_employee = 0;
-        $history->id_order_state = (int)Configuration::get('PS_OS_REFUND');
-        $history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), $order->id);
-        $history->add();
-
-        die(Tools::jsonEncode(array('result' => ($result == 200 ? 'success' : 'failure'), 'details' => $result)));
+        die(Tools::jsonEncode(array('result' => (isset($result['statusCode']) && $result['statusCode'] == 200 ? 'success' : 'failure'), 'details' => $result)));
     }
 }
