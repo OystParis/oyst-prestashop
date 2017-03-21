@@ -68,12 +68,14 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             }
 
             // Set refund status
-            $history = new OrderHistory();
-            $history->id_order = $order->id;
-            $history->id_employee = 0;
-            $history->id_order_state = (int)Configuration::get('PS_OS_REFUND');
-            $history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), $order->id);
-            $history->add();
+            if (!isset($result['error'])) {
+                $history = new OrderHistory();
+                $history->id_order = $order->id;
+                $history->id_employee = 0;
+                $history->id_order_state = (int)Configuration::get('PS_OS_REFUND');
+                $history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), $order->id);
+                $history->add();
+            }
         }
 
         die(Tools::jsonEncode(array('result' => (isset($result['error']) ? 'failure' : 'success'), 'details' => $result)));
