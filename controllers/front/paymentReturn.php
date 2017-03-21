@@ -67,7 +67,7 @@ class OystPaymentReturnModuleFrontController extends ModuleFrontController
                     $url = $this->context->link->getPageLink('order-confirmation').$glue.'id_cart='.$cart->id.'&id_module='.Module::getModuleIdByName('oyst').'&key='.$customer->secure_key;
                     break;
                 case 'CUSTOM':
-                    $url = COnfiguration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM');
+                    $url = Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM');
                     break;
             }
 

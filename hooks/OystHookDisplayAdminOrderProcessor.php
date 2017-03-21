@@ -32,7 +32,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
     {
         // Check if order has been paid with Oyst
         $order = new Order(Tools::getValue('id_order'));
-        if ($order->module != 'oyst') {
+        if ($order->module != 'oyst' || $order->current_state == 7) {
             return '';
         }
 
