@@ -113,6 +113,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         if ($goToConf) {
+            Configuration::updateValue('FC_OYST_GUEST', false);
             $goToForm = false;
         }
 
