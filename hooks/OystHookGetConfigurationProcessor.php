@@ -171,9 +171,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
      */
     private function handleContactForm(&$assign, &$hasError, &$goToForm)
     {
-        $assign['form_get_apikey_name']  = '';
+        $assign['form_get_apikey_name']  = $this->context->employee->lastname.' '.$this->context->employee->firstname;
         $assign['form_get_apikey_phone'] = '';
-        $assign['form_get_apikey_email'] = '';
+        $assign['form_get_apikey_email'] = $this->context->employee->email;
         $assign['form_get_apikey_name_error']  = '';
         $assign['form_get_apikey_phone_error'] = '';
         $assign['form_get_apikey_email_error'] = '';
