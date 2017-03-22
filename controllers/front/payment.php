@@ -139,13 +139,12 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         }
 
         $notification = $this->context->link->getModuleLink('oyst', 'paymentNotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
-        $cancelUrl    = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_CANCEL'), Configuration::get('FC_OYST_REDIRECT_CANCEL_CUSTOM'));
         $errorUrl     = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
         $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
 
         $urls = array(
             'notification' => $notification,
-            'cancel'       => $cancelUrl,
+            'cancel'       => $errorUrl,
             'error'        => $errorUrl,
             'return'       => $successUrl
         );

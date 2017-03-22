@@ -95,18 +95,6 @@
                 <p class="error customUrlText"><strong>{l s='This is not a valid URL!' mod='oyst'}</strong></p>
                 {/if}
             </div>
-            <label class="advancedOptions">{l s='Cancel Url' mod='oyst'}</label>
-            <div class="margin-form advancedOptions urlCustomization">
-                <select id="FC_OYST_REDIRECT_CANCEL" name="FC_OYST_REDIRECT_CANCEL">
-                {foreach from=$oyst.redirect_cancel_urls key=url item=label}
-                    <option value="{$url|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_REDIRECT_CANCEL == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label|escape:'html':'UTF-8'}</option>
-                {/foreach}
-                </select>
-                <input type="text" id="FC_OYST_REDIRECT_CANCEL_CUSTOM" name="FC_OYST_REDIRECT_CANCEL_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_CANCEL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
-                {if $oyst.custom_cancel_error}
-                <p class="error customUrlText"><strong>{l s='This is not a valid URL!' mod='oyst'}</strong></p>
-                {/if}
-            </div>
             <br>
             <div class="margin-form">
                 <p>
