@@ -34,7 +34,7 @@
         </div>
         <div class="header">
             <h2>{l s='Congratulations!' mod='oyst'}</h2>
-            <p>{l s='All you have to do now is enabling FreePay plugin to benefit from' mod='oyst'} <strong>{l s='credit card payment 100&#37 free' mod='oyst'}</strong>!</p>
+            <p>{l s='To enable the FreePay plugin, please fill the following form.' mod='oyst'}</p>
         </div>
         <fieldset class="panel oyst_fieldset">
             <div id="form">
