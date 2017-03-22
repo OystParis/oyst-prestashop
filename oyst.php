@@ -19,43 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-defined('_PS_VERSION_') || require dirname(__FILE__) . '/index.php';
-
-/*
- * Include Froggy Library
- */
-if (!class_exists('FroggyModule', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/froggy/FroggyModule.php';
-}
-if (!class_exists('FroggyPaymentModule', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/froggy/FroggyPaymentModule.php';
-}
-
-/*
- * Include Oyst SDK
- */
-if (!class_exists('OystSDK', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystSDK.php';
-}
-
-/*
- * Include Oyst Product Class
- */
-if (!class_exists('OystProduct', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystProduct.php';
-}
-
-/*
- * Include Oyst Payment Notification Class
- */
-if (!class_exists('OystPaymentNotification', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystPaymentNotification.php';
-}
-
-define('_PS_OYST_DEBUG_', 0);
+require_once __DIR__ . '/autoload.php';
 
 /**
  * Class Oyst

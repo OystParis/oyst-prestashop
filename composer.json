@@ -7,7 +7,7 @@
     ],
     "require": {
         "php": ">=5.3",
-        "oyst/oyst-php": "dev-feat-update-composer",
+        "oyst/oyst-php": "1.1.1",
         "symfony/http-foundation": "2.*"
     },
     "autoload": {

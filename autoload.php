@@ -37,9 +37,3 @@ if (!class_exists('OystPaymentNotification', false)) {
 }
 
 define('_PS_OYST_DEBUG_', 0);
-
-// Include Oyst library auto load
-$autoload = __DIR__.'/external/oyst-library/autoload.php';
-if (file_exists($autoload)) {
-    require_once $autoload;
-}
