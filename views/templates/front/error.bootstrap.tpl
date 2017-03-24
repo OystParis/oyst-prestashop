@@ -20,7 +20,7 @@
 
 <div class="alert alert-danger">
     {l s='An error occured with the payment system. Please contact support.' mod='oyst'}
-    {if isset($smarty.get.debug)}
+    {if isset($oyst_debug)}
         <pre>{$oyst_debug|print_r|escape:'htmlall':'UTF-8'}</pre>
     {/if}
 </div>
