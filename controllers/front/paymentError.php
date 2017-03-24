@@ -33,8 +33,10 @@ class OystPaymentErrorModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
-        $function = 'base64'.'_'.'decode';
-        $this->context->smarty->assign('oyst_debug', Tools::jsonDecode($function($this->context->cookie->oyst_debug), true));
+        if (_PS_OYST_DEBUG_ == 1 && Tools::getValue('debug') == Configuration::get('FC_OYST_HASH_KEY')) {
+            $function = 'base64'.'_'.'decode';
+            $this->context->smarty->assign('oyst_debug', Tools::jsonDecode($function($this->context->cookie->oyst_debug), true));
+        }
         $this->setTemplate('error'.(version_compare(_PS_VERSION_, '1.6.0') ? '.bootstrap' : '').'.tpl');
     }
 }
