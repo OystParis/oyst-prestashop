@@ -21,9 +21,13 @@
 $(document).ready(function() {
 
     // Hide partial and refund and display refund button
+    var standard_refund_button = $('#desc-order-standard_refund');
     var partial_refund_button = $('#desc-order-partial_refund');
+
+    standard_refund_button.hide();
     partial_refund_button.hide();
     partial_refund_button.after(refund_button_html);
+
     $('#desc-order-freepay-refund').click(function() {
         if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {
             $.ajax({
