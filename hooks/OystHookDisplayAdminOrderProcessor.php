@@ -32,7 +32,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
     {
         // Check if order has been paid with Oyst
         $order = new Order(Tools::getValue('id_order'));
-        if ($order->module != 'oyst' || $order->current_state == 7) {
+        if ($order->module != 'oyst') {
             return '';
         }
 
@@ -41,9 +41,11 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             $this->refundOrder($order);
         }
 
+        // Check if order has already been refunded
         $assign = array(
             'module_dir' => $this->path,
             'transaction_id' => $order->id_cart,
+            'has_order_been_refunded' => ($this->hasOrderBeenRefunded($order) ? 1 : 0),
         );
         $this->smarty->assign($this->module->name, $assign);
 
@@ -79,5 +81,18 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         }
 
         die(Tools::jsonEncode(array('result' => (isset($result['error']) ? 'failure' : 'success'), 'details' => $result)));
+    }
+
+    public function hasOrderBeenRefunded($order)
+    {
+        $id_order_history = Db::getInstance()->getValue('
+        SELECT `id_order_history`
+        FROM `'._DB_PREFIX_.'order_history`
+        WHERE `id_order` = '.(int)$order->id.'
+        AND `id_order_state` = '.(int)Configuration::get('PS_OS_REFUND'));
+        if ($id_order_history > 0) {
+            return true;
+        }
+        return false;
     }
 }
