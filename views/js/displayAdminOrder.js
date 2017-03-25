@@ -26,7 +26,9 @@ $(document).ready(function() {
 
     standard_refund_button.hide();
     partial_refund_button.hide();
-    partial_refund_button.after(refund_button_html);
+    if (!has_order_been_refunded) {
+        partial_refund_button.after(refund_button_html);
+    }
 
     $('#desc-order-freepay-refund').click(function() {
         if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {
