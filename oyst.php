@@ -38,7 +38,7 @@ class Oyst extends FroggyPaymentModule
         parent::__construct();
 
         $this->author = 'Oyst';
-        $this->displayName = $this->l('Freepay');
+        $this->displayName = $this->l('FreePay');
         $this->description = $this->l('FreePay est une solution de paiement en ligne "full service" entièrement gratuite : 0% de commission, 0€ de frais d\'installation, 0€ d\'abonnement. Avec FreePay, éliminez vos coûts de transactions, augmentez vos marges.');
         $this->module_key = 'b79be2b346400227a9c886c9239470e4';
 
