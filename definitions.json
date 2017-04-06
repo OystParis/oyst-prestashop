@@ -14,7 +14,6 @@
     },
 
     "configurations": {
-        "FC_OYST_HASH_KEY": "",
 
         "FC_OYST_GUEST": "1",
         "FC_OYST_MERCHANT_PHONE": "",
