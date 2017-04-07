@@ -276,7 +276,6 @@ class OystProduct
         $main_category = array();
         $categories = array();
         foreach ($product_categories as $id_category) {
-
             // Retrieve names for category
             $category = new Category($id_category);
             $c = array('titles' => array(), 'reference' => 'ID '.$id_category);
@@ -313,15 +312,12 @@ class OystProduct
         foreach ($this->context->cart->getProducts() as $p) {
             $this->context->cart->updateQty(- $p['cart_quantity'], $p['id_product'], $p['id_product_attribute']);
             $this->context->cart->update();
-
         }
 
         // Loop on quantity
         for ($i = 1; $i <= 10; $i++) {
-
             // Loop on countries
             foreach ($this->countries as $country) {
-
                 // Update address
                 if ($this->address->id_country != $country->id) {
                     $this->address->id_country = $country->id;
@@ -341,7 +337,6 @@ class OystProduct
                 $delivery_options = $this->context->cart->getDeliveryOptionList();
                 foreach ($delivery_options[$this->address->id] as $delivery_option) {
                     foreach ($delivery_option['carrier_list'] as $id_carrier => $carrier) {
-
                         // Get id tax rules group
                         $id_tax_rules_group = $carrier['instance']->id_tax_rules_group;
 
