@@ -156,7 +156,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
     {
         $url = '';
 
-        switch($urlName) {
+        switch ($urlName) {
             case 'ORDER_HISTORY':
                 $url = $this->context->link->getPageLink('history');
                 break;

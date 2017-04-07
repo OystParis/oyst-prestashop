@@ -20,7 +20,7 @@
 
 <script>
     var oyst_transaction_id = {$oyst.transaction_id|escape:'html':'UTF-8'};
-    var has_order_been_refunded = {$oyst.has_order_been_refunded};
+    var has_order_been_refunded = {$oyst.has_order_been_refunded|escape:'html':'UTF-8'};
 </script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder-1.5.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder.js"></script>
