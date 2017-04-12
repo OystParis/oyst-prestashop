@@ -64,7 +64,7 @@ class OystNotificationModuleFrontController extends ModuleFrontController
         $import_id = $event_data['data']['import_id'];
 
         // Get number of products
-        $oyst_product = new OystProduct();
+        $oyst_product = new OystProductOld();
         $nb_products = $oyst_product->getProductsRequest(true);
 
         // Send catalog

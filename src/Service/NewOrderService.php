@@ -13,10 +13,9 @@ use Currency;
 use Customer;
 use Exception;
 use Oyst\Repository\OrderRepository;
-use OystOrderApi;
+use Oyst\Api\OystOrderApi;
 use Product;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use ToolsCore;
 use Validate;
 

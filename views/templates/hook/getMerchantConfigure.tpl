@@ -111,7 +111,7 @@
 
             <label>{l s='Enable OneClick' mod='oyst'}</label>
             <div class="margin-form">
-                <input type="checkbox" class="form-control" name="FC_OYST_ONE_CLICK_FEATURE" value="1"{if $oyst.FC_OYST_ONE_CLICK_FEATURE} checked="checked"{/if} />
+                <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
             </div>
 
             <label class="advancedOptions">{l s='Set the Oyst payment endpoint' mod='oyst'}</label>

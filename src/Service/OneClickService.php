@@ -4,8 +4,8 @@ namespace Oyst\Service;
 
 use Combination;
 use Exception;
-use OystOneClickApi;
-use OystUser;
+use Oyst\Classes\OystUser;
+use Oyst\Api\OystOneClickApi;
 use Product;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,31 +67,31 @@ class OneClickService extends AbstractOystService
         $quantity = 0;
         $response = new JsonResponse();
 
-        if (!$request->query->has('oneClick')) {
+        if (!$request->request->has('oneClick')) {
             $data['error'] = 'Missing parameters';
-        } elseif (!$request->query->has('productId')) {
+        } elseif (!$request->request->has('productId')) {
             $data['error'] = 'Missing product';
-        } elseif (!$request->query->has('productAttributeId')) {
+        } elseif (!$request->request->has('productAttributeId')) {
             $data['error'] = 'Missing combination, even none selected';
-        } elseif (!$request->query->has('quantity')) {
+        } elseif (!$request->request->has('quantity')) {
             $data['error'] = 'Missing quantity';
         }
 
         if (!isset($data['error'])) {
 
-            $product = new Product($request->query->get('productId'));
+            $product = new Product($request->request->get('productId'));
             if (!Validate::isLoadedObject($product)) {
                 $data['error'] = 'Product can\'t be found';
             }
 
-            if ($request->query->has('productAttributeId')) {
-                $combination = new Combination($request->query->get('productAttributeId'));
+            if ($request->request->has('productAttributeId')) {
+                $combination = new Combination($request->request->get('productAttributeId'));
                 if (!Validate::isLoadedObject($combination)) {
                     $data['error'] = 'Combination could not be found';
                 }
             }
 
-            $quantity = (int)$request->query->get('quantity');
+            $quantity = (int)$request->request->get('quantity');
             if ($quantity <= 0) {
                 $data['error'] = 'Bad quantity';
             }

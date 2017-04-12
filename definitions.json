@@ -4,8 +4,17 @@
     "need_instance": 0,
 
     "hooks": {
-        "all" : [ "displayHeader", "displayPayment", "displayPaymentReturn", "displayAdminOrder" , "displayFooterProduct" ],
-        "1.6" : [ "advancedPaymentOptions" ]
+        "all" : [
+            "displayHeader",
+            "displayPayment",
+            "displayPaymentReturn",
+            "displayAdminOrder" ,
+            "displayFooterProduct",
+            "displayBackOfficeHeader"
+        ],
+        "1.6" : [
+            "advancedPaymentOptions"
+        ]
     },
 
     "sql": {
@@ -39,6 +48,6 @@
         "FC_OYST_ADDRESS_CONFIG": "",
         "FC_OYST_CART_CONFIG": "",
 
-        "FC_OYST_ONE_CLICK_FEATURE": 0
+        "OYST_ONE_CLICK_FEATURE_STATE": 0
     }
 }

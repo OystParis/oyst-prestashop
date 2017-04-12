@@ -12,13 +12,6 @@ if (!file_exists(__DIR__.'/vendor/autoload.php')) {
 
 require_once __DIR__.'/vendor/autoload.php';
 
-// When sending the module to PrestaShop Validator, all the require files will be available
-if (!file_exists(__DIR__.'/external/oyst-library/autoload.php')) {
-    throw new Exception('Please install composer inside the external/oyst-library folder');
-}
-
-require_once __DIR__.'/external/oyst-library/autoload.php';
-
 /*
  * Include Froggy Library
  */

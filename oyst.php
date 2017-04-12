@@ -160,7 +160,48 @@ class Oyst extends FroggyPaymentModule
         file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data."\n", FILE_APPEND);
     }
 
+    /**
+     * @return DateTime|null
+     */
+    public function getRequestedCatalogDate()
+    {
+        $dataRegistered = Configuration::get('OYST_REQUESTED_CATALOG_DATE');
+        $date = $dataRegistered ? new DateTime($dataRegistered) : null;
 
+        return $date;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCatalogExportStillRunning()
+    {
+        return (bool) Configuration::get(Oyst\Service\Configuration::CATALOG_EXPORT_STATE);
+    }
+
+    /**
+     * @param $state
+     * @return $this
+     */
+    public function setAdminPanelInformationVisibility($state)
+    {
+        // TIPS: Maybe better to have an AdminClass / Configuration to handle anything about this
+        $state = (bool) $state ?
+            Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_ENABLE :
+            Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_DISABLE
+        ;
+        Configuration::updateValue(Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_STATE, $state);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminPanelInformationVisibility()
+    {
+        return (bool) Configuration::get(Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_STATE);
+    }
 
     /**
      * @return string
