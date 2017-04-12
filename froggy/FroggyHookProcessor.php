@@ -26,6 +26,7 @@ defined('_PS_VERSION_') || require dirname(__FILE__).'/index.php';
 
 abstract class FroggyHookProcessor
 {
+    /** @var  Oyst */
     public $module;
     public $context;
     public $path;

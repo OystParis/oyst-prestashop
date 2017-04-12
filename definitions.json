@@ -4,7 +4,7 @@
     "need_instance": 0,
 
     "hooks": {
-        "all" : [ "displayHeader", "displayPayment", "displayPaymentReturn", "displayAdminOrder" ],
+        "all" : [ "displayHeader", "displayPayment", "displayPaymentReturn", "displayAdminOrder", "displayBackOfficeHeader" ],
         "1.6" : [ "advancedPaymentOptions" ]
     },
 
