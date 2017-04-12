@@ -4,8 +4,17 @@
     "need_instance": 0,
 
     "hooks": {
-        "all" : [ "displayHeader", "displayPayment", "displayPaymentReturn", "displayAdminOrder" , "displayFooterProduct" ],
-        "1.6" : [ "advancedPaymentOptions" ]
+        "all" : [
+            "displayHeader",
+            "displayPayment",
+            "displayPaymentReturn",
+            "displayAdminOrder" ,
+            "displayFooterProduct",
+            "displayBackOfficeHeader"
+        ],
+        "1.6" : [
+            "advancedPaymentOptions"
+        ]
     },
 
     "sql": {

@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.0.1';
+        $this->version = '1.2.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -65,6 +65,16 @@ class Oyst extends FroggyPaymentModule
         }
     }
 
+    public function uninstall()
+    {
+        Configuration::deleteByName('OYST_IS_EXPORT_STILL_RUNNING');
+        Configuration::deleteByName('FC_OYST_ONE_CLICK_FEATURE');
+        Configuration::deleteByName('OYST_DISPLAY_ADMIN_INFO');
+        Configuration::deleteByName('OYST_REQUESTED_CATALOG_DATE');
+
+        return parent::uninstall();
+    }
+
     public function install()
     {
         $result = parent::install();
@@ -89,6 +99,7 @@ class Oyst extends FroggyPaymentModule
             Configuration::updateValue('FC_OYST_GUEST', false);
         }
 
+        Db::getInstance()->execute(file_get_contents(__DIR__.'/upgrade/sql/install-1.0.0.sql'));
         $result &= $this->installNewCarrier();
 
         return $result;
@@ -173,17 +184,6 @@ class Oyst extends FroggyPaymentModule
     }
 
     /**
-     * Export catalog method
-     */
-    public function exportCatalog()
-    {
-        require_once _PS_MODULE_DIR_.'/oyst/controllers/cron/ExportCatalog.php';
-        $controller = new OystExportCatalogModuleCronController($this);
-        $controller->run();
-    }
-
-
-    /**
      * Logging methods
      */
 
@@ -214,10 +214,8 @@ class Oyst extends FroggyPaymentModule
      */
     public function getRequestedCatalogDate()
     {
-        $date = null;
-        if ($this->hasExportCatalogBeenRequested()) {
-            $date = new DateTime(Configuration::get('OYST_REQUESTED_CATALOG_DATE'));
-        }
+        $dataRegistered = Configuration::get('OYST_REQUESTED_CATALOG_DATE');
+        $date = $dataRegistered ? new DateTime($dataRegistered) : null;
 
         return $date;
     }

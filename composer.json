@@ -1,10 +1,17 @@
 {
+    "repositories": [
+        {
+            "url": "https://github.com/OystParis/oyst-php.git",
+            "type": "git"
+        }
+    ],
     "require": {
-        "php": "5.3.*",
+        "php": ">=5.3",
+        "oyst/oyst-php": "1.1.1",
         "symfony/http-foundation": "2.*"
     },
     "require-dev": {
-      "symfony/var-dumper": "^3.2"
+        "symfony/var-dumper": "^3.2"
     },
     "autoload": {
         "psr-4": {

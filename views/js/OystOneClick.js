@@ -7,8 +7,9 @@ class OystOneClick {
      * Constructor
      * @param url
      */
-    constructor(url) {
+    constructor(url, productId) {
         this.url = url;
+        this.productId = productId;
     }
 
     /**
@@ -21,18 +22,6 @@ class OystOneClick {
     }
 
     /**
-     * Set product and combinations information
-     * @param productInfo
-     * @returns {OystOneClick}
-     */
-    setProductInfo(productInfo) {
-        this.product = productInfo.product;
-        this.productCombinations = productInfo.combinations;
-
-        return this;
-    }
-
-    /**
      * On Click, retrieve the right product / combination information
      * @returns {{productId, productAttributeId: *, quantity: (*|jQuery)}}
      */
@@ -40,17 +29,12 @@ class OystOneClick {
 
         let productAttributeId = null;
 
-        if (selectedCombination != undefined) {
-            $.each(this.productCombinations, function (index, combination) {
-                if (combination.reference == selectedCombination.reference) {
-                    productAttributeId = combination.id_attribute;
-                    return;
-                }
-            })
+        if ($('#idCombination').val() != undefined) {
+            productAttributeId = $('#idCombination').val();
         }
 
         return {
-            productId: this.product.id,
+            productId: this.productId,
             productAttributeId: productAttributeId,
             quantity: $('input[name="qty"]').val(),
         }
@@ -68,7 +52,7 @@ class OystOneClick {
 
         $.ajax({
             url: this.url,
-            method: 'POST',
+            type: 'POST',
             data: params,
             success: function (json) {
                 if (json.state) {

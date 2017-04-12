@@ -22,6 +22,11 @@
 /*
  * Security
  */
+use Oyst\Api\OystApiClientFactory;
+use Oyst\Api\OystCatalogApi;
+use Oyst\Repository\ProductRepository;
+use Oyst\Service\ExportProductService;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -179,6 +184,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
     {
         if (Tools::isSubmit('synchronizeProducts')) {
 
+            $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
             $productRepository = new ProductRepository(Db::getInstance());
 
             /** @var OystCatalogAPI $oystCatalogAPI */
@@ -190,10 +196,12 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             );
 
             (new ExportProductService(Context::getContext(), $this->module))
-                ->setRepository($productRepository)
+                ->setProductRepository($productRepository)
                 ->setCatalogApi($oystCatalogAPI)
                 ->requestNewExport()
             ;
+
+            Tools::redirect($request->getScheme().'://'.$request->getHost().$request->getRequestUri());
         }
     }
 

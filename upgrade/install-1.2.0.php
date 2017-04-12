@@ -19,29 +19,14 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-// Construct path
-$config_path = dirname(__FILE__).'/../../config/config.inc.php';
-$module_path = dirname(__FILE__).'/oyst.php';
-
-// Set _PS_ADMIN_DIR_ define
-define('_PS_ADMIN_DIR_', getcwd());
-
-// Keep going if config script is found
-if (file_exists($config_path)) {
-    include($config_path);
-    include($module_path);
-    if (OystIsPHPCLI()) {
-        $oyst = new Oyst();
-        $oyst->exportCatalog();
-    } else {
-        die('Should be called in command line');
-    }
-} else {
-    die('ERROR');
-}
-
-// Function IsPHPCLI
-function OystIsPHPCLI()
+/**
+ * @param Oyst $module
+ * @return bool
+ */
+function upgrade_module_1_2_0($module)
 {
-    return (defined('STDIN') || (Tools::strtolower(php_sapi_name()) == 'cli' && (!isset($_SERVER['REMOTE_ADDR']) || empty($_SERVER['REMOTE_ADDR']))));
+    Db::getInstance()->execute(file_get_contents(__DIR__.'/../upgrade/sql/install-1.0.0.sql'));
+    $module->installNewCarrier();
+
+    return true;
 }

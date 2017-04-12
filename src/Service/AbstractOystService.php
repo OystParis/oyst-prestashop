@@ -5,6 +5,10 @@ namespace Oyst\Service;
 use Context;
 use Oyst;
 
+/**
+ * Class AbstractOystService
+ * @package Oyst\Service
+ */
 abstract class AbstractOystService
 {
     /**
@@ -26,5 +30,13 @@ abstract class AbstractOystService
     {
         $this->context = $context;
         $this->oyst = $oyst;
+    }
+
+    /**
+     * @return Oyst
+     */
+    public function getOyst()
+    {
+        return $this->oyst;
     }
 }

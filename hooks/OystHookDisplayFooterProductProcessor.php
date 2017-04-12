@@ -30,18 +30,15 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
 {
     public function run()
     {
-        $product = new Product(Tools::getValue('id_product'));
-        if (!Validate::isLoadedObject($product)) {
+        $productId = Tools::getValue('id_product', false);
+        if (!$productId) {
             return '';
         }
-
-        $combinations = $product->getAttributeCombinations($this->context->language->id);
 
         $this->smarty->assign(array(
             'oneClickUrl' => Tools::getShopDomain(true).'/modules/oyst/oneClick.php',
             'productInfo' => array(
-                'product' => $product,
-                'combinations' => $combinations,
+                'productId' => $productId,
             ),
         ));
         return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');

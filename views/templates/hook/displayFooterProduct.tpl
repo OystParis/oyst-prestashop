@@ -2,8 +2,7 @@
 <script type="text/javascript" src="https://cdn.staging.oyst.eu/1click/script/script.min.js"></script>
 
 <script type="text/javascript">
-    const oyst = new OystOneClick({$oneClickUrl|json_encode});
-    oyst.setProductInfo({$productInfo|json_encode});
+    const oyst = new OystOneClick({$oneClickUrl|json_encode}, {$productInfo.productId|json_encode});
     oyst.prepareButton();
 
     window.__OYST__ = window.__OYST__ || {};

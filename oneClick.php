@@ -1,5 +1,7 @@
 <?php
 
+use Oyst\Api\OystApiClientFactory;
+use Oyst\Api\OystOneClickApi;
 use Oyst\Controller\OneClickOrderController;
 use Oyst\Service\OneClickService;
 
