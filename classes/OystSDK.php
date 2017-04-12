@@ -34,7 +34,7 @@ class OystSDK
     public function testCatalogRequest()
     {
         // Get products
-        $oyst_product = new OystProduct();
+        $oyst_product = new OystProductOld();
         $return = $oyst_product->sendCatalog(0, 1);
         $return = Tools::jsonDecode($return, true);
         $result = (isset($return['statusCode'])  && $return['statusCode'] == 200) ? true : false;

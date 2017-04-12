@@ -19,43 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-defined('_PS_VERSION_') || require dirname(__FILE__) . '/index.php';
-
-/*
- * Include Froggy Library
- */
-if (!class_exists('FroggyModule', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/froggy/FroggyModule.php';
-}
-if (!class_exists('FroggyPaymentModule', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/froggy/FroggyPaymentModule.php';
-}
-
-/*
- * Include Oyst SDK
- */
-if (!class_exists('OystSDK', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystSDK.php';
-}
-
-/*
- * Include Oyst Product Class
- */
-if (!class_exists('OystProduct', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystProduct.php';
-}
-
-/*
- * Include Oyst Payment Notification Class
- */
-if (!class_exists('OystPaymentNotification', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystPaymentNotification.php';
-}
-
-define('_PS_OYST_DEBUG_', 0);
+require_once __DIR__ . '/autoload.php';
 
 /**
  * Class Oyst
@@ -124,6 +88,8 @@ class Oyst extends FroggyPaymentModule
         if (Configuration::get('FC_OYST_API_KEY') != '') {
             Configuration::updateValue('FC_OYST_GUEST', false);
         }
+
+        Db::getInstance()->execute(file_get_contents(__DIR__.'/upgrade/sql/install-1.0.0.sql'));
 
         return $result;
     }
@@ -194,5 +160,113 @@ class Oyst extends FroggyPaymentModule
         }
         file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data_json."\n", FILE_APPEND);
         file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data."\n", FILE_APPEND);
+    }
+
+    public function hookDisplayBackOfficeHeader()
+    {
+        if (!ModuleCore::isInstalled($this->name) || !ModuleCore::isEnabled($this->name)) {
+            return '';
+        }
+
+        $content = '';
+
+        $oystProductRepository = new ProductRepository(Db::getInstance());
+        $exportedProducts = $oystProductRepository->getExportedProduct();
+
+        /** @var Smarty_Internal_Template $template */
+        $template = Context::getContext()->smarty->createTemplate(__DIR__.'/views/templates/hook/displayBackOfficeHeader.tpl');
+        $exportDate = $this->getRequestedCatalogDate();
+        $template->assign([
+            'OYST_REQUESTED_CATALOG_DATE' => $exportDate ? $exportDate->format(Context::getContext()->language->date_format_full) : false,
+            'OYST_HAS_EXPORT_REQUESTED' => $this->hasExportCatalogBeenRequested(),
+            'OYST_IS_EXPORT_STILL_RUNNING' => $this->isCatalogExportStillRunning(),
+            'exportedProducts' => $exportedProducts,
+            'displayPanel' => $this->getAdminPanelInformationVisibility(),
+        ]);
+
+        $content .= $template->fetch();
+
+        return $content;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getRequestedCatalogDate()
+    {
+        $date = null;
+        if ($this->hasExportCatalogBeenRequested()) {
+            $date = new DateTime(Configuration::get('OYST_REQUESTED_CATALOG_DATE'));
+        }
+
+        return $date;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCatalogExportStillRunning()
+    {
+        return (bool) Configuration::get('OYST_IS_EXPORT_STILL_RUNNING');
+    }
+
+    /**
+     * @param $state
+     * @return $this
+     */
+    public function setIsExportCatalogRunning($state)
+    {
+        $state = ((bool) $state) ? 1 : 0;
+        Configuration::updateValue('OYST_IS_EXPORT_STILL_RUNNING', $state);
+
+        return $this;
+    }
+
+    /**
+     * @param $state
+     * @return $this
+     */
+    public function setAdminPanelInformationVisibility($state)
+    {
+        // TIPS: Maybe better to have an AdminClass / Configuration to handle anything about this
+        $state = (bool) $state ? 1 : 0;
+        Configuration::updateValue('OYST_DISPLAY_ADMIN_INFO', $state);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminPanelInformationVisibility()
+    {
+        return (bool) Configuration::get('OYST_DISPLAY_ADMIN_INFO');
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiKey()
+    {
+        $env = strtoupper($this->getEnvironment());
+        return Configuration::get('FC_OYST_API_'.$env.'_KEY');
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return Configuration::get('FC_OYST_API_ENV');
+    }
+
+    /**
+     * @param Product $product
+     * @param Combination|null $combination
+     * @return string
+     */
+    public function getProductReference(Product $product, Combination $combination = null)
+    {
+        return $product->id.(Validate::isLoadedObject($combination) ? '-'.$combination->id : '');
     }
 }
