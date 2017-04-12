@@ -115,7 +115,7 @@ class FroggyPaymentModule extends PaymentModule
         // Fix for some server configuration (methods are in lowercase and server is case sensitive file for hook Processor)
         $prefix_call = array(
             'hookdisplay' => 'hookDisplay', 'hookdisplaybackoffice' => 'hookDisplayBackOffice', 'hookaction' => 'hookAction',
-            'hookbackoffice' => 'hookBackOffice', 'hook' => 'hook',
+            'hookbackoffice' => 'hookBackOffice', 'hook' => 'hook', 'hookdisplaybackofficeheader' => 'hookDisplayBackOfficeHeader',
         );
         foreach ($prefix_call as $prefix_search => $prefix_replace) {
             if (strpos($method, $prefix_search) !== false) {

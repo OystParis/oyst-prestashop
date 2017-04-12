@@ -26,7 +26,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OystProduct
+class OystProductOld
 {
     public $context;
     public $languages;
