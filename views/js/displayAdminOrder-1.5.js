@@ -18,8 +18,10 @@
  * @license GNU GENERAL PUBLIC LICENSE
  */
 
-// Refund button
-var refund_button_html = '<a id="desc-order-freepay-refund" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>Remboursement standard</div></a>';
+// Refund & Cancel buttons
+var cancel_button_html = '<a id="desc-order-freepay-cancel" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_cancel + '</div></a>&nbsp;&nbsp;&nbsp;';
+var refund_button_html = '<a id="desc-order-freepay-refund" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_refund + '</div></a>&nbsp;&nbsp;&nbsp;';
+var partial_refund_button_html = '<a id="desc-order-freepay-partial-refund" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_partial_refund + '</div></a>';
 
 $(document).ready(function() {
 

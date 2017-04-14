@@ -61,6 +61,11 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                     $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
                 }
 
+                // If capture succeed, we update the order
+                if ($notification_item['event_code'] == 'CAPTURE') {
+                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
+                }
+
                 // If cancellation is confirmed, we cancel the order
                 if ($notification_item['event_code'] == 'CANCELLATION') {
                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
@@ -68,6 +73,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
 
                 // If refund is confirmed, we cancel the order
                 if ($notification_item['event_code'] == 'REFUND') {
+                    //@todo check total price of order and the amount received for the refund (and the sum of the former refunds)
                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
                 }
             }
@@ -135,8 +141,8 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                 $payment_status = (int) Configuration::get('PS_OS_ERROR');
                 $message = $this->module->l('Cart changed, please retry.').'<br />';
             } else {
-                $payment_status = (int) Configuration::get('PS_OS_PAYMENT');
-                $message = $this->module->l('Payment accepted.').'<br />';
+                $payment_status = (int) Configuration::get('OYST_STATUS_PAYMENT_PENDING');
+                $message = $this->module->l('Payment processing.').'<br />';
             }
 
             // Set shop

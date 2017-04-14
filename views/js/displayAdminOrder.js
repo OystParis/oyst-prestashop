@@ -19,16 +19,55 @@
  */
 
 $(document).ready(function() {
-
-    // Hide partial and refund and display refund button
+    // Hide prestashop partial and refund and display custom cancel & refund buttons
     var standard_refund_button = $('#desc-order-standard_refund');
     var partial_refund_button = $('#desc-order-partial_refund');
 
     standard_refund_button.hide();
     partial_refund_button.hide();
-    if (!has_order_been_refunded) {
+
+    if (order_can_be_cancelled) {
+        partial_refund_button.after(cancel_button_html);
+    } else if (order_can_be_refunded) {
+        partial_refund_button.after(partial_refund_button_html);
         partial_refund_button.after(refund_button_html);
     }
+
+    $('#desc-order-freepay-cancel').click(function() {
+        if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {
+            $.ajax({
+                method: "POST",
+                url: window.location.href,
+                data: { subaction: "freepay-refund" }
+            }).done(function( msg ) {
+                msg = JSON.parse(msg);
+                if (msg.result == 'success') {
+                    window.location.href = window.location.href;
+                } else {
+                    alert('Une erreur s\'est produite lors du remboursement : ' + msg.details.message);
+                }
+            });
+        }
+        return false;
+    });
+
+    $('#desc-order-freepay-partial-refund').click(function() {
+        if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {
+            $.ajax({
+                method: "POST",
+                url: window.location.href,
+                data: { subaction: "freepay-refund" }
+            }).done(function( msg ) {
+                msg = JSON.parse(msg);
+                if (msg.result == 'success') {
+                    window.location.href = window.location.href;
+                } else {
+                    alert('Une erreur s\'est produite lors du remboursement : ' + msg.details.message);
+                }
+            });
+        }
+        return false;
+    });
 
     $('#desc-order-freepay-refund').click(function() {
         if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {

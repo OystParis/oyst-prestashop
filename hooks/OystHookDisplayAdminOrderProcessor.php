@@ -45,7 +45,12 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         $assign = array(
             'module_dir' => $this->path,
             'transaction_id' => $order->id_cart,
-            'has_order_been_refunded' => ($this->hasOrderBeenRefunded($order) ? 1 : 0),
+            'order_can_be_cancelled' => ($this->orderCanBeCancelled($order) ? 1 : 0),
+            'order_can_be_refunded' => ($this->orderCanBeRefunded($order) ? 1 : 0),
+            'max_refund' => $this->getMaxRefund($order),
+            'label_cancel' => $this->module->l('Cancel order', 'oysthookdisplayadminorderprocessor'),
+            'label_refund' => $this->module->l('Standard refund', 'oysthookdisplayadminorderprocessor'),
+            'label_partial_refund' => $this->module->l('Partial refund', 'oysthookdisplayadminorderprocessor')
         );
         $this->smarty->assign($this->module->name, $assign);
 
@@ -64,7 +69,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             $oyst_api = new OystSDK();
             $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
             $oyst_api->setApiKey(Configuration::get('FC_OYST_API_KEY'));
-            $result = $oyst_api->cancelRefundRequest($oyst_payment_notification->payment_id);
+            $result = $oyst_api->cancelOrRefundRequest($oyst_payment_notification->payment_id);
             if ($result) {
                 $result = Tools::jsonDecode($result, true);
             }
@@ -83,7 +88,20 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         die(Tools::jsonEncode(array('result' => (isset($result['error']) ? 'failure' : 'success'), 'details' => $result)));
     }
 
-    public function hasOrderBeenRefunded($order)
+    public function orderCanBeCancelled($order)
+    {
+        $id_order_history = Db::getInstance()->getValue('
+        SELECT `id_order_history`
+        FROM `'._DB_PREFIX_.'order_history`
+        WHERE `id_order` = '.(int)$order->id.'
+        AND `id_order_state` = '.(int)Configuration::get('PS_OS_REFUND'));
+        if ($id_order_history > 0) {
+            return false;
+        }
+        return false;
+    }
+
+    public function orderCanBeRefunded($order)
     {
         $id_order_history = Db::getInstance()->getValue('
         SELECT `id_order_history`
@@ -93,6 +111,22 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         if ($id_order_history > 0) {
             return true;
         }
-        return false;
+        return true;
+    }
+
+    public function getMaxRefund($order)
+    {
+        $maxRefund = 0;
+
+        //$id_order_history = Db::getInstance()->getValue('
+        //SELECT `id_order_history`
+        //FROM `'._DB_PREFIX_.'order_history`
+        //WHERE `id_order` = '.(int)$order->id.'
+        //AND `id_order_state` = '.(int)Configuration::get('PS_OS_REFUND'));
+        //if ($id_order_history > 0) {
+        //    return true;
+        //}
+
+        return $maxRefund;
     }
 }
