@@ -48,6 +48,13 @@ if (!class_exists('OystProduct', false)) {
     require_once _PS_MODULE_DIR_.'/oyst/classes/OystProduct.php';
 }
 
+/*
+ * Include Oyst Payment Notification Class
+ */
+if (!class_exists('OystPaymentNotification', false)) {
+    require_once _PS_MODULE_DIR_.'/oyst/classes/OystPaymentNotification.php';
+}
+
 define('_PS_OYST_DEBUG_', 0);
 
 /**
@@ -60,14 +67,14 @@ class Oyst extends FroggyPaymentModule
      */
     public function __construct()
     {
-        $this->name = 'FreePay';
-        $this->version = '0.8.9.0';
+        $this->name = 'oyst';
+        $this->version = '1.0.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
 
         $this->author = 'Oyst';
-        $this->displayName = $this->l('Freepay');
+        $this->displayName = $this->l('FreePay');
         $this->description = $this->l('FreePay est une solution de paiement en ligne "full service" entièrement gratuite : 0% de commission, 0€ de frais d\'installation, 0€ d\'abonnement. Avec FreePay, éliminez vos coûts de transactions, augmentez vos marges.');
         $this->module_key = 'b79be2b346400227a9c886c9239470e4';
 
@@ -82,9 +89,15 @@ class Oyst extends FroggyPaymentModule
         }
 
         // If old configuration variable exists, we migrate it
-        if (Configuration::get('FC_OYST_API_KEY') != '') {
-            Configuration::updateValue('FC_OYST_API_PAYMENT_KEY', Configuration::get('FC_OYST_API_KEY'));
-            Configuration::deleteByName('FC_OYST_API_KEY');
+        if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
+            Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
+        }
+
+        // If old configuration variable exists, we migrate it
+        if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
+            Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
         }
     }
 
@@ -108,13 +121,17 @@ class Oyst extends FroggyPaymentModule
             WHERE `id_hook` = '.(int)$id_hook.' AND `id_module` = '.$id_module);
         }
 
+        if (Configuration::get('FC_OYST_API_KEY') != '') {
+            Configuration::updateValue('FC_OYST_GUEST', false);
+        }
+
         return $result;
     }
 
     public function loadSQLFile($sql_file)
     {
         // Get install SQL file content
-        $sql_content = file_get_contents($sql_file);
+        $sql_content = Tools::file_get_contents($sql_file);
 
         // Replace prefix and store SQL command in array
         $sql_content = str_replace('@PREFIX@', _DB_PREFIX_, $sql_content);
@@ -122,7 +139,7 @@ class Oyst extends FroggyPaymentModule
 
         // Execute each SQL statement
         $result = true;
-        foreach($sql_requests as $request) {
+        foreach ($sql_requests as $request) {
             if (!empty($request)) {
                 $result &= Db::getInstance()->execute(trim($request));
             }
@@ -139,7 +156,7 @@ class Oyst extends FroggyPaymentModule
      */
     public function getContent()
     {
-        return $this->hookGetContent();
+        return $this->hookGetConfiguration();
     }
 
     /**

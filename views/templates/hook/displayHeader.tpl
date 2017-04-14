@@ -17,4 +17,4 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-<script src="https://trk.10ru.pt"></script>
+<script src="{$oyst.FC_OYST_TRACKER_URL|escape:'html':'UTF-8'}"></script>

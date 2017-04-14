@@ -1,4 +1,4 @@
-{**
+/*
  * 2013-2016 Froggy Commerce
  *
  * NOTICE OF LICENSE
@@ -16,5 +16,15 @@
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
- *}
-<script src="{$oyst.FC_OYST_TRACKER_URL|escape:'html':'UTF-8'}"></script>
+ */
+
+// Refund button
+var refund_button_html = '<a id="desc-order-freepay-refund" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>Remboursement standard</div></a>';
+
+$(document).ready(function() {
+
+    // Display FreePay transaction ID
+    var page_title = $('span .breadcrumb');
+    page_title.text(page_title.text() + ' - Transaction FreePay n°' + oyst_transaction_id);
+
+});

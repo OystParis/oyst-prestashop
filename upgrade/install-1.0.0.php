@@ -19,24 +19,11 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
-
-class OystPaymentErrorModuleFrontController extends ModuleFrontController
+function upgrade_module_1_0_0()
 {
-    public $ssl = true;
+    Configuration::updateValue('FC_OYST_API_PAYMENT_ENDPOINT', 'https://api.oyst.com/payment');
+    Configuration::updateValue('FC_OYST_API_CATALOG_ENDPOINT', 'https://api.oyst.com/catalog');
 
-    public function initContent()
-    {
-        parent::initContent();
-        if (_PS_OYST_DEBUG_ == 1 && Tools::getValue('debug') == Configuration::get('FC_OYST_HASH_KEY')) {
-            $function = 'base64'.'_'.'decode';
-            $this->context->smarty->assign('oyst_debug', Tools::jsonDecode($function($this->context->cookie->oyst_debug), true));
-        }
-        $this->setTemplate('error'.(version_compare(_PS_VERSION_, '1.6.0') ? '.bootstrap' : '').'.tpl');
-    }
+    // All went well!
+    return true;
 }

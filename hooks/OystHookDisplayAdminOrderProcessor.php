@@ -36,10 +36,63 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             return '';
         }
 
-        $assign = array();
-        $assign['module_dir'] = $this->path;
+        // Ajax refund
+        if (Tools::getValue('subaction') == 'freepay-refund') {
+            $this->refundOrder($order);
+        }
+
+        // Check if order has already been refunded
+        $assign = array(
+            'module_dir' => $this->path,
+            'transaction_id' => $order->id_cart,
+            'has_order_been_refunded' => ($this->hasOrderBeenRefunded($order) ? 1 : 0),
+        );
         $this->smarty->assign($this->module->name, $assign);
 
         return $this->module->fcdisplay(__FILE__, 'displayAdminOrder.tpl');
+    }
+
+    public function refundOrder($order)
+    {
+        // Clean buffer
+        ob_end_clean();
+
+        // Make Oyst api call
+        $result = array('error' => 'Error', 'message' => 'Transaction not found');
+        $oyst_payment_notification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
+        if (Validate::isLoadedObject($oyst_payment_notification)) {
+            $oyst_api = new OystSDK();
+            $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
+            $oyst_api->setApiKey(Configuration::get('FC_OYST_API_KEY'));
+            $result = $oyst_api->cancelRefundRequest($oyst_payment_notification->payment_id);
+            if ($result) {
+                $result = Tools::jsonDecode($result, true);
+            }
+
+            // Set refund status
+            if (!isset($result['error'])) {
+                $history = new OrderHistory();
+                $history->id_order = $order->id;
+                $history->id_employee = 0;
+                $history->id_order_state = (int)Configuration::get('PS_OS_REFUND');
+                $history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), $order->id);
+                $history->add();
+            }
+        }
+
+        die(Tools::jsonEncode(array('result' => (isset($result['error']) ? 'failure' : 'success'), 'details' => $result)));
+    }
+
+    public function hasOrderBeenRefunded($order)
+    {
+        $id_order_history = Db::getInstance()->getValue('
+        SELECT `id_order_history`
+        FROM `'._DB_PREFIX_.'order_history`
+        WHERE `id_order` = '.(int)$order->id.'
+        AND `id_order_state` = '.(int)Configuration::get('PS_OS_REFUND'));
+        if ($id_order_history > 0) {
+            return true;
+        }
+        return false;
     }
 }

@@ -26,17 +26,20 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OystPaymentErrorModuleFrontController extends ModuleFrontController
+class OystHookAdvancedPaymentOptionsProcessor extends FroggyHookProcessor
 {
-    public $ssl = true;
-
-    public function initContent()
+    public function run()
     {
-        parent::initContent();
-        if (_PS_OYST_DEBUG_ == 1 && Tools::getValue('debug') == Configuration::get('FC_OYST_HASH_KEY')) {
-            $function = 'base64'.'_'.'decode';
-            $this->context->smarty->assign('oyst_debug', Tools::jsonDecode($function($this->context->cookie->oyst_debug), true));
+        if (Configuration::get('FC_OYST_PAYMENT_FEATURE') != 1) {
+            return '';
         }
-        $this->setTemplate('error'.(version_compare(_PS_VERSION_, '1.6.0') ? '.bootstrap' : '').'.tpl');
+
+        $payment_option = new Core_Business_Payment_PaymentOption();
+        $payment_option->setCallToActionText($this->module->l('Pay by Credit Card'));
+        $payment_option->setLogo($this->path.'views/img/logo-horizontal-credit-card.png');
+        $payment_option->setAction($this->context->link->getModuleLink('oyst', 'payment'));
+        $payment_option->setModuleName($this->module->name);
+
+        return array($payment_option);
     }
 }

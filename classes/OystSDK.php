@@ -31,42 +31,6 @@ class OystSDK
     private $_api_key;
     private $_api_endpoint;
 
-    public function testPaymentRequest()
-    {
-        $data = array(
-            'amount' => array(
-                'value' => 100,
-                'currency' => 'EUR',
-            ),
-            'is_3d' => false,
-            'label' => 'ConnectionTest',
-            'notification_url' => 'http://localhost.test',
-            'order_id' => 'ConnectionTest',
-            'redirects' => array(
-                'cancel_url' => 'http://localhost.test',
-                'error_url' => 'http://localhost.test',
-                'return_url' => 'http://localhost.test',
-            ),
-            'user' => array(
-                'addresses' => array(),
-                'billing_addresses' => array(),
-                'email' => Configuration::get('PS_SHOP_EMAIL'),
-                'first_name' => 'Test',
-                'language' => 'fr',
-                'last_name' => 'Test',
-                'phone' => '0100000000',
-            ),
-        );
-
-        $result = $this->_apiPostRequest($this->getApiEndpoint().'/payments', $data);
-        $result = Tools::jsonDecode($result, true);
-        if (isset($result['url']) && !empty($result['url'])) {
-            return array('result' => true);
-        }
-
-        return array('result' => false, 'values' => $result);
-    }
-
     public function testCatalogRequest()
     {
         // Get products
@@ -97,6 +61,11 @@ class OystSDK
         return $this->_apiPostRequest($this->getApiEndpoint().'/payments', $data);
     }
 
+    public function cancelRefundRequest($payment_id)
+    {
+        return $this->_apiPostRequest($this->getApiEndpoint().'/payments/'.$payment_id.'/cancel_or_refund', array());
+    }
+
     public function productPostRequest($products)
     {
         $data = array('products' => $products);
@@ -121,6 +90,42 @@ class OystSDK
         curl_setopt($ch, CURLOPT_TIMEOUT, 2000);
 
         return curl_exec($ch);
+    }
+
+    /**
+     * @param string $name
+     * @param string $phone
+     * @param string $email
+     *
+     * @return bool
+     */
+    public static function notify($name, $phone, $email)
+    {
+        $psUrl  = 'https://partners-subscribe.prestashop.com/oyst/request.php';
+        $params = array(
+            'ps_version'   => _PS_VERSION_,
+            'oyst_version' => _PS_OYST_VERSION_,
+            'url'          => Tools::getHttpHost(true).__PS_BASE_URI__,
+            'name'         => $name,
+            'phone'        => $phone,
+            'email'        => $email,
+            'channel'      => 'plugin-alerts'
+        );
+        $urlToCall = $psUrl.'?'.http_build_query($params);
+
+        $ch = curl_init($urlToCall);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 2000);
+
+        $return   = curl_exec($ch);
+        $response = Tools::jsonDecode($return, true);
+
+        if (isset($response['status']) && $response['status'] == 'OK') {
+            return true;
+        }
+
+        return false;
     }
 
     /**

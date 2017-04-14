@@ -30,6 +30,10 @@ class OystHookDisplayHeaderProcessor extends FroggyHookProcessor
 {
     public function run()
     {
+        $this->smarty->assign('oyst', array(
+            'FC_OYST_TRACKER_URL' => Configuration::get('FC_OYST_TRACKER_URL')
+        ));
+
         return $this->module->fcdisplay(__FILE__, 'displayHeader.tpl');
     }
 }

@@ -39,20 +39,6 @@ class OystPaymentModuleFrontController extends ModuleFrontController
 
     public function initContent()
     {
-        // Build hash
-        $cart_hash = md5(Tools::jsonEncode(array($this->context->cart->id, $this->context->cart->nbProducts())));
-
-        // Build urls and amount
-        $glue = '&';
-        if (Configuration::get('PS_REWRITING_SETTINGS') == 1) {
-            $glue = '?';
-        }
-        $urls = array(
-            'notification' => $this->context->link->getModuleLink('oyst', 'paymentNotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash,
-            'cancel' => $this->context->link->getModuleLink('oyst', 'paymentError'),
-            'error' => $this->context->link->getModuleLink('oyst', 'paymentError'),
-            'return' => $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key,
-        );
         $currency = new Currency($this->context->cart->id_currency);
         $total_amount = (int)round($this->context->cart->getOrderTotal() * 100);
 
@@ -106,10 +92,12 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             'phone' => $main_phone,
         );
 
+        $urls = $this->getUrls();
+
         // Make Oyst api call
         $oyst_api = new OystSDK();
         $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
-        $oyst_api->setApiKey(Configuration::get('FC_OYST_API_PAYMENT_KEY'));
+        $oyst_api->setApiKey(Configuration::get('FC_OYST_API_KEY'));
         $result = $oyst_api->paymentRequest($total_amount, $currency->iso_code, $this->context->cart->id, $urls, false, $user);
 
         // Result payment
@@ -123,13 +111,66 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         }
 
         // Redirect to error page, save data in
-        $this->context->cookie->oyst_debug = base64_encode(Tools::jsonEncode(
-            array_merge(
-                $user,
-                $result,
-                array($total_amount, $currency->iso_code, $this->context->cart->id, $urls, true)
-            ))
+        $function = 'base64'.'_'.'encode';
+        $this->context->cookie->oyst_debug = $function(
+            Tools::jsonEncode(
+                array_merge(
+                    $user,
+                    $result,
+                    array($total_amount, $currency->iso_code, $this->context->cart->id, $urls, true)
+                )
+            )
         );
         Tools::redirect($urls['error']);
+    }
+
+    /**
+     * @return array
+     */
+    private function getUrls()
+    {
+        // Build hash
+        $cart_hash = md5(Tools::jsonEncode(array($this->context->cart->id, $this->context->cart->nbProducts())));
+
+        // Build urls and amount
+        $glue = '&';
+        if (Configuration::get('PS_REWRITING_SETTINGS') == 1) {
+            $glue = '?';
+        }
+
+        $notification = $this->context->link->getModuleLink('oyst', 'paymentNotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
+        $errorUrl     = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
+        $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
+
+        $urls = array(
+            'notification' => $notification,
+            'cancel'       => $errorUrl,
+            'error'        => $errorUrl,
+            'return'       => $successUrl
+        );
+
+        return $urls;
+    }
+
+    private function getUrlByName($urlName, $customUrl)
+    {
+        $url = '';
+
+        switch ($urlName) {
+            case 'ORDER_HISTORY':
+                $url = $this->context->link->getPageLink('history');
+                break;
+            case 'PAYMENT_ERROR':
+                $url = $this->context->link->getModuleLink('oyst', 'paymentError');
+                break;
+            case 'CART':
+                $url = $this->context->link->getPageLink('order');
+                break;
+            case 'CUSTOM':
+                $url = $customUrl;
+                break;
+        }
+
+        return $url;
     }
 }

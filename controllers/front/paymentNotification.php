@@ -55,9 +55,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         $this->module->log('Payment notification received');
         $this->module->logNotification('Payment', $_GET);
         try {
-
             if ($notification_item['success'] == 1) {
-
                 // If authorisation succeed, we create the order
                 if ($notification_item['event_code'] == 'AUTHORISATION') {
                     $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
@@ -73,7 +71,6 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
                 }
             }
-
         } catch (Exception $e) {
             $this->module->log($e->getMessage());
         }
@@ -87,7 +84,6 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         $id_order = Order::getOrderByCartId($id_cart);
 
         if ($id_order > 0 && $id_order_state > 0) {
-
             // Create new OrderHistory
             $history = new OrderHistory();
             $history->id_order = $id_order;
@@ -95,7 +91,6 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
             $history->id_order_state = (int)$id_order_state;
             $history->changeIdOrderState((int)$id_order_state, $id_order);
             $history->add();
-
         }
     }
 
@@ -121,12 +116,11 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         }
 
         if ($payment_notification['success'] == 'true') {
-
             // Build transation array
             $message = null;
             $transaction = array(
                 'id_transaction' => pSQL($payment_notification['payment_id']),
-                'transaction_id' => pSQL($payment_notification['payment_id']),
+                'transaction_id' => pSQL($payment_notification['order_id']),
                 'total_paid' => (float)($payment_notification['amount']['value'] / 100),
                 'currency' => pSQL($payment_notification['amount']['currency']),
                 'payment_date' => pSQL(Tools::substr(str_replace('T', '', $payment_notification['event_date']), 0, 19)),
@@ -152,13 +146,12 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                 $shop_id = $this->context->shop->id;
                 $shop = new Shop($shop_id);
             }
-
         } else {
             $payment_status = (int) Configuration::get('PS_OS_ERROR');
             $message = $this->module->l('Oyst payment failed.').'<br />';
         }
 
         // Validate order
-        $this->module->validateOrder($cart->id, $payment_status, $transaction['total_paid'], 'CB', $message, $transaction, $cart->id_currency, false, $this->context->customer->secure_key, $shop);
+        $this->module->validateOrder($cart->id, $payment_status, $transaction['total_paid'], $this->module->displayName, $message, $transaction, $cart->id_currency, false, $this->context->customer->secure_key, $shop);
     }
 }
