@@ -32,13 +32,18 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
     {
         // Check if order has been paid with Oyst
         $order = new Order(Tools::getValue('id_order'));
-        if ($order->module != 'oyst') {
+        if ($order->module != $this->module->name) {
             return '';
         }
 
         // Ajax refund
         if (Tools::getValue('subaction') == 'freepay-refund') {
             $this->refundOrder($order);
+        }
+
+        // Ajax partial refund
+        if (Tools::getValue('subaction') == 'freepay-partial-refund') {
+            $this->partialRefundOrder($order);
         }
 
         // Check if order has already been refunded
@@ -49,8 +54,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             'order_can_be_refunded' => ($this->orderCanBeRefunded($order) ? 1 : 0),
             'max_refund' => $this->getMaxRefund($order),
             'label_cancel' => $this->module->l('Cancel order', 'oysthookdisplayadminorderprocessor'),
-            'label_refund' => $this->module->l('Standard refund', 'oysthookdisplayadminorderprocessor'),
-            'label_partial_refund' => $this->module->l('Partial refund', 'oysthookdisplayadminorderprocessor')
+            'label_refund' => $this->module->l('Standard refund', 'oysthookdisplayadminorderprocessor')
         );
         $this->smarty->assign($this->module->name, $assign);
 
@@ -86,6 +90,10 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         }
 
         die(Tools::jsonEncode(array('result' => (isset($result['error']) ? 'failure' : 'success'), 'details' => $result)));
+    }
+
+    public function partialRefundOrder($order)
+    {
     }
 
     public function orderCanBeCancelled($order)

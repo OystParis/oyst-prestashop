@@ -19,9 +19,8 @@
  */
 
 // Refund & Cancel buttons
-var cancel_button_html = '<a id="desc-order-freepay-cancel" class="btn btn-default" href="#"> <i class="icon-exchange"></i> ' + label_cancel + '</a>&nbsp;&nbsp;&nbsp;';
-var refund_button_html = '<a id="desc-order-freepay-refund" class="btn btn-default" href="#"> <i class="icon-exchange"></i> ' + label_refund + '</a>&nbsp;&nbsp;&nbsp;';
-var partial_refund_button_html = '<a id="desc-order-freepay-partial-refund" class="btn btn-default" href="#"> <i class="icon-exchange"></i> ' + label_partial_refund + '</a>';
+var cancel_button_html = '<a id="desc-order-freepay-cancel" class="btn btn-default" href="#"> <i class="icon-exchange"></i> ' + label_cancel + '</a>';
+var refund_button_html = '<a id="desc-order-freepay-refund" class="btn btn-default" href="#"> <i class="icon-exchange"></i> ' + label_refund + '</a>';
 
 $(document).ready(function() {
     // Display FreePay transaction ID
