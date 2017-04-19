@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.0.1';
+        $this->version = '1.2.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -65,6 +65,14 @@ class Oyst extends FroggyPaymentModule
         }
     }
 
+    public function uninstall()
+    {
+        $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this,_DB_PREFIX_);
+        $oystDb->uninstall();
+
+        return parent::uninstall();
+    }
+
     public function install()
     {
         $result = parent::install();
@@ -85,9 +93,12 @@ class Oyst extends FroggyPaymentModule
             WHERE `id_hook` = '.(int)$id_hook.' AND `id_module` = '.$id_module);
         }
 
-        if (Configuration::get('FC_OYST_API_KEY') != '') {
+        if ($this->getApiKey() != '') {
             Configuration::updateValue('FC_OYST_GUEST', false);
         }
+
+        $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this,_DB_PREFIX_);
+        $result &= $oystDb->install();
 
         return $result;
     }
@@ -124,17 +135,6 @@ class Oyst extends FroggyPaymentModule
     }
 
     /**
-     * Export catalog method
-     */
-    public function exportCatalog()
-    {
-        require_once _PS_MODULE_DIR_.'/oyst/controllers/cron/ExportCatalog.php';
-        $controller = new OystExportCatalogModuleCronController($this);
-        $controller->run();
-    }
-
-
-    /**
      * Logging methods
      */
 
@@ -158,5 +158,36 @@ class Oyst extends FroggyPaymentModule
         }
         file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data_json."\n", FILE_APPEND);
         file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data."\n", FILE_APPEND);
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getApiKey()
+    {
+        $env = strtoupper($this->getEnvironment());
+        $key = $env == \Oyst\Service\Configuration::API_ENV_PREPROD ?
+            \Oyst\Service\Configuration::API_KEY_PREPROD :
+            \Oyst\Service\Configuration::API_KEY_PROD
+        ;
+        return Configuration::get($key);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return Configuration::get(\Oyst\Service\Configuration::API_ENV);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return 'PrestaShop-'.$this->version;
     }
 }

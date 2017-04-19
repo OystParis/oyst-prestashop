@@ -133,7 +133,7 @@
             <button id="toggleConfig" type="button" class="btn btn-default">
                 <i class="process-icon- icon-eye"></i> <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
             </button>
-            {if !$oyst.FC_OYST_API_KEY}
+            {if !$oyst.hasApiKey}
             <a class="btn btn-default" href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }">
                 <i class="process-icon- icon-key"></i>
                 {l s='Get an API Key' mod='oyst'}
