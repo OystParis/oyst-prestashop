@@ -69,13 +69,41 @@
         </div>
         <div class="oyst-admin-tab">
             <fieldset>
+
                 <div class="form-group clearfix">
-                    <label class="control-label col-md-3 col-lg-4">{l s='API Key' mod='oyst'}</label>
+                    <label class="control-label col-md-3 col-lg-4">{l s='Environment' mod='oyst'}</label>
                     <div class="col-md-7 col-lg-4">
-                        <input type="text" id="FC_OYST_API_KEY" name="FC_OYST_API_KEY" value="{$oyst.FC_OYST_API_KEY|escape:'htmlall':'UTF-8'}" />
+                        <select name="FC_OYST_API_ENV">
+                            <option value="prod" {if $oyst.FC_OYST_API_ENV == 'prod'}selected="selected"{/if}>Production</option>
+                            <option value="preprod" {if $oyst.FC_OYST_API_ENV == 'preprod'}selected="selected"{/if}>Preproduction</option>
+                            {if $oyst.isOystDeveloper}
+                                <option value="integration" {if $oyst.FC_OYST_API_ENV == 'integration'}selected="selected"{/if}>Integration</option>
+                            {/if}
+                        </select>
+                        {*{if $oyst.apikey_test_error}*}
+                        {*<p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>*}
+                        {*{/if}*}
+                    </div>
+                </div>
+
+                <div class="form-group clearfix env prod" style="display: none;">
+                    <label class="control-label col-md-3 col-lg-4">{l s='API Production Key' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <input type="text" id="FC_OYST_API_PROD_KEY" name="FC_OYST_API_PROD_KEY" value="{$oyst.FC_OYST_API_PROD_KEY|escape:'htmlall':'UTF-8'}"/>
                         <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                         {if $oyst.apikey_test_error}
-                        <div class="alert alert-danger">{l s='Your key seems invalid!' mod='oyst'}</div>
+                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                        {/if}
+                    </div>
+                </div>
+
+                <div class="form-group clearfix env preprod" style="display: none;">
+                    <label class="control-label col-md-3 col-lg-4">{l s='API PreProduction Key' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <input type="text" id="FC_OYST_API_PREPROD_KEY" name="FC_OYST_API_PREPROD_KEY" value="{$oyst.FC_OYST_API_PREPROD_KEY|escape:'htmlall':'UTF-8'}"/>
+                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                        {if $oyst.apikey_test_error}
+                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                         {/if}
                     </div>
                 </div>
@@ -85,6 +113,14 @@
                         <input type="checkbox" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
                     </div>
                 </div>
+
+                 <div class="form-group clearfix">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Enable OneClick' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4" style="height: 31px;">
+                        <input type="checkbox" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
+                    </div>
+                 </div>
+
                 <div class="form-group clearfix advancedOptions">
                     <label class="control-label col-md-3 col-lg-4">{l s='Set the Oyst payment endpoint' mod='oyst'}</label>
                     <div class="col-md-7 col-lg-4">
@@ -133,7 +169,7 @@
             <button id="toggleConfig" type="button" class="btn btn-default">
                 <i class="process-icon- icon-eye"></i> <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
             </button>
-            {if !$oyst.FC_OYST_API_KEY}
+            {if !$oyst.hasApiKey}
             <a class="btn btn-default" href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }">
                 <i class="process-icon- icon-key"></i>
                 {l s='Get an API Key' mod='oyst'}

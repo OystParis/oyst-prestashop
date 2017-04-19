@@ -28,21 +28,34 @@ if (!defined('_PS_VERSION_')) {
 
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
+    /** @var string  */
     public $configuration_result = '';
+
+    /** @var array  */
     public $configurations = array(
         'FC_OYST_GUEST'                   => 'int',
         'FC_OYST_REDIRECT_SUCCESS'        => 'string',
         'FC_OYST_REDIRECT_ERROR'          => 'string',
         'FC_OYST_REDIRECT_SUCCESS_CUSTOM' => 'string',
         'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
-        'FC_OYST_API_KEY'                 => 'string',
+        \Oyst\Service\Configuration::API_KEY_PROD => 'string',
+        \Oyst\Service\Configuration::API_KEY_PREPROD => 'string',
+        \Oyst\Service\Configuration::API_ENV => 'string',
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
         'FC_OYST_API_PAYMENT_ENDPOINT'    => 'string',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
         'FC_OYST_API_CATALOG_ENDPOINT'    => 'string',
+        \Oyst\Service\Configuration::ONE_CLICK_FEATURE_STATE => 'int',
     );
+
+    /** @var array  */
     public $redirect_success_urls = array();
+
+    /** @var array  */
     public $redirect_error_urls = array();
+
+    /** @var array  */
+    public $redirect_cancel_urls = array();
 
     public function init()
     {
@@ -93,15 +106,22 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
     public function displayModuleConfiguration()
     {
         $assign      = array();
-        $apiKey      = Configuration::get('FC_OYST_API_KEY');
+        $apiKeyProd = Configuration::get(\Oyst\Service\Configuration::API_KEY_PROD);
+        $apiKeyPreprod = Configuration::get(\Oyst\Service\Configuration::API_KEY_PREPROD);
+        $env = Configuration::get(\Oyst\Service\Configuration::API_ENV);
+
+        $hasApiKey = !empty($apiKeyProd) || !empty($apiKeyPreprod);
+
+        $currentApiKey = $env == \Oyst\Service\Configuration::API_ENV_PROD ? $apiKeyProd : $apiKeyPreprod;
+
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $goToConf    = (bool) Tools::getValue('go_to_conf');
         $goToForm    = (bool) Tools::getValue('go_to_form');
         $hasError    = false;
 
         // Merchant comes from the plugin list
-        if (!$goToForm && !$goToConf) {
-            $goToForm = $clientPhone == '' && $apiKey == '';
+        if (!$hasApiKey && !$goToConf) {
+            $goToForm = empty($clientPhone) && empty($hasApiKey);
         }
 
         if ($goToConf) {
@@ -109,8 +129,13 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $goToForm = false;
         }
 
+        $isOystDeveloper = filter_var(getenv('OYST_DEVELOPER'), FILTER_VALIDATE_BOOLEAN);
+
         $this->handleContactForm($assign, $hasError, $goToForm);
 
+        $assign['hasApiKey'] = $hasApiKey;
+        $assign['isOystDeveloper'] = $isOystDeveloper;
+        $assign['exportRunning']            = $this->module->isCatalogExportStillRunning();
         $assign['module_dir']               = $this->path;
         $assign['message']                  = '';
         $assign['phone']                    = Configuration::get('FC_OYST_MERCHANT_PHONE');
@@ -135,8 +160,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->showMessageToMerchant($assign);
         }
 
-        if ($apiKey != '') {
-            $assign['apikey_test_error'] = Tools::strlen($apiKey) != 64;
+        if ($hasApiKey) {
+            $assign['apikey_test_error'] = Tools::strlen($currentApiKey) != 64;
 
             // First time merchant enter a key after submitting the contact form
             if ($isGuest) {
@@ -150,6 +175,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $this->smarty->assign($this->module->name, $assign);
 
+
         if ($goToForm || $hasError) {
             return $this->module->fcdisplay(__FILE__, 'getGuestConfigure.tpl');
         }
@@ -157,9 +183,32 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         return $this->module->fcdisplay(__FILE__, 'getMerchantConfigure.tpl');
     }
 
+    private function postRequest()
+    {
+        if (Tools::isSubmit('synchronizeProducts')) {
+
+            $productRepository = new ProductRepository(Db::getInstance());
+
+            /** @var OystCatalogAPI $oystCatalogAPI */
+            $oystCatalogAPI = OystApiClientFactory::getClient(
+                OystApiClientFactory::ENTITY_CATALOG,
+                $this->module->getApiKey(),
+                $this->module->getUserAgent(),
+                $this->module->getEnvironment()
+            );
+
+            (new ExportProductService(Context::getContext(), $this->module))
+                ->setRepository($productRepository)
+                ->setCatalogApi($oystCatalogAPI)
+                ->requestNewExport()
+            ;
+        }
+    }
+
     public function run()
     {
         $this->init();
+        $this->postRequest();
         $this->saveModuleConfiguration();
         return $this->displayModuleConfiguration();
     }
