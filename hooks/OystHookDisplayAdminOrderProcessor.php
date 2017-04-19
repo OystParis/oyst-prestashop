@@ -42,7 +42,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         }
 
         // Ajax partial refund
-        if (Tools::getValue('subaction') == 'freepay-partial-refund') {
+        if (Tools::isSubmit('partialRefundProduct')) {
             $this->partialRefundOrder($order);
         }
 

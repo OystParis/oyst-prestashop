@@ -36,9 +36,9 @@ $(document).ready(function() {
     $('#desc-order-freepay-cancel').click(function() {
         if (confirm('Êtes vous sûr de vouloir annuler la commande ?')) {
             $.ajax({
-                method: "POST",
+                method: 'POST',
                 url: window.location.href,
-                data: { subaction: "freepay-refund" }
+                data: { subaction: 'freepay-refund' }
             }).done(function( msg ) {
                 msg = JSON.parse(msg);
                 if (msg.result == 'success') {
@@ -55,17 +55,19 @@ $(document).ready(function() {
         event.preventDefault();
 
         if (confirm('Êtes vous sûr de vouloir rembourser partiellement la commande ?')) {
+            var formData = $($(this).closest('form')[0]).serialize();
+
             $.ajax({
-                method: "POST",
+                method: 'POST',
                 url: window.location.href,
-                data: { subaction: "freepay-partial-refund" }
+                data: formData
             }).done(function( msg ) {
-                msg = JSON.parse(msg);
-                if (msg.result == 'success') {
-                    window.location.href = window.location.href;
-                } else {
-                    alert('Une erreur s\'est produite lors du remboursement partiel : ' + msg.details.message);
-                }
+                //msg = JSON.parse(msg);
+                //if (msg.result == 'success') {
+                //    window.location.href = window.location.href;
+                //} else {
+                //    alert('Une erreur s\'est produite lors du remboursement partiel : ' + msg.details.message);
+                //}
             });
         }
         return false;
@@ -74,9 +76,9 @@ $(document).ready(function() {
     $('#desc-order-freepay-refund').click(function() {
         if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {
             $.ajax({
-                method: "POST",
+                method: 'POST',
                 url: window.location.href,
-                data: { subaction: "freepay-refund" }
+                data: { subaction: 'freepay-refund' }
             }).done(function( msg ) {
                 msg = JSON.parse(msg);
                 if (msg.result == 'success') {

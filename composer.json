@@ -1,0 +1,18 @@
+{
+    "repositories": [
+        {
+            "url": "https://github.com/OystParis/oyst-php.git",
+            "type": "git"
+        }
+    ],
+    "require": {
+        "php": ">=5.3",
+        "oyst/oyst-php": "dev-feat-update-composer",
+        "symfony/http-foundation": "2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Oyst\\": "src/"
+        }
+    }
+}
