@@ -31,7 +31,7 @@ use Oyst\Api\OystApiClientFactory;
 
 class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
 {
-    public function run()
+    private function fetchProductContent()
     {
         if (!Module::isInstalled($this->module->name) || !Module::isEnabled($this->module->name)) {
             return '';
@@ -46,26 +46,56 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                     $this->partialRefundOrder($order);
                 }
             }
-            return;
+            return '';
         }
 
         $content = '';
 
+        if (Tools::getValue('controller') == 'AdminProducts' && Tools::isSubmit('id_product')) {
+            $productRepository = new ProductRepository(Db::getInstance());
+            $isProductSent = $productRepository->isProductSent(new Product(Tools::getValue('id_product')));
+
+            /** @var Smarty_Internal_Template $template */
+            $template = Context::getContext()->smarty->createTemplate(__DIR__.'/../views/templates/hook/displayAdminProduct.tpl');
+            $template->assign(array(
+                'isProductSent' => $isProductSent,
+            ));
+
+            $content = $template->fetch();
+        }
+
+        return $content;
+    }
+
+    private function fetchExportContent()
+    {
         $oystProductRepository = new ProductRepository(Db::getInstance());
         $exportedProducts = $oystProductRepository->getExportedProduct();
 
         /** @var Smarty_Internal_Template $template */
         $template = Context::getContext()->smarty->createTemplate(__DIR__.'/../views/templates/hook/displayBackOfficeHeader.tpl');
         $exportDate = $this->module->getRequestedCatalogDate();
-        $template->assign([
+        $template->assign(array(
             'marginRequired' => version_compare(_PS_VERSION_, '1.5', '>'),
             'OYST_REQUESTED_CATALOG_DATE' => $exportDate ? $exportDate->format(Context::getContext()->language->date_format_full) : false,
             'OYST_IS_EXPORT_STILL_RUNNING' => $this->module->isCatalogExportStillRunning(),
             'exportedProducts' => $exportedProducts,
             'displayPanel' => $this->module->getAdminPanelInformationVisibility(),
-        ]);
+        ));
 
-        $content .= $template->fetch();
+        $content = $template->fetch();
+
+        return $content;
+    }
+
+    public function run()
+    {
+        if (!ModuleCore::isInstalled($this->module->name) || !ModuleCore::isEnabled($this->module->name)) {
+            return '';
+        }
+
+        $content = $this->fetchExportContent();
+        $content .= $this->fetchProductContent();
 
         return $content;
     }

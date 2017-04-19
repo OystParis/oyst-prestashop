@@ -3,7 +3,6 @@
 namespace Oyst\Repository;
 
 use Combination;
-use Db;
 use Oyst;
 use Product;
 
@@ -63,8 +62,9 @@ class ProductRepository extends AbstractOystRepository
      * @param array $baseProductToExport PrestaShop product
      * @param Oyst\Classes\OystProduct[] $oystProductsExported Oysts product really exported
      * @param $importId
+     * @return bool
      */
-    public function recordSentProducts(Oyst $oyst, $baseProductToExport, $oystProductsExported, $importId)
+    public function recordSentProductsFromOystProductList(Oyst $oyst, $baseProductToExport, $oystProductsExported, $importId)
     {
         $productIds = [];
         foreach ($baseProductToExport as $product) {
@@ -87,7 +87,22 @@ class ProductRepository extends AbstractOystRepository
                 'hasBeenExported' => (int) $hasBeenExported,
             ];
         }
-        $this->db->insert('oyst_exported_catalog', $productIds);
+        return $this->db->insert('oyst_exported_catalog', $productIds);
+    }
+
+    /**
+     * @param Product $product
+     * @param Combination|null $combination
+     * @return bool
+     */
+    public function recordSingleSentProduct(Product $product, Combination $combination = null)
+    {
+        return $this->db->insert('oyst_exported_catalog', array(
+            'productId' => $product->id,
+            'productAttributeId' => (int) $combination->id,
+            'importId' => null,
+            'hasBeenExported' => 1,
+        ));
     }
 
     /**
@@ -110,6 +125,27 @@ class ProductRepository extends AbstractOystRepository
      */
     public function truncateExportTable()
     {
-        return Db::getInstance()->execute('TRUNCATE TABLE ' . _DB_PREFIX_ . 'oyst_exported_catalog');
+        return $this->db->execute('TRUNCATE TABLE ' . _DB_PREFIX_ . 'oyst_exported_catalog');
+    }
+
+    /**
+     * @param Product $product
+     * @param Combination $combination
+     * @return mixed
+     */
+    public function isProductSent(Product $product, Combination $combination = null)
+    {
+        $productId = (int) $product->id;
+        $combinationId = !$combination ? 0 : (int) $combination->id;
+
+        $query = "
+            SELECT *
+            FROM ps_oyst_exported_catalog poec 
+            WHERE  
+              poec.productId = $productId
+              AND poec.productAttributeId = $combinationId
+        ";
+
+        return $this->db->getValue(str_replace('ps_', _DB_PREFIX_, $query));
     }
 }

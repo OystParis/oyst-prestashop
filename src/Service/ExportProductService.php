@@ -3,16 +3,11 @@
 namespace Oyst\Service;
 
 use Oyst;
-use Oyst\Classes\OystCategory;
-use Oyst\Classes\OystPrice;
 use Oyst\Classes\OystProduct;
-use Oyst\Classes\OystSize;
+use Oyst\Transformer\ProductTransformer;
 use Oyst\Repository\ProductRepository;
 use Product;
 use Validate;
-use StockAvailable;
-use Image;
-use Tools;
 use Cart;
 use Combination;
 use Configuration as PSConfiguration;
@@ -40,6 +35,9 @@ class ExportProductService extends AbstractOystService
 
     /** @var  int */
     private $limitedProduct;
+
+    /** @var  ProductTransformer */
+    private $productTransformer;
 
     /**
      * Oyst\Service\ExportProductService constructor.
@@ -71,8 +69,6 @@ class ExportProductService extends AbstractOystService
         $oystProducts = [];
         foreach ($products as $productInfo) {
 
-            $oystProduct = new OystProduct();
-
             $combination = new Combination();
             if ($product->id != $productInfo['id_product']) {
                 $product = new Product($productInfo['id_product'], false, $this->context->language->id);
@@ -82,60 +78,11 @@ class ExportProductService extends AbstractOystService
                 $combination = new Combination($productInfo['id_product_attribute']);
             }
 
-            $oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
+            $oystProduct = $this->productTransformer->transformWithCombination($product, $combination);
 
-            $categories = [];
-            // Small cache to use avoid this process with attributes
-            if (!isset($categories[$product->id])) {
-                $categories = [$product->id => []];
+            if ($oystProduct) {
+                $oystProducts[] = clone $oystProduct;
             }
-
-            foreach (Product::getProductCategoriesFull($product->id) as $categoryInfo) {
-                $oystCategory = new OystCategory(
-                    $categoryInfo['id_category'],
-                    $categoryInfo['name'],
-                    $categoryInfo['id_category'] == $product->id_category_default
-                );
-                $categories[$product->id][] = $oystCategory;
-            }
-
-            if (empty($categories[$product->id])) {
-                continue;
-            }
-
-            $oystSize = new OystSize(
-                $product->height > 0 ? $product->height : 1,
-                $product->width > 0 ? $product->width : 1,
-                $product->depth > 0 ? $product->depth : 1
-            );
-
-            // Combination fields
-            $oystProduct->setRef($this->oyst->getProductReference($product, $combination));
-            $oystProduct->setEan(Validate::isLoadedObject($combination) ? $combination->ean13 : $product->ean13);
-            $oystProduct->setWeight((Validate::isLoadedObject($combination) ? $combination->weight : $product->weight));
-
-            // Common fields
-            $oystProduct->setActive($product->active);
-            $oystProduct->setManufacturer($product->manufacturer_name);
-            $oystProduct->setSize($oystSize);
-            $oystProduct->setCondition(($product->condition == 'used' ? 'reused' : $product->condition));
-            $oystProduct->setCategories($categories[$product->id]);
-            $oystProduct->setAmountIncludingTax($oystPrice);
-            $oystProduct->setAvailableQuantity(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
-            $oystProduct->setDescription($product->description);
-            $oystProduct->setShortDescription($product->description_short);
-            $oystProduct->setUrl($this->context->link->getProductLink($product));
-
-            $images = [];
-            foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
-                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
-            }
-            if (empty($images)) {
-                $images = [Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png'];
-            }
-            $oystProduct->setImages($images);
-
-            $oystProducts[] = clone $oystProduct;
         }
 
         return $oystProducts;
@@ -144,15 +91,21 @@ class ExportProductService extends AbstractOystService
     /**
      * @param $importId
      * @return array
+     * @throws Exception
      */
     public function sendNewProducts($importId)
     {
+        if (!$this->productTransformer instanceof ProductTransformer) {
+            throw new Exception('Did you forget to set the ProductTransformer ?');
+        }
+
         $json = [
             'totalCount' => 0,
             'remaining' => 0,
             'state' => false,
         ];
 
+        // TODO: Maybe add some log information for this process and store it in a new table ?
         $prestaShopProducts = $this->productRepository->getProductsNotExported($this->limitedProduct);
         $products = $this->transformProducts($prestaShopProducts);
 
@@ -161,7 +114,7 @@ class ExportProductService extends AbstractOystService
         $apiClient = $this->requester->getApiClient();
         if ($apiClient->getLastHttpCode() == 200) {
             $json['state'] = true;
-            $this->productRepository->recordSentProducts($this->oyst, $prestaShopProducts, $products, $importId);
+            $this->productRepository->recordSentProductsFromOystProductList($this->oyst, $prestaShopProducts, $products, $importId);
             $json['totalCount'] = $this->productRepository->getTotalProducts();
             $productNotHandled = $this->productRepository->getProductsNotExported(static::EXPORT_ALL_PRODUCT);
             $totalProductNotHandled = count($productNotHandled);
@@ -263,6 +216,17 @@ class ExportProductService extends AbstractOystService
     public function setDimensionUnit($dimensionUnit)
     {
         $this->dimensionUnit = $dimensionUnit;
+
+        return $this;
+    }
+
+    /**
+     * @param ProductTransformer $productTransformer
+     * @return $this
+     */
+    public function setProductTransformer(ProductTransformer $productTransformer)
+    {
+        $this->productTransformer = $productTransformer;
 
         return $this;
     }
