@@ -4,16 +4,11 @@ namespace Oyst\Service;
 
 use Oyst;
 use Oyst\Api\OystCatalogApi;
-use Oyst\Classes\OystCategory;
-use Oyst\Classes\OystPrice;
 use Oyst\Classes\OystProduct;
-use Oyst\Classes\OystSize;
+use Oyst\Transformer\ProductTransformer;
 use Oyst\Repository\ProductRepository;
 use Product;
 use Validate;
-use StockAvailable;
-use Image;
-use Tools;
 use Cart;
 use Combination;
 use Configuration;
@@ -45,6 +40,9 @@ class ExportProductService extends AbstractOystService
     /** @var  int */
     private $limitedProduct;
 
+    /** @var  ProductTransformer */
+    private $productTransformer;
+
     /**
      * Oyst\Service\ExportProductService constructor.
      * @param Context $context
@@ -56,39 +54,6 @@ class ExportProductService extends AbstractOystService
 
         $this->setWeightUnit('kg');
         $this->setDimensionUnit('cm');
-    }
-
-    /**
-     * @param string $weightUnit
-     * @return $this
-     */
-    public function setWeightUnit($weightUnit)
-    {
-        $this->weightUnit = $weightUnit;
-
-        return $this;
-    }
-
-    /**
-     * @param string $dimensionUnit
-     * @return $this
-     */
-    public function setDimensionUnit($dimensionUnit)
-    {
-        $this->dimensionUnit = $dimensionUnit;
-
-        return $this;
-    }
-
-    /**
-     * @param OystCatalogAPI $oystCatalogAPI
-     * @return $this
-     */
-    public function setCatalogApi(OystCatalogAPI $oystCatalogAPI)
-    {
-        $this->oystCatalogAPI = $oystCatalogAPI;
-
-        return $this;
     }
 
     /**
@@ -108,8 +73,6 @@ class ExportProductService extends AbstractOystService
         $oystProducts = [];
         foreach ($products as $productInfo) {
 
-            $oystProduct = new OystProduct();
-
             $combination = new Combination();
             if ($product->id != $productInfo['id_product']) {
                 $product = new Product($productInfo['id_product'], false, $this->context->language->id);
@@ -119,53 +82,7 @@ class ExportProductService extends AbstractOystService
                 $combination = new Combination($productInfo['id_product_attribute']);
             }
 
-            $oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
-
-            $categories = [];
-            // Small cache to use avoid this process with attributes
-            if (!isset($categories[$product->id])) {
-                $categories = [$product->id => []];
-            }
-
-            foreach (Product::getProductCategoriesFull($product->id) as $categoryInfo) {
-                $oystCategory = new OystCategory(
-                    $categoryInfo['id_category'],
-                    $categoryInfo['name'],
-                    $categoryInfo['id_category'] == $product->id_category_default
-                );
-                $categories[$product->id][] = $oystCategory;
-            }
-            $oystSize = new OystSize(
-                $product->height > 0 ? $product->height : 1,
-                $product->width > 0 ? $product->width : 1,
-                $product->depth > 0 ? $product->depth : 1
-            );
-
-            // Combination fields
-            $oystProduct->setRef($product->id . '-' . ($combination->id ? $combination->id : 0));
-            $oystProduct->setEan(Validate::isLoadedObject($combination) ? $combination->ean13 : $product->ean13);
-            $oystProduct->setWeight((Validate::isLoadedObject($combination) ? $combination->weight : $product->weight));
-
-            // Common fields
-            $oystProduct->setActive($product->active);
-            $oystProduct->setManufacturer($product->manufacturer_name);
-            $oystProduct->setSize($oystSize);
-            $oystProduct->setCondition(($product->condition == 'used' ? 'reused' : $product->condition));
-            $oystProduct->setCategories($categories[$product->id]);
-            $oystProduct->setAmountIncludingTax($oystPrice);
-            $oystProduct->setAvailableQuantity(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
-            $oystProduct->setDescription($product->description);
-            $oystProduct->setShortDescription($product->description_short);
-            $oystProduct->setUrl($this->context->link->getProductLink($product));
-
-            $images = [];
-            foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
-                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
-            }
-            if (empty($images)) {
-                $images = [Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png'];
-            }
-            $oystProduct->setImages($images);
+            $oystProduct = $this->productTransformer->transformWithCombination($product, $combination);
 
             $oystProducts[] = clone $oystProduct;
         }
@@ -176,9 +93,14 @@ class ExportProductService extends AbstractOystService
     /**
      * @param $importId
      * @return bool
+     * @throws Exception
      */
     public function export($importId)
     {
+        if (!$this->productTransformer instanceof ProductTransformer) {
+            throw new Exception('Did you forget to set the ProductTransformer ?');
+        }
+
         // TODO: Maybe add some log information for this process and store it in a new table ?
         $prestaShopProducts = $this->productRepository->getProductsNotExported($this->limitedProduct);
         $products = $this->transformProducts($prestaShopProducts);
@@ -274,5 +196,46 @@ class ExportProductService extends AbstractOystService
         $this->productRepository = $productRepository;
 
         return $this;
+    }
+
+    /**
+     * @param string $weightUnit
+     * @return $this
+     */
+    public function setWeightUnit($weightUnit)
+    {
+        $this->weightUnit = $weightUnit;
+
+        return $this;
+    }
+
+    /**
+     * @param string $dimensionUnit
+     * @return $this
+     */
+    public function setDimensionUnit($dimensionUnit)
+    {
+        $this->dimensionUnit = $dimensionUnit;
+
+        return $this;
+    }
+
+    /**
+     * @param OystCatalogAPI $oystCatalogAPI
+     * @return $this
+     */
+    public function setCatalogApi(OystCatalogAPI $oystCatalogAPI)
+    {
+        $this->oystCatalogAPI = $oystCatalogAPI;
+
+        return $this;
+    }
+
+    /**
+     * @param ProductTransformer $productTransformer
+     */
+    public function setProductTransformer(ProductTransformer $productTransformer)
+    {
+        $this->productTransformer = $productTransformer;
     }
 }

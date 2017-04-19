@@ -4,6 +4,7 @@ namespace Oyst\Repository;
 
 use Combination;
 use Db;
+use Product;
 
 /**
  * Class Oyst\Repository\ProductRepository
@@ -92,6 +93,27 @@ class ProductRepository extends AbstractOystRepository
      */
     public function truncateExportTable()
     {
-        return Db::getInstance()->execute('TRUNCATE TABLE ' . _DB_PREFIX_ . 'oyst_exported_catalog');
+        return $this->db->execute('TRUNCATE TABLE ' . _DB_PREFIX_ . 'oyst_exported_catalog');
+    }
+
+    /**
+     * @param Product $product
+     * @param Combination $combination
+     * @return mixed
+     */
+    public function isProductSent(Product $product, Combination $combination = null)
+    {
+        $productId = (int) $product->id;
+        $combinationId = !$combination ? 0 : (int) $combination->id;
+
+        $query = "
+            SELECT *
+            FROM ps_oyst_exported_catalog poec 
+            WHERE  
+              poec.productId = $productId
+              AND poec.productAttributeId = $combinationId
+        ";
+
+        return $this->db->getValue(str_replace('ps_', _DB_PREFIX_, $query));
     }
 }

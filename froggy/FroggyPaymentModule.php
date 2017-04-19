@@ -109,6 +109,7 @@ class FroggyPaymentModule extends PaymentModule
      * @param $method
      * @param $args
      * @return null
+     * @throws Exception
      */
     public function __call($method, $args)
     {
@@ -121,6 +122,9 @@ class FroggyPaymentModule extends PaymentModule
             'hook' => 'hook',
             'hookdisplayproductfooter' => 'hookDisplayProductFooter',
             'hookdisplaybackofficeheader' => 'hookDisplayBackOfficeHeader',
+            'hookactionproductadd' => 'hookActionProductAdd',
+            'hookactionproductsave' => 'hookActionProductSave',
+            'hookactionproductupdate' => 'hookActionProductUpdate',
         );
 
         foreach ($prefix_call as $prefix_search => $prefix_replace) {
