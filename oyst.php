@@ -89,7 +89,56 @@ class Oyst extends FroggyPaymentModule
             Configuration::updateValue('FC_OYST_GUEST', false);
         }
 
+        $result &= $this->installNewCarrier();
+
         return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    private function installNewCarrier()
+    {
+        //Create new carrier
+        $carrier = new Carrier(Configuration::get('OYST_ONE_CLICK_CARRIER'));
+
+        if (Validate::isLoadedObject($carrier)) {
+            return true;
+        }
+
+        $carrier->name = 'Oyst One Click';
+        $carrier->active = true;
+        $carrier->deleted = 0;
+        $carrier->shipping_handling = false;
+        $carrier->range_behavior = 0;
+        $carrier->is_free = true;
+        $carrier->delay = array(
+            Configuration::get('PS_LANG_DEFAULT') => 'Delay'
+        );
+        $carrier->is_module = false;
+        $carrier->external_module_name = $this->name;
+        $carrier->need_range = false;
+
+        if ($carrier->add()) {
+            $groups = Group::getGroups(true);
+            foreach ($groups as $group) {
+                Db::getInstance()->insert('carrier_group', array(
+                    'id_carrier' => (int)$carrier->id,
+                    'id_group' => (int)$group['id_group']
+                ));
+            }
+
+            $zones = Zone::getZones(true);
+            foreach ($zones as $z) {
+                Db::getInstance()->insert('carrier_zone',
+                    array('id_carrier' => (int) $carrier->id, 'id_zone' => (int) $z['id_zone'])
+                );
+            }
+
+            Configuration::updateValue('OYST_ONE_CLICK_CARRIER', $carrier->id);
+            return true;
+        }
+        return false;
     }
 
     public function loadSQLFile($sql_file)
@@ -158,5 +207,94 @@ class Oyst extends FroggyPaymentModule
         }
         file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data_json."\n", FILE_APPEND);
         file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data."\n", FILE_APPEND);
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getRequestedCatalogDate()
+    {
+        $date = null;
+        if ($this->hasExportCatalogBeenRequested()) {
+            $date = new DateTime(Configuration::get('OYST_REQUESTED_CATALOG_DATE'));
+        }
+
+        return $date;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCatalogExportStillRunning()
+    {
+        return (bool) Configuration::get('OYST_IS_EXPORT_STILL_RUNNING');
+    }
+
+    /**
+     * @param $state
+     * @return $this
+     */
+    public function setIsExportCatalogRunning($state)
+    {
+        $state = ((bool) $state) ? 1 : 0;
+        Configuration::updateValue('OYST_IS_EXPORT_STILL_RUNNING', $state);
+
+        return $this;
+    }
+
+    /**
+     * @param $state
+     * @return $this
+     */
+    public function setAdminPanelInformationVisibility($state)
+    {
+        // TIPS: Maybe better to have an AdminClass / Configuration to handle anything about this
+        $state = (bool) $state ? 1 : 0;
+        Configuration::updateValue('OYST_DISPLAY_ADMIN_INFO', $state);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminPanelInformationVisibility()
+    {
+        return (bool) Configuration::get('OYST_DISPLAY_ADMIN_INFO');
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiKey()
+    {
+        $env = strtoupper($this->getEnvironment());
+        return Configuration::get('FC_OYST_API_'.$env.'_KEY');
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return Configuration::get('FC_OYST_API_ENV');
+    }
+
+    /**
+     * @param Product $product
+     * @param Combination|null $combination
+     * @return string
+     */
+    public function getProductReference(Product $product, Combination $combination = null)
+    {
+        return $product->id.(Validate::isLoadedObject($combination) ? '-'.$combination->id : '');
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return 'PrestaShop-'.$this->version;
     }
 }
