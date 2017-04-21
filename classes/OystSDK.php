@@ -66,6 +66,18 @@ class OystSDK
         return $this->_apiPostRequest($this->getApiEndpoint().'/payments/'.$payment_id.'/cancel_or_refund', array());
     }
 
+    public function refundRequest($payment_id, $value, $currency)
+    {
+        $data = array(
+            'amount' => array(
+                'value' => $value,
+                'currency' => $currency
+            )
+        );
+
+        return $this->_apiPostRequest($this->getApiEndpoint().'/payments/'.$payment_id.'/refund', $data);
+    }
+
     public function productPostRequest($products)
     {
         $data = array('products' => $products);

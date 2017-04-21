@@ -24,7 +24,6 @@
     var order_can_be_refunded = {$oyst.order_can_be_refunded|escape:'html':'UTF-8'};
     var label_cancel = '{$oyst.label_cancel|escape:'html':'UTF-8'}';
     var label_refund = '{$oyst.label_refund|escape:'html':'UTF-8'}';
-    var label_partial_refund = '{$oyst.label_partial_refund|escape:'html':'UTF-8'}';
 </script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder-1.6.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder.js"></script>

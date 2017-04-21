@@ -23,9 +23,7 @@ var cancel_button_html = '<a id="desc-order-freepay-cancel" class="toolbar_btn" 
 var refund_button_html = '<a id="desc-order-freepay-refund" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_refund + '</div></a>';
 
 $(document).ready(function() {
-
     // Display FreePay transaction ID
     var page_title = $('span .breadcrumb');
     page_title.text(page_title.text() + ' - Transaction FreePay n°' + oyst_transaction_id);
-
 });
