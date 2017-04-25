@@ -21,7 +21,7 @@
 <script>
     var oyst_transaction_id = {$oyst.transaction_id|escape:'html':'UTF-8'};
     var order_can_be_cancelled = {$oyst.order_can_be_cancelled|escape:'html':'UTF-8'};
-    var order_can_be_refunded = {$oyst.order_can_be_refunded|escape:'html':'UTF-8'};
+    var order_max_refund = {$oyst.order_max_refund|escape:'html':'UTF-8'};
     var label_cancel = '{$oyst.label_cancel|escape:'html':'UTF-8'}';
     var label_refund = '{$oyst.label_refund|escape:'html':'UTF-8'}';
 </script>

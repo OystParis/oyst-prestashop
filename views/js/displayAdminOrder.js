@@ -24,11 +24,12 @@ $(document).ready(function() {
     var partial_refund_button = $('#desc-order-partial_refund');
 
     standard_refund_button.hide();
+    partial_refund_button.hide();
 
     if (order_can_be_cancelled) {
         standard_refund_button.after(cancel_button_html);
         partial_refund_button.hide();
-    } else if (order_can_be_refunded) {
+    } else if (order_max_refund > 0) {
         standard_refund_button.after(refund_button_html);
         partial_refund_button.show();
     }
@@ -62,12 +63,12 @@ $(document).ready(function() {
                 url: window.location.href,
                 data: formData
             }).done(function( msg ) {
-                //msg = JSON.parse(msg);
-                //if (msg.result == 'success') {
-                //    window.location.href = window.location.href;
-                //} else {
-                //    alert('Une erreur s\'est produite lors du remboursement partiel : ' + msg.details.message);
-                //}
+                msg = JSON.parse(msg);
+                if (msg.result == 'success') {
+                    window.location.href = window.location.href;
+                } else {
+                    alert('Une erreur s\'est produite lors du remboursement partiel : ' + msg.details.message);
+                }
             });
         }
         return false;

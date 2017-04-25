@@ -56,25 +56,25 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         $this->module->logNotification('Payment', $_GET);
         try {
             if ($notification_item['success'] == 1) {
-                // If authorisation succeed, we create the order
-                if ($notification_item['event_code'] == 'AUTHORISATION') {
-                    $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
-                }
-
-                // If capture succeed, we update the order
-                if ($notification_item['event_code'] == 'CAPTURE') {
-                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
-                }
-
-                // If cancellation is confirmed, we cancel the order
-                if ($notification_item['event_code'] == 'CANCELLATION') {
-                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
-                }
-
-                // If refund is confirmed, we cancel the order
-                if ($notification_item['event_code'] == 'REFUND') {
-                    //@todo check total price of order and the amount received for the refund (and the sum of the former refunds)
-                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
+                switch ($notification_item['event_code']) {
+                    // If authorisation succeed, we create the order
+                    case OystPaymentNotification::EVENT_AUTHORISATION:
+                        $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
+                        break;
+                    // If capture succeed, we update the order
+                    case OystPaymentNotification::EVENT_CAPTURE:
+                        $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
+                        break;
+                    // If cancellation is confirmed, we cancel the order
+                    case OystPaymentNotification::EVENT_CANCELLATION:
+                        $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
+                        break;
+                    // If refund is confirmed, we cancel the order
+                    case OystPaymentNotification::EVENT_REFUND:
+                        var_dump($notification_item['event_data']);die;
+                        //@todo check total price of order and the amount received for the refund (and the sum of the former refunds)
+                        $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
+                        break;
                 }
             }
         } catch (Exception $e) {
