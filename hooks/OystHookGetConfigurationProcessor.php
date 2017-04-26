@@ -22,6 +22,9 @@
 /*
  * Security
  */
+use Oyst\Api\OystApiClientFactory;
+use Oyst\Service\Logger\PrestaShopLogger;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -135,7 +138,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $assign['hasApiKey'] = $hasApiKey;
         $assign['isOystDeveloper'] = $isOystDeveloper;
-        $assign['exportRunning']            = $this->module->isCatalogExportStillRunning();
         $assign['module_dir']               = $this->path;
         $assign['message']                  = '';
         $assign['phone']                    = Configuration::get('FC_OYST_MERCHANT_PHONE');
@@ -183,32 +185,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         return $this->module->fcdisplay(__FILE__, 'getMerchantConfigure.tpl');
     }
 
-    private function postRequest()
-    {
-        if (Tools::isSubmit('synchronizeProducts')) {
-
-            $productRepository = new ProductRepository(Db::getInstance());
-
-            /** @var OystCatalogAPI $oystCatalogAPI */
-            $oystCatalogAPI = OystApiClientFactory::getClient(
-                OystApiClientFactory::ENTITY_CATALOG,
-                $this->module->getApiKey(),
-                $this->module->getUserAgent(),
-                $this->module->getEnvironment()
-            );
-
-            (new ExportProductService(Context::getContext(), $this->module))
-                ->setRepository($productRepository)
-                ->setCatalogApi($oystCatalogAPI)
-                ->requestNewExport()
-            ;
-        }
-    }
-
     public function run()
     {
         $this->init();
-        $this->postRequest();
         $this->saveModuleConfiguration();
         return $this->displayModuleConfiguration();
     }

@@ -5,6 +5,9 @@
  */
 defined('_PS_VERSION_') || require dirname(__FILE__) . '/index.php';
 
+// We need to override this for older q  PrestaShop
+Logger::$definition['fields']['message']['validate'] = 'isString';
+
 // When sending the module to PrestaShop Validator, all the require files will be available
 if (!file_exists(__DIR__.'/vendor/autoload.php')) {
     throw new Exception('Please install composer inside the oyst module');

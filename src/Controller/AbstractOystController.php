@@ -2,7 +2,9 @@
 
 namespace Oyst\Controller;
 
+use Oyst;
 use Oyst\Service\Http\CurrentRequest;
+use Oyst\Service\Logger\AbstractLogger;
 
 abstract class AbstractOystController
 {
@@ -11,6 +13,12 @@ abstract class AbstractOystController
      */
     protected $request;
 
+    /** @var  AbstractLogger */
+    protected $logger;
+
+    /** @var  Oyst */
+    protected $oyst;
+
     /**
      * Oyst\Controller\AbstractOystController constructor.
      * @param CurrentRequest $request
@@ -18,5 +26,16 @@ abstract class AbstractOystController
     public function __construct(CurrentRequest $request)
     {
         $this->request = $request;
+    }
+
+    /**
+     * @param AbstractLogger $logger
+     * @return $this
+     */
+    public function setLogger(AbstractLogger $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
     }
 }

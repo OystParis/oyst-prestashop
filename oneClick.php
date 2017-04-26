@@ -1,27 +1,15 @@
 <?php
 
-use Oyst\Api\OystApiClientFactory;
-use Oyst\Api\OystOneClickApi;
 use Oyst\Controller\OneClickOrderController;
 use Oyst\Service\Http\CurrentRequest;
-use Oyst\Service\OneClickService;
+use Oyst\Service\Logger\PrestaShopLogger;
 
 require_once __DIR__.'/../../config/config.inc.php';
 require __DIR__.'/oyst.php';
 
-$oyst = new Oyst();
-/** @var OystOneClickApi $oneClickAPI */
-$oneClickAPI = OystApiClientFactory::getClient(
-    OystApiClientFactory::ENTITY_ONECLICK,
-    $oyst->getApiKey(),
-    $oyst->getUserAgent(),
-    $oyst->getEnvironment()
-);
-
-$oneClickService = new OneClickService(Context::getContext(), $oyst);
-$oneClickService
-    ->setOneClickApi($oneClickAPI)
-;
+$logger = new PrestaShopLogger();
+$logger->info(sprintf('New OneClick request from customer: %d', Context::getContext()->customer->id));
 
 $oneClickController = new OneClickOrderController(new CurrentRequest());
-$oneClickController->authorizeOrderAction($oneClickService);
+$oneClickController->setLogger($logger);
+$oneClickController->authorizeOrderAction();

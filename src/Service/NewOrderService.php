@@ -7,7 +7,7 @@ use Oyst\Repository\AddressRepository;
 use Carrier;
 use Cart;
 use Combination;
-use Configuration;
+use Configuration as PSConfiguration;
 use CountryCore;
 use Currency;
 use Customer;
@@ -46,7 +46,7 @@ class NewOrderService extends AbstractOystService
             $customer->email = $user['email'];
             $customer->firstname = $user['address']['first_name'];
             $customer->lastname = $user['address']['last_name'];
-            $customer->id_lang = Configuration::get('PS_LANG_DEFAULT');
+            $customer->id_lang = PSConfiguration::get('PS_LANG_DEFAULT');
             $customer->passwd = ToolsCore::encrypt(ToolsCore::passwdGen());
             $customer->add();
         }
@@ -66,7 +66,7 @@ class NewOrderService extends AbstractOystService
             // TODO: For now, France only, should be changed for worldwide or European
             $countryId = (int)CountryCore::getByIso('fr');
             if (0 >= $countryId) {
-                $countryId = Configuration::get('PS_COUNTRY_DEFAULT');
+                $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
             $address->id_customer = $customer->id;
@@ -108,11 +108,18 @@ class NewOrderService extends AbstractOystService
         $this->context->currency = new Currency(Currency::getIdByIsoCode($oystOrderInfo['order_amount']['currency']));
 
         if (!Validate::isLoadedObject($this->context->currency)) {
+            $this->logger->emergency(
+                'Currency not found: '.$oystOrderInfo['order_amount']['currency']
+            );
             return false;
         }
 
-        $carrier = Carrier::getCarrierByReference(Configuration::get('OYST_ONE_CLICK_CARRIER'));
+        $carrierReference = PSConfiguration::get('OYST_ONE_CLICK_CARRIER');
+        $carrier = Carrier::getCarrierByReference($carrierReference);
         if (!Validate::isLoadedObject($carrier)) {
+            $this->logger->emergency(
+                'Carrier reference not found: #'.$carrierReference
+            );
             return false;
         }
 
@@ -120,11 +127,24 @@ class NewOrderService extends AbstractOystService
         $cart->id_address_delivery = $cart->id_address_invoice = $address->id;
         $cart->id_lang = $customer->id_lang;
         $cart->secure_key = $customer->secure_key;
-        $cart->id_shop = Configuration::get('PS_SHOP_DEFAULT');
+        $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
         $cart->id_carrier = $carrier->id;
 
-        if (!$cart->add() || !$cart->updateQty($oystOrderInfo['quantity'], $product->id, $combination->id)) {
+        if (!$cart->add()) {
+            $this->logger->emergency(
+                'Can\'t create cart ['.$this->serializer->serialize($cart).']'
+            );
+            return false;
+        } elseif (!$cart->updateQty($oystOrderInfo['quantity'], $product->id, $combination->id)) {
+            $this->logger->emergency(
+                sprintf(
+                    "Can't add product to cart, please check the quantity.
+                        Product #%d. Combination #%d",
+                    $product->id,
+                    $combination->id
+                )
+            );
             return false;
         }
 
@@ -137,7 +157,7 @@ class NewOrderService extends AbstractOystService
 
         $state = $this->oyst->validateOrder(
             $cart->id,
-            Configuration::get('PS_OS_PAYMENT'),
+            PSConfiguration::get('PS_OS_PAYMENT'),
             $oystOrderInfo['order_amount']['value'] / 100,
             'Oyst OneClick',
             null,
@@ -165,7 +185,7 @@ class NewOrderService extends AbstractOystService
             'state' => false,
         );
 
-        $oystOrderInfo = $this->orderApi->getOrder($orderId);
+        $oystOrderInfo = $this->requestApi($this->orderApi, 'getOrder', $orderId);
         if ($oystOrderInfo) {
             $productReferences = explode('-', $oystOrderInfo['product_reference']);
             $product = new Product($productReferences[0]);

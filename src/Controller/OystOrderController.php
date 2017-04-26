@@ -21,12 +21,7 @@ class OystOrderController extends AbstractOystController
         $context = Context::getContext();
         $orderRepository = new OrderRepository(Db::getInstance());
         $addressRepository = new AddressRepository(Db::getInstance());
-        $orderService = new NewOrderService(
-            $context,
-            $oyst
-        );
-        $orderService->setOrderRepository($orderRepository);
-        $orderService->setAddressRepository($addressRepository);
+
         /** @var OystOrderApi $orderApi */
         $orderApi = OystApiClientFactory::getClient(
             OystApiClientFactory::ENTITY_ORDER,
@@ -35,7 +30,17 @@ class OystOrderController extends AbstractOystController
             $oyst->getEnvironment()
         );
 
-        $orderService->setOrderAPi($orderApi);
+        $orderService = new NewOrderService(
+            $context,
+            $oyst
+        );
+
+        $orderService
+            ->setOrderRepository($orderRepository)
+            ->setAddressRepository($addressRepository)
+            ->setLogger($this->logger)
+            ->setOrderAPi($orderApi)
+        ;
 
         $json = $this->request->getJson();
         if ($json) {
