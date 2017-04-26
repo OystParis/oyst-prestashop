@@ -2,12 +2,14 @@
 
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystCatalogApi;
+use Oyst\Api\OystOrderApi;
 use Oyst\Controller\ExportProductController;
 use Oyst\Repository\ProductRepository;
 use Oyst\Service\ExportProductService;
 use Oyst\Controller\OystOrderController;
 use Oyst\Repository\AddressRepository;
 use Oyst\Repository\OrderRepository;
+use Oyst\Service\Logger\PrestaShopLogger;
 use Oyst\Service\NewOrderService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,16 +23,19 @@ $response = new JsonResponse();
 // Read json request
 $request = Request::createFromGlobals();
 
-$data = array(
-    'state' => false,
-    'error' => 'Method not found',
-);
-
 if ($request->getContentType() == 'json') {
     $data = json_decode($request->getContent(), true);
 }
 
 if (isset($data['event'])) {
+
+    $logger = new PrestaShopLogger();
+    $logger->info(
+        sprintf('New notification [%s]', $request->getContent()), array(
+            'objectType' => 'OystNotification'
+        )
+    );
+
     switch ($data['event']) {
         case 'catalog.import':
             $oyst = new Oyst();
@@ -46,8 +51,11 @@ if (isset($data['event'])) {
                 $limitedProduct = ExportProductService::EXPORT_REGULAR_NUMBER;
             }
 
-            $exportProductService->setProductRepository($productRepository);
-            $exportProductService->setLimitedProduct($limitedProduct);
+            $exportProductService
+                ->setProductRepository($productRepository)
+                ->setLimitedProduct($limitedProduct)
+                ->setLogger($logger)
+            ;
 
             /** @var OystCatalogAPI $oystCatalogAPI */
             $oystCatalogAPI = OystApiClientFactory::getClient(
@@ -58,6 +66,7 @@ if (isset($data['event'])) {
             );
 
             // Let's go !
+            // TODO: Refactoring code to use AbstractOystController and Request
             $exportProductController = new ExportProductController($exportProductService, $oystCatalogAPI);
             $exportProductController->setRequestData($data);
             $response = $exportProductController->run();
@@ -72,8 +81,11 @@ if (isset($data['event'])) {
                 $context,
                 $oyst
             );
-            $orderService->setOrderRepository($orderRepository);
-            $orderService->setAddressRepository($addressRepository);
+            $orderService
+                ->setOrderRepository($orderRepository)
+                ->setAddressRepository($addressRepository)
+                ->setLogger($logger)
+            ;
             /** @var OystOrderApi $orderApi */
             $orderApi = OystApiClientFactory::getClient(
                 OystApiClientFactory::ENTITY_ORDER,
@@ -85,7 +97,7 @@ if (isset($data['event'])) {
             $orderService->setOrderAPi($orderApi);
 
             $orderController = new OystOrderController($request);
-            $response = $orderController->createNewOrderAction($orderService, $data['order_id']);
+            $response = $orderController->createNewOrderAction($orderService, $data['data']['order_id']);
 
             break;
     }

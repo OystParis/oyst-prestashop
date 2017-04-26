@@ -209,6 +209,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             (new ExportProductService(Context::getContext(), $this->module))
                 ->setProductRepository($productRepository)
                 ->setCatalogApi($oystCatalogAPI)
+                ->setLogger(new PrestaShopLogger())
                 ->requestNewExport()
             ;
 

@@ -135,6 +135,13 @@ class ExportProductService extends AbstractOystService
                 );
                 $categories[$product->id][] = $oystCategory;
             }
+
+            // In case there is no categories, we log a warn to prevent the merchant and skip it
+            if (empty($categories[$product->id])) {
+                $this->logger->warning(sprintf('This product %d has not been imported because there is no categories.', $product->id));
+                continue;
+            }
+
             $oystSize = new OystSize(
                 $product->height > 0 ? $product->height : 1,
                 $product->width > 0 ? $product->width : 1,
@@ -183,13 +190,16 @@ class ExportProductService extends AbstractOystService
         $prestaShopProducts = $this->productRepository->getProductsNotExported($this->limitedProduct);
         $products = $this->transformProducts($prestaShopProducts);
 
-        $this->oystCatalogAPI->postProducts($products);
+        $this->requestApi($this->oystCatalogAPI, 'postProducts',
+            $products
+        );
+
         $state = false;
 
         if ($this->oystCatalogAPI->getLastHttpCode() == 200) {
             $state = true;
             $this->productRepository->recordSentProducts($prestaShopProducts, $importId);
-            $this->setIsExportCatalogRunning(0 != $this->getTotalProductsRemaining());
+            $this->setExportCatalogState(0 != $this->getTotalProductsRemaining());
         }
 
         return $state;
@@ -201,7 +211,8 @@ class ExportProductService extends AbstractOystService
     public function requestNewExport()
     {
         $this->productRepository->truncateExportTable();
-        $this->oystCatalogAPI->notifyImport();
+
+        $this->requestApi($this->oystCatalogAPI, 'notifyImport', null);
 
         if ($this->oystCatalogAPI->getLastHttpCode() == 200) {
             PSConfiguration::updateValue('OYST_REQUESTED_CATALOG_DATE', (new DateTime())->format('Y-m-d H:i:s'));
