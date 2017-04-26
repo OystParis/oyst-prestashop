@@ -2,12 +2,14 @@
 
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystCatalogApi;
+use Oyst\Api\OystOrderApi;
 use Oyst\Controller\ExportProductController;
 use Oyst\Repository\ProductRepository;
 use Oyst\Service\ExportProductService;
 use Oyst\Controller\OystOrderController;
 use Oyst\Repository\AddressRepository;
 use Oyst\Repository\OrderRepository;
+use Oyst\Service\Logger\PrestaShopLogger;
 use Oyst\Service\NewOrderService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,8 +48,11 @@ if (isset($data['event'])) {
                 $limitedProduct = ExportProductService::EXPORT_REGULAR_NUMBER;
             }
 
-            $exportProductService->setProductRepository($productRepository);
-            $exportProductService->setLimitedProduct($limitedProduct);
+            $exportProductService
+                ->setProductRepository($productRepository)
+                ->setLimitedProduct($limitedProduct)
+                ->setLogger(new PrestaShopLogger())
+            ;
 
             /** @var OystCatalogAPI $oystCatalogAPI */
             $oystCatalogAPI = OystApiClientFactory::getClient(
@@ -72,8 +77,11 @@ if (isset($data['event'])) {
                 $context,
                 $oyst
             );
-            $orderService->setOrderRepository($orderRepository);
-            $orderService->setAddressRepository($addressRepository);
+            $orderService
+                ->setOrderRepository($orderRepository)
+                ->setAddressRepository($addressRepository)
+                ->setLogger(new PrestaShopLogger())
+            ;
             /** @var OystOrderApi $orderApi */
             $orderApi = OystApiClientFactory::getClient(
                 OystApiClientFactory::ENTITY_ORDER,

@@ -167,7 +167,7 @@ class NewOrderService extends AbstractOystService
             'state' => false,
         );
 
-        $oystOrderInfo = $this->orderApi->getOrder($orderId);
+        $oystOrderInfo = $this->requestApi($this->orderApi, 'getOrder', $orderId);
         if ($oystOrderInfo) {
             $productReferences = explode('-', $oystOrderInfo['product_reference']);
             $product = new Product($productReferences[0]);

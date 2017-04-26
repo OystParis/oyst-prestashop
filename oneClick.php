@@ -3,6 +3,7 @@
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystOneClickApi;
 use Oyst\Controller\OneClickOrderController;
+use Oyst\Service\Logger\PrestaShopLogger;
 use Oyst\Service\OneClickService;
 
 require_once __DIR__.'/../../config/config.inc.php';
@@ -20,7 +21,10 @@ $oneClickAPI = OystApiClientFactory::getClient(
 );
 
 $oneClickService = new OneClickService(Context::getContext(), $oyst);
-$oneClickService->setOneClickApi($oneClickAPI);
+$oneClickService
+    ->setOneClickApi($oneClickAPI)
+    ->setLogger(new PrestaShopLogger())
+;
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 $oneClickController = new OneClickOrderController($request);
 $oneClickController
