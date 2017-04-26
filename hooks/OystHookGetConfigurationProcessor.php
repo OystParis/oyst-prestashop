@@ -26,6 +26,7 @@ use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystCatalogApi;
 use Oyst\Repository\ProductRepository;
 use Oyst\Service\ExportProductService;
+use Oyst\Service\Logger\PrestaShopLogger;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -198,6 +199,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             (new ExportProductService(Context::getContext(), $this->module))
                 ->setProductRepository($productRepository)
                 ->setCatalogApi($oystCatalogAPI)
+                ->setLogger(new PrestaShopLogger())
                 ->requestNewExport()
             ;
 

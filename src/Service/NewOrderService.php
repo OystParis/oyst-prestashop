@@ -109,11 +109,18 @@ class NewOrderService extends AbstractOystService
         $this->context->currency = new Currency(Currency::getIdByIsoCode($oystOrderInfo['order_amount']['currency']));
 
         if (!Validate::isLoadedObject($this->context->currency)) {
+            $this->logger->emergency(
+                'Currency not found: '.$oystOrderInfo['order_amount']['currency']
+            );
             return false;
         }
 
-        $carrier = Carrier::getCarrierByReference(Configuration::get('OYST_ONE_CLICK_CARRIER'));
+        $carrierReference = Configuration::get('OYST_ONE_CLICK_CARRIER');
+        $carrier = Carrier::getCarrierByReference($carrierReference);
         if (!Validate::isLoadedObject($carrier)) {
+            $this->logger->emergency(
+                'Carrier reference not found: #'.$carrierReference
+            );
             return false;
         }
 
@@ -125,7 +132,20 @@ class NewOrderService extends AbstractOystService
         $cart->id_currency = $this->context->currency->id;
         $cart->id_carrier = $carrier->id;
 
-        if (!$cart->add() || !$cart->updateQty($oystOrderInfo['quantity'], $product->id, $combination->id)) {
+        if (!$cart->add()) {
+            $this->logger->emergency(
+                'Can\'t create cart ['.$this->serializer->serialize($cart).']'
+            );
+            return false;
+        } elseif (!$cart->updateQty($oystOrderInfo['quantity'], $product->id, $combination->id)) {
+            $this->logger->emergency(
+                sprintf(
+                    "Can't add product to cart, please check the quantity.
+                        Product #%d. Combination #%d",
+                    $product->id,
+                    $combination->id
+                )
+            );
             return false;
         }
 
@@ -167,7 +187,7 @@ class NewOrderService extends AbstractOystService
             'state' => false,
         );
 
-        $oystOrderInfo = $this->orderApi->getOrder($orderId);
+        $oystOrderInfo = $this->requestApi($this->orderApi, 'getOrder', $orderId);
         if ($oystOrderInfo) {
             $productReferences = explode('-', $oystOrderInfo['product_reference']);
             $product = new Product($productReferences[0]);

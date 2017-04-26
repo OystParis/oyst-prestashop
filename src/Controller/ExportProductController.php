@@ -5,6 +5,7 @@ namespace Oyst\Controller;
 use ConfigurationCore;
 use Oyst\Service\ExportProductService;
 use Oyst\Api\OystCatalogApi;
+use Oyst\Service\Serializer\ExportProductRequestParamSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ExportProductController
@@ -54,11 +55,13 @@ class ExportProductController
     public function run()
     {
         $importId = $this->requestData['data']['import_id'];
-        $this->exportProductService->setCatalogApi($this->oystCatalogAPI);
-        $this->exportProductService->setWeightUnit(ConfigurationCore::get('PS_WEIGHT_UNIT'));
-        $this->exportProductService->setDimensionUnit(ConfigurationCore::get('PS_CURRENCY_DEFAULT'));
-
-        $state = $this->exportProductService->export($importId);
+        $state = $this->exportProductService
+            ->setCatalogApi($this->oystCatalogAPI)
+            ->setWeightUnit(ConfigurationCore::get('PS_WEIGHT_UNIT'))
+            ->setSerializer(new ExportProductRequestParamSerializer())
+            ->setDimensionUnit(ConfigurationCore::get('PS_CURRENCY_DEFAULT'))
+            ->export($importId)
+        ;
 
         $jsonResponse = new JsonResponse();
 

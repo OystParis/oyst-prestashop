@@ -34,8 +34,13 @@ class OneClickService extends AbstractOystService
         }
 
         $productReference = $this->oyst->getProductReference($product, $combination);
-        // TODO: Handle variation and change this SKU
-        $response = $this->oneClickApi->authorizeOrder($productReference, $quantity, null, $user);
+
+        $response = $this->requestApi($this->oneClickApi, 'authorizeOrder',
+            $productReference,
+            $quantity,
+            null,
+            $user
+        );
 
         if ($this->oneClickApi->getLastHttpCode() == 200) {
             $result = array(

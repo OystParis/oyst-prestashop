@@ -8,7 +8,9 @@
     "require": {
         "php": ">=5.3",
         "oyst/oyst-php": "1.1.1",
-        "symfony/http-foundation": "2.*"
+        "symfony/http-foundation": "2.*",
+        "symfony/serializer": "v2.8.19",
+        "symfony/property-access": "v2.8.19"
     },
     "require-dev": {
         "symfony/var-dumper": "^3.2"
