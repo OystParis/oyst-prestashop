@@ -29,9 +29,13 @@ $(document).ready(function() {
     if (order_can_be_cancelled) {
         standard_refund_button.after(cancel_button_html);
         partial_refund_button.hide();
-    } else if (order_max_refund > 0) {
-        standard_refund_button.after(refund_button_html);
-        partial_refund_button.show();
+    } else {
+        if (order_can_be_totally_refunded) {
+            standard_refund_button.after(refund_button_html);
+        }
+        if (order_max_refund > 0) {
+            partial_refund_button.show();
+        }
     }
 
     $('#desc-order-freepay-cancel').click(function() {
@@ -46,28 +50,6 @@ $(document).ready(function() {
                     window.location.href = window.location.href;
                 } else {
                     alert('Une erreur s\'est produite lors de l\'annulation : ' + msg.details.message);
-                }
-            });
-        }
-        return false;
-    });
-
-    $('button[name=partialRefund]').click(function(event) {
-        event.preventDefault();
-
-        if (confirm('Êtes vous sûr de vouloir rembourser partiellement la commande ?')) {
-            var formData = $($(this).closest('form')[0]).serialize();
-
-            $.ajax({
-                method: 'POST',
-                url: window.location.href,
-                data: formData
-            }).done(function( msg ) {
-                msg = JSON.parse(msg);
-                if (msg.result == 'success') {
-                    window.location.href = window.location.href;
-                } else {
-                    alert('Une erreur s\'est produite lors du remboursement partiel : ' + msg.details.message);
                 }
             });
         }

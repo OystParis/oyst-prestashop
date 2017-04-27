@@ -22,6 +22,7 @@
 function upgrade_module_1_1_0(Oyst $module)
 {
     $module->installOrderStates();
+    $module->registerHook('displayBackOfficeHeader');
 
     // All went well!
     return true;
