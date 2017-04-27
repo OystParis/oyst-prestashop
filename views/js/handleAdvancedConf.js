@@ -50,3 +50,17 @@ function handleSelectOptions(select) {
         }
     });
 }
+
+function refreshEnvironmentDisplay()
+{
+    var containerClass = '.' + $('select[name="FC_OYST_API_ENV"]').val();
+    $('.env').not(containerClass).hide();
+    $(containerClass).show();
+
+}
+
+$('select[name="FC_OYST_API_ENV"]').on('change', function () {
+    refreshEnvironmentDisplay();
+});
+
+refreshEnvironmentDisplay();

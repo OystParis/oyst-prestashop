@@ -16,16 +16,31 @@
  *
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
- * @license GNU GENERAL PUBLIC LICENSE
+ * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+/*
+ * Security
+ */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-header('Cache-Control: no-store, no-cache, must-revalidate');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
+class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
+{
+    public function run()
+    {
+        $productId = Tools::getValue('id_product', false);
+        if (!$productId) {
+            return '';
+        }
 
-header('Location: ../');
-exit;
-
+        $this->smarty->assign(array(
+            'oneClickUrl' => Tools::getShopDomain(true).'/modules/oyst/oneClick.php',
+            'productInfo' => array(
+                'productId' => $productId,
+            ),
+        ));
+        return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');
+    }
+}

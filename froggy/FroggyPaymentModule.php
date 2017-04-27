@@ -109,14 +109,24 @@ class FroggyPaymentModule extends PaymentModule
      * @param $method
      * @param $args
      * @return null
+     * @throws Exception
      */
     public function __call($method, $args)
     {
         // Fix for some server configuration (methods are in lowercase and server is case sensitive file for hook Processor)
         $prefix_call = array(
-            'hookdisplay' => 'hookDisplay', 'hookdisplaybackoffice' => 'hookDisplayBackOffice', 'hookaction' => 'hookAction',
-            'hookbackoffice' => 'hookBackOffice', 'hook' => 'hook',
+            'hookdisplay' => 'hookDisplay',
+            'hookdisplaybackoffice' => 'hookDisplayBackOffice',
+            'hookaction' => 'hookAction',
+            'hookbackoffice' => 'hookBackOffice',
+            'hook' => 'hook',
+            'hookdisplayproductfooter' => 'hookDisplayProductFooter',
+            'hookdisplaybackofficeheader' => 'hookDisplayBackOfficeHeader',
+            'hookactionproductadd' => 'hookActionProductAdd',
+            'hookactionproductsave' => 'hookActionProductSave',
+            'hookactionproductupdate' => 'hookActionProductUpdate',
         );
+
         foreach ($prefix_call as $prefix_search => $prefix_replace) {
             if (strpos($method, $prefix_search) !== false) {
                 $method = $prefix_replace.Tools::ucfirst(str_replace($prefix_search, '', $method));

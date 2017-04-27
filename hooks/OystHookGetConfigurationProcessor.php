@@ -22,27 +22,47 @@
 /*
  * Security
  */
+use Oyst\Api\OystApiClientFactory;
+use Oyst\Api\OystCatalogApi;
+use Oyst\Repository\ProductRepository;
+use Oyst\Service\ExportProductService;
+use Oyst\Service\Logger\PrestaShopLogger;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
+    /** @var string  */
     public $configuration_result = '';
+
+    /** @var array  */
     public $configurations = array(
         'FC_OYST_GUEST'                   => 'int',
         'FC_OYST_REDIRECT_SUCCESS'        => 'string',
         'FC_OYST_REDIRECT_ERROR'          => 'string',
         'FC_OYST_REDIRECT_SUCCESS_CUSTOM' => 'string',
         'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
-        'FC_OYST_API_KEY'                 => 'string',
+        'FC_OYST_API_PROD_KEY' => 'string',
+        'FC_OYST_API_PREPROD_KEY' => 'string',
+        'FC_OYST_API_INTEGRATION_KEY' => 'string',
+        'FC_OYST_API_ENV' => 'string',
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
         'FC_OYST_API_PAYMENT_ENDPOINT'    => 'string',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
         'FC_OYST_API_CATALOG_ENDPOINT'    => 'string',
+        'FC_OYST_ONE_CLICK_FEATURE' => 'int',
     );
+
+    /** @var array  */
     public $redirect_success_urls = array();
+
+    /** @var array  */
     public $redirect_error_urls = array();
+
+    /** @var array  */
+    public $redirect_cancel_urls = array();
 
     public function init()
     {
@@ -109,8 +129,12 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $goToForm = false;
         }
 
+        $isOystDeveloper = filter_var(getenv('OYST_DEVELOPER'), FILTER_VALIDATE_BOOLEAN);
+
         $this->handleContactForm($assign, $hasError, $goToForm);
 
+        $assign['isOystDeveloper'] = $isOystDeveloper;
+        $assign['exportRunning']            = $this->module->isCatalogExportStillRunning();
         $assign['module_dir']               = $this->path;
         $assign['message']                  = '';
         $assign['phone']                    = Configuration::get('FC_OYST_MERCHANT_PHONE');
@@ -157,9 +181,36 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         return $this->module->fcdisplay(__FILE__, 'getMerchantConfigure.tpl');
     }
 
+    private function postRequest()
+    {
+        if (Tools::isSubmit('synchronizeProducts')) {
+
+            $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+            $productRepository = new ProductRepository(Db::getInstance());
+
+            /** @var OystCatalogAPI $oystCatalogAPI */
+            $oystCatalogAPI = OystApiClientFactory::getClient(
+                OystApiClientFactory::ENTITY_CATALOG,
+                $this->module->getApiKey(),
+                'PrestaShop-'.$this->module->version,
+                $this->module->getEnvironment()
+            );
+
+            (new ExportProductService(Context::getContext(), $this->module))
+                ->setProductRepository($productRepository)
+                ->setCatalogApi($oystCatalogAPI)
+                ->setLogger(new PrestaShopLogger())
+                ->requestNewExport()
+            ;
+
+            Tools::redirect($request->getScheme().'://'.$request->getHost().$request->getRequestUri());
+        }
+    }
+
     public function run()
     {
         $this->init();
+        $this->postRequest();
         $this->saveModuleConfiguration();
         return $this->displayModuleConfiguration();
     }
