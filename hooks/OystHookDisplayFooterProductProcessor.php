@@ -26,31 +26,22 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OystExportCatalogModuleCronController
+class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
 {
-    private $_module;
-    public $context;
-
-    /**
-     * OystExportCatalogModuleCronController constructor.
-     * @param Oyst $module
-     */
-    public function __construct($module)
-    {
-        $this->_module = $module;
-    }
-
-    /**
-     * Run method
-     */
     public function run()
     {
-        // Get products
-        $oyst_product = new OystProduct();
-        $result = $oyst_product->sendCatalog();
+        $productId = Tools::getValue('id_product', false);
+        if (!$productId) {
+            return '';
+        }
 
-        // Display result
-        print_r($result);
-        echo "\n";
+        $this->smarty->assign(array(
+            '__PS_BASE_URI__' => __PS_BASE_URI__,
+            'oneClickUrl' => Tools::getShopDomain(true).__PS_BASE_URI__.'modules/oyst/oneClick.php',
+            'productInfo' => array(
+                'productId' => $productId,
+            ),
+        ));
+        return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');
     }
 }

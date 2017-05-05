@@ -31,16 +31,6 @@ class OystSDK
     private $_api_key;
     private $_api_endpoint;
 
-    public function testCatalogRequest()
-    {
-        // Get products
-        $oyst_product = new OystProduct();
-        $return = $oyst_product->sendCatalog(0, 1);
-        $return = Tools::jsonDecode($return, true);
-        $result = (isset($return['statusCode'])  && $return['statusCode'] == 200) ? true : false;
-        return array('result' => $result, 'values' => $return);
-    }
-
     public function paymentRequest($amount, $currency, $id_cart, $urls, $is_3d, $user)
     {
         $data = array(

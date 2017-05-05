@@ -1,16 +1,19 @@
 <?php
 
+/*
+ * Security
+ */
+defined('_PS_VERSION_') || require dirname(__FILE__) . '/index.php';
+
+// We need to override this for older q  PrestaShop
+Logger::$definition['fields']['message']['validate'] = 'isString';
+
 // When sending the module to PrestaShop Validator, all the require files will be available
 if (!file_exists(__DIR__.'/vendor/autoload.php')) {
     throw new Exception('Please install composer inside the oyst module');
 }
 
 require_once __DIR__.'/vendor/autoload.php';
-
-/*
- * Security
- */
-defined('_PS_VERSION_') || require dirname(__FILE__) . '/index.php';
 
 /*
  * Include Froggy Library
@@ -37,10 +40,3 @@ if (!class_exists('OystPaymentNotification', false)) {
 }
 
 define('_PS_OYST_DEBUG_', 0);
-
-// Include Oyst library auto load
-$autoload = __DIR__.'/external/oyst-library/autoload.php';
-if (file_exists($autoload)) {
-    require_once $autoload;
-}
-

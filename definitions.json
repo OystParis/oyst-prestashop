@@ -1,11 +1,20 @@
 {
     "tab": "payments_gateways",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "need_instance": 0,
 
     "hooks": {
-        "all" : [ "displayHeader", "displayPayment", "displayPaymentReturn", "displayAdminOrder" ],
-        "1.6" : [ "advancedPaymentOptions" ]
+        "all" : [
+            "displayHeader",
+            "displayPayment",
+            "displayPaymentReturn",
+            "displayAdminOrder" ,
+            "displayFooterProduct",
+            "displayBackOfficeHeader"
+        ],
+        "1.6" : [
+            "advancedPaymentOptions"
+        ]
     },
 
     "sql": {
@@ -37,6 +46,8 @@
 
         "FC_OYST_CUSTOMER_CONFIG": "",
         "FC_OYST_ADDRESS_CONFIG": "",
-        "FC_OYST_CART_CONFIG": ""
+        "FC_OYST_CART_CONFIG": "",
+
+        "OYST_ONE_CLICK_FEATURE_STATE": 0
     }
 }
