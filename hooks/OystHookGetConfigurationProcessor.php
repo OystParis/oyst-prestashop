@@ -174,9 +174,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['form_get_apikey_name']  = $this->context->employee->lastname.' '.$this->context->employee->firstname;
         $assign['form_get_apikey_phone'] = '';
         $assign['form_get_apikey_email'] = $this->context->employee->email;
+        $assign['form_get_apikey_transac'] = '';
         $assign['form_get_apikey_name_error']  = '';
         $assign['form_get_apikey_phone_error'] = '';
         $assign['form_get_apikey_email_error'] = '';
+        $assign['form_get_apikey_transac_error'] = '';
 
         // Merchant filled the contact form
         if (!Tools::isSubmit('form_get_apikey_submit')) {
@@ -185,17 +187,20 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $goToForm = false;
 
-        $name  = Tools::getValue('form_get_apikey_name');
-        $phone = Tools::getValue('form_get_apikey_phone');
-        $email = Tools::getValue('form_get_apikey_email');
+        $name      = Tools::getValue('form_get_apikey_name');
+        $phone     = Tools::getValue('form_get_apikey_phone');
+        $email     = Tools::getValue('form_get_apikey_email');
+        $nbTransac = Tools::getValue('form_get_apikey_transac');
 
-        $assign['form_get_apikey_name']  = $name;
-        $assign['form_get_apikey_phone'] = $phone;
-        $assign['form_get_apikey_email'] = $email;
+        $assign['form_get_apikey_name']    = $name;
+        $assign['form_get_apikey_phone']   = $phone;
+        $assign['form_get_apikey_email']   = $email;
+        $assign['form_get_apikey_transac'] = $nbTransac;
 
-        $nameError  = '';
-        $phoneError = '';
-        $emailError = '';
+        $nameError      = '';
+        $phoneError     = '';
+        $emailError     = '';
+        $nbTransacError = '';
 
         if (!$name || !Validate::isName($name)) {
             $hasError  = true;
@@ -212,13 +217,19 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $emailError = $this->module->l('Please enter a valid email', 'oysthookgetconfigurationprocessor');
         }
 
-        $assign['form_get_apikey_name_error']   = $nameError;
-        $assign['form_get_apikey_phone_error']  = $phoneError;
-        $assign['form_get_apikey_email_error']  = $emailError;
-        $assign['form_get_apikey_notify_error'] = false;
+        if (!$nbTransac || !Validate::isInt($nbTransac)) {
+            $hasError       = true;
+            $nbTransacError = $this->module->l('Please enter a valid number', 'oysthookgetconfigurationprocessor');
+        }
+
+        $assign['form_get_apikey_name_error']    = $nameError;
+        $assign['form_get_apikey_phone_error']   = $phoneError;
+        $assign['form_get_apikey_email_error']   = $emailError;
+        $assign['form_get_apikey_transac_error'] = $nbTransacError;
+        $assign['form_get_apikey_notify_error']  = false;
 
         if (!$hasError) {
-            $isSent = OystSDK::notify($name, $phone, $email);
+            $isSent = OystSDK::notify($name, $phone, $email, $nbTransac);
 
             if (!$isSent) {
                 $goToForm = true;

@@ -80,6 +80,15 @@
                         {/if}
                     </div>
                 </div>
+                <div class="form-group clearfix{if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_transac_error !== ''} has-error{/if}">
+                    <label class="control-label col-lg-4">{l s='Nb transactions by month' mod='oyst'}</label>
+                    <div class="col-lg-4">
+                        <input type="text" id="form_get_apikey_transac" name="form_get_apikey_transac" value="{$oyst.form_get_apikey_transac|escape:'html':'UTF-8'}" />
+                        {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_transac_error !== ''}
+                        <span class="help-block">{$oyst.form_get_apikey_transac_error|escape:'html':'UTF-8'}</span>
+                        {/if}
+                    </div>
+                </div>
                 <div class="form-group clearfix">
                     <label class="control-label col-lg-4"></label>
                     <div class="col-lg-4">

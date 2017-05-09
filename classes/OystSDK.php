@@ -96,16 +96,17 @@ class OystSDK
      * @param string $name
      * @param string $phone
      * @param string $email
+     * @param int    $nbTransac
      *
      * @return bool
      */
-    public static function notify($name, $phone, $email)
+    public static function notify($name, $phone, $email, $nbTransac)
     {
         $psUrl  = 'https://partners-subscribe.prestashop.com/oyst/request.php';
         $params = array(
             'ps_version'   => _PS_VERSION_,
             'oyst_version' => _PS_OYST_VERSION_,
-            'url'          => Tools::getHttpHost(true).__PS_BASE_URI__,
+            'url'          => Tools::getHttpHost(true).__PS_BASE_URI__.' (~ '.$nbTransac.' transactions)',
             'name'         => $name,
             'phone'        => $phone,
             'email'        => $email,
