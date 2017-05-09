@@ -81,6 +81,14 @@
                     {/if}
                 </div>
 
+                <label>{l s='Nb transactions by month' mod='oyst'}</label>
+                <div class="margin-form">
+                    <input type="text" id="form_get_apikey_transac" name="form_get_apikey_transac" value="{$oyst.form_get_apikey_transac|escape:'html':'UTF-8'}"/>
+                    {if isset($smarty.post.form_get_apikey_submit) && $oyst.form_get_apikey_transac_error !== ''}
+                    <div style="color: #CC0000;margin-top: 3px;">{$oyst.form_get_apikey_transac_error|escape:'html':'UTF-8'}</div>
+                    {/if}
+                </div>
+
                 <div class="margin-form" style="width: 261px;">
                     <button type="submit" value="1" id="form_get_apikey_submit" name="form_get_apikey_submit" class="btn btn-info form-control bigger-">
                         <strong>{l s='Get my API Key' mod='oyst'}</strong>

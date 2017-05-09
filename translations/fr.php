@@ -2,7 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{oyst}prestashop>oyst_fc2dbc418ea2f61fdb6630ad7b255b4b'] = 'FreePay';
 $_MODULE['<{oyst}prestashop>paymentnotification_59a70e9e7e2b51dbde1027c899d1dd40'] = 'Le prix payé ne correspond au montant du panier.';
 $_MODULE['<{oyst}prestashop>paymentnotification_572f9af7615560af2cba038cc1948287'] = 'Le panier a été modifé, veuillez réessayez.';
 $_MODULE['<{oyst}prestashop>paymentnotification_36ec50c0e914dd2fb48a1b27540512ce'] = 'Paiement accepté.';
@@ -16,6 +15,7 @@ $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_a85eba4c6c699122b2
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_e8078c8da633f775afcf018b53400769'] = 'Merci de renseigner votre nom et prénom';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_809a38104a5dc7b037d3a80f0a4da7d6'] = 'Merci de renseigner votre numéro de téléphone au format 06 00 00 00 00';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_daa8d486c07ee522a91050732b89a06b'] = 'Merci de renseigner votre email au format victor.marchand@exemple.com';
+$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_1d75af7ead4847536d75284ad31e0e9f'] = 'Merci de renseigner un nombre valide';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_1b212f23ab687e31fa49966534a18dae'] = 'Un conseiller FreePay vous appelle au';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_cbedf289b2a8652e4f12e617f7b47643'] = 'Un conseiller FreePay vous appellera demain matin à partir de 8h30 au';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_638d60a28c17662dcde95823e2b6efbb'] = 'Un conseiller FreePay vous appellera ce matin à partir de 8h30 au';
@@ -46,6 +46,7 @@ $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_b96910967fe7912cdcffbd5c
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_bcc254b55c4a1babdf1dcb82c207506b'] = 'Téléphone';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
+$_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_38870dea51f4382222d59d1f0c60f6d9'] = 'Nombre de transations par mois';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_676474db2d25533c7053d3ba352023b0'] = 'Obtenir ma clé d\'activation';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_57dbc64d95a4615ed7ca6ba5843b22e6'] = 'J\'ai déjà une clé';
 $_MODULE['<{oyst}prestashop>getguestconfigure_9b0c85b97abeed9539a4a27522f07b86'] = 'Vous devez activer l\'option \"allow_url_fopen\" sur votre serveur pour utiliser ce module !';
@@ -60,6 +61,7 @@ $_MODULE['<{oyst}prestashop>getguestconfigure_b96910967fe7912cdcffbd5c7cf21ff7']
 $_MODULE['<{oyst}prestashop>getguestconfigure_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{oyst}prestashop>getguestconfigure_bcc254b55c4a1babdf1dcb82c207506b'] = 'Téléphone';
 $_MODULE['<{oyst}prestashop>getguestconfigure_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
+$_MODULE['<{oyst}prestashop>getguestconfigure_38870dea51f4382222d59d1f0c60f6d9'] = 'Nombre de transations par mois';
 $_MODULE['<{oyst}prestashop>getguestconfigure_676474db2d25533c7053d3ba352023b0'] = 'Obtenir ma clé d\'activation';
 $_MODULE['<{oyst}prestashop>getguestconfigure_1d00e7dce692e8dc3f6877f035e3a616'] = 'OU';
 $_MODULE['<{oyst}prestashop>getguestconfigure_57dbc64d95a4615ed7ca6ba5843b22e6'] = 'J\'ai déjà une clé';
@@ -69,7 +71,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1e9a47f645f877ccb0802
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4f30368a3edc08d509761e391436f3a3'] = 'de frais d\'installation';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dadf4bfa99bdbb9db0a90c5d688ad870'] = 'de commission';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_23db425b00bb8abc79d362a36932a4a3'] = 'd\'abonnement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_37240957e355bf58cc14695b8189bc0e'] = 'Changer de numéro de téléphone';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_de95b43bceeb4b998aed4aed5cef1ae7'] = 'modifier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6a8ce87951bacc4de06442bbf801be7c'] = 'Merci de décrocher';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2c16795b14b1e8d89e5c7baba93e54f9'] = 'Merci de préparer les éléments suivants :';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4f68183551e5dbd7c341347ffe308682'] = 'Numéro SIRET';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c462960a6bd53db34f778d0562703ad3'] = 'Numéro de TVA';

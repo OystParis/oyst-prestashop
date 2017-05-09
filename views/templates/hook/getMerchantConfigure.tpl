@@ -38,9 +38,12 @@
         </div>
         {if $oyst.FC_OYST_GUEST && $oyst.phone}
             <div class="header">
-            <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong></p>
-
-            <p><a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
+            <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong>
+                (<a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='edit' mod='oyst'}</a>)
+            </p>
+            {if $oyst.show_sub_message}
+            <p><h2>{l s='Pick up your phone' mod='oyst'}</h2></p>
+            {/if}
             <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
             <p>
                 {l s='Please, get these information ready:' mod='oyst'}<br>
@@ -105,11 +108,6 @@
                         <span>{l s='Show advanced options' mod='oyst'}</span>
                         <span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
                     </button>
-                    {if !$oyst.FC_OYST_API_KEY}
-                    <a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
-                        <img src="../img/t/AdminAdmin.gif" alt="" style="vertical-align: text-bottom;">{l s='Get an API Key' mod='oyst'}
-                    </a>
-                    {/if}
                 </p>
             </div>
         </fieldset>
