@@ -71,7 +71,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1e9a47f645f877ccb0802
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4f30368a3edc08d509761e391436f3a3'] = 'de frais d\'installation';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dadf4bfa99bdbb9db0a90c5d688ad870'] = 'de commission';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_23db425b00bb8abc79d362a36932a4a3'] = 'd\'abonnement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_37240957e355bf58cc14695b8189bc0e'] = 'Changer de numéro de téléphone';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_de95b43bceeb4b998aed4aed5cef1ae7'] = 'modifier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6a8ce87951bacc4de06442bbf801be7c'] = 'Merci de décrocher';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2c16795b14b1e8d89e5c7baba93e54f9'] = 'Merci de préparer les éléments suivants :';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4f68183551e5dbd7c341347ffe308682'] = 'Numéro SIRET';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c462960a6bd53db34f778d0562703ad3'] = 'Numéro de TVA';

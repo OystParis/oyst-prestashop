@@ -100,7 +100,6 @@
             </div>
             <div class="panel-footer text-center">
                 <a class="btn btn-default" href="{$oyst.configureLink|cat:'&go_to_conf=1'|escape:'htmlall':'UTF-8'}">
-                    <i class="process-icon- icon-key"></i>
                     {l s='I have an API Key' mod='oyst'}
                 </a>
             </div>
