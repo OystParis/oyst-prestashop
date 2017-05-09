@@ -9,6 +9,10 @@ use Oyst\Service\Logger\AbstractLogger;
 use Oyst\Service\Logger\LogLevel;
 use Oyst\Service\Serializer\SerializerInterface;
 
+/**
+ * Class AbstractOystService
+ * @package Oyst\Service
+ */
 abstract class AbstractOystService
 {
     /**

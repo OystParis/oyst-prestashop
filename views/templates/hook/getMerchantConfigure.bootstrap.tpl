@@ -43,6 +43,14 @@
     </div>
 {/if}
 
+{if isset($apiError)}
+    <div class="bootstrap">
+        <div class="alert alert-danger">
+            <strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError}
+        </div>
+    </div>
+{/if}
+
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
 <form id="module_form" class="defaultForm form-horizontal oyst configuration" method="POST" action="">
     <div align="center" style="font-size: 16px;">
@@ -107,6 +115,21 @@
                         {/if}
                     </div>
                 </div>
+
+                {if $oyst.isOystDeveloper}
+                    <div class="form-group clearfix env integration" style="display: none;">
+                        <label class="control-label col-md-3 col-lg-4">{l s='API Integration Key' mod='oyst'}</label>
+                        <div class=col-md-7 col-lg-4">
+                            <input type="text" id="FC_OYST_API_INTEGRATION_KEY" name="FC_OYST_API_INTEGRATION_KEY" value="{$oyst.FC_OYST_API_INTEGRATION_KEY|escape:'htmlall':'UTF-8'}"/>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            {if $oyst.apikey_test_error}
+                                <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                            {/if}
+                        </div>
+                    </div>
+                {/if}
+
+                </div>
                 <div class="form-group clearfix">
                     <label class="control-label col-md-3 col-lg-4">{l s='Enable FreePay' mod='oyst'}</label>
                     <div class="col-md-7 col-lg-4" style="height: 31px;">
@@ -164,6 +187,26 @@
                     </div>
                 </div>
             </fieldset>
+
+            <form method="POST">
+                <fieldset>
+                    <legend>
+                        <img src="{$oyst.module_dir|escape:'html':'UTF-8'}logo.png" alt="" width="16">{l s='Catalog' mod='oyst'}
+                    </legend>
+
+                    <div class="form-group clearfix">
+                        <label class="control-label col-md-3 col-lg-4">{l s='Syncronize your products' mod='oyst'}</label>
+                        <div class="col-md-7 col-lg-4">
+                            {if $oyst.exportRunning}
+                                {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
+                            {else}
+                                <button type="submit" name="synchronizeProducts">{l s='Start' mod='oyst'}</button>
+                                <span>{l s='Will start to synchronize your products'}</span>
+                            {/if}
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
         <div class="panel-footer">
             <button id="toggleConfig" type="button" class="btn btn-default">
