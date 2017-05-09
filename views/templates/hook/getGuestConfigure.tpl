@@ -98,7 +98,7 @@
                 <div class="margin-form" style="width: 261px;text-align: center;"><p>{l s='OR' mod='oyst'}</p></div>
                 <div class="margin-form" style="width: 261px;text-align: center;padding-bottom: 0;">
                     <a href="{$oyst.configureLink|cat:'&go_to_conf=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
-                        <img src="../img/t/AdminAdmin.gif" alt="" style="vertical-align: text-bottom;">{l s='I have an API Key' mod='oyst'}
+                        {l s='I have an API Key' mod='oyst'}
                     </a>
                 </div>
             </div>
