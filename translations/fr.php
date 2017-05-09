@@ -89,14 +89,14 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_aff51d15d8c5540034633
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4578544e15448d2758f7c6ae4009253a'] = 'Cacher les options avancées';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_16d357cfdaaecd1510765140ecace07b'] = 'Obtenir ma clé API';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4725c2b6db34f755b89b741c1d45bc71'] = 'La nouvelle configuration a été sauvegardée !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9b0c85b97abeed9539a4a27522f07b86'] = 'Vous devez activer l\'option \"allow_url_fopen\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1e9a47f645f877ccb0802c12a409fcdf'] = 'Vous devez activer l\'extension \"cURL\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4f30368a3edc08d509761e391436f3a3'] = 'de frais d\'installation';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_dadf4bfa99bdbb9db0a90c5d688ad870'] = 'de commission';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_23db425b00bb8abc79d362a36932a4a3'] = 'd\'abonnement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_37240957e355bf58cc14695b8189bc0e'] = 'Changer de numéro de téléphone';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_de95b43bceeb4b998aed4aed5cef1ae7'] = 'modifier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_6a8ce87951bacc4de06442bbf801be7c'] = 'Merci de décrocher';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2c16795b14b1e8d89e5c7baba93e54f9'] = 'Merci de préparer les documents suivants :';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4f68183551e5dbd7c341347ffe308682'] = 'Numéro SIRET';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c462960a6bd53db34f778d0562703ad3'] = 'Numéro de TVA';
@@ -113,4 +113,3 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_aff51d15d8c554003463325f0eb4313
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4578544e15448d2758f7c6ae4009253a'] = 'Cacher les options avancées';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_16d357cfdaaecd1510765140ecace07b'] = 'Obtenir ma clé API';
