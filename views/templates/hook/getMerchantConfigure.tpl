@@ -30,6 +30,10 @@
     <p class="error"><strong>{l s='You have to enable "curl" extension on your server to use this module!' mod='oyst'}</strong></p>
 {/if}
 
+{if isset($apiError)}
+    <p class="error"><strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError}</p>
+{/if}
+
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
     <form id="module_form" class="defaultForm form-horizontal oyst configuration" method="POST" action="#">
         <div class="header">
@@ -64,6 +68,9 @@
                     <option value="prod" {if $oyst.FC_OYST_API_ENV == 'prod'}selected="selected"{/if}>Production</option>
                     <option value="preprod" {if $oyst.FC_OYST_API_ENV == 'preprod'}selected="selected"{/if}>Preproduction</option>
                 </select>
+                {if $oyst.apikey_test_error}
+                    <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                {/if}
             </div>
 
             <div class="env prod" style="display: none;">
@@ -92,6 +99,7 @@
             <div class="margin-form">
                 <input type="checkbox" class="form-control" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
             </div>
+
 
             <label>{l s='Enable OneClick' mod='oyst'}</label>
             <div class="margin-form">
@@ -140,6 +148,32 @@
             </div>
         </fieldset>
     </form>
+    {if $oyst.isCurrentApiKeyValid}
+    <br />
+    <form method="POST">
+        <fieldset>
+            <legend>
+                <img src="{$oyst.module_dir|escape:'html':'UTF-8'}logo.png" alt="" width="16">{l s='Catalog' mod='oyst'}
+            </legend>
+
+            <label>{l s='Syncronize your products' mod='oyst'}</label>
+            <div class="margin-form">
+                {if $oyst.exportRunning}
+                    {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
+                {else}
+                    <button type="submit" name="synchronizeProducts">
+                        {if $oyst.lastExportDate}
+                            {l s='Re start the export process' mod='oyst'}
+                        {else}
+                            {l s='Start the export process' mod='oyst'}
+                        {/if}
+                    </button>
+                    <p>{l s='Will export your products to Oyst'}</p>
+                {/if}
+            </div>
+        </fieldset>
+    </form>
+    {/if}
 {/if}
 
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>

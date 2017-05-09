@@ -19,26 +19,19 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
+/**
+ * @param Oyst $module
+ * @return bool
  */
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
-
-class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
+function upgrade_module_1_2_0($module)
 {
-    public function run()
-    {
-        $product = new Product(Tools::getValue('id_product'));
-        if (!Validate::isLoadedObject($product)) {
-            return '';
-        }
+    $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module,_DB_PREFIX_);
+    $oystDb->createExportTable();
+    $oystDb->createCarrier();
 
-        $this->smarty->assign(array(
-            'shopUrl' => Tools::getShopDomainSsl(true).__PS_BASE_URI__,
-            'product' => $product,
-        ));
-        return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');
-    }
+    // As hook are handled dynamically by parent lib, we don't need to move them elsewhere
+    $module->registerHook('displayFooterProduct');
+    $module->registerHook('displayBackOfficeHeader');
+
+    return true;
 }

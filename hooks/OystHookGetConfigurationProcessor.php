@@ -22,8 +22,9 @@
 /*
  * Security
  */
-use Oyst\Api\OystApiClientFactory;
-use Oyst\Service\Logger\PrestaShopLogger;
+use Oyst\Factory\ExportProductServiceFactory;
+use Oyst\Service\Configuration as OystConfiguration;
+use Oyst\Service\Http\CurrentRequest;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,14 +42,14 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_REDIRECT_ERROR'          => 'string',
         'FC_OYST_REDIRECT_SUCCESS_CUSTOM' => 'string',
         'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
-        \Oyst\Service\Configuration::API_KEY_PROD => 'string',
-        \Oyst\Service\Configuration::API_KEY_PREPROD => 'string',
-        \Oyst\Service\Configuration::API_ENV => 'string',
+        OystConfiguration::API_KEY_PROD => 'string',
+        OystConfiguration::API_KEY_PREPROD => 'string',
+        OystConfiguration::API_ENV => 'string',
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
         'FC_OYST_API_PAYMENT_ENDPOINT'    => 'string',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
         'FC_OYST_API_CATALOG_ENDPOINT'    => 'string',
-        \Oyst\Service\Configuration::ONE_CLICK_FEATURE_STATE => 'int',
+        OystConfiguration::ONE_CLICK_FEATURE_STATE => 'int',
     );
 
     /** @var array  */
@@ -117,6 +118,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $currentApiKey = $env == \Oyst\Service\Configuration::API_ENV_PROD ? $apiKeyProd : $apiKeyPreprod;
 
+        // Keep it simple for now
+        $isCurrentApiKeyValid = Tools::strlen($currentApiKey) == 64;
+
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $goToConf    = (bool) Tools::getValue('go_to_conf');
         $goToForm    = (bool) Tools::getValue('go_to_form');
@@ -133,11 +137,18 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         $isOystDeveloper = filter_var(getenv('OYST_DEVELOPER'), FILTER_VALIDATE_BOOLEAN);
-
+        $lastExportDate = Configuration::get(\Oyst\Service\Configuration::REQUESTED_CATALOG_DATE);
+        if (!empty($lastExportDate)) {
+            $lastExportDate = new DateTime($lastExportDate);
+        }
         $this->handleContactForm($assign, $hasError, $goToForm);
 
+        $assign['lastExportDate'] = $lastExportDate;
+        $assign['isCurrentApiKeyValid'] = $isCurrentApiKeyValid;
+        $assign['hasAlreadyExportProducts'] = $isCurrentApiKeyValid;
         $assign['hasApiKey'] = $hasApiKey;
         $assign['isOystDeveloper'] = $isOystDeveloper;
+        $assign['exportRunning']            = $this->module->isCatalogExportStillRunning();
         $assign['module_dir']               = $this->path;
         $assign['message']                  = '';
         $assign['phone']                    = Configuration::get('FC_OYST_MERCHANT_PHONE');
@@ -162,8 +173,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->showMessageToMerchant($assign);
         }
 
-        if ($hasApiKey) {
-            $assign['apikey_test_error'] = Tools::strlen($currentApiKey) != 64;
+        if ($hasApiKey && !$isCurrentApiKeyValid) {
+            $assign['apikey_test_error'] = $isCurrentApiKeyValid;
 
             // First time merchant enter a key after submitting the contact form
             if ($isGuest) {
@@ -177,17 +188,33 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $this->smarty->assign($this->module->name, $assign);
 
+        $template = $goToForm || $hasError ? 'getGuestConfigure.tpl' : 'getMerchantConfigure.tpl';
+        return $this->module->fcdisplay(__FILE__, $template);
+    }
 
-        if ($goToForm || $hasError) {
-            return $this->module->fcdisplay(__FILE__, 'getGuestConfigure.tpl');
+    private function postRequest()
+    {
+        if (Tools::isSubmit('synchronizeProducts')) {
+
+            $request = new CurrentRequest();
+            $exportProductService = ExportProductServiceFactory::get($this->module, $this->context);
+            $succeed = $exportProductService->requestNewExport();
+
+            if ($succeed) {
+                Tools::redirect($request->getScheme().$request->getHost().$request->getRequestUri());
+                die();
+            } else {
+                $this->smarty->assign([
+                    'apiError' => $exportProductService->getOystCatalogAPI()->getLastError(),
+                ]);
+            }
         }
-
-        return $this->module->fcdisplay(__FILE__, 'getMerchantConfigure.tpl');
     }
 
     public function run()
     {
         $this->init();
+        $this->postRequest();
         $this->saveModuleConfiguration();
         return $this->displayModuleConfiguration();
     }

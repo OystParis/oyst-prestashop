@@ -88,9 +88,12 @@ class OneClickService extends AbstractOystService
             }
 
             if ($request->hasRequest('productAttributeId')) {
-                $combination = new Combination($request->getRequestItem('productAttributeId'));
-                if (!Validate::isLoadedObject($combination)) {
-                    $data['error'] = 'Combination could not be found';
+                $combinationId = (int) $request->getRequestItem('productAttributeId');
+                if ($combinationId > 0) {
+                    $combination = new Combination($request->getRequestItem('productAttributeId'));
+                    if (!Validate::isLoadedObject($combination)) {
+                        $data['error'] = 'Combination could not be found';
+                    }
                 }
             }
 
@@ -101,7 +104,7 @@ class OneClickService extends AbstractOystService
         }
 
         if (isset($data['error'])) {
-            $this->logger->critical(sprintf('Error occurred during oneClick process: %s'), $data['error']);
+            $this->logger->critical(sprintf('Error occurred during oneClick process: %s', $data['error']));
         }
 
         if (!isset($data['error'])) {
