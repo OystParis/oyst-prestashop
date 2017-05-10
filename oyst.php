@@ -124,6 +124,29 @@ class Oyst extends FroggyPaymentModule
             Configuration::updateValue('OYST_STATUS_PAYMENT_PENDING', $orderState->id);
         }
 
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Annulation en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = true;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_CANCELLATION_PENDING', $orderState->id);
+        }
+
         $orderState = new OrderState(Configuration::get('OYST_STATUS_REFUND_PENDING'));
 
         if (!Validate::isLoadedObject($orderState)) {
@@ -144,7 +167,7 @@ class Oyst extends FroggyPaymentModule
 
             $result &= $orderState->add();
 
-            Configuration::updateValue('OYST_STATUS_PAYMENT_VALIDATED', $orderState->id);
+            Configuration::updateValue('OYST_STATUS_REFUND_PENDING', $orderState->id);
         }
 
         $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PENDING'));

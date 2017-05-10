@@ -1,12 +1,5 @@
 <?php
 
-// When sending the module to PrestaShop Validator, all the require files will be available
-if (!file_exists(__DIR__.'/vendor/autoload.php')) {
-    throw new Exception('Please install composer inside the oyst module');
-}
-
-require_once __DIR__.'/vendor/autoload.php';
-
 /*
  * Security
  */
@@ -34,6 +27,16 @@ if (!class_exists('OystSDK', false)) {
  */
 if (!class_exists('OystPaymentNotification', false)) {
     require_once _PS_MODULE_DIR_.'/oyst/classes/OystPaymentNotification.php';
+}
+
+/*
+ * Include Oyst Repository
+ */
+if (!class_exists('AbstractOystRepository', false)) {
+    require_once _PS_MODULE_DIR_.'/oyst/src/Repository/AbstractOystRepository.php';
+}
+if (!class_exists('OrderRepository', false)) {
+    require_once _PS_MODULE_DIR_.'/oyst/src/Repository/OrderRepository.php';
 }
 
 define('_PS_OYST_DEBUG_', 0);
