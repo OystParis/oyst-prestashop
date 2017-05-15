@@ -44,12 +44,12 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         $id_cart  = $notification_item['order_id'];
         $id_order = Order::getOrderByCartId($id_cart);
         $insert   = array(
-            'id_order'   => $id_order,
+            'id_order'   => $id_order ?: 0,
             'id_cart'    => (int) $id_cart,
             'payment_id' =>  pSQL($notification_item['payment_id']),
             'event_code' =>  pSQL($notification_item['event_code']),
             'event_data' => pSQL(Tools::jsonEncode($event_data)),
-            'date_event' => pSQL(Tools::substr(str_replace('T', '', $notification_item['event_date']), 0, 19)),
+            'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $notification_item['event_date']), 0, 19)),
             'date_add'   => date('Y-m-d H:i:s'),
         );
         Db::getInstance()->insert('oyst_payment_notification', $insert);
@@ -83,6 +83,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
             }
         } catch (Exception $e) {
             $this->module->log($e->getMessage());
+            die(Tools::jsonEncode(array('result' => 'ko', 'error' => $e->getMessage())));
         }
 
         die(Tools::jsonEncode(array('result' => 'ok')));

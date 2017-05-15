@@ -112,7 +112,7 @@ class Oyst extends FroggyPaymentModule
             $orderState->deleted = false;
             $orderState->delivery = false;
             $orderState->invoice = false;
-            $orderState->logable = true;
+            $orderState->logable = false;
             $orderState->module_name = $this->name;
             $orderState->paid = false;
             $orderState->hidden = false;
@@ -135,7 +135,7 @@ class Oyst extends FroggyPaymentModule
             $orderState->deleted = false;
             $orderState->delivery = false;
             $orderState->invoice = false;
-            $orderState->logable = true;
+            $orderState->logable = false;
             $orderState->module_name = $this->name;
             $orderState->paid = false;
             $orderState->hidden = false;
@@ -158,7 +158,7 @@ class Oyst extends FroggyPaymentModule
             $orderState->deleted = false;
             $orderState->delivery = false;
             $orderState->invoice = false;
-            $orderState->logable = true;
+            $orderState->logable = false;
             $orderState->module_name = $this->name;
             $orderState->paid = false;
             $orderState->hidden = false;
@@ -170,7 +170,7 @@ class Oyst extends FroggyPaymentModule
             Configuration::updateValue('OYST_STATUS_REFUND_PENDING', $orderState->id);
         }
 
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PENDING'));
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
 
         if (!Validate::isLoadedObject($orderState)) {
             $orderState->name = array(
@@ -181,7 +181,7 @@ class Oyst extends FroggyPaymentModule
             $orderState->deleted = false;
             $orderState->delivery = false;
             $orderState->invoice = false;
-            $orderState->logable = true;
+            $orderState->logable = false;
             $orderState->module_name = $this->name;
             $orderState->paid = false;
             $orderState->hidden = false;
@@ -190,7 +190,7 @@ class Oyst extends FroggyPaymentModule
 
             $result &= $orderState->add();
 
-            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND_PENDING', $orderState->id);
+            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND_PEND', $orderState->id);
         }
 
         $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND'));
@@ -204,7 +204,7 @@ class Oyst extends FroggyPaymentModule
             $orderState->deleted = false;
             $orderState->delivery = false;
             $orderState->invoice = false;
-            $orderState->logable = true;
+            $orderState->logable = false;
             $orderState->module_name = $this->name;
             $orderState->paid = false;
             $orderState->hidden = false;
