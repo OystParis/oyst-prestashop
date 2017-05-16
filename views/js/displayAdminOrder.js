@@ -40,6 +40,7 @@ $(document).ready(function() {
 
     $('#desc-order-freepay-cancel').click(function() {
         if (confirm('Êtes vous sûr de vouloir annuler la commande ?')) {
+            $('#desc-order-freepay-cancel').attr('disabled', 'disabled');
             $.ajax({
                 method: 'POST',
                 url: window.location.href,
@@ -50,6 +51,7 @@ $(document).ready(function() {
                     window.location.href = window.location.href;
                 } else {
                     alert('Une erreur s\'est produite lors de l\'annulation : ' + msg.details.message);
+                    $('#desc-order-freepay-cancel').removeAttr('disabled');
                 }
             });
         }

@@ -9,7 +9,7 @@ if (!defined('_PS_VERSION_')) {
 
 class OrderRepository extends AbstractOystRepository
 {
-    public function orderCanBeCancelled($idCart)
+    public function orderCanBeCancelled($idCart, $currentState)
     {
         // The order must have an AUTHORISATION event and no CAPTURE/CANCELLATION event
         $sql = 'SELECT COUNT(DISTINCT(opn.`id_oyst_payment_notification`))'
@@ -25,7 +25,7 @@ class OrderRepository extends AbstractOystRepository
 
         $result = $this->db->getValue($sql);
 
-        return $result > 0;
+        return $result > 0 && $currentState != Configuration::get('OYST_STATUS_CANCELLATION_PENDING');
     }
 
     public function orderCanBeTotallyRefunded($idCart)

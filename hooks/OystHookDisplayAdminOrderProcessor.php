@@ -47,7 +47,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         $assign = array(
             'module_dir' => $this->path,
             'transaction_id' => $order->id_cart,
-            'order_can_be_cancelled' => ($oystOrderRepository->orderCanBeCancelled($order->id_cart) ? 1 : 0),
+            'order_can_be_cancelled' => ($oystOrderRepository->orderCanBeCancelled($order->id_cart, $order->current_state) ? 1 : 0),
             'order_can_be_totally_refunded' => ($oystOrderRepository->orderCanBeTotallyRefunded($order->id_cart) ? 1 : 0),
             'order_max_refund' => $oystOrderRepository->getOrderMaxRefund($order->id_cart),
             'label_cancel' => $this->module->l('Cancel order', 'oysthookdisplayadminorderprocessor'),

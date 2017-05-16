@@ -240,7 +240,6 @@ class Oyst extends FroggyPaymentModule
         return $result;
     }
 
-
     /**
      * Configuration method
      * @return string $html
