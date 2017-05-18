@@ -41,6 +41,8 @@ class InstallManager
         $state = true;
         $state &= $this->createCarrier();
 
+        $this->installDefaultConfiguration();
+
         return $state;
     }
 
@@ -129,5 +131,13 @@ class InstallManager
 
         $carrier->deleted = 1;
         return $carrier->save();
+    }
+
+    /**
+     *
+     */
+    public function installDefaultConfiguration()
+    {
+        PSConfiguration::updateValue(Configuration::ONE_CLICK_FEATURE_STATE, 1);
     }
 }
