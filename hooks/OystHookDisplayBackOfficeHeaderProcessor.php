@@ -68,8 +68,8 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                     $history = new OrderHistory();
                     $history->id_order = $order->id;
                     $history->id_employee = 0;
-                    $history->id_order_state = (int)Configuration::get('OYST_STATUS_PARTIAL_REFUND_PENDING');
-                    $history->changeIdOrderState((int)Configuration::get('OYST_STATUS_PARTIAL_REFUND_PENDING'), $order->id);
+                    $history->id_order_state = (int)Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND');
+                    $history->changeIdOrderState((int)Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'), $order->id);
                     $history->add();
                 }
             }

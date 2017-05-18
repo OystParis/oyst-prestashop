@@ -28,9 +28,8 @@ $(document).ready(function() {
     panel_heading.before('<span class="badge">Transaction FreePay n°' + oyst_transaction_id + '</span>');
 
     $('#desc-order-partial_refund').click(function() {
-        console.log("icic");
         $('input[name^="partialRefundProductQuantity"]').focusout(function(event) {
-            var quantity = $('span.product_quantity_show', $(this).closest('tr')).text();
+            var quantity = $('input.partialRefundProductQuantity', $(this).closest('tr')).val();
 
             if ($(this).val() < 0 || $(this).val() > quantity) {
                 //use setTimeout method to fix a Firefox bug which select text after dismissing the alert

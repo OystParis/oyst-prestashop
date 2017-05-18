@@ -60,6 +60,8 @@ $(document).ready(function() {
 
     $('#desc-order-freepay-refund').click(function() {
         if (confirm(label_confirm_refund)) {
+            $('#desc-order-freepay-refund').attr('disabled', 'disabled');
+            partial_refund_button.attr('disabled', 'disabled');
             $.ajax({
                 method: 'POST',
                 url: window.location.href,
@@ -70,6 +72,8 @@ $(document).ready(function() {
                     window.location.href = window.location.href;
                 } else {
                     alert('Une erreur s\'est produite lors du remboursement : ' + msg.details.message);
+                    $('#desc-order-freepay-refund').removeAttr('disabled');
+                    partial_refund_button.removeAttr('disabled');
                 }
             });
         }

@@ -28,7 +28,7 @@ class OrderRepository extends AbstractOystRepository
         return $result > 0 && $currentState != Configuration::get('OYST_STATUS_CANCELLATION_PENDING');
     }
 
-    public function orderCanBeTotallyRefunded($idCart)
+    public function orderCanBeTotallyRefunded($idCart, $currentState)
     {
         // The order must have a CAPTURE event but no REFUND/CANCELLATION event
         $sql = 'SELECT COUNT(DISTINCT(opn.`id_oyst_payment_notification`))'
@@ -44,10 +44,10 @@ class OrderRepository extends AbstractOystRepository
 
         $result = $this->db->getValue($sql);
 
-        return $result > 0;
+        return $result > 0 && $currentState != Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') && $currentState != Configuration::get('OYST_STATUS_REFUND_PENDING');
     }
 
-    public function getOrderMaxRefund($idCart)
+    public function getOrderMaxRefund($idCart, $currentState)
     {
         $maxRefund = 0;
 
@@ -69,6 +69,10 @@ class OrderRepository extends AbstractOystRepository
             $result      = json_decode($result, true);
             $totalAmount = $result['notification']['amount']['value'] / 100;
             $maxRefund   = $this->calculateMaxRefund($idCart, $totalAmount);
+        }
+
+        if ($currentState == Configuration::get('OYST_STATUS_REFUND_PENDING')) {
+            $maxRefund = 0;
         }
 
         return $maxRefund;
