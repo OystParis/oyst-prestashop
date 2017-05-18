@@ -30,7 +30,7 @@ class OrderRepository extends AbstractOystRepository
 
     public function orderCanBeTotallyRefunded($idCart)
     {
-        // The order must have an AUTHORISATION event and no CAPTURE/CANCELLATION event
+        // The order must have a CAPTURE event but no REFUND/CANCELLATION event
         $sql = 'SELECT COUNT(DISTINCT(opn.`id_oyst_payment_notification`))'
             .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
             .' WHERE opn.`id_cart` = '.(int) $idCart

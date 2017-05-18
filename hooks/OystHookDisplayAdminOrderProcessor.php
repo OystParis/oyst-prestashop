@@ -51,7 +51,12 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             'order_can_be_totally_refunded' => ($oystOrderRepository->orderCanBeTotallyRefunded($order->id_cart) ? 1 : 0),
             'order_max_refund' => $oystOrderRepository->getOrderMaxRefund($order->id_cart),
             'label_cancel' => $this->module->l('Cancel order', 'oysthookdisplayadminorderprocessor'),
-            'label_refund' => $this->module->l('Standard refund', 'oysthookdisplayadminorderprocessor')
+            'label_refund' => $this->module->l('Standard refund', 'oysthookdisplayadminorderprocessor'),
+            'label_confirm_cancel' => $this->module->l('Are you sure you want to cancel this order?', 'oysthookdisplayadminorderprocessor'),
+            'label_confirm_refund' => $this->module->l('Are you sure you want to totally refund this order?', 'oysthookdisplayadminorderprocessor'),
+            'label_wrong_quantity' => $this->module->l('The quantity is wrong', 'oysthookdisplayadminorderprocessor'),
+            'label_wrong_amount' => $this->module->l('The amount is wrong', 'oysthookdisplayadminorderprocessor'),
+            'label_error' => $this->module->l('An error has occured while processing the cancellation of the order:', 'oysthookdisplayadminorderprocessor'),
         );
         $this->smarty->assign($this->module->name, $assign);
 

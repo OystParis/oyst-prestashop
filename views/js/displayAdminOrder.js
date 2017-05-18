@@ -39,7 +39,7 @@ $(document).ready(function() {
     }
 
     $('#desc-order-freepay-cancel').click(function() {
-        if (confirm('Êtes vous sûr de vouloir annuler la commande ?')) {
+        if (confirm(label_confirm_cancel)) {
             $('#desc-order-freepay-cancel').attr('disabled', 'disabled');
             $.ajax({
                 method: 'POST',
@@ -50,7 +50,7 @@ $(document).ready(function() {
                 if (msg.result == 'success') {
                     window.location.href = window.location.href;
                 } else {
-                    alert('Une erreur s\'est produite lors de l\'annulation : ' + msg.details.message);
+                    alert(label_error + ' ' + msg.details.message);
                     $('#desc-order-freepay-cancel').removeAttr('disabled');
                 }
             });
@@ -59,7 +59,7 @@ $(document).ready(function() {
     });
 
     $('#desc-order-freepay-refund').click(function() {
-        if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {
+        if (confirm(label_confirm_refund)) {
             $.ajax({
                 method: 'POST',
                 url: window.location.href,

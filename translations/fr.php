@@ -9,6 +9,11 @@ $_MODULE['<{oyst}prestashop>paymentnotification_a495948365afdff85b1f0c6e95fc36f7
 $_MODULE['<{oyst}prestashop>oysthookadvancedpaymentoptionsprocessor_e77bb171c7ae55bba8b2ed869fadfb19'] = 'Payer par carte bleue';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_d99d59366cc238d329d9fc8c7376d40b'] = 'Annuler la commande';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_4ad439b4f7069964e258259e049fa90c'] = 'Remboursement standard';
+$_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_9a3f357fa55aab55de39ca79444bc6db'] = 'Êtes vous sûr de vouloir annuler la commande ?';
+$_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_1c2d2d2a695caa767b1a65c631e32d39'] = 'Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?';
+$_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_c553131fd61f1974f283284d081bd4aa'] = 'La quantité saisie n\'est pas bonne';
+$_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_024ae09e98fa72606806543757012ff2'] = 'Le montant saisi n\'est pas bon';
+$_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_2b7091c33002c6db27a2a5165ce431f8'] = 'Une erreur s\'est produite lors de l\'annulation :';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_782c8b38bce4f2f6975ca7f33ac8189b'] = 'Historique de commandes';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_fb077ecba55e5552916bde26d8b9e794'] = 'Confirmation de commande';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_90589c47f06eb971d548591f23c285af'] = 'Personnalisée';

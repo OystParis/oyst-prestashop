@@ -26,4 +26,26 @@ $(document).ready(function() {
     // Display FreePay transaction ID
     var panel_heading = $('.panel-heading-action');
     panel_heading.before('<span class="badge">Transaction FreePay n°' + oyst_transaction_id + '</span>');
+
+    $('#desc-order-partial_refund').click(function() {
+        console.log("icic");
+        $('input[name^="partialRefundProductQuantity"]').focusout(function(event) {
+            var quantity = $('span.product_quantity_show', $(this).closest('tr')).text();
+
+            if ($(this).val() < 0 || $(this).val() > quantity) {
+                //use setTimeout method to fix a Firefox bug which select text after dismissing the alert
+                setTimeout(function() { alert(label_wrong_quantity); }, 0);
+                $(this).val(0);
+            }
+        });
+        $('input[name^="partialRefundProduct"]').focusout(function(event) {
+            var amount = $('input.partialRefundProductAmount', $(this).closest('tr')).val();
+
+            if ($(this).val() < 0 || $(this).val() > amount) {
+                //use setTimeout method to fix a Firefox bug which select text after dismissing the alert
+                setTimeout(function() { alert(label_wrong_amount); }, 0);
+                $(this).val(0);
+            }
+        });
+    });
 });
