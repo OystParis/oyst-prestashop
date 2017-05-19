@@ -52,6 +52,8 @@ class OrderRepository extends AbstractOystRepository
         $maxRefund = 0;
 
         // The order must have a CAPTURE event and no CANCELLATION event
+        // NB: the EVENT_REFUND was added to prevent multiple partial refund (due to a bug)
+        // so it should be temporary
         $sql = 'SELECT opn.`event_data`'
             .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
             .' WHERE opn.`id_cart` = '.(int) $idCart
@@ -60,6 +62,7 @@ class OrderRepository extends AbstractOystRepository
                 .'SELECT opn_bis.`id_cart`'
                 .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn_bis'
                 .' WHERE opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_CANCELLATION.'"'
+                .' OR opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_REFUND.'"'
             .')';
 
         // Return data of the CAPTURE event
@@ -71,7 +74,7 @@ class OrderRepository extends AbstractOystRepository
             $maxRefund   = $this->calculateMaxRefund($idCart, $totalAmount);
         }
 
-        if ($currentState == Configuration::get('OYST_STATUS_REFUND_PENDING')) {
+        if ($currentState == Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') || $currentState == Configuration::get('OYST_STATUS_REFUND_PENDING')) {
             $maxRefund = 0;
         }
 
