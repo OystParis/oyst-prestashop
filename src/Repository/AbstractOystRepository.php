@@ -1,6 +1,7 @@
 <?php
 
 namespace Oyst\Repository;
+
 use Db;
 
 abstract class AbstractOystRepository
@@ -11,7 +12,6 @@ abstract class AbstractOystRepository
     protected $db;
 
     /**
-     * Oyst\Repository\AbstractOystRepository constructor.
      * @param Db $db
      */
     public function __construct(Db $db)

@@ -51,9 +51,20 @@ class OystSDK
         return $this->_apiPostRequest($this->getApiEndpoint().'/payments', $data);
     }
 
-    public function cancelRefundRequest($payment_id)
+    public function cancelOrRefundRequest($payment_id, $value = null, $currency = null)
     {
-        return $this->_apiPostRequest($this->getApiEndpoint().'/payments/'.$payment_id.'/cancel_or_refund', array());
+        $data = array();
+
+        if (!is_null($value) && !is_null($currency)) {
+            $data = array(
+                'amount' => array(
+                    'value' => $value,
+                    'currency' => $currency
+                )
+            );
+        }
+
+        return $this->_apiPostRequest($this->getApiEndpoint().'/payments/'.$payment_id.'/cancel_or_refund', $data);
     }
 
     public function productPostRequest($products)
@@ -86,16 +97,17 @@ class OystSDK
      * @param string $name
      * @param string $phone
      * @param string $email
+     * @param int    $nbTransac
      *
      * @return bool
      */
-    public static function notify($name, $phone, $email)
+    public static function notify($name, $phone, $email, $nbTransac)
     {
         $psUrl  = 'https://partners-subscribe.prestashop.com/oyst/request.php';
         $params = array(
             'ps_version'   => _PS_VERSION_,
             'oyst_version' => _PS_OYST_VERSION_,
-            'url'          => Tools::getHttpHost(true).__PS_BASE_URI__,
+            'url'          => Tools::getHttpHost(true).__PS_BASE_URI__.' (~ '.$nbTransac.' transactions)',
             'name'         => $name,
             'phone'        => $phone,
             'email'        => $email,

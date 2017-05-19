@@ -20,7 +20,16 @@
 
 <script>
     var oyst_transaction_id = {$oyst.transaction_id|escape:'html':'UTF-8'};
-    var has_order_been_refunded = {$oyst.has_order_been_refunded|escape:'html':'UTF-8'};
+    var order_can_be_cancelled = {$oyst.order_can_be_cancelled|escape:'html':'UTF-8'};
+    var order_can_be_totally_refunded = {$oyst.order_can_be_totally_refunded|escape:'html':'UTF-8'};
+    var order_max_refund = {$oyst.order_max_refund|escape:'html':'UTF-8'};
+    var label_cancel = '{$oyst.label_cancel|escape:'html':'UTF-8'}';
+    var label_refund = '{$oyst.label_refund|escape:'html':'UTF-8'}';
+    var label_confirm_cancel = '{$oyst.label_confirm_cancel|escape:'html':'UTF-8'}';
+    var label_confirm_refund = '{$oyst.label_confirm_refund|escape:'html':'UTF-8'}';
+    var label_wrong_quantity = '{$oyst.label_wrong_quantity|escape:'html':'UTF-8'}';
+    var label_wrong_amount = '{$oyst.label_wrong_amount|escape:'html':'UTF-8'}';
+    var label_error = '{$oyst.label_error|escape:'html':'UTF-8'}';
 </script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder-1.6.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder.js"></script>
