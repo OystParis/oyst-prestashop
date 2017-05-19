@@ -28,6 +28,11 @@ if (!defined('_PS_VERSION_')) {
 
 class OystPaymentNotification extends ObjectModel
 {
+    const EVENT_AUTHORISATION = 'AUTHORISATION';
+    const EVENT_CAPTURE = 'CAPTURE';
+    const EVENT_CANCELLATION = 'CANCELLATION';
+    const EVENT_REFUND = 'REFUND';
+
     public $id;
 
     /** @var integer Order ID */

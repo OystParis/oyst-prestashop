@@ -19,7 +19,7 @@
  *}
 
 <div class="row">
-    <div class="col-xs-12 col-md-12">
+    <div class="col-xs-12">
         <p class="payment_module">
             <a href="{$link->getModuleLink('oyst', 'payment')|escape:'htmlall':'UTF-8'}" class="oyst">
                 <img src="{$oyst.module_dir|escape:'htmlall':'UTF-8'}views/img/logo-horizontal-credit-card.png" height="49" />

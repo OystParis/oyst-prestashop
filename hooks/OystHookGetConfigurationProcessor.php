@@ -202,9 +202,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['form_get_apikey_name']  = $this->context->employee->lastname.' '.$this->context->employee->firstname;
         $assign['form_get_apikey_phone'] = '';
         $assign['form_get_apikey_email'] = $this->context->employee->email;
+        $assign['form_get_apikey_transac'] = '';
         $assign['form_get_apikey_name_error']  = '';
         $assign['form_get_apikey_phone_error'] = '';
         $assign['form_get_apikey_email_error'] = '';
+        $assign['form_get_apikey_transac_error'] = '';
 
         // Merchant filled the contact form
         if (!Tools::isSubmit('form_get_apikey_submit')) {
@@ -213,17 +215,20 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $goToForm = false;
 
-        $name  = Tools::getValue('form_get_apikey_name');
-        $phone = Tools::getValue('form_get_apikey_phone');
-        $email = Tools::getValue('form_get_apikey_email');
+        $name      = Tools::getValue('form_get_apikey_name');
+        $phone     = Tools::getValue('form_get_apikey_phone');
+        $email     = Tools::getValue('form_get_apikey_email');
+        $nbTransac = Tools::getValue('form_get_apikey_transac');
 
-        $assign['form_get_apikey_name']  = $name;
-        $assign['form_get_apikey_phone'] = $phone;
-        $assign['form_get_apikey_email'] = $email;
+        $assign['form_get_apikey_name']    = $name;
+        $assign['form_get_apikey_phone']   = $phone;
+        $assign['form_get_apikey_email']   = $email;
+        $assign['form_get_apikey_transac'] = $nbTransac;
 
-        $nameError  = '';
-        $phoneError = '';
-        $emailError = '';
+        $nameError      = '';
+        $phoneError     = '';
+        $emailError     = '';
+        $nbTransacError = '';
 
         if (!$name || !Validate::isName($name)) {
             $hasError  = true;
@@ -240,13 +245,19 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $emailError = $this->module->l('Please enter a valid email', 'oysthookgetconfigurationprocessor');
         }
 
-        $assign['form_get_apikey_name_error']   = $nameError;
-        $assign['form_get_apikey_phone_error']  = $phoneError;
-        $assign['form_get_apikey_email_error']  = $emailError;
-        $assign['form_get_apikey_notify_error'] = false;
+        if (!$nbTransac || !Validate::isInt($nbTransac)) {
+            $hasError       = true;
+            $nbTransacError = $this->module->l('Please enter a valid number', 'oysthookgetconfigurationprocessor');
+        }
+
+        $assign['form_get_apikey_name_error']    = $nameError;
+        $assign['form_get_apikey_phone_error']   = $phoneError;
+        $assign['form_get_apikey_email_error']   = $emailError;
+        $assign['form_get_apikey_transac_error'] = $nbTransacError;
+        $assign['form_get_apikey_notify_error']  = false;
 
         if (!$hasError) {
-            $isSent = OystSDK::notify($name, $phone, $email);
+            $isSent = OystSDK::notify($name, $phone, $email, $nbTransac);
 
             if (!$isSent) {
                 $goToForm = true;
@@ -265,18 +276,24 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
     {
         $dayOfTheWeek    = date('w');
         $currentDateTime = date('Hi');
+        $showSubMessage  = true;
         $message         = $this->module->l('A FreePay customer advisor shall contact you on', 'oysthookgetconfigurationprocessor');
 
         if (in_array($dayOfTheWeek, array(0, 1, 2, 3, 4)) && $currentDateTime > '2000') {// Sunday or Monday, Tuesday, Wednesday, Thursday after 8pm
+            $showSubMessage = false;
             $message = $this->module->l('A FreePay customer advisor shall contact you from tomorrow morning 8:30 am on', 'oysthookgetconfigurationprocessor');
         } elseif (in_array($dayOfTheWeek, array(1, 2, 3, 4, 5)) && $currentDateTime > '0000' && $currentDateTime < '0830') {// Monday, Tuesday, Wednesday, Thursday, Friday between 12:01 am and 8:30 am
+            $showSubMessage = false;
             $message = $this->module->l('A FreePay customer advisor shall contact you this morning from 8:30 am on', 'oysthookgetconfigurationprocessor');
         } elseif ($dayOfTheWeek == 5 && $currentDateTime > '1800' || $dayOfTheWeek == 6) {// Friday after 6 pm and Saturday
+            $showSubMessage = false;
             $message = $this->module->l('A FreePay customer advisor shall contact you monday morning from 8:30 am on', 'oysthookgetconfigurationprocessor');
         } elseif (in_array($dayOfTheWeek, array(1, 2, 3, 4, 5)) && $currentDateTime > '1200' && $currentDateTime < '1400') {// Monday, Tuesday, Wednesday, Thursday, Friday entre 12h et 14h
+            $showSubMessage = false;
             $message = $this->module->l('A FreePay customer advisor shall contact you this afternoon from 14:30 pm on', 'oysthookgetconfigurationprocessor');
         }
 
         $assign['message'] = $message;
+        $assign['show_sub_message'] = $showSubMessage;
     }
 }

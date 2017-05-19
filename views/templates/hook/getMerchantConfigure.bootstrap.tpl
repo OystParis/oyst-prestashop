@@ -51,9 +51,13 @@
     </div>
     {if $oyst.FC_OYST_GUEST && $oyst.phone}
     <div class="text-center">
-        <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong></p>
+        <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong>
+            (<a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='edit' mod='oyst'}</a>)
+        </p>
 
-        <p><a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
+        {if $oyst.show_sub_message}
+        <p><h2>{l s='Pick up your phone' mod='oyst'}</h2></p>
+        {/if}
         <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
         <p>
             {l s='Please, get these information ready:' mod='oyst'}<br>
@@ -76,13 +80,7 @@
                         <select name="FC_OYST_API_ENV">
                             <option value="prod" {if $oyst.FC_OYST_API_ENV == 'prod'}selected="selected"{/if}>Production</option>
                             <option value="preprod" {if $oyst.FC_OYST_API_ENV == 'preprod'}selected="selected"{/if}>Preproduction</option>
-                            {if $oyst.isOystDeveloper}
-                                <option value="integration" {if $oyst.FC_OYST_API_ENV == 'integration'}selected="selected"{/if}>Integration</option>
-                            {/if}
                         </select>
-                        {*{if $oyst.apikey_test_error}*}
-                        {*<p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>*}
-                        {*{/if}*}
                     </div>
                 </div>
 
@@ -92,7 +90,7 @@
                         <input type="text" id="FC_OYST_API_PROD_KEY" name="FC_OYST_API_PROD_KEY" value="{$oyst.FC_OYST_API_PROD_KEY|escape:'htmlall':'UTF-8'}"/>
                         <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                         {if $oyst.apikey_test_error}
-                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                        <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                         {/if}
                     </div>
                 </div>
@@ -103,7 +101,7 @@
                         <input type="text" id="FC_OYST_API_PREPROD_KEY" name="FC_OYST_API_PREPROD_KEY" value="{$oyst.FC_OYST_API_PREPROD_KEY|escape:'htmlall':'UTF-8'}"/>
                         <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                         {if $oyst.apikey_test_error}
-                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                        <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                         {/if}
                     </div>
                 </div>
@@ -167,14 +165,8 @@
         </div>
         <div class="panel-footer">
             <button id="toggleConfig" type="button" class="btn btn-default">
-                <i class="process-icon- icon-eye"></i> <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
+                <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
             </button>
-            {if !$oyst.hasApiKey}
-            <a class="btn btn-default" href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }">
-                <i class="process-icon- icon-key"></i>
-                {l s='Get an API Key' mod='oyst'}
-            </a>
-            {/if}
         </div>
     </div>
 </form>

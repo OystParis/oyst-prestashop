@@ -32,7 +32,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
     {
         // Check if order has been paid with Oyst
         $order = new Order(Tools::getValue('id_order'));
-        if ($order->module != 'oyst' || $order->current_state == 7) {
+        if ($order->module != $this->module->name) {
             return '';
         }
 
@@ -41,16 +41,29 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             $this->refundOrder($order);
         }
 
+        $oystOrderRepository = new OrderRepository(Db::getInstance());
+
+        // Check if order has already been refunded
         $assign = array(
             'module_dir' => $this->path,
             'transaction_id' => $order->id_cart,
+            'order_can_be_cancelled' => ($oystOrderRepository->orderCanBeCancelled($order->id_cart, $order->current_state) ? 1 : 0),
+            'order_can_be_totally_refunded' => ($oystOrderRepository->orderCanBeTotallyRefunded($order->id_cart, $order->current_state) ? 1 : 0),
+            'order_max_refund' => $oystOrderRepository->getOrderMaxRefund($order->id_cart, $order->current_state),
+            'label_cancel' => $this->module->l('Cancel order', 'oysthookdisplayadminorderprocessor'),
+            'label_refund' => $this->module->l('Standard refund', 'oysthookdisplayadminorderprocessor'),
+            'label_confirm_cancel' => $this->module->l('Are you sure you want to cancel this order?', 'oysthookdisplayadminorderprocessor'),
+            'label_confirm_refund' => $this->module->l('Are you sure you want to totally refund this order?', 'oysthookdisplayadminorderprocessor'),
+            'label_wrong_quantity' => $this->module->l('The quantity is wrong', 'oysthookdisplayadminorderprocessor'),
+            'label_wrong_amount' => $this->module->l('The amount is wrong', 'oysthookdisplayadminorderprocessor'),
+            'label_error' => $this->module->l('An error has occured while processing the cancellation of the order:', 'oysthookdisplayadminorderprocessor'),
         );
         $this->smarty->assign($this->module->name, $assign);
 
         return $this->module->fcdisplay(__FILE__, 'displayAdminOrder.tpl');
     }
 
-    public function refundOrder($order)
+    private function refundOrder($order)
     {
         // Clean buffer
         ob_end_clean();
@@ -59,21 +72,23 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         $result = array('error' => 'Error', 'message' => 'Transaction not found');
         $oyst_payment_notification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
         if (Validate::isLoadedObject($oyst_payment_notification)) {
-            $oyst_api = new OystSDK();
-            $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
-            $oyst_api->setApiKey(Configuration::get('FC_OYST_API_KEY'));
-            $result = $oyst_api->cancelRefundRequest($oyst_payment_notification->payment_id);
+            $oystApi = new OystSDK();
+            $oystApi->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
+            $oystApi->setApiKey(Configuration::get('FC_OYST_API_KEY'));
+            $result = $oystApi->cancelOrRefundRequest($oyst_payment_notification->payment_id);
             if ($result) {
                 $result = Tools::jsonDecode($result, true);
             }
 
             // Set refund status
             if (!isset($result['error'])) {
+                $oystOrderRepository = new OrderRepository(Db::getInstance());
+                $state = $oystOrderRepository->orderCanBeCancelled($order->id_cart) ? Configuration::get('OYST_STATUS_CANCELLATION_PENDING') : Configuration::get('OYST_STATUS_REFUND_PENDING');
                 $history = new OrderHistory();
                 $history->id_order = $order->id;
                 $history->id_employee = 0;
-                $history->id_order_state = (int)Configuration::get('PS_OS_REFUND');
-                $history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), $order->id);
+                $history->id_order_state = (int)$state;
+                $history->changeIdOrderState((int)$state, $order->id);
                 $history->add();
             }
         }

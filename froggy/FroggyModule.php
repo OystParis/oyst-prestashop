@@ -196,7 +196,6 @@ class FroggyModule extends Module
     public function uninstall()
     {
         if (parent::uninstall()) {
-
             if (class_exists('FroggyOverride') && !$this->uninstallFroggyOverrides()) {
                 return false;
             }
