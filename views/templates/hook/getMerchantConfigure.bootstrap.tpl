@@ -135,7 +135,7 @@
         </div>
         <div class="panel-footer">
             <button id="toggleConfig" type="button" class="btn btn-default">
-                <i class="process-icon- icon-eye"></i> <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
+                <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
             </button>
         </div>
     </div>
