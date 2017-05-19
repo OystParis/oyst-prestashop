@@ -18,13 +18,35 @@
  * @license GNU GENERAL PUBLIC LICENSE
  */
 
-// Refund button
-var refund_button_html = '<a id="desc-order-freepay-refund" class="btn btn-default" href="#"> <i class="icon-exchange"></i>Remboursement standard</a>';
+// Refund & Cancel buttons
+var cancel_button_html = '<a id="desc-order-freepay-cancel" class="btn btn-default" href="#"> <i class="icon-exchange"></i> ' + label_cancel + '</a>';
+var refund_button_html = '<a id="desc-order-freepay-refund" class="btn btn-default" href="#"> <i class="icon-exchange"></i> ' + label_refund + '</a>';
 
 $(document).ready(function() {
-
     // Display FreePay transaction ID
     var panel_heading = $('.panel-heading-action');
     panel_heading.before('<span class="badge">Transaction FreePay n°' + oyst_transaction_id + '</span>');
 
+    $('#desc-order-partial_refund').click(function() {
+        $('input[name^="partialRefundProductQuantity"]').focusout(function(event) {
+            var quantity = parseFloat($('input.partialRefundProductQuantity', $(this).closest('tr')).val());
+            var inputQuantity = parseFloat($(this).val());
+
+            if (inputQuantity < 0 || inputQuantity > quantity) {
+                //use setTimeout method to fix a Firefox bug which select text after dismissing the alert
+                setTimeout(function() { alert(label_wrong_quantity); }, 0);
+                $(this).val(0);
+            }
+        });
+        $('input[name^="partialRefundProduct"]').focusout(function(event) {
+            var amount = parseFloat($('input.partialRefundProductAmount', $(this).closest('tr')).val());
+            var inputAmount = parseFloat($(this).val());
+
+            if (inputAmount < 0 || inputAmount > amount) {
+                //use setTimeout method to fix a Firefox bug which select text after dismissing the alert
+                setTimeout(function() { alert(label_wrong_amount); }, 0);
+                $(this).val(0);
+            }
+        });
+    });
 });

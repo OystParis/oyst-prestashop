@@ -19,43 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-defined('_PS_VERSION_') || require dirname(__FILE__) . '/index.php';
-
-/*
- * Include Froggy Library
- */
-if (!class_exists('FroggyModule', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/froggy/FroggyModule.php';
-}
-if (!class_exists('FroggyPaymentModule', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/froggy/FroggyPaymentModule.php';
-}
-
-/*
- * Include Oyst SDK
- */
-if (!class_exists('OystSDK', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystSDK.php';
-}
-
-/*
- * Include Oyst Product Class
- */
-if (!class_exists('OystProduct', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystProduct.php';
-}
-
-/*
- * Include Oyst Payment Notification Class
- */
-if (!class_exists('OystPaymentNotification', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystPaymentNotification.php';
-}
-
-define('_PS_OYST_DEBUG_', 0);
+require_once __DIR__ . '/autoload.php';
 
 /**
  * Class Oyst
@@ -68,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.0.1';
+        $this->version = '1.1.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -125,6 +89,133 @@ class Oyst extends FroggyPaymentModule
             Configuration::updateValue('FC_OYST_GUEST', false);
         }
 
+        $result &= $this->installOrderStates();
+
+        return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public function installOrderStates()
+    {
+        $result = true;
+        $langId = Configuration::get('PS_LANG_DEFAULT');
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PAYMENT_PENDING'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'En attente de paiement FreePay',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_PAYMENT_PENDING', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Annulation en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_CANCELLATION_PENDING', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_REFUND_PENDING'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Remboursement en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_REFUND_PENDING', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Remboursement partiel en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND_PEND', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Remboursé partiellement',
+            );
+            $orderState->color = '#FF7F50';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND', $orderState->id);
+        }
+
         return $result;
     }
 
@@ -148,7 +239,6 @@ class Oyst extends FroggyPaymentModule
         // Return result
         return $result;
     }
-
 
     /**
      * Configuration method

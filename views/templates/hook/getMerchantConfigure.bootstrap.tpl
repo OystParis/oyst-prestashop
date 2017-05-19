@@ -51,9 +51,13 @@
     </div>
     {if $oyst.FC_OYST_GUEST && $oyst.phone}
     <div class="text-center">
-        <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong></p>
+        <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong>
+            (<a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='edit' mod='oyst'}</a>)
+        </p>
 
-        <p><a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
+        {if $oyst.show_sub_message}
+        <p><h2>{l s='Pick up your phone' mod='oyst'}</h2></p>
+        {/if}
         <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
         <p>
             {l s='Please, get these information ready:' mod='oyst'}<br>
@@ -131,14 +135,8 @@
         </div>
         <div class="panel-footer">
             <button id="toggleConfig" type="button" class="btn btn-default">
-                <i class="process-icon- icon-eye"></i> <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
+                <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
             </button>
-            {if !$oyst.FC_OYST_API_KEY}
-            <a class="btn btn-default" href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }">
-                <i class="process-icon- icon-key"></i>
-                {l s='Get an API Key' mod='oyst'}
-            </a>
-            {/if}
         </div>
     </div>
 </form>

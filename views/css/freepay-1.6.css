@@ -30,6 +30,14 @@
     border-color: #008abd;
 }
 
+.oyst.contact #form_get_apikey_submit {
+    height: 50px;
+}
+
 .oyst.contact .help-block {
     margin-bottom: 0;
+}
+
+.oyst h2 {
+    font: 400 25px/1.42857 "Open Sans",Helvetica,Arial,sans-serif;
 }
