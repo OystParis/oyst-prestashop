@@ -29,18 +29,20 @@ $(document).ready(function() {
 
     $('#desc-order-partial_refund').click(function() {
         $('input[name^="partialRefundProductQuantity"]').focusout(function(event) {
-            var quantity = $('input.partialRefundProductQuantity', $(this).closest('tr')).val();
+            var quantity = parseFloat($('input.partialRefundProductQuantity', $(this).closest('tr')).val());
+            var inputQuantity = parseFloat($(this).val());
 
-            if ($(this).val() < 0 || $(this).val() > quantity) {
+            if (inputQuantity < 0 || inputQuantity > quantity) {
                 //use setTimeout method to fix a Firefox bug which select text after dismissing the alert
                 setTimeout(function() { alert(label_wrong_quantity); }, 0);
                 $(this).val(0);
             }
         });
         $('input[name^="partialRefundProduct"]').focusout(function(event) {
-            var amount = $('input.partialRefundProductAmount', $(this).closest('tr')).val();
+            var amount = parseFloat($('input.partialRefundProductAmount', $(this).closest('tr')).val());
+            var inputAmount = parseFloat($(this).val());
 
-            if ($(this).val() < 0 || $(this).val() > amount) {
+            if (inputAmount < 0 || inputAmount > amount) {
                 //use setTimeout method to fix a Firefox bug which select text after dismissing the alert
                 setTimeout(function() { alert(label_wrong_amount); }, 0);
                 $(this).val(0);
