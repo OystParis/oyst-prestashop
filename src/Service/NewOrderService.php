@@ -3,6 +3,7 @@
 namespace Oyst\Service;
 
 use Address;
+use Oyst\Api\AbstractOystApiClient;
 use Oyst\Repository\AddressRepository;
 use Carrier;
 use Cart;
@@ -171,6 +172,17 @@ class NewOrderService extends AbstractOystService
     }
 
     /**
+     * @param $oystOrderId
+     * @return \Guzzle\Http\Message\Response
+     */
+    public function getOrderInfo($oystOrderId)
+    {
+        $oystOrderInfo = $this->requestApi($this->orderApi, 'getOrder', array($oystOrderId));
+
+        return $oystOrderInfo;
+    }
+
+    /**
      * @param $orderId
      * @return array
      * @throws Exception
@@ -185,7 +197,7 @@ class NewOrderService extends AbstractOystService
             'state' => false,
         );
 
-        $oystOrderInfo = $this->requestApi($this->orderApi, 'getOrder', $orderId);
+        $oystOrderInfo = $this->getOrderInfo($orderId);
         if ($oystOrderInfo) {
             $productReferences = explode('-', $oystOrderInfo['product_reference']);
             $product = new Product($productReferences[0]);
@@ -225,6 +237,26 @@ class NewOrderService extends AbstractOystService
     }
 
     /**
+     * @param $orderId
+     * @param $status
+     * @return bool
+     */
+    public function updateOrderStatus($orderId, $status)
+    {
+        $this->requestApi($this->orderApi, 'updateStatus', array($orderId, $status));
+
+        $succeed = false;
+        if ($this->orderApi->getLastHttpCode() != 200) {
+            $this->logger->warning(sprintf('Oyst order %s has not been updated to %s', $orderId, $status));
+        } else {
+            $succeed = true;
+            $this->logger->info(sprintf('Oyst order %s has been updated to %s', $orderId, $status));
+        }
+
+        return $succeed;
+    }
+
+    /**
      * @param \Oyst\Repository\OrderRepository $orderRepository
      * @return $this
      */
@@ -236,7 +268,7 @@ class NewOrderService extends AbstractOystService
     }
 
     /**
-     * @param OystOrderApi $orderApi
+     * @param OystOrderApi|AbstractOystApiClient $orderApi
      * @return $this
      */
     public function setOrderApi(OystOrderApi $orderApi)

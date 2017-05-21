@@ -12,8 +12,6 @@ class OneClickOrderController extends AbstractOystController
 {
     public function authorizeOrderAction()
     {
-        header('Content-Type: application/json');
-
         $oyst = new Oyst();
         /** @var OystOneClickApi $oneClickAPI */
         $oneClickAPI = OystApiClientFactory::getClient(
@@ -31,6 +29,8 @@ class OneClickOrderController extends AbstractOystController
 
         if ($this->request->getMethod() === 'POST') {
             $responseData = $oneClickService->requestAuthorizeNewOrderProcess($this->request);
+
+            header('Content-Type: application/json');
             echo json_encode($responseData);
         } else {
             http_response_code(400);

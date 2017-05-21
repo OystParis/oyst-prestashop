@@ -160,7 +160,7 @@ class ExportProductService extends AbstractOystService
         $prestaShopProducts = $this->productRepository->getProductsNotExported($this->limitedProduct);
         $products = $this->transformProducts($prestaShopProducts);
 
-        $this->requestApi($this->oystCatalogAPI, 'postProducts', $products);
+        $this->requestApi($this->oystCatalogAPI, 'postProducts', array($products));
 
         if ($this->oystCatalogAPI->getLastHttpCode() == 200) {
             $json['state'] = true;

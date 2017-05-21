@@ -4,12 +4,8 @@ namespace Oyst\Controller;
 
 use Oyst;
 use Context;
-use Db;
-use Oyst\Api\OystApiClientFactory;
-use Oyst\Api\OystOrderApi;
-use Oyst\Repository\AddressRepository;
-use Oyst\Repository\OrderRepository;
-use Oyst\Service\NewOrderService;
+use Oyst\Classes\Enum\AbstractOrderState;
+use Oyst\Factory\NewOrderServiceFactory;
 
 class OystOrderController extends AbstractOystController
 {
@@ -17,34 +13,28 @@ class OystOrderController extends AbstractOystController
     {
         header('Content-Type: application/json');
 
-        $oyst = new Oyst();
-        $context = Context::getContext();
-        $orderRepository = new OrderRepository(Db::getInstance());
-        $addressRepository = new AddressRepository(Db::getInstance());
-
-        /** @var OystOrderApi $orderApi */
-        $orderApi = OystApiClientFactory::getClient(
-            OystApiClientFactory::ENTITY_ORDER,
-            $oyst->getApiKey(),
-            $oyst->getUserAgent(),
-            $oyst->getEnvironment()
-        );
-
-        $orderService = new NewOrderService(
-            $context,
-            $oyst
-        );
-
-        $orderService
-            ->setOrderRepository($orderRepository)
-            ->setAddressRepository($addressRepository)
-            ->setLogger($this->logger)
-            ->setOrderAPi($orderApi)
-        ;
-
         $json = $this->request->getJson();
         if ($json) {
-            $responseData = $orderService->requestCreateNewOrder($json['data']['order_id']);
+
+            $oyst = new Oyst();
+            $context = Context::getContext();
+            $orderService = NewOrderServiceFactory::get($oyst, $context);
+            $orderId = $json['data']['order_id'];
+            $responseData = $orderService->requestCreateNewOrder($orderId);
+
+            $state = $responseData['state'];
+
+            if ($state) {
+                $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);
+            } else {
+                $data['error'] = 'The order has no been created';
+                $orderService->updateOrderStatus($orderId, AbstractOrderState::DECLINED);
+            }
+
+            if (isset($responseData['error'])) {
+                $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData)));
+            }
+
             echo json_encode($responseData);
         } else {
             http_response_code(400);

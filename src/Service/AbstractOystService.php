@@ -3,6 +3,7 @@
 namespace Oyst\Service;
 
 use Context;
+use Guzzle\Http\Message\Response;
 use Oyst;
 use Oyst\Api\AbstractOystApiClient;
 use Oyst\Service\Logger\AbstractLogger;
@@ -44,21 +45,23 @@ abstract class AbstractOystService
 
     /**
      * @param AbstractOystApiClient $object
-     * @param $method
-     * @param $params
+     * @param string $method
+     * @param array $params
      * @return Response
      */
-    protected function requestApi(AbstractOystApiClient $object, $method, $params = null)
+    protected function requestApi(AbstractOystApiClient $object, $method, $params = array())
     {
         /** @var Response $result */
-        $result = call_user_func(array($object, $method), $params);
+        $result = call_user_func_array(array($object, $method), $params);
 
         if ($this->logger instanceof AbstractLogger) {
 
             $thisCallArgs = null == $params ? null : func_get_arg(2);
 
             $messageMask = 'Request from %s %s. HTTP[%s] BODY[%s]';
-            $context = array();
+            $context = array(
+                'objectType' => 'OystRequest'
+            );
             $requestFrom = sprintf('%s::%s(%s)',
                 get_class($object),
                 $method,
