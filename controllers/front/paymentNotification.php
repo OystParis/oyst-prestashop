@@ -63,10 +63,6 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                     case OystPaymentNotification::EVENT_AUTHORISATION:
                         $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
                         break;
-                    // If capture succeed, we update the order
-                    case OystPaymentNotification::EVENT_CAPTURE:
-                        $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
-                        break;
                     // If cancellation is confirmed, we cancel the order
                     case OystPaymentNotification::EVENT_CANCELLATION:
                         $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
@@ -146,8 +142,8 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                 $payment_status = (int) Configuration::get('PS_OS_ERROR');
                 $message = $this->module->l('Cart changed, please retry.').'<br />';
             } else {
-                $payment_status = (int) Configuration::get('OYST_STATUS_PAYMENT_PENDING');
-                $message = $this->module->l('Payment processing.').'<br />';
+                $payment_status = (int) Configuration::get('PS_OS_PAYMENT');
+                $message = $this->module->l('Payment accepted.').'<br />';
             }
 
             // Set shop
