@@ -47,6 +47,35 @@ class OrderRepository extends AbstractOystRepository
         return $result > 0 && $currentState != Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') && $currentState != Configuration::get('OYST_STATUS_REFUND_PENDING');
     }
 
+    public function calculateOrderMaxRefund($idCart)
+    {
+        $maxRefund = 0;
+
+        // The order must have a CAPTURE event and no CANCELLATION event
+        // NB: this is almost a duplicate of the getOrderMaxRefund method
+        // because from FreePay BO we allow many partial refund but not on Prestashop
+        $sql = 'SELECT opn.`event_data`'
+            .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
+            .' WHERE opn.`id_cart` = '.(int) $idCart
+            .' AND opn.`event_code` = "'.OystPaymentNotification::EVENT_CAPTURE.'"'
+            .' AND opn.`id_cart` NOT IN ('
+                .'SELECT opn_bis.`id_cart`'
+                .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn_bis'
+                .' WHERE opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_CANCELLATION.'"'
+            .')';
+
+        // Return data of the CAPTURE event
+        $result = $this->db->getValue($sql);
+
+        if ($result) {
+            $result      = json_decode($result, true);
+            $totalAmount = $result['notification']['amount']['value'] / 100;
+            $maxRefund   = $this->calculateMaxRefund($idCart, $totalAmount);
+        }
+
+        return $maxRefund;
+    }
+
     public function getOrderMaxRefund($idCart, $currentState)
     {
         $maxRefund = 0;
