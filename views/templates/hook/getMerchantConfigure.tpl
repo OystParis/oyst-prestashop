@@ -73,6 +73,16 @@
                 {/if}
             </div>
 
+            <label class="env prod">{l s='Endpoint API Production' mod='oyst'}</label>
+            <div class="margin-form env prod">
+                <input type="text" id="OYST_API_PROD_ENDPOINT" name="OYST_API_PROD_ENDPOINT" value="{$oyst.OYST_API_PROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
+            </div>
+
+            <label class="env preprod">{l s='Endpoint API PreProduction' mod='oyst'}</label>
+            <div class="margin-form env preprod">
+                <input type="text" id="OYST_API_PREPROD_ENDPOINT" name="OYST_API_PREPROD_ENDPOINT" value="{$oyst.OYST_API_PREPROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
+            </div>
+
             <div class="env prod" style="display: none;">
                 <label>{l s='API Production Key' mod='oyst'}</label>
                 <div class="margin-form">
@@ -117,11 +127,6 @@
             <label>{l s='Enable OneClick' mod='oyst'}</label>
             <div class="margin-form">
                 <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
-            </div>
-
-            <label class="advancedOptions">{l s='Set the Oyst payment endpoint' mod='oyst'}</label>
-            <div class="margin-form advancedOptions">
-                <input type="text" id="FC_OYST_API_PAYMENT_ENDPOINT" name="FC_OYST_API_PAYMENT_ENDPOINT" value="{$oyst.FC_OYST_API_PAYMENT_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
             </div>
             <label class="advancedOptions">{l s='Success Url' mod='oyst'}</label>
             <div class="margin-form advancedOptions urlCustomization">

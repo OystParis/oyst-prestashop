@@ -20,7 +20,7 @@ class OneClickOrderController extends AbstractOystController
             OystApiClientFactory::ENTITY_ONECLICK,
             $oyst->getApiKey(),
             $oyst->getUserAgent(),
-            $oyst->getEnvironment()
+            $oyst->getApiUrl()
         );
 
         $oneClickService = new OneClickService(Context::getContext(), $oyst);

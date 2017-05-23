@@ -99,6 +99,19 @@
                 </div>
 
                 <div class="form-group clearfix env prod" style="display: none;">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API Production' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <input type="text" id="OYST_API_PROD_ENDPOINT" name="OYST_API_PROD_ENDPOINT" value="{$oyst.OYST_API_PROD_ENDPOINT|escape:'htmlall':'UTF-8'}" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="form-group clearfix env preprod" style="display: none;">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API PreProduction' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <input type="text" id="OYST_API_PREPROD_ENDPOINT" name="OYST_API_PREPROD_ENDPOINT" value="{$oyst.OYST_API_PREPROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
+                    </div>
+                </div>
+
+                <div class="form-group clearfix env prod" style="display: none;">
                     <label class="control-label col-md-3 col-lg-4">{l s='API Production Key' mod='oyst'}</label>
                     <div class="col-md-7 col-lg-4">
                         <input type="text" id="FC_OYST_API_PROD_KEY" name="FC_OYST_API_PROD_KEY" value="{$oyst.FC_OYST_API_PROD_KEY|escape:'htmlall':'UTF-8'}"/>
@@ -147,13 +160,6 @@
                         <input type="checkbox" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
                     </div>
                  </div>
-
-                <div class="form-group clearfix advancedOptions">
-                    <label class="control-label col-md-3 col-lg-4">{l s='Set the Oyst payment endpoint' mod='oyst'}</label>
-                    <div class="col-md-7 col-lg-4">
-                        <input type="text" id="FC_OYST_API_PAYMENT_ENDPOINT" name="FC_OYST_API_PAYMENT_ENDPOINT" value="{$oyst.FC_OYST_API_PAYMENT_ENDPOINT|escape:'htmlall':'UTF-8'}" />
-                    </div>
-                </div>
                 <div class="form-group clearfix advancedOptions urlCustomization">
                     <label class="control-label col-md-3 col-lg-4">{l s='Success Url' mod='oyst'}</label>
                     <div class="col-md-7 col-lg-4">
@@ -212,10 +218,12 @@
                 </fieldset>
             </form>
         </div>
-        <div class="panel-footer">
-            <button id="toggleConfig" type="button" class="btn btn-default">
-                <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
-            </button>
+        <div class="oyst configuration">
+            <div class="panel-footer">
+                <button id="toggleConfig" type="button" class="btn btn-default">
+                    <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
+                </button>
+            </div>
         </div>
     </div>
 </form>

@@ -344,6 +344,21 @@ class Oyst extends FroggyPaymentModule
     /**
      * @return string
      */
+    public function getApiUrl()
+    {
+        $env = $this->getEnvironment();
+
+        $key = ($env == \Oyst\Service\Configuration::API_ENV_PREPROD) ?
+            \Oyst\Service\Configuration::API_ENDPOINT_PREPROD :
+            \Oyst\Service\Configuration::API_ENDPOINT_PROD
+        ;
+
+        return Configuration::get($key);
+    }
+
+    /**
+     * @return string
+     */
     public function getEnvironment()
     {
         return Configuration::get(\Oyst\Service\Configuration::API_ENV);

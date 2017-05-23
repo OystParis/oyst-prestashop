@@ -33,5 +33,9 @@ function upgrade_module_1_2_0($module)
     $module->registerHook('displayFooterProduct');
     $module->registerHook('displayBackOfficeHeader');
 
+    Configuration::updateValue('OYST_API_PROD_ENDPOINT', 'https://api.oyst.com');
+    Configuration::updateValue('OYST_API_PREPROD_ENDPOINT', 'https://api.staging.oyst.eu');
+
+    // All went well!
     return true;
 }

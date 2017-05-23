@@ -28,6 +28,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Oyst\Api\OystApiClientFactory;
+
 class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
 {
     public function run()
@@ -79,18 +81,19 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
             $result = array('error' => 'Error', 'message' => 'Transaction not found');
             $oystPaymentNotification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
             if (Validate::isLoadedObject($oystPaymentNotification)) {
-                $oystApi = new OystSDK();
-                $oystApi->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
-                $oystApi->setApiKey(Configuration::get('FC_OYST_API_KEY'));
-
                 $currency = new Currency($order->id_currency);
-                $result = $oystApi->cancelOrRefundRequest($oystPaymentNotification->payment_id, $amountToRefund * 100, $currency->iso_code);
-                if ($result) {
-                    $result = Tools::jsonDecode($result, true);
-                }
+                $oyst = new Oyst();
+                /** @var OystPaymentApi $paymentApi */
+                $paymentApi = OystApiClientFactory::getClient(
+                    OystApiClientFactory::ENTITY_PAYMENT,
+                    $oyst->getApiKey(),
+                    $oyst->getUserAgent(),
+                    $oyst->getApiUrl()
+                );
+                $response = $paymentApi->cancelOrRefund($oyst_payment_notification->payment_id, new Price($amountToRefund, $currency->iso_code));
 
                 // Set refund status
-                if (!isset($result['error'])) {
+                if ($paymentApi->getLastHttpCode() == 200) {
                     $history = new OrderHistory();
                     $history->id_order = $order->id;
                     $history->id_employee = 0;
@@ -100,7 +103,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                 }
             }
 
-            if (isset($result['error'])) {
+            if ($paymentApi->getLastHttpCode() != 200) {
                 unset($_POST['partialRefund']);
 
                 Tools::redirectAdmin(Context::getContext()->link->getAdminLink('AdminOrders').'&vieworder&id_order='.$order->id);

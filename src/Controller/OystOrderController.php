@@ -27,7 +27,7 @@ class OystOrderController extends AbstractOystController
             OystApiClientFactory::ENTITY_ORDER,
             $oyst->getApiKey(),
             $oyst->getUserAgent(),
-            $oyst->getEnvironment()
+            $oyst->getApiUrl()
         );
 
         $orderService = new NewOrderService(

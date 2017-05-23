@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6392569a4934137ff523fd635b87c59",
+    "content-hash": "43acf7dd9ba5f2aae42b915679cdd436",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -142,11 +142,11 @@
         },
         {
             "name": "oyst/oyst-php",
-            "version": "v1.2.0",
+            "version": "dev-feat-config-url",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OystParis/oyst-php.git",
-                "reference": "e47e2b6a01d3ed390dd22fa50e398f60877863f7"
+                "reference": "ddecc155b4396741812b8a1968877f850601595b"
             },
             "require": {
                 "guzzlehttp/guzzle": "3.8.1",
@@ -182,7 +182,7 @@
                 "payment",
                 "php"
             ],
-            "time": "2017-05-03T14:06:34+00:00"
+            "time": "2017-05-24 08:52:27"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -605,7 +605,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "oyst/oyst-php": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
