@@ -1,4 +1,23 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 /*
  * Security
@@ -7,6 +26,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * Class OrderRepository
+ */
 class OrderRepository extends AbstractOystRepository
 {
     public function orderCanBeCancelled($idCart, $currentState)
@@ -215,20 +237,21 @@ class OrderRepository extends AbstractOystRepository
 
     private function getAmountToRefundOldVersion($tabAccess)
     {
-        if ($tabAccess['edit'] != '1' || !is_array($_POST['partialRefundProduct'])) {
+        if ($tabAccess['edit'] != '1' || !is_array(Tools::getValue('partialRefundProduct'))) {
             return 0;
         }
 
         $amount = 0;
         $order_detail_list = array();
-        foreach ($_POST['partialRefundProduct'] as $id_order_detail => $amount_detail) {
-            $order_detail_list[$id_order_detail]['quantity'] = (int)$_POST['partialRefundProductQuantity'][$id_order_detail];
+        foreach (Tools::getValue('partialRefundProduct') as $id_order_detail => $amount_detail) {
+            $order_detail_list[$id_order_detail]['quantity'] = (int)Tools::getValue('partialRefundProductQuantity')[$id_order_detail];
 
             if (empty($amount_detail)) {
                 $order_detail = new OrderDetail((int)$id_order_detail);
                 $order_detail_list[$id_order_detail]['amount'] = $order_detail->unit_price_tax_incl * $order_detail_list[$id_order_detail]['quantity'];
-            } else
+            } else {
                 $order_detail_list[$id_order_detail]['amount'] = (float)$amount_detail;
+            }
 
             $amount += $order_detail_list[$id_order_detail]['amount'];
         }

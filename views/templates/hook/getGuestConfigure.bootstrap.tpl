@@ -42,7 +42,7 @@
         </div>
         <div class="text-center">
             <h2>{l s='Congratulations!' mod='oyst'}</h2>
-            <p>{l s='To enable the FreePay plugin, please fill the following form.' mod='oyst'}</p>
+            <p style="font-size: 13px;font-weight: bold;">{l s='To enable the FreePay plugin, please fill the following form.' mod='oyst'}</p>
         </div>
         <div class="panel oyst_fieldset">
             <div class="oyst-admin-tab">

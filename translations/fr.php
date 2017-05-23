@@ -53,7 +53,7 @@ $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_b96910967fe7912cdcffbd5c
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_bcc254b55c4a1babdf1dcb82c207506b'] = 'Téléphone';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
-$_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_38870dea51f4382222d59d1f0c60f6d9'] = 'Nombre de transations par mois';
+$_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_38870dea51f4382222d59d1f0c60f6d9'] = 'Nombre de transactions par mois';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_676474db2d25533c7053d3ba352023b0'] = 'Obtenir ma clé d\'activation';
 $_MODULE['<{oyst}prestashop>getguestconfigure.bootstrap_57dbc64d95a4615ed7ca6ba5843b22e6'] = 'J\'ai déjà une clé';
 $_MODULE['<{oyst}prestashop>getguestconfigure_9b0c85b97abeed9539a4a27522f07b86'] = 'Vous devez activer l\'option \"allow_url_fopen\" sur votre serveur pour utiliser ce module !';
@@ -68,7 +68,7 @@ $_MODULE['<{oyst}prestashop>getguestconfigure_b96910967fe7912cdcffbd5c7cf21ff7']
 $_MODULE['<{oyst}prestashop>getguestconfigure_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{oyst}prestashop>getguestconfigure_bcc254b55c4a1babdf1dcb82c207506b'] = 'Téléphone';
 $_MODULE['<{oyst}prestashop>getguestconfigure_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
-$_MODULE['<{oyst}prestashop>getguestconfigure_38870dea51f4382222d59d1f0c60f6d9'] = 'Nombre de transations par mois';
+$_MODULE['<{oyst}prestashop>getguestconfigure_38870dea51f4382222d59d1f0c60f6d9'] = 'Nombre de transactions par mois';
 $_MODULE['<{oyst}prestashop>getguestconfigure_676474db2d25533c7053d3ba352023b0'] = 'Obtenir ma clé d\'activation';
 $_MODULE['<{oyst}prestashop>getguestconfigure_1d00e7dce692e8dc3f6877f035e3a616'] = 'OU';
 $_MODULE['<{oyst}prestashop>getguestconfigure_57dbc64d95a4615ed7ca6ba5843b22e6'] = 'J\'ai déjà une clé';

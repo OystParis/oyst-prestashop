@@ -16,32 +16,16 @@
  *
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
- * @license   GNU GENERAL PUBLIC LICENSE
+ * @license GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 
-/**
- * Class AbstractOystRepository
- */
-abstract class AbstractOystRepository
-{
-    /**
-     * @var Db
-     */
-    protected $db;
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
 
-    /**
-     * Oyst\Repository\AbstractOystRepository constructor.
-     * @param Db $db
-     */
-    public function __construct(Db $db)
-    {
-        $this->db = $db;
-    }
-}
+header('Location: ../');
+exit;
+
