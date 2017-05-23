@@ -14,8 +14,8 @@ class OystOrderController extends AbstractOystController
         header('Content-Type: application/json');
 
         $json = $this->request->getJson();
-        if ($json) {
 
+        if ($json) {
             $oyst = new Oyst();
             $context = Context::getContext();
             $orderService = NewOrderServiceFactory::get($oyst, $context);

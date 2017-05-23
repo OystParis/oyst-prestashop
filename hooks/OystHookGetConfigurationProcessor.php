@@ -22,13 +22,15 @@
 /*
  * Security
  */
-use Oyst\Factory\ExportProductServiceFactory;
-use Oyst\Service\Configuration as OystConfiguration;
-use Oyst\Service\Http\CurrentRequest;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
+
+use Oyst\Factory\ExportProductServiceFactory;
+use Oyst\Service\Configuration as OystConfiguration;
+use Oyst\Service\Http\CurrentRequest;
+use Oyst\Api\OystApiClientFactory;
+use Oyst\Service\Logger\PrestaShopLogger;
 
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
@@ -42,13 +44,14 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_REDIRECT_ERROR'          => 'string',
         'FC_OYST_REDIRECT_SUCCESS_CUSTOM' => 'string',
         'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
+        'FC_OYST_PAYMENT_FEATURE'         => 'int',
+        'FC_OYST_CATALOG_FEATURE'         => 'int',
+        'FC_OYST_API_ENDPOINT'            => 'string',
         OystConfiguration::API_KEY_PROD => 'string',
         OystConfiguration::API_KEY_PREPROD => 'string',
+        OystConfiguration::API_ENDPOINT_PROD => 'string',
+        OystConfiguration::API_ENDPOINT_PREPROD => 'string',
         OystConfiguration::API_ENV => 'string',
-        'FC_OYST_PAYMENT_FEATURE'         => 'int',
-        'FC_OYST_API_PAYMENT_ENDPOINT'    => 'string',
-        'FC_OYST_CATALOG_FEATURE'         => 'int',
-        'FC_OYST_API_CATALOG_ENDPOINT'    => 'string',
         OystConfiguration::ONE_CLICK_FEATURE_STATE => 'int',
     );
 

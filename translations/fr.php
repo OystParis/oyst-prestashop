@@ -86,13 +86,14 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c462960a6bd53db34f778
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_350e17d65ded375d643259e7eed26e2a'] = 'IBAN';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_254f642527b45bc260048e30704edb39'] = 'Configuration';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_0ba29c6a1afacf586b03a26162c72274'] = 'Environnement';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_050e1d0e391d7cf6ab2d04031f9055c4'] = 'URL API Production';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_edceca2890b198c2a9e7618272ca58c2'] = 'URL API Pré-Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f117591646c40a924e831c855cab0624'] = 'Clé API Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_104c53f712b567c6a55bd6e21511ad57'] = 'Obtenez votre clé API directement sur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8166540c7fd52a23da06af9c9ea1b0ec'] = 'Votre clé API semble invalide !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6bcd8be9c60a09aee5010096bb0579aa'] = 'Clé API Pré-Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_17e6e15f2ea6cb21136d16ad72e8361c'] = 'Activer FreePay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3d704c8eda12958b3d36812e5b1bb8c4'] = 'Activer 1-click';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dcef5e8edb13510777145bc8e5ac30d2'] = 'API de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_429f48491bb134051b37e53a37c52221'] = 'Success URL';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_7c716ec85af8e22c87caffb6a007b358'] = 'Ce n\'est pas une URL valide!';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_aff51d15d8c554003463325f0eb4313f'] = 'Error URL';

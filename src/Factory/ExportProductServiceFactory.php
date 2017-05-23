@@ -26,7 +26,8 @@ class ExportProductServiceFactory
             OystApiClientFactory::ENTITY_CATALOG,
             $oyst->getApiKey(),
             $oyst->getUserAgent(),
-            $oyst->getEnvironment()
+            $oyst->getEnvironment(),
+            $oyst->getApiUrl()
         );
 
         $oystCatalogAPI->setNotifyUrl($oyst->getNotifyUrl());

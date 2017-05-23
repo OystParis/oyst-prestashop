@@ -7,7 +7,7 @@
     ],
     "require": {
         "php": ">=5.3",
-        "oyst/oyst-php": "dev-functionnal_test",
+        "oyst/oyst-php": "dev-feat-config-url",
         "symfony/serializer": "v2.8.19",
         "symfony/property-access": "v2.8.19"
     },
