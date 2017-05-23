@@ -70,7 +70,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                     // If refund is confirmed, we cancel the order
                     case OystPaymentNotification::EVENT_REFUND:
                         $oystOrderRepository = new OrderRepository(Db::getInstance());
-                        $maxRefund = $oystOrderRepository->getOrderMaxRefund($id_cart);
+                        $maxRefund = $oystOrderRepository->calculateOrderMaxRefund($id_cart);
                         $status = $maxRefund == 0 ? Configuration::get('PS_OS_REFUND') : Configuration::get('OYST_STATUS_PARTIAL_REFUND');
 
                         $this->updateOrderStatus((int)$id_cart, $status);
