@@ -38,7 +38,7 @@ class Oyst extends FroggyPaymentModule
         parent::__construct();
 
         $this->author = 'Oyst';
-        $this->displayName = $this->l('Freepay');
+        $this->displayName = $this->l('FreePay');
         $this->description = $this->l('FreePay est une solution de paiement en ligne "full service" entièrement gratuite : 0% de commission, 0€ de frais d\'installation, 0€ d\'abonnement. Avec FreePay, éliminez vos coûts de transactions, augmentez vos marges.');
         $this->module_key = 'b79be2b346400227a9c886c9239470e4';
 
@@ -99,6 +99,132 @@ class Oyst extends FroggyPaymentModule
 
         $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this,_DB_PREFIX_);
         $result &= $oystDb->install();
+        $result &= $this->installOrderStates();
+
+        return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public function installOrderStates()
+    {
+        $result = true;
+        $langId = Configuration::get('PS_LANG_DEFAULT');
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PAYMENT_PENDING'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'En attente de paiement FreePay',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_PAYMENT_PENDING', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Annulation en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_CANCELLATION_PENDING', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_REFUND_PENDING'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Remboursement en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_REFUND_PENDING', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Remboursement partiel en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND_PEND', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Remboursé partiellement',
+            );
+            $orderState->color = '#FF7F50';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND', $orderState->id);
+        }
 
         return $result;
     }
@@ -123,7 +249,6 @@ class Oyst extends FroggyPaymentModule
         // Return result
         return $result;
     }
-
 
     /**
      * Configuration method
@@ -213,6 +338,21 @@ class Oyst extends FroggyPaymentModule
             \Oyst\Service\Configuration::API_KEY_PREPROD :
             \Oyst\Service\Configuration::API_KEY_PROD
         ;
+        return Configuration::get($key);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiUrl()
+    {
+        $env = $this->getEnvironment();
+
+        $key = ($env == \Oyst\Service\Configuration::API_ENV_PREPROD) ?
+            \Oyst\Service\Configuration::API_ENDPOINT_PREPROD :
+            \Oyst\Service\Configuration::API_ENDPOINT_PROD
+        ;
+
         return Configuration::get($key);
     }
 

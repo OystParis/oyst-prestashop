@@ -42,17 +42,20 @@
         </div>
         {if $oyst.FC_OYST_GUEST && $oyst.phone}
             <div class="header">
-                <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong></p>
-
-                <p><a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
-                <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
-                <p>
-                    {l s='Please, get these information ready:' mod='oyst'}<br>
-                    <strong>{l s='SIRET' mod='oyst'}</strong><br>
-                    <strong>{l s='VAT Number' mod='oyst'}</strong><br>
-                    <strong>{l s='IBAN' mod='oyst'}</strong>
-                </p>
-            </div>
+            <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong>
+                (<a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='edit' mod='oyst'}</a>)
+            </p>
+            {if $oyst.show_sub_message}
+            <p><h2>{l s='Pick up your phone' mod='oyst'}</h2></p>
+            {/if}
+            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
+            <p>
+                {l s='Please, get these information ready:' mod='oyst'}<br>
+                <strong>{l s='SIRET' mod='oyst'}</strong><br>
+                <strong>{l s='VAT Number' mod='oyst'}</strong><br>
+                <strong>{l s='IBAN' mod='oyst'}</strong>
+            </p>
+        </div>
         {/if}
         <fieldset class="panel">
             <legend>
@@ -68,6 +71,16 @@
                 {if $oyst.apikey_test_error}
                     <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                 {/if}
+            </div>
+
+            <label class="env prod">{l s='Endpoint API Production' mod='oyst'}</label>
+            <div class="margin-form env prod">
+                <input type="text" id="OYST_API_PROD_ENDPOINT" name="OYST_API_PROD_ENDPOINT" value="{$oyst.OYST_API_PROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
+            </div>
+
+            <label class="env preprod">{l s='Endpoint API PreProduction' mod='oyst'}</label>
+            <div class="margin-form env preprod">
+                <input type="text" id="OYST_API_PREPROD_ENDPOINT" name="OYST_API_PREPROD_ENDPOINT" value="{$oyst.OYST_API_PREPROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
             </div>
 
             <div class="env prod" style="display: none;">
@@ -115,11 +128,6 @@
             <div class="margin-form">
                 <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
             </div>
-
-            <label class="advancedOptions">{l s='Set the Oyst payment endpoint' mod='oyst'}</label>
-            <div class="margin-form advancedOptions">
-                <input type="text" id="FC_OYST_API_PAYMENT_ENDPOINT" name="FC_OYST_API_PAYMENT_ENDPOINT" value="{$oyst.FC_OYST_API_PAYMENT_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
-            </div>
             <label class="advancedOptions">{l s='Success Url' mod='oyst'}</label>
             <div class="margin-form advancedOptions urlCustomization">
                 <select id="FC_OYST_REDIRECT_SUCCESS" name="FC_OYST_REDIRECT_SUCCESS">
@@ -154,11 +162,6 @@
                         <span>{l s='Show advanced options' mod='oyst'}</span>
                         <span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
                     </button>
-                    {if !$oyst.FC_OYST_API_PROD_KEY}
-                        <a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }" style="text-decoration: underline;">
-                            <img src="../img/t/AdminAdmin.gif" alt="" style="vertical-align: text-bottom;">{l s='Get an API Key' mod='oyst'}
-                        </a>
-                    {/if}
                 </p>
             </div>
         </fieldset>

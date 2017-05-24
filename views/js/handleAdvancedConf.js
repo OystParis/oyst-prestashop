@@ -27,7 +27,6 @@ $(document).ready(function() {
 
     $('#toggleConfig').click(function() {
         $('.advancedOptions').toggle();
-        $('i', this).toggleClass('icon-eye').toggleClass('icon-eye-close');
         $('span', this).toggle();
     });
     $('.urlCustomization select').each(function() {
@@ -35,6 +34,12 @@ $(document).ready(function() {
     }).change(function() {
         handleSelectOptions($(this));
     });
+
+    $('select[name="FC_OYST_API_ENV"]').on('change', function () {
+        refreshEnvironmentDisplay();
+    });
+
+    refreshEnvironmentDisplay();
 });
 
 function handleSelectOptions(select) {
@@ -56,11 +61,4 @@ function refreshEnvironmentDisplay()
     var containerClass = '.' + $('select[name="FC_OYST_API_ENV"]').val();
     $('.env').not(containerClass).hide();
     $(containerClass).show();
-
 }
-
-$('select[name="FC_OYST_API_ENV"]').on('change', function () {
-    refreshEnvironmentDisplay();
-});
-
-refreshEnvironmentDisplay();

@@ -210,7 +210,6 @@ class FroggyPaymentModule extends PaymentModule
     public function uninstall()
     {
         if (parent::uninstall()) {
-
             if (class_exists('FroggyOverride') && !$this->uninstallFroggyOverrides()) {
                 return false;
             }

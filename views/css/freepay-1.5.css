@@ -59,3 +59,7 @@
     color: #FFF;
     width: 100%;
 }
+
+.oyst.contact button[type=submit] {
+    height: 50px;
+}

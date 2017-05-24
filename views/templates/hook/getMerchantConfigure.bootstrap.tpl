@@ -59,9 +59,13 @@
     </div>
     {if $oyst.FC_OYST_GUEST && $oyst.phone}
     <div class="text-center">
-        <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong></p>
+        <p>{$oyst.message|escape:'html':'UTF-8'} <strong>{$oyst.phone|escape:'html':'UTF-8'}</strong>
+            (<a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='edit' mod='oyst'}</a>)
+        </p>
 
-        <p><a href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8'}">{l s='Change your phone number' mod='oyst'}</a></p>
+        {if $oyst.show_sub_message}
+        <p><h2>{l s='Pick up your phone' mod='oyst'}</h2></p>
+        {/if}
         <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/phone.gif" width="70"/></p>
         <p>
             {l s='Please, get these information ready:' mod='oyst'}<br>
@@ -91,6 +95,19 @@
                         {*{if $oyst.apikey_test_error}*}
                         {*<p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>*}
                         {*{/if}*}
+                    </div>
+                </div>
+
+                <div class="form-group clearfix env prod" style="display: none;">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API Production' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <input type="text" id="OYST_API_PROD_ENDPOINT" name="OYST_API_PROD_ENDPOINT" value="{$oyst.OYST_API_PROD_ENDPOINT|escape:'htmlall':'UTF-8'}" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="form-group clearfix env preprod" style="display: none;">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API PreProduction' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <input type="text" id="OYST_API_PREPROD_ENDPOINT" name="OYST_API_PREPROD_ENDPOINT" value="{$oyst.OYST_API_PREPROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
                     </div>
                 </div>
 
@@ -143,13 +160,6 @@
                         <input type="checkbox" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
                     </div>
                  </div>
-
-                <div class="form-group clearfix advancedOptions">
-                    <label class="control-label col-md-3 col-lg-4">{l s='Set the Oyst payment endpoint' mod='oyst'}</label>
-                    <div class="col-md-7 col-lg-4">
-                        <input type="text" id="FC_OYST_API_PAYMENT_ENDPOINT" name="FC_OYST_API_PAYMENT_ENDPOINT" value="{$oyst.FC_OYST_API_PAYMENT_ENDPOINT|escape:'htmlall':'UTF-8'}" />
-                    </div>
-                </div>
                 <div class="form-group clearfix advancedOptions urlCustomization">
                     <label class="control-label col-md-3 col-lg-4">{l s='Success Url' mod='oyst'}</label>
                     <div class="col-md-7 col-lg-4">
@@ -208,16 +218,12 @@
                 </fieldset>
             </form>
         </div>
-        <div class="panel-footer">
-            <button id="toggleConfig" type="button" class="btn btn-default">
-                <i class="process-icon- icon-eye"></i> <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
-            </button>
-            {if !$oyst.hasApiKey}
-            <a class="btn btn-default" href="{$oyst.configureLink|cat:'&go_to_form=1'|escape:'htmlall':'UTF-8' }">
-                <i class="process-icon- icon-key"></i>
-                {l s='Get an API Key' mod='oyst'}
-            </a>
-            {/if}
+        <div class="oyst configuration">
+            <div class="panel-footer">
+                <button id="toggleConfig" type="button" class="btn btn-default">
+                    <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
+                </button>
+            </div>
         </div>
     </div>
 </form>

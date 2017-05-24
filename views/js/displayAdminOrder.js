@@ -19,23 +19,61 @@
  */
 
 $(document).ready(function() {
-
-    // Hide partial and refund and display refund button
+    // Hide prestashop refund buttons and display custom cancel & refund buttons
+    var standard_refund_button = $('#desc-order-standard_refund');
     var partial_refund_button = $('#desc-order-partial_refund');
+
+    standard_refund_button.hide();
     partial_refund_button.hide();
-    partial_refund_button.after(refund_button_html);
-    $('#desc-order-freepay-refund').click(function() {
-        if (confirm('Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?')) {
+
+    if (order_can_be_cancelled) {
+        standard_refund_button.after(cancel_button_html);
+        partial_refund_button.hide();
+    } else {
+        if (order_can_be_totally_refunded) {
+            standard_refund_button.after(refund_button_html);
+        }
+        if (order_max_refund > 0) {
+            partial_refund_button.show();
+        }
+    }
+
+    $('#desc-order-freepay-cancel').click(function() {
+        if (confirm(label_confirm_cancel)) {
+            $('#desc-order-freepay-cancel').attr('disabled', 'disabled');
             $.ajax({
-                method: "POST",
+                method: 'POST',
                 url: window.location.href,
-                data: { subaction: "freepay-refund" }
+                data: { subaction: 'freepay-refund' }
+            }).done(function( msg ) {
+                msg = JSON.parse(msg);
+                if (msg.result == 'success') {
+                    window.location.href = window.location.href;
+                } else {
+                    alert(label_error + ' ' + msg.details.message);
+                    $('#desc-order-freepay-cancel').removeAttr('disabled');
+                }
+            });
+        }
+        return false;
+    });
+
+    $('#desc-order-freepay-refund').click(function() {
+        if (confirm(label_confirm_refund)) {
+            $('#desc-order-freepay-refund').attr('disabled', 'disabled');
+            partial_refund_button.attr('disabled', 'disabled');
+            $.ajax({
+                method: 'POST',
+                url: window.location.href,
+                data: { subaction: 'freepay-refund' }
             }).done(function( msg ) {
                 msg = JSON.parse(msg);
                 if (msg.result == 'success') {
                     window.location.href = window.location.href;
                 } else {
                     alert('Une erreur s\'est produite lors du remboursement : ' + msg.details.message);
+                    $('#desc-order-freepay-refund').removeAttr('disabled');
+                    partial_refund_button.removeAttr('disabled');
                 }
             });
         }

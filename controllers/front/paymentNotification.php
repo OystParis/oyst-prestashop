@@ -41,41 +41,49 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
 
         // We store the notification
         $notification_item = $event_data['notification'];
-        $insert = array(
-            'id_order' => 0,
-            'id_cart' => (int)$notification_item['order_id'],
+        $id_cart  = $notification_item['order_id'];
+        $id_order = Order::getOrderByCartId($id_cart);
+        $insert   = array(
+            'id_order'   => $id_order ?: 0,
+            'id_cart'    => (int) $id_cart,
             'payment_id' =>  pSQL($notification_item['payment_id']),
             'event_code' =>  pSQL($notification_item['event_code']),
             'event_data' => pSQL(Tools::jsonEncode($event_data)),
-            'date_event' => pSQL(Tools::substr(str_replace('T', '', $notification_item['event_date']), 0, 19)),
-            'date_add' => date('Y-m-d H:i:s'),
+            'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $notification_item['event_date']), 0, 19)),
+            'date_add'   => date('Y-m-d H:i:s'),
         );
         Db::getInstance()->insert('oyst_payment_notification', $insert);
 
         $this->module->log('Payment notification received');
         $this->module->logNotification('Payment', $_GET);
         try {
-
             if ($notification_item['success'] == 1) {
+                switch ($notification_item['event_code']) {
+                    // If authorisation succeed, we create the order
+                    case OystPaymentNotification::EVENT_AUTHORISATION:
+                        $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
+                        break;
+                    // If capture succeed, we update the order
+                    case OystPaymentNotification::EVENT_CAPTURE:
+                        $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
+                        break;
+                    // If cancellation is confirmed, we cancel the order
+                    case OystPaymentNotification::EVENT_CANCELLATION:
+                        $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
+                        break;
+                    // If refund is confirmed, we cancel the order
+                    case OystPaymentNotification::EVENT_REFUND:
+                        $oystOrderRepository = new OrderRepository(Db::getInstance());
+                        $maxRefund = $oystOrderRepository->getOrderMaxRefund($id_cart);
+                        $status = $maxRefund == 0 ? Configuration::get('PS_OS_REFUND') : Configuration::get('OYST_STATUS_PARTIAL_REFUND');
 
-                // If authorisation succeed, we create the order
-                if ($notification_item['event_code'] == 'AUTHORISATION') {
-                    $this->convertCartToOrder($notification_item, Tools::getValue('ch'));
-                }
-
-                // If cancellation is confirmed, we cancel the order
-                if ($notification_item['event_code'] == 'CANCELLATION') {
-                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
-                }
-
-                // If refund is confirmed, we cancel the order
-                if ($notification_item['event_code'] == 'REFUND') {
-                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_REFUND'));
+                        $this->updateOrderStatus((int)$id_cart, $status);
+                        break;
                 }
             }
-
         } catch (Exception $e) {
             $this->module->log($e->getMessage());
+            die(Tools::jsonEncode(array('result' => 'ko', 'error' => $e->getMessage())));
         }
 
         die(Tools::jsonEncode(array('result' => 'ok')));
@@ -87,7 +95,6 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         $id_order = Order::getOrderByCartId($id_cart);
 
         if ($id_order > 0 && $id_order_state > 0) {
-
             // Create new OrderHistory
             $history = new OrderHistory();
             $history->id_order = $id_order;
@@ -95,7 +102,6 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
             $history->id_order_state = (int)$id_order_state;
             $history->changeIdOrderState((int)$id_order_state, $id_order);
             $history->add();
-
         }
     }
 
@@ -121,7 +127,6 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         }
 
         if ($payment_notification['success'] == 'true') {
-
             // Build transation array
             $message = null;
             $transaction = array(
@@ -141,8 +146,8 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                 $payment_status = (int) Configuration::get('PS_OS_ERROR');
                 $message = $this->module->l('Cart changed, please retry.').'<br />';
             } else {
-                $payment_status = (int) Configuration::get('PS_OS_PAYMENT');
-                $message = $this->module->l('Payment accepted.').'<br />';
+                $payment_status = (int) Configuration::get('OYST_STATUS_PAYMENT_PENDING');
+                $message = $this->module->l('Payment processing.').'<br />';
             }
 
             // Set shop
@@ -152,13 +157,12 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                 $shop_id = $this->context->shop->id;
                 $shop = new Shop($shop_id);
             }
-
         } else {
             $payment_status = (int) Configuration::get('PS_OS_ERROR');
             $message = $this->module->l('Oyst payment failed.').'<br />';
         }
 
         // Validate order
-        $this->module->validateOrder($cart->id, $payment_status, $transaction['total_paid'], 'CB', $message, $transaction, $cart->id_currency, false, $this->context->customer->secure_key, $shop);
+        $this->module->validateOrder($cart->id, $payment_status, $transaction['total_paid'], $this->module->displayName, $message, $transaction, $cart->id_currency, false, $this->context->customer->secure_key, $shop);
     }
 }
