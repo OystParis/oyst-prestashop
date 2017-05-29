@@ -19,9 +19,10 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
+
+use Oyst\Repository\OrderRepository;
+use Oyst\Repository\ProductRepository;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -30,14 +31,41 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
 {
     public function run()
     {
-        // Check if order has been paid with Oyst
-        $order = new Order(Tools::getValue('id_order'));
-        if ($order->module == $this->module->name) {
-            // Partial refund
-            if (Tools::isSubmit('partialRefund') && isset($order)) {
-                $this->partialRefundOrder($order);
-            }
+        if (!Module::isInstalled($this->module->name) || !Module::isEnabled($this->module->name)) {
+            return '';
         }
+
+        if (Tools::isSubmit('id_order')) {
+            // Check if order has been paid with Oyst
+            $order = new Order(Tools::getValue('id_order'));
+            if ($order->module == $this->module->name) {
+                // Partial refund
+                if (Tools::isSubmit('partialRefund') && isset($order)) {
+                    $this->partialRefundOrder($order);
+                }
+            }
+            return ;
+        }
+
+        $content = '';
+
+        $oystProductRepository = new ProductRepository(Db::getInstance());
+        $exportedProducts = $oystProductRepository->getExportedProduct();
+
+        /** @var Smarty_Internal_Template $template */
+        $template = Context::getContext()->smarty->createTemplate(__DIR__.'/../views/templates/hook/displayBackOfficeHeader.tpl');
+        $exportDate = $this->module->getRequestedCatalogDate();
+        $template->assign([
+            'marginRequired' => version_compare(_PS_VERSION_, '1.5', '>'),
+            'OYST_REQUESTED_CATALOG_DATE' => $exportDate ? $exportDate->format(Context::getContext()->language->date_format_full) : false,
+            'OYST_IS_EXPORT_STILL_RUNNING' => $this->module->isCatalogExportStillRunning(),
+            'exportedProducts' => $exportedProducts,
+            'displayPanel' => $this->module->getAdminPanelInformationVisibility(),
+        ]);
+
+        $content .= $template->fetch();
+
+        return $content;
     }
 
     private function partialRefundOrder($order)

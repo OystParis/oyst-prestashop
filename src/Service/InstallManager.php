@@ -40,15 +40,47 @@ class InstallManager
     {
         $state = true;
         $state &= $this->createCarrier();
+        $state &= $this->createExportTable();
 
         $this->installDefaultConfiguration();
 
         return $state;
     }
 
+    /**
+     * @return bool
+     */
+    public function createExportTable()
+    {
+        $query = "
+            CREATE TABLE IF NOT EXISTS ps_oyst_exported_catalog
+            (
+                productId INT,
+                productAttributeId INT,
+                importId VARCHAR(60),
+                hasBeenExported TINYINT DEFAULT 0
+            );  
+        ";
+
+        return $this->db->execute($this->prefixQuery($query));
+    }
+
+    /**
+     * @return bool
+     */
+    public function dropExportTable()
+    {
+        $query = "
+            DROP TABLE IF EXISTS ps_oyst_exported_catalog;
+        ";
+
+        return $this->db->execute($this->prefixQuery($query));
+    }
+
     public function uninstall()
     {
         $this->removeCarrier();
+        $this->dropExportTable();
 
         // Remove anything at the end
         $this->removeConfiguration();
@@ -115,6 +147,9 @@ class InstallManager
         PSConfiguration::deleteByName(Configuration::API_KEY_PROD);
         PSConfiguration::deleteByName(Configuration::API_KEY_PREPROD);
         PSConfiguration::deleteByName(Configuration::API_ENV);
+        PSConfiguration::deleteByName(Configuration::CATALOG_EXPORT_STATE);
+        PSConfiguration::deleteByName(Configuration::REQUESTED_CATALOG_DATE);
+        PSConfiguration::deleteByName(Configuration::DISPLAY_ADMIN_INFO_STATE);
     }
 
     /**

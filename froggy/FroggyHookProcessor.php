@@ -28,6 +28,7 @@ abstract class FroggyHookProcessor
 {
     /** @var  Oyst */
     public $module;
+
     public $context;
     public $path;
     public $smarty;

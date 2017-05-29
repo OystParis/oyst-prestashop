@@ -10,6 +10,83 @@ class CurrentRequest
     const METHOD_PATCH = 'PATCH';
     const METHOD_DELETE = 'DELETE';
 
+    /** @var  string */
+    private $scheme;
+
+    /** @var  string */
+    private $host;
+
+    /** @var  string */
+    private $requestUri;
+
+    /** @var  string */
+    private $method;
+
+    /** @var  string */
+    private $body;
+
+    public function __construct()
+    {
+        $this->initializeScheme();
+        $this->initializeHost();
+        $this->initializeRequestUri();
+        $this->initializeMethod();
+        $this->initializeBody();
+    }
+
+    /**
+     * @return $this
+     */
+    private function initializeScheme()
+    {
+        $this->scheme = 'http://';
+        if (isset($_SERVER['HTTPS']) &&
+            ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) ||
+            isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+            $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+            $this->scheme = 'https://';
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function initializeHost()
+    {
+        $this->host = $_SERVER['HTTP_HOST'];
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function initializeRequestUri()
+    {
+        $this->requestUri = $_SERVER['REQUEST_URI'];
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function initializeMethod()
+    {
+        $this->method = $_SERVER['REQUEST_METHOD'];
+
+        return $this;
+    }
+
+    public function initializeBody()
+    {
+        $this->body = file_get_contents('php://input');
+
+        return $this;
+    }
+
     /**
      * @return string
      */
@@ -33,8 +110,7 @@ class CurrentRequest
      */
     public function getBody()
     {
-
-        return file_get_contents('php://input');
+        return $this->body;
     }
 
     /**
@@ -42,10 +118,12 @@ class CurrentRequest
      */
     public function getJson()
     {
-        $data = false;
+        // AS OVH drop my content-type.. I can't check the header properly..
+        /*$data = false;
         if ($this->getContentType() == 'application/json') {
-            $data = json_decode(file_get_contents('php://input'), true);
-        }
+            $data = json_decode($this->body, true);
+        }*/
+        $data = json_decode($this->body, true);
 
         return $data;
     }
@@ -55,7 +133,7 @@ class CurrentRequest
      */
     public function getMethod()
     {
-        return $_SERVER['REQUEST_METHOD'];
+        return $this->method;
     }
 
     /**
@@ -93,6 +171,7 @@ class CurrentRequest
      */
     public function getQueryData($key)
     {
+        $value = false;
         if ($this->hasQuery($key)) {
             $value = $_POST[$key];
         }
@@ -116,5 +195,29 @@ class CurrentRequest
     public function hasQuery($key)
     {
         return isset($_GET[$key]);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getScheme()
+    {
+        return $this->scheme;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequestUri()
+    {
+        return $this->requestUri;
     }
 }
