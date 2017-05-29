@@ -61,28 +61,13 @@
             <legend>
                 <img src="{$oyst.module_dir|escape:'html':'UTF-8'}logo.png" alt="" width="16">{l s='Configuration' mod='oyst'}
             </legend>
-
-            <label>{l s='Environment' mod='oyst'}</label>
             <div class="margin-form">
-                <select name="FC_OYST_API_ENV">
-                    <option value="prod" {if $oyst.FC_OYST_API_ENV == 'prod'}selected="selected"{/if}>Production</option>
-                    <option value="preprod" {if $oyst.FC_OYST_API_ENV == 'preprod'}selected="selected"{/if}>Preproduction</option>
-                </select>
-                {if $oyst.apikey_test_error}
-                    <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                {/if}
+                <h3>{l s='FreePay' mod='oyst'}</h3>
             </div>
-
-            <label class="env prod">{l s='Endpoint API Production' mod='oyst'}</label>
-            <div class="margin-form env prod">
-                <input type="text" id="OYST_API_PROD_ENDPOINT" name="OYST_API_PROD_ENDPOINT" value="{$oyst.OYST_API_PROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
+            <label>{l s='Enable FreePay' mod='oyst'}</label>
+            <div class="margin-form">
+                <input type="checkbox" class="form-control" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
             </div>
-
-            <label class="env preprod">{l s='Endpoint API PreProduction' mod='oyst'}</label>
-            <div class="margin-form env preprod">
-                <input type="text" id="OYST_API_PREPROD_ENDPOINT" name="OYST_API_PREPROD_ENDPOINT" value="{$oyst.OYST_API_PREPROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
-            </div>
-
             <div class="env prod" style="display: none;">
                 <label>{l s='API Production Key' mod='oyst'}</label>
                 <div class="margin-form">
@@ -93,7 +78,6 @@
                     {/if}
                 </div>
             </div>
-
             <div class="env preprod" style="display: none;">
                 <label>{l s='API PreProduction Key' mod='oyst'}</label>
                 <div class="margin-form">
@@ -103,17 +87,6 @@
                     <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                     {/if}
                 </div>
-            </div>
-
-            <label>{l s='Enable FreePay' mod='oyst'}</label>
-            <div class="margin-form">
-                <input type="checkbox" class="form-control" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
-            </div>
-
-
-            <label>{l s='Enable OneClick' mod='oyst'}</label>
-            <div class="margin-form">
-                <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
             </div>
             <label class="advancedOptions">{l s='Success Url' mod='oyst'}</label>
             <div class="margin-form advancedOptions urlCustomization">
@@ -139,6 +112,49 @@
                 <p class="error customUrlText"><strong>{l s='This is not a valid URL!' mod='oyst'}</strong></p>
                 {/if}
             </div>
+
+            <div class="advancedOptions">
+                <div class="margin-form">
+                    <h3>{l s='1-click' mod='oyst'}</h3>
+                </div>
+                <label>{l s='Enable OneClick' mod='oyst'}</label>
+                <div class="margin-form">
+                    <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
+                </div>
+                <label>{l s='Syncronize your products' mod='oyst'}</label>
+                <div class="margin-form">
+                    {if $oyst.exportRunning}
+                        {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
+                    {else}
+                        <button type="submit" name="synchronizeProducts">
+                            {if $oyst.lastExportDate}
+                                {l s='Re start the export process' mod='oyst'}
+                            {else}
+                                {l s='Start the export process' mod='oyst'}
+                            {/if}
+                        </button>
+                        <p>{l s='Will export your products to Oyst'}</p>
+                    {/if}
+                </div>
+                <div class="margin-form">
+                    <h3>{l s='Environment' mod='oyst'}</h3>
+                </div>
+                <label>{l s='Environment' mod='oyst'}</label>
+                <div class="margin-form">
+                    <select name="FC_OYST_API_ENV">
+                        <option value="prod" {if $oyst.FC_OYST_API_ENV == 'prod'}selected="selected"{/if}>Production</option>
+                        <option value="preprod" {if $oyst.FC_OYST_API_ENV == 'preprod'}selected="selected"{/if}>Preproduction</option>
+                    </select>
+                </div>
+                <label class="env prod">{l s='Endpoint API Production' mod='oyst'}</label>
+                <div class="margin-form env prod">
+                    <input type="text" id="OYST_API_PROD_ENDPOINT" name="OYST_API_PROD_ENDPOINT" value="{$oyst.OYST_API_PROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
+                </div>
+                <label class="env preprod">{l s='Endpoint API PreProduction' mod='oyst'}</label>
+                <div class="margin-form env preprod">
+                    <input type="text" id="OYST_API_PREPROD_ENDPOINT" name="OYST_API_PREPROD_ENDPOINT" value="{$oyst.OYST_API_PREPROD_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
+                </div>
+            </div>
             <br>
             <div class="margin-form">
                 <p>
@@ -153,32 +169,6 @@
             </div>
         </fieldset>
     </form>
-    {if $oyst.isCurrentApiKeyValid}
-    <br />
-    <form method="POST">
-        <fieldset>
-            <legend>
-                <img src="{$oyst.module_dir|escape:'html':'UTF-8'}logo.png" alt="" width="16">{l s='Catalog' mod='oyst'}
-            </legend>
-
-            <label>{l s='Syncronize your products' mod='oyst'}</label>
-            <div class="margin-form">
-                {if $oyst.exportRunning}
-                    {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
-                {else}
-                    <button type="submit" name="synchronizeProducts">
-                        {if $oyst.lastExportDate}
-                            {l s='Re start the export process' mod='oyst'}
-                        {else}
-                            {l s='Start the export process' mod='oyst'}
-                        {/if}
-                    </button>
-                    <p>{l s='Will export your products to Oyst'}</p>
-                {/if}
-            </div>
-        </fieldset>
-    </form>
-    {/if}
 {/if}
 
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
