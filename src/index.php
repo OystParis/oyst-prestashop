@@ -1,4 +1,5 @@
-{**
+<?php
+/**
  * 2013-2016 Froggy Commerce
  *
  * NOTICE OF LICENSE
@@ -16,12 +17,15 @@
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
- *}
+ */
 
-<div id="oyst-confirmation">
-    <p class="conf">
-        {l s='Your order %s is complete.' sprintf=$oyst.order_reference mod='oyst'}<br>
-        {l s='Payment transaction ID: %s' sprintf=$oyst.transaction_id mod='oyst'}<br><br>
-        {l s='If you have questions, comments or concerns, please contact our' mod='oyst'} <a style="color:white" href="{$link->getPageLink('contact', true)|escape:'htmlall':'UTF-8'}">{l s='expert customer support team' mod='oyst'}</a>.
-    </p>
-</div>
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+
+header('Location: ../');
+exit;
+
