@@ -33,8 +33,26 @@ function upgrade_module_1_2_0($module)
     $module->registerHook('displayFooterProduct');
     $module->registerHook('displayBackOfficeHeader');
 
-    Configuration::updateValue('OYST_API_PROD_ENDPOINT', 'https://api.oyst.com');
-    Configuration::updateValue('OYST_API_PREPROD_ENDPOINT', 'https://api.staging.oyst.eu');
+    // If old configuration variable exists, we migrate and delete it
+    if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
+        Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
+    }
+
+    Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
+
+    // If old configuration variable exists, we migrate and delete it
+    if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
+        Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
+    }
+
+    Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
+
+    // If old configuration variable exists, we migrate and delete it
+    if (Configuration::get('FC_OYST_API_KEY') != '' && Configuration::get('OYST_API_PROD_FREEPAY_KEY') == '') {
+        Configuration::updateValue('OYST_API_PROD_FREEPAY_KEY', Configuration::get('FC_OYST_API_KEY'));
+    }
+
+    Configuration::deleteByName('FC_OYST_API_KEY');
 
     // All went well!
     return true;

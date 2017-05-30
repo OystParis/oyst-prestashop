@@ -46,7 +46,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                     $this->partialRefundOrder($order);
                 }
             }
-            return ;
+            return;
         }
 
         $content = '';
@@ -85,6 +85,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                 OystApiClientFactory::ENTITY_PAYMENT,
                 $oyst->getApiKey(),
                 $oyst->getUserAgent(),
+                $oyst->getEnvironment(),
                 $oyst->getApiUrl()
             );
             if (Validate::isLoadedObject($oystPaymentNotification)) {

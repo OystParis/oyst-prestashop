@@ -35,7 +35,7 @@ $(document).ready(function() {
         handleSelectOptions($(this));
     });
 
-    $('select[name="FC_OYST_API_ENV"]').on('change', function () {
+    $('select[name="OYST_API_ENV"]').on('change', function () {
         refreshEnvironmentDisplay();
     });
 
@@ -58,7 +58,7 @@ function handleSelectOptions(select) {
 
 function refreshEnvironmentDisplay()
 {
-    var containerClass = '.' + $('select[name="FC_OYST_API_ENV"]').val();
+    var containerClass = '.' + $('select[name="OYST_API_ENV"]').val();
     $('.env').not(containerClass).hide();
     $(containerClass).show();
 }

@@ -26,7 +26,8 @@ class NewOrderServiceFactory
             OystApiClientFactory::ENTITY_ORDER,
             $oyst->getApiKey(),
             $oyst->getUserAgent(),
-            $oyst->getEnvironment()
+            $oyst->getEnvironment(),
+            $oyst->getApiUrl()
         );
 
         $oystOrderApi->setNotifyUrl($oyst->getNotifyUrl());

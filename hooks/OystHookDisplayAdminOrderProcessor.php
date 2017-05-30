@@ -80,6 +80,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
                 OystApiClientFactory::ENTITY_PAYMENT,
                 $oyst->getApiKey(),
                 $oyst->getUserAgent(),
+                $oyst->getEnvironment(),
                 $oyst->getApiUrl()
             );
             $response = $paymentApi->cancelOrRefund($oyst_payment_notification->payment_id);
