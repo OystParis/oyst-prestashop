@@ -117,7 +117,7 @@ class OystSDK
         $params = array(
             'ps_version'   => _PS_VERSION_,
             'oyst_version' => _PS_OYST_VERSION_,
-            'url'          => Tools::getHttpHost(true).__PS_BASE_URI__.' (~ '.$nbTransac.' transactions)',
+            'url'          => Tools::getHttpHost(true).__PS_BASE_URI__.' (~ '.$nbTransac.' transactions par mois)',
             'name'         => $name,
             'phone'        => $phone,
             'email'        => $email,

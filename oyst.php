@@ -19,7 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-require_once __DIR__ . '/autoload.php';
+require_once dirname(__FILE__) . '/autoload.php';
 
 /**
  * Class Oyst
@@ -101,29 +101,6 @@ class Oyst extends FroggyPaymentModule
     {
         $result = true;
         $langId = Configuration::get('PS_LANG_DEFAULT');
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_PAYMENT_PENDING'));
-
-        if (!Validate::isLoadedObject($orderState)) {
-            $orderState->name = array(
-                $langId => 'En attente de paiement FreePay',
-            );
-            $orderState->color = '#FFF168';
-            $orderState->unremovable = true;
-            $orderState->deleted = false;
-            $orderState->delivery = false;
-            $orderState->invoice = false;
-            $orderState->logable = false;
-            $orderState->module_name = $this->name;
-            $orderState->paid = false;
-            $orderState->hidden = false;
-            $orderState->shipped = false;
-            $orderState->send_email = false;
-
-            $result &= $orderState->add();
-
-            Configuration::updateValue('OYST_STATUS_PAYMENT_PENDING', $orderState->id);
-        }
-
         $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
 
         if (!Validate::isLoadedObject($orderState)) {

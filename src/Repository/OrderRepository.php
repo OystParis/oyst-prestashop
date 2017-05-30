@@ -1,4 +1,23 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 /*
  * Security
@@ -7,6 +26,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * Class OrderRepository
+ */
 class OrderRepository extends AbstractOystRepository
 {
     public function orderCanBeCancelled($idCart, $currentState)
@@ -45,6 +67,35 @@ class OrderRepository extends AbstractOystRepository
         $result = $this->db->getValue($sql);
 
         return $result > 0 && $currentState != Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') && $currentState != Configuration::get('OYST_STATUS_REFUND_PENDING');
+    }
+
+    public function calculateOrderMaxRefund($idCart)
+    {
+        $maxRefund = 0;
+
+        // The order must have a CAPTURE event and no CANCELLATION event
+        // NB: this is almost a duplicate of the getOrderMaxRefund method
+        // because from FreePay BO we allow many partial refund but not on Prestashop
+        $sql = 'SELECT opn.`event_data`'
+            .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
+            .' WHERE opn.`id_cart` = '.(int) $idCart
+            .' AND opn.`event_code` = "'.OystPaymentNotification::EVENT_CAPTURE.'"'
+            .' AND opn.`id_cart` NOT IN ('
+                .'SELECT opn_bis.`id_cart`'
+                .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn_bis'
+                .' WHERE opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_CANCELLATION.'"'
+            .')';
+
+        // Return data of the CAPTURE event
+        $result = $this->db->getValue($sql);
+
+        if ($result) {
+            $result      = json_decode($result, true);
+            $totalAmount = $result['notification']['amount']['value'] / 100;
+            $maxRefund   = $this->calculateMaxRefund($idCart, $totalAmount);
+        }
+
+        return $maxRefund;
     }
 
     public function getOrderMaxRefund($idCart, $currentState)
@@ -186,20 +237,21 @@ class OrderRepository extends AbstractOystRepository
 
     private function getAmountToRefundOldVersion($tabAccess)
     {
-        if ($tabAccess['edit'] != '1' || !is_array($_POST['partialRefundProduct'])) {
+        if ($tabAccess['edit'] != '1' || !is_array(Tools::getValue('partialRefundProduct'))) {
             return 0;
         }
 
         $amount = 0;
         $order_detail_list = array();
-        foreach ($_POST['partialRefundProduct'] as $id_order_detail => $amount_detail) {
-            $order_detail_list[$id_order_detail]['quantity'] = (int)$_POST['partialRefundProductQuantity'][$id_order_detail];
+        foreach (Tools::getValue('partialRefundProduct') as $id_order_detail => $amount_detail) {
+            $order_detail_list[$id_order_detail]['quantity'] = (int)Tools::getValue('partialRefundProductQuantity')[$id_order_detail];
 
             if (empty($amount_detail)) {
                 $order_detail = new OrderDetail((int)$id_order_detail);
                 $order_detail_list[$id_order_detail]['amount'] = $order_detail->unit_price_tax_incl * $order_detail_list[$id_order_detail]['quantity'];
-            } else
+            } else {
                 $order_detail_list[$id_order_detail]['amount'] = (float)$amount_detail;
+            }
 
             $amount += $order_detail_list[$id_order_detail]['amount'];
         }
