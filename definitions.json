@@ -29,9 +29,12 @@
 
         "OYST_API_ENV": "prod",
 
-        "OYST_API_PROD_KEY": "",
-        "OYST_API_PREPROD_KEY": "",
-        "OYST_API_CUSTOM_KEY": "",
+        "OYST_API_PROD_KEY_FREEPAY": "",
+        "OYST_API_PREPROD_KEY_FREEPAY": "",
+        "OYST_API_CUSTOM_KEY_FREEPAY": "",
+        "OYST_API_PROD_KEY_ONECLICK": "",
+        "OYST_API_PREPROD_KEY_ONECLICK": "",
+        "OYST_API_CUSTOM_KEY_ONECLICK": "",
 
         "OYST_API_CUSTOM_ENDPOINT": "",
 

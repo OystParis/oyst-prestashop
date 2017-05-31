@@ -33,26 +33,7 @@ function upgrade_module_1_2_0($module)
     $module->registerHook('displayFooterProduct');
     $module->registerHook('displayBackOfficeHeader');
 
-    // If old configuration variable exists, we migrate and delete it
-    if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
-        Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
-    }
-
-    Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
-
-    // If old configuration variable exists, we migrate and delete it
-    if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
-        Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
-    }
-
-    Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
-
-    // If old configuration variable exists, we migrate and delete it
-    if (Configuration::get('FC_OYST_API_KEY') != '' && Configuration::get('OYST_API_PROD_FREEPAY_KEY') == '') {
-        Configuration::updateValue('OYST_API_PROD_FREEPAY_KEY', Configuration::get('FC_OYST_API_KEY'));
-    }
-
-    Configuration::deleteByName('FC_OYST_API_KEY');
+    $module->updateConstants();
 
     // All went well!
     return true;

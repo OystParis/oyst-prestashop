@@ -24,7 +24,7 @@ class AbstractNewOrderServiceFactory
         /** @var OystOrderApi $apiClient */
         $apiClient = OystApiClientFactory::getClient(
             OystApiClientFactory::ENTITY_ORDER,
-            $oyst->getApiKey(),
+            $oyst->getOneClickApiKey(),
             $oyst->getUserAgent(),
             $oyst->getEnvironment(),
             $oyst->getApiUrl()
