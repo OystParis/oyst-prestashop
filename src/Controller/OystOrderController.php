@@ -5,7 +5,7 @@ namespace Oyst\Controller;
 use Oyst;
 use Context;
 use Oyst\Classes\Enum\AbstractOrderState;
-use Oyst\Factory\NewOrderServiceFactory;
+use Oyst\Factory\AbstractNewOrderServiceFactory;
 
 class OystOrderController extends AbstractOystController
 {
@@ -18,7 +18,7 @@ class OystOrderController extends AbstractOystController
         if ($json) {
             $oyst = new Oyst();
             $context = Context::getContext();
-            $orderService = NewOrderServiceFactory::get($oyst, $context);
+            $orderService = AbstractNewOrderServiceFactory::get($oyst, $context);
             $orderId = $json['data']['order_id'];
             $responseData = $orderService->requestCreateNewOrder($orderId);
 

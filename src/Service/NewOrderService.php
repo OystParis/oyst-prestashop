@@ -24,12 +24,6 @@ use Validate;
  */
 class NewOrderService extends AbstractOystService
 {
-    /** @var  OystOrderApi */
-    private $orderApi;
-
-    /** @var  OrderRepository */
-    private $orderRepository;
-
     /** @var  AddressRepository */
     private $addressRepository;
 
@@ -177,7 +171,7 @@ class NewOrderService extends AbstractOystService
      */
     public function getOrderInfo($oystOrderId)
     {
-        $oystOrderInfo = $this->requestApi($this->orderApi, 'getOrder', array($oystOrderId));
+        $oystOrderInfo = $this->requester->call('getOrder', array($oystOrderId));
 
         return $oystOrderInfo;
     }
@@ -189,10 +183,6 @@ class NewOrderService extends AbstractOystService
      */
     public function requestCreateNewOrder($orderId)
     {
-        if (null == $this->orderApi) {
-            throw new Exception('Did you forget to inject the order api component ?');
-        }
-
         $data = array(
             'state' => false,
         );
@@ -229,8 +219,8 @@ class NewOrderService extends AbstractOystService
                 $data['state'] = $state;
             }
         } else {
-            $data['error'] = $this->orderApi->getLastError();
-            $data['httpCode'] = $this->orderApi->getLastHttpCode();
+            $data['error'] = $this->requester->getApiClient()->getLastError();
+            $data['httpCode'] = $this->requester->getApiClient()->getLastHttpCode();
         }
 
         return $data;
@@ -243,10 +233,10 @@ class NewOrderService extends AbstractOystService
      */
     public function updateOrderStatus($orderId, $status)
     {
-        $this->requestApi($this->orderApi, 'updateStatus', array($orderId, $status));
+        $this->requester->call('updateStatus', array($orderId, $status));
 
         $succeed = false;
-        if ($this->orderApi->getLastHttpCode() != 200) {
+        if ($this->requester->getApiClient()->getLastHttpCode() != 200) {
             $this->logger->warning(sprintf('Oyst order %s has not been updated to %s', $orderId, $status));
         } else {
             $succeed = true;
@@ -254,28 +244,6 @@ class NewOrderService extends AbstractOystService
         }
 
         return $succeed;
-    }
-
-    /**
-     * @param \Oyst\Repository\OrderRepository $orderRepository
-     * @return $this
-     */
-    public function setOrderRepository($orderRepository)
-    {
-        $this->orderRepository = $orderRepository;
-
-        return $this;
-    }
-
-    /**
-     * @param OystOrderApi|AbstractOystApiClient $orderApi
-     * @return $this
-     */
-    public function setOrderApi(OystOrderApi $orderApi)
-    {
-        $this->orderApi = $orderApi;
-
-        return $this;
     }
 
     /**

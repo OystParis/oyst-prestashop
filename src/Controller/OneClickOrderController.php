@@ -3,9 +3,7 @@
 namespace Oyst\Controller;
 
 use Oyst;
-use Oyst\Api\OystApiClientFactory;
-use Oyst\Api\OystOneClickApi;
-use Oyst\Service\OneClickService;
+use Oyst\Factory\AbstractOneClickServiceFactory;
 use Context;
 
 class OneClickOrderController extends AbstractOystController
@@ -13,20 +11,8 @@ class OneClickOrderController extends AbstractOystController
     public function authorizeOrderAction()
     {
         $oyst = new Oyst();
-        /** @var OystOneClickApi $oneClickAPI */
-        $oneClickAPI = OystApiClientFactory::getClient(
-            OystApiClientFactory::ENTITY_ONECLICK,
-            $oyst->getApiKey(),
-            $oyst->getUserAgent(),
-            $oyst->getEnvironment(),
-            $oyst->getApiUrl()
-        );
 
-        $oneClickService = new OneClickService(Context::getContext(), $oyst);
-        $oneClickService
-            ->setLogger($this->logger)
-            ->setOneClickApi($oneClickAPI)
-        ;
+        $oneClickService = AbstractOneClickServiceFactory::get($oyst, Context::getContext());
 
         if ($this->request->getMethod() === 'POST') {
             $responseData = $oneClickService->requestAuthorizeNewOrderProcess($this->request);

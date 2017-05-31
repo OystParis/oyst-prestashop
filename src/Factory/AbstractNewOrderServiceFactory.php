@@ -6,11 +6,11 @@ use Db;
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystOrderApi;
 use Oyst\Repository\AddressRepository;
-use Oyst\Repository\OrderRepository;
+use Oyst\Service\Api\Requester;
 use Oyst\Service\Logger\PrestaShopLogger;
 use Oyst\Service\NewOrderService;
 
-class NewOrderServiceFactory
+class AbstractNewOrderServiceFactory
 {
     /**
      * Add Factory for this service due to huge redundant code used
@@ -21,8 +21,8 @@ class NewOrderServiceFactory
      */
     static public function get(\Oyst $oyst, $context)
     {
-        /** @var OystOrderApi $oystOrderApi */
-        $oystOrderApi = OystApiClientFactory::getClient(
+        /** @var OystOrderApi $apiClient */
+        $apiClient = OystApiClientFactory::getClient(
             OystApiClientFactory::ENTITY_ORDER,
             $oyst->getApiKey(),
             $oyst->getUserAgent(),
@@ -30,19 +30,22 @@ class NewOrderServiceFactory
             $oyst->getApiUrl()
         );
 
-        $oystOrderApi->setNotifyUrl($oyst->getNotifyUrl());
+        $apiClient->setNotifyUrl($oyst->getNotifyUrl());
+
+        $logger = new PrestaShopLogger();
+        $requester = new Requester($apiClient);
+        $requester->setLogger($logger);
 
         $newOrderService = new NewOrderService(
             $context,
             $oyst
         );
-        $orderRepository = new OrderRepository(Db::getInstance());
+
         $addressRepository = new AddressRepository(Db::getInstance());
 
         $newOrderService
-            ->setOrderApi($oystOrderApi)
-            ->setLogger(new PrestaShopLogger())
-            ->setOrderRepository($orderRepository)
+            ->setRequester($requester)
+            ->setLogger($logger)
             ->setAddressRepository($addressRepository)
         ;
 
