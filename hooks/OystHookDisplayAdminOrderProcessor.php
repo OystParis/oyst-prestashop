@@ -26,6 +26,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Oyst\Api\OystApiClientFactory;
+
 class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
 {
     public function run()
@@ -72,16 +74,21 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         $result = array('error' => 'Error', 'message' => 'Transaction not found');
         $oyst_payment_notification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
         if (Validate::isLoadedObject($oyst_payment_notification)) {
-            $oystApi = new OystSDK();
-            $oystApi->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
-            $oystApi->setApiKey(Configuration::get('FC_OYST_API_KEY'));
-            $result = $oystApi->cancelOrRefundRequest($oyst_payment_notification->payment_id);
-            if ($result) {
-                $result = Tools::jsonDecode($result, true);
-            }
+            $oyst = new Oyst();
+            /** @var OystPaymentApi $paymentApi */
+            $paymentApi = OystApiClientFactory::getClient(
+                OystApiClientFactory::ENTITY_PAYMENT,
+                $oyst->getApiKey(),
+                $oyst->getUserAgent(),
+                $oyst->getEnvironment(),
+                $oyst->getApiUrl()
+            );
+            $response = $paymentApi->cancelOrRefund($oyst_payment_notification->payment_id);
 
-            // Set refund status
-            if (!isset($result['error'])) {
+            $success = false;
+            if ($paymentApi->getLastHttpCode() == 200) {
+                $success = true;
+                // Set refund status
                 $oystOrderRepository = new OrderRepository(Db::getInstance());
                 $state = $oystOrderRepository->orderCanBeCancelled($order->id_cart) ? Configuration::get('OYST_STATUS_CANCELLATION_PENDING') : Configuration::get('OYST_STATUS_REFUND_PENDING');
                 $history = new OrderHistory();
@@ -93,6 +100,6 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             }
         }
 
-        die(Tools::jsonEncode(array('result' => (isset($result['error']) ? 'failure' : 'success'), 'details' => $result)));
+        die(Tools::jsonEncode(array('result' => $success ? 'success' : 'failure', 'details' => $response)));
     }
 }

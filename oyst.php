@@ -51,18 +51,6 @@ class Oyst extends FroggyPaymentModule
         if (version_compare(_PS_VERSION_, '1.6.0') >= 0) {
             $this->bootstrap = true;
         }
-
-        // If old configuration variable exists, we migrate it
-        if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '') {
-            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
-            Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
-        }
-
-        // If old configuration variable exists, we migrate it
-        if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '') {
-            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
-            Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
-        }
     }
 
     public function uninstall()
@@ -334,12 +322,37 @@ class Oyst extends FroggyPaymentModule
      */
     public function getApiKey()
     {
+        $key = '';
         $env = strtolower($this->getEnvironment());
-        $key = $env == \Oyst\Service\Configuration::API_ENV_PREPROD ?
-            \Oyst\Service\Configuration::API_KEY_PREPROD :
-            \Oyst\Service\Configuration::API_KEY_PROD
-        ;
+
+        switch ($env) {
+            case \Oyst\Service\Configuration::API_ENV_PROD:
+                $key = \Oyst\Service\Configuration::API_KEY_PROD;
+                break;
+            case \Oyst\Service\Configuration::API_ENV_PREPROD:
+                $key = \Oyst\Service\Configuration::API_KEY_PREPROD;
+                break;
+            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                $key = \Oyst\Service\Configuration::API_KEY_CUSTOM;
+                break;
+        }
+
         return Configuration::get($key);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiUrl()
+    {
+        $apiUrl = null;
+        $env = strtolower($this->getEnvironment());
+
+        if (\Oyst\Service\Configuration::API_ENV_CUSTOM == $env) {
+            $apiUrl = Configuration::get(\Oyst\Service\Configuration::API_ENDPOINT_CUSTOM);
+        }
+
+        return $apiUrl;
     }
 
     /**
