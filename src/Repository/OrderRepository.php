@@ -41,17 +41,17 @@ class OrderRepository extends AbstractOystRepository
         $sql = 'SELECT COUNT(DISTINCT(opn.`id_oyst_payment_notification`))'
             .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
             .' WHERE opn.`id_cart` = '.(int) $idCart
-            .' AND opn.`event_code` = "'. OystPaymentNotification::EVENT_AUTHORISATION.'"'
+            .' AND opn.`event_code` = "'. \OystPaymentNotification::EVENT_AUTHORISATION.'"'
             .' AND opn.`id_cart` NOT IN ('
                 .'SELECT opn_bis.`id_cart`'
                 .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn_bis'
-                .' WHERE opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_CAPTURE.'"'
-                .' OR opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_CANCELLATION.'"'
+                .' WHERE opn_bis.`event_code` = "'.\OystPaymentNotification::EVENT_CAPTURE.'"'
+                .' OR opn_bis.`event_code` = "'.\OystPaymentNotification::EVENT_CANCELLATION.'"'
             .')';
 
         $result = $this->db->getValue($sql);
 
-        return $result > 0 && $currentState != Configuration::get('OYST_STATUS_CANCELLATION_PENDING');
+        return $result > 0 && $currentState != \Configuration::get('OYST_STATUS_CANCELLATION_PENDING');
     }
 
     /**
@@ -67,17 +67,17 @@ class OrderRepository extends AbstractOystRepository
         $sql = 'SELECT COUNT(DISTINCT(opn.`id_oyst_payment_notification`))'
             .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
             .' WHERE opn.`id_cart` = '.(int) $idCart
-            .' AND opn.`event_code` = "'.OystPaymentNotification::EVENT_CAPTURE.'"'
+            .' AND opn.`event_code` = "'.\OystPaymentNotification::EVENT_CAPTURE.'"'
             .' AND opn.`id_cart` NOT IN ('
                 .'SELECT opn_bis.`id_cart`'
                 .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn_bis'
-            .' WHERE opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_REFUND.'"'
-                .' OR opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_CANCELLATION.'"'
+            .' WHERE opn_bis.`event_code` = "'.\OystPaymentNotification::EVENT_REFUND.'"'
+                .' OR opn_bis.`event_code` = "'.\OystPaymentNotification::EVENT_CANCELLATION.'"'
             .')';
 
         $result = $this->db->getValue($sql);
 
-        return $result > 0 && $currentState != Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') && $currentState != Configuration::get('OYST_STATUS_REFUND_PENDING');
+        return $result > 0 && $currentState != \Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') && $currentState != \Configuration::get('OYST_STATUS_REFUND_PENDING');
     }
 
     /**
@@ -97,12 +97,12 @@ class OrderRepository extends AbstractOystRepository
         $sql = 'SELECT opn.`event_data`'
             .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
             .' WHERE opn.`id_cart` = '.(int) $idCart
-            .' AND opn.`event_code` = "'.OystPaymentNotification::EVENT_CAPTURE.'"'
+            .' AND opn.`event_code` = "'.\OystPaymentNotification::EVENT_CAPTURE.'"'
             .' AND opn.`id_cart` NOT IN ('
                 .'SELECT opn_bis.`id_cart`'
                 .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn_bis'
-                .' WHERE opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_CANCELLATION.'"'
-                .' OR opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_REFUND.'"'
+                .' WHERE opn_bis.`event_code` = "'.\OystPaymentNotification::EVENT_CANCELLATION.'"'
+                .' OR opn_bis.`event_code` = "'.\OystPaymentNotification::EVENT_REFUND.'"'
             .')';
 
         // Return data of the CAPTURE event
@@ -114,7 +114,7 @@ class OrderRepository extends AbstractOystRepository
             $maxRefund   = $this->calculateMaxRefund($idCart, $totalAmount);
         }
 
-        if ($currentState == Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') || $currentState == Configuration::get('OYST_STATUS_REFUND_PENDING')) {
+        if ($currentState == \Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') || $currentState == \Configuration::get('OYST_STATUS_REFUND_PENDING')) {
             $maxRefund = 0;
         }
 
@@ -135,7 +135,7 @@ class OrderRepository extends AbstractOystRepository
         $sql = 'SELECT opn.`event_data`'
             .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
             .' WHERE opn.`id_cart` = '.(int) $idCart
-            .' AND opn.`event_code` = "'.OystPaymentNotification::EVENT_REFUND.'"';
+            .' AND opn.`event_code` = "'.\OystPaymentNotification::EVENT_REFUND.'"';
 
         $result = $this->db->query($sql);
 
