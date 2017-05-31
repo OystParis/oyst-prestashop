@@ -26,7 +26,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Oyst\Factory\ExportProductServiceFactory;
+use Oyst\Factory\AbstractExportProductServiceFactory;
 use Oyst\Service\Configuration as OystConfiguration;
 use Oyst\Service\Http\CurrentRequest;
 use Oyst\Api\OystApiClientFactory;
@@ -201,15 +201,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
     {
         if (Tools::isSubmit('synchronizeProducts')) {
             $request = new CurrentRequest();
-            $exportProductService = ExportProductServiceFactory::get($this->module, $this->context);
+            $exportProductService = AbstractExportProductServiceFactory::get($this->module, $this->context);
             $succeed = $exportProductService->requestNewExport();
 
             if ($succeed) {
                 Tools::redirect($request->getScheme().$request->getHost().$request->getRequestUri());
                 die();
             } else {
+                $apiClient = $exportProductService->getRequester()->getApiClient();
                 $this->smarty->assign([
-                    'apiError' => $exportProductService->getOystCatalogAPI()->getLastError(),
+                    'apiError' => $apiClient->getLastError(),
                 ]);
             }
         }

@@ -7,10 +7,12 @@ use Db;
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystCatalogApi;
 use Oyst\Repository\ProductRepository;
+use Oyst\Service\Api\Requester;
 use Oyst\Service\ExportProductService;
 use Oyst\Service\Logger\PrestaShopLogger;
+use Oyst\Service\Serializer\ExportProductRequestParamSerializer;
 
-class ExportProductServiceFactory
+class AbstractExportProductServiceFactory
 {
     /**
      * Add Factory for this service due to huge redundant code used
@@ -21,8 +23,8 @@ class ExportProductServiceFactory
      */
     static public function get(\Oyst $oyst, $context)
     {
-        /** @var OystCatalogAPI $oystCatalogAPI */
-        $oystCatalogAPI = OystApiClientFactory::getClient(
+        /** @var OystCatalogAPI $apiClient */
+        $apiClient = OystApiClientFactory::getClient(
             OystApiClientFactory::ENTITY_CATALOG,
             $oyst->getApiKey(),
             $oyst->getUserAgent(),
@@ -30,16 +32,27 @@ class ExportProductServiceFactory
             $oyst->getApiUrl()
         );
 
-        $oystCatalogAPI->setNotifyUrl($oyst->getNotifyUrl());
+        $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
         $exportProductService = new ExportProductService(
             $context,
             $oyst
         );
 
+        $serializer = new ExportProductRequestParamSerializer();
+        $logger = new PrestaShopLogger();
+        $requester = new Requester($apiClient);
+        $requester
+            // TODO: Find a better way to log this (file and db ?)
+            // with PostProduct, the log could be too long that the classic TEXT field..
+            //->setSerializer($serializer)
+            ->setLogger($logger)
+        ;
+
         $exportProductService
-            ->setCatalogApi($oystCatalogAPI)
-            ->setLogger(new PrestaShopLogger())
+            ->setSerializer($serializer)
+            ->setRequester($requester)
+            ->setLogger($logger)
             ->setProductRepository(new ProductRepository(Db::getInstance()))
             ->setWeightUnit(PSConfiguration::get('PS_WEIGHT_UNIT'))
             ->setDimensionUnit(PSConfiguration::get('PS_CURRENCY_DEFAULT'))

@@ -3,7 +3,6 @@
 namespace Oyst\Service;
 
 use Oyst;
-use Oyst\Api\OystCatalogApi;
 use Oyst\Classes\OystCategory;
 use Oyst\Classes\OystPrice;
 use Oyst\Classes\OystProduct;
@@ -38,9 +37,6 @@ class ExportProductService extends AbstractOystService
 
     /** @var  string */
     private $dimensionUnit;
-
-    /** @var  OystCatalogAPI */
-    private $oystCatalogAPI;
 
     /** @var  int */
     private $limitedProduct;
@@ -160,9 +156,10 @@ class ExportProductService extends AbstractOystService
         $prestaShopProducts = $this->productRepository->getProductsNotExported($this->limitedProduct);
         $products = $this->transformProducts($prestaShopProducts);
 
-        $this->requestApi($this->oystCatalogAPI, 'postProducts', array($products));
+        $this->requester->call('postProducts', array($products));
 
-        if ($this->oystCatalogAPI->getLastHttpCode() == 200) {
+        $apiClient = $this->requester->getApiClient();
+        if ($apiClient->getLastHttpCode() == 200) {
             $json['state'] = true;
             $this->productRepository->recordSentProducts($this->oyst, $prestaShopProducts, $products, $importId);
             $json['totalCount'] = $this->productRepository->getTotalProducts();
@@ -176,8 +173,8 @@ class ExportProductService extends AbstractOystService
             }
             $json['remaining'] = $totalProductNotHandled;
         } else {
-            $json['httpCode'] = $this->oystCatalogAPI->getLastHttpCode();
-            $json['error'] = $this->oystCatalogAPI->getLastError();
+            $json['httpCode'] = $apiClient->getLastHttpCode();
+            $json['error'] = $apiClient->getLastError();
         }
 
         return $json;
@@ -190,10 +187,10 @@ class ExportProductService extends AbstractOystService
     {
         $this->productRepository->truncateExportTable();
 
-        $this->requestApi($this->oystCatalogAPI, 'notifyImport');
+        $this->requester->call('notifyImport');
 
         $succeed = false;
-        if ($this->oystCatalogAPI->getLastHttpCode() == 200) {
+        if ($this->requester->getApiClient()->getLastHttpCode() == 200) {
             PSConfiguration::updateValue('OYST_REQUESTED_CATALOG_DATE', (new DateTime())->format('Y-m-d H:i:s'));
             $this->setExportCatalogState(true);
             $this->oyst->setAdminPanelInformationVisibility(true);
@@ -268,24 +265,5 @@ class ExportProductService extends AbstractOystService
         $this->dimensionUnit = $dimensionUnit;
 
         return $this;
-    }
-
-    /**
-     * @param OystCatalogAPI $oystCatalogAPI
-     * @return $this
-     */
-    public function setCatalogApi(OystCatalogAPI $oystCatalogAPI)
-    {
-        $this->oystCatalogAPI = $oystCatalogAPI;
-
-        return $this;
-    }
-
-    /**
-     * @return OystCatalogApi
-     */
-    public function getOystCatalogAPI()
-    {
-        return $this->oystCatalogAPI;
     }
 }

@@ -15,9 +15,6 @@ use Validate;
  */
 class OneClickService extends AbstractOystService
 {
-    /** @var  OystOneClickApi */
-    private $oneClickApi;
-
     /**
      * @param Product $product
      * @param $quantity
@@ -28,27 +25,24 @@ class OneClickService extends AbstractOystService
      */
     public function authorizeNewOrder(Product $product, $quantity, Combination $combination = null, OystUser $user = null)
     {
-        if (null == $this->oneClickApi) {
-            throw new Exception('Did you forget to inject the oneClick api component ?');
-        }
-
         $productReference = $this->oyst->getProductReference($product, $combination);
 
-        $response = $this->requestApi($this->oneClickApi, 'authorizeOrder', array(
+        $response = $this->requester->call('authorizeOrder', array(
             $productReference,
             $quantity,
             null,
             $user
         ));
 
-        if ($this->oneClickApi->getLastHttpCode() == 200) {
+        $apiClient = $this->requester->getApiClient();
+        if ($apiClient->getLastHttpCode() == 200) {
             $result = array(
                 'url' => $response['url'],
                 'state' => true,
             );
         } else {
             $result = array(
-                'error' => $this->oneClickApi->getLastError(),
+                'error' => $apiClient->getLastError(),
                 'state' => false,
             );
         }
@@ -124,16 +118,5 @@ class OneClickService extends AbstractOystService
         }
 
         return $data;
-    }
-
-    /**
-     * @param OystOneClickApi $oneClickApi
-     * @return $this
-     */
-    public function setOneClickApi(OystOneClickApi $oneClickApi)
-    {
-        $this->oneClickApi = $oneClickApi;
-
-        return $this;
     }
 }
