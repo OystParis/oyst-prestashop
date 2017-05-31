@@ -27,6 +27,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Oyst\Api\OystApiClientFactory;
+use Oyst\Repository\OrderRepository;
 
 class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
 {

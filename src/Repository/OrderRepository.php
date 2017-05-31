@@ -2,6 +2,9 @@
 
 namespace Oyst\Repository;
 
+use Configuration;
+use OystPaymentNotification;
+
 class OrderRepository extends AbstractOystRepository
 {
     /**
