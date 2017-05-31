@@ -34,12 +34,12 @@ class OneClickService extends AbstractOystService
 
         $productReference = $this->oyst->getProductReference($product, $combination);
 
-        $response = $this->requestApi($this->oneClickApi, 'authorizeOrder',
+        $response = $this->requestApi($this->oneClickApi, 'authorizeOrder', array(
             $productReference,
             $quantity,
             null,
             $user
-        );
+        ));
 
         if ($this->oneClickApi->getLastHttpCode() == 200) {
             $result = array(
