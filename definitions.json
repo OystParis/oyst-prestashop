@@ -10,7 +10,8 @@
             "displayPaymentReturn",
             "displayAdminOrder" ,
             "displayFooterProduct",
-            "displayBackOfficeHeader"
+            "displayBackOfficeHeader",
+            "actionProductAdd"
         ],
         "1.6" : [
             "advancedPaymentOptions"

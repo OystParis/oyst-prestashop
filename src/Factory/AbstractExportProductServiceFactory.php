@@ -11,6 +11,7 @@ use Oyst\Service\Api\Requester;
 use Oyst\Service\ExportProductService;
 use Oyst\Service\Logger\PrestaShopLogger;
 use Oyst\Service\Serializer\ExportProductRequestParamSerializer;
+use Oyst\Transformer\ProductTransformer;
 
 class AbstractExportProductServiceFactory
 {
@@ -42,6 +43,8 @@ class AbstractExportProductServiceFactory
         $serializer = new ExportProductRequestParamSerializer();
         $logger = new PrestaShopLogger();
         $requester = new Requester($apiClient);
+        $productTransformer = new ProductTransformer($context);
+
         $requester
             // TODO: Find a better way to log this (file and db ?)
             // with PostProduct, the log could be too long that the classic TEXT field..
@@ -50,6 +53,7 @@ class AbstractExportProductServiceFactory
         ;
 
         $exportProductService
+            ->setProductTransformer($productTransformer)
             ->setSerializer($serializer)
             ->setRequester($requester)
             ->setLogger($logger)
