@@ -16,7 +16,7 @@ class OystOneClick {
      * Initialize requirements
      */
     prepareButton() {
-        $('#add_to_cart').append($('<div>', {
+        $('#add_to_cart').before($('<div>', {
             id: 'oyst-1click-button'
         }));
     }
