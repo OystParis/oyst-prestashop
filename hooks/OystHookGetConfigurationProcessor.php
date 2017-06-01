@@ -116,7 +116,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
     {
         $assign = array();
         $currentFreePayApiKey = $this->module->getFreePayApiKey();
-        $currentOneClickApiKey = $this->module->getOneClickPayApiKey();
+        $currentOneClickApiKey = $this->module->getOneClickApiKey();
         $hasApiKey = !empty($currentFreePayApiKey) || !empty($currentOneClickApiKey);
 
         // Keep it simple for now
