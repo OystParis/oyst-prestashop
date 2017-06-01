@@ -113,7 +113,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
             $oystPaymentNotification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
             $paymentApi = OystApiClientFactory::getClient(
                 OystApiClientFactory::ENTITY_PAYMENT,
-                $oyst->getApiKey(),
+                $oyst->getFreePayApiKey(),
                 $oyst->getUserAgent(),
                 $oyst->getEnvironment(),
                 $oyst->getApiUrl()

@@ -27,7 +27,7 @@ class AbstractExportProductServiceFactory
         /** @var OystCatalogAPI $apiClient */
         $apiClient = OystApiClientFactory::getClient(
             OystApiClientFactory::ENTITY_CATALOG,
-            $oyst->getApiKey(),
+            $oyst->getOneClickApiKey(),
             $oyst->getUserAgent(),
             $oyst->getEnvironment(),
             $oyst->getApiUrl()

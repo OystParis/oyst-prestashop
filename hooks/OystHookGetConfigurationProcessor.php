@@ -46,9 +46,12 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
-        OystConfiguration::API_KEY_PROD => 'string',
-        OystConfiguration::API_KEY_PREPROD => 'string',
-        OystConfiguration::API_KEY_CUSTOM => 'string',
+        OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
+        OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
+        OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
+        OystConfiguration::API_KEY_PROD_ONECLICK => 'string',
+        OystConfiguration::API_KEY_PREPROD_ONECLICK => 'string',
+        OystConfiguration::API_KEY_CUSTOM_ONECLICK => 'string',
         OystConfiguration::API_ENDPOINT_CUSTOM => 'string',
         OystConfiguration::API_ENV => 'string',
         OystConfiguration::ONE_CLICK_FEATURE_STATE => 'int',
@@ -111,12 +114,14 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     public function displayModuleConfiguration()
     {
-        $assign        = array();
-        $currentApiKey = $this->module->getApiKey();
-        $hasApiKey     = !empty($currentApiKey);
+        $assign = array();
+        $currentFreePayApiKey = $this->module->getFreePayApiKey();
+        $currentOneClickApiKey = $this->module->getOneClickPayApiKey();
+        $hasApiKey = !empty($currentFreePayApiKey) || !empty($currentOneClickApiKey);
 
         // Keep it simple for now
-        $isCurrentApiKeyValid = Tools::strlen($currentApiKey) == 64;
+        $isCurrentFreePayApiKeyValid = Tools::strlen($currentFreePayApiKey) == 64;
+        $isCurrentOneClickApiKeyValid = Tools::strlen($currentOneClickApiKey) == 64;
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $goToConf    = (bool) Tools::getValue('go_to_conf');
@@ -141,17 +146,19 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
         $this->handleContactForm($assign, $hasError, $goToForm);
 
-        $assign['lastExportDate']           = $lastExportDate;
-        $assign['isCurrentApiKeyValid']     = $isCurrentApiKeyValid;
+        $assign['lastExportDate'] = $lastExportDate;
         $assign['hasAlreadyExportProducts'] = $hasAlreadyExportProducts;
-        $assign['hasApiKey']       = $hasApiKey;
-        $assign['exportRunning']   = $this->module->isCatalogExportStillRunning();
-        $assign['module_dir']      = $this->path;
-        $assign['message']         = '';
-        $assign['phone']           = Configuration::get('FC_OYST_MERCHANT_PHONE');
-        $assign['apikey_prod_test_error']    = '';
-        $assign['apikey_preprod_test_error'] = '';
-        $assign['apikey_custom_test_error']  = '';
+        $assign['hasApiKey']     = $hasApiKey;
+        $assign['exportRunning'] = $this->module->isCatalogExportStillRunning();
+        $assign['module_dir']    = $this->path;
+        $assign['message']       = '';
+        $assign['phone']         = Configuration::get('FC_OYST_MERCHANT_PHONE');
+        $assign['apikey_prod_test_error_freepay']     = '';
+        $assign['apikey_preprod_test_error_freepay']  = '';
+        $assign['apikey_custom_test_error_freepay']   = '';
+        $assign['apikey_prod_test_error_oneclick']    = '';
+        $assign['apikey_preprod_test_error_oneclick'] = '';
+        $assign['apikey_custom_test_error_oneclick']  = '';
         $assign['result']                   = $this->configuration_result;
         $assign['ps_version']               = Tools::substr(_PS_VERSION_, 0, 3);
         $assign['module_version']           = $this->module->version;
@@ -172,12 +179,23 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->showMessageToMerchant($assign);
         }
 
-        if ($hasApiKey && !$isCurrentApiKeyValid) {
+        if ($hasApiKey && (!empty($currentFreePayApiKey) && !$isCurrentFreePayApiKeyValid || !empty($currentOneClickApiKey) && !$isCurrentOneClickApiKeyValid)) {
             $env = strtolower($this->module->getEnvironment());
-            $key = 'apikey_'.$env.'_test_error';
 
-            if (array_key_exists($key, $assign)) {
-                $assign[$key] = !$isCurrentApiKeyValid;
+            if (!$isCurrentFreePayApiKeyValid) {
+                $key = 'apikey_'.$env.'_test_error_freepay';
+
+                if (array_key_exists($key, $assign)) {
+                    $assign[$key] = !$isCurrentFreePayApiKeyValid;
+                }
+            }
+
+            if (!$isCurrentOneClickApiKeyValid) {
+                $key = 'apikey_'.$env.'_test_error_oneclick';
+
+                if (array_key_exists($key, $assign)) {
+                    $assign[$key] = !$isCurrentOneClickApiKeyValid;
+                }
             }
 
             // First time merchant enter a key after submitting the contact form

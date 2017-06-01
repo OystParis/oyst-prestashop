@@ -79,7 +79,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             /** @var OystPaymentApi $paymentApi */
             $paymentApi = OystApiClientFactory::getClient(
                 OystApiClientFactory::ENTITY_PAYMENT,
-                $oyst->getApiKey(),
+                $oyst->getFreePayApiKey(),
                 $oyst->getUserAgent(),
                 $oyst->getEnvironment(),
                 $oyst->getApiUrl()

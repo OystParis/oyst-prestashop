@@ -81,16 +81,43 @@ class Oyst extends FroggyPaymentModule
             WHERE `id_hook` = '.(int)$id_hook.' AND `id_module` = '.$id_module);
         }
 
-        if ($this->getApiKey() != '') {
+        if ($this->getFreePayApiKey() != '' || $this->getOneClickApiKey() != '') {
             Configuration::updateValue('FC_OYST_GUEST', false);
         }
 
         $result &= $this->installOrderStates();
+        $result &= $this->updateConstants();
 
         $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this,_DB_PREFIX_);
         $result &= $oystDb->install();
 
         return $result;
+    }
+
+    public function updateConstants()
+    {
+        // If old configuration variable exists, we migrate and delete it
+        if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
+        }
+
+        Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
+
+        // If old configuration variable exists, we migrate and delete it
+        if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
+        }
+
+        Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
+
+        // If old configuration variable exists, we migrate and delete it
+        if (Configuration::get('FC_OYST_API_KEY') != '' && Configuration::get('OYST_API_PROD_KEY_FREEPAY') == '') {
+            Configuration::updateValue('OYST_API_PROD_KEY_FREEPAY', Configuration::get('FC_OYST_API_KEY'));
+        }
+
+        Configuration::deleteByName('FC_OYST_API_KEY');
+        Configuration::deleteByName('FC_OYST_API_PAYMENT_ENDPOINT');
+        Configuration::deleteByName('FC_OYST_API_CATALOG_ENDPOINT');
     }
 
     /**
@@ -297,20 +324,43 @@ class Oyst extends FroggyPaymentModule
     /**
      * @return string
      */
-    public function getApiKey()
+    public function getFreePayApiKey()
     {
         $key = '';
         $env = strtolower($this->getEnvironment());
 
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:
-                $key = \Oyst\Service\Configuration::API_KEY_PROD;
+                $key = \Oyst\Service\Configuration::API_KEY_PROD_FREEPAY;
                 break;
             case \Oyst\Service\Configuration::API_ENV_PREPROD:
-                $key = \Oyst\Service\Configuration::API_KEY_PREPROD;
+                $key = \Oyst\Service\Configuration::API_KEY_PREPROD_FREEPAY;
                 break;
             case \Oyst\Service\Configuration::API_ENV_CUSTOM:
-                $key = \Oyst\Service\Configuration::API_KEY_CUSTOM;
+                $key = \Oyst\Service\Configuration::API_KEY_CUSTOM_FREEPAY;
+                break;
+        }
+
+        return Configuration::get($key);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOneClickApiKey()
+    {
+        $key = '';
+        $env = strtolower($this->getEnvironment());
+
+        switch ($env) {
+            case \Oyst\Service\Configuration::API_ENV_PROD:
+                $key = \Oyst\Service\Configuration::API_KEY_PROD_ONECLICK;
+                break;
+            case \Oyst\Service\Configuration::API_ENV_PREPROD:
+                $key = \Oyst\Service\Configuration::API_KEY_PREPROD_ONECLICK;
+                break;
+            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                $key = \Oyst\Service\Configuration::API_KEY_CUSTOM_ONECLICK;
                 break;
         }
 

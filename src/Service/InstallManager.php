@@ -42,8 +42,6 @@ class InstallManager
         $state &= $this->createCarrier();
         $state &= $this->createExportTable();
 
-        $this->installDefaultConfiguration();
-
         return $state;
     }
 
@@ -144,9 +142,6 @@ class InstallManager
     {
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_FEATURE_STATE);
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_CARRIER);
-        PSConfiguration::deleteByName(Configuration::API_KEY_PROD);
-        PSConfiguration::deleteByName(Configuration::API_KEY_PREPROD);
-        PSConfiguration::deleteByName(Configuration::API_ENV);
         PSConfiguration::deleteByName(Configuration::CATALOG_EXPORT_STATE);
         PSConfiguration::deleteByName(Configuration::REQUESTED_CATALOG_DATE);
         PSConfiguration::deleteByName(Configuration::DISPLAY_ADMIN_INFO_STATE);
@@ -166,13 +161,5 @@ class InstallManager
 
         $carrier->deleted = 1;
         return $carrier->save();
-    }
-
-    /**
-     *
-     */
-    public function installDefaultConfiguration()
-    {
-        PSConfiguration::updateValue(Configuration::ONE_CLICK_FEATURE_STATE, 1);
     }
 }

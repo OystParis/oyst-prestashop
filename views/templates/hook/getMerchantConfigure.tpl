@@ -71,9 +71,9 @@
             <div class="env prod" style="display: none;">
                 <label>{l s='API Production Key' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="OYST_API_PROD_KEY" name="OYST_API_PROD_KEY" value="{$oyst.OYST_API_PROD_KEY|escape:'htmlall':'UTF-8'}"/>
+                    <input type="text" id="OYST_API_PROD_KEY_FREEPAY" name="OYST_API_PROD_KEY_FREEPAY" value="{$oyst.OYST_API_PROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                     <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                    {if $oyst.apikey_prod_test_error}
+                    {if $oyst.apikey_prod_test_error_freepay}
                     <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                     {/if}
                 </div>
@@ -81,9 +81,9 @@
             <div class="env preprod" style="display: none;">
                 <label>{l s='API PreProduction Key' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="OYST_API_PREPROD_KEY" name="OYST_API_PREPROD_KEY" value="{$oyst.OYST_API_PREPROD_KEY|escape:'htmlall':'UTF-8'}"/>
+                    <input type="text" id="OYST_API_PREPROD_KEY_FREEPAY" name="OYST_API_PREPROD_KEY_FREEPAY" value="{$oyst.OYST_API_PREPROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                     <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                    {if $oyst.apikey_preprod_test_error}
+                    {if $oyst.apikey_preprod_test_error_freepay}
                     <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                     {/if}
                 </div>
@@ -91,9 +91,9 @@
             <div class="env custom" style="display: none;">
                 <label>{l s='API Custom Key' mod='oyst'}</label>
                 <div class="margin-form">
-                    <input type="text" id="OYST_API_CUSTOM_KEY" name="OYST_API_CUSTOM_KEY" value="{$oyst.OYST_API_CUSTOM_KEY|escape:'htmlall':'UTF-8'}"/>
+                    <input type="text" id="OYST_API_CUSTOM_KEY_FREEPAY" name="OYST_API_CUSTOM_KEY_FREEPAY" value="{$oyst.OYST_API_CUSTOM_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                     <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                    {if $oyst.apikey_custom_test_error}
+                    {if $oyst.apikey_custom_test_error_freepay}
                     <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                     {/if}
                 </div>
@@ -130,6 +130,36 @@
                 <label>{l s='Enable OneClick' mod='oyst'}</label>
                 <div class="margin-form">
                     <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
+                </div>
+                <div class="env prod" style="display: none;">
+                    <label>{l s='API Production Key' mod='oyst'}</label>
+                    <div class="margin-form">
+                        <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                        {if $oyst.apikey_prod_test_error_oneclick}
+                        <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                        {/if}
+                    </div>
+                </div>
+                <div class="env preprod" style="display: none;">
+                    <label>{l s='API PreProduction Key' mod='oyst'}</label>
+                    <div class="margin-form">
+                        <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                        {if $oyst.apikey_preprod_test_error_oneclick}
+                        <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                        {/if}
+                    </div>
+                </div>
+                <div class="env custom" style="display: none;">
+                    <label>{l s='API Custom Key' mod='oyst'}</label>
+                    <div class="margin-form">
+                        <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                        {if $oyst.apikey_custom_test_error_oneclick}
+                        <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                        {/if}
+                    </div>
                 </div>
                 <label>{l s='Syncronize your products' mod='oyst'}</label>
                 <div class="margin-form">

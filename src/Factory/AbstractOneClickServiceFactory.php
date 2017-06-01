@@ -22,7 +22,7 @@ abstract class AbstractOneClickServiceFactory
         /** @var OystOrderApi $apiClient */
         $apiClient = OystApiClientFactory::getClient(
             OystApiClientFactory::ENTITY_ONECLICK,
-            $oyst->getApiKey(),
+            $oyst->getOneClickApiKey(),
             $oyst->getUserAgent(),
             $oyst->getEnvironment(),
             $oyst->getApiUrl()
