@@ -7,12 +7,10 @@ use Context;
 use Oyst\Classes\Enum\AbstractOrderState;
 use Oyst\Factory\AbstractNewOrderServiceFactory;
 
-class OystOrderController extends AbstractOystController
+class OrderController extends AbstractOystController
 {
     public function createNewOrderAction()
     {
-        header('Content-Type: application/json');
-
         $json = $this->request->getJson();
 
         if ($json) {
@@ -35,7 +33,7 @@ class OystOrderController extends AbstractOystController
                 $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData)));
             }
 
-            echo json_encode($responseData);
+            $this->respondAsJson($responseData);
         } else {
             http_response_code(400);
         }
