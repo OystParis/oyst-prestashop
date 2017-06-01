@@ -10,3 +10,9 @@
         oyst.requestOneCLick(callback);
     };
 </script>
+
+<style type="text/css">
+    #oyst-1click-button {
+        margin: 10px;
+    }
+</style>
