@@ -114,7 +114,7 @@ class InstallManager
         $carrier->delay = array(
             PSConfiguration::get('PS_LANG_DEFAULT') => 'Delay'
         );
-        $carrier->is_module = false;
+        $carrier->is_module = true;
         $carrier->external_module_name = $this->oyst->name;
         $carrier->need_range = false;
 

@@ -2,7 +2,7 @@
 
 use Oyst\Controller\ExportProductController;
 use Oyst\Service\Http\CurrentRequest;
-use Oyst\Controller\OystOrderController;
+use Oyst\Controller\OrderController;
 use Oyst\Service\Logger\PrestaShopLogger;
 
 require_once __DIR__.'/../../config/config.inc.php';
@@ -39,7 +39,7 @@ if ($data && isset($data['event'])) {
             $exportProductController->exportCatalogAction();
             break;
         case 'order.new':
-            $orderController = new OystOrderController($request);
+            $orderController = new OrderController($request);
             $orderController->setLogger($logger);
             $orderController->createNewOrderAction();
             break;

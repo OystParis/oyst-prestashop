@@ -6,6 +6,7 @@ use Db;
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystOrderApi;
 use Oyst\Repository\AddressRepository;
+use Oyst\Repository\OrderRepository;
 use Oyst\Service\Api\Requester;
 use Oyst\Service\Logger\PrestaShopLogger;
 use Oyst\Service\NewOrderService;
@@ -42,11 +43,13 @@ class AbstractNewOrderServiceFactory
         );
 
         $addressRepository = new AddressRepository(Db::getInstance());
+        $orderRepository = new OrderRepository(Db::getInstance());
 
         $newOrderService
             ->setRequester($requester)
             ->setLogger($logger)
             ->setAddressRepository($addressRepository)
+            ->setOrderRepository($orderRepository)
         ;
 
         return $newOrderService;

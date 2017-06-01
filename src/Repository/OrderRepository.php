@@ -21,7 +21,10 @@
 
 namespace Oyst\Repository;
 
+use Carrier;
 use Configuration;
+use Order;
+use OrderHistory;
 use OystPaymentNotification;
 
 /**
@@ -50,6 +53,7 @@ class OrderRepository extends AbstractOystRepository
 
         $query = str_replace('ps_', _DB_PREFIX_, $query);
         $address = $this->db->getRow($query);
+
         return $address;
     }
 
@@ -300,9 +304,9 @@ class OrderRepository extends AbstractOystRepository
             }
 
             return $amount;
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
     /**
@@ -342,5 +346,48 @@ class OrderRepository extends AbstractOystRepository
         }
 
         return $amount > 0 ? $amount : 0;
+    }
+
+    /**
+     * @param Order $order
+     * @param Carrier $carrier
+     */
+    public function updateOrderCarrier(Order $order, Carrier $carrier)
+    {
+        // This part will be reviews with v2 to apply the carrier cost set by the merchant
+        $order->id_carrier = $carrier->id;
+        $order->total_paid = $order->total_paid_real;
+        $order->total_paid_tax_excl = $order->total_paid_tax_incl = $order->total_paid;
+        $order->total_shipping = 0;
+        $order->total_shipping_tax_excl = 0;
+        $order->total_shipping_tax_incl = 0;
+        $order->save();
+
+        $this->db->update('order_carrier', array(
+                'id_carrier' => $carrier->id,
+                'shipping_cost_tax_excl' => 0.0,
+                'shipping_cost_tax_incl' => 0.0,
+            ),
+            'id_order = '.(int) $order->id
+        );
+    }
+
+    /**
+     * @param Order $order
+     * @return OrderHistory
+     */
+    public function getLastOrderHistory(Order $order)
+    {
+        $orderId = (int) $order->id;
+        $query = "
+            SELECT id_order_history
+            FROM ps_order_history
+            WHERE id_order = $orderId
+            ORDER BY id_order_history DESC 
+        ";
+
+        $query = str_replace('ps_', _DB_PREFIX_, $query);
+
+        return new OrderHistory((int) $this->db->getValue($query));
     }
 }

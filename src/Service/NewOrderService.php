@@ -3,7 +3,7 @@
 namespace Oyst\Service;
 
 use Address;
-use Oyst\Api\AbstractOystApiClient;
+use Order;
 use Oyst\Repository\AddressRepository;
 use Carrier;
 use Cart;
@@ -14,7 +14,6 @@ use Currency;
 use Customer;
 use Exception;
 use Oyst\Repository\OrderRepository;
-use Oyst\Api\OystOrderApi;
 use Product;
 use ToolsCore;
 use Validate;
@@ -26,6 +25,9 @@ class NewOrderService extends AbstractOystService
 {
     /** @var  AddressRepository */
     private $addressRepository;
+
+    /** @var  OrderRepository */
+    private $orderRepository;
 
     /**
      * @param $user
@@ -109,22 +111,12 @@ class NewOrderService extends AbstractOystService
             return false;
         }
 
-        $carrierReference = PSConfiguration::get('OYST_ONE_CLICK_CARRIER');
-        $carrier = Carrier::getCarrierByReference($carrierReference);
-        if (!Validate::isLoadedObject($carrier)) {
-            $this->logger->emergency(
-                'Carrier reference not found: #'.$carrierReference
-            );
-            return false;
-        }
-
         $cart->id_customer = $customer->id;
         $cart->id_address_delivery = $cart->id_address_invoice = $address->id;
         $cart->id_lang = $customer->id_lang;
         $cart->secure_key = $customer->secure_key;
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
-        $cart->id_carrier = $carrier->id;
 
         if (!$cart->add()) {
             $this->logger->emergency(
@@ -145,11 +137,6 @@ class NewOrderService extends AbstractOystService
 
         $cart->update();
 
-        $key = Cart::desintifier($carrier->id);
-        $cart->setDeliveryOption(array($address->id => $key));
-        $cart->getDeliveryOptionList(null, true);
-        $cart->getDeliveryOption(null, false, false);
-
         $state = $this->oyst->validateOrder(
             $cart->id,
             PSConfiguration::get('PS_OS_PAYMENT'),
@@ -162,7 +149,43 @@ class NewOrderService extends AbstractOystService
             $cart->secure_key
         );
 
+        if ($state) {
+            $this->handleShippingCost($cart);
+        }
+
         return $state;
+    }
+
+    /**
+     * @param Cart $cart
+     * @return bool
+     */
+    private function handleShippingCost(Cart $cart)
+    {
+        if (!($orderId = Order::getOrderByCartId($cart->id))) {
+            return false;
+        }
+
+        // This is a tricky part, we need to use a carrier and hide it for the front process.
+        // So we have to rewrite the order detail properly according to the carrier
+
+        $carrierReference = PSConfiguration::get('OYST_ONE_CLICK_CARRIER');
+        $carrier = Carrier::getCarrierByReference($carrierReference);
+        if (!Validate::isLoadedObject($carrier)) {
+            $this->logger->emergency(
+                'Carrier reference not found: #'.$carrierReference
+            );
+            return false;
+        }
+
+        $order = new Order($orderId);
+        $this->orderRepository->updateOrderCarrier($order, $carrier);
+        $orderHistory = $this->orderRepository->getLastOrderHistory($order);
+        $orderHistory->id_order_state = 2;
+        $order->current_state = $orderHistory->id_order_state;
+        $order->save();
+
+        return true;
     }
 
     /**
@@ -261,6 +284,25 @@ class NewOrderService extends AbstractOystService
     public function setAddressRepository($addressRepository)
     {
         $this->addressRepository = $addressRepository;
+
+        return $this;
+    }
+
+    /**
+     * @return OrderRepository
+     */
+    public function getOrderRepository()
+    {
+        return $this->orderRepository;
+    }
+
+    /**
+     * @param OrderRepository $orderRepository
+     * @return $this
+     */
+    public function setOrderRepository($orderRepository)
+    {
+        $this->orderRepository = $orderRepository;
 
         return $this;
     }

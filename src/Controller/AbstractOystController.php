@@ -38,4 +38,13 @@ abstract class AbstractOystController
 
         return $this;
     }
+
+    /**
+     * @param $content
+     */
+    protected function respondAsJson($content)
+    {
+        header('Content-Type: application/json');
+        echo json_encode($content);
+    }
 }
