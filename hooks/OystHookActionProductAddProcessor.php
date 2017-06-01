@@ -42,6 +42,9 @@ class OystHookActionProductAddProcessor extends FroggyHookProcessor
      */
     public function run()
     {
+        // Disable this feature
+        return true;
+
         $product = $this->params['product'];
 
         $productService = \Oyst\Factory\AbstractProductServiceFactory::get($this->module, $this->context, Db::getInstance());
