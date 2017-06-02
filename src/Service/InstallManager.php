@@ -5,6 +5,11 @@ namespace Oyst\Service;
 use Carrier;
 use Db;
 use Configuration as PSConfiguration;
+use Oyst\Classes\OneClickShipment;
+use Oyst\Classes\OystCarrier;
+use Oyst\Classes\OystShipment;
+use Oyst\Classes\ShipmentAmount;
+use Oyst\Factory\AbstractShipmentServiceFactory;
 use Zone;
 use Group;
 use Validate;
@@ -40,6 +45,7 @@ class InstallManager
     {
         $state = true;
         $state &= $this->createCarrier();
+        $state &= $this->pushDefaultShipment();
         $state &= $this->createExportTable();
 
         return $state;
@@ -161,5 +167,31 @@ class InstallManager
 
         $carrier->deleted = 1;
         return $carrier->save();
+    }
+
+    public function pushDefaultShipment()
+    {
+        $shipment = new OneClickShipment();
+
+        $carrier = new OystCarrier(
+            PSConfiguration::get(Configuration::ONE_CLICK_CARRIER),
+            'Default and Free',
+            OneClickShipment::HOME_DELIVERY
+        );
+
+        $amount = new ShipmentAmount(0, 0, 'EUR');
+        $shipment
+            ->setCarrier($carrier)
+            ->setAmount($amount)
+            ->setDelay(7)
+            ->setFreeShipping(0)
+            ->setPrimary(true)
+            ->setZones([
+                'FR'
+            ])
+        ;
+
+        $shipmentService = AbstractShipmentServiceFactory::get($this->oyst, $this->oyst->getContext(), $this->db);
+        $result = $shipmentService->pushShipment($shipment);
     }
 }

@@ -27,6 +27,7 @@ function upgrade_module_1_2_0($module)
 {
     $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module,_DB_PREFIX_);
     $oystDb->createExportTable();
+    $oystDb->pushDefaultShipment();
     $oystDb->createCarrier();
 
     // As hook are handled dynamically by parent lib, we don't need to move them elsewhere
