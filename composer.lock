@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9494dc34e5b55f8d10e0262c7c8f1da",
+    "content-hash": "cb8345ff849f5af268a4d47317c8e92b",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -142,20 +142,26 @@
         },
         {
             "name": "oyst/oyst-php",
-            "version": "dev-master",
+            "version": "dev-feat-shipments",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OystParis/oyst-php.git",
-                "reference": "c1f61d8da19ca6f19472dc3ac46d7cab0319b1bf"
+                "reference": "36e1c21033fb0617e470d2181870f04ed401aa76"
             },
             "require": {
-                "guzzlehttp/guzzle": "3.8.1",
+                "guzzlehttp/guzzle": "^3.8",
                 "php": ">=5.3",
-                "symfony/yaml": "2.*"
+                "symfony/yaml": "^2.8"
             },
             "require-dev": {
+                "phploc/phploc": "^2.1",
+                "phpmd/phpmd": "^2.6",
                 "phpunit/phpunit": "4.8.35",
-                "squizlabs/php_codesniffer": "2.*"
+                "sebastian/phpcpd": "^2.0",
+                "sebastian/phpdcd": "^1.0",
+                "simplyadmire/composer-plugins": "^2.1",
+                "squizlabs/php_codesniffer": "^2.9",
+                "wimg/php-compatibility": "^7.1"
             },
             "type": "library",
             "autoload": {
@@ -163,6 +169,9 @@
                     "Oyst\\": "src"
                 }
             },
+            "license": [
+                "Apache-2.0"
+            ],
             "authors": [
                 {
                     "name": "Oyst Team",
@@ -182,7 +191,11 @@
                 "payment",
                 "php"
             ],
-            "time": "2017-05-31 10:23:40"
+            "support": {
+                "issues": "https://github.com/OystParis/oyst-php/issues",
+                "source": "https://github.com/OystParis/oyst-php/"
+            },
+            "time": "2017-06-02 13:23:17"
         },
         {
             "name": "symfony/event-dispatcher",

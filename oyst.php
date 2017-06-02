@@ -415,4 +415,12 @@ class Oyst extends FroggyPaymentModule
     {
         return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/oyst/notification.php';
     }
+
+    /**
+     * @return Context
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
 }
