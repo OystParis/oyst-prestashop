@@ -154,7 +154,7 @@ class ExportProductService extends AbstractOystService
     }
 
     /**
-     * @param $state
+     * @param bool $state
      * @return $this
      */
     public function setExportCatalogState($state)

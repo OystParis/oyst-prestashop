@@ -69,6 +69,10 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
 
     private function fetchExportContent()
     {
+        if (!($isPanelVisible = $this->module->getAdminPanelInformationVisibility())) {
+            return '';
+        }
+
         $oystProductRepository = new ProductRepository(Db::getInstance());
         $exportedProducts = $oystProductRepository->getExportedProduct();
 
