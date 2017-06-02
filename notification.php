@@ -12,17 +12,6 @@ $request = new CurrentRequest();
 $data = $request->getJson();
 
 $logger = new PrestaShopLogger();
-$logger->info(
-    sprintf('New notification request Request[%s] RawBody:[%s] Body[%s] GET[%s] POST[%s]',
-        json_encode($_REQUEST),
-        $request->getBody(),
-        json_encode($data),
-        json_encode($request->getQuery()),
-        json_encode($request->getRequest())
-    ), array(
-        'objectType' => 'OystNotification'
-    )
-);
 
 if ($data && isset($data['event'])) {
 
@@ -47,5 +36,16 @@ if ($data && isset($data['event'])) {
             http_response_code(400);
     }
 } else {
+    $logger->warning(
+        sprintf('[Bad request notification] Request[%s] RawBody:[%s] Body[%s] GET[%s] POST[%s]',
+            json_encode($_REQUEST),
+            $request->getBody(),
+            json_encode($data),
+            json_encode($request->getQuery()),
+            json_encode($request->getRequest())
+        ), array(
+            'objectType' => 'OystNotification'
+        )
+    );
     http_response_code(400);
 }
