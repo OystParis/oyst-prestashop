@@ -36,9 +36,11 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
         }
 
         $this->smarty->assign(array(
-            'shopUrl' => Tools::getShopDomainSsl(true).__PS_BASE_URI__,
+            'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
+            'oneClickUrl' => trim($this->module->getOneClickUrl(), '/'),
             'product' => $product,
         ));
+
         return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');
     }
 }

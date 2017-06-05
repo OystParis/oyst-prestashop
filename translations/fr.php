@@ -105,7 +105,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_0ba29c6a1afacf586b03a
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_756d97bb256b8580d4d71ee0c547804e'] = 'Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_97f559e8d8c3575af3f669d903ee4111'] = 'Pré-Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_90589c47f06eb971d548591f23c285af'] = 'Personnalisé';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnaliée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4578544e15448d2758f7c6ae4009253a'] = 'Cacher les options avancées';
@@ -144,6 +145,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_756d97bb256b8580d4d71ee0c547804
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_97f559e8d8c3575af3f669d903ee4111'] = 'Pré-Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_90589c47f06eb971d548591f23c285af'] = 'Personnalié';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_39074f6e402daf268c5d26c30950d5cc'] = 'Afficher les options avancées';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4578544e15448d2758f7c6ae4009253a'] = 'Cacher les options avancées';

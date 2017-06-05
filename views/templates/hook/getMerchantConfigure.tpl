@@ -191,6 +191,10 @@
                 <div class="margin-form env custom">
                     <input type="text" id="OYST_API_CUSTOM_ENDPOINT" name="OYST_API_CUSTOM_ENDPOINT" value="{$oyst.OYST_API_CUSTOM_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
                 </div>
+                <label class="env custom">{l s='Endpoint CDN Custom' mod='oyst'}</label>
+                <div class="margin-form env custom">
+                    <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
+                </div>
             </div>
             <br>
             <div class="margin-form">
