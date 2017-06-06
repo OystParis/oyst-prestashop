@@ -27,11 +27,22 @@ class ShipmentService extends AbstractOystService
 {
     /**
      * @param OneClickShipment $shipment
+     *
      * @return bool
      */
     public function pushShipment(OneClickShipment $shipment)
     {
-        $result = $this->requester->call('postShipments', array($shipment));
+        $this->pushShipments(array($shipment));
+    }
+
+    /**
+     * @param OneClickShipment[] $shipments
+     *
+     * @return bool
+     */
+    public function pushShipments($shipments)
+    {
+        $result = $this->requester->call('postShipments', array($shipments));
 
         if (!isset($result['shipments']) || !count($result['shipments'])) {
             $this->logger->alert('No shipment(s) sent');
