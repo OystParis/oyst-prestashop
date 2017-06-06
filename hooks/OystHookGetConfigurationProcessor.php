@@ -26,10 +26,13 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Oyst\Api\OystApiClientFactory;
+use Oyst\Classes\OneClickShipment;
+use Oyst\Classes\OystCarrier;
+use Oyst\Classes\ShipmentAmount;
 use Oyst\Factory\AbstractExportProductServiceFactory;
 use Oyst\Service\Configuration as OystConfiguration;
 use Oyst\Service\Http\CurrentRequest;
-use Oyst\Api\OystApiClientFactory;
 use Oyst\Service\Logger\PrestaShopLogger;
 
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
@@ -109,7 +112,51 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 }
                 Configuration::updateValue($conf, $value);
             }
-            $this->configuration_result = 'ok';
+
+            $resultConfiguration = 'ok';
+
+            // Handle Shipments
+            $shipments = Tools::getValue('shipments');
+            $data = array();
+
+            foreach ($shipments as $key => $shipment) {
+                $oneClickShipment = new OneClickShipment();
+                $carrier = new Carrier($shipment['id_carrier']);
+                $oneClickShipment->setCarrier(new OystCarrier($shipment['id_carrier'], $carrier->name, $shipment['type']));
+                $oneClickShipment->setAmount(new ShipmentAmount((float) $shipment['amount_follower'], (float) $shipment['amount_leader'], 'EUR'));
+                $oneClickShipment->setFreeShipping((float) $shipment['free_shipping']);
+                $oneClickShipment->setPrimary(isset($shipment['primary']) && $shipment['primary'] == 1 ? true : false);
+                $oneClickShipment->setDelay((int) $shipment['delay'] * 24);
+                $oneClickShipment->setZones(array('FR'));
+                $data[] = $oneClickShipment;
+            }
+
+            Db::getInstance()->delete('oyst_shipment');
+            if (count($data)) {
+                $shipmentService = AbstractShipmentServiceFactory::get($this->module, $this->context, Db::instance());
+                $isResultOk = $shipmentService->pushShipments($data);
+
+                if ($isResultOk) {
+                    foreach ($shipments as $shipment) {
+                        $insert = array(
+                            'id_carrier' => (int) $shipment['id_carrier'],
+                            'primary' => isset($shipment['primary']) && $shipment['primary'] == 1 ? true : false,
+                            'type' => $shipment['type'],
+                            'delay' => (int) $shipment['delay'],
+                            'amount_leader' => (float) $shipment['amount_leader'],
+                            'amount_follower' => (float) $shipment['amount_follower'],
+                            'amount_currency' => 'EUR',
+                            'free_shipping' => (float) $shipment['free_shipping'],
+                            'zones' => 'FR',
+                        );
+                        Db::getInstance()->insert('oyst_shipment', $insert);
+                    }
+                } else {
+                    $resultConfiguration = 'ko';
+                }
+            }
+
+            $this->configuration_result = $resultConfiguration;
         }
     }
 
@@ -147,6 +194,22 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
         $this->handleContactForm($assign, $hasError, $goToForm);
 
+        $catalogApi = OystApiClientFactory::getClient(
+            OystApiClientFactory::ENTITY_CATALOG,
+            $this->module->getOneClickApiKey(),
+            $this->module->getUserAgent(),
+            $this->module->getEnvironment(),
+            $this->module->getApiUrl()
+        );
+        $result = $catalogApi->getShipmentTypes();
+        $shipmentTypes = array();
+
+        if (isset($result['types'])) {
+            foreach ($result['types'] as $value => $label) {
+                $shipmentTypes[$value] = $this->module->l($label, 'oysthookgetconfigurationprocessor');
+            }
+        }
+
         $assign['lastExportDate'] = $lastExportDate;
         $assign['hasAlreadyExportProducts'] = $hasAlreadyExportProducts;
         $assign['hasApiKey']     = $hasApiKey;
@@ -172,6 +235,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['redirect_error_urls']      = $this->redirect_error_urls;
         $assign['custom_success_error']     = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM'));
         $assign['custom_error_error']       = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
+        $assign['carrier_list']             = $this->getCarrierList();
+        $assign['shipment_list']            = $this->getShipmentList();
+        $assign['type_list']                = $shipmentTypes;
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');
@@ -346,5 +412,20 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $assign['message'] = $message;
         $assign['show_sub_message'] = $showSubMessage;
+    }
+
+    private function getCarrierList()
+    {
+        $carrier_list = Carrier::getCarriers($this->context->language->id, false, false, false, null, Carrier::ALL_CARRIERS);
+
+        return $carrier_list;
+    }
+
+    private function getShipmentList()
+    {
+        $query = 'SELECT * FROM '._DB_PREFIX_.'oyst_shipment';
+        $shipment_list = Db::getInstance()->executeS($query);
+
+        return $shipment_list;
     }
 }

@@ -176,6 +176,114 @@
                     <p>{l s='Will export your products to Oyst' mod='oyst'}</p>
                 {/if}
                 </div>
+                <label>{l s='Shipments' mod='oyst'}</label>
+                <div class="margin-form">
+                    <div id="shipment-collection">
+                        <div id="shipment-model" style="display: none;">
+                            <div class="shipment-item">
+                                <label>{l s='Carrier' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <select name="shipments[__shipment_id__][id_carrier]">
+                                    {foreach $oyst.carrier_list as $carrier}
+                                        <option value="{$carrier.id_reference}">{$carrier.name}</option>
+                                    {/foreach}
+                                    </select>
+                                </div>
+                                <label>{l s='Primary' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" name="shipments[__shipment_id__][primary]" value="1"/>
+                                </div>
+                                <label>{l s='Type' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <select name="shipments[__shipment_id__][type]">
+                                    {foreach from=$oyst.type_list key=value item=name}
+                                        <option value="{$value}">{$name}</option>
+                                    {/foreach}
+                                    </select>
+                                </div>
+                                <label>{l s='Delay' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
+                                </div>
+                                <label>{l s='Zones' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" value="France Métropolitaine" disabled="disabled"/>
+                                </div>
+                                <label>{l s='Amount' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="shipments[__shipment_id__][amount_leader]" value=""/>
+                                    <br>
+                                    <span class="help-block">{l s='First product' mod='oyst'}</span>
+                                </div>
+                                <div class="margin-form">
+                                    <input type="text" name="shipments[__shipment_id__][amount_follower]" value=""/>
+                                    <br>
+                                    <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Free shipping from' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="shipments[__shipment_id__][free_shipping]" value=""/>
+                                </div>
+                                <label></label>
+                                <div class="margin-form">
+                                    <button type="button" class="delete-shipment">{l s='Delete Shipment' mod='oyst'}</button>
+                                </div>
+                            </div>
+                        </div>
+                        {foreach from=$oyst.shipment_list key=index item=shipment}
+                        <div class="shipment-item">
+                            <label>{l s='Carrier' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <select name="shipments[{$index}][id_carrier]">
+                                {foreach $oyst.carrier_list as $carrier}
+                                    <option value="{$carrier.id_reference}"{if $shipment.id_carrier == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
+                                {/foreach}
+                                </select>
+                            </div>
+                            <label>{l s='Primary' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <input type="checkbox" name="shipments[{$index}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
+                            </div>
+                            <label>{l s='Type' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <select name="shipments[{$index}][type]">
+                                {foreach from=$oyst.type_list key=value item=name}
+                                    <option value="{$value}"{if $shipment.type == $value} selected="selected"{/if}>{$name}</option>
+                                {/foreach}
+                                </select>
+                            </div>
+                            <label>{l s='Delay' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <input type="text" name="shipments[{$index}][delay]" value="{$shipment.delay}"/>
+                            </div>
+                            <label>{l s='Zones' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <input type="text" value="France Métropolitaine" disabled="disabled"/>
+                            </div>
+                            <label>{l s='Amount' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <input type="text" name="shipments[{$index}][amount_leader]" value="{$shipment.amount_leader}"/>
+                                <br>
+                                <span class="help-block">{l s='First product' mod='oyst'}</span>
+                            </div>
+                            <div class="margin-form">
+                                <input type="text" name="shipments[{$index}][amount_follower]" value="{$shipment.amount_follower}"/>
+                                <br>
+                                <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
+                            </div>
+                            <label>{l s='Free shipping from' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <input type="text" name="shipments[{$index}][free_shipping]" value="{$shipment.free_shipping}"/>
+                            </div>
+                            <label></label>
+                            <div class="margin-form">
+                                <button type="button" class="delete-shipment">{l s='Delete Shipment' mod='oyst'}</button>
+                            </div>
+                        </div>
+                        {/foreach}
+                    </div>
+                    <button type="button" id="add-shipment" class="btn btn-success">{l s='Add Shipment' mod='oyst'}</button>
+                </div>
                 <div class="margin-form">
                     <h3>{l s='Environment' mod='oyst'}</h3>
                 </div>
@@ -213,3 +321,16 @@
 {/if}
 
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
+<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
+<style>
+    .shipment-item {
+        border-bottom: 1px solid #C7D6DB;
+        margin-bottom: 15px;
+    }
+    #shipment-model label, .shipment-item label {
+        width: 150px;
+    }
+    #shipment-model .margin-form, .shipment-item .margin-form {
+        padding-left: 160px;
+    }
+</style>

@@ -206,6 +206,176 @@
                     {/if}
                     </div>
                 </div>
+                <div class="form-group clearfix">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Shipments' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <div id="shipment-collection">
+                            <div id="shipment-model" style="display: none;">
+                                <div class="shipment-item">
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-4">{l s='Carrier' mod='oyst'}</label>
+                                        <div class="col-md-9 col-lg-8">
+                                            <select name="shipments[__shipment_id__][id_carrier]">
+                                            {foreach $oyst.carrier_list as $carrier}
+                                                {if !isset($carrier.selected) || !$carrier.selected}
+                                                <option value="{$carrier.id_reference}">{$carrier.name}</option>
+                                                {/if}
+                                            {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-4">{l s='Primary' mod='oyst'}</label>
+                                        <div class="col-md-9 col-lg-8">
+                                            <input type="checkbox" name="shipments[__shipment_id__][primary]" value="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-4">{l s='Type' mod='oyst'}</label>
+                                        <div class="col-md-9 col-lg-8">
+                                            <select name="shipments[__shipment_id__][type]">
+                                            {foreach from=$oyst.type_list key=value item=name}
+                                                <option value="{$value}">{$name}</option>
+                                            {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-4">{l s='Delay' mod='oyst'}</label>
+                                        <div class="col-md-9 col-lg-8">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-time"></i></span>
+                                                <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
+                                            </div>
+                                            <span class="help-block">{l s='Value in days' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-4">{l s='Zones' mod='oyst'}</label>
+                                        <div class="col-md-9 col-lg-8">
+                                            <input type="text" value="France Métropolitaine" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
+                                        <div class="col-md-9 col-lg-8">
+                                            <div class="amount-shipment-leader col-xs-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">€</span>
+                                                    <input type="text" name="shipments[__shipment_id__][amount_leader]" value=""/>
+                                                </div>
+                                                <span class="help-block">{l s='First product' mod='oyst'}</span>
+                                            </div>
+                                            <div class="amount-shipment-follower col-xs-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">€</span>
+                                                    <input type="text" name="shipments[__shipment_id__][amount_follower]" value=""/>
+                                                </div>
+                                                <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-4">{l s='Free shipping from' mod='oyst'}</label>
+                                        <div class="col-md-9 col-lg-8">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">€</span>
+                                                <input type="text" name="shipments[__shipment_id__][free_shipping]" value=""/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-4"></label>
+                                        <div class="col-md-9 col-lg-8">
+                                            <button type="button" class="delete-shipment btn btn-danger">{l s='Delete Shipment' mod='oyst'}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {foreach from=$oyst.shipment_list key=index item=shipment}
+                            <div class="shipment-item">
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-4">{l s='Carrier' mod='oyst'}</label>
+                                    <div class="col-md-9 col-lg-8">
+                                        <select name="shipments[{$index}][id_carrier]">
+                                        {foreach $oyst.carrier_list as $carrier}
+                                            <option value="{$carrier.id_reference}"{if $shipment.id_carrier == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
+                                        {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-4">{l s='Primary' mod='oyst'}</label>
+                                    <div class="col-md-9 col-lg-8">
+                                        <input type="checkbox" name="shipments[{$index}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-4">{l s='Type' mod='oyst'}</label>
+                                    <div class="col-md-9 col-lg-8">
+                                        <select name="shipments[{$index}][type]">
+                                        {foreach from=$oyst.type_list key=value item=name}
+                                            <option value="{$value}"{if $shipment.type == $value} selected="selected"{/if}>{$name}</option>
+                                        {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-4">{l s='Delay' mod='oyst'}</label>
+                                    <div class="col-md-9 col-lg-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon-time"></i></span>
+                                            <input type="text" name="shipments[{$index}][delay]" value="{$shipment.delay}"/>
+                                        </div>
+                                        <span class="help-block">{l s='Value in days' mod='oyst'}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-4">{l s='Zones' mod='oyst'}</label>
+                                    <div class="col-md-9 col-lg-8">
+                                        <input type="text" value="France Métropolitaine" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
+                                    <div class="col-md-9 col-lg-8">
+                                        <div class="amount-shipment-leader col-xs-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">€</span>
+                                                <input type="text" name="shipments[{$index}][amount_leader]" value="{$shipment.amount_leader}"/>
+                                            </div>
+                                            <span class="help-block">{l s='First product' mod='oyst'}</span>
+                                        </div>
+                                        <div class="amount-shipment-follower col-xs-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">€</span>
+                                                <input type="text" name="shipments[{$index}][amount_follower]" value="{$shipment.amount_follower}"/>
+                                            </div>
+                                            <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-4">{l s='Free shipping from' mod='oyst'}</label>
+                                    <div class="col-md-9 col-lg-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">€</span>
+                                            <input type="text" name="shipments[{$index}][free_shipping]" value="{$shipment.free_shipping}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-4"></label>
+                                    <div class="col-md-9 col-lg-8">
+                                        <button type="button" class="delete-shipment btn btn-danger">{l s='Delete Shipment' mod='oyst'}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {/foreach}
+                        </div>
+                        <button type="button" id="add-shipment" class="btn btn-success">{l s='Add Shipment' mod='oyst'}</button>
+                    </div>
+                </div>
             </fieldset>
             <fieldset class="advancedOptions">
                 <div class="form-group">
@@ -256,3 +426,16 @@
 {/if}
 
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
+<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
+<style>
+    .shipment-item {
+        border-bottom: 1px solid #C7D6DB;
+        margin-bottom: 15px;
+    }
+    .amount-shipment-leader {
+        padding-left: 0 !important;
+    }
+    .amount-shipment-follower {
+        padding-right: 0 !important;
+    }
+</style>

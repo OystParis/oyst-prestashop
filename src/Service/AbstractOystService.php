@@ -29,7 +29,6 @@ use Oyst\Service\Serializer\SerializerInterface;
 
 /**
  * Class AbstractOystService
- * @package Oyst\Service
  */
 abstract class AbstractOystService
 {
@@ -39,13 +38,13 @@ abstract class AbstractOystService
     /** @var Oyst  */
     protected $oyst;
 
-    /** @var  AbstractLogger */
+    /** @var AbstractLogger */
     protected $logger;
 
-    /** @var  SerializerInterface */
+    /** @var SerializerInterface */
     protected $serializer;
 
-    /** @var  Requester */
+    /** @var Requester */
     protected $requester;
 
     /**
