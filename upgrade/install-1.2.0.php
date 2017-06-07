@@ -25,6 +25,8 @@
  */
 function upgrade_module_1_2_0($module)
 {
+    $module->updateConstants();
+
     $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module,_DB_PREFIX_);
     $oystDb->createExportTable();
     $oystDb->pushDefaultShipment();
@@ -33,8 +35,6 @@ function upgrade_module_1_2_0($module)
     // As hook are handled dynamically by parent lib, we don't need to move them elsewhere
     $module->registerHook('displayFooterProduct');
     $module->registerHook('displayBackOfficeHeader');
-
-    $module->updateConstants();
 
     // All went well!
     return true;

@@ -228,9 +228,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 die();
             } else {
                 $apiClient = $exportProductService->getRequester()->getApiClient();
-                $this->smarty->assign([
+                $this->smarty->assign(array(
                     'apiError' => $apiClient->getLastError(),
-                ]);
+                ));
             }
         }
     }

@@ -118,6 +118,10 @@ class Oyst extends FroggyPaymentModule
         Configuration::deleteByName('FC_OYST_API_KEY');
         Configuration::deleteByName('FC_OYST_API_PAYMENT_ENDPOINT');
         Configuration::deleteByName('FC_OYST_API_CATALOG_ENDPOINT');
+
+        Configuration::updateValue('OYST_API_ENV', 'prod');
+        Configuration::updateValue('OYST_ONECLICK_URL_PROD', 'https://cdn.oyst.com');
+        Configuration::updateValue('OYST_ONECLICK_URL_PREPROD', 'https://cdn.staging.oyst.eu');
     }
 
     /**

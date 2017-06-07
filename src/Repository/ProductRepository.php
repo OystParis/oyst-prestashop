@@ -66,7 +66,7 @@ class ProductRepository extends AbstractOystRepository
      */
     public function recordSentProductsFromOystProductList(Oyst $oyst, $baseProductToExport, $oystProductsExported, $importId)
     {
-        $productIds = [];
+        $productIds = array();
         foreach ($baseProductToExport as $product) {
             $hasBeenExported = false;
             foreach ($oystProductsExported as $oystProduct) {
@@ -80,12 +80,12 @@ class ProductRepository extends AbstractOystRepository
                 }
             }
 
-            $productIds[] = [
+            $productIds[] = array(
                 'productId' => $product['id_product'],
                 'productAttributeId' => (int)$product['id_product_attribute'],
                 'importId' => $importId,
                 'hasBeenExported' => (int) $hasBeenExported,
-            ];
+            );
         }
         return $this->db->insert('oyst_exported_catalog', $productIds);
     }
