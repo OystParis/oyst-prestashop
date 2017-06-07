@@ -17,7 +17,6 @@
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license   GNU GENERAL PUBLIC LICENSE
- */
 
 namespace Oyst\Repository;
 
@@ -34,6 +33,7 @@ class OrderRepository extends AbstractOystRepository
 {
     /**
      * @param $user
+     *
      * @return mixed
      */
     public function findAddressByUserInfo($user)
@@ -58,7 +58,6 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
-     * 
      * @param int $idCart
      * @param int $currentState
      *
@@ -84,7 +83,6 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
-     * 
      * @param int $idCart
      * @param int $currentState
      *
@@ -110,7 +108,6 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
-     * 
      * @param int $idCart
      *
      * @return float
@@ -145,7 +142,6 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
-     * 
      * @param int $idCart
      * @param int $currentState
      *
@@ -186,7 +182,6 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
-     * 
      * @param int   $idCart
      * @param float $totalAmount
      *
@@ -212,7 +207,6 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
-     * 
      * @param Order $order
      * @param array $tabAccess
      *
@@ -230,7 +224,6 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
-     * 
      * @param array $tabAccess
      * @param Order $order
      *
@@ -310,7 +303,6 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
-     * 
      * @param array $tabAccess
      *
      * @return float
