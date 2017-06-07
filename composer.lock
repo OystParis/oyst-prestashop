@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb8345ff849f5af268a4d47317c8e92b",
+    "hash": "5f4f879d2d37ee95f259ac4218d4c690",
+    "content-hash": "3987c0d37a5899afee7d094fb9937038",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -96,7 +97,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-01-28T22:29:15+00:00"
+            "time": "2014-01-28 22:29:15"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -138,15 +139,15 @@
                 "hashing",
                 "password"
             ],
-            "time": "2014-11-20T16:49:30+00:00"
+            "time": "2014-11-20 16:49:30"
         },
         {
             "name": "oyst/oyst-php",
-            "version": "dev-feat-shipments",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OystParis/oyst-php.git",
-                "reference": "36e1c21033fb0617e470d2181870f04ed401aa76"
+                "reference": "e9da31f49afe0c89a0f8710bf09fd5c114ef0207"
             },
             "require": {
                 "guzzlehttp/guzzle": "^3.8",
@@ -195,7 +196,7 @@
                 "issues": "https://github.com/OystParis/oyst-php/issues",
                 "source": "https://github.com/OystParis/oyst-php/"
             },
-            "time": "2017-06-02 13:23:17"
+            "time": "2017-06-06 14:13:45"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -255,7 +256,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-01T14:58:48+00:00"
+            "time": "2017-05-01 14:58:48"
         },
         {
             "name": "symfony/polyfill-php55",
@@ -311,7 +312,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14T01:06:16+00:00"
+            "time": "2016-11-14 01:06:16"
         },
         {
             "name": "symfony/property-access",
@@ -371,7 +372,7 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2017-03-21T21:39:01+00:00"
+            "time": "2017-03-21 21:39:01"
         },
         {
             "name": "symfony/serializer",
@@ -435,7 +436,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-21T22:47:17+00:00"
+            "time": "2017-03-21 22:47:17"
         },
         {
             "name": "symfony/yaml",
@@ -484,7 +485,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-01T14:31:55+00:00"
+            "time": "2017-05-01 14:31:55"
         }
     ],
     "packages-dev": [
@@ -545,7 +546,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14T01:06:16+00:00"
+            "time": "2016-11-14 01:06:16"
         },
         {
             "name": "symfony/var-dumper",
@@ -613,14 +614,12 @@
                 "debug",
                 "dump"
             ],
-            "time": "2017-05-01T14:55:58+00:00"
+            "time": "2017-05-01 14:55:58"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "oyst/oyst-php": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

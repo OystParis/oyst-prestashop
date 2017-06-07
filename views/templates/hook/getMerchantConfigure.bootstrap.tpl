@@ -230,6 +230,12 @@
                         <input type="text" id="OYST_API_CUSTOM_ENDPOINT" name="OYST_API_CUSTOM_ENDPOINT" value="{$oyst.OYST_API_CUSTOM_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
                     </div>
                 </div>
+                <div class="form-group clearfix env custom" style="display: none;">
+                    <label class="control-label col-md-3 col-lg-4">{l s='Endpoint CDN Custom' mod='oyst'}</label>
+                    <div class="col-md-7 col-lg-4">
+                        <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
+                    </div>
+                </div>
             </fieldset>
             <div class="form-group clearfix">
                 <label class="control-label col-lg-4"></label>

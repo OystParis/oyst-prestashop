@@ -7,7 +7,6 @@ use Db;
 use Configuration as PSConfiguration;
 use Oyst\Classes\OneClickShipment;
 use Oyst\Classes\OystCarrier;
-use Oyst\Classes\OystShipment;
 use Oyst\Classes\ShipmentAmount;
 use Oyst\Factory\AbstractShipmentServiceFactory;
 use Zone;

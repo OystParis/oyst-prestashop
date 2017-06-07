@@ -39,6 +39,9 @@
         "OYST_API_CUSTOM_ENDPOINT": "",
 
         "FC_OYST_TRACKER_URL": "https://trk.10ru.pt",
+        "OYST_ONECLICK_URL_PROD": "https://cdn.oyst.com",
+        "OYST_ONECLICK_URL_PREPROD": "https://cdn.staging.oyst.eu",
+        "OYST_ONECLICK_URL_CUSTOM": "",
 
         "FC_OYST_REDIRECT_SUCCESS": "ORDER_CONFIRMATION",
         "FC_OYST_REDIRECT_ERROR": "PAYMENT_ERROR",
