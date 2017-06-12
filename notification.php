@@ -48,6 +48,7 @@ if ($data && isset($data['event'])) {
             $exportProductController->exportCatalogAction();
             break;
         case 'order.new':
+        case 'order.v2.new':
             $orderController = new OrderController($request);
             $orderController->setLogger($logger);
             $orderController->createNewOrderAction();
