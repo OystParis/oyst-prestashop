@@ -147,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oystparis/oyst-php.git",
-                "reference": "887a72e5406d1cc7187ec7101bfaed1552bcac06"
+                "reference": "3b772a1f5601e4c263118621b86c330f051ae9ef"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/887a72e5406d1cc7187ec7101bfaed1552bcac06",
-                "reference": "887a72e5406d1cc7187ec7101bfaed1552bcac06",
+                "reference": "3b772a1f5601e4c263118621b86c330f051ae9ef",
                 "shasum": ""
             },
             "require": {

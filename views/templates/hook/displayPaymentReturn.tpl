@@ -17,7 +17,6 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-
 <div id="oyst-confirmation">
     <p class="conf">
         {l s='Your order %s is complete.' sprintf=$oyst.order_reference mod='oyst'}<br>

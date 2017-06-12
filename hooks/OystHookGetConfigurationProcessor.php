@@ -181,7 +181,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         if ($hasApiKey && (!empty($currentFreePayApiKey) && !$isCurrentFreePayApiKeyValid || !empty($currentOneClickApiKey) && !$isCurrentOneClickApiKeyValid)) {
-            $env = strtolower($this->module->getEnvironment());
+            $env = Tools::strtolower($this->module->getEnvironment());
 
             if (!$isCurrentFreePayApiKeyValid) {
                 $key = 'apikey_'.$env.'_test_error_freepay';

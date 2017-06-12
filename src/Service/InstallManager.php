@@ -1,4 +1,23 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 namespace Oyst\Service;
 
@@ -16,11 +35,6 @@ use Validate;
 class InstallManager
 {
     /**
-     * @var string
-     */
-    private $tablePrefix;
-
-    /**
      * @var Db
      */
     private $db;
@@ -30,9 +44,8 @@ class InstallManager
      */
     private $oyst;
 
-    public function __construct(Db $db, \Oyst $oyst, $tablePrefix = '')
+    public function __construct(Db $db, \Oyst $oyst)
     {
-        $this->tablePrefix = $tablePrefix;
         $this->db = $db;
         $this->oyst = $oyst;
     }
@@ -56,7 +69,7 @@ class InstallManager
     public function createExportTable()
     {
         $query = "
-            CREATE TABLE IF NOT EXISTS ps_oyst_exported_catalog
+            CREATE TABLE IF NOT EXISTS "._DB_PREFIX_."oyst_exported_catalog
             (
                 productId INT,
                 productAttributeId INT,
@@ -65,7 +78,7 @@ class InstallManager
             );  
         ";
 
-        return $this->db->execute($this->prefixQuery($query));
+        return $this->db->execute($query);
     }
 
     /**
@@ -74,10 +87,10 @@ class InstallManager
     public function dropExportTable()
     {
         $query = "
-            DROP TABLE IF EXISTS ps_oyst_exported_catalog;
+            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_exported_catalog;
         ";
 
-        return $this->db->execute($this->prefixQuery($query));
+        return $this->db->execute($query);
     }
 
     public function uninstall()
@@ -89,18 +102,8 @@ class InstallManager
         $this->removeConfiguration();
     }
 
-    /**
-     * @param $query
-     * @return string
-     */
-    private function prefixQuery($query)
-    {
-        return str_replace('ps_', $this->tablePrefix, $query);
-    }
-
     public function createCarrier()
     {
-
         //Create new carrier
         $carrier = new Carrier(PSConfiguration::get(Configuration::ONE_CLICK_CARRIER));
 
@@ -132,7 +135,8 @@ class InstallManager
 
             $zones = Zone::getZones(true);
             foreach ($zones as $z) {
-                Db::getInstance()->insert('carrier_zone',
+                Db::getInstance()->insert(
+                    'carrier_zone',
                     array('id_carrier' => (int) $carrier->id, 'id_zone' => (int) $z['id_zone'])
                 );
             }
@@ -185,9 +189,7 @@ class InstallManager
             ->setDelay(7)
             ->setFreeShipping(0)
             ->setPrimary(true)
-            ->setZones([
-                'FR'
-            ])
+            ->setZones(array('FR'))
         ;
 
         $shipmentService = AbstractShipmentServiceFactory::get($this->oyst, $this->oyst->getContext(), $this->db);

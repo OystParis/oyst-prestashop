@@ -1,4 +1,23 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 namespace Oyst\Service;
 
@@ -19,14 +38,14 @@ use ToolsCore;
 use Validate;
 
 /**
- * Class Oyst\Service\OneClickService
+ * Class OneClickService
  */
 class NewOrderService extends AbstractOystService
 {
-    /** @var  AddressRepository */
+    /** @var AddressRepository */
     private $addressRepository;
 
-    /** @var  OrderRepository */
+    /** @var OrderRepository */
     private $orderRepository;
 
     /**
@@ -143,7 +162,7 @@ class NewOrderService extends AbstractOystService
             $oystOrderInfo['order_amount']['value'] / 100,
             'Oyst OneClick',
             null,
-            [],
+            array(),
             null,
             true,
             $cart->secure_key
@@ -158,6 +177,7 @@ class NewOrderService extends AbstractOystService
 
     /**
      * @param Cart $cart
+     *
      * @return bool
      */
     private function handleShippingCost(Cart $cart)
@@ -190,6 +210,7 @@ class NewOrderService extends AbstractOystService
 
     /**
      * @param $oystOrderId
+     *
      * @return \Guzzle\Http\Message\Response
      */
     public function getOrderInfo($oystOrderId)
@@ -201,7 +222,9 @@ class NewOrderService extends AbstractOystService
 
     /**
      * @param $orderId
+     *
      * @return array
+     *
      * @throws Exception
      */
     public function requestCreateNewOrder($orderId)
@@ -252,6 +275,7 @@ class NewOrderService extends AbstractOystService
     /**
      * @param $orderId
      * @param $status
+     *
      * @return bool
      */
     public function updateOrderStatus($orderId, $status)
@@ -279,6 +303,7 @@ class NewOrderService extends AbstractOystService
 
     /**
      * @param \Oyst\Repository\AddressRepository $addressRepository
+     *
      * @return $this
      */
     public function setAddressRepository($addressRepository)
@@ -298,6 +323,7 @@ class NewOrderService extends AbstractOystService
 
     /**
      * @param OrderRepository $orderRepository
+     *
      * @return $this
      */
     public function setOrderRepository($orderRepository)

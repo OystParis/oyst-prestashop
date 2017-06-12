@@ -46,7 +46,7 @@
 {if isset($apiError)}
     <div class="bootstrap">
         <div class="alert alert-danger">
-            <strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError}
+            <strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError|escape:'htmlall':'UTF-8'}
         </div>
     </div>
 {/if}
@@ -202,7 +202,7 @@
                         {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
                     {else}
                         <button type="submit" name="synchronizeProducts">{l s='Start' mod='oyst'}</button>
-                        <span>{l s='Will start to synchronize your products'}</span>
+                        <span>{l s='Will start to synchronize your products' mod='oyst'}</span>
                     {/if}
                     </div>
                 </div>

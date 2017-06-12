@@ -17,6 +17,7 @@
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 namespace Oyst\Repository;
 
@@ -25,6 +26,7 @@ use Configuration;
 use Order;
 use OrderHistory;
 use OystPaymentNotification;
+use Tools;
 
 /**
  * Class OrderRepository
@@ -44,14 +46,13 @@ class OrderRepository extends AbstractOystRepository
 
         $query = "
             SELECT *
-            FROM ps_address a
+            FROM "._DB_PREFIX_."address a
             WHERE
               a.address1 = '$address1'
               AND a.postcode = '$postcode'
               AND a.city = '$city'
         ";
 
-        $query = str_replace('ps_', _DB_PREFIX_, $query);
         $address = $this->db->getRow($query);
 
         return $address;
@@ -355,7 +356,9 @@ class OrderRepository extends AbstractOystRepository
         $order->total_shipping_tax_incl = 0;
         $order->save();
 
-        $this->db->update('order_carrier', array(
+        $this->db->update(
+            'order_carrier',
+            array(
                 'id_carrier' => $carrier->id,
                 'shipping_cost_tax_excl' => 0.0,
                 'shipping_cost_tax_incl' => 0.0,
@@ -373,12 +376,10 @@ class OrderRepository extends AbstractOystRepository
         $orderId = (int) $order->id;
         $query = "
             SELECT id_order_history
-            FROM ps_order_history
+            FROM "._DB_PREFIX_."order_history
             WHERE id_order = $orderId
             ORDER BY id_order_history DESC 
         ";
-
-        $query = str_replace('ps_', _DB_PREFIX_, $query);
 
         return new OrderHistory((int) $this->db->getValue($query));
     }

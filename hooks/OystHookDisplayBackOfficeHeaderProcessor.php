@@ -19,15 +19,13 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-
-use Oyst\Repository\OrderRepository;
-use Oyst\Repository\ProductRepository;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 use Oyst\Api\OystApiClientFactory;
+use Oyst\Repository\OrderRepository;
+use Oyst\Repository\ProductRepository;
 
 class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
 {
@@ -56,7 +54,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
             $isProductSent = $productRepository->isProductSent(new Product(Tools::getValue('id_product')));
 
             /** @var Smarty_Internal_Template $template */
-            $template = Context::getContext()->smarty->createTemplate(__DIR__.'/../views/templates/hook/displayAdminProduct.tpl');
+            $template = Context::getContext()->smarty->createTemplate(dirname(__FILE__).'/../views/templates/hook/displayAdminProduct.tpl');
             $template->assign(array(
                 'isProductSent' => $isProductSent,
             ));
@@ -77,7 +75,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
         $exportedProducts = $oystProductRepository->getExportedProduct();
 
         /** @var Smarty_Internal_Template $template */
-        $template = Context::getContext()->smarty->createTemplate(__DIR__.'/../views/templates/hook/displayBackOfficeHeader.tpl');
+        $template = Context::getContext()->smarty->createTemplate(dirname(__FILE__).'/../views/templates/hook/displayBackOfficeHeader.tpl');
         $exportDate = $this->module->getRequestedCatalogDate();
         $template->assign(array(
             'marginRequired' => version_compare(_PS_VERSION_, '1.5', '>'),
@@ -117,16 +115,16 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
             $oystPaymentNotification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
             $paymentApi = OystApiClientFactory::getClient(
                 OystApiClientFactory::ENTITY_PAYMENT,
-                $oyst->getFreePayApiKey(),
-                $oyst->getUserAgent(),
-                $oyst->getEnvironment(),
-                $oyst->getApiUrl()
+                $this->module->getFreePayApiKey(),
+                $this->module->getUserAgent(),
+                $this->module->getEnvironment(),
+                $this->module->getApiUrl()
             );
             if (Validate::isLoadedObject($oystPaymentNotification)) {
                 $currency = new Currency($order->id_currency);
                 $oyst = new Oyst();
                 /** @var OystPaymentApi $paymentApi */
-                $response = $paymentApi->cancelOrRefund($oyst_payment_notification->payment_id, new Price($amountToRefund, $currency->iso_code));
+                $response = $paymentApi->cancelOrRefund($oystPaymentNotification->payment_id, new Price($amountToRefund, $currency->iso_code));
 
                 // Set refund status
                 if ($paymentApi->getLastHttpCode() == 200) {

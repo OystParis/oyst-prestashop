@@ -1,6 +1,27 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 namespace Oyst\Service\Http;
+
+use Tools;
 
 class CurrentRequest
 {
@@ -10,19 +31,19 @@ class CurrentRequest
     const METHOD_PATCH = 'PATCH';
     const METHOD_DELETE = 'DELETE';
 
-    /** @var  string */
+    /** @var string */
     private $scheme;
 
-    /** @var  string */
+    /** @var string */
     private $host;
 
-    /** @var  string */
+    /** @var string */
     private $requestUri;
 
-    /** @var  string */
+    /** @var string */
     private $method;
 
-    /** @var  string */
+    /** @var string */
     private $body;
 
     public function __construct()
@@ -82,7 +103,7 @@ class CurrentRequest
 
     public function initializeBody()
     {
-        $this->body = file_get_contents('php://input');
+        $this->body = Tools::file_get_contents('php://input');
 
         return $this;
     }
@@ -96,8 +117,8 @@ class CurrentRequest
         $contentType = 'text/html';
 
         // get the content type header
-        foreach($headers as $headerKey => $headerValue) {
-            if (substr(strtolower($headerKey),0,13) == "content-type") {
+        foreach ($headers as $headerKey => $headerValue) {
+            if (Tools::substr(Tools::strtolower($headerKey), 0, 13) == "content-type") {
                 list($contentType) = explode(";", $headerValue);
             }
         }
@@ -151,7 +172,7 @@ class CurrentRequest
     public function getRequestItem($key)
     {
         if ($this->hasRequest($key)) {
-            $value = $_POST[$key];
+            $value = Tools::getValue($key);
         }
 
         return $value;
@@ -173,7 +194,7 @@ class CurrentRequest
     {
         $value = false;
         if ($this->hasQuery($key)) {
-            $value = $_POST[$key];
+            $value = Tools::getValue($key);
         }
 
         return $value;
@@ -185,7 +206,7 @@ class CurrentRequest
      */
     public function hasRequest($key)
     {
-        return isset($_POST[$key]);
+        return Tools::getIsset($key);
     }
 
     /**
@@ -194,7 +215,7 @@ class CurrentRequest
      */
     public function hasQuery($key)
     {
-        return isset($_GET[$key]);
+        return Tools::getIsset($key);
     }
 
     /**
