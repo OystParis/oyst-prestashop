@@ -1,4 +1,23 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 namespace Oyst\Service;
 
@@ -16,7 +35,7 @@ use DateTime;
 use Exception;
 
 /**
- * Class Oyst\Service\ExportProductService
+ * Class ExportProductService
  */
 class ExportProductService extends AbstractOystService
 {
@@ -24,19 +43,19 @@ class ExportProductService extends AbstractOystService
 
     const EXPORT_REGULAR_NUMBER = 512;
 
-    /** @var  ProductRepository */
+    /** @var ProductRepository */
     protected $productRepository;
 
-    /** @var  string */
+    /** @var string */
     private $weightUnit;
 
-    /** @var  string */
+    /** @var string */
     private $dimensionUnit;
 
-    /** @var  int */
+    /** @var int */
     private $limitedProduct;
 
-    /** @var  ProductTransformer */
+    /** @var ProductTransformer */
     private $productTransformer;
 
     /**
@@ -66,9 +85,8 @@ class ExportProductService extends AbstractOystService
             throw new Exception('Bad Currency object, Did you forget to set it ?');
         }
 
-        $oystProducts = [];
+        $oystProducts = array();
         foreach ($products as $productInfo) {
-
             $combination = new Combination();
             if ($product->id != $productInfo['id_product']) {
                 $product = new Product($productInfo['id_product'], false, $this->context->language->id);
@@ -99,11 +117,11 @@ class ExportProductService extends AbstractOystService
             throw new Exception('Did you forget to set the ProductTransformer ?');
         }
 
-        $json = [
+        $json = array(
             'totalCount' => 0,
             'remaining' => 0,
             'state' => false,
-        ];
+        );
 
         // TODO: Maybe add some log information for this process and store it in a new table ?
         $prestaShopProducts = $this->productRepository->getProductsNotExported($this->limitedProduct);

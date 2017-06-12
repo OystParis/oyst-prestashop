@@ -27,7 +27,7 @@ function upgrade_module_1_2_0($module)
 {
     $module->updateConstants();
 
-    $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module,_DB_PREFIX_);
+    $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
     $oystDb->createExportTable();
     $oystDb->pushDefaultShipment();
     $oystDb->createCarrier();

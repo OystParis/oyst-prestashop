@@ -28,11 +28,11 @@ defined('_PS_VERSION_') || require dirname(__FILE__) . '/index.php';
 Logger::$definition['fields']['message']['validate'] = 'isString';
 
 // When sending the module to PrestaShop Validator, all the require files will be available
-if (!file_exists(__DIR__.'/vendor/autoload.php')) {
+if (!file_exists(dirname(__FILE__).'/vendor/autoload.php')) {
     throw new Exception('Please install composer inside the oyst module');
 }
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once dirname(__FILE__).'/vendor/autoload.php';
 
 /*
  * Include Froggy Library

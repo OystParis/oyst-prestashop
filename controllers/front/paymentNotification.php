@@ -26,6 +26,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Oyst\Repository\OrderRepository;
+
 class OystPaymentNotificationModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;

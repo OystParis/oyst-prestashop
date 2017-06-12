@@ -17,7 +17,6 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-
 <div id="oyst-confirmation">
     <div class="alert alert-success">
         <div class="container-icon-success">

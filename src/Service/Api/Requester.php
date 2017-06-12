@@ -1,4 +1,23 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 namespace Oyst\Service\Api;
 
@@ -7,6 +26,7 @@ use Oyst\Api\AbstractOystApiClient;
 use Oyst\Service\Logger\AbstractLogger;
 use Oyst\Service\Logger\LogLevel;
 use Oyst\Service\Serializer\SerializerInterface;
+use Tools;
 
 class Requester
 {
@@ -15,10 +35,14 @@ class Requester
      */
     private $apiClient;
 
-    /** @var  AbstractLogger */
+    /**
+     * @var AbstractLogger
+     */
     private $logger;
 
-    /** @var  SerializerInterface */
+    /**
+     * @var SerializerInterface
+     */
     protected $serializer;
 
     public function __construct(AbstractOystApiClient $apiClient)
@@ -38,7 +62,6 @@ class Requester
         //dump($result, $method, $params); die();
 
         if ($this->logger instanceof AbstractLogger) {
-
             $thisCallArgs = null == $params ? null : func_get_arg(1);
 
             $messageMask = 'Request from %s %s. HTTP[%s] BODY[%s]';
@@ -46,7 +69,7 @@ class Requester
                 'objectType' => 'OystRequest'
             );
 
-            $paramsEncoded =  null == $thisCallArgs ? '' : substr(
+            $paramsEncoded =  null == $thisCallArgs ? '' : Tools::substr(
                 $this->serializer instanceof SerializerInterface ?
                     $this->serializer->serialize($params) :
                     json_encode($params, JSON_OBJECT_AS_ARRAY),
@@ -54,7 +77,8 @@ class Requester
                 255
             );
 
-            $requestFrom = sprintf('%s::%s(%s)',
+            $requestFrom = sprintf(
+                '%s::%s(%s)',
                 get_class($this->logger),
                 $method,
                 $paramsEncoded
@@ -76,10 +100,7 @@ class Requester
                 $this->apiClient->getBody()
             );
 
-            call_user_func(array($this->logger, $method),
-                $message,
-                $context
-            );
+            call_user_func(array($this->logger, $method), $message, $context);
         }
 
         return $result;

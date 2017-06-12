@@ -1,4 +1,23 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 namespace Oyst\Repository;
 
@@ -7,7 +26,7 @@ use Oyst;
 use Product;
 
 /**
- * Class Oyst\Repository\ProductRepository
+ * Class ProductRepository
  */
 class ProductRepository extends AbstractOystRepository
 {
@@ -22,11 +41,11 @@ class ProductRepository extends AbstractOystRepository
             SELECT 
               p.id_product,
               pa.id_product_attribute
-            FROM ps_product p
-            LEFT JOIN ps_product_attribute pa ON pa.id_product = p.id_product
+            FROM "._DB_PREFIX_."product p
+            LEFT JOIN "._DB_PREFIX_."product_attribute pa ON pa.id_product = p.id_product
             WHERE CONCAT(p.id_product, '-', IFNULL(pa.id_product_attribute, 0)) NOT IN (
               SELECT CONCAT(oec.productId, '-', IFNULL(oec.productAttributeId, 0))
-              FROM ps_oyst_exported_catalog oec
+              FROM "._DB_PREFIX_."oyst_exported_catalog oec
             )
         ";
 
@@ -34,8 +53,7 @@ class ProductRepository extends AbstractOystRepository
             $query .= ' LIMIT ' . $limitProducts;
         }
 
-        // Use replace to keep IDE working with database source on dev side.
-        $products = $this->db->executeS(str_replace('ps_', _DB_PREFIX_, $query));
+        $products = $this->db->executeS($query);
 
         return $products;
     }
@@ -48,12 +66,12 @@ class ProductRepository extends AbstractOystRepository
         $query = "
             SELECT 
               count(1) totalProducts
-            FROM ps_product p
-            LEFT JOIN ps_product_attribute pa ON pa.id_product = p.id_product
+            FROM "._DB_PREFIX_."product p
+            LEFT JOIN "._DB_PREFIX_."product_attribute pa ON pa.id_product = p.id_product
         ";
 
         // Use replace to keep IDE working with database source on dev side.
-        $totalProducts = $this->db->getValue(str_replace('ps_', _DB_PREFIX_, $query));
+        $totalProducts = $this->db->getValue($query);
         return (int)$totalProducts;
     }
 
@@ -112,10 +130,10 @@ class ProductRepository extends AbstractOystRepository
     {
         $query = '
             SELECT *
-            FROM ps_oyst_exported_catalog
+            FROM '._DB_PREFIX_.'oyst_exported_catalog
         ';
 
-        $results = $this->db->executeS(str_replace('ps_', _DB_PREFIX_, $query));
+        $results = $this->db->executeS($query);
 
         return $results;
     }
@@ -140,12 +158,12 @@ class ProductRepository extends AbstractOystRepository
 
         $query = "
             SELECT *
-            FROM ps_oyst_exported_catalog poec 
+            FROM "._DB_PREFIX_."oyst_exported_catalog poec
             WHERE  
               poec.productId = $productId
               AND poec.productAttributeId = $combinationId
         ";
 
-        return $this->db->getValue(str_replace('ps_', _DB_PREFIX_, $query));
+        return $this->db->getValue($query);
     }
 }

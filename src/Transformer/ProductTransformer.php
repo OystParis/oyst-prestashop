@@ -1,4 +1,23 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 namespace Oyst\Transformer;
 
@@ -14,7 +33,7 @@ use StockAvailable;
 use Tools;
 
 /**
- * Class Oyst\Transformer\ProductTransformer
+ * Class ProductTransformer
  */
 class ProductTransformer extends AbstractTransformer
 {
@@ -38,11 +57,11 @@ class ProductTransformer extends AbstractTransformer
 
         $oystPrice = new OystPrice($product->getPrice(true), $this->context->currency->iso_code);
 
-        $categories = [];
+        $categories = array();
 
         // Small cache to use avoid this process with attributes
         if (!isset($categories[$product->id])) {
-            $categories = [$product->id => []];
+            $categories = array($product->id => array());
         }
 
         foreach (Product::getProductCategoriesFull($product->id) as $categoryInfo) {
@@ -82,13 +101,13 @@ class ProductTransformer extends AbstractTransformer
         $oystProduct->setShortDescription(is_array($product->description_short) ? reset($product->description_short) : $product->description_short);
         $oystProduct->setUrl($this->context->link->getProductLink($product));
 
-        $images = [];
+        $images = array();
         foreach (Image::getImages($this->context->language->id, $product->id) as $image) {
             $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
         }
 
         if (empty($images)) {
-            $images = [Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png'];
+            $images = array(Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png');
         }
 
         $oystProduct->setImages($images);
@@ -111,7 +130,6 @@ class ProductTransformer extends AbstractTransformer
         $oystProduct = $this->transform($product);
 
         if ($oystProduct && $combination && $combination->id) {
-
             $oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
 
             $oystProduct->setRef($product->id.'-'.$combination->id);
@@ -121,13 +139,13 @@ class ProductTransformer extends AbstractTransformer
             $oystProduct->setAmountIncludingTax($oystPrice);
             $oystProduct->setAvailableQuantity(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
 
-            $images = [];
+            $images = array();
             foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
                 $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
             }
 
             if (empty($images)) {
-                $images = [Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png'];
+                $images = array(Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png');
             }
 
             $oystProduct->setImages($images);

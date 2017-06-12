@@ -16,41 +16,15 @@
  *
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
- * @license   GNU GENERAL PUBLIC LICENSE
+ * @license GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 
-class OystExportCatalogModuleCronController
-{
-    private $_module;
-    public $context;
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
 
-    /**
-     * OystExportCatalogModuleCronController constructor.
-     * @param Oyst $module
-     */
-    public function __construct($module)
-    {
-        $this->_module = $module;
-    }
-
-    /**
-     * Run method
-     */
-    public function run()
-    {
-        // Get products
-        $oyst_product = new OystProduct();
-        $result = $oyst_product->sendCatalog();
-
-        // Display result
-        print_r($result);
-        echo "\n";
-    }
-}
+header('Location: ../');
+exit;

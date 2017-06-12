@@ -1,3 +1,22 @@
+{**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license GNU GENERAL PUBLIC LICENSE
+ *}
 <style>
     .oyst-header-notification {
         text-align: center;
@@ -20,10 +39,10 @@
 </style>
 {if $displayPanel}
     {if $OYST_IS_EXPORT_STILL_RUNNING}
-        <div class="oyst-header-notification oyst-info">{l s='Oyst export is still running'}. <b>{$exportedProducts|count}</b> {l s='products have been exported'} <img src="../modules/oyst/views/img/balls.svg"> </div>
+        <div class="oyst-header-notification oyst-info">{l s='Oyst export is still running' mod='oyst'}. <b>{$exportedProducts|count}</b> {l s='products have been exported' mod='oyst'} <img src="../modules/oyst/views/img/balls.svg"> </div>
     {else}
         <div class="oyst-header-notification oyst-info">
-            {l s='Oyst export is over'}
+            {l s='Oyst export is over' mod='oyst'}
             <a href="#" class="close">X Close</a>
         </div>
 

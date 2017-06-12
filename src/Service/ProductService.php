@@ -1,4 +1,23 @@
 <?php
+/**
+ * 2013-2016 Froggy Commerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * You should have received a licence with this module.
+ * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
+ * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to benefit the updates
+ * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Froggy Commerce <contact@froggy-commerce.com>
+ * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
 namespace Oyst\Service;
 
@@ -11,17 +30,17 @@ use Oyst\Transformer\ProductTransformer;
 use Oyst\Classes\OystProduct;
 
 /**
- * Class Oyst\Service\ProductService
+ * Class ProductService
  */
 class ProductService extends AbstractOystService
 {
-    /** @var  OystCatalogAPI */
+    /** @var OystCatalogAPI */
     private $catalogApi;
 
-    /** @var  ProductTransformer */
+    /** @var ProductTransformer */
     private $productTransformer;
 
-    /** @var  ProductRepository */
+    /** @var ProductRepository */
     private $productRepository;
 
     /**
@@ -73,13 +92,11 @@ class ProductService extends AbstractOystService
     {
         $oystProduct = $this->getOystProduct($product, $combination);
 
-        $response = $this->requester->call('postProduct', [$oystProduct]);
+        $response = $this->requester->call('postProduct', array($oystProduct));
 
-        if ($this->requester->getApiClient()->getLastHttpCode() == 200 &&
-            isset($response['imported']) &&
-            1 == $response['imported']) {
-
+        if ($this->requester->getApiClient()->getLastHttpCode() == 200 && isset($response['imported']) && 1 == $response['imported']) {
             $this->productRepository->recordSingleSentProduct($product, $combination);
+
             return true;
         }
 

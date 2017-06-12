@@ -55,7 +55,7 @@ class Oyst extends FroggyPaymentModule
 
     public function uninstall()
     {
-        $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this,_DB_PREFIX_);
+        $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this);
         $oystDb->uninstall();
 
         return parent::uninstall();
@@ -88,7 +88,7 @@ class Oyst extends FroggyPaymentModule
         $result &= $this->installOrderStates();
         $result &= $this->updateConstants();
 
-        $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this,_DB_PREFIX_);
+        $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this);
         $result &= $oystDb->install();
 
         return $result;
@@ -331,7 +331,7 @@ class Oyst extends FroggyPaymentModule
     public function getFreePayApiKey()
     {
         $key = '';
-        $env = strtolower($this->getEnvironment());
+        $env = Tools::strtolower($this->getEnvironment());
 
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:
@@ -354,7 +354,7 @@ class Oyst extends FroggyPaymentModule
     public function getOneClickApiKey()
     {
         $key = '';
-        $env = strtolower($this->getEnvironment());
+        $env = Tools::strtolower($this->getEnvironment());
 
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:
@@ -377,7 +377,7 @@ class Oyst extends FroggyPaymentModule
     public function getApiUrl()
     {
         $apiUrl = null;
-        $env = strtolower($this->getEnvironment());
+        $env = Tools::strtolower($this->getEnvironment());
 
         if (\Oyst\Service\Configuration::API_ENV_CUSTOM == $env) {
             $apiUrl = Configuration::get(\Oyst\Service\Configuration::API_ENDPOINT_CUSTOM);
@@ -392,7 +392,7 @@ class Oyst extends FroggyPaymentModule
     public function getOneClickUrl()
     {
         $oneClickUrl = null;
-        $env = strtolower($this->getEnvironment());
+        $env = Tools::strtolower($this->getEnvironment());
 
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:

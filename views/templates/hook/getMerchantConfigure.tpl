@@ -31,7 +31,7 @@
 {/if}
 
 {if isset($apiError)}
-    <p class="error"><strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError}</p>
+    <p class="error"><strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError|escape:'htmlall':'UTF-8'}</p>
 {/if}
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
@@ -173,7 +173,7 @@
                             {l s='Start the export process' mod='oyst'}
                         {/if}
                     </button>
-                    <p>{l s='Will export your products to Oyst'}</p>
+                    <p>{l s='Will export your products to Oyst' mod='oyst'}</p>
                 {/if}
                 </div>
                 <div class="margin-form">

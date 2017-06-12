@@ -28,4 +28,3 @@ header('Pragma: no-cache');
 
 header('Location: ../');
 exit;
-
