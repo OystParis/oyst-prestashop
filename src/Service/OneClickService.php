@@ -24,7 +24,6 @@ namespace Oyst\Service;
 use Combination;
 use Exception;
 use Oyst\Classes\OystUser;
-use Oyst\Api\OystOneClickApi;
 use Oyst\Service\Http\CurrentRequest;
 use Product;
 use Validate;
@@ -34,6 +33,8 @@ use Validate;
  */
 class OneClickService extends AbstractOystService
 {
+    const ONE_CLICK_VERSION = 2;
+
     /**
      * @param Product $product
      * @param $quantity
@@ -50,7 +51,8 @@ class OneClickService extends AbstractOystService
             $productReference,
             $quantity,
             null,
-            $user
+            $user,
+            self::ONE_CLICK_VERSION
         ));
 
         $apiClient = $this->requester->getApiClient();

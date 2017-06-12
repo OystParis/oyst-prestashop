@@ -111,12 +111,11 @@ class NewOrderService extends AbstractOystService
     /**
      * @param Customer $customer
      * @param Address $address
-     * @param Product $product
-     * @param Combination $combination
+     * @param $products
      * @param $oystOrderInfo
      * @return bool
      */
-    public function createNewOrder(Customer $customer, Address $address, Product $product, Combination $combination, $oystOrderInfo)
+    public function createNewOrder(Customer $customer, Address $address, $products, $oystOrderInfo)
     {
         // PS core used this context anywhere.. So we need to fill it properly
         $this->context->cart = $cart = new Cart();
@@ -142,17 +141,23 @@ class NewOrderService extends AbstractOystService
                 'Can\'t create cart ['.$this->serializer->serialize($cart).']'
             );
             return false;
-        } elseif (!$cart->updateQty($oystOrderInfo['quantity'], $product->id, $combination->id)) {
-            $this->logger->emergency(
-                sprintf(
-                    "Can't add product to cart, please check the quantity.
-                        Product #%d. Combination #%d",
-                    $product->id,
-                    $combination->id
-                )
-            );
-            return false;
         }
+
+        foreach ($products as $productInfo) {
+            if (!$cart->updateQty($productInfo['quantity'], $productInfo['productId'], $productInfo['combinationId'])) {
+                $this->logger->emergency(
+                    sprintf(
+                        "Can't add product to cart, please check the quantity.
+                        Product #%d. Combination #%d. Quantity %d",
+                        $productInfo['productId'],
+                        $productInfo['combinationId'],
+                        $productInfo['quantity']
+                    )
+                );
+                return false;
+            }
+        }
+
 
         $cart->update();
 
@@ -169,7 +174,7 @@ class NewOrderService extends AbstractOystService
         );
 
         if ($state) {
-            $this->handleShippingCost($cart);
+            $this->handleShippingCost($cart, $oystOrderInfo['shipment']);
         }
 
         return $state;
@@ -177,10 +182,11 @@ class NewOrderService extends AbstractOystService
 
     /**
      * @param Cart $cart
+     * @param $shipmentInfo
      *
      * @return bool
      */
-    private function handleShippingCost(Cart $cart)
+    private function handleShippingCost(Cart $cart, $shipmentInfo)
     {
         if (!($orderId = Order::getOrderByCartId($cart->id))) {
             return false;
@@ -198,8 +204,12 @@ class NewOrderService extends AbstractOystService
             return false;
         }
 
+        // Actually we don't need to check the currency, EUR every time.
+
+        $cost = $shipmentInfo['amount']['value'];
+        $cost = (float) ($cost > 0 ? $cost / 100 : 0);
         $order = new Order($orderId);
-        $this->orderRepository->updateOrderCarrier($order, $carrier);
+        $this->orderRepository->updateOrderCarrier($order, $carrier, $cost);
         $orderHistory = $this->orderRepository->getLastOrderHistory($order);
         $orderHistory->id_order_state = 2;
         $order->current_state = $orderHistory->id_order_state;
@@ -235,19 +245,28 @@ class NewOrderService extends AbstractOystService
 
         $oystOrderInfo = $this->getOrderInfo($orderId);
         if ($oystOrderInfo) {
-            $productReferences = explode('-', $oystOrderInfo['product_reference']);
-            $product = new Product($productReferences[0]);
+            $products = array();
+            foreach ($oystOrderInfo['items'] as $productInfo) {
+                $productReferences = explode('-', $productInfo['product_reference']);
+                $product = new Product($productReferences[0]);
 
-            if (!Validate::isLoadedObject($product)) {
-                $data['error'] = 'Product has not been found';
-            }
-
-            $combination = new Combination();
-            if (isset($productReferences[1])) {
-                $combination = new Combination($productReferences[1]);
-                if (!Validate::isLoadedObject($combination)) {
-                    $data['error'] = 'Combination has not been found';
+                if (!Validate::isLoadedObject($product)) {
+                    $data['error'] = 'Product has not been found';
                 }
+
+                $combination = new Combination();
+                if (isset($productReferences[1])) {
+                    $combination = new Combination($productReferences[1]);
+                    if (!Validate::isLoadedObject($combination)) {
+                        $data['error'] = 'Combination has not been found';
+                    }
+                }
+
+                $products[] = array(
+                    'productId' => $product->id,
+                    'combinationId' => $combination->id,
+                    'quantity' => $productInfo['quantity'],
+                );
             }
 
             $customer = $this->getCustomer($oystOrderInfo['user']);
@@ -261,7 +280,7 @@ class NewOrderService extends AbstractOystService
             }
 
             if (!isset($data['error'])) {
-                $state = $this->createNewOrder($customer, $address, $product, $combination, $oystOrderInfo);
+                $state = $this->createNewOrder($customer, $address, $products, $oystOrderInfo);
                 $data['state'] = $state;
             }
         } else {
