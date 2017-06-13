@@ -21,6 +21,7 @@ $(document).ready(function() {
     var shipmentModel = $('#shipment-model').html();
     // We delete the shipment model form to not submit it
     $('#shipment-model').remove();
+
     var shipmentCount = $('.shipment-item').length;
 
     $('#add-shipment').click(function(event) {
@@ -32,6 +33,14 @@ $(document).ready(function() {
         shipmentCount++;
 
         addDeleteEventOnButton();
+
+        // if this is the first shipment
+        if ($('.shipment-item').length == 1) {
+            $('.shipment-primary').attr('checked', 'checked');
+            $('.shipment-primary').attr('readonly', 'readonly');
+        } else {
+            $('.shipment-primary').removeAttr('readonly');
+        }
     });
 
     addDeleteEventOnButton();
@@ -44,6 +53,17 @@ function addDeleteEventOnButton()
 
         if(confirm('Are you sure you want to delete this shipment?')) {
             $(this).closest('div.shipment-item').remove();
+
+            // if there is only one shipment left
+            if ($('.shipment-item').length == 1) {
+                $('.shipment-primary').attr('checked', 'checked');
+                $('.shipment-primary').attr('readonly', 'readonly');
+            }
         }
+    });
+
+    $('.shipment-primary').click(function() {
+        $('.shipment-primary').removeAttr('checked');
+        $(this).attr('checked', 'checked');
     });
 }

@@ -227,7 +227,7 @@
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-4">{l s='Primary' mod='oyst'}</label>
                                         <div class="col-md-9 col-lg-8">
-                                            <input type="checkbox" name="shipments[__shipment_id__][primary]" value="1"/>
+                                            <input type="checkbox" class="shipment-primary" name="shipments[__shipment_id__][primary]" value="1"/>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
@@ -307,7 +307,7 @@
                                 <div class="form-group clearfix">
                                     <label class="control-label col-md-3 col-lg-4">{l s='Primary' mod='oyst'}</label>
                                     <div class="col-md-9 col-lg-8">
-                                        <input type="checkbox" name="shipments[{$index}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
+                                        <input type="checkbox" class="shipment-primary" name="shipments[{$index}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
                                     </div>
                                 </div>
                                 <div class="form-group clearfix">
