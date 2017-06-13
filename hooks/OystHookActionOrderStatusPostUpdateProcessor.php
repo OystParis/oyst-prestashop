@@ -37,7 +37,7 @@ class OystHookActionOrderStatusPostUpdateProcessor extends FroggyHookProcessor
         $orderSate = $this->params['newOrderStatus'];
 
         // As the order is by default accepted, we ask for a refund when canceled
-        if ($orderSate->id == 7) {
+        if (in_array($orderSate->id, array(6, 7))) {
             $orderService = AbstractOrderServiceFactory::get(
                 $this->module,
                 $this->context
