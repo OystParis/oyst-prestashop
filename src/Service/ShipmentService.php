@@ -42,7 +42,7 @@ class ShipmentService extends AbstractOystService
      */
     public function pushShipments($shipments)
     {
-        $result = $this->requester->call('postShipments', $shipments);
+        $result = $this->requester->call('postShipments', array($shipments));
 
         if (!isset($result['shipments']) || !count($result['shipments'])) {
             $this->logger->alert('No shipment(s) sent');

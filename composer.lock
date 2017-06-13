@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "da92e662f5d0094e7af7edb6234582b4",
-    "content-hash": "40fbdd672e1c5712fbb0d7cc1fd0adaa",
+    "hash": "e5ca60046f7d377310fc6b6017ccfd41",
+    "content-hash": "f162be6ee314156221d1186a7588f90c",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -143,16 +143,16 @@
         },
         {
             "name": "oyst/oyst-php",
-            "version": "v1.3.0",
+            "version": "dev-feat-v2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oystparis/oyst-php.git",
-                "reference": "3b772a1f5601e4c263118621b86c330f051ae9ef"
+                "reference": "9b2a214e5e93f1d9bb8bfaa90ef2d725398d47bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/887a72e5406d1cc7187ec7101bfaed1552bcac06",
-                "reference": "3b772a1f5601e4c263118621b86c330f051ae9ef",
+                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/9b2a214e5e93f1d9bb8bfaa90ef2d725398d47bf",
+                "reference": "9b2a214e5e93f1d9bb8bfaa90ef2d725398d47bf",
                 "shasum": ""
             },
             "require": {
@@ -202,7 +202,7 @@
                 "issues": "https://github.com/OystParis/oyst-php/issues",
                 "source": "https://github.com/OystParis/oyst-php/"
             },
-            "time": "2017-06-12 07:40:12"
+            "time": "2017-06-12 13:42:58"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -625,7 +625,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "oyst/oyst-php": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

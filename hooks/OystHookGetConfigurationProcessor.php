@@ -31,6 +31,7 @@ use Oyst\Classes\OneClickShipment;
 use Oyst\Classes\OystCarrier;
 use Oyst\Classes\ShipmentAmount;
 use Oyst\Factory\AbstractExportProductServiceFactory;
+use Oyst\Factory\AbstractShipmentServiceFactory;
 use Oyst\Service\Configuration as OystConfiguration;
 use Oyst\Service\Http\CurrentRequest;
 use Oyst\Service\Logger\PrestaShopLogger;
@@ -133,7 +134,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
             Db::getInstance()->delete('oyst_shipment');
             if (count($data)) {
-                $shipmentService = AbstractShipmentServiceFactory::get($this->module, $this->context, Db::instance());
+                $shipmentService = AbstractShipmentServiceFactory::get($this->module, $this->context);
                 $isResultOk = $shipmentService->pushShipments($data);
 
                 if ($isResultOk) {
