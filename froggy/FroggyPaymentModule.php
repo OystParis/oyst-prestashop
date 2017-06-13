@@ -123,6 +123,7 @@ class FroggyPaymentModule extends PaymentModule
             'hookdisplayproductfooter' => 'hookDisplayProductFooter',
             'hookdisplaybackofficeheader' => 'hookDisplayBackOfficeHeader',
             'hookactionproductadd' => 'hookActionProductAdd',
+            'hookactionorderstatuspostupdate' => 'hookActionOrderStatusPostUpdate',
         );
 
         foreach ($prefix_call as $prefix_search => $prefix_replace) {
