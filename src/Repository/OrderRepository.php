@@ -384,4 +384,33 @@ class OrderRepository extends AbstractOystRepository
 
         return new OrderHistory((int) $this->db->getValue($query));
     }
+
+    /**
+     * @param $orderId
+     * @return string
+     */
+    public function getOrderGUID($orderId)
+    {
+        return $this->db->getValue('
+            SELECT orderGUID
+            FROM '._DB_PREFIX_.'oyst_api_order
+            WHERE orderId = '.(int) $orderId
+        );
+    }
+
+    /**
+     * @param Order $order
+     * @param $orderGuid
+     * @return bool
+     */
+    public function linkOrderToGUID(Order $order, $orderGuid)
+    {
+        return $this->db->insert(
+            'oyst_api_order',
+            array(
+                'orderId' => (int) $order->id,
+                'orderGUID' => (string) $orderGuid,
+            )
+        );
+    }
 }

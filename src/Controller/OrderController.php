@@ -24,7 +24,7 @@ namespace Oyst\Controller;
 use Oyst;
 use Context;
 use Oyst\Classes\Enum\AbstractOrderState;
-use Oyst\Factory\AbstractNewOrderServiceFactory;
+use Oyst\Factory\AbstractOrderServiceFactory;
 
 class OrderController extends AbstractOystController
 {
@@ -35,21 +35,15 @@ class OrderController extends AbstractOystController
         if ($json) {
             $oyst = new Oyst();
             $context = Context::getContext();
-            $orderService = AbstractNewOrderServiceFactory::get($oyst, $context);
+            $orderService = AbstractOrderServiceFactory::get($oyst, $context);
             $orderId = $json['data']['order_id'];
             $responseData = $orderService->requestCreateNewOrder($orderId);
 
-            $state = $responseData['state'];
-
-            if ($state) {
+            if ($responseData['state']) {
                 $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);
             } else {
-                $responseData['error'] = 'The order has no been created';
-                $orderService->updateOrderStatus($orderId, AbstractOrderState::DECLINED);
-            }
-
-            if (isset($responseData['error'])) {
-                $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData)));
+                $orderService->updateOrderStatus($orderId, AbstractOrderState::DENIED);
+                $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData['error'])));
             }
 
             $this->respondAsJson($responseData);

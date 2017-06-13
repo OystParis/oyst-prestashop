@@ -59,6 +59,7 @@ class InstallManager
         $state &= $this->createCarrier();
         $state &= $this->pushDefaultShipment();
         $state &= $this->createExportTable();
+        $state &= $this->createOrderTable();
 
         return $state;
     }
@@ -84,6 +85,21 @@ class InstallManager
     /**
      * @return bool
      */
+    public function createOrderTable()
+    {
+        $query = "
+            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_api_order` (
+                  `orderId` int(11) DEFAULT NULL,
+                  `orderGUID` varchar(64) CHARACTER SET latin1 DEFAULT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ";
+
+        return $this->db->execute($query);
+    }
+
+    /**
+     * @return bool
+     */
     public function dropExportTable()
     {
         $query = "
@@ -93,10 +109,23 @@ class InstallManager
         return $this->db->execute($query);
     }
 
+    /**
+     * @return bool
+     */
+    public function dropOrderTable()
+    {
+        $query = "
+            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_api_order;
+        ";
+
+        return $this->db->execute($query);
+    }
+
     public function uninstall()
     {
         $this->removeCarrier();
         $this->dropExportTable();
+        $this->dropOrderTable();
 
         // Remove anything at the end
         $this->removeConfiguration();

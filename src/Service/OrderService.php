@@ -40,7 +40,7 @@ use Validate;
 /**
  * Class OneClickService
  */
-class NewOrderService extends AbstractOystService
+class OrderService extends AbstractOystService
 {
     /** @var AddressRepository */
     private $addressRepository;
@@ -174,23 +174,33 @@ class NewOrderService extends AbstractOystService
         );
 
         if ($state) {
-            $this->handleShippingCost($cart, $oystOrderInfo['shipment']);
+            $order = new Order(Order::getOrderByCartId($cart->id));
+            $this->orderRepository->linkOrderToGUID($order, $oystOrderInfo['id']);
         }
 
         return $state;
     }
 
     /**
-     * @param Cart $cart
+     * @param Order $order
+     */
+    private function handleHistory(Order $order)
+    {
+        $orderHistory = $this->orderRepository->getLastOrderHistory($order);
+        $orderHistory->id_order_state = 2;
+        $orderHistory->save();
+
+        $order->current_state = $orderHistory->id_order_state;
+        $order->save();
+    }
+
+    /**
+     * @param Order $order
      * @param $shipmentInfo
-     *
      * @return bool
      */
-    private function handleShippingCost(Cart $cart, $shipmentInfo)
+    private function handleShippingCost(Order $order, $shipmentInfo)
     {
-        if (!($orderId = Order::getOrderByCartId($cart->id))) {
-            return false;
-        }
 
         // This is a tricky part, we need to use a carrier and hide it for the front process.
         // So we have to rewrite the order detail properly according to the carrier
@@ -208,12 +218,7 @@ class NewOrderService extends AbstractOystService
 
         $cost = $shipmentInfo['amount']['value'];
         $cost = (float) ($cost > 0 ? $cost / 100 : 0);
-        $order = new Order($orderId);
         $this->orderRepository->updateOrderCarrier($order, $carrier, $cost);
-        $orderHistory = $this->orderRepository->getLastOrderHistory($order);
-        $orderHistory->id_order_state = 2;
-        $order->current_state = $orderHistory->id_order_state;
-        $order->save();
 
         return true;
     }
@@ -299,7 +304,7 @@ class NewOrderService extends AbstractOystService
      */
     public function updateOrderStatus($orderId, $status)
     {
-        $this->requester->call('updateStatus', array($orderId, $status));
+        $this->requester->call('updateStatus', array((string) $orderId, $status));
 
         $succeed = false;
         if ($this->requester->getApiClient()->getLastHttpCode() != 200) {
