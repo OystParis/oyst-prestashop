@@ -11,7 +11,8 @@
             "displayAdminOrder" ,
             "displayFooterProduct",
             "displayBackOfficeHeader",
-            "actionProductAdd"
+            "actionProductAdd",
+            "actionOrderStatusPostUpdate"
         ],
         "1.6" : [
             "advancedPaymentOptions"
