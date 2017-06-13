@@ -204,6 +204,8 @@
                                 <label>{l s='Delay' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
+                                    <br>
+                                    <span class="help-block">{l s='Values in days' mod='oyst'}</span>
                                 </div>
                                 <label>{l s='Zones' mod='oyst'}</label>
                                 <div class="margin-form">
@@ -255,6 +257,8 @@
                             <label>{l s='Delay' mod='oyst'}</label>
                             <div class="margin-form">
                                 <input type="text" name="shipments[{$index}][delay]" value="{$shipment.delay}"/>
+                                <br>
+                                <span class="help-block">{l s='Values in days' mod='oyst'}</span>
                             </div>
                             <label>{l s='Zones' mod='oyst'}</label>
                             <div class="margin-form">
