@@ -19,12 +19,9 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+namespace Oyst\Repository;
+
+use Db;
 
 /**
  * Class AbstractOystRepository
@@ -37,7 +34,6 @@ abstract class AbstractOystRepository
     protected $db;
 
     /**
-     * Oyst\Repository\AbstractOystRepository constructor.
      * @param Db $db
      */
     public function __construct(Db $db)

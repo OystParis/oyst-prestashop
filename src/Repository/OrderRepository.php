@@ -19,18 +19,51 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+namespace Oyst\Repository;
+
+use Carrier;
+use Configuration;
+use Order;
+use OrderHistory;
+use OystPaymentNotification;
+use Tools;
 
 /**
  * Class OrderRepository
  */
 class OrderRepository extends AbstractOystRepository
 {
+    /**
+     * @param $user
+     *
+     * @return mixed
+     */
+    public function findAddressByUserInfo($user)
+    {
+        $address1 = $user['address']['street'];
+        $postcode = $user['address']['postcode'];
+        $city = $user['address']['city'];
+
+        $query = "
+            SELECT *
+            FROM "._DB_PREFIX_."address a
+            WHERE
+              a.address1 = '$address1'
+              AND a.postcode = '$postcode'
+              AND a.city = '$city'
+        ";
+
+        $address = $this->db->getRow($query);
+
+        return $address;
+    }
+
+    /**
+     * @param int $idCart
+     * @param int $currentState
+     *
+     * @return bool
+     */
     public function orderCanBeCancelled($idCart, $currentState)
     {
         // The order must have an AUTHORISATION event and no CAPTURE/CANCELLATION event
@@ -50,6 +83,12 @@ class OrderRepository extends AbstractOystRepository
         return $result > 0 && $currentState != Configuration::get('OYST_STATUS_CANCELLATION_PENDING');
     }
 
+    /**
+     * @param int $idCart
+     * @param int $currentState
+     *
+     * @return bool
+     */
     public function orderCanBeTotallyRefunded($idCart, $currentState)
     {
         // The order must have a CAPTURE event but no REFUND/CANCELLATION event
@@ -69,6 +108,11 @@ class OrderRepository extends AbstractOystRepository
         return $result > 0 && $currentState != Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') && $currentState != Configuration::get('OYST_STATUS_REFUND_PENDING');
     }
 
+    /**
+     * @param int $idCart
+     *
+     * @return float
+     */
     public function calculateOrderMaxRefund($idCart)
     {
         $maxRefund = 0;
@@ -98,6 +142,12 @@ class OrderRepository extends AbstractOystRepository
         return $maxRefund;
     }
 
+    /**
+     * @param int $idCart
+     * @param int $currentState
+     *
+     * @return float
+     */
     public function getOrderMaxRefund($idCart, $currentState)
     {
         $maxRefund = 0;
@@ -132,6 +182,12 @@ class OrderRepository extends AbstractOystRepository
         return $maxRefund;
     }
 
+    /**
+     * @param int   $idCart
+     * @param float $totalAmount
+     *
+     * @return float
+     */
     public function calculateMaxRefund($idCart, $totalAmount)
     {
         $maxRefund = $totalAmount;
@@ -151,6 +207,12 @@ class OrderRepository extends AbstractOystRepository
         return $maxRefund;
     }
 
+    /**
+     * @param Order $order
+     * @param array $tabAccess
+     *
+     * @return float
+     */
     public function getAmountToRefund($order, $tabAccess)
     {
         if (version_compare(_PS_VERSION_, '1.6.0') >= 0) {
@@ -162,6 +224,12 @@ class OrderRepository extends AbstractOystRepository
         return $amountToRefund;
     }
 
+    /**
+     * @param array $tabAccess
+     * @param Order $order
+     *
+     * @return float
+     */
     private function getAmountToRefundRecentVersion($tabAccess, $order)
     {
         if ($tabAccess['edit'] != '1') {
@@ -230,11 +298,16 @@ class OrderRepository extends AbstractOystRepository
             }
 
             return $amount;
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
+    /**
+     * @param array $tabAccess
+     *
+     * @return float
+     */
     private function getAmountToRefundOldVersion($tabAccess)
     {
         if ($tabAccess['edit'] != '1' || !is_array(Tools::getValue('partialRefundProduct'))) {
@@ -266,5 +339,48 @@ class OrderRepository extends AbstractOystRepository
         }
 
         return $amount > 0 ? $amount : 0;
+    }
+
+    /**
+     * @param Order $order
+     * @param Carrier $carrier
+     */
+    public function updateOrderCarrier(Order $order, Carrier $carrier)
+    {
+        // This part will be reviews with v2 to apply the carrier cost set by the merchant
+        $order->id_carrier = $carrier->id;
+        $order->total_paid = $order->total_paid_real;
+        $order->total_paid_tax_excl = $order->total_paid_tax_incl = $order->total_paid;
+        $order->total_shipping = 0;
+        $order->total_shipping_tax_excl = 0;
+        $order->total_shipping_tax_incl = 0;
+        $order->save();
+
+        $this->db->update(
+            'order_carrier',
+            array(
+                'id_carrier' => $carrier->id,
+                'shipping_cost_tax_excl' => 0.0,
+                'shipping_cost_tax_incl' => 0.0,
+            ),
+            'id_order = '.(int) $order->id
+        );
+    }
+
+    /**
+     * @param Order $order
+     * @return OrderHistory
+     */
+    public function getLastOrderHistory(Order $order)
+    {
+        $orderId = (int) $order->id;
+        $query = "
+            SELECT id_order_history
+            FROM "._DB_PREFIX_."order_history
+            WHERE id_order = $orderId
+            ORDER BY id_order_history DESC 
+        ";
+
+        return new OrderHistory((int) $this->db->getValue($query));
     }
 }

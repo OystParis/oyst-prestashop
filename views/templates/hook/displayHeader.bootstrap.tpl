@@ -18,3 +18,8 @@
  * @license GNU GENERAL PUBLIC LICENSE
  *}
 <script src="{$oyst.FC_OYST_TRACKER_URL|escape:'html':'UTF-8'}"></script>
+<meta name="oyst_tracker_info_freepay_activated" content="{$oyst.freePayActivated|escape:'html':'UTF-8'}">
+<meta name="oyst_tracker_info_oneclick_activated" content="{$oyst.oneClickActivated|escape:'html':'UTF-8'}">
+<meta name="oyst_tracker_info_freepay_apikey" content="{$oyst.freePayKeyFilled|escape:'html':'UTF-8'}">
+<meta name="oyst_tracker_info_oneclick_apikey" content="{$oyst.oneClickKeyFilled|escape:'html':'UTF-8'}">
+<meta name="oyst_tracker_info_plugin_version" content="{$oyst.pluginVersion|escape:'html':'UTF-8'}">

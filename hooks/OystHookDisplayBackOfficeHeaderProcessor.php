@@ -19,25 +19,87 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Oyst\Api\OystApiClientFactory;
+use Oyst\Repository\OrderRepository;
+use Oyst\Repository\ProductRepository;
+
 class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
 {
+    private function fetchProductContent()
+    {
+        if (!Module::isInstalled($this->module->name) || !Module::isEnabled($this->module->name)) {
+            return '';
+        }
+
+        if (Tools::isSubmit('id_order')) {
+            // Check if order has been paid with Oyst
+            $order = new Order(Tools::getValue('id_order'));
+            if ($order->module == $this->module->name) {
+                // Partial refund
+                if (Tools::isSubmit('partialRefund') && isset($order)) {
+                    $this->partialRefundOrder($order);
+                }
+            }
+            return '';
+        }
+
+        $content = '';
+
+        if (Tools::getValue('controller') == 'AdminProducts' && Tools::isSubmit('id_product')) {
+            $productRepository = new ProductRepository(Db::getInstance());
+            $isProductSent = $productRepository->isProductSent(new Product(Tools::getValue('id_product')));
+
+            /** @var Smarty_Internal_Template $template */
+            $template = Context::getContext()->smarty->createTemplate(dirname(__FILE__).'/../views/templates/hook/displayAdminProduct.tpl');
+            $template->assign(array(
+                'isProductSent' => $isProductSent,
+            ));
+
+            $content = $template->fetch();
+        }
+
+        return $content;
+    }
+
+    private function fetchExportContent()
+    {
+        if (!($isPanelVisible = $this->module->getAdminPanelInformationVisibility())) {
+            return '';
+        }
+
+        $oystProductRepository = new ProductRepository(Db::getInstance());
+        $exportedProducts = $oystProductRepository->getExportedProduct();
+
+        /** @var Smarty_Internal_Template $template */
+        $template = Context::getContext()->smarty->createTemplate(dirname(__FILE__).'/../views/templates/hook/displayBackOfficeHeader.tpl');
+        $exportDate = $this->module->getRequestedCatalogDate();
+        $template->assign(array(
+            'marginRequired' => version_compare(_PS_VERSION_, '1.5', '>'),
+            'OYST_REQUESTED_CATALOG_DATE' => $exportDate ? $exportDate->format(Context::getContext()->language->date_format_full) : false,
+            'OYST_IS_EXPORT_STILL_RUNNING' => $this->module->isCatalogExportStillRunning(),
+            'exportedProducts' => $exportedProducts,
+            'displayPanel' => $this->module->getAdminPanelInformationVisibility(),
+        ));
+
+        $content = $template->fetch();
+
+        return $content;
+    }
+
     public function run()
     {
-        // Check if order has been paid with Oyst
-        $order = new Order(Tools::getValue('id_order'));
-        if ($order->module == $this->module->name) {
-            // Partial refund
-            if (Tools::isSubmit('partialRefund') && isset($order)) {
-                $this->partialRefundOrder($order);
-            }
+        if (!ModuleCore::isInstalled($this->module->name) || !ModuleCore::isEnabled($this->module->name)) {
+            return '';
         }
+
+        $content = $this->fetchExportContent();
+        $content .= $this->fetchProductContent();
+
+        return $content;
     }
 
     private function partialRefundOrder($order)
@@ -50,21 +112,22 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
 
         if ($amountToRefund > 0) {
             // Make Oyst api call
-            $result = array('error' => 'Error', 'message' => 'Transaction not found');
             $oystPaymentNotification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
+            $paymentApi = OystApiClientFactory::getClient(
+                OystApiClientFactory::ENTITY_PAYMENT,
+                $this->module->getFreePayApiKey(),
+                $this->module->getUserAgent(),
+                $this->module->getEnvironment(),
+                $this->module->getApiUrl()
+            );
             if (Validate::isLoadedObject($oystPaymentNotification)) {
-                $oystApi = new OystSDK();
-                $oystApi->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
-                $oystApi->setApiKey(Configuration::get('FC_OYST_API_KEY'));
-
                 $currency = new Currency($order->id_currency);
-                $result = $oystApi->cancelOrRefundRequest($oystPaymentNotification->payment_id, $amountToRefund * 100, $currency->iso_code);
-                if ($result) {
-                    $result = Tools::jsonDecode($result, true);
-                }
+                $oyst = new Oyst();
+                /** @var OystPaymentApi $paymentApi */
+                $response = $paymentApi->cancelOrRefund($oystPaymentNotification->payment_id, new Price($amountToRefund, $currency->iso_code));
 
                 // Set refund status
-                if (!isset($result['error'])) {
+                if ($paymentApi->getLastHttpCode() == 200) {
                     $history = new OrderHistory();
                     $history->id_order = $order->id;
                     $history->id_employee = 0;
@@ -74,7 +137,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                 }
             }
 
-            if (isset($result['error'])) {
+            if ($paymentApi->getLastHttpCode() != 200) {
                 unset($_POST['partialRefund']);
 
                 Tools::redirectAdmin(Context::getContext()->link->getAdminLink('AdminOrders').'&vieworder&id_order='.$order->id);

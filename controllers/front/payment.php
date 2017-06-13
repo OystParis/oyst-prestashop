@@ -26,12 +26,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-/*
- * Include Oyst SDK
- */
-if (!class_exists('OystSDK', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystSDK.php';
-}
+use Oyst\Api\OystApiClientFactory;
 
 class OystPaymentModuleFrontController extends ModuleFrontController
 {
@@ -95,17 +90,22 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         $urls = $this->getUrls();
 
         // Make Oyst api call
-        $oyst_api = new OystSDK();
-        $oyst_api->setApiEndpoint(Configuration::get('FC_OYST_API_PAYMENT_ENDPOINT'));
-        $oyst_api->setApiKey(Configuration::get('FC_OYST_API_KEY'));
-        $result = $oyst_api->paymentRequest($total_amount, $currency->iso_code, $this->context->cart->id, $urls, false, $user);
+        $oyst = new Oyst();
+        /** @var OystPaymentApi $paymentApi */
+        $paymentApi = OystApiClientFactory::getClient(
+            OystApiClientFactory::ENTITY_PAYMENT,
+            $oyst->getFreePayApiKey(),
+            $oyst->getUserAgent(),
+            $oyst->getEnvironment(),
+            $oyst->getApiUrl()
+        );
+        $result = $paymentApi->payment($total_amount, $currency->iso_code, $this->context->cart->id, $urls, false, $user);
 
         // Result payment
         $this->module->log($user);
         $this->module->logNotification('Result payment', $result);
 
         // Redirect to payment
-        $result = Tools::jsonDecode($result, true);
         if (isset($result['url']) && !empty($result['url'])) {
             Tools::redirect($result['url']);
         }

@@ -19,38 +19,18 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
+namespace Oyst\Service\Logger;
+
+/**
+ * Describes a logger-aware instance
  */
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
-
-class OystExportCatalogModuleCronController
+interface LoggerAwareInterface
 {
-    private $_module;
-    public $context;
-
     /**
-     * OystExportCatalogModuleCronController constructor.
-     * @param Oyst $module
+     * Sets a logger instance on the object
+     *
+     * @param LoggerInterface $logger
+     * @return null
      */
-    public function __construct($module)
-    {
-        $this->_module = $module;
-    }
-
-    /**
-     * Run method
-     */
-    public function run()
-    {
-        // Get products
-        $oyst_product = new OystProduct();
-        $result = $oyst_product->sendCatalog();
-
-        // Display result
-        print_r($result);
-        echo "\n";
-    }
+    public function setLogger(LoggerInterface $logger);
 }

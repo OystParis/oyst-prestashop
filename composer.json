@@ -1,0 +1,22 @@
+{
+    "repositories": [
+        {
+            "url": "https://github.com/oystparis/oyst-php.git",
+            "type": "vcs"
+        }
+    ],
+    "require": {
+        "php": ">=5.3",
+        "oyst/oyst-php": "v1.3.0",
+        "symfony/serializer": "v2.8.19",
+        "symfony/property-access": "v2.8.19"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Oyst\\": "src/"
+        }
+    }
+}

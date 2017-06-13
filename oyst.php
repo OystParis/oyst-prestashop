@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.1.0';
+        $this->version = '1.2.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -51,18 +51,14 @@ class Oyst extends FroggyPaymentModule
         if (version_compare(_PS_VERSION_, '1.6.0') >= 0) {
             $this->bootstrap = true;
         }
+    }
 
-        // If old configuration variable exists, we migrate it
-        if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '') {
-            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
-            Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
-        }
+    public function uninstall()
+    {
+        $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this);
+        $oystDb->uninstall();
 
-        // If old configuration variable exists, we migrate it
-        if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '') {
-            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
-            Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
-        }
+        return parent::uninstall();
     }
 
     public function install()
@@ -85,13 +81,47 @@ class Oyst extends FroggyPaymentModule
             WHERE `id_hook` = '.(int)$id_hook.' AND `id_module` = '.$id_module);
         }
 
-        if (Configuration::get('FC_OYST_API_KEY') != '') {
+        if ($this->getFreePayApiKey() != '' || $this->getOneClickApiKey() != '') {
             Configuration::updateValue('FC_OYST_GUEST', false);
         }
 
         $result &= $this->installOrderStates();
+        $result &= $this->updateConstants();
+
+        $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this);
+        $result &= $oystDb->install();
 
         return $result;
+    }
+
+    public function updateConstants()
+    {
+        // If old configuration variable exists, we migrate and delete it
+        if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
+        }
+
+        Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
+
+        // If old configuration variable exists, we migrate and delete it
+        if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
+            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
+        }
+
+        Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
+
+        // If old configuration variable exists, we migrate and delete it
+        if (Configuration::get('FC_OYST_API_KEY') != '' && Configuration::get('OYST_API_PROD_KEY_FREEPAY') == '') {
+            Configuration::updateValue('OYST_API_PROD_KEY_FREEPAY', Configuration::get('FC_OYST_API_KEY'));
+        }
+
+        Configuration::deleteByName('FC_OYST_API_KEY');
+        Configuration::deleteByName('FC_OYST_API_PAYMENT_ENDPOINT');
+        Configuration::deleteByName('FC_OYST_API_CATALOG_ENDPOINT');
+
+        Configuration::updateValue('OYST_API_ENV', 'prod');
+        Configuration::updateValue('OYST_ONECLICK_URL_PROD', 'https://cdn.oyst.com');
+        Configuration::updateValue('OYST_ONECLICK_URL_PREPROD', 'https://cdn.staging.oyst.eu');
     }
 
     /**
@@ -227,17 +257,6 @@ class Oyst extends FroggyPaymentModule
     }
 
     /**
-     * Export catalog method
-     */
-    public function exportCatalog()
-    {
-        require_once _PS_MODULE_DIR_.'/oyst/controllers/cron/ExportCatalog.php';
-        $controller = new OystExportCatalogModuleCronController($this);
-        $controller->run();
-    }
-
-
-    /**
      * Logging methods
      */
 
@@ -261,5 +280,174 @@ class Oyst extends FroggyPaymentModule
         }
         file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data_json."\n", FILE_APPEND);
         file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data."\n", FILE_APPEND);
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getRequestedCatalogDate()
+    {
+        $dataRegistered = Configuration::get('OYST_REQUESTED_CATALOG_DATE');
+        $date = $dataRegistered ? new DateTime($dataRegistered) : null;
+
+        return $date;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCatalogExportStillRunning()
+    {
+        return (bool) Configuration::get(Oyst\Service\Configuration::CATALOG_EXPORT_STATE);
+    }
+
+    /**
+     * @param $state
+     * @return $this
+     */
+    public function setAdminPanelInformationVisibility($state)
+    {
+        // TIPS: Maybe better to have an AdminClass / Configuration to handle anything about this
+        $state = (bool) $state ?
+            Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_ENABLE :
+            Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_DISABLE
+        ;
+        Configuration::updateValue(Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_STATE, $state);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminPanelInformationVisibility()
+    {
+        return (bool) Configuration::get(Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_STATE);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFreePayApiKey()
+    {
+        $key = '';
+        $env = Tools::strtolower($this->getEnvironment());
+
+        switch ($env) {
+            case \Oyst\Service\Configuration::API_ENV_PROD:
+                $key = \Oyst\Service\Configuration::API_KEY_PROD_FREEPAY;
+                break;
+            case \Oyst\Service\Configuration::API_ENV_PREPROD:
+                $key = \Oyst\Service\Configuration::API_KEY_PREPROD_FREEPAY;
+                break;
+            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                $key = \Oyst\Service\Configuration::API_KEY_CUSTOM_FREEPAY;
+                break;
+        }
+
+        return Configuration::get($key);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOneClickApiKey()
+    {
+        $key = '';
+        $env = Tools::strtolower($this->getEnvironment());
+
+        switch ($env) {
+            case \Oyst\Service\Configuration::API_ENV_PROD:
+                $key = \Oyst\Service\Configuration::API_KEY_PROD_ONECLICK;
+                break;
+            case \Oyst\Service\Configuration::API_ENV_PREPROD:
+                $key = \Oyst\Service\Configuration::API_KEY_PREPROD_ONECLICK;
+                break;
+            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                $key = \Oyst\Service\Configuration::API_KEY_CUSTOM_ONECLICK;
+                break;
+        }
+
+        return Configuration::get($key);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiUrl()
+    {
+        $apiUrl = null;
+        $env = Tools::strtolower($this->getEnvironment());
+
+        if (\Oyst\Service\Configuration::API_ENV_CUSTOM == $env) {
+            $apiUrl = Configuration::get(\Oyst\Service\Configuration::API_ENDPOINT_CUSTOM);
+        }
+
+        return $apiUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOneClickUrl()
+    {
+        $oneClickUrl = null;
+        $env = Tools::strtolower($this->getEnvironment());
+
+        switch ($env) {
+            case \Oyst\Service\Configuration::API_ENV_PROD:
+                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PROD);
+                break;
+            case \Oyst\Service\Configuration::API_ENV_PREPROD:
+                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PREPROD);
+                break;
+            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_CUSTOM);
+                break;
+        }
+
+        return $oneClickUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return Configuration::get(\Oyst\Service\Configuration::API_ENV);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return 'PrestaShop-'.$this->version;
+    }
+
+    /**
+     * @param Product $product
+     * @param Combination|null $combination
+     * @return string
+     */
+    public function getProductReference(Product $product, Combination $combination = null)
+    {
+        return $product->id.(Validate::isLoadedObject($combination) ? '-'.$combination->id : '');
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotifyUrl()
+    {
+        return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/oyst/notification.php';
+    }
+
+    /**
+     * @return Context
+     */
+    public function getContext()
+    {
+        return $this->context;
     }
 }

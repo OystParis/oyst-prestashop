@@ -34,6 +34,12 @@ $(document).ready(function() {
     }).change(function() {
         handleSelectOptions($(this));
     });
+
+    $('select[name="OYST_API_ENV"]').on('change', function () {
+        refreshEnvironmentDisplay();
+    });
+
+    refreshEnvironmentDisplay();
 });
 
 function handleSelectOptions(select) {
@@ -48,4 +54,11 @@ function handleSelectOptions(select) {
             $('input.customUrlText', parentDiv).attr('disabled', 'disabled');
         }
     });
+}
+
+function refreshEnvironmentDisplay()
+{
+    var containerClass = '.' + $('select[name="OYST_API_ENV"]').val();
+    $('.env').not(containerClass).hide();
+    $(containerClass).show();
 }

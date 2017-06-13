@@ -26,23 +26,46 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Oyst\Factory\AbstractExportProductServiceFactory;
+use Oyst\Service\Configuration as OystConfiguration;
+use Oyst\Service\Http\CurrentRequest;
+use Oyst\Api\OystApiClientFactory;
+use Oyst\Service\Logger\PrestaShopLogger;
+
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
+    /** @var string  */
     public $configuration_result = '';
+
+    /** @var array  */
     public $configurations = array(
         'FC_OYST_GUEST'                   => 'int',
         'FC_OYST_REDIRECT_SUCCESS'        => 'string',
         'FC_OYST_REDIRECT_ERROR'          => 'string',
         'FC_OYST_REDIRECT_SUCCESS_CUSTOM' => 'string',
         'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
-        'FC_OYST_API_KEY'                 => 'string',
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
-        'FC_OYST_API_PAYMENT_ENDPOINT'    => 'string',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
-        'FC_OYST_API_CATALOG_ENDPOINT'    => 'string',
+        OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
+        OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
+        OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
+        OystConfiguration::API_KEY_PROD_ONECLICK => 'string',
+        OystConfiguration::API_KEY_PREPROD_ONECLICK => 'string',
+        OystConfiguration::API_KEY_CUSTOM_ONECLICK => 'string',
+        OystConfiguration::API_ENDPOINT_CUSTOM => 'string',
+        OystConfiguration::API_ENV => 'string',
+        OystConfiguration::ONE_CLICK_FEATURE_STATE => 'int',
+        OystConfiguration::ONE_CLICK_URL_CUSTOM => 'string',
     );
+
+    /** @var array  */
     public $redirect_success_urls = array();
+
+    /** @var array  */
     public $redirect_error_urls = array();
+
+    /** @var array  */
+    public $redirect_cancel_urls = array();
 
     public function init()
     {
@@ -92,16 +115,23 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     public function displayModuleConfiguration()
     {
-        $assign      = array();
-        $apiKey      = Configuration::get('FC_OYST_API_KEY');
+        $assign = array();
+        $currentFreePayApiKey = $this->module->getFreePayApiKey();
+        $currentOneClickApiKey = $this->module->getOneClickApiKey();
+        $hasApiKey = !empty($currentFreePayApiKey) || !empty($currentOneClickApiKey);
+
+        // Keep it simple for now
+        $isCurrentFreePayApiKeyValid = Tools::strlen($currentFreePayApiKey) == 64;
+        $isCurrentOneClickApiKeyValid = Tools::strlen($currentOneClickApiKey) == 64;
+
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $goToConf    = (bool) Tools::getValue('go_to_conf');
         $goToForm    = (bool) Tools::getValue('go_to_form');
         $hasError    = false;
 
         // Merchant comes from the plugin list
-        if (!$goToForm && !$goToConf) {
-            $goToForm = $clientPhone == '' && $apiKey == '';
+        if (!$hasApiKey && !$goToConf) {
+            $goToForm = empty($clientPhone) && empty($hasApiKey);
         }
 
         if ($goToConf) {
@@ -109,12 +139,27 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $goToForm = false;
         }
 
+        $lastExportDate = Configuration::get(\Oyst\Service\Configuration::REQUESTED_CATALOG_DATE);
+        $hasAlreadyExportProducts = false;
+        if (!empty($lastExportDate)) {
+            $lastExportDate = new DateTime($lastExportDate);
+            $hasAlreadyExportProducts = true;
+        }
         $this->handleContactForm($assign, $hasError, $goToForm);
 
-        $assign['module_dir']               = $this->path;
-        $assign['message']                  = '';
-        $assign['phone']                    = Configuration::get('FC_OYST_MERCHANT_PHONE');
-        $assign['apikey_test_error']        = '';
+        $assign['lastExportDate'] = $lastExportDate;
+        $assign['hasAlreadyExportProducts'] = $hasAlreadyExportProducts;
+        $assign['hasApiKey']     = $hasApiKey;
+        $assign['exportRunning'] = $this->module->isCatalogExportStillRunning();
+        $assign['module_dir']    = $this->path;
+        $assign['message']       = '';
+        $assign['phone']         = Configuration::get('FC_OYST_MERCHANT_PHONE');
+        $assign['apikey_prod_test_error_freepay']     = '';
+        $assign['apikey_preprod_test_error_freepay']  = '';
+        $assign['apikey_custom_test_error_freepay']   = '';
+        $assign['apikey_prod_test_error_oneclick']    = '';
+        $assign['apikey_preprod_test_error_oneclick'] = '';
+        $assign['apikey_custom_test_error_oneclick']  = '';
         $assign['result']                   = $this->configuration_result;
         $assign['ps_version']               = Tools::substr(_PS_VERSION_, 0, 3);
         $assign['module_version']           = $this->module->version;
@@ -135,8 +180,24 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->showMessageToMerchant($assign);
         }
 
-        if ($apiKey != '') {
-            $assign['apikey_test_error'] = Tools::strlen($apiKey) != 64;
+        if ($hasApiKey && (!empty($currentFreePayApiKey) && !$isCurrentFreePayApiKeyValid || !empty($currentOneClickApiKey) && !$isCurrentOneClickApiKeyValid)) {
+            $env = Tools::strtolower($this->module->getEnvironment());
+
+            if (!$isCurrentFreePayApiKeyValid) {
+                $key = 'apikey_'.$env.'_test_error_freepay';
+
+                if (array_key_exists($key, $assign)) {
+                    $assign[$key] = !$isCurrentFreePayApiKeyValid;
+                }
+            }
+
+            if (!$isCurrentOneClickApiKeyValid) {
+                $key = 'apikey_'.$env.'_test_error_oneclick';
+
+                if (array_key_exists($key, $assign)) {
+                    $assign[$key] = !$isCurrentOneClickApiKeyValid;
+                }
+            }
 
             // First time merchant enter a key after submitting the contact form
             if ($isGuest) {
@@ -150,16 +211,34 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $this->smarty->assign($this->module->name, $assign);
 
-        if ($goToForm || $hasError) {
-            return $this->module->fcdisplay(__FILE__, 'getGuestConfigure.tpl');
-        }
+        $template = $goToForm || $hasError ? 'getGuestConfigure.tpl' : 'getMerchantConfigure.tpl';
 
-        return $this->module->fcdisplay(__FILE__, 'getMerchantConfigure.tpl');
+        return $this->module->fcdisplay(__FILE__, $template);
+    }
+
+    private function postRequest()
+    {
+        if (Tools::isSubmit('synchronizeProducts')) {
+            $request = new CurrentRequest();
+            $exportProductService = AbstractExportProductServiceFactory::get($this->module, $this->context);
+            $succeed = $exportProductService->requestNewExport();
+
+            if ($succeed) {
+                Tools::redirect($request->getScheme().$request->getHost().$request->getRequestUri());
+                die();
+            } else {
+                $apiClient = $exportProductService->getRequester()->getApiClient();
+                $this->smarty->assign(array(
+                    'apiError' => $apiClient->getLastError(),
+                ));
+            }
+        }
     }
 
     public function run()
     {
         $this->init();
+        $this->postRequest();
         $this->saveModuleConfiguration();
         return $this->displayModuleConfiguration();
     }
