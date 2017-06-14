@@ -129,7 +129,7 @@ class ProductRepository extends AbstractOystRepository
     public function getExportedProduct()
     {
         $query = '
-            SELECT *
+            SELECT productId, productAttributeId, importId, hasBeenExported
             FROM '._DB_PREFIX_.'oyst_exported_catalog
         ';
 
@@ -157,7 +157,7 @@ class ProductRepository extends AbstractOystRepository
         $combinationId = !$combination ? 0 : (int) $combination->id;
 
         $query = "
-            SELECT *
+            SELECT productId, productAttributeId, importId, hasBeenExported
             FROM "._DB_PREFIX_."oyst_exported_catalog poec
             WHERE  
               poec.productId = $productId
@@ -165,5 +165,24 @@ class ProductRepository extends AbstractOystRepository
         ";
 
         return $this->db->getValue($query);
+    }
+
+    /**
+     * @param Product $product
+     * @return array
+     */
+    public function getExportedFromProduct(Product $product)
+    {
+        $productId = (int) $product->id;
+
+        $query = "
+            SELECT productId, productAttributeId, importId, hasBeenExported
+            FROM "._DB_PREFIX_."oyst_exported_catalog poec
+            WHERE  
+              poec.productId = $productId
+              AND hasBeenExported = 1
+        ";
+
+        return $this->db->executeS($query);
     }
 }
