@@ -22,6 +22,7 @@
 
 <script type="text/javascript">
     const oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, {$product->id|json_encode});
+    oyst.setExportedCombinations({$synchronizedCombination|json_encode})
     oyst.prepareButton();
 
     window.__OYST__ = window.__OYST__ || {};
@@ -31,7 +32,7 @@
 </script>
 
 <style type="text/css">
-    #oyst-1click-button {
+    #oneClickContainer {
         margin: 10px !important;
     }
 </style>
