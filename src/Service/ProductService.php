@@ -77,7 +77,7 @@ class ProductService extends AbstractOystService
             throw new Exception('Did you forget to set the Product Transformer ?');
         }
 
-        $oystProduct = $this->productTransformer->transformWithCombination($product, $combination);
+        $oystProduct = $this->productTransformer->transformCombination($product, $combination);
 
         return $oystProduct;
     }
