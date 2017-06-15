@@ -47,6 +47,7 @@ class ProductRepository extends AbstractOystRepository
               SELECT CONCAT(oec.productId, '-', IFNULL(oec.productAttributeId, 0))
               FROM "._DB_PREFIX_."oyst_exported_catalog oec
             )
+            ORDER BY p.id_product, pa.id_product_attribute
         ";
 
         if ($limitProducts > 0) {
@@ -88,13 +89,20 @@ class ProductRepository extends AbstractOystRepository
         foreach ($baseProductToExport as $product) {
             $hasBeenExported = false;
             foreach ($oystProductsExported as $oystProduct) {
-                $psProduct = new Product($product['id_product']);
-                $combination = new Combination($product['id_product_attribute']);
-                $baseReference = $oyst->getProductReference($psProduct, $combination);
-
-                if ($baseReference == $oystProduct->getRef()) {
-                    $hasBeenExported = true;
-                    break;
+                if ($product['id_product'] == $oystProduct->getRef()) {
+                    // No variation possible
+                    if (!$product['id_product_attribute']) {
+                        $hasBeenExported = true;
+                        break;
+                    } else {
+                        // Check out if the variation has been sent
+                        foreach ($oystProduct->getVariations() as $variationProduct) {
+                            if ($product['id_product_attribute'] == $variationProduct->getRef()) {
+                                $hasBeenExported = true;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
