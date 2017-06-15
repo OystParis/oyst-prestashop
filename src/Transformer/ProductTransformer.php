@@ -125,19 +125,19 @@ class ProductTransformer extends AbstractTransformer
      * @param Combination $combination
      * @return OystProduct
      */
-    public function transformWithCombination(Product $product, Combination $combination)
+    public function transformCombination(Product $product, Combination $combination)
     {
-        $oystProduct = $this->transform($product);
+        $oystProductVariation = $this->transform($product);
 
-        if ($oystProduct && $combination && $combination->id) {
+        if ($oystProductVariation && $combination && $combination->id) {
             $oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
 
-            $oystProduct->setRef($product->id.'-'.$combination->id);
-            $oystProduct->setEan($combination->ean13);
-            $oystProduct->setWeight($combination->weight);
+            $oystProductVariation->setRef($combination->id);
+            $oystProductVariation->setEan($combination->ean13);
+            $oystProductVariation->setWeight($combination->weight);
 
-            $oystProduct->setAmountIncludingTax($oystPrice);
-            $oystProduct->setAvailableQuantity(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
+            $oystProductVariation->setAmountIncludingTax($oystPrice);
+            $oystProductVariation->setAvailableQuantity(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
 
             $images = array();
             foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
@@ -148,9 +148,9 @@ class ProductTransformer extends AbstractTransformer
                 $images = array(Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png');
             }
 
-            $oystProduct->setImages($images);
+            $oystProductVariation->setImages($images);
         }
 
-        return $oystProduct;
+        return $oystProductVariation;
     }
 }
