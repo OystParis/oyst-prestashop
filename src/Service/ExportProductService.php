@@ -78,28 +78,44 @@ class ExportProductService extends AbstractOystService
      */
     private function transformProducts($products)
     {
-        $product = new Product();
-
+        // Tricks requirements for PrestaShop
         $this->context->cart = new Cart();
         if (!Validate::isLoadedObject($this->context->currency)) {
             throw new Exception('Bad Currency object, Did you forget to set it ?');
         }
 
+        // Prepare a default cache object (Query is ordered by id ASC :)
+        $product = new Product();
+
+        /** @var OystProduct[] $oystProducts */
         $oystProducts = array();
         foreach ($products as $productInfo) {
-            $combination = new Combination();
+            // Check if product is already loaded
             if ($product->id != $productInfo['id_product']) {
                 $product = new Product($productInfo['id_product'], false, $this->context->language->id);
+                if (!Validate::isLoadedObject($product)) {
+                    continue;
+                }
             }
 
+            // We need the base product first in case it doesn't exist
+            if (!isset($oystProducts[$product->id])) {
+                if (!($baseOystProduct = $this->productTransformer->transform($product))) {
+                    continue;
+                }
+                $oystProducts[$product->id] = clone $baseOystProduct;
+            }
+
+            // Then we handle combination as variation
+            $combination = null;
             if ($productInfo['id_product_attribute']) {
                 $combination = new Combination($productInfo['id_product_attribute']);
-            }
-
-            $oystProduct = $this->productTransformer->transformWithCombination($product, $combination);
-
-            if ($oystProduct) {
-                $oystProducts[] = clone $oystProduct;
+                if (Validate::isLoadedObject($combination)) {
+                    // We still need the original product to get the current price (discount for example)
+                    if (($oystProductVariation = $this->productTransformer->transformCombination($product, $combination))) {
+                        $oystProducts[$product->id]->addVariation($oystProductVariation);
+                    }
+                }
             }
         }
 
