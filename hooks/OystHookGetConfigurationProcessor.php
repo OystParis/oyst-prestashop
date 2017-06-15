@@ -125,7 +125,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 $carrier = new Carrier($shipment['id_carrier']);
                 $oneClickShipment->setCarrier(new OystCarrier($shipment['id_carrier'], $carrier->name, $shipment['type']));
                 $oneClickShipment->setAmount(new ShipmentAmount((float) $shipment['amount_follower'], (float) $shipment['amount_leader'], 'EUR'));
-                $oneClickShipment->setFreeShipping((float) $shipment['free_shipping']);
+                $oneClickShipment->setFreeShipping((int) $shipment['free_shipping']);
                 $oneClickShipment->setPrimary(isset($shipment['primary']) && $shipment['primary'] == 1 ? true : false);
                 $oneClickShipment->setDelay((int) $shipment['delay'] * 24);
                 $oneClickShipment->setZones(array('FR'));
