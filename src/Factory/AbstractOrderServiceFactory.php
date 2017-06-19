@@ -28,16 +28,16 @@ use Oyst\Repository\AddressRepository;
 use Oyst\Repository\OrderRepository;
 use Oyst\Service\Api\Requester;
 use Oyst\Service\Logger\PrestaShopLogger;
-use Oyst\Service\NewOrderService;
+use Oyst\Service\OrderService;
 
-class AbstractNewOrderServiceFactory
+class AbstractOrderServiceFactory
 {
     /**
      * Add Factory for this service due to huge redundant code used
      *
      * @param \Oyst $oyst
      * @param $context
-     * @return NewOrderService
+     * @return OrderService
      */
     public static function get(\Oyst $oyst, $context)
     {
@@ -56,7 +56,7 @@ class AbstractNewOrderServiceFactory
         $requester = new Requester($apiClient);
         $requester->setLogger($logger);
 
-        $newOrderService = new NewOrderService(
+        $newOrderService = new OrderService(
             $context,
             $oyst
         );

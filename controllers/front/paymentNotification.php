@@ -132,7 +132,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                 'transaction_id' => pSQL($payment_notification['order_id']),
                 'total_paid' => (float)($payment_notification['amount']['value'] / 100),
                 'currency' => pSQL($payment_notification['amount']['currency']),
-                'payment_date' => pSQL(Tools::substr(str_replace('T', '', $payment_notification['event_date']), 0, 19)),
+                'payment_date' => pSQL(Tools::substr(str_replace('T', ' ', $payment_notification['event_date']), 0, 19)),
                 'payment_status' => pSQL($payment_notification['success']),
             );
 

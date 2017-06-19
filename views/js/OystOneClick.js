@@ -30,15 +30,59 @@ class OystOneClick {
     constructor(url, productId) {
         this.url = url;
         this.productId = productId;
+        this.combinations = [];
+        this.button = '#oneClickContainer';
+    }
+
+    setExportedCombinations(combinations) {
+        this.combinations = combinations;
+    }
+
+    isProductCombinationExported() {
+        let product = this.getSelectedProduct();
+        let isExported = this.combinations.indexOf(product.productAttributeId);
+
+        return isExported >= 0;
+    }
+
+    watcherCombination() {
+        if (!this.isProductCombinationExported() || !quantityAvailable) {
+            $(this.button).hide();
+        } else if (quantityAvailable) {
+            $(this.button).show();
+        }
+
+        let object = this;
+        window.setTimeout(function () {
+            object.watcherCombination();
+        }, 100);
+    }
+
+    prepareEvents() {
+        if (this.combinations.length) {
+            // Value is changed by PrestaShop code, we need to check using a timer
+            this.watcherCombination();
+        }
     }
 
     /**
      * Initialize requirements
      */
     prepareButton() {
+        // Avoid any event issue due to potential remove / create from loaded oyst script
         $('#add_to_cart').before($('<div>', {
+            id: 'oneClickContainer'
+        }));
+
+        $('#oneClickContainer').append($('<div>', {
             id: 'oyst-1click-button'
         }));
+
+        this.prepareEvents();
+
+        if (!quantityAvailable) {
+            $(this.button).hide();
+        }
     }
 
     /**

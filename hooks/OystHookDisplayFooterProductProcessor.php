@@ -22,6 +22,8 @@
 /*
  * Security
  */
+use Oyst\Repository\ProductRepository;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -35,10 +37,25 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             return '';
         }
 
+        $productRepository = new ProductRepository(Db::getInstance());
+        $exportedProducts = $productRepository->getExportedFromProduct($product);
+
+        if (!$exportedProducts) {
+            return '';
+        }
+
+        $synchronizedCombination = array();
+        foreach ($exportedProducts as $exportedProduct) {
+            if ($exportedProduct['hasBeenExported'] && 0 < $exportedProduct['productAttributeId']) {
+                $synchronizedCombination[] = $exportedProduct['productAttributeId'];
+            }
+        }
+
         $this->smarty->assign(array(
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
             'oneClickUrl' => trim($this->module->getOneClickUrl(), '/'),
             'product' => $product,
+            'synchronizedCombination' => $synchronizedCombination,
         ));
 
         return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');

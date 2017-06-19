@@ -40,7 +40,7 @@ use Validate;
 /**
  * Class OneClickService
  */
-class NewOrderService extends AbstractOystService
+class OrderService extends AbstractOystService
 {
     /** @var AddressRepository */
     private $addressRepository;
@@ -111,12 +111,11 @@ class NewOrderService extends AbstractOystService
     /**
      * @param Customer $customer
      * @param Address $address
-     * @param Product $product
-     * @param Combination $combination
+     * @param $products
      * @param $oystOrderInfo
      * @return bool
      */
-    public function createNewOrder(Customer $customer, Address $address, Product $product, Combination $combination, $oystOrderInfo)
+    public function createNewOrder(Customer $customer, Address $address, $products, $oystOrderInfo)
     {
         // PS core used this context anywhere.. So we need to fill it properly
         $this->context->cart = $cart = new Cart();
@@ -142,17 +141,23 @@ class NewOrderService extends AbstractOystService
                 'Can\'t create cart ['.$this->serializer->serialize($cart).']'
             );
             return false;
-        } elseif (!$cart->updateQty($oystOrderInfo['quantity'], $product->id, $combination->id)) {
-            $this->logger->emergency(
-                sprintf(
-                    "Can't add product to cart, please check the quantity.
-                        Product #%d. Combination #%d",
-                    $product->id,
-                    $combination->id
-                )
-            );
-            return false;
         }
+
+        foreach ($products as $productInfo) {
+            if (!$cart->updateQty($productInfo['quantity'], $productInfo['productId'], $productInfo['combinationId'])) {
+                $this->logger->emergency(
+                    sprintf(
+                        "Can't add product to cart, please check the quantity.
+                        Product #%d. Combination #%d. Quantity %d",
+                        $productInfo['productId'],
+                        $productInfo['combinationId'],
+                        $productInfo['quantity']
+                    )
+                );
+                return false;
+            }
+        }
+
 
         $cart->update();
 
@@ -169,22 +174,40 @@ class NewOrderService extends AbstractOystService
         );
 
         if ($state) {
-            $this->handleShippingCost($cart);
+            if (!($orderId = Order::getOrderByCartId($cart->id))) {
+                return false;
+            }
+            
+            $order = new Order($orderId);
+
+            $this->handleShippingCost($order, $oystOrderInfo['shipment']);
+            $this->handleHistory($order);
+            $this->getOrderRepository()->linkorderToGUID($order, $oystOrderInfo['id']);
         }
 
         return $state;
     }
 
     /**
-     * @param Cart $cart
-     *
+     * @param Order $order
+     */
+    private function handleHistory(Order $order)
+    {
+        $orderHistory = $this->orderRepository->getLastOrderHistory($order);
+        $orderHistory->id_order_state = 2;
+        $orderHistory->save();
+
+        $order->current_state = $orderHistory->id_order_state;
+        $order->save();
+    }
+
+    /**
+     * @param Order $order
+     * @param $shipmentInfo
      * @return bool
      */
-    private function handleShippingCost(Cart $cart)
+    private function handleShippingCost(Order $order, $shipmentInfo)
     {
-        if (!($orderId = Order::getOrderByCartId($cart->id))) {
-            return false;
-        }
 
         // This is a tricky part, we need to use a carrier and hide it for the front process.
         // So we have to rewrite the order detail properly according to the carrier
@@ -198,12 +221,11 @@ class NewOrderService extends AbstractOystService
             return false;
         }
 
-        $order = new Order($orderId);
-        $this->orderRepository->updateOrderCarrier($order, $carrier);
-        $orderHistory = $this->orderRepository->getLastOrderHistory($order);
-        $orderHistory->id_order_state = 2;
-        $order->current_state = $orderHistory->id_order_state;
-        $order->save();
+        // Actually we don't need to check the currency, EUR every time.
+
+        $cost = $shipmentInfo['amount']['value'];
+        $cost = (float) ($cost > 0 ? $cost / 100 : 0);
+        $this->orderRepository->updateOrderCarrier($order, $carrier, $cost);
 
         return true;
     }
@@ -235,19 +257,28 @@ class NewOrderService extends AbstractOystService
 
         $oystOrderInfo = $this->getOrderInfo($orderId);
         if ($oystOrderInfo) {
-            $productReferences = explode('-', $oystOrderInfo['product_reference']);
-            $product = new Product($productReferences[0]);
+            $products = array();
+            foreach ($oystOrderInfo['items'] as $productInfo) {
+                $productReferences = explode('-', $productInfo['product_reference']);
+                $product = new Product($productReferences[0]);
 
-            if (!Validate::isLoadedObject($product)) {
-                $data['error'] = 'Product has not been found';
-            }
-
-            $combination = new Combination();
-            if (isset($productReferences[1])) {
-                $combination = new Combination($productReferences[1]);
-                if (!Validate::isLoadedObject($combination)) {
-                    $data['error'] = 'Combination has not been found';
+                if (!Validate::isLoadedObject($product)) {
+                    $data['error'] = 'Product has not been found';
                 }
+
+                $combination = new Combination();
+                if (isset($productReferences[1])) {
+                    $combination = new Combination($productReferences[1]);
+                    if (!Validate::isLoadedObject($combination)) {
+                        $data['error'] = 'Combination has not been found';
+                    }
+                }
+
+                $products[] = array(
+                    'productId' => $product->id,
+                    'combinationId' => $combination->id,
+                    'quantity' => $productInfo['quantity'],
+                );
             }
 
             $customer = $this->getCustomer($oystOrderInfo['user']);
@@ -261,7 +292,7 @@ class NewOrderService extends AbstractOystService
             }
 
             if (!isset($data['error'])) {
-                $state = $this->createNewOrder($customer, $address, $product, $combination, $oystOrderInfo);
+                $state = $this->createNewOrder($customer, $address, $products, $oystOrderInfo);
                 $data['state'] = $state;
             }
         } else {
@@ -280,7 +311,7 @@ class NewOrderService extends AbstractOystService
      */
     public function updateOrderStatus($orderId, $status)
     {
-        $this->requester->call('updateStatus', array($orderId, $status));
+        $this->requester->call('updateStatus', array((string) $orderId, $status));
 
         $succeed = false;
         if ($this->requester->getApiClient()->getLastHttpCode() != 200) {

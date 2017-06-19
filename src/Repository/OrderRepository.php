@@ -344,24 +344,25 @@ class OrderRepository extends AbstractOystRepository
     /**
      * @param Order $order
      * @param Carrier $carrier
+     * @param $cost
      */
-    public function updateOrderCarrier(Order $order, Carrier $carrier)
+    public function updateOrderCarrier(Order $order, Carrier $carrier, $cost)
     {
         // This part will be reviews with v2 to apply the carrier cost set by the merchant
         $order->id_carrier = $carrier->id;
         $order->total_paid = $order->total_paid_real;
         $order->total_paid_tax_excl = $order->total_paid_tax_incl = $order->total_paid;
-        $order->total_shipping = 0;
-        $order->total_shipping_tax_excl = 0;
-        $order->total_shipping_tax_incl = 0;
+        $order->total_shipping = $cost;
+        $order->total_shipping_tax_excl = $cost;
+        $order->total_shipping_tax_incl = $cost;
         $order->save();
 
         $this->db->update(
             'order_carrier',
             array(
                 'id_carrier' => $carrier->id,
-                'shipping_cost_tax_excl' => 0.0,
-                'shipping_cost_tax_incl' => 0.0,
+                'shipping_cost_tax_excl' => $cost,
+                'shipping_cost_tax_incl' => $cost,
             ),
             'id_order = '.(int) $order->id
         );
@@ -382,5 +383,34 @@ class OrderRepository extends AbstractOystRepository
         ";
 
         return new OrderHistory((int) $this->db->getValue($query));
+    }
+
+    /**
+     * @param $orderId
+     * @return string
+     */
+    public function getOrderGUID($orderId)
+    {
+        return $this->db->getValue('
+            SELECT orderGUID
+            FROM '._DB_PREFIX_.'oyst_api_order
+            WHERE orderId = '.(int) $orderId
+        );
+    }
+
+    /**
+     * @param Order $order
+     * @param $orderGuid
+     * @return bool
+     */
+    public function linkOrderToGUID(Order $order, $orderGuid)
+    {
+        return $this->db->insert(
+            'oyst_api_order',
+            array(
+                'orderId' => (int) $order->id,
+                'orderGUID' => (string) $orderGuid,
+            )
+        );
     }
 }
