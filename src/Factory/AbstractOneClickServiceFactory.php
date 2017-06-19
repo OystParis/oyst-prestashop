@@ -43,8 +43,8 @@ abstract class AbstractOneClickServiceFactory
             OystApiClientFactory::ENTITY_ONECLICK,
             $oyst->getOneClickApiKey(),
             $oyst->getUserAgent(),
-            $oyst->getEnvironment(),
-            $oyst->getApiUrl()
+            $oyst->getOneClickEnvironment(),
+            $oyst->getOneClickApiUrl()
         );
 
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
