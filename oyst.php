@@ -331,7 +331,7 @@ class Oyst extends FroggyPaymentModule
     public function getFreePayApiKey()
     {
         $key = '';
-        $env = Tools::strtolower($this->getEnvironment());
+        $env = Tools::strtolower($this->getFreePayEnvironment());
 
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:
@@ -354,7 +354,7 @@ class Oyst extends FroggyPaymentModule
     public function getOneClickApiKey()
     {
         $key = '';
-        $env = Tools::strtolower($this->getEnvironment());
+        $env = Tools::strtolower($this->getOneClickEnvironment());
 
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:
@@ -374,13 +374,28 @@ class Oyst extends FroggyPaymentModule
     /**
      * @return string
      */
-    public function getApiUrl()
+    public function getFreePayApiUrl()
     {
         $apiUrl = null;
-        $env = Tools::strtolower($this->getEnvironment());
+        $env = Tools::strtolower($this->getFreePayEnvironment());
 
         if (\Oyst\Service\Configuration::API_ENV_CUSTOM == $env) {
-            $apiUrl = Configuration::get(\Oyst\Service\Configuration::API_ENDPOINT_CUSTOM);
+            $apiUrl = Configuration::get(\Oyst\Service\Configuration::API_ENDPOINT_CUSTOM_FREEPAY);
+        }
+
+        return $apiUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOneClickApiUrl()
+    {
+        $apiUrl = null;
+        $env = Tools::strtolower($this->getOneClickEnvironment());
+
+        if (\Oyst\Service\Configuration::API_ENV_CUSTOM == $env) {
+            $apiUrl = Configuration::get(\Oyst\Service\Configuration::API_ENDPOINT_CUSTOM_ONECLICK);
         }
 
         return $apiUrl;
@@ -392,7 +407,7 @@ class Oyst extends FroggyPaymentModule
     public function getOneClickUrl()
     {
         $oneClickUrl = null;
-        $env = Tools::strtolower($this->getEnvironment());
+        $env = Tools::strtolower($this->getOneClickEnvironment());
 
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:
@@ -412,9 +427,17 @@ class Oyst extends FroggyPaymentModule
     /**
      * @return string
      */
-    public function getEnvironment()
+    public function getFreePayEnvironment()
     {
-        return Configuration::get(\Oyst\Service\Configuration::API_ENV);
+        return Configuration::get(\Oyst\Service\Configuration::API_ENV_FREEPAY);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOneClickEnvironment()
+    {
+        return Configuration::get(\Oyst\Service\Configuration::API_ENV_ONECLICK);
     }
 
     /**

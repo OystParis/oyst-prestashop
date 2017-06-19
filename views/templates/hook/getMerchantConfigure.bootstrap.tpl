@@ -91,7 +91,7 @@
                             </div>
                         </div>
                         <div class="form-group clearfix env prod" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='API Production Key' mod='oyst'}</label>
+                            <label class="control-label col-md-3 col-lg-4">{l s='FreePay API Production Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
                                 <input type="text" id="OYST_API_PROD_KEY_FREEPAY" name="OYST_API_PROD_KEY_FREEPAY" value="{$oyst.OYST_API_PROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -101,7 +101,7 @@
                             </div>
                         </div>
                         <div class="form-group clearfix env preprod" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='API PreProduction Key' mod='oyst'}</label>
+                            <label class="control-label col-md-3 col-lg-4">{l s='FreePay API PreProduction Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
                                 <input type="text" id="OYST_API_PREPROD_KEY_FREEPAY" name="OYST_API_PREPROD_KEY_FREEPAY" value="{$oyst.OYST_API_PREPROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -111,7 +111,7 @@
                             </div>
                         </div>
                         <div class="form-group clearfix env custom" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='API Custom Key' mod='oyst'}</label>
+                            <label class="control-label col-md-3 col-lg-4">{l s='FreePay API Custom Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
                                 <input type="text" id="OYST_API_CUSTOM_KEY_FREEPAY" name="OYST_API_CUSTOM_KEY_FREEPAY" value="{$oyst.OYST_API_CUSTOM_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -120,7 +120,7 @@
                                 {/if}
                             </div>
                         </div>
-                        <div class="form-group clearfix advancedOptions urlCustomization">
+                        <div class="form-group clearfix urlCustomization">
                             <label class="control-label col-md-3 col-lg-4">{l s='Success Url' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
                                 <select id="FC_OYST_REDIRECT_SUCCESS" name="FC_OYST_REDIRECT_SUCCESS">
@@ -134,7 +134,7 @@
                                 {/if}
                             </div>
                         </div>
-                        <div class="form-group clearfix advancedOptions urlCustomization">
+                        <div class="form-group clearfix urlCustomization">
                             <label class="control-label col-md-3 col-lg-4">{l s='Error Url' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
                                 <select id="FC_OYST_REDIRECT_ERROR" name="FC_OYST_REDIRECT_ERROR">
@@ -148,6 +148,22 @@
                                 {/if}
                             </div>
                         </div>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-4">{l s='Environment' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-4">
+                                <select name="OYST_API_ENV_FREEPAY">
+                                    <option value="prod" {if $oyst.OYST_API_ENV_FREEPAY == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
+                                    <option value="preprod" {if $oyst.OYST_API_ENV_FREEPAY == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
+                                    <option value="custom" {if $oyst.OYST_API_ENV_FREEPAY == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix env custom" style="display: none;">
+                            <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API Custom' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-4">
+                                <input type="text" id="OYST_API_CUSTOM_ENDPOINT_FREEPAY" name="OYST_API_CUSTOM_ENDPOINT_FREEPAY" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="form-1-click">
@@ -159,7 +175,7 @@
                            </div>
                         </div>
                         <div class="form-group clearfix env prod" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='API Production Key' mod='oyst'}</label>
+                            <label class="control-label col-md-3 col-lg-4">{l s='1-click API Production Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
                                 <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -169,7 +185,7 @@
                             </div>
                         </div>
                         <div class="form-group clearfix env preprod" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='API PreProduction Key' mod='oyst'}</label>
+                            <label class="control-label col-md-3 col-lg-4">{l s='1-click API PreProduction Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
                                 <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -179,7 +195,7 @@
                             </div>
                         </div>
                         <div class="form-group clearfix env custom" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='API Custom Key' mod='oyst'}</label>
+                            <label class="control-label col-md-3 col-lg-4">{l s='1-click API Custom Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
                                 <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -369,47 +385,35 @@
                                 <button type="button" id="add-shipment" class="btn btn-success">{l s='Add Shipment' mod='oyst'}</button>
                             </div>
                         </div>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-4">{l s='Environment' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-4">
+                                <select name="OYST_API_ENV_ONECLICK">
+                                    <option value="prod" {if $oyst.OYST_API_ENV_ONECLICK == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
+                                    <option value="preprod" {if $oyst.OYST_API_ENV_ONECLICK == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
+                                    <option value="custom" {if $oyst.OYST_API_ENV_ONECLICK == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix env custom" style="display: none;">
+                            <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API Custom' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-4">
+                                <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLICK" name="OYST_API_CUSTOM_ENDPOINT_ONECLICK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix env custom" style="display: none;">
+                            <label class="control-label col-md-3 col-lg-4">{l s='Endpoint CDN Custom' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-4">
+                                <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
         </div>
-        <div class="oyst-admin-tab">
-            <fieldset class="advancedOptions">
-                <div class="form-group clearfix">
-                    <label class="control-label col-md-3 col-lg-4">{l s='Environment' mod='oyst'}</label>
-                    <div class="col-md-7 col-lg-4">
-                        <select name="OYST_API_ENV">
-                            <option value="prod" {if $oyst.OYST_API_ENV == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
-                            <option value="preprod" {if $oyst.OYST_API_ENV == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
-                            <option value="custom" {if $oyst.OYST_API_ENV == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group clearfix env custom" style="display: none;">
-                    <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API Custom' mod='oyst'}</label>
-                    <div class="col-md-7 col-lg-4">
-                        <input type="text" id="OYST_API_CUSTOM_ENDPOINT" name="OYST_API_CUSTOM_ENDPOINT" value="{$oyst.OYST_API_CUSTOM_ENDPOINT|escape:'htmlall':'UTF-8'}"/>
-                    </div>
-                </div>
-                <div class="form-group clearfix env custom" style="display: none;">
-                    <label class="control-label col-md-3 col-lg-4">{l s='Endpoint CDN Custom' mod='oyst'}</label>
-                    <div class="col-md-7 col-lg-4">
-                        <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
-                    </div>
-                </div>
-            </fieldset>
-            <div class="form-group clearfix">
-                <label class="control-label col-lg-4"></label>
-                <div class="col-lg-4">
-                    <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info form-control bigger-">
-                        <strong>{l s='Save' mod='oyst'}</strong>
-                    </button>
-                </div>
-            </div>
-        </div>
         <div class="panel-footer">
-            <button id="toggleConfig" type="button" class="btn btn-default">
-                <span>{l s='Show advanced options' mod='oyst'}</span><span style="display: none;">{l s='Hide advanced options' mod='oyst'}</span>
+            <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info" style="width: 180px;">
+                <strong>{l s='Save' mod='oyst'}</strong>
             </button>
         </div>
     </div>
@@ -428,5 +432,8 @@
     }
     .amount-shipment-follower {
         padding-right: 0 !important;
+    }
+    .nav.nav-tabs {
+        border-bottom: 1px solid #ddd !important;
     }
 </style>
