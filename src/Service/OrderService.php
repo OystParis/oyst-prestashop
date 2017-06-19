@@ -212,16 +212,16 @@ class OrderService extends AbstractOystService
         if ($oystOrderInfo) {
             $products = array();
             foreach ($oystOrderInfo['items'] as $productInfo) {
-                $productReferences = explode('-', $productInfo['product_reference']);
-                $product = new Product($productReferences[0]);
+                $product = new Product($productInfo['product_reference']);
 
                 if (!Validate::isLoadedObject($product)) {
                     $data['error'] = 'Product has not been found';
                 }
 
                 $combination = new Combination();
-                if (isset($productReferences[1])) {
-                    $combination = new Combination($productReferences[1]);
+                // Array will exist but reference could be null
+                if (is_array($productInfo['product']['variations']) && null !== $productInfo['product']['variations']['reference']) {
+                    $combination = new Combination($productInfo['product']['variations']['reference']);
                     if (!Validate::isLoadedObject($combination)) {
                         $data['error'] = 'Combination has not been found';
                     }
