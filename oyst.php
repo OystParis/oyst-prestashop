@@ -449,16 +449,6 @@ class Oyst extends FroggyPaymentModule
     }
 
     /**
-     * @param Product $product
-     * @param Combination|null $combination
-     * @return string
-     */
-    public function getProductReference(Product $product, Combination $combination = null)
-    {
-        return $product->id.(Validate::isLoadedObject($combination) ? '-'.$combination->id : '');
-    }
-
-    /**
      * @return string
      */
     public function getNotifyUrl()

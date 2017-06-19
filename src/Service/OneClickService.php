@@ -45,12 +45,10 @@ class OneClickService extends AbstractOystService
      */
     public function authorizeNewOrder(Product $product, $quantity, Combination $combination = null, OystUser $user = null)
     {
-        $productReference = $this->oyst->getProductReference($product, $combination);
-
         $response = $this->requester->call('authorizeOrder', array(
-            $productReference,
+            $product->id,
             $quantity,
-            null,
+            Validate::isLoadedObject($combination) ? $combination->id : null,
             $user,
             self::ONE_CLICK_VERSION
         ));
