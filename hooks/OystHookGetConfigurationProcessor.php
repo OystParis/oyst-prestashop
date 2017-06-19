@@ -56,8 +56,10 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         OystConfiguration::API_KEY_PROD_ONECLICK => 'string',
         OystConfiguration::API_KEY_PREPROD_ONECLICK => 'string',
         OystConfiguration::API_KEY_CUSTOM_ONECLICK => 'string',
-        OystConfiguration::API_ENDPOINT_CUSTOM => 'string',
-        OystConfiguration::API_ENV => 'string',
+        OystConfiguration::API_ENDPOINT_CUSTOM_FREEPAY => 'string',
+        OystConfiguration::API_ENDPOINT_CUSTOM_ONECLICK => 'string',
+        OystConfiguration::API_ENV_FREEPAY => 'string',
+        OystConfiguration::API_ENV_ONECLICK => 'string',
         OystConfiguration::ONE_CLICK_FEATURE_STATE => 'int',
         OystConfiguration::ONE_CLICK_URL_CUSTOM => 'string',
     );
@@ -199,8 +201,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             OystApiClientFactory::ENTITY_CATALOG,
             $this->module->getOneClickApiKey(),
             $this->module->getUserAgent(),
-            $this->module->getEnvironment(),
-            $this->module->getApiUrl()
+            $this->module->getOneClickEnvironment(),
+            $this->module->getOneClickApiUrl()
         );
         $result = $catalogApi->getShipmentTypes();
         $shipmentTypes = array();
@@ -248,10 +250,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         if ($hasApiKey && (!empty($currentFreePayApiKey) && !$isCurrentFreePayApiKeyValid || !empty($currentOneClickApiKey) && !$isCurrentOneClickApiKeyValid)) {
-            $env = Tools::strtolower($this->module->getEnvironment());
+            $envFreePay = Tools::strtolower($this->module->getFreePayEnvironment());
+            $envOneClick = Tools::strtolower($this->module->getOneClickEnvironment());
 
             if (!$isCurrentFreePayApiKeyValid) {
-                $key = 'apikey_'.$env.'_test_error_freepay';
+                $key = 'apikey_'.$envFreePay.'_test_error_freepay';
 
                 if (array_key_exists($key, $assign)) {
                     $assign[$key] = !$isCurrentFreePayApiKeyValid;
@@ -259,7 +262,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             }
 
             if (!$isCurrentOneClickApiKeyValid) {
-                $key = 'apikey_'.$env.'_test_error_oneclick';
+                $key = 'apikey_'.$envOneClick.'_test_error_oneclick';
 
                 if (array_key_exists($key, $assign)) {
                     $assign[$key] = !$isCurrentOneClickApiKeyValid;

@@ -18,28 +18,19 @@
  * @license GNU GENERAL PUBLIC LICENSE
  */
 $(document).ready(function() {
-    // Compatibility 1.5 and 1.6
-    var errorOnAdvancedOption = $('.urlCustomization p.error').length || $('.urlCustomization div.alert').length;
-
-    if (errorOnAdvancedOption) {
-        $('.advancedOptions').show();
-    }
-
-    $('#toggleConfig').click(function() {
-        $('.advancedOptions').toggle();
-        $('span', this).toggle();
-    });
     $('.urlCustomization select').each(function() {
         handleSelectOptions($(this));
     }).change(function() {
         handleSelectOptions($(this));
     });
 
-    $('select[name="OYST_API_ENV"]').on('change', function () {
-        refreshEnvironmentDisplay();
+    $('select[name^="OYST_API_ENV"]').on('change', function () {
+        refreshEnvironmentDisplay($(this));
     });
 
-    refreshEnvironmentDisplay();
+    $('select[name^="OYST_API_ENV"]').each(function () {
+        refreshEnvironmentDisplay($(this));
+    });
 });
 
 function handleSelectOptions(select) {
@@ -56,9 +47,9 @@ function handleSelectOptions(select) {
     });
 }
 
-function refreshEnvironmentDisplay()
-{
-    var containerClass = '.' + $('select[name="OYST_API_ENV"]').val();
-    $('.env').not(containerClass).hide();
-    $(containerClass).show();
+function refreshEnvironmentDisplay(select) {
+    var tabContainer = select.closest('.tab-pane');
+    var containerClass = '.' + select.val();
+    $('.env', tabContainer).not(containerClass).hide();
+    $(containerClass, tabContainer).show();
 }

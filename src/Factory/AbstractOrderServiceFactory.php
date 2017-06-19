@@ -46,8 +46,8 @@ class AbstractOrderServiceFactory
             OystApiClientFactory::ENTITY_ORDER,
             $oyst->getOneClickApiKey(),
             $oyst->getUserAgent(),
-            $oyst->getEnvironment(),
-            $oyst->getApiUrl()
+            $oyst->getOneClickEnvironment(),
+            $oyst->getOneClickApiUrl()
         );
 
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
