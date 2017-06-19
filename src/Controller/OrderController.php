@@ -39,17 +39,11 @@ class OrderController extends AbstractOystController
             $orderId = $json['data']['order_id'];
             $responseData = $orderService->requestCreateNewOrder($orderId);
 
-            $state = $responseData['state'];
-
-            if ($state) {
+            if ($responseData['state']) {
                 $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);
             } else {
-                $responseData['error'] = 'The order has no been created';
-                $orderService->updateOrderStatus($orderId, AbstractOrderState::DECLINED);
-            }
-
-            if (isset($responseData['error'])) {
-                $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData)));
+                $orderService->updateOrderStatus($orderId, AbstractOrderState::DENIED);
+                $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData['error'])));
             }
 
             $this->respondAsJson($responseData);

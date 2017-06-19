@@ -4,7 +4,6 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "35b95b67966453b830ae69f6b0cd16ef",
     "content-hash": "94071132091b698e419f3b3ceccddb7e",
     "packages": [
         {
@@ -97,7 +96,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-01-28 22:29:15"
+            "time": "2014-01-28T22:29:15+00:00"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -139,7 +138,7 @@
                 "hashing",
                 "password"
             ],
-            "time": "2014-11-20 16:49:30"
+            "time": "2014-11-20T16:49:30+00:00"
         },
         {
             "name": "oyst/oyst-php",
@@ -147,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oystparis/oyst-php.git",
-                "reference": "3bba1560c4d7fba9bc148af56068bf4efdfd5911"
+                "reference": "36d1e97ea27e45a44a95aca05d0e4d774f17b337"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/3bba1560c4d7fba9bc148af56068bf4efdfd5911",
-                "reference": "3bba1560c4d7fba9bc148af56068bf4efdfd5911",
+                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/36d1e97ea27e45a44a95aca05d0e4d774f17b337",
+                "reference": "36d1e97ea27e45a44a95aca05d0e4d774f17b337",
                 "shasum": ""
             },
             "require": {
@@ -202,7 +201,7 @@
                 "issues": "https://github.com/OystParis/oyst-php/issues",
                 "source": "https://github.com/OystParis/oyst-php/"
             },
-            "time": "2017-06-19 07:34:32"
+            "time": "2017-06-19 12:26:52"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -262,7 +261,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-01 14:58:48"
+            "time": "2017-05-01T14:58:48+00:00"
         },
         {
             "name": "symfony/polyfill-php55",
@@ -318,7 +317,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14 01:06:16"
+            "time": "2016-11-14T01:06:16+00:00"
         },
         {
             "name": "symfony/property-access",
@@ -378,7 +377,7 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2017-03-21 21:39:01"
+            "time": "2017-03-21T21:39:01+00:00"
         },
         {
             "name": "symfony/serializer",
@@ -442,7 +441,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-21 22:47:17"
+            "time": "2017-03-21T22:47:17+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -491,7 +490,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-01 14:31:55"
+            "time": "2017-05-01T14:31:55+00:00"
         }
     ],
     "packages-dev": [
@@ -552,7 +551,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14 01:06:16"
+            "time": "2016-11-14T01:06:16+00:00"
         },
         {
             "name": "symfony/var-dumper",
@@ -620,7 +619,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2017-05-01 14:55:58"
+            "time": "2017-05-01T14:55:58+00:00"
         }
     ],
     "aliases": [],
