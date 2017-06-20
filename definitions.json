@@ -39,7 +39,7 @@
         "OYST_API_CUSTOM_KEY_ONECLICK": "",
 
         "OYST_API_CUSTOM_ENDPOINT_FREEPAY": "",
-        "OYST_API_CUSTOM_ENDPOINT_ONECLICK": "",
+        "OYST_API_CUSTOM_ENDPOINT_ONECLCK": "",
 
         "FC_OYST_TRACKER_URL": "https://trk.10ru.pt",
         "OYST_ONECLICK_URL_PROD": "https://cdn.oyst.com",

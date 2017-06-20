@@ -32,6 +32,11 @@
     height: 18px;
 }
 
+.oyst.configuration #module_form_submit_btn {
+    height: 40px;
+    width: 180px;
+}
+
 .oyst.configuration p.error {
     width: 415px;
 }
@@ -58,4 +63,49 @@
 
 .oyst.contact button[type=submit] {
     height: 50px;
+}
+
+ul.nav.nav-tabs {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e5e5e5;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+ul.nav.nav-tabs li {
+    float: left;
+}
+ul.nav.nav-tabs a.title {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    padding: 8px 4px;
+    font-weight: normal;
+    font-size: 12px;
+}
+ul.nav.nav-tabs li.active a.title, ul.nav.nav-tabs a.title:hover {
+    background-color: #49B2FF;
+    color: #fff;
+    text-shadow: -1px -1px 0 #3293D6;
+}
+div.tab-content {
+    background-color: #ebedf4;
+    border: 1px solid #ccced7;
+    min-height: 404px;
+    padding: 5px 10px 10px;
+    margin-left: 140px;
+}
+.oyst-admin-tab.tab-content {
+    clear: both;
+}
+.shipment-item {
+    border-bottom: 1px solid #C7D6DB;
+    margin-bottom: 15px;
+}
+#shipment-model label, .shipment-item label {
+    width: 150px;
+}
+#shipment-model .margin-form, .shipment-item .margin-form {
+    padding-left: 160px;
 }
