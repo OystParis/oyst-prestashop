@@ -35,7 +35,7 @@ function upgrade_module_1_3_0($module)
     Configuration::deleteByName('OYST_API_ENV');
 
     Configuration::updateValue('OYST_API_CUSTOM_ENDPOINT_FREEPAY', Configuration::get('OYST_API_CUSTOM_ENDPOINT'));
-    Configuration::updateValue('OYST_API_CUSTOM_ENDPOINT_ONECLICK', Configuration::get('OYST_API_CUSTOM_ENDPOINT'));
+    Configuration::updateValue('OYST_API_CUSTOM_ENDPOINT_ONECLCK', Configuration::get('OYST_API_CUSTOM_ENDPOINT'));
     Configuration::deleteByName('OYST_API_CUSTOM_ENDPOINT');
 
     return true;

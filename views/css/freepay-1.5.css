@@ -32,6 +32,11 @@
     height: 18px;
 }
 
+.oyst.configuration #module_form_submit_btn {
+    height: 40px;
+    width: 180px;
+}
+
 .oyst.configuration p.error {
     width: 415px;
 }
