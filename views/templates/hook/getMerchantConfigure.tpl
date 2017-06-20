@@ -218,55 +218,6 @@
                     <label>{l s='Shipments' mod='oyst'}</label>
                     <div class="margin-form">
                         <div id="shipment-collection">
-                            <div id="shipment-model" style="display: none;">
-                                <div class="shipment-item">
-                                    <label>{l s='Carrier' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <select name="shipments[__shipment_id__][id_carrier]">
-                                        {foreach $oyst.carrier_list as $carrier}
-                                            <option value="{$carrier.id_reference}">{$carrier.name}</option>
-                                        {/foreach}
-                                        </select>
-                                    </div>
-                                    <label>{l s='Primary' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <input type="checkbox" class="shipment-primary" name="shipments[__shipment_id__][primary]" value="1"/>
-                                    </div>
-                                    <label>{l s='Type' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <select name="shipments[__shipment_id__][type]">
-                                        {foreach from=$oyst.type_list key=value item=name}
-                                            <option value="{$value}">{$name}</option>
-                                        {/foreach}
-                                        </select>
-                                    </div>
-                                    <label>{l s='Delay' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
-                                        <br>
-                                        <span class="help-block">{l s='Values in days' mod='oyst'}</span>
-                                    </div>
-                                    <label>{l s='Amount' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <input type="text" name="shipments[__shipment_id__][amount_leader]" value=""/>
-                                        <br>
-                                        <span class="help-block">{l s='First product' mod='oyst'}</span>
-                                    </div>
-                                    <div class="margin-form">
-                                        <input type="text" name="shipments[__shipment_id__][amount_follower]" value=""/>
-                                        <br>
-                                        <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
-                                    </div>
-                                    <label>{l s='Free shipping from' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <input type="text" name="shipments[__shipment_id__][free_shipping]" value=""/>
-                                    </div>
-                                    <label></label>
-                                    <div class="margin-form">
-                                        <button type="button" class="delete-shipment">{l s='Delete Shipment' mod='oyst'}</button>
-                                    </div>
-                                </div>
-                            </div>
                             {foreach from=$oyst.shipment_list key=index item=shipment}
                             <div class="shipment-item">
                                 <label>{l s='Carrier' mod='oyst'}</label>
@@ -318,9 +269,7 @@
                             {/foreach}
                         </div>
                         <button type="button" id="add-shipment"{if $oyst.currentOneClickApiKeyValid} class="btn btn-success"{else} disabled="disabled"{/if}>{l s='Add Shipment' mod='oyst'}</button>
-                        {if !$oyst.currentOneClickApiKeyValid}
-                        <p class="help-block">{l s='You have to add a valid API key in order to add your shipment methods' mod='oyst'}</p>
-                        {/if}
+                        <p class="help-block" id="add-shipment-help" {if $oyst.currentOneClickApiKeyValid} style="display: none;"{/if}>{l s='You have to add a valid API key in order to add your shipment methods' mod='oyst'}</p>
                     </div>
                     <label>{l s='Environment' mod='oyst'}</label>
                     <div class="margin-form">
@@ -350,6 +299,56 @@
         </div>
     </div>
 {/if}
+
+<div id="shipment-model" style="display: none;">
+    <div class="shipment-item">
+        <label>{l s='Carrier' mod='oyst'}</label>
+        <div class="margin-form">
+            <select name="shipments[__shipment_id__][id_carrier]">
+            {foreach $oyst.carrier_list as $carrier}
+                <option value="{$carrier.id_reference}">{$carrier.name}</option>
+            {/foreach}
+            </select>
+        </div>
+        <label>{l s='Primary' mod='oyst'}</label>
+        <div class="margin-form">
+            <input type="checkbox" class="shipment-primary" name="shipments[__shipment_id__][primary]" value="1"/>
+        </div>
+        <label>{l s='Type' mod='oyst'}</label>
+        <div class="margin-form">
+            <select name="shipments[__shipment_id__][type]">
+            {foreach from=$oyst.type_list key=value item=name}
+                <option value="{$value}">{$name}</option>
+            {/foreach}
+            </select>
+        </div>
+        <label>{l s='Delay' mod='oyst'}</label>
+        <div class="margin-form">
+            <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
+            <br>
+            <span class="help-block">{l s='Values in days' mod='oyst'}</span>
+        </div>
+        <label>{l s='Amount' mod='oyst'}</label>
+        <div class="margin-form">
+            <input type="text" name="shipments[__shipment_id__][amount_leader]" value=""/>
+            <br>
+            <span class="help-block">{l s='First product' mod='oyst'}</span>
+        </div>
+        <div class="margin-form">
+            <input type="text" name="shipments[__shipment_id__][amount_follower]" value=""/>
+            <br>
+            <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
+        </div>
+        <label>{l s='Free shipping from' mod='oyst'}</label>
+        <div class="margin-form">
+            <input type="text" name="shipments[__shipment_id__][free_shipping]" value=""/>
+        </div>
+        <label></label>
+        <div class="margin-form">
+            <button type="button" class="delete-shipment">{l s='Delete Shipment' mod='oyst'}</button>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
