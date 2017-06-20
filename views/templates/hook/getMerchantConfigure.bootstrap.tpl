@@ -449,18 +449,3 @@
 
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
-<style>
-    .shipment-item {
-        border-bottom: 1px solid #C7D6DB;
-        margin-bottom: 15px;
-    }
-    .amount-shipment-leader {
-        padding-left: 0 !important;
-    }
-    .amount-shipment-follower {
-        padding-right: 0 !important;
-    }
-    .nav.nav-tabs {
-        border-bottom: 1px solid #ddd !important;
-    }
-</style>
