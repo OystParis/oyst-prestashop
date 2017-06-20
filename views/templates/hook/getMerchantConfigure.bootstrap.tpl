@@ -93,7 +93,12 @@
                         <div class="form-group clearfix env prod" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='FreePay API Production Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_PROD_KEY_FREEPAY" name="OYST_API_PROD_KEY_FREEPAY" value="{$oyst.OYST_API_PROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_PROD_KEY_FREEPAY" name="OYST_API_PROD_KEY_FREEPAY" value="{$oyst.OYST_API_PROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_prod_test_error_freepay}
@@ -104,7 +109,12 @@
                         <div class="form-group clearfix env preprod" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='FreePay API PreProduction Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_PREPROD_KEY_FREEPAY" name="OYST_API_PREPROD_KEY_FREEPAY" value="{$oyst.OYST_API_PREPROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_PREPROD_KEY_FREEPAY" name="OYST_API_PREPROD_KEY_FREEPAY" value="{$oyst.OYST_API_PREPROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_preprod_test_error_freepay}
@@ -115,7 +125,12 @@
                         <div class="form-group clearfix env custom" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='FreePay API Custom Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_CUSTOM_KEY_FREEPAY" name="OYST_API_CUSTOM_KEY_FREEPAY" value="{$oyst.OYST_API_CUSTOM_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_CUSTOM_KEY_FREEPAY" name="OYST_API_CUSTOM_KEY_FREEPAY" value="{$oyst.OYST_API_CUSTOM_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_custom_test_error_freepay}
@@ -180,7 +195,12 @@
                         <div class="form-group clearfix env prod" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='1-click API Production Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_prod_test_error_oneclick}
@@ -191,7 +211,12 @@
                         <div class="form-group clearfix env preprod" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='1-click API PreProduction Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_preprod_test_error_oneclick}
@@ -202,7 +227,12 @@
                         <div class="form-group clearfix env custom" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='1-click API Custom Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_custom_test_error_oneclick}
