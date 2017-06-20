@@ -21,7 +21,7 @@
     text-align: center;
 }
 
-.oyst.contact #form_get_apikey_submit, .oyst.configuration #module_form_submit_btn {
+.oyst.contact #form_get_apikey_submit, .oyst.configuration #module_form_submit_btn, .oyst.configuration .module_form_apply_btn {
     background-color: #00aff0;
     border-color: #008abd;
 }
@@ -30,10 +30,29 @@
     height: 50px;
 }
 
+.oyst.configuration #module_form_submit_btn {
+    height: 40px;
+    width: 180px;
+}
+
 .oyst.contact .help-block {
     margin-bottom: 0;
 }
 
 .oyst h2 {
     font: 400 25px/1.42857 "Open Sans",Helvetica,Arial,sans-serif;
+}
+
+.shipment-item {
+    border-bottom: 1px solid #C7D6DB;
+    margin-bottom: 15px;
+}
+.amount-shipment-leader {
+    padding-left: 0 !important;
+}
+.amount-shipment-follower {
+    padding-right: 0 !important;
+}
+.nav.nav-tabs {
+    border-bottom: 1px solid #ddd !important;
 }

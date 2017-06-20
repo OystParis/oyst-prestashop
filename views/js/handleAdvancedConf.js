@@ -24,12 +24,15 @@ $(document).ready(function() {
         handleSelectOptions($(this));
     });
 
-    $('select[name^="OYST_API_ENV"]').on('change', function () {
-        refreshEnvironmentDisplay($(this));
-    });
-
     $('select[name^="OYST_API_ENV"]').each(function () {
         refreshEnvironmentDisplay($(this));
+    }).on('change', function () {
+        refreshEnvironmentDisplay($(this));
+    });
+    $('select[name="OYST_API_ENV_ONECLICK"]').on('change', function () {
+        $('#shipment-collection').empty();
+        $('#add-shipment').attr('disabled', 'disabled');
+        $('#add-shipment-help').show();
     });
 });
 

@@ -18,15 +18,12 @@
  * @license GNU GENERAL PUBLIC LICENSE
  */
 $(document).ready(function() {
-    var shipmentModel = $('#shipment-model').html();
-    // We delete the shipment model form to not submit it
-    $('#shipment-model').remove();
-
     var shipmentCount = $('.shipment-item').length;
 
     $('#add-shipment').click(function(event) {
         event.preventDefault();
 
+        var shipmentModel = $('#shipment-model').html();
         var shipmentNewItem = shipmentModel.replace(/__shipment_id__/g, shipmentCount);
 
         $('#shipment-collection').append(shipmentNewItem);
@@ -35,11 +32,11 @@ $(document).ready(function() {
         addDeleteEventOnButton();
 
         // if this is the first shipment
-        if ($('.shipment-item').length == 1) {
-            $('.shipment-primary').attr('checked', 'checked');
-            $('.shipment-primary').attr('readonly', 'readonly');
+        if ($('#shipment-collection .shipment-item').length == 1) {
+            $('#shipment-collection .shipment-primary').attr('checked', 'checked');
+            $('#shipment-collection .shipment-primary').attr('readonly', 'readonly');
         } else {
-            $('.shipment-primary').removeAttr('readonly');
+            $('#shipment-collection .shipment-primary').removeAttr('readonly');
         }
     });
 
@@ -48,22 +45,24 @@ $(document).ready(function() {
 
 function addDeleteEventOnButton()
 {
-    $('.delete-shipment').click(function(event) {
+    $('#shipment-collection .delete-shipment').unbind();
+    $('#shipment-collection .delete-shipment').click(function(event) {
         event.preventDefault();
 
         if(confirm('Are you sure you want to delete this shipment?')) {
             $(this).closest('div.shipment-item').remove();
 
             // if there is only one shipment left
-            if ($('.shipment-item').length == 1) {
-                $('.shipment-primary').attr('checked', 'checked');
-                $('.shipment-primary').attr('readonly', 'readonly');
+            if ($('#shipment-collection .shipment-item').length == 1) {
+                $('#shipment-collection .shipment-primary').attr('checked', 'checked');
+                $('#shipment-collection .shipment-primary').attr('readonly', 'readonly');
             }
         }
     });
 
-    $('.shipment-primary').click(function() {
-        $('.shipment-primary').removeAttr('checked');
+    $('#shipment-collection .shipment-primary').unbind();
+    $('#shipment-collection .shipment-primary').click(function() {
+        $('#shipment-collection .shipment-primary').removeAttr('checked');
         $(this).attr('checked', 'checked');
     });
 }

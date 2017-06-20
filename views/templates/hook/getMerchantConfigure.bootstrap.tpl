@@ -93,7 +93,12 @@
                         <div class="form-group clearfix env prod" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='FreePay API Production Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_PROD_KEY_FREEPAY" name="OYST_API_PROD_KEY_FREEPAY" value="{$oyst.OYST_API_PROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_PROD_KEY_FREEPAY" name="OYST_API_PROD_KEY_FREEPAY" value="{$oyst.OYST_API_PROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_prod_test_error_freepay}
@@ -104,7 +109,12 @@
                         <div class="form-group clearfix env preprod" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='FreePay API PreProduction Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_PREPROD_KEY_FREEPAY" name="OYST_API_PREPROD_KEY_FREEPAY" value="{$oyst.OYST_API_PREPROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_PREPROD_KEY_FREEPAY" name="OYST_API_PREPROD_KEY_FREEPAY" value="{$oyst.OYST_API_PREPROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_preprod_test_error_freepay}
@@ -115,7 +125,12 @@
                         <div class="form-group clearfix env custom" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='FreePay API Custom Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_CUSTOM_KEY_FREEPAY" name="OYST_API_CUSTOM_KEY_FREEPAY" value="{$oyst.OYST_API_CUSTOM_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_CUSTOM_KEY_FREEPAY" name="OYST_API_CUSTOM_KEY_FREEPAY" value="{$oyst.OYST_API_CUSTOM_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_custom_test_error_freepay}
@@ -180,7 +195,12 @@
                         <div class="form-group clearfix env prod" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='1-click API Production Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_prod_test_error_oneclick}
@@ -191,7 +211,12 @@
                         <div class="form-group clearfix env preprod" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='1-click API PreProduction Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_preprod_test_error_oneclick}
@@ -202,7 +227,12 @@
                         <div class="form-group clearfix env custom" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='1-click API Custom Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                <div class="input-group">
+                                    <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                    </span>
+                                </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_custom_test_error_oneclick}
@@ -225,88 +255,6 @@
                             <label class="control-label col-md-3 col-lg-4">{l s='Shipments' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
                                 <div id="shipment-collection">
-                                    <div id="shipment-model" style="display: none;">
-                                        <div class="shipment-item">
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Carrier' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <select name="shipments[__shipment_id__][id_carrier]">
-                                                    {foreach $oyst.carrier_list as $carrier}
-                                                        {if !isset($carrier.selected) || !$carrier.selected}
-                                                        <option value="{$carrier.id_reference}">{$carrier.name}</option>
-                                                        {/if}
-                                                    {/foreach}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Primary' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <input type="checkbox" class="shipment-primary" name="shipments[__shipment_id__][primary]" value="1"/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Type' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <select name="shipments[__shipment_id__][type]">
-                                                    {foreach from=$oyst.type_list key=value item=name}
-                                                        <option value="{$value}">{$name}</option>
-                                                    {/foreach}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Delay' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="icon-time"></i></span>
-                                                        <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
-                                                    </div>
-                                                    <span class="help-block">{l s='Value in days' mod='oyst'}</span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Zones' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <input type="text" value="France Métropolitaine" disabled="disabled"/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <div class="amount-shipment-leader col-xs-6">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">€</span>
-                                                            <input type="text" name="shipments[__shipment_id__][amount_leader]" value=""/>
-                                                        </div>
-                                                        <span class="help-block">{l s='First product' mod='oyst'}</span>
-                                                    </div>
-                                                    <div class="amount-shipment-follower col-xs-6">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">€</span>
-                                                            <input type="text" name="shipments[__shipment_id__][amount_follower]" value=""/>
-                                                        </div>
-                                                        <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Free shipping from' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon">€</span>
-                                                        <input type="text" name="shipments[__shipment_id__][free_shipping]" value=""/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4"></label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <button type="button" class="delete-shipment btn btn-danger">{l s='Delete Shipment' mod='oyst'}</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 {foreach from=$oyst.shipment_list key=index item=shipment}
                                     <div class="shipment-item">
                                         <div class="form-group clearfix">
@@ -346,12 +294,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group clearfix">
-                                            <label class="control-label col-md-3 col-lg-4">{l s='Zones' mod='oyst'}</label>
-                                            <div class="col-md-9 col-lg-8">
-                                                <input type="text" value="France Métropolitaine" disabled="disabled"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
                                             <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
                                             <div class="col-md-9 col-lg-8">
                                                 <div class="amount-shipment-leader col-xs-6">
@@ -388,7 +330,8 @@
                                     </div>
                                 {/foreach}
                                 </div>
-                                <button type="button" id="add-shipment" class="btn btn-success">{l s='Add Shipment' mod='oyst'}</button>
+                                <button type="button" id="add-shipment"{if $oyst.currentOneClickApiKeyValid} class="btn btn-success"{else} disabled="disabled"{/if}>{l s='Add Shipment' mod='oyst'}</button>
+                                <p class="help-block" id="add-shipment-help"{if $oyst.currentOneClickApiKeyValid} style="display: none;"{/if}>{l s='You have to add a valid API key in order to add your shipments method' mod='oyst'}</p>
                             </div>
                         </div>
                         <div class="form-group clearfix">
@@ -404,7 +347,7 @@
                         <div class="form-group clearfix env custom" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API Custom' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLICK" name="OYST_API_CUSTOM_ENDPOINT_ONECLICK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLCK" name="OYST_API_CUSTOM_ENDPOINT_ONECLCK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLCK|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
                         <div class="form-group clearfix env custom" style="display: none;">
@@ -418,7 +361,7 @@
             </div>
         </div>
         <div class="panel-footer">
-            <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info" style="width: 180px;">
+            <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info">
                 <strong>{l s='Save' mod='oyst'}</strong>
             </button>
         </div>
@@ -426,20 +369,82 @@
 </form>
 {/if}
 
+<div id="shipment-model" style="display: none;">
+    <div class="shipment-item">
+        <div class="form-group clearfix">
+            <label class="control-label col-md-3 col-lg-4">{l s='Carrier' mod='oyst'}</label>
+            <div class="col-md-9 col-lg-8">
+                <select name="shipments[__shipment_id__][id_carrier]">
+                {foreach $oyst.carrier_list as $carrier}
+                    {if !isset($carrier.selected) || !$carrier.selected}
+                    <option value="{$carrier.id_reference}">{$carrier.name}</option>
+                    {/if}
+                {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-md-3 col-lg-4">{l s='Primary' mod='oyst'}</label>
+            <div class="col-md-9 col-lg-8">
+                <input type="checkbox" class="shipment-primary" name="shipments[__shipment_id__][primary]" value="1"/>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-md-3 col-lg-4">{l s='Type' mod='oyst'}</label>
+            <div class="col-md-9 col-lg-8">
+                <select name="shipments[__shipment_id__][type]">
+                {foreach from=$oyst.type_list key=value item=name}
+                    <option value="{$value}">{$name}</option>
+                {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-md-3 col-lg-4">{l s='Delay' mod='oyst'}</label>
+            <div class="col-md-9 col-lg-8">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-time"></i></span>
+                    <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
+                </div>
+                <span class="help-block">{l s='Value in days' mod='oyst'}</span>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
+            <div class="col-md-9 col-lg-8">
+                <div class="amount-shipment-leader col-xs-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">€</span>
+                        <input type="text" name="shipments[__shipment_id__][amount_leader]" value=""/>
+                    </div>
+                    <span class="help-block">{l s='First product' mod='oyst'}</span>
+                </div>
+                <div class="amount-shipment-follower col-xs-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">€</span>
+                        <input type="text" name="shipments[__shipment_id__][amount_follower]" value=""/>
+                    </div>
+                    <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-md-3 col-lg-4">{l s='Free shipping from' mod='oyst'}</label>
+            <div class="col-md-9 col-lg-8">
+                <div class="input-group">
+                    <span class="input-group-addon">€</span>
+                    <input type="text" name="shipments[__shipment_id__][free_shipping]" value=""/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-md-3 col-lg-4"></label>
+            <div class="col-md-9 col-lg-8">
+                <button type="button" class="delete-shipment btn btn-danger">{l s='Delete Shipment' mod='oyst'}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
-<style>
-    .shipment-item {
-        border-bottom: 1px solid #C7D6DB;
-        margin-bottom: 15px;
-    }
-    .amount-shipment-leader {
-        padding-left: 0 !important;
-    }
-    .amount-shipment-follower {
-        padding-right: 0 !important;
-    }
-    .nav.nav-tabs {
-        border-bottom: 1px solid #ddd !important;
-    }
-</style>
