@@ -78,6 +78,9 @@
                         <label>{l s='FreePay API Production Key' mod='oyst'}</label>
                         <div class="margin-form">
                             <input type="text" id="OYST_API_PROD_KEY_FREEPAY" name="OYST_API_PROD_KEY_FREEPAY" value="{$oyst.OYST_API_PROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                            <button type="submit" value="1" name="submitOystConfiguration">
+                                {l s='Apply' mod='oyst'}
+                            </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_prod_test_error_freepay}
@@ -89,6 +92,9 @@
                         <label>{l s='FreePay API PreProduction Key' mod='oyst'}</label>
                         <div class="margin-form">
                             <input type="text" id="OYST_API_PREPROD_KEY_FREEPAY" name="OYST_API_PREPROD_KEY_FREEPAY" value="{$oyst.OYST_API_PREPROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                            <button type="submit" value="1" name="submitOystConfiguration">
+                                {l s='Apply' mod='oyst'}
+                            </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_preprod_test_error_freepay}
@@ -100,6 +106,9 @@
                         <label>{l s='FreePay API Custom Key' mod='oyst'}</label>
                         <div class="margin-form">
                             <input type="text" id="OYST_API_CUSTOM_KEY_FREEPAY" name="OYST_API_CUSTOM_KEY_FREEPAY" value="{$oyst.OYST_API_CUSTOM_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                            <button type="submit" value="1" name="submitOystConfiguration">
+                                {l s='Apply' mod='oyst'}
+                            </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_custom_test_error_freepay}
@@ -153,6 +162,9 @@
                         <label>{l s='1-click API Production Key' mod='oyst'}</label>
                         <div class="margin-form">
                             <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                            <button type="submit" value="1" name="submitOystConfiguration">
+                                {l s='Apply' mod='oyst'}
+                            </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_prod_test_error_oneclick}
@@ -164,6 +176,9 @@
                         <label>{l s='1-click API PreProduction Key' mod='oyst'}</label>
                         <div class="margin-form">
                             <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                            <button type="submit" value="1" name="submitOystConfiguration">
+                                {l s='Apply' mod='oyst'}
+                            </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_preprod_test_error_oneclick}
@@ -175,6 +190,9 @@
                         <label>{l s='1-click API Custom Key' mod='oyst'}</label>
                         <div class="margin-form">
                             <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                            <button type="submit" value="1" name="submitOystConfiguration">
+                                {l s='Apply' mod='oyst'}
+                            </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_custom_test_error_oneclick}
@@ -336,49 +354,3 @@
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/bootstrapTab-1.5.js"></script>
-<style>
-    ul.nav.nav-tabs {
-        background-color: #f8f8f8;
-        border-bottom: 1px solid #e5e5e5;
-        line-height: normal;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-    }
-    ul.nav.nav-tabs li {
-        float: left;
-    }
-    ul.nav.nav-tabs a.title {
-        text-decoration: none;
-        color: #000;
-        display: block;
-        padding: 8px 4px;
-        font-weight: normal;
-        font-size: 12px;
-    }
-    ul.nav.nav-tabs li.active a.title, ul.nav.nav-tabs a.title:hover {
-        background-color: #49B2FF;
-        color: #fff;
-        text-shadow: -1px -1px 0 #3293D6;
-    }
-    div.tab-content {
-        background-color: #ebedf4;
-        border: 1px solid #ccced7;
-        min-height: 404px;
-        padding: 5px 10px 10px;
-        margin-left: 140px;
-    }
-    .oyst-admin-tab.tab-content {
-        clear: both;
-    }
-    .shipment-item {
-        border-bottom: 1px solid #C7D6DB;
-        margin-bottom: 15px;
-    }
-    #shipment-model label, .shipment-item label {
-        width: 150px;
-    }
-    #shipment-model .margin-form, .shipment-item .margin-form {
-        padding-left: 160px;
-    }
-</style>

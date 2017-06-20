@@ -42,3 +42,17 @@
 .oyst h2 {
     font: 400 25px/1.42857 "Open Sans",Helvetica,Arial,sans-serif;
 }
+
+.shipment-item {
+    border-bottom: 1px solid #C7D6DB;
+    margin-bottom: 15px;
+}
+.amount-shipment-leader {
+    padding-left: 0 !important;
+}
+.amount-shipment-follower {
+    padding-right: 0 !important;
+}
+.nav.nav-tabs {
+    border-bottom: 1px solid #ddd !important;
+}
