@@ -296,12 +296,6 @@
                                                 </div>
                                             </div>
                                             <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Zones' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <input type="text" value="France Métropolitaine" disabled="disabled"/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
                                                 <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
                                                 <div class="col-md-9 col-lg-8">
                                                     <div class="amount-shipment-leader col-xs-6">
@@ -376,12 +370,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group clearfix">
-                                            <label class="control-label col-md-3 col-lg-4">{l s='Zones' mod='oyst'}</label>
-                                            <div class="col-md-9 col-lg-8">
-                                                <input type="text" value="France Métropolitaine" disabled="disabled"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
                                             <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
                                             <div class="col-md-9 col-lg-8">
                                                 <div class="amount-shipment-leader col-xs-6">
@@ -418,7 +406,10 @@
                                     </div>
                                 {/foreach}
                                 </div>
-                                <button type="button" id="add-shipment" class="btn btn-success">{l s='Add Shipment' mod='oyst'}</button>
+                                <button type="button" id="add-shipment"{if $oyst.currentOneClickApiKeyValid} class="btn btn-success"{else} disabled="disabled"{/if}>{l s='Add Shipment' mod='oyst'}</button>
+                                {if !$oyst.currentOneClickApiKeyValid}
+                                <p class="help-block">{l s='You have to add a valid API key in order to add your shipments method' mod='oyst'}</p>
+                                {/if}
                             </div>
                         </div>
                         <div class="form-group clearfix">
@@ -434,7 +425,7 @@
                         <div class="form-group clearfix env custom" style="display: none;">
                             <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API Custom' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-4">
-                                <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLICK" name="OYST_API_CUSTOM_ENDPOINT_ONECLICK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLCK" name="OYST_API_CUSTOM_ENDPOINT_ONECLCK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLCK|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
                         <div class="form-group clearfix env custom" style="display: none;">
@@ -448,7 +439,7 @@
             </div>
         </div>
         <div class="panel-footer">
-            <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info" style="width: 180px;">
+            <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info">
                 <strong>{l s='Save' mod='oyst'}</strong>
             </button>
         </div>
