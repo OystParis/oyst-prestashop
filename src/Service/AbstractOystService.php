@@ -24,7 +24,7 @@ namespace Oyst\Service;
 use Context;
 use Oyst;
 use Oyst\Service\Api\Requester;
-use Oyst\Service\Logger\AbstractLogger;
+use Psr\Log\AbstractLogger;
 use Oyst\Service\Serializer\SerializerInterface;
 
 /**

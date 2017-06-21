@@ -7,9 +7,10 @@
     ],
     "require": {
         "php": ">=5.3",
-        "oyst/oyst-php": "dev-master",
+        "oyst/oyst-php": "dev-orderv2",
         "symfony/serializer": "v2.8.19",
-        "symfony/property-access": "v2.8.19"
+        "symfony/property-access": "v2.8.19",
+        "psr/log": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^3.2"
