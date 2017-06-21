@@ -22,6 +22,19 @@
     width: 150px;
 }
 
+#shipment-collection input[type="text"] {
+    width: 140px;
+}
+
+#shipment-collection .margin-form {
+    width: 160px;
+}
+
+#shipment-collection .col-left, #shipment-collection .col-right {
+    width: 320px;
+    float: left;
+}
+
 .oyst.configuration input.customUrlText {
     display: block;
 }

@@ -37,7 +37,7 @@
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
     <div class="oyst configuration">
         <div class="header">
-            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /></p>
+            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" style="height: 120px;"/></p>
             <p class="sub-header"><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
         </div>
         {if $oyst.FC_OYST_GUEST && $oyst.phone}
@@ -218,34 +218,38 @@
                                 <div class="margin-form">
                                     <input type="checkbox" class="shipment-primary" name="shipments[{$index}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
                                 </div>
-                                <label>{l s='Type' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <select name="shipments[{$index}][type]">
-                                    {foreach from=$oyst.type_list key=value item=name}
-                                        <option value="{$value}"{if $shipment.type == $value} selected="selected"{/if}>{$name}</option>
-                                    {/foreach}
-                                    </select>
+                                <div class="col-left">
+                                    <label>{l s='Type' mod='oyst'}</label>
+                                    <div class="margin-form">
+                                        <select name="shipments[{$index}][type]">
+                                        {foreach from=$oyst.type_list key=value item=name}
+                                            <option value="{$value}"{if $shipment.type == $value} selected="selected"{/if}>{$name}</option>
+                                        {/foreach}
+                                        </select>
+                                    </div>
+                                    <label>{l s='Delay' mod='oyst'}</label>
+                                    <div class="margin-form">
+                                        <input type="text" name="shipments[{$index}][delay]" value="{$shipment.delay}"/>
+                                        <br>
+                                        <span class="help-block">{l s='Values in days' mod='oyst'}</span>
+                                    </div>
+                                    <label>{l s='Free shipping from' mod='oyst'}</label>
+                                    <div class="margin-form">
+                                        <input type="text" name="shipments[{$index}][free_shipping]" value="{$shipment.free_shipping}"/>
+                                    </div>
                                 </div>
-                                <label>{l s='Delay' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="text" name="shipments[{$index}][delay]" value="{$shipment.delay}"/>
-                                    <br>
-                                    <span class="help-block">{l s='Values in days' mod='oyst'}</span>
-                                </div>
-                                <label>{l s='Amount' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="text" name="shipments[{$index}][amount_leader]" value="{$shipment.amount_leader}"/>
-                                    <br>
-                                    <span class="help-block">{l s='First product' mod='oyst'}</span>
-                                </div>
-                                <div class="margin-form">
-                                    <input type="text" name="shipments[{$index}][amount_follower]" value="{$shipment.amount_follower}"/>
-                                    <br>
-                                    <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
-                                </div>
-                                <label>{l s='Free shipping from' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="text" name="shipments[{$index}][free_shipping]" value="{$shipment.free_shipping}"/>
+                                <div class="col-right">
+                                    <label>{l s='Amount' mod='oyst'}</label>
+                                    <div class="margin-form">
+                                        <input type="text" name="shipments[{$index}][amount_leader]" value="{$shipment.amount_leader}"/>
+                                        <br>
+                                        <span class="help-block">{l s='First product' mod='oyst'}</span>
+                                    </div>
+                                    <div class="margin-form">
+                                        <input type="text" name="shipments[{$index}][amount_follower]" value="{$shipment.amount_follower}"/>
+                                        <br>
+                                        <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
+                                    </div>
                                 </div>
                                 <label></label>
                                 <div class="margin-form">
@@ -311,34 +315,38 @@
         <div class="margin-form">
             <input type="checkbox" class="shipment-primary" name="shipments[__shipment_id__][primary]" value="1"/>
         </div>
-        <label>{l s='Type' mod='oyst'}</label>
-        <div class="margin-form">
-            <select name="shipments[__shipment_id__][type]">
-            {foreach from=$oyst.type_list key=value item=name}
-                <option value="{$value}">{$name}</option>
-            {/foreach}
-            </select>
+        <div class="col-left">
+            <label>{l s='Type' mod='oyst'}</label>
+            <div class="margin-form">
+                <select name="shipments[__shipment_id__][type]">
+                {foreach from=$oyst.type_list key=value item=name}
+                    <option value="{$value}">{$name}</option>
+                {/foreach}
+                </select>
+            </div>
+            <label>{l s='Delay' mod='oyst'}</label>
+            <div class="margin-form">
+                <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
+                <br>
+                <span class="help-block">{l s='Values in days' mod='oyst'}</span>
+            </div>
+            <label>{l s='Free shipping from' mod='oyst'}</label>
+            <div class="margin-form">
+                <input type="text" name="shipments[__shipment_id__][free_shipping]" value=""/>
+            </div>
         </div>
-        <label>{l s='Delay' mod='oyst'}</label>
-        <div class="margin-form">
-            <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
-            <br>
-            <span class="help-block">{l s='Values in days' mod='oyst'}</span>
-        </div>
-        <label>{l s='Amount' mod='oyst'}</label>
-        <div class="margin-form">
-            <input type="text" name="shipments[__shipment_id__][amount_leader]" value=""/>
-            <br>
-            <span class="help-block">{l s='First product' mod='oyst'}</span>
-        </div>
-        <div class="margin-form">
-            <input type="text" name="shipments[__shipment_id__][amount_follower]" value=""/>
-            <br>
-            <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
-        </div>
-        <label>{l s='Free shipping from' mod='oyst'}</label>
-        <div class="margin-form">
-            <input type="text" name="shipments[__shipment_id__][free_shipping]" value=""/>
+        <div class="col-right">
+            <label>{l s='Amount' mod='oyst'}</label>
+            <div class="margin-form">
+                <input type="text" name="shipments[__shipment_id__][amount_leader]" value=""/>
+                <br>
+                <span class="help-block">{l s='First product' mod='oyst'}</span>
+            </div>
+            <div class="margin-form">
+                <input type="text" name="shipments[__shipment_id__][amount_follower]" value=""/>
+                <br>
+                <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
+            </div>
         </div>
         <label></label>
         <div class="margin-form">
