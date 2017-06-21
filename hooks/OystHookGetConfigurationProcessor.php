@@ -215,6 +215,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             }
         }
 
+        $shipmentList = $this->getShipmentList();
         $assign['lastExportDate'] = $lastExportDate;
         $assign['hasAlreadyExportProducts'] = $hasAlreadyExportProducts;
         $assign['hasApiKey']     = $hasApiKey;
@@ -241,10 +242,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['custom_success_error']     = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM'));
         $assign['custom_error_error']       = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
         $assign['carrier_list']             = $this->getCarrierList();
-        $assign['shipment_list']            = $this->getShipmentList();
+        $assign['shipment_list']            = $shipmentList;
         $assign['type_list']                = $shipmentTypes;
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
+        $assign['can_export_catalog'] = Configuration::get('OYST_ONE_CLICK_FEATURE_STATE') && !empty($currentOneClickApiKey) && count($shipmentList);
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');

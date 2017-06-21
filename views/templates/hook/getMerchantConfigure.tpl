@@ -201,21 +201,6 @@
                             {/if}
                         </div>
                     </div>
-                    <label>{l s='Syncronize your products' mod='oyst'}</label>
-                    <div class="margin-form">
-                    {if $oyst.exportRunning}
-                        {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
-                    {else}
-                        <button type="submit" name="synchronizeProducts">
-                            {if $oyst.lastExportDate}
-                                {l s='Re start the export process' mod='oyst'}
-                            {else}
-                                {l s='Start the export process' mod='oyst'}
-                            {/if}
-                        </button>
-                        <p>{l s='Will export your products to Oyst' mod='oyst'}</p>
-                    {/if}
-                    </div>
                     <label>{l s='Shipments' mod='oyst'}</label>
                     <div class="margin-form">
                         <div id="shipment-collection">
@@ -269,7 +254,7 @@
                             </div>
                             {/foreach}
                         </div>
-                        <button type="button" id="add-shipment"{if $oyst.currentOneClickApiKeyValid} class="btn btn-success"{else} disabled="disabled"{/if}>{l s='Add Shipment' mod='oyst'}</button>
+                        <button type="button" id="add-shipment"{if !$oyst.currentOneClickApiKeyValid} disabled="disabled"{/if}>{l s='Add Shipment' mod='oyst'}</button>
                         <p class="help-block" id="add-shipment-help" {if $oyst.currentOneClickApiKeyValid} style="display: none;"{/if}>{l s='You have to add a valid API key in order to add your shipment methods' mod='oyst'}</p>
                     </div>
                     <label>{l s='Environment' mod='oyst'}</label>
@@ -290,11 +275,22 @@
                     </div>
                 </div>
                 <div class="margin-form">
-                    <p>
-                        <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
-                            {l s='Save' mod='oyst'}
-                        </button>
-                    </p>
+                    <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
+                        {l s='Save' mod='oyst'}
+                    </button>
+                </div>
+                <div class="margin-form">
+                {if $oyst.exportRunning}
+                    {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
+                {else}
+                    <button type="submit" id="module_export_catalog_btn" name="synchronizeProducts"{if !$oyst.can_export_catalog} disabled="disabled"{/if}>
+                        {if $oyst.lastExportDate}
+                            {l s='Re start the export catalog' mod='oyst'}
+                        {else}
+                            {l s='Start the export catalog' mod='oyst'}
+                        {/if}
+                    </button>
+                {/if}
                 </div>
             </form>
         </div>
