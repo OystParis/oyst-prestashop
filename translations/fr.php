@@ -89,6 +89,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_678ea88595ca1270ae925
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f83c233ebf58682671eae3cb4558b740'] = '1-click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_17e6e15f2ea6cb21136d16ad72e8361c'] = 'Activer FreePay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f29513710a1b03eaf19b92a32ba539c9'] = 'Clé API FreePay Production';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9639e32cab248434a17ab32237cb3b71'] = 'Appliquer';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_104c53f712b567c6a55bd6e21511ad57'] = 'Obtenez votre clé API directement sur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_286351865a825dec12bb8f436a26f69f'] = 'Un problème? Allez sur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_80389a5c0eb275b4bedabc6f22c3b48d'] = 'aide à l\'installation';
@@ -116,13 +117,13 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_074de7e7c226d5c60f8af
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Type';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de livraison';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3dbde0fd6c148e980be6e0d54becf461'] = 'Valeur en jours';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dad1f8d794ee0dd7753fe75e73b78f31'] = 'Zones';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b2f40690858b404ed10e62bdf422c704'] = 'Montant';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e7212301546f5c736414fb9d733ab0a7'] = '1er produit';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_7e70b5c732ee88bc54ebeada2cd270ce'] = 'par produit suppl.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e268cede04562e8808056adec47ace55'] = 'Livraison offerte à partir de';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d0426fd4634123279a8dbfa930d79ce7'] = 'Supprimer';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_80092f7900d59aab765d0ddd35dc7231'] = 'Ajouter';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_032d5b0d7cb2444be669d588da5b60a3'] = 'Il faut appliquer une clé API valide pour pouvoir ajouter un mode de livraison';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4725c2b6db34f755b89b741c1d45bc71'] = 'La nouvelle configuration a été sauvegardée !';
@@ -140,6 +141,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_c462960a6bd53db34f778d0562703ad
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_350e17d65ded375d643259e7eed26e2a'] = 'IBAN';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_17e6e15f2ea6cb21136d16ad72e8361c'] = 'Activer FreePay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_f29513710a1b03eaf19b92a32ba539c9'] = 'Clé API FreePay Production';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_9639e32cab248434a17ab32237cb3b71'] = 'Appliquer';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_104c53f712b567c6a55bd6e21511ad57'] = 'Vous n\'avez pas encore de clé API? Rendez-vous sur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_286351865a825dec12bb8f436a26f69f'] = 'Un problème? Allez sur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_80389a5c0eb275b4bedabc6f22c3b48d'] = 'aide à l\'installation';
@@ -168,12 +170,12 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_074de7e7c226d5c60f8af14c2072535
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Type';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de livraison';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_53907db05842c0b7e2ef2e1e89dee2a0'] = 'Valeur en jours';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_dad1f8d794ee0dd7753fe75e73b78f31'] = 'Zones';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_b2f40690858b404ed10e62bdf422c704'] = 'Montant';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e7212301546f5c736414fb9d733ab0a7'] = '1er produit';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_7e70b5c732ee88bc54ebeada2cd270ce'] = 'par produit suppl.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e268cede04562e8808056adec47ace55'] = 'Livraison offerte à partir de';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d0426fd4634123279a8dbfa930d79ce7'] = 'Supprimer';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_80092f7900d59aab765d0ddd35dc7231'] = 'Ajouter';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_30a46eb72496a3c5ba85efc235959596'] = 'Il faut appliquer une clé API valide pour pouvoir ajouter un mode de livraison';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';

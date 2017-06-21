@@ -97,7 +97,7 @@
                                 <div class="input-group">
                                     <input type="text" id="OYST_API_PROD_KEY_FREEPAY" name="OYST_API_PROD_KEY_FREEPAY" value="{$oyst.OYST_API_PROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -113,7 +113,7 @@
                                 <div class="input-group">
                                     <input type="text" id="OYST_API_PREPROD_KEY_FREEPAY" name="OYST_API_PREPROD_KEY_FREEPAY" value="{$oyst.OYST_API_PREPROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -129,7 +129,7 @@
                                 <div class="input-group">
                                     <input type="text" id="OYST_API_CUSTOM_KEY_FREEPAY" name="OYST_API_CUSTOM_KEY_FREEPAY" value="{$oyst.OYST_API_CUSTOM_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -199,7 +199,7 @@
                                 <div class="input-group">
                                     <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -215,7 +215,7 @@
                                 <div class="input-group">
                                     <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -231,7 +231,7 @@
                                 <div class="input-group">
                                     <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Appliquer' mod='oyst'}</button>
+                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
@@ -239,17 +239,6 @@
                                 {if $oyst.apikey_custom_test_error_oneclick}
                                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                 {/if}
-                            </div>
-                        </div>
-                        <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-4">{l s='Syncronize your products' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-4">
-                            {if $oyst.exportRunning}
-                                {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
-                            {else}
-                                <button type="submit" name="synchronizeProducts">{l s='Start' mod='oyst'}</button>
-                                <span>{l s='Will start to synchronize your products' mod='oyst'}</span>
-                            {/if}
                             </div>
                         </div>
                         <div class="form-group clearfix">
@@ -362,9 +351,18 @@
             </div>
         </div>
         <div class="panel-footer">
-            <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info">
-                <strong>{l s='Save' mod='oyst'}</strong>
-            </button>
+            <p>
+                <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info">
+                    <strong>{l s='Save' mod='oyst'}</strong>
+                </button>
+            </p>
+            <p>
+                {if $oyst.exportRunning}
+                {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
+                {else}
+                <button type="submit" id="module_export_catalog_btn" name="synchronizeProducts"{if $oyst.can_export_catalog} class="btn btn-success"{else} disabled="disabled"{/if}>{l s='Export catalog' mod='oyst'}</button>
+                {/if}
+            </p>
         </div>
     </div>
 </form>
@@ -447,5 +445,8 @@
     </div>
 </div>
 
+<script>
+    var currentTab = "{$oyst.current_tab|escape:'html':'UTF-8'}";
+</script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
