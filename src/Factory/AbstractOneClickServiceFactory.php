@@ -24,7 +24,7 @@ namespace Oyst\Factory;
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystOrderApi;
 use Oyst\Service\Api\Requester;
-use Oyst\Service\Logger\PrestaShopLogger;
+use Oyst\Service\Logger\FileLogger;
 use Oyst\Service\OneClickService;
 
 abstract class AbstractOneClickServiceFactory
@@ -49,7 +49,8 @@ abstract class AbstractOneClickServiceFactory
 
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
-        $logger = new PrestaShopLogger();
+        $logger = new FileLogger();
+        $logger->setFile(__DIR__.'/../../logs/oneClick.log');
         $requester = new Requester($apiClient);
         $requester->setLogger($logger);
 

@@ -23,9 +23,10 @@ namespace Oyst\Service\Api;
 
 use Guzzle\Http\Message\Response;
 use Oyst\Api\AbstractOystApiClient;
-use Oyst\Service\Logger\AbstractLogger;
-use Oyst\Service\Logger\LogLevel;
+use Oyst\Service\Logger\FileLogger;
 use Oyst\Service\Serializer\SerializerInterface;
+use Psr\Log\AbstractLogger;
+use Psr\Log\LogLevel;
 use Tools;
 
 class Requester
@@ -57,32 +58,49 @@ class Requester
      */
     public function call($method, $params = array())
     {
+        $this->logRequest($method, null == $params ? null : func_get_arg(1));
+
         /** @var Response $result */
         $result = call_user_func_array(array($this->apiClient, $method), $params);
-        //dump($result, $method, $params); die();
+        $this->logResponse($result);
 
+        return $result;
+    }
+
+    private function logRequest($method, $params)
+    {
         if ($this->logger instanceof AbstractLogger) {
-            $thisCallArgs = null == $params ? null : func_get_arg(1);
-
-            $messageMask = 'Request from %s %s. HTTP[%s] BODY[%s]';
             $context = array(
                 'objectType' => 'OystRequest'
             );
 
-            $paramsEncoded =  null == $thisCallArgs ? '' : Tools::substr(
-                $this->serializer instanceof SerializerInterface ?
-                    $this->serializer->serialize($params) :
-                    json_encode($params, JSON_OBJECT_AS_ARRAY),
-                0,
-                255
-            );
+            $encodedParams = '';
+            if ($params != null) {
+                if ($this->logger instanceof FileLogger) {
+                    if ($this->serializer instanceof SerializerInterface) {
+                        $encodedParams = $this->serializer->serialize($params);
+                    } else {
+                        $encodedParams = json_encode($params, JSON_OBJECT_AS_ARRAY);
+                    }
+                } else {
+                    $encodedParams = Tools::substr(json_encode($params, JSON_OBJECT_AS_ARRAY), 0, 255);
+                }
+            }
 
             $requestFrom = sprintf(
-                '%s::%s(%s)',
+                'Request from %s::%s() with json body: ' . PHP_EOL . '%s',
                 get_class($this->logger),
                 $method,
-                $paramsEncoded
+                $encodedParams
             );
+
+            $this->logger->info($requestFrom, $context);
+        }
+    }
+
+    private function logResponse()
+    {
+        if ($this->logger instanceof AbstractLogger) {
 
             if ($this->apiClient->getLastHttpCode() == 200) {
                 $messageState = 'Succeed';
@@ -93,18 +111,16 @@ class Requester
             }
 
             $message = sprintf(
-                $messageMask,
-                $requestFrom,
+                'Result %s %s with json body'.PHP_EOL.'%s',
                 $messageState,
                 $this->apiClient->getLastHttpCode(),
                 $this->apiClient->getBody()
             );
 
-            call_user_func(array($this->logger, $method), $message, $context);
+            call_user_func(array($this->logger, $method), $message);
         }
-
-        return $result;
     }
+
 
     /**
      * @param AbstractLogger $logger

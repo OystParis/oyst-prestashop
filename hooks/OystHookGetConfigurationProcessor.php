@@ -34,6 +34,7 @@ use Oyst\Factory\AbstractExportProductServiceFactory;
 use Oyst\Factory\AbstractShipmentServiceFactory;
 use Oyst\Service\Configuration as OystConfiguration;
 use Oyst\Service\Http\CurrentRequest;
+use Oyst\Service\Logger\LoggerManager;
 use Oyst\Service\Logger\PrestaShopLogger;
 
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
@@ -165,6 +166,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function displayModuleConfiguration()
     {
         $assign = array();
@@ -216,6 +220,14 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         $shipmentList = $this->getShipmentList();
+        $loggerManager = new LoggerManager();
+        $logsFile = $loggerManager->getFiles();
+        $filesName = array();
+        foreach ($logsFile as $logFile) {
+            $filesName[] = basename($logFile);
+        }
+
+        $assign['logsFile'] = $filesName;
         $assign['lastExportDate'] = $lastExportDate;
         $assign['hasAlreadyExportProducts'] = $hasAlreadyExportProducts;
         $assign['hasApiKey']     = $hasApiKey;
@@ -308,6 +320,17 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                     'apiError' => $apiClient->getLastError(),
                 ));
             }
+        }
+
+        if (Tools::isSubmit('action') && Tools::getValue('action') == 'getLog') {
+            $logManager = new LoggerManager();
+            echo $logManager->getContent(Tools::getValue('file'));
+            die();
+        }
+
+        if (Tools::isSubmit('deleteLogs')) {
+            $logManager = new LoggerManager();
+            $logManager->deleteAll();
         }
     }
 

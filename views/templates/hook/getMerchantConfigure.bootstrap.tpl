@@ -451,8 +451,60 @@
     </div>
 </div>
 
+<fieldset id="logManagement">
+    <legend>Logs</legend>
+    <p>Display logs about any process</p>
+
+    {if is_array($oyst.logsFile) && count($oyst.logsFile)}
+        <select name="logsFile">
+            <option value="">{l s='Select log' mod='oyst'}</option>
+            {foreach $oyst.logsFile as $logFile}
+                <option value="{$logFile}">{$logFile|substr:0:-4}</a></option>
+            {/foreach}
+        </select>
+
+        <form method="post" id="deleteLogs">
+            <input type="submit" name="deleteLogs" value="{l s='Delete logs' mod='oyst'}" />
+        </form>
+    {else}
+        {l s='Actually there are no logs available' mod='oyst'}
+    {/if}
+</fieldset>
+
+<div id="logContainer">
+    <p id="logName"></p>
+    <pre id="log"></pre>
+</div>
+
 <script>
     var currentTab = "{$oyst.current_tab|escape:'html':'UTF-8'}";
 </script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
+<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/logManagement.js"></script>
+<script>
+    $(function() {
+        var logManagement = new LogManagement(window.location.href);
+        logManagement.initBackend();
+    });
+</script>
+<style>
+    #logManagement, #log, #logContainer, #deleteLogs {
+        margin-top: 15px;
+    }
+
+    #logName {
+        font-weight: bolder;
+        font-size:14px;
+    }
+
+    #log {
+        display: none;
+        background-color: #333333;
+        color: snow;
+        padding: 10px;
+        max-height: 400px;
+        overflow: auto;
+        font: message-box;
+    }
+</style>
