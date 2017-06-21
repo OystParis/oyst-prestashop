@@ -58,7 +58,7 @@
         </div>
         {/if}
         <div class="productTabs">
-            <ul class="tab">
+            <ul id="oyst-config-menu" class="tab">
                 <li class="tab-row">
                     <a class="tab-page selected" href="#tab-content-FreePay">FreePay</a>
                 </li>
@@ -69,7 +69,8 @@
         </div>
         <div class="tab-content" id="tabPane1">
             <form id="module_form" class="defaultForm form-horizontal" method="POST" action="#">
-                <div id="tab-content-FreePay" class="tab-pane active">
+                <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab}"/>
+                <div id="tab-content-FreePay" class="tab-pane">
                     <label>{l s='Enable FreePay' mod='oyst'}</label>
                     <div class="margin-form">
                         <input type="checkbox" class="form-control" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
@@ -350,6 +351,9 @@
     </div>
 </div>
 
+<script>
+    var currentTab = "{$oyst.current_tab|escape:'html':'UTF-8'}";
+</script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
 <script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/bootstrapTab-1.5.js"></script>

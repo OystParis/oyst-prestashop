@@ -34,6 +34,9 @@ $(document).ready(function() {
         $('#add-shipment').attr('disabled', 'disabled');
         $('#add-shipment-help').show();
     });
+    $('ul#oyst-config-menu a').click(function () {
+        $('#current_tab_value').val($(this).attr('href'));
+    });
 });
 
 function handleSelectOptions(select) {
