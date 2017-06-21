@@ -30,9 +30,13 @@
     height: 50px;
 }
 
-.oyst.configuration #module_form_submit_btn {
+.oyst.configuration #module_form_submit_btn, .oyst.configuration #module_export_catalog_btn {
     height: 40px;
-    width: 180px;
+    width: 220px;
+}
+
+.oyst.configuration .panel-footer {
+    height: auto !important;
 }
 
 .oyst.contact .help-block {

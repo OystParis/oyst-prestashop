@@ -35,9 +35,22 @@ $(document).ready(function() {
         $('#add-shipment-help').show();
     });
     $('ul#oyst-config-menu a').click(function () {
-        $('#current_tab_value').val($(this).attr('href'));
+        var clickedTab = $(this).attr('href');
+        $('#current_tab_value').val(clickedTab);
+
+        handleExportCatalogButton(clickedTab);
     });
+
+    handleExportCatalogButton(currentTab);
 });
+
+function handleExportCatalogButton(clickedTab) {
+    if (clickedTab == '#tab-content-FreePay') {
+        $('#module_export_catalog_btn').hide();
+    } else {
+        $('#module_export_catalog_btn').show();
+    }
+}
 
 function handleSelectOptions(select) {
     var parentDiv = select.parent();
