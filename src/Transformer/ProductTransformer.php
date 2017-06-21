@@ -29,6 +29,7 @@ use Oyst\Classes\OystPrice;
 use Oyst\Classes\OystProduct;
 use Oyst\Classes\OystSize;
 use Product;
+use Psr\Log\AbstractLogger;
 use StockAvailable;
 use Tools;
 
@@ -37,6 +38,9 @@ use Tools;
  */
 class ProductTransformer extends AbstractTransformer
 {
+    /** @var  AbstractLogger */
+    private $logger;
+
     /**
      * ProductTransformer constructor.
      * @param Context $context
@@ -44,6 +48,17 @@ class ProductTransformer extends AbstractTransformer
     public function __construct(Context $context)
     {
         parent::__construct($context);
+    }
+
+    /**
+     * @param AbstractLogger $logger
+     * @return $this
+     */
+    public function setLogger(AbstractLogger $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
     }
 
     /**
@@ -59,21 +74,19 @@ class ProductTransformer extends AbstractTransformer
 
         $categories = array();
 
-        // Small cache to use avoid this process with attributes
-        if (!isset($categories[$product->id])) {
-            $categories = array($product->id => array());
-        }
-
         foreach (Product::getProductCategoriesFull($product->id) as $categoryInfo) {
             $oystCategory = new OystCategory(
                 $categoryInfo['id_category'],
                 $categoryInfo['name'],
                 $categoryInfo['id_category'] == $product->id_category_default
             );
-            $categories[$product->id][] = $oystCategory;
+            $categories[] = $oystCategory;
         }
 
-        if (empty($categories[$product->id])) {
+        if (empty($categories)) {
+            if ($this->logger instanceof AbstractLogger) {
+                $this->logger->alert(sprintf('No categories for product %d', $product->id));
+            }
             return null;
         }
 
@@ -93,7 +106,7 @@ class ProductTransformer extends AbstractTransformer
         $oystProduct->setManufacturer($product->manufacturer_name);
         $oystProduct->setSize($oystSize);
         $oystProduct->setCondition(($product->condition == 'used' ? 'reused' : $product->condition));
-        $oystProduct->setCategories($categories[$product->id]);
+        $oystProduct->setCategories($categories);
         $oystProduct->setAmountIncludingTax($oystPrice);
         $oystProduct->setAvailableQuantity(StockAvailable::getStockAvailableIdByProductId($product->id));
         $oystProduct->setTitle(is_array($product->name) ? reset($product->name) : $product->name);

@@ -22,8 +22,9 @@
 namespace Oyst\Service\Logger;
 
 use DateTime;
-use Guzzle\Common\Exception\InvalidArgumentException;
 use Logger;
+use Psr\Log\AbstractLogger;
+use Psr\Log\LogLevel;
 
 class PrestaShopLogger extends AbstractLogger
 {
@@ -35,10 +36,6 @@ class PrestaShopLogger extends AbstractLogger
      */
     public function log($level, $message, array $context = array())
     {
-        if (!in_array($level, LogLevel::getList())) {
-            throw new InvalidArgumentException('The log level you use does not exist');
-        }
-
         $log = new Logger();
         $log->message = $message;
         $log->severity = $this->getSeverity($level);
@@ -50,6 +47,7 @@ class PrestaShopLogger extends AbstractLogger
         $log->object_type = isset($context['objectType']) ? $context['objectType'] : false;
 
         $state = $log->add();
+
         return $state;
     }
 
@@ -61,11 +59,7 @@ class PrestaShopLogger extends AbstractLogger
     {
         switch ($level) {
             case LogLevel::EMERGENCY:
-                return 4;
-                break;
             case LogLevel::ALERT:
-                return 4;
-                break;
             case LogLevel::CRITICAL:
                 return 4;
                 break;
@@ -73,14 +67,10 @@ class PrestaShopLogger extends AbstractLogger
                 return 3;
                 break;
             case LogLevel::WARNING:
-                return 2;
-                break;
             case LogLevel::NOTICE:
                 return 2;
                 break;
             case LogLevel::INFO:
-                return 1;
-                break;
             case LogLevel::DEBUG:
                 return 1;
                 break;
