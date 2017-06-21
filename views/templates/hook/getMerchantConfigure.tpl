@@ -37,7 +37,7 @@
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
     <div class="oyst configuration">
         <div class="header">
-            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /></p>
+            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" style="height: 120px;"/></p>
             <p class="sub-header"><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
         </div>
         {if $oyst.FC_OYST_GUEST && $oyst.phone}
