@@ -25,7 +25,7 @@ use Db;
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystCatalogApi;
 use Oyst\Service\Api\Requester;
-use Oyst\Service\Logger\PrestaShopLogger;
+use Oyst\Service\Logger\FileLogger;
 use Oyst\Service\ShipmentService;
 
 abstract class AbstractShipmentServiceFactory
@@ -51,7 +51,8 @@ abstract class AbstractShipmentServiceFactory
 
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
-        $logger = new PrestaShopLogger();
+        $logger = new FileLogger();
+        $logger->setFile(__DIR__.'/../../logs/shipment.log');
         $requester = new Requester($apiClient);
         $requester->setLogger($logger);
 

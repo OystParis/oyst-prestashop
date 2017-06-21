@@ -27,7 +27,7 @@ use Oyst\Api\OystOrderApi;
 use Oyst\Repository\AddressRepository;
 use Oyst\Repository\OrderRepository;
 use Oyst\Service\Api\Requester;
-use Oyst\Service\Logger\PrestaShopLogger;
+use Oyst\Service\Logger\FileLogger;
 use Oyst\Service\OrderService;
 
 class AbstractOrderServiceFactory
@@ -52,7 +52,8 @@ class AbstractOrderServiceFactory
 
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
-        $logger = new PrestaShopLogger();
+        $logger = new FileLogger();
+        $logger->setFile(__DIR__.'/../../logs/order.log');
         $requester = new Requester($apiClient);
         $requester->setLogger($logger);
 

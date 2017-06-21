@@ -28,7 +28,7 @@ use Oyst\Api\OystCatalogApi;
 use Oyst\Repository\ProductRepository;
 use Oyst\Service\Api\Requester;
 use Oyst\Service\ExportProductService;
-use Oyst\Service\Logger\PrestaShopLogger;
+use Oyst\Service\Logger\FileLogger;
 use Oyst\Service\Serializer\ExportProductRequestParamSerializer;
 use Oyst\Transformer\ProductTransformer;
 
@@ -60,14 +60,15 @@ class AbstractExportProductServiceFactory
         );
 
         $serializer = new ExportProductRequestParamSerializer();
-        $logger = new PrestaShopLogger();
+        $logger = new FileLogger();
+        $logger->setFile(__DIR__.'/../../logs/export.log');
         $requester = new Requester($apiClient);
         $productTransformer = new ProductTransformer($context);
+        $productTransformer->setLogger($logger);
 
         $requester
-            // TODO: Find a better way to log this (file and db ?)
-            // with PostProduct, the log could be too long that the classic TEXT field..
-            //->setSerializer($serializer)
+            // Avoid this if you want to store back inside the BDD and TEXT field
+            ->setSerializer($serializer)
             ->setLogger($logger)
         ;
 
