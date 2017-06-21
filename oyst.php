@@ -450,4 +450,26 @@ class Oyst extends FroggyPaymentModule
     {
         return $this->context;
     }
+
+    /**
+     * Method call during the checkout process
+     * @param $cart
+     * @param $shipping_cost
+     * @param $products
+     * @return bool
+     */
+    public function getPackageShippingCost($cart, $shipping_cost, $products)
+    {
+        return $this->getShipmentCost($cart);
+    }
+
+    private function getShipmentCost($cart)
+    {
+        if (isset($cart->oystShipment)) {
+            $cost = $cart->oystShipment['amount']['value'];
+            return ($cost > 0 ? $cost / 100 : 0);
+        }
+
+        return false;
+    }
 }
