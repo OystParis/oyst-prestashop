@@ -22,7 +22,6 @@
 use Oyst\Controller\ExportProductController;
 use Oyst\Service\Http\CurrentRequest;
 use Oyst\Controller\OrderController;
-use Oyst\Service\Logger\PrestaShopLogger;
 
 require_once dirname(__FILE__).'/../../config/config.inc.php';
 require_once dirname(__FILE__).'/oyst.php';
@@ -30,7 +29,8 @@ require_once dirname(__FILE__).'/oyst.php';
 $request = new CurrentRequest();
 $data = $request->getJson();
 
-$logger = new PrestaShopLogger();
+$logger = new \Oyst\Service\Logger\FileLogger();
+$logger->setFile(__DIR__.'/logs/notification.log');
 
 if ($data && isset($data['event'])) {
     $logger->info(
@@ -41,20 +41,24 @@ if ($data && isset($data['event'])) {
         array('objectType' => 'OystNotification')
     );
 
-    switch ($data['event']) {
-        case 'catalog.import':
-            $exportProductController = new ExportProductController($request);
-            $exportProductController->setLogger($logger);
-            $exportProductController->exportCatalogAction();
-            break;
-        case 'order.new':
-        case 'order.v2.new':
-            $orderController = new OrderController($request);
-            $orderController->setLogger($logger);
-            $orderController->createNewOrderAction();
-            break;
-        default:
-            http_response_code(400);
+    try {
+        switch ($data['event']) {
+            case 'catalog.import':
+                $exportProductController = new ExportProductController($request);
+                $exportProductController->setLogger($logger);
+                $exportProductController->exportCatalogAction();
+                break;
+            case 'order.new':
+            case 'order.v2.new':
+                $orderController = new OrderController($request);
+                $orderController->setLogger($logger);
+                $orderController->createNewOrderAction();
+                break;
+            default:
+                http_response_code(400);
+        }
+    } catch (Exception $exception) {
+        $logger->critical($exception->getMessage());
     }
 } else {
     $logger->warning(

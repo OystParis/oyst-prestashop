@@ -21,12 +21,12 @@
 
 use Oyst\Controller\OneClickOrderController;
 use Oyst\Service\Http\CurrentRequest;
-use Oyst\Service\Logger\PrestaShopLogger;
 
 require_once dirname(__FILE__).'/../../config/config.inc.php';
 require dirname(__FILE__).'/oyst.php';
 
-$logger = new PrestaShopLogger();
+$logger = new \Oyst\Service\Logger\FileLogger();
+$logger->setFile(__DIR__.'/logs/oneClick.log');
 $logger->info(sprintf('New OneClick request from customer: %d', Context::getContext()->customer->id));
 
 $oneClickController = new OneClickOrderController(new CurrentRequest());

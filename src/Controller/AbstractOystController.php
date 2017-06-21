@@ -23,7 +23,7 @@ namespace Oyst\Controller;
 
 use Oyst;
 use Oyst\Service\Http\CurrentRequest;
-use Oyst\Service\Logger\AbstractLogger;
+use Psr\Log\AbstractLogger;
 
 abstract class AbstractOystController
 {
