@@ -26,7 +26,7 @@ use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystCatalogApi;
 use Oyst\Repository\ProductRepository;
 use Oyst\Service\Api\Requester;
-use Oyst\Service\Logger\PrestaShopLogger;
+use Oyst\Service\Logger\FileLogger;
 use Oyst\Service\ProductService;
 use Oyst\Transformer\ProductTransformer;
 
@@ -53,7 +53,8 @@ abstract class AbstractProductServiceFactory
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
         $productTransformer = new ProductTransformer($context);
-        $logger = new PrestaShopLogger();
+        $logger = new FileLogger();
+        $logger->setFile(__DIR__.'/../../product.log');
         $requester = new Requester($apiClient);
         $requester->setLogger($logger);
 

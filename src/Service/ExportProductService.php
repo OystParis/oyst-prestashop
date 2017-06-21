@@ -94,6 +94,7 @@ class ExportProductService extends AbstractOystService
             if ($product->id != $productInfo['id_product']) {
                 $product = new Product($productInfo['id_product'], false, $this->context->language->id);
                 if (!Validate::isLoadedObject($product)) {
+                    $this->logger->alert(sprintf('Product %d can\'t be found', $productInfo['id_product']));
                     continue;
                 }
             }
@@ -101,6 +102,7 @@ class ExportProductService extends AbstractOystService
             // We need the base product first in case it doesn't exist
             if (!isset($oystProducts[$product->id])) {
                 if (!($baseOystProduct = $this->productTransformer->transform($product))) {
+                    $this->logger->alert(sprintf('Product %d won\'t be exported', $productInfo['id_product']));
                     continue;
                 }
                 $oystProducts[$product->id] = clone $baseOystProduct;
@@ -153,9 +155,9 @@ class ExportProductService extends AbstractOystService
             $productNotHandled = $this->productRepository->getProductsNotExported(static::EXPORT_ALL_PRODUCT);
             $totalProductNotHandled = count($productNotHandled);
             if ($totalProductNotHandled) {
-                $this->logger->warning(sprintf('[Export] Product(s) waiting : %s', json_encode($productNotHandled)));
+                $this->logger->warning(sprintf('Product(s) waiting : %s', json_encode($productNotHandled)));
             } else {
-                $this->logger->info('[Export] Is over');
+                $this->logger->info('Export is over');
                 $this->setExportCatalogState(false);
             }
             $json['remaining'] = $totalProductNotHandled;
