@@ -22,6 +22,8 @@
 namespace Oyst\Service;
 
 use Carrier;
+use RangePrice;
+use RangeWeight;
 use Db;
 use Configuration as PSConfiguration;
 use Oyst\Classes\OneClickShipment;
@@ -144,14 +146,15 @@ class InstallManager
         $carrier->active = true;
         $carrier->deleted = 0;
         $carrier->shipping_handling = false;
+        $carrier->shipping_external = true;
         $carrier->range_behavior = 0;
-        $carrier->is_free = true;
+        $carrier->is_free = false;
         $carrier->delay = array(
             PSConfiguration::get('PS_LANG_DEFAULT') => 'Delay'
         );
         $carrier->is_module = true;
         $carrier->external_module_name = $this->oyst->name;
-        $carrier->need_range = false;
+        $carrier->need_range = true;
 
         if ($carrier->add()) {
             $groups = Group::getGroups(true);
@@ -162,11 +165,47 @@ class InstallManager
                 ));
             }
 
+            $rangePrice = new RangePrice();
+            $rangePrice->id_carrier = $carrier->id;
+            $rangePrice->delimiter1 = '0';
+            $rangePrice->delimiter2 = '1000000';
+            $rangePrice->add();
+
+            $rangeWeight = new RangeWeight();
+            $rangeWeight->id_carrier = $carrier->id;
+            $rangeWeight->delimiter1 = '0';
+            $rangeWeight->delimiter2 = '1000000';
+            $rangeWeight->add();
+
             $zones = Zone::getZones(true);
             foreach ($zones as $z) {
-                Db::getInstance()->insert(
+                $this->db->insert(
                     'carrier_zone',
                     array('id_carrier' => (int) $carrier->id, 'id_zone' => (int) $z['id_zone'])
+                );
+
+                $this->db->autoExecuteWithNullValues(
+                    _DB_PREFIX_ . 'delivery',
+                    array(
+                        'id_carrier' => $carrier->id,
+                        'id_range_price' => (int) $rangePrice->id,
+                        'id_range_weight' => NULL,
+                        'id_zone' => (int) $z['id_zone'],
+                        'price' => '0'
+                    ),
+                    'INSERT'
+                );
+
+                $this->db->autoExecuteWithNullValues(
+                    _DB_PREFIX_ . 'delivery',
+                    array(
+                        'id_carrier' => $carrier->id,
+                        'id_range_price' => NULL,
+                        'id_range_weight' => (int) $rangeWeight->id,
+                        'id_zone' => (int) $z['id_zone'],
+                        'price' => '0'
+                    ),
+                    'INSERT'
                 );
             }
 
