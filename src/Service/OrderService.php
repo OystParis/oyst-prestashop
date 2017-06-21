@@ -22,7 +22,6 @@
 namespace Oyst\Service;
 
 use Address;
-use Order;
 use Oyst\Repository\AddressRepository;
 use Carrier;
 use Cart;
@@ -158,8 +157,16 @@ class OrderService extends AbstractOystService
             }
         }
 
-
+        // Require to get the right price during the validateOrder
+        $cart->oystShipment = $oystOrderInfo['shipment'];
+        $cart->id_carrier = Carrier::getCarrierByReference(PSConfiguration::get(Configuration::ONE_CLICK_CARRIER))->id;
+        $delivery_option = $cart->getDeliveryOption();
+        $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
+        $cart->setDeliveryOption($delivery_option);
         $cart->update();
+
+        // Yes not used but it will flush the delivery cache, instead, default carrier will be used
+        $cart->getOrderTotal();
 
         $state = $this->oyst->validateOrder(
             $cart->id,
@@ -173,61 +180,7 @@ class OrderService extends AbstractOystService
             $cart->secure_key
         );
 
-        if ($state) {
-            if (!($orderId = Order::getOrderByCartId($cart->id))) {
-                return false;
-            }
-            
-            $order = new Order($orderId);
-
-            $this->handleShippingCost($order, $oystOrderInfo['shipment']);
-            $this->handleHistory($order);
-            $this->getOrderRepository()->linkorderToGUID($order, $oystOrderInfo['id']);
-        }
-
         return $state;
-    }
-
-    /**
-     * @param Order $order
-     */
-    private function handleHistory(Order $order)
-    {
-        $orderHistory = $this->orderRepository->getLastOrderHistory($order);
-        $orderHistory->id_order_state = 2;
-        $orderHistory->save();
-
-        $order->current_state = $orderHistory->id_order_state;
-        $order->save();
-    }
-
-    /**
-     * @param Order $order
-     * @param $shipmentInfo
-     * @return bool
-     */
-    private function handleShippingCost(Order $order, $shipmentInfo)
-    {
-
-        // This is a tricky part, we need to use a carrier and hide it for the front process.
-        // So we have to rewrite the order detail properly according to the carrier
-
-        $carrierReference = PSConfiguration::get('OYST_ONE_CLICK_CARRIER');
-        $carrier = Carrier::getCarrierByReference($carrierReference);
-        if (!Validate::isLoadedObject($carrier)) {
-            $this->logger->emergency(
-                'Carrier reference not found: #'.$carrierReference
-            );
-            return false;
-        }
-
-        // Actually we don't need to check the currency, EUR every time.
-
-        $cost = $shipmentInfo['amount']['value'];
-        $cost = (float) ($cost > 0 ? $cost / 100 : 0);
-        $this->orderRepository->updateOrderCarrier($order, $carrier, $cost);
-
-        return true;
     }
 
     /**
