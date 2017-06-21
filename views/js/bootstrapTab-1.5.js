@@ -18,14 +18,17 @@
  * @license GNU GENERAL PUBLIC LICENSE
  */
 $(document).ready(function() {
-    $('.tab-content .tab-pane').hide();
-    $('.tab-content .tab-pane.active').show();
+    showTab($('a[href=' + currentTab + ']'));
 
     $('.productTabs ul.tab li.tab-row a.tab-page').click(function (e) {
-        e.preventDefault()
-        $('.tab-content .tab-pane').hide();
-        $($(this).attr('href')).show();
-        $('.productTabs ul.tab li.tab-row a.tab-page').removeClass('selected');
-        $(this).addClass('selected');
+        e.preventDefault();
+        showTab($(this));
     });
 });
+
+function showTab(link) {
+    $('.tab-content .tab-pane').hide();
+    $(link.attr('href')).show();
+    $('.productTabs ul.tab li.tab-row a.tab-page').removeClass('selected');
+    link.addClass('selected');
+}

@@ -244,6 +244,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['shipment_list']            = $this->getShipmentList();
         $assign['type_list']                = $shipmentTypes;
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
+        $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');

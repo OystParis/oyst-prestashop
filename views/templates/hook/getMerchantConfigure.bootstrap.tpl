@@ -77,12 +77,13 @@
     {/if}
     <div class="panel" class="oyst_fieldset">
         <div>
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#form-freepay" role="tab" data-toggle="tab">{l s='FreePay' mod='oyst'}</a></li>
-                <li role="presentation"><a href="#form-1-click" role="tab" data-toggle="tab">{l s='1-click' mod='oyst'}</a></li>
+            <ul id="oyst-config-menu" class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="{if $oyst.current_tab == '#tab-content-FreePay'}active{/if}"><a href="#tab-content-FreePay" role="tab" data-toggle="tab">{l s='FreePay' mod='oyst'}</a></li>
+                <li role="presentation" class="{if $oyst.current_tab == '#tab-content-1-click'}active{/if}"><a href="#tab-content-1-click" role="tab" data-toggle="tab">{l s='1-click' mod='oyst'}</a></li>
             </ul>
             <div class="oyst-admin-tab tab-content">
-                <div role="tabpanel" class="tab-pane active" id="form-freepay">
+                <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab}"/>
+                <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-FreePay'} active{/if}" id="tab-content-FreePay">
                     <fieldset>
                         <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-4">{l s='Enable FreePay' mod='oyst'}</label>
@@ -184,7 +185,7 @@
                         </div>
                     </fieldset>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="form-1-click">
+                <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-1-click'} active{/if}" id="tab-content-1-click">
                     <fieldset>
                         <div class="form-group clearfix">
                            <label class="control-label col-md-3 col-lg-4">{l s='Enable OneClick' mod='oyst'}</label>
