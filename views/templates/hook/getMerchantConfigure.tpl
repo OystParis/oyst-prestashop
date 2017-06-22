@@ -206,7 +206,7 @@
                                 <div class="margin-form">
                                     <select name="shipments[{$index}][id_carrier]">
                                     {foreach $oyst.carrier_list as $carrier}
-                                        <option value="{$carrier.id_reference}"{if $shipment.id_carrier == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
+                                        <option value="{$carrier.id_reference}"{if $shipment.id_carrier_reference == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
                                     {/foreach}
                                     </select>
                                 </div>

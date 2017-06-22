@@ -58,4 +58,6 @@ if (!class_exists('OystPaymentNotification', false)) {
     require_once _PS_MODULE_DIR_.'/oyst/classes/OystPaymentNotification.php';
 }
 
+require_once _PS_MODULE_DIR_.'/oyst/classes/OystShipment.php';
+
 define('_PS_OYST_DEBUG_', 0);

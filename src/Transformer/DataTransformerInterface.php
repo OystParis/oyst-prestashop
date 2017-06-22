@@ -26,7 +26,7 @@ namespace Oyst\Transformer;
  */
 interface DataTransformerInterface
 {
-    public function transform($value);
+    public function transform($data);
 
-    public function reverseTransform($value);
+    public function reverseTransform($data);
 }
