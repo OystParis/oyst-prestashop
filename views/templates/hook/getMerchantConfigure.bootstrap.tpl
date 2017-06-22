@@ -54,8 +54,7 @@
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
 <form id="module_form" class="defaultForm form-horizontal oyst configuration" method="POST" action="">
     <div align="center" style="font-size: 16px;">
-        <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" style="height: 120px;"/></p>
-        <p><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
+        <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" style="height: 100px;"/></p>
     </div>
     {if $oyst.FC_OYST_GUEST && $oyst.phone}
     <div class="text-center">
@@ -101,7 +100,7 @@
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
+                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_prod_test_error_freepay}
                                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                 {/if}
@@ -117,7 +116,7 @@
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
+                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_preprod_test_error_freepay}
                                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                 {/if}
@@ -133,7 +132,7 @@
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
+                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_custom_test_error_freepay}
                                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                 {/if}
@@ -188,14 +187,14 @@
                 <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-1-click'} active{/if}" id="tab-content-1-click">
                     <fieldset>
                         <div class="form-group clearfix">
-                           <label class="control-label col-md-3 col-lg-4">{l s='Enable OneClick' mod='oyst'}</label>
-                           <div class="col-md-7 col-lg-5" style="height: 31px;">
+                           <label class="control-label col-md-3 col-lg-3">{l s='Enable OneClick' mod='oyst'}</label>
+                           <div class="col-md-7 col-lg-7" style="height: 31px;">
                                <input type="checkbox" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
                            </div>
                         </div>
                         <div class="form-group clearfix env prod" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='1-click API Production Key' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-5">
+                            <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Production Key' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
                                 <div class="input-group">
                                     <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
@@ -203,15 +202,14 @@
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_prod_test_error_oneclick}
                                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                 {/if}
                             </div>
                         </div>
                         <div class="form-group clearfix env preprod" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='1-click API PreProduction Key' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-5">
+                            <label class="control-label col-md-3 col-lg-3">{l s='1-Click API PreProduction Key' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
                                 <div class="input-group">
                                     <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
@@ -219,15 +217,14 @@
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_preprod_test_error_oneclick}
                                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                 {/if}
                             </div>
                         </div>
                         <div class="form-group clearfix env custom" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='1-click API Custom Key' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-5">
+                            <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Custom Key' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
                                 <div class="input-group">
                                     <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
@@ -235,15 +232,14 @@
                                     </span>
                                 </div>
                                 <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_custom_test_error_oneclick}
                                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                 {/if}
                             </div>
                         </div>
                         <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-4">{l s='Shipments' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-5">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Shipments' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
                                 <div id="shipment-collection">
                                 {foreach from=$oyst.shipment_list key=index item=shipment}
                                     <div class="shipment-item">
@@ -255,6 +251,7 @@
                                                     <option value="{$carrier.id_reference}"{if $shipment.id_carrier == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
                                                 {/foreach}
                                                 </select>
+                                                <span class="help-block" style="visibility: hidden;">&nbsp;</span>
                                             </div>
                                         </div>
                                         <div class="form-group clearfix">
@@ -263,7 +260,7 @@
                                                 <input type="checkbox" class="shipment-primary" name="shipments[{$index}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
                                             <div class="form-group clearfix">
                                                 <label class="control-label col-md-3 col-lg-4">{l s='Type' mod='oyst'}</label>
                                                 <div class="col-md-9 col-lg-8">
@@ -285,7 +282,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-7">
                                             <div class="form-group clearfix">
                                                 <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
                                                 <div class="col-md-9 col-lg-8">
@@ -328,8 +325,8 @@
                             </div>
                         </div>
                         <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-4">{l s='Environment' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-5">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Environment' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
                                 <select name="OYST_API_ENV_ONECLICK">
                                     <option value="prod" {if $oyst.OYST_API_ENV_ONECLICK == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
                                     <option value="preprod" {if $oyst.OYST_API_ENV_ONECLICK == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
@@ -338,14 +335,14 @@
                             </div>
                         </div>
                         <div class="form-group clearfix env custom" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='Endpoint API Custom' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-5">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Endpoint API Custom' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
                                 <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLCK" name="OYST_API_CUSTOM_ENDPOINT_ONECLCK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLCK|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
                         <div class="form-group clearfix env custom" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-4">{l s='Endpoint CDN Custom' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-5">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Endpoint CDN Custom' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
                                 <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
@@ -391,7 +388,7 @@
                 <input type="checkbox" class="shipment-primary" name="shipments[__shipment_id__][primary]" value="1"/>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="form-group clearfix">
                 <label class="control-label col-md-3 col-lg-4">{l s='Type' mod='oyst'}</label>
                 <div class="col-md-9 col-lg-8">
@@ -400,6 +397,7 @@
                         <option value="{$value}">{$name}</option>
                     {/foreach}
                     </select>
+                    <span class="help-block" style="visibility: hidden;">&nbsp;</span>
                 </div>
             </div>
             <div class="form-group clearfix">
@@ -413,7 +411,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="form-group clearfix">
                 <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
                 <div class="col-md-9 col-lg-8">
