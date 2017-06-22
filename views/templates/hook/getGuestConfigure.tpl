@@ -29,8 +29,7 @@
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
     <form id="module_form" class="defaultForm form-horizontal oyst contact" method="POST" action="{$oyst.configureLink|escape:'htmlall':'UTF-8'}">
         <div class="header">
-            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" /></p>
-            <p class="sub-header"><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
+            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" style="height: 100px;"/></p>
         </div>
         <div class="header">
             <h2>{l s='Congratulations!' mod='oyst'}</h2>

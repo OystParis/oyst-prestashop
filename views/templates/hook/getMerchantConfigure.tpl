@@ -37,8 +37,7 @@
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
     <div class="oyst configuration">
         <div class="header">
-            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" style="height: 120px;"/></p>
-            <p class="sub-header"><b>0€</b> {l s='installation fees' mod='oyst'} - <b>0%</b> {l s='transaction fees' mod='oyst'} - <b>0€</b> {l s='subscription fees' mod='oyst'}</p>
+            <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" style="height: 100px;"/></p>
         </div>
         {if $oyst.FC_OYST_GUEST && $oyst.phone}
         <div class="header">
@@ -63,7 +62,7 @@
                     <a class="tab-page selected" href="#tab-content-FreePay">FreePay</a>
                 </li>
                 <li class="tab-row">
-                    <a class="tab-page" href="#tab-content-1-click">1-click</a>
+                    <a class="tab-page" href="#tab-content-1-click">1-Click</a>
                 </li>
             </ul>
         </div>
@@ -83,7 +82,7 @@
                                 {l s='Apply' mod='oyst'}
                             </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                            <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
+                            <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_prod_test_error_freepay}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
@@ -97,7 +96,7 @@
                                 {l s='Apply' mod='oyst'}
                             </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                            <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
+                            <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_preprod_test_error_freepay}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
@@ -111,7 +110,7 @@
                                 {l s='Apply' mod='oyst'}
                             </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                            <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
+                            <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_custom_test_error_freepay}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
@@ -160,42 +159,39 @@
                         <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
                     </div>
                     <div class="env prod" style="display: none;">
-                        <label>{l s='1-click API Production Key' mod='oyst'}</label>
+                        <label>{l s='1-Click API Production Key' mod='oyst'}</label>
                         <div class="margin-form">
                             <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                            <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_prod_test_error_oneclick}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
                         </div>
                     </div>
                     <div class="env preprod" style="display: none;">
-                        <label>{l s='1-click API PreProduction Key' mod='oyst'}</label>
+                        <label>{l s='1-Click API PreProduction Key' mod='oyst'}</label>
                         <div class="margin-form">
                             <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                            <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_preprod_test_error_oneclick}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
                         </div>
                     </div>
                     <div class="env custom" style="display: none;">
-                        <label>{l s='1-click API Custom Key' mod='oyst'}</label>
+                        <label>{l s='1-Click API Custom Key' mod='oyst'}</label>
                         <div class="margin-form">
                             <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
                             <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
-                            <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_custom_test_error_oneclick}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
