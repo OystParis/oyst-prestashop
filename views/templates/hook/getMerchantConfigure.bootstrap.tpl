@@ -248,7 +248,7 @@
                                             <div class="col-md-9 col-lg-8">
                                                 <select name="shipments[{$index}][id_carrier]">
                                                 {foreach $oyst.carrier_list as $carrier}
-                                                    <option value="{$carrier.id_reference}"{if $shipment.id_carrier == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
+                                                    <option value="{$carrier.id_reference}"{if $shipment.id_carrier_reference == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
                                                 {/foreach}
                                                 </select>
                                                 <span class="help-block" style="visibility: hidden;">&nbsp;</span>

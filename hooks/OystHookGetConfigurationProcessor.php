@@ -27,15 +27,13 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Oyst\Api\OystApiClientFactory;
-use Oyst\Classes\OneClickShipment;
-use Oyst\Classes\OystCarrier;
-use Oyst\Classes\ShipmentAmount;
 use Oyst\Factory\AbstractExportProductServiceFactory;
-use Oyst\Factory\AbstractShipmentServiceFactory;
+use Oyst\Repository\OneClickShipmentRepository;
 use Oyst\Service\Configuration as OystConfiguration;
 use Oyst\Service\Http\CurrentRequest;
 use Oyst\Service\Logger\LoggerManager;
-use Oyst\Service\Logger\PrestaShopLogger;
+use Oyst\Service\OneClickShipmentService;
+use Oyst\Transformer\OneClickShipmentTransformer;
 
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
@@ -117,52 +115,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 Configuration::updateValue($conf, $value);
             }
 
-            $resultConfiguration = 'ok';
-
-            // Handle Shipments
-            $shipments = Tools::getValue('shipments')?: array();
-            $data = array();
-
-            foreach ($shipments as $key => $shipment) {
-                if (isset($shipment['type'])) {
-                    $oneClickShipment = new OneClickShipment();
-                    $carrier = new Carrier($shipment['id_carrier']);
-                    $oneClickShipment->setCarrier(new OystCarrier($shipment['id_carrier'], $carrier->name, $shipment['type']));
-                    $oneClickShipment->setAmount(new ShipmentAmount((float) $shipment['amount_follower'], (float) $shipment['amount_leader'], 'EUR'));
-                    $oneClickShipment->setFreeShipping((int) $shipment['free_shipping']);
-                    $oneClickShipment->setPrimary(isset($shipment['primary']) && $shipment['primary'] == 1 ? true : false);
-                    $oneClickShipment->setDelay((int) $shipment['delay'] * 24);
-                    $oneClickShipment->setZones(array('FR'));
-                    $data[] = $oneClickShipment;
-                }
+            if (Tools::isSubmit('shipments')) {
+                $oneClickShipmentTransformer = new OneClickShipmentTransformer($this->context);
+                $oneClickShipmentRepository = new OneClickShipmentRepository(Db::getInstance());
+                $oneClickShipmentService = new OneClickShipmentService($this->context, $this->module);
+                $oneClickShipmentService
+                    ->setOneClickShipmentRepository($oneClickShipmentRepository)
+                    ->setOneClickShipmentTransformer($oneClickShipmentTransformer)
+                ;
+                $this->configuration_result = $oneClickShipmentService->handleShipmentRequest();
             }
-
-            Db::getInstance()->delete('oyst_shipment');
-            if (count($data)) {
-                $shipmentService = AbstractShipmentServiceFactory::get($this->module, $this->context);
-                $isResultOk = $shipmentService->pushShipments($data);
-
-                if ($isResultOk) {
-                    foreach ($shipments as $shipment) {
-                        $insert = array(
-                            'id_carrier' => (int) $shipment['id_carrier'],
-                            'primary' => isset($shipment['primary']) && $shipment['primary'] == 1 ? true : false,
-                            'type' => $shipment['type'],
-                            'delay' => (int) $shipment['delay'],
-                            'amount_leader' => (float) $shipment['amount_leader'],
-                            'amount_follower' => (float) $shipment['amount_follower'],
-                            'amount_currency' => 'EUR',
-                            'free_shipping' => (float) $shipment['free_shipping'],
-                            'zones' => 'FR',
-                        );
-                        Db::getInstance()->insert('oyst_shipment', $insert);
-                    }
-                } else {
-                    $resultConfiguration = 'ko';
-                }
-            }
-
-            $this->configuration_result = $resultConfiguration;
         }
     }
 
@@ -219,7 +181,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             }
         }
 
-        $shipmentList = $this->getShipmentList();
+        $shipmentRepository = new OneClickShipmentRepository(Db::getInstance());
+        $shipmentList = $shipmentRepository->getShipments();
         $loggerManager = new LoggerManager();
         $logsFile = $loggerManager->getFiles();
         $filesName = array();
@@ -452,13 +415,5 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $carrier_list = Carrier::getCarriers($this->context->language->id, false, false, false, null, Carrier::ALL_CARRIERS);
 
         return $carrier_list;
-    }
-
-    private function getShipmentList()
-    {
-        $query = 'SELECT * FROM '._DB_PREFIX_.'oyst_shipment';
-        $shipment_list = Db::getInstance()->executeS($query);
-
-        return $shipment_list;
     }
 }
