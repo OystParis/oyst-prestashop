@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "94071132091b698e419f3b3ceccddb7e",
+    "content-hash": "14e7ef459024e8c2900d5b853dfe28f2",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -142,16 +142,16 @@
         },
         {
             "name": "oyst/oyst-php",
-            "version": "dev-master",
+            "version": "dev-feat-v2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oystparis/oyst-php.git",
-                "reference": "36d1e97ea27e45a44a95aca05d0e4d774f17b337"
+                "reference": "9f336b6eb786682e6250e8c4b2a44b3ca194ca6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/36d1e97ea27e45a44a95aca05d0e4d774f17b337",
-                "reference": "36d1e97ea27e45a44a95aca05d0e4d774f17b337",
+                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/9f336b6eb786682e6250e8c4b2a44b3ca194ca6c",
+                "reference": "9f336b6eb786682e6250e8c4b2a44b3ca194ca6c",
                 "shasum": ""
             },
             "require": {
@@ -201,7 +201,54 @@
                 "issues": "https://github.com/OystParis/oyst-php/issues",
                 "source": "https://github.com/OystParis/oyst-php/"
             },
-            "time": "2017-06-19 12:26:52"
+            "time": "2017-06-22 10:31:21"
+        },
+        {
+            "name": "psr/log",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "symfony/event-dispatcher",

@@ -62,6 +62,7 @@ class InstallManager
         $state &= $this->pushDefaultShipment();
         $state &= $this->createExportTable();
         $state &= $this->createOrderTable();
+        $state &= $this->createShipmentTable();
 
         return $state;
     }
@@ -102,6 +103,30 @@ class InstallManager
     /**
      * @return bool
      */
+    public function createShipmentTable()
+    {
+        $query = "
+            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_shipment` (
+                  `id_oyst_shipment` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                  `id_carrier_reference` int(10) unsigned NOT NULL,
+                  `primary` tinyint(1) DEFAULT 0,
+                  `type` varchar(128) NOT NULL,
+                  `delay` int(10) unsigned NOT NULL,
+                  `zones` varchar(128) NOT NULL,
+                  `amount_leader` decimal(20,2) NOT NULL,
+                  `amount_follower` decimal(20,2) NOT NULL,
+                  `free_shipping` decimal(20,2) NULL,
+                  `currency` varchar(16) DEFAULT NULL,
+                  PRIMARY KEY (`id_oyst_shipment`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+        ";
+
+        return $this->db->execute($query);
+    }
+
+    /**
+     * @return bool
+     */
     public function dropExportTable()
     {
         $query = "
@@ -123,11 +148,24 @@ class InstallManager
         return $this->db->execute($query);
     }
 
+    /**
+     * @return bool
+     */
+    public function dropShipmentTable()
+    {
+        $query = "
+            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_shipment;
+        ";
+
+        return $this->db->execute($query);
+    }
+
     public function uninstall()
     {
         $this->removeCarrier();
         $this->dropExportTable();
         $this->dropOrderTable();
+        $this->dropShipmentTable();
 
         // Remove anything at the end
         $this->removeConfiguration();
@@ -261,6 +299,8 @@ class InstallManager
         ;
 
         $shipmentService = AbstractShipmentServiceFactory::get($this->oyst, $this->oyst->getContext(), $this->db);
-        $result = $shipmentService->pushShipment($shipment);
+        $shipmentService->pushShipment($shipment);
+
+        return $shipmentService->getRequester()->getApiClient()->getLastHttpCode() == "200";
     }
 }

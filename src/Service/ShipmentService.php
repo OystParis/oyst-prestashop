@@ -27,7 +27,6 @@ class ShipmentService extends AbstractOystService
 {
     /**
      * @param OneClickShipment $shipment
-     *
      * @return bool
      */
     public function pushShipment(OneClickShipment $shipment)
@@ -36,7 +35,7 @@ class ShipmentService extends AbstractOystService
     }
 
     /**
-     * @param OneClickShipment[] $shipments
+     * @param OneClickShipmentService[] $shipments
      *
      * @return bool
      */
