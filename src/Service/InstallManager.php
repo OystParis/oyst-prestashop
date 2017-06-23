@@ -227,7 +227,7 @@ class InstallManager
                     array(
                         'id_carrier' => $carrier->id,
                         'id_range_price' => (int) $rangePrice->id,
-                        'id_range_weight' => NULL,
+                        'id_range_weight' => null,
                         'id_zone' => (int) $z['id_zone'],
                         'price' => '0'
                     ),
@@ -238,7 +238,7 @@ class InstallManager
                     _DB_PREFIX_ . 'delivery',
                     array(
                         'id_carrier' => $carrier->id,
-                        'id_range_price' => NULL,
+                        'id_range_price' => null,
                         'id_range_weight' => (int) $rangeWeight->id,
                         'id_zone' => (int) $z['id_zone'],
                         'price' => '0'

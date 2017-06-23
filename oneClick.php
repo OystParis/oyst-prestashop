@@ -26,7 +26,7 @@ require_once dirname(__FILE__).'/../../config/config.inc.php';
 require dirname(__FILE__).'/oyst.php';
 
 $logger = new \Oyst\Service\Logger\FileLogger();
-$logger->setFile(__DIR__.'/logs/oneClick.log');
+$logger->setFile(dirname(__FILE__).'/logs/oneClick.log');
 $logger->info(sprintf('New OneClick request from customer: %d', Context::getContext()->customer->id));
 
 $oneClickController = new OneClickOrderController(new CurrentRequest());

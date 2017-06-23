@@ -394,8 +394,7 @@ class OrderRepository extends AbstractOystRepository
         return $this->db->getValue('
             SELECT orderGUID
             FROM '._DB_PREFIX_.'oyst_api_order
-            WHERE orderId = '.(int) $orderId
-        );
+            WHERE orderId = '.(int) $orderId);
     }
 
     /**

@@ -50,7 +50,7 @@ abstract class AbstractOneClickServiceFactory
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
         $logger = new FileLogger();
-        $logger->setFile(__DIR__.'/../../logs/oneClick.log');
+        $logger->setFile(dirname(__FILE__).'/../../logs/oneClick.log');
         $requester = new Requester($apiClient);
         $requester->setLogger($logger);
 

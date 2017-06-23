@@ -68,7 +68,7 @@
         </div>
         <div class="tab-content" id="tabPane1">
             <form id="module_form" class="defaultForm form-horizontal" method="POST" action="#">
-                <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab}"/>
+                <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab|escape:'htmlall':'UTF-8'}"/>
                 <div id="tab-content-FreePay" class="tab-pane">
                     <label>{l s='Enable FreePay' mod='oyst'}</label>
                     <div class="margin-form">
@@ -204,45 +204,45 @@
                             <div class="shipment-item">
                                 <label>{l s='Carrier' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <select name="shipments[{$index}][id_carrier]">
+                                    <select name="shipments[{$index|escape:'htmlall':'UTF-8'}][id_carrier]">
                                     {foreach $oyst.carrier_list as $carrier}
-                                        <option value="{$carrier.id_reference}"{if $shipment.id_carrier_reference == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
+                                        <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $shipment.id_carrier_reference == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
                                     {/foreach}
                                     </select>
                                 </div>
                                 <label>{l s='Primary' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="checkbox" class="shipment-primary" name="shipments[{$index}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
+                                    <input type="checkbox" class="shipment-primary" name="shipments[{$index|escape:'htmlall':'UTF-8'}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
                                 </div>
                                 <div class="col-left">
                                     <label>{l s='Type' mod='oyst'}</label>
                                     <div class="margin-form">
-                                        <select name="shipments[{$index}][type]">
+                                        <select name="shipments[{$index|escape:'htmlall':'UTF-8'}][type]">
                                         {foreach from=$oyst.type_list key=value item=name}
-                                            <option value="{$value}"{if $shipment.type == $value} selected="selected"{/if}>{$name}</option>
+                                            <option value="{$value|escape:'htmlall':'UTF-8'}"{if $shipment.type == $value} selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
                                         {/foreach}
                                         </select>
                                     </div>
                                     <label>{l s='Delay' mod='oyst'}</label>
                                     <div class="margin-form">
-                                        <input type="text" name="shipments[{$index}][delay]" value="{$shipment.delay}"/>
+                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][delay]" value="{$shipment.delay}"/>
                                         <br>
                                         <span class="help-block">{l s='Values in days' mod='oyst'}</span>
                                     </div>
                                     <label>{l s='Free shipping from' mod='oyst'}</label>
                                     <div class="margin-form">
-                                        <input type="text" name="shipments[{$index}][free_shipping]" value="{$shipment.free_shipping}"/>
+                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][free_shipping]" value="{$shipment.free_shipping}"/>
                                     </div>
                                 </div>
                                 <div class="col-right">
                                     <label>{l s='Amount' mod='oyst'}</label>
                                     <div class="margin-form">
-                                        <input type="text" name="shipments[{$index}][amount_leader]" value="{$shipment.amount_leader}"/>
+                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][amount_leader]" value="{$shipment.amount_leader}"/>
                                         <br>
                                         <span class="help-block">{l s='First product' mod='oyst'}</span>
                                     </div>
                                     <div class="margin-form">
-                                        <input type="text" name="shipments[{$index}][amount_follower]" value="{$shipment.amount_follower}"/>
+                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][amount_follower]" value="{$shipment.amount_follower}"/>
                                         <br>
                                         <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
                                     </div>
@@ -303,7 +303,7 @@
         <div class="margin-form">
             <select name="shipments[__shipment_id__][id_carrier]">
             {foreach $oyst.carrier_list as $carrier}
-                <option value="{$carrier.id_reference}">{$carrier.name}</option>
+                <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}">{$carrier.name|escape:'htmlall':'UTF-8'}</option>
             {/foreach}
             </select>
         </div>
@@ -316,7 +316,7 @@
             <div class="margin-form">
                 <select name="shipments[__shipment_id__][type]">
                 {foreach from=$oyst.type_list key=value item=name}
-                    <option value="{$value}">{$name}</option>
+                    <option value="{$value|escape:'htmlall':'UTF-8'}">{$name|escape:'htmlall':'UTF-8'}</option>
                 {/foreach}
                 </select>
             </div>
@@ -359,7 +359,7 @@
         <select name="logsFile">
             <option value="">{l s='Select log' mod='oyst'}</option>
             {foreach $oyst.logsFile as $logFile}
-                <option value="{$logFile}">{$logFile|substr:0:-4}</a></option>
+                <option value="{$logFile|escape:'htmlall':'UTF-8'}">{$logFile|escape:'htmlall':'UTF-8'|substr:0:-4}</a></option>
             {/foreach}
         </select>
 
