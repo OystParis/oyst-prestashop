@@ -59,6 +59,9 @@ if ($data && isset($data['event'])) {
         }
     } catch (Exception $exception) {
         $logger->critical($exception->getMessage());
+        header('Content-Type: application/json');
+        echo json_encode(['critical' => $exception->getMessage()]);
+        http_response_code(500);
     }
 } else {
     $logger->warning(
