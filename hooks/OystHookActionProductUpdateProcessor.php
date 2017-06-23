@@ -25,6 +25,7 @@
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystCatalogApi;
 use Oyst\Repository\ProductRepository;
+use Oyst\Service\Logger\PrestaShopLogger;
 use Oyst\Service\ProductService;
 use Oyst\Transformer\ProductTransformer;
 
@@ -35,10 +36,10 @@ if (!defined('_PS_VERSION_')) {
 /**
  * Class OystHookActionProductAddProcessor
  */
-class OystHookActionProductAddProcessor extends FroggyHookProcessor
+class OystHookActionProductUpdateProcessor extends FroggyHookProcessor
 {
     /**
-     * @return bool
+     *
      */
     public function run()
     {
@@ -55,7 +56,5 @@ class OystHookActionProductAddProcessor extends FroggyHookProcessor
             $this->context->controller->errors[] = 'Can\'t synchronise product to oyst:';
             $this->context->controller->errors[] = $productService->getRequester()->getApiClient()->getLastError();
         }
-
-        return $succeed;
     }
 }
