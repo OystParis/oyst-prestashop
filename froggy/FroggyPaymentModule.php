@@ -124,6 +124,7 @@ class FroggyPaymentModule extends PaymentModule
             'hookdisplaybackofficeheader' => 'hookDisplayBackOfficeHeader',
             'hookactionproductadd' => 'hookActionProductAdd',
             'hookactionorderstatuspostupdate' => 'hookActionOrderStatusPostUpdate',
+            'hookactioncarrierupdate' => 'hookActionCarrierUpdate',
         );
 
         foreach ($prefix_call as $prefix_search => $prefix_replace) {
