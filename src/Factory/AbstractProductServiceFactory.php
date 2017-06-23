@@ -54,7 +54,7 @@ abstract class AbstractProductServiceFactory
 
         $productTransformer = new ProductTransformer($context);
         $logger = new FileLogger();
-        $logger->setFile(__DIR__.'/../../product.log');
+        $logger->setFile(dirname(__FILE__).'/../../logs/product.log');
         $requester = new Requester($apiClient);
         $requester->setLogger($logger);
 
