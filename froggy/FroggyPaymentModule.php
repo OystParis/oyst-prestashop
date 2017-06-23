@@ -123,6 +123,9 @@ class FroggyPaymentModule extends PaymentModule
             'hookdisplayproductfooter' => 'hookDisplayProductFooter',
             'hookdisplaybackofficeheader' => 'hookDisplayBackOfficeHeader',
             'hookactionproductadd' => 'hookActionProductAdd',
+            'hookactionproductupdate' => 'hookActionProductUpdate',
+            'hookactionobjectcombinationaddafter' => 'hookActionObjectCombinationAddAfter',
+            'hookactionobjectcombinationupdateafter' => 'hookActionObjectCombinationUpdateAfter',
             'hookactionorderstatuspostupdate' => 'hookActionOrderStatusPostUpdate',
             'hookactioncarrierupdate' => 'hookActionCarrierUpdate',
         );

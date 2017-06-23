@@ -150,7 +150,8 @@ class ProductTransformer extends AbstractTransformer
             $oystProductVariation->setWeight($combination->weight);
 
             $oystProductVariation->setAmountIncludingTax($oystPrice);
-            $oystProductVariation->setAvailableQuantity(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
+            $stockAvailable = new StockAvailable(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
+            $oystProductVariation->setAvailableQuantity($stockAvailable->quantity);
 
             $images = array();
             foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {

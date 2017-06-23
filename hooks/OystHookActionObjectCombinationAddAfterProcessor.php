@@ -35,19 +35,15 @@ if (!defined('_PS_VERSION_')) {
 /**
  * Class OystHookActionProductAddProcessor
  */
-class OystHookActionProductAddProcessor extends FroggyHookProcessor
+class OystHookActionObjectCombinationAddAfterProcessor extends FroggyHookProcessor
 {
     /**
      * @return bool
      */
     public function run()
     {
-        // If combination is set, it will use this same process on its own
-        if (Tools::isSubmit('id_product_attribute') && Tools::getValue('id_product_attribute') > 0) {
-            return true;
-        }
-
-        $product = $this->params['product'];
+        // object is a Combination
+        $product = new Product($this->params['object']->id_product);
         $productService = \Oyst\Factory\AbstractProductServiceFactory::get($this->module, $this->context, Db::getInstance());
         $succeed = $productService->sendProduct($product);
 
