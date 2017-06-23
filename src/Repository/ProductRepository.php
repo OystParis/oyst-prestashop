@@ -23,6 +23,7 @@ namespace Oyst\Repository;
 
 use Combination;
 use Oyst;
+use Oyst\Classes\OystProduct;
 use Product;
 
 /**
@@ -79,7 +80,7 @@ class ProductRepository extends AbstractOystRepository
     /**
      * @param Oyst $oyst
      * @param array $baseProductToExport PrestaShop product
-     * @param Oyst\Classes\OystProduct[] $oystProductsExported Oysts product really exported
+     * @param OystProduct[] $oystProductsExported Oysts product really exported
      * @param $importId
      * @return bool
      */
@@ -117,18 +118,34 @@ class ProductRepository extends AbstractOystRepository
     }
 
     /**
-     * @param Product $product
-     * @param Combination|null $combination
+     * @param OystProduct $product
      * @return bool
      */
-    public function recordSingleSentProduct(Product $product, Combination $combination = null)
+    public function recordOystProductSent(OystProduct $product)
     {
-        return $this->db->insert('oyst_exported_catalog', array(
-            'productId' => $product->id,
-            'productAttributeId' => (int) $combination->id,
-            'importId' => null,
-            'hasBeenExported' => 1,
-        ));
+        $this->db->delete('oyst_exported_catalog', 'productId = '.(int) $product->getRef());
+
+        $variations = $product->getVariations();
+        $succeed = true;
+        if (count($variations)) {
+            foreach ($variations as $variation) {
+                $succeed &= $this->db->insert('oyst_exported_catalog', array(
+                    'productId' => $product->getRef(),
+                    'productAttributeId' => $variation->getRef(),
+                    'importId' => null,
+                    'hasBeenExported' => 1,
+                ));
+            }
+        } else {
+            $succeed = $this->db->insert('oyst_exported_catalog', array(
+                'productId' => $product->getRef(),
+                'productAttributeId' => 0,
+                'importId' => null,
+                'hasBeenExported' => 1,
+            ));
+        }
+
+        return $succeed;
     }
 
     /**
@@ -169,10 +186,23 @@ class ProductRepository extends AbstractOystRepository
             FROM "._DB_PREFIX_."oyst_exported_catalog poec
             WHERE  
               poec.productId = $productId
-              AND poec.productAttributeId = $combinationId
         ";
 
-        return $this->db->getValue($query);
+        $products = $this->db->executeS($query);
+        
+        $isSent = count($products);
+        if ($isSent && $combinationId) {
+            $combinationFound = false;
+            foreach ($products as $productInfo) {
+                if ($productInfo['productAttributeId'] == $combinationId) {
+                    $combinationFound = true;
+                    break;
+                }
+            }
+            $isSent = $combinationFound;
+        }
+
+        return $isSent;
     }
 
     /**

@@ -12,6 +12,9 @@
             "displayFooterProduct",
             "displayBackOfficeHeader",
             "actionProductAdd",
+            "actionProductUpdate",
+            "actionObjectCombinationAddAfter",
+            "actionObjectCombinationUpdateAfter",
             "actionOrderStatusPostUpdate",
             "actionCarrierUpdate"
         ],

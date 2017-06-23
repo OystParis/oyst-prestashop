@@ -67,36 +67,45 @@ class ProductService extends AbstractOystService
 
     /**
      * @param Product $product
-     * @param Combination|null $combination
      * @return OystProduct
      * @throws Exception
      */
-    public function getOystProduct(Product $product, Combination $combination = null)
+    public function getOystProduct(Product $product)
     {
         if (!$this->productTransformer instanceof ProductTransformer) {
             throw new Exception('Did you forget to set the Product Transformer ?');
         }
 
-        $oystProduct = $this->productTransformer->transformCombination($product, $combination);
+        // Flush cache because multiple call of this method could happens because of the 2 hooks (ProductSave and
+        // CombinationSave (or Update)
+        // It means this same process for product event will be executed and the query to get combinations will be
+        // save to the cache, so we won't have the fresh info sent to the api as combination is not saved / created yet.
+        // TODO: Try it with APC for example, for there is no way to flush the current cache
+        //Cache::getInstance()->flush();
+
+        $oystProduct = $this->productTransformer->transform($product);
+        $combinations = Product::getProductAttributesIds($product->id);
+        foreach ($combinations as $combinationInfo) {
+            $combination = new Combination($combinationInfo['id_product_attribute']);
+            $variation = $this->productTransformer->transformCombination($product, $combination);
+            $oystProduct->addVariation($variation);
+        }
 
         return $oystProduct;
     }
 
     /**
      * @param Product $product
-     * @param Combination|null $combination
      * @return bool
      * @throws Exception
      */
-    public function sendNewProduct(Product $product, Combination $combination = null)
+    public function sendProduct(Product $product)
     {
-        $oystProduct = $this->getOystProduct($product, $combination);
-
+        $oystProduct = $this->getOystProduct($product);
         $response = $this->requester->call('postProduct', array($oystProduct));
 
         if ($this->requester->getApiClient()->getLastHttpCode() == 200 && isset($response['imported']) && 1 == $response['imported']) {
-            $this->productRepository->recordSingleSentProduct($product, $combination);
-
+            $this->productRepository->recordOystProductSent($oystProduct);
             return true;
         }
 
