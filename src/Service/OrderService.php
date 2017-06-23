@@ -75,9 +75,9 @@ class OrderService extends AbstractOystService
      * @param array $oystAddress
      * @return Address
      */
-    private function getAddress(Customer $customer, $oystAddress)
+    private function getInvoiceAddress(Customer $customer, $oystAddress)
     {
-        $address = $this->addressRepository->findAddressUserAddress($oystAddress);
+        $address = $this->addressRepository->findAddress($oystAddress);
         if (!Validate::isLoadedObject($address)) {
             // TODO: For now, France only, should be changed for worldwide or European
             $countryId = (int)CountryCore::getByIso('fr');
@@ -109,13 +109,57 @@ class OrderService extends AbstractOystService
     }
 
     /**
+     * @param $shipmentInfo
+     * @return Address
+     * @internal param $pickupStoreInfo
+     *
+     */
+    private function getPickupStoreAddress($shipmentInfo)
+    {
+        $pickupAddress = $shipmentInfo['pickup_store']['address'];
+        $pickupId = $shipmentInfo['pickup_store']['id'];
+        $carrierInfo = $shipmentInfo['carrier'];
+
+        $alias = 'Pickup_'.str_replace(' ', '_', $pickupAddress['name']);
+        $addressToFind = array(
+            'name' => $alias,
+            'street' => $pickupAddress['street'],
+            'postcode' => $pickupAddress['postal_code'],
+            'city' => $pickupAddress['city'],
+        );
+
+        $address = $this->addressRepository->findAddress($addressToFind);
+        if (!Validate::isLoadedObject($address)) {
+
+            $countryId = (int)CountryCore::getByIso('fr');
+            if (0 >= $countryId) {
+                $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
+            }
+
+            $address->firstname = $pickupAddress['name'];
+            $address->lastname = "";
+            $address->address1 = $pickupAddress['street'];
+            $address->postcode = $pickupAddress['postal_code'];
+            $address->city = $pickupAddress['city'];
+            $address->alias = $alias;
+            $address->id_country = $countryId;
+            $address->other = 'Pickup Info #'.$pickupId.' type '.$carrierInfo['type'];
+
+            $address->add();
+        }
+
+        return $address;
+    }
+
+    /**
      * @param Customer $customer
-     * @param Address $address
+     * @param Address $invoiceAddress
+     * @param Address $deliveryAddress
      * @param $products
      * @param $oystOrderInfo
      * @return bool
      */
-    public function createNewOrder(Customer $customer, Address $address, $products, $oystOrderInfo)
+    public function createNewOrder(Customer $customer, Address $invoiceAddress, Address $deliveryAddress, $products, $oystOrderInfo)
     {
         // PS core used this context anywhere.. So we need to fill it properly
         $this->context->cart = $cart = new Cart();
@@ -130,7 +174,8 @@ class OrderService extends AbstractOystService
         }
 
         $cart->id_customer = $customer->id;
-        $cart->id_address_delivery = $cart->id_address_invoice = $address->id;
+        $cart->id_address_delivery = $deliveryAddress->id;
+        $cart->id_address_invoice = $invoiceAddress->id;
         $cart->id_lang = $customer->id_lang;
         $cart->secure_key = $customer->secure_key;
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
@@ -245,13 +290,19 @@ class OrderService extends AbstractOystService
                 $data['error'] = 'Customer not found or can\'t be found';
             }
 
-            $address = $this->getAddress($customer, $oystOrderInfo['user']['address']);
-            if (!Validate::isLoadedObject($address)) {
+            $invoiceAddress = $this->getInvoiceAddress($customer, $oystOrderInfo['user']['address']);
+            if (!Validate::isLoadedObject($invoiceAddress)) {
                 $data['error'] = 'Address not found or can\'t be created';
             }
 
+            if (!isset($oystOrderInfo['shipment']['pickup_store'])) {
+                $deliveryAddress = $invoiceAddress;
+            } else {
+                $deliveryAddress = $this->getPickupStoreAddress($oystOrderInfo['shipment']);
+            }
+
             if (!isset($data['error'])) {
-                $state = $this->createNewOrder($customer, $address, $products, $oystOrderInfo);
+                $state = $this->createNewOrder($customer, $invoiceAddress, $deliveryAddress, $products, $oystOrderInfo);
                 $data['state'] = $state;
             }
         } else {
