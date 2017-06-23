@@ -26,14 +26,14 @@ use Address;
 class AddressRepository extends AbstractOystRepository
 {
     /**
-     * @param $userAddress
+     * @param $address
      * @return Address
      */
-    public function findAddressUserAddress($userAddress)
+    public function findAddress($address)
     {
-        $address1 = pSQL($userAddress['street']);
-        $postcode = pSQL($userAddress['postcode']);
-        $city = pSQL($userAddress['city']);
+        $address1 = pSQL($address['street']);
+        $postcode = pSQL($address['postcode']);
+        $city = pSQL($address['city']);
 
         $query = "
             SELECT a.id_address
@@ -43,6 +43,10 @@ class AddressRepository extends AbstractOystRepository
               AND a.postcode = '$postcode'
               AND a.city = '$city'
         ";
+
+        if (isset($address['name'])) {
+            $query .= ' AND a.alias = "'.pSQL($address['name']).'"';
+        }
 
         $addressId = $this->db->getValue($query);
         return new Address($addressId);
