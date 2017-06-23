@@ -27,6 +27,10 @@ defined('_PS_VERSION_') || require dirname(__FILE__) . '/index.php';
 // We need to override this for older q  PrestaShop
 Logger::$definition['fields']['message']['validate'] = 'isString';
 
+// No required for a pickup store
+Address::$definition['fields']['lastname']['required'] = false;
+Address::$definition['fields']['lastname']['validate'] = 'isAnything';
+
 // When sending the module to PrestaShop Validator, all the require files will be available
 if (!file_exists(dirname(__FILE__).'/vendor/autoload.php')) {
     throw new Exception('Please install composer inside the oyst module');
@@ -57,7 +61,5 @@ if (!class_exists('OystSDK', false)) {
 if (!class_exists('OystPaymentNotification', false)) {
     require_once _PS_MODULE_DIR_.'/oyst/classes/OystPaymentNotification.php';
 }
-
-require_once _PS_MODULE_DIR_.'/oyst/classes/OystShipment.php';
 
 define('_PS_OYST_DEBUG_', 0);
