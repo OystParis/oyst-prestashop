@@ -52,7 +52,7 @@ abstract class AbstractShipmentServiceFactory
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
         $logger = new FileLogger();
-        $logger->setFile(__DIR__.'/../../logs/shipment.log');
+        $logger->setFile(dirname(__FILE__).'/../../logs/shipment.log');
         $requester = new Requester($apiClient);
         $requester->setLogger($logger);
 

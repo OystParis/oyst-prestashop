@@ -61,7 +61,7 @@ class AbstractExportProductServiceFactory
 
         $serializer = new ExportProductRequestParamSerializer();
         $logger = new FileLogger();
-        $logger->setFile(__DIR__.'/../../logs/export.log');
+        $logger->setFile(dirname(__FILE__).'/../../logs/export.log');
         $requester = new Requester($apiClient);
         $productTransformer = new ProductTransformer($context);
         $productTransformer->setLogger($logger);

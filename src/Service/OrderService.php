@@ -111,8 +111,6 @@ class OrderService extends AbstractOystService
     /**
      * @param $shipmentInfo
      * @return Address
-     * @internal param $pickupStoreInfo
-     *
      */
     private function getPickupStoreAddress($shipmentInfo)
     {
@@ -130,7 +128,6 @@ class OrderService extends AbstractOystService
 
         $address = $this->addressRepository->findAddress($addressToFind);
         if (!Validate::isLoadedObject($address)) {
-
             $countryId = (int)CountryCore::getByIso('fr');
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
