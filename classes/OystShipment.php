@@ -88,7 +88,7 @@ class OystShipment extends \ObjectModel
      */
     public function isPrimary()
     {
-        return $this->primary;
+        return (bool) $this->primary;
     }
 
     /**

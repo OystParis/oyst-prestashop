@@ -5,8 +5,12 @@ namespace Oyst\Service;
 use Oyst\Factory\AbstractShipmentServiceFactory;
 use Oyst\Repository\OneClickShipmentRepository;
 use Oyst\Transformer\OneClickShipmentTransformer;
+use OystShipment;
 use Tools;
 
+/**
+ * TODO: Should be merged with ShipmentService
+ */
 class OneClickShipmentService extends AbstractOystService
 {
     /** @var  OneClickShipmentRepository */
@@ -43,6 +47,25 @@ class OneClickShipmentService extends AbstractOystService
         }
 
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function updateShipments()
+    {
+        $shipmentsInfo = $this->oneClickShipmentRepository->getShipments();
+        $oneClickShipments = array();
+        foreach ($shipmentsInfo as $shipmentInfo) {
+            $oneClickShipments[] = $this->oneClickShipmentTransformer->transform(
+                new OystShipment($shipmentInfo['id_oyst_shipment'])
+            );
+        }
+
+        $shipmentService = AbstractShipmentServiceFactory::get($this->oyst, $this->context);
+        $shipmentService->pushShipments($oneClickShipments);
+
+        return $shipmentService->getRequester()->getApiClient()->getLastHttpCode() == "200";
     }
 
     /**
