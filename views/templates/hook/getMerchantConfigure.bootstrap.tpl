@@ -81,7 +81,7 @@
                 <li role="presentation" class="{if $oyst.current_tab == '#tab-content-1-click'}active{/if}"><a href="#tab-content-1-click" role="tab" data-toggle="tab">{l s='1-click' mod='oyst'}</a></li>
             </ul>
             <div class="oyst-admin-tab tab-content">
-                <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab}"/>
+                <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab|escape:'htmlall':'UTF-8'}"/>
                 <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-FreePay'} active{/if}" id="tab-content-FreePay">
                     <fieldset>
                         <div class="form-group clearfix">
@@ -246,9 +246,9 @@
                                         <div class="form-group clearfix">
                                             <label class="control-label col-md-3 col-lg-4">{l s='Carrier' mod='oyst'}</label>
                                             <div class="col-md-9 col-lg-8">
-                                                <select name="shipments[{$index}][id_carrier]">
+                                                <select name="shipments[{$index|escape:'htmlall':'UTF-8'}][id_carrier]">
                                                 {foreach $oyst.carrier_list as $carrier}
-                                                    <option value="{$carrier.id_reference}"{if $shipment.id_carrier_reference == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
+                                                    <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $shipment.id_carrier_reference == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
                                                 {/foreach}
                                                 </select>
                                                 <span class="help-block" style="visibility: hidden;">&nbsp;</span>
@@ -257,16 +257,16 @@
                                         <div class="form-group clearfix">
                                             <label class="control-label col-md-3 col-lg-4">{l s='Primary' mod='oyst'}</label>
                                             <div class="col-md-9 col-lg-8">
-                                                <input type="checkbox" class="shipment-primary" name="shipments[{$index}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
+                                                <input type="checkbox" class="shipment-primary" name="shipments[{$index|escape:'htmlall':'UTF-8'}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group clearfix">
                                                 <label class="control-label col-md-3 col-lg-4">{l s='Type' mod='oyst'}</label>
                                                 <div class="col-md-9 col-lg-8">
-                                                    <select name="shipments[{$index}][type]">
+                                                    <select name="shipments[{$index|escape:'htmlall':'UTF-8'}][type]">
                                                     {foreach from=$oyst.type_list key=value item=name}
-                                                        <option value="{$value}"{if $shipment.type == $value} selected="selected"{/if}>{$name}</option>
+                                                        <option value="{$value|escape:'htmlall':'UTF-8'}"{if $shipment.type == $value} selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
                                                     {/foreach}
                                                     </select>
                                                 </div>
@@ -276,7 +276,7 @@
                                                 <div class="col-md-9 col-lg-8">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="icon-time"></i></span>
-                                                        <input type="text" name="shipments[{$index}][delay]" value="{$shipment.delay}"/>
+                                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][delay]" value="{$shipment.delay}"/>
                                                     </div>
                                                     <span class="help-block">{l s='Value in days' mod='oyst'}</span>
                                                 </div>
@@ -289,14 +289,14 @@
                                                     <div class="amount-shipment-leader col-xs-6">
                                                         <div class="input-group">
                                                             <span class="input-group-addon">€</span>
-                                                            <input type="text" name="shipments[{$index}][amount_leader]" value="{$shipment.amount_leader}"/>
+                                                            <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][amount_leader]" value="{$shipment.amount_leader}"/>
                                                         </div>
                                                         <span class="help-block">{l s='First product' mod='oyst'}</span>
                                                     </div>
                                                     <div class="amount-shipment-follower col-xs-6">
                                                         <div class="input-group">
                                                             <span class="input-group-addon">€</span>
-                                                            <input type="text" name="shipments[{$index}][amount_follower]" value="{$shipment.amount_follower}"/>
+                                                            <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][amount_follower]" value="{$shipment.amount_follower}"/>
                                                         </div>
                                                         <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
                                                     </div>
@@ -307,7 +307,7 @@
                                                 <div class="col-md-9 col-lg-8">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">€</span>
-                                                        <input type="text" name="shipments[{$index}][free_shipping]" value="{$shipment.free_shipping}"/>
+                                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][free_shipping]" value="{$shipment.free_shipping}"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -376,7 +376,7 @@
                 <select name="shipments[__shipment_id__][id_carrier]">
                 {foreach $oyst.carrier_list as $carrier}
                     {if !isset($carrier.selected) || !$carrier.selected}
-                    <option value="{$carrier.id_reference}">{$carrier.name}</option>
+                    <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}">{$carrier.name|escape:'htmlall':'UTF-8'}</option>
                     {/if}
                 {/foreach}
                 </select>
@@ -394,7 +394,7 @@
                 <div class="col-md-9 col-lg-8">
                     <select name="shipments[__shipment_id__][type]">
                     {foreach from=$oyst.type_list key=value item=name}
-                        <option value="{$value}">{$name}</option>
+                        <option value="{$value|escape:'htmlall':'UTF-8'}">{$name|escape:'htmlall':'UTF-8'}</option>
                     {/foreach}
                     </select>
                     <span class="help-block" style="visibility: hidden;">&nbsp;</span>
@@ -457,7 +457,7 @@
         <select name="logsFile">
             <option value="">{l s='Select log' mod='oyst'}</option>
             {foreach $oyst.logsFile as $logFile}
-                <option value="{$logFile}">{$logFile|substr:0:-4}</a></option>
+                <option value="{$logFile|escape:'htmlall':'UTF-8'}">{$logFile|escape:'htmlall':'UTF-8'|substr:0:-4}</a></option>
             {/foreach}
         </select>
 

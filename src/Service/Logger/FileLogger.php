@@ -27,6 +27,7 @@ use Guzzle\Common\Exception\InvalidArgumentException;
 use Logger;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
+use Tools;
 
 class FileLogger extends AbstractLogger
 {
@@ -53,7 +54,7 @@ class FileLogger extends AbstractLogger
         }
 
         $date = (new DateTime())->format('Y-m-d H:i:s');
-        $level = strtoupper($level);
+        $level = Tools::strtoupper($level);
 
         if (!empty($context)) {
             fwrite($resource, sprintf(

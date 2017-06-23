@@ -101,7 +101,6 @@ class Requester
     private function logResponse()
     {
         if ($this->logger instanceof AbstractLogger) {
-
             if ($this->apiClient->getLastHttpCode() == 200) {
                 $messageState = 'Succeed';
                 $method = LogLevel::INFO;

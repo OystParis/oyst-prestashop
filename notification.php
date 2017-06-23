@@ -30,7 +30,7 @@ $request = new CurrentRequest();
 $data = $request->getJson();
 
 $logger = new \Oyst\Service\Logger\FileLogger();
-$logger->setFile(__DIR__.'/logs/notification.log');
+$logger->setFile(dirname(__FILE__).'/logs/notification.log');
 
 if ($data && isset($data['event'])) {
     $logger->info(
@@ -60,7 +60,7 @@ if ($data && isset($data['event'])) {
     } catch (Exception $exception) {
         $logger->critical($exception->getMessage());
         header('Content-Type: application/json');
-        echo json_encode(['critical' => $exception->getMessage()]);
+        echo json_encode(array('critical' => $exception->getMessage()));
         http_response_code(500);
     }
 } else {
