@@ -138,7 +138,7 @@ class ProductRepository extends AbstractOystRepository
             }
         } else {
             $succeed = $this->db->insert('oyst_exported_catalog', array(
-                'productId' => $product->id,
+                'productId' => $product->getRef(),
                 'productAttributeId' => 0,
                 'importId' => null,
                 'hasBeenExported' => 1,
