@@ -34,6 +34,7 @@ function upgrade_module_1_3_0($module)
     $module->registerHook('actionProductUpdate');
     $module->registerHook('actionObjectCombinationSaveAfter');
     $module->registerHook('actionObjectCombinationUpdateAfter');
+    $module->registerHook('actionObjectProductDeleteAfter');
 
     Configuration::updateValue('OYST_API_ENV_FREEPAY', Configuration::get('OYST_API_ENV'));
     Configuration::updateValue('OYST_API_ENV_ONECLICK', Configuration::get('OYST_API_ENV'));
