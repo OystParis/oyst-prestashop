@@ -108,7 +108,8 @@ class ProductTransformer extends AbstractTransformer
         $oystProduct->setCondition(($product->condition == 'used' ? 'reused' : $product->condition));
         $oystProduct->setCategories($categories);
         $oystProduct->setAmountIncludingTax($oystPrice);
-        $oystProduct->setAvailableQuantity(StockAvailable::getStockAvailableIdByProductId($product->id));
+        $stockAvailable = new StockAvailable(StockAvailable::getStockAvailableIdByProductId($product->id));
+        $oystProduct->setAvailableQuantity($stockAvailable->quantity);
         $oystProduct->setTitle(is_array($product->name) ? reset($product->name) : $product->name);
         $oystProduct->setDescription(is_array($product->description) ? reset($product->description) : $product->description);
         $oystProduct->setShortDescription(is_array($product->description_short) ? reset($product->description_short) : $product->description_short);
