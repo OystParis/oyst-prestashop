@@ -43,13 +43,13 @@ class AbstractExportProductServiceFactory
      */
     public static function get(\Oyst $oyst, $context)
     {
-        /** @var OystCatalogAPI $apiClient */
+               /** @var OystCatalogAPI $apiClient */
         $apiClient = OystApiClientFactory::getClient(
             OystApiClientFactory::ENTITY_CATALOG,
             $oyst->getOneClickApiKey(),
             $oyst->getUserAgent(),
             $oyst->getOneClickEnvironment(),
-            $oyst->getOneClickApiUrl()
+            $oyst->getCustomOneClickApiUrl()
         );
 
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());

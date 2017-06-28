@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "14e7ef459024e8c2900d5b853dfe28f2",
+    "content-hash": "e767aba4a23187b75a680c152bf46515",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -142,16 +142,16 @@
         },
         {
             "name": "oyst/oyst-php",
-            "version": "dev-feat-v2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oystparis/oyst-php.git",
-                "reference": "9f336b6eb786682e6250e8c4b2a44b3ca194ca6c"
+                "reference": "b688215ccfe5813a47c24424f3a44874109533fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/9f336b6eb786682e6250e8c4b2a44b3ca194ca6c",
-                "reference": "9f336b6eb786682e6250e8c4b2a44b3ca194ca6c",
+                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/b688215ccfe5813a47c24424f3a44874109533fc",
+                "reference": "b688215ccfe5813a47c24424f3a44874109533fc",
                 "shasum": ""
             },
             "require": {
@@ -201,7 +201,7 @@
                 "issues": "https://github.com/OystParis/oyst-php/issues",
                 "source": "https://github.com/OystParis/oyst-php/"
             },
-            "time": "2017-06-22 10:31:21"
+            "time": "2017-06-28 15:54:41"
         },
         {
             "name": "psr/log",

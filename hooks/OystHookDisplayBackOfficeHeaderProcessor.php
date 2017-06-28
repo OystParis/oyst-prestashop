@@ -118,7 +118,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                 $this->module->getFreePayApiKey(),
                 $this->module->getUserAgent(),
                 $this->module->getFreePayEnvironment(),
-                $this->module->getFreePayApiUrl()
+                $this->module->getCustomFreePayApiUrl()
             );
             if (Validate::isLoadedObject($oystPaymentNotification)) {
                 $currency = new Currency($order->id_currency);

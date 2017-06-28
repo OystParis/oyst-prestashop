@@ -97,7 +97,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             $oyst->getFreePayApiKey(),
             $oyst->getUserAgent(),
             $oyst->getFreePayEnvironment(),
-            $oyst->getFreePayApiUrl()
+            $oyst->getCustomFreePayApiUrl()
         );
         $result = $paymentApi->payment($total_amount, $currency->iso_code, $this->context->cart->id, $urls, false, $user);
 

@@ -170,7 +170,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->module->getOneClickApiKey(),
             $this->module->getUserAgent(),
             $this->module->getOneClickEnvironment(),
-            $this->module->getOneClickApiUrl()
+            $this->module->getCustomOneClickApiUrl()
         );
         $result = $catalogApi->getShipmentTypes();
         $shipmentTypes = array();
