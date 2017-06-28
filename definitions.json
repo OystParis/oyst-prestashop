@@ -13,6 +13,7 @@
             "displayBackOfficeHeader",
             "actionProductAdd",
             "actionProductUpdate",
+            "actionObjectProductDeleteAfter",
             "actionObjectCombinationAddAfter",
             "actionObjectCombinationUpdateAfter",
             "actionOrderStatusPostUpdate",

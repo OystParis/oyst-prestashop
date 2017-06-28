@@ -19,21 +19,31 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-namespace Oyst\Service\Serializer;
+/*
+ * Security
+ */
+use Oyst\Factory\AbstractProductServiceFactory;
 
-use Oyst\Classes\OystProduct;
-use Symfony\Component\Serializer\Encoder\scalar;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-class ExportProductRequestParamSerializer extends AbstractSerializer
+/**
+ * Class OystHookActionProductAddProcessor
+ */
+class OystHookActionObjectProductDeleteAfterProcessor extends FroggyHookProcessor
 {
     /**
-     * @param OystProduct[] $oystProducts
-     * @return array|string|scalar
+     * @return bool
      */
-    public function serialize($oystProducts)
+    public function run()
     {
-        $serializer = $this->getObjectSerializer();
+        /** @var Product $product */
+        $product = $this->params['object'];
+        $productService = AbstractProductServiceFactory::get($this->module, $this->context, Db::getInstance());
+        $oystProduct = $productService->getOystProduct($product);
+        $succeed = $productService->delete($oystProduct);
 
-        return $serializer->serialize($oystProducts, 'json');
+        return $succeed;
     }
 }
