@@ -29,7 +29,7 @@ use Oyst\Repository\ProductRepository;
 use Oyst\Service\Api\Requester;
 use Oyst\Service\ExportProductService;
 use Oyst\Service\Logger\FileLogger;
-use Oyst\Service\Serializer\ExportProductRequestParamSerializer;
+use Oyst\Service\Serializer\ProductSerializer;
 use Oyst\Transformer\ProductTransformer;
 
 class AbstractExportProductServiceFactory
@@ -59,7 +59,7 @@ class AbstractExportProductServiceFactory
             $oyst
         );
 
-        $serializer = new ExportProductRequestParamSerializer();
+        $serializer = new ProductSerializer();
         $logger = new FileLogger();
         $logger->setFile(dirname(__FILE__).'/../../logs/export.log');
         $requester = new Requester($apiClient);
