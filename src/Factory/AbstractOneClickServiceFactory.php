@@ -44,7 +44,7 @@ abstract class AbstractOneClickServiceFactory
             $oyst->getOneClickApiKey(),
             $oyst->getUserAgent(),
             $oyst->getOneClickEnvironment(),
-            $oyst->getOneClickApiUrl()
+            $oyst->getCustomOneClickApiUrl()
         );
 
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
