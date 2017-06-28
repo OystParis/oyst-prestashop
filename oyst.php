@@ -39,7 +39,7 @@ class Oyst extends FroggyPaymentModule
 
         $this->author = 'Oyst';
         $this->displayName = $this->l('FreePay');
-        $this->description = $this->l('FreePay est une solution de paiement en ligne "full service" entièrement gratuite : 0% de commission, 0€ de frais d\'installation, 0€ d\'abonnement. Avec FreePay, éliminez vos coûts de transactions, augmentez vos marges.');
+        $this->description = $this->l('FreePay is a full service online payment solution entirely free: 0% commission, 0% installation fee, 0% subscription. With FreePay, eliminate your transaction costs, increase your margins.');
         $this->module_key = 'b79be2b346400227a9c886c9239470e4';
 
         // Set Oyst version as define
@@ -90,7 +90,6 @@ class Oyst extends FroggyPaymentModule
 
         $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this);
         $result &= $oystDb->install();
-
         return $result;
     }
 
@@ -119,7 +118,7 @@ class Oyst extends FroggyPaymentModule
         Configuration::deleteByName('FC_OYST_API_PAYMENT_ENDPOINT');
         Configuration::deleteByName('FC_OYST_API_CATALOG_ENDPOINT');
 
-        Configuration::updateValue('OYST_API_ENV', 'prod');
+        Configuration::updateValue('OYST_API_ENV', \Oyst\Service\Configuration::API_ENV_PROD);
         Configuration::updateValue('OYST_ONECLICK_URL_PROD', 'https://cdn.oyst.com');
         Configuration::updateValue('OYST_ONECLICK_URL_PREPROD', 'https://cdn.staging.oyst.eu');
     }
@@ -204,7 +203,7 @@ class Oyst extends FroggyPaymentModule
 
         if (!Validate::isLoadedObject($orderState)) {
             $orderState->name = array(
-                $langId => 'Remboursé partiellement',
+                $langId => 'Remboursement partiel',
             );
             $orderState->color = '#FF7F50';
             $orderState->unremovable = true;
@@ -374,7 +373,7 @@ class Oyst extends FroggyPaymentModule
     /**
      * @return string
      */
-    public function getFreePayApiUrl()
+    public function getCustomFreePayApiUrl()
     {
         $apiUrl = null;
         $env = Tools::strtolower($this->getFreePayEnvironment());
@@ -389,7 +388,7 @@ class Oyst extends FroggyPaymentModule
     /**
      * @return string
      */
-    public function getOneClickApiUrl()
+    public function getCustomOneClickApiUrl()
     {
         $apiUrl = null;
         $env = Tools::strtolower($this->getOneClickEnvironment());
