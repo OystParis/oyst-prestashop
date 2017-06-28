@@ -113,6 +113,17 @@ class ProductService extends AbstractOystService
     }
 
     /**
+     * @param OystProduct $product
+     * @return bool
+     */
+    public function delete(OystProduct $product)
+    {
+        $this->requester->call('deleteProduct', array($product->getRef()));
+
+        return $this->requester->getApiClient()->getLastHttpCode() == "200";
+    }
+
+    /**
      * @param ProductRepository $productRepository
      * @return ProductService
      */

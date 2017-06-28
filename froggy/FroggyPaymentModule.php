@@ -128,6 +128,7 @@ class FroggyPaymentModule extends PaymentModule
             'hookactionobjectcombinationupdateafter' => 'hookActionObjectCombinationUpdateAfter',
             'hookactionorderstatuspostupdate' => 'hookActionOrderStatusPostUpdate',
             'hookactioncarrierupdate' => 'hookActionCarrierUpdate',
+            'hookactionobjectproductdeleteafter' => 'hookActionObjectProductDeleteAfter',
         );
 
         foreach ($prefix_call as $prefix_search => $prefix_replace) {

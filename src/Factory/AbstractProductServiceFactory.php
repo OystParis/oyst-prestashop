@@ -28,6 +28,7 @@ use Oyst\Repository\ProductRepository;
 use Oyst\Service\Api\Requester;
 use Oyst\Service\Logger\FileLogger;
 use Oyst\Service\ProductService;
+use Oyst\Service\Serializer\ProductSerializer;
 use Oyst\Transformer\ProductTransformer;
 
 abstract class AbstractProductServiceFactory
@@ -52,11 +53,15 @@ abstract class AbstractProductServiceFactory
 
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
+        $serializer = new ProductSerializer();
         $productTransformer = new ProductTransformer($context);
         $logger = new FileLogger();
         $logger->setFile(dirname(__FILE__).'/../../logs/product.log');
         $requester = new Requester($apiClient);
-        $requester->setLogger($logger);
+        $requester
+            ->setLogger($logger)
+            ->setSerializer($serializer)
+        ;
 
         $productService = new ProductService($context, $oyst);
 
