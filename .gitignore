@@ -1,5 +1,2 @@
-config.xml
-config_fr.xml
 /vendor
-
 /logs/*.log

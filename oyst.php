@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.3.0';
+        $this->version = '1.3';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -91,36 +91,6 @@ class Oyst extends FroggyPaymentModule
         $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $this);
         $result &= $oystDb->install();
         return $result;
-    }
-
-    public function updateConstants()
-    {
-        // If old configuration variable exists, we migrate and delete it
-        if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
-            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
-        }
-
-        Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
-
-        // If old configuration variable exists, we migrate and delete it
-        if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
-            Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
-        }
-
-        Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
-
-        // If old configuration variable exists, we migrate and delete it
-        if (Configuration::get('FC_OYST_API_KEY') != '' && Configuration::get('OYST_API_PROD_KEY_FREEPAY') == '') {
-            Configuration::updateValue('OYST_API_PROD_KEY_FREEPAY', Configuration::get('FC_OYST_API_KEY'));
-        }
-
-        Configuration::deleteByName('FC_OYST_API_KEY');
-        Configuration::deleteByName('FC_OYST_API_PAYMENT_ENDPOINT');
-        Configuration::deleteByName('FC_OYST_API_CATALOG_ENDPOINT');
-
-        Configuration::updateValue('OYST_API_ENV', \Oyst\Service\Configuration::API_ENV_PROD);
-        Configuration::updateValue('OYST_ONECLICK_URL_PROD', 'https://cdn.oyst.com');
-        Configuration::updateValue('OYST_ONECLICK_URL_PREPROD', 'https://cdn.staging.oyst.eu');
     }
 
     /**

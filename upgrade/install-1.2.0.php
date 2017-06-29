@@ -19,17 +19,43 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
+require_once dirname(__FILE__).'/../vendor/autoload.php';
+
+use Oyst\Service\Configuration as OConfiguration;
+
 /**
  * @param Oyst $module
  * @return bool
  */
 function upgrade_module_1_2_0($module)
 {
-    $module->updateConstants();
+    // If old configuration variable exists, we migrate and delete it
+    if (Configuration::get('FC_OYST_API_PAYMENT_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
+        Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_PAYMENT_KEY'));
+    }
+
+    Configuration::deleteByName('FC_OYST_API_PAYMENT_KEY');
+
+    // If old configuration variable exists, we migrate and delete it
+    if (Configuration::get('FC_OYST_API_CATALOG_KEY') != '' && Configuration::get('FC_OYST_API_KEY') == '') {
+        Configuration::updateValue('FC_OYST_API_KEY', Configuration::get('FC_OYST_API_CATALOG_KEY'));
+    }
+
+    Configuration::deleteByName('FC_OYST_API_CATALOG_KEY');
+
+    // If old configuration variable exists, we migrate and delete it
+    if (Configuration::get('FC_OYST_API_KEY') != '' && Configuration::get('OYST_API_PROD_KEY_FREEPAY') == '') {
+        Configuration::updateValue('OYST_API_PROD_KEY_FREEPAY', Configuration::get('FC_OYST_API_KEY'));
+    }
+
+    Configuration::updateValue('OYST_API_ENV', \Oyst\Service\Configuration::API_ENV_PROD);
+
+    // TODO: We should not know about this values.. They belongs to the api client
+    Configuration::updateValue('OYST_ONECLICK_URL_PROD', 'https://cdn.oyst.com');
+    Configuration::updateValue('OYST_ONECLICK_URL_PREPROD', 'https://cdn.staging.oyst.eu');
 
     $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
     $oystDb->createExportTable();
-    $oystDb->pushDefaultShipment();
     $oystDb->createCarrier();
 
     // As hook are handled dynamically by parent lib, we don't need to move them elsewhere
