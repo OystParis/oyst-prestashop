@@ -18,23 +18,19 @@
  * @license GNU GENERAL PUBLIC LICENSE
  */
 
+"use strict";
+
 /**
  * Manage oneClick process
  */
-class OystOneClick {
+function OystOneClick(url, productId) {
 
-    /**
-     * Constructor
-     * @param url
-     */
-    constructor(url, productId) {
-        this.url = url;
-        this.productId = productId;
-        this.combinations = [];
-        this.button = '#oneClickContainer';
-    }
+    this.url = url;
+    this.productId = productId;
+    this.combinations = [];
+    this.button = '#oneClickContainer';
 
-    setExportedCombinations(combinations) {
+    this.setExportedCombinations = function(combinations) {
         this.combinations = combinations;
     }
 
@@ -42,61 +38,61 @@ class OystOneClick {
      * Return json with the product information to avoid any redundant code.
      * @returns {{isExported: boolean, product: {productId, productAttributeId: *, quantity: (*|jQuery)}}}
      */
-    isProductExported() {
-        let product = this.getSelectedProduct();
+    this.isProductExported = function () {
+        var product = this.getSelectedProduct();
         // if productAttributeIf is equal to 0, it means its a unique product
-        let isExported = product.productAttributeId in this.combinations;
+        var isExported = product.productAttributeId in this.combinations;
 
         return {
             "isExported": isExported,
             "product": product
         };
-    }
+    };
 
     /**
      * Check is the product is available
      * @returns {boolean}
      */
-    isProductAvailable() {
-        let productExported = this.isProductExported();
+    this.isProductAvailable = function() {
+        var productExported = this.isProductExported();
 
         if (productExported.isExported) {
-            let product = productExported.product;
+            var product = productExported.product;
 
             return 0 < this.combinations[product.productAttributeId].quantity;
         }
 
         return false;
-    }
+    };
 
     /**
      * Watch any change about the variations of the product
      */
-    watcherCombination() {
+    this.watcherCombination = function() {
         if (this.isProductAvailable()) {
             $(this.button).show();
         } else {
             $(this.button).hide();
         }
 
-        let object = this;
+        var object = this;
         window.setTimeout(function () {
             object.watcherCombination();
         }, 100);
-    }
+    };
 
     /**
      * Prepare any possible events
      */
-    prepareEvents() {
+    this.prepareEvents = function () {
         // Value is changed by PrestaShop code, we need to check using a timer
         this.watcherCombination();
-    }
+    };
 
     /**
      * Initialize requirements
      */
-    prepareButton() {
+    this.prepareButton = function() {
         // Avoid any event issue due to potential remove / create from loaded oyst script
         $('#add_to_cart').before($('<div>', {
             id: 'oneClickContainer'
@@ -107,15 +103,15 @@ class OystOneClick {
         }));
 
         this.prepareEvents();
-    }
+    };
 
     /**
      * On Click, retrieve the right product / combination information
      * @returns {{productId, productAttributeId: *, quantity: (*|jQuery)}}
      */
-    getSelectedProduct() {
+    this.getSelectedProduct = function() {
 
-        let productAttributeId = null;
+        var productAttributeId = null;
 
         if ($('#idCombination').val() != undefined) {
             productAttributeId = parseInt($('#idCombination').val()) || 0;
@@ -126,17 +122,15 @@ class OystOneClick {
             productAttributeId: productAttributeId,
             quantity: $('input[name="qty"]').val(),
         }
-    }
+    };
 
     /**
      * Send request to start oneClick process
      */
-    requestOneCLick(oystCallBack) {
-
-        let params = Object.assign({}, this.getSelectedProduct(), {
-            oneClick: true,
-            token: '{SuggestToAddSecurityToken}'
-        });
+    this.requestOneCLick = function(oystCallBack) {
+        var params = this.getSelectedProduct();
+        params.oneClick = true;
+        params.token = '{SuggestToAddSecurityToken}';
 
         $.post(this.url, params, function(json) {
             if (json.state) {
@@ -147,4 +141,4 @@ class OystOneClick {
             }
         });
     }
-}
+};

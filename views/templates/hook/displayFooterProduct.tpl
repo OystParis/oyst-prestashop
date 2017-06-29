@@ -21,7 +21,7 @@
 <script type="text/javascript" src="{$oneClickUrl|escape:'htmlall':'UTF-8'}/1click/script/script.min.js"></script>
 
 <script type="text/javascript">
-    const oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, {$product->id|json_encode});
+    var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, {$product->id|json_encode});
     oyst.setExportedCombinations({$synchronizedCombination|json_encode})
     oyst.prepareButton();
 
