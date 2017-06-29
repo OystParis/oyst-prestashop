@@ -38,18 +38,45 @@ class OystOneClick {
         this.combinations = combinations;
     }
 
-    isProductCombinationExported() {
+    /**
+     * Return json with the product information to avoid any redundant code.
+     * @returns {{isExported: boolean, product: {productId, productAttributeId: *, quantity: (*|jQuery)}}}
+     */
+    isProductExported() {
         let product = this.getSelectedProduct();
-        let isExported = this.combinations.indexOf(product.productAttributeId);
+        // if productAttributeIf is equal to 0, it means its a unique product
+        let isExported = product.productAttributeId in this.combinations;
 
-        return isExported >= 0;
+        return {
+            "isExported": isExported,
+            "product": product
+        };
     }
 
+    /**
+     * Check is the product is available
+     * @returns {boolean}
+     */
+    isProductAvailable() {
+        let productExported = this.isProductExported();
+
+        if (productExported.isExported) {
+            let product = productExported.product;
+
+            return 0 < this.combinations[product.productAttributeId].quantity;
+        }
+
+        return false;
+    }
+
+    /**
+     * Watch any change about the variations of the product
+     */
     watcherCombination() {
-        if (!this.isProductCombinationExported() || !quantityAvailable) {
-            $(this.button).hide();
-        } else if (quantityAvailable) {
+        if (this.isProductAvailable()) {
             $(this.button).show();
+        } else {
+            $(this.button).hide();
         }
 
         let object = this;
@@ -58,11 +85,12 @@ class OystOneClick {
         }, 100);
     }
 
+    /**
+     * Prepare any possible events
+     */
     prepareEvents() {
-        if (this.combinations.length) {
-            // Value is changed by PrestaShop code, we need to check using a timer
-            this.watcherCombination();
-        }
+        // Value is changed by PrestaShop code, we need to check using a timer
+        this.watcherCombination();
     }
 
     /**
@@ -79,10 +107,6 @@ class OystOneClick {
         }));
 
         this.prepareEvents();
-
-        if (!quantityAvailable) {
-            $(this.button).hide();
-        }
     }
 
     /**
@@ -94,7 +118,7 @@ class OystOneClick {
         let productAttributeId = null;
 
         if ($('#idCombination').val() != undefined) {
-            productAttributeId = $('#idCombination').val();
+            productAttributeId = parseInt($('#idCombination').val()) || 0;
         }
 
         return {
