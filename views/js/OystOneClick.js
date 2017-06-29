@@ -18,23 +18,19 @@
  * @license GNU GENERAL PUBLIC LICENSE
  */
 
+"use strict";
+
 /**
  * Manage oneClick process
  */
-class OystOneClick {
+function OystOneClick(url, productId) {
 
-    /**
-     * Constructor
-     * @param url
-     */
-    constructor(url, productId) {
-        this.url = url;
-        this.productId = productId;
-        this.combinations = [];
-        this.button = '#oneClickContainer';
-    }
+    this.url = url;
+    this.productId = productId;
+    this.combinations = [];
+    this.button = '#oneClickContainer';
 
-    setExportedCombinations(combinations) {
+    this.setExportedCombinations = function(combinations) {
         this.combinations = combinations;
     }
 
@@ -42,7 +38,7 @@ class OystOneClick {
      * Return json with the product information to avoid any redundant code.
      * @returns {{isExported: boolean, product: {productId, productAttributeId: *, quantity: (*|jQuery)}}}
      */
-    isProductExported() {
+    this.isProductExported = function () {
         let product = this.getSelectedProduct();
         // if productAttributeIf is equal to 0, it means its a unique product
         let isExported = product.productAttributeId in this.combinations;
@@ -51,13 +47,13 @@ class OystOneClick {
             "isExported": isExported,
             "product": product
         };
-    }
+    };
 
     /**
      * Check is the product is available
      * @returns {boolean}
      */
-    isProductAvailable() {
+    this.isProductAvailable = function() {
         let productExported = this.isProductExported();
 
         if (productExported.isExported) {
@@ -67,12 +63,12 @@ class OystOneClick {
         }
 
         return false;
-    }
+    };
 
     /**
      * Watch any change about the variations of the product
      */
-    watcherCombination() {
+    this.watcherCombination = function() {
         if (this.isProductAvailable()) {
             $(this.button).show();
         } else {
@@ -83,20 +79,20 @@ class OystOneClick {
         window.setTimeout(function () {
             object.watcherCombination();
         }, 100);
-    }
+    };
 
     /**
      * Prepare any possible events
      */
-    prepareEvents() {
+    this.prepareEvents = function () {
         // Value is changed by PrestaShop code, we need to check using a timer
         this.watcherCombination();
-    }
+    };
 
     /**
      * Initialize requirements
      */
-    prepareButton() {
+    this.prepareButton = function() {
         // Avoid any event issue due to potential remove / create from loaded oyst script
         $('#add_to_cart').before($('<div>', {
             id: 'oneClickContainer'
@@ -107,13 +103,13 @@ class OystOneClick {
         }));
 
         this.prepareEvents();
-    }
+    };
 
     /**
      * On Click, retrieve the right product / combination information
      * @returns {{productId, productAttributeId: *, quantity: (*|jQuery)}}
      */
-    getSelectedProduct() {
+    this.getSelectedProduct = function() {
 
         let productAttributeId = null;
 
@@ -126,12 +122,12 @@ class OystOneClick {
             productAttributeId: productAttributeId,
             quantity: $('input[name="qty"]').val(),
         }
-    }
+    };
 
     /**
      * Send request to start oneClick process
      */
-    requestOneCLick(oystCallBack) {
+    this.requestOneCLick = function(oystCallBack) {
 
         let params = Object.assign({}, this.getSelectedProduct(), {
             oneClick: true,
@@ -147,4 +143,4 @@ class OystOneClick {
             }
         });
     }
-}
+};
