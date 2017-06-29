@@ -54,7 +54,10 @@ abstract class AbstractProductServiceFactory
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
         $serializer = new ProductSerializer();
+        $productRepository = new ProductRepository($db);
         $productTransformer = new ProductTransformer($context);
+        $productTransformer->setProductRepository($productRepository);
+
         $logger = new FileLogger();
         $logger->setFile(dirname(__FILE__).'/../../logs/product.log');
         $requester = new Requester($apiClient);
@@ -68,7 +71,7 @@ abstract class AbstractProductServiceFactory
         $productService
             ->setRequester($requester)
             ->setLogger($logger)
-            ->setProductRepository(new ProductRepository($db))
+            ->setProductRepository($productRepository)
             ->setProductTransformer($productTransformer)
         ;
 
