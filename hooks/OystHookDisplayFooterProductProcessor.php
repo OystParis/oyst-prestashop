@@ -46,8 +46,13 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
 
         $synchronizedCombination = array();
         foreach ($exportedProducts as $exportedProduct) {
-            if ($exportedProduct['hasBeenExported'] && 0 < $exportedProduct['productAttributeId']) {
-                $synchronizedCombination[] = $exportedProduct['productAttributeId'];
+            if ($exportedProduct['hasBeenExported']) {
+                $stockAvailable = new StockAvailable(
+                    StockAvailable::getStockAvailableIdByProductId($product->id, $exportedProduct['productAttributeId'])
+                );
+                $synchronizedCombination[$exportedProduct['productAttributeId']] = array(
+                    'quantity' => $stockAvailable->quantity
+                );
             }
         }
 
