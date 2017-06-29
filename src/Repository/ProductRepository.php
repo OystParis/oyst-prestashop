@@ -223,4 +223,31 @@ class ProductRepository extends AbstractOystRepository
 
         return $this->db->executeS($query);
     }
+
+    /**
+     * @param Combination $combination
+     * @return array
+     */
+    public function getAttributesCombination(Combination $combination)
+    {
+        $langId = \Configuration::get('PS_LANG_DEFAULT');
+        $attributes = $combination->getAttributesName($langId);
+        $attributesId = array();
+
+        foreach($attributes as $attributeInfo) {
+            $attributesId[] = $attributeInfo['id_attribute'];
+        }
+
+        $queryWhereAttributes = rtrim(implode(', ', $attributesId), ',');
+
+        $query = "
+            SELECT agl.public_name as name, al.name as value
+            FROM ps_attribute a
+            INNER JOIN ps_attribute_lang al ON (al.id_attribute = a.id_attribute AND al.id_lang = $langId)
+            INNER JOIN ps_attribute_group_lang agl ON (agl.id_attribute_group = a.id_attribute_group AND agl.id_lang = $langId)
+            WHERE a.id_attribute IN ($queryWhereAttributes)
+        ";
+
+        return $this->db->executeS($query);
+    }
 }

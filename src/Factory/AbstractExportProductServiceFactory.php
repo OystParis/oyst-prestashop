@@ -63,7 +63,10 @@ class AbstractExportProductServiceFactory
         $logger = new FileLogger();
         $logger->setFile(dirname(__FILE__).'/../../logs/export.log');
         $requester = new Requester($apiClient);
+
+        $productRepository = new ProductRepository(Db::getInstance());
         $productTransformer = new ProductTransformer($context);
+        $productTransformer->setProductRepository($productRepository);
         $productTransformer->setLogger($logger);
 
         $requester
@@ -77,7 +80,7 @@ class AbstractExportProductServiceFactory
             ->setSerializer($serializer)
             ->setRequester($requester)
             ->setLogger($logger)
-            ->setProductRepository(new ProductRepository(Db::getInstance()))
+            ->setProductRepository($productRepository)
             ->setWeightUnit(PSConfiguration::get('PS_WEIGHT_UNIT'))
             ->setDimensionUnit(PSConfiguration::get('PS_CURRENCY_DEFAULT'))
         ;
