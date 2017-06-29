@@ -28,6 +28,7 @@ use Oyst\Classes\OystCategory;
 use Oyst\Classes\OystPrice;
 use Oyst\Classes\OystProduct;
 use Oyst\Classes\OystSize;
+use Oyst\Repository\ProductRepository;
 use Product;
 use Psr\Log\AbstractLogger;
 use StockAvailable;
@@ -40,6 +41,9 @@ class ProductTransformer extends AbstractTransformer
 {
     /** @var  AbstractLogger */
     private $logger;
+
+    /** @var  ProductRepository */
+    private $productRepository;
 
     /**
      * ProductTransformer constructor.
@@ -164,8 +168,24 @@ class ProductTransformer extends AbstractTransformer
             }
 
             $oystProductVariation->setImages($images);
+
+            $attributesInfo = $this->productRepository->getAttributesCombination($combination);
+            foreach ($attributesInfo as $attributeInfo) {
+                $oystProductVariation->addInformation($attributeInfo['name'], $attributeInfo['value']);
+            }
         }
 
         return $oystProductVariation;
+    }
+
+    /**
+     * @param ProductRepository $productRepository
+     * @return ProductTransformer
+     */
+    public function setProductRepository($productRepository)
+    {
+        $this->productRepository = $productRepository;
+
+        return $this;
     }
 }
