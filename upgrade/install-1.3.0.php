@@ -19,12 +19,25 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
+require_once dirname(__FILE__).'/../vendor/autoload.php';
+
+use Oyst\Service\Configuration as OConfiguration;
+
 /**
  * @param Oyst $module
  * @return bool
  */
 function upgrade_module_1_3_0($module)
 {
+    // Migrate constants to new ones
+    $currentEnv = Configuration::get('OYST_API_ENV');
+    if (!$currentEnv || empty($currentEnv) ||
+        !in_array($currentEnv, array(OConfiguration::API_ENV_PROD, OConfiguration::API_ENV_PREPROD, OConfiguration::API_ENV_CUSTOM))) {
+        $currentEnv = OConfiguration::API_ENV_PROD;
+    }
+    Configuration::updateValue(OConfiguration::API_ENV_FREEPAY, $currentEnv);
+    Configuration::updateValue(OConfiguration::API_ENV_ONECLICK, $currentEnv);
+
     $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
     $oystDb->createOrderTable();
     $oystDb->createShipmentTable();
