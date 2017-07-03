@@ -31,5 +31,3 @@
     var label_wrong_amount = '{$oyst.label_wrong_amount|escape:'html':'UTF-8'}';
     var label_error = '{$oyst.label_error|escape:'html':'UTF-8'}';
 </script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder-1.6.js"></script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder.js"></script>

@@ -477,32 +477,9 @@
 <script>
     var currentTab = "{$oyst.current_tab|escape:'html':'UTF-8'}";
 </script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleAdvancedConf.js"></script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/handleShipment.js"></script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/logManagement.js"></script>
 <script>
     $(function() {
         var logManagement = new LogManagement(window.location.href);
         logManagement.initBackend();
     });
 </script>
-<style>
-    #logManagement, #log, #logContainer, #deleteLogs {
-        margin-top: 15px;
-    }
-
-    #logName {
-        font-weight: bolder;
-        font-size:14px;
-    }
-
-    #log {
-        display: none;
-        background-color: #333333;
-        color: snow;
-        padding: 10px;
-        max-height: 400px;
-        overflow: auto;
-        font: message-box;
-    }
-</style>
