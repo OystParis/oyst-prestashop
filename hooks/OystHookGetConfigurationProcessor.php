@@ -264,7 +264,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $template = $goToForm || $hasError ? 'getGuestConfigure.tpl' : 'getMerchantConfigure.tpl';
         
-        if (version_compare(_PS_VERSION_, '1.5', '<='))
+        if (version_compare(_PS_VERSION_, '1.6', '<'))
         {
             $this->context->controller->addCSS(array(
                 $this->path.'views/css/freepay-1.5.css',
@@ -274,7 +274,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             ));               
         }
         
-        if (version_compare(_PS_VERSION_, '1.6.0', '>='))
+        if (version_compare(_PS_VERSION_, '1.6', '>='))
         {
             $this->context->controller->addCSS(array(
                 $this->path.'views/css/freepay-1.6.css',

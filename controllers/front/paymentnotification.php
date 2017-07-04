@@ -51,7 +51,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
                 switch ($notification_item['event_code']) {
                     // If authorisation succeed, we create the order
                     case OystPaymentNotification::EVENT_AUTHORISATION:
-                        $this->convertCartToOrder($notification_item, Tools::getValue('ch'), $event_data, $notification_item);
+                        $this->convertCartToOrder($notification_item, Tools::getValue('ch'), $event_data);
                         break;
                     // If cancellation is confirmed, we cancel the order
                     case OystPaymentNotification::EVENT_CANCELLATION:
@@ -91,7 +91,7 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         }
     }
 
-    public function convertCartToOrder($payment_notification, $url_cart_hash, $event_data, $notification_item)
+    public function convertCartToOrder($payment_notification, $url_cart_hash, $event_data)
     {
         // Load cart
         $cart = new Cart((int)$payment_notification['order_id']);
@@ -155,10 +155,10 @@ class OystPaymentNotificationModuleFrontController extends ModuleFrontController
         $insert   = array(
             'id_order'   => (int) $id_order,
             'id_cart'    => (int) $cart->id,
-            'payment_id' =>  pSQL($notification_item['payment_id']),
-            'event_code' =>  pSQL($notification_item['event_code']),
+            'payment_id' =>  pSQL($payment_notification['payment_id']),
+            'event_code' =>  pSQL($payment_notification['event_code']),
             'event_data' => pSQL(Tools::jsonEncode($event_data)),
-            'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $notification_item['event_date']), 0, 19)),
+            'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $payment_notification['event_date']), 0, 19)),
             'date_add'   => date('Y-m-d H:i:s'),
         );
         Db::getInstance()->insert('oyst_payment_notification', $insert);     
