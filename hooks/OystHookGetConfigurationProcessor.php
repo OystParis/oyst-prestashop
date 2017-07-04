@@ -263,7 +263,30 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $this->smarty->assign($this->module->name, $assign);
 
         $template = $goToForm || $hasError ? 'getGuestConfigure.tpl' : 'getMerchantConfigure.tpl';
-
+        
+        if (version_compare(_PS_VERSION_, '1.6', '<'))
+        {
+            $this->context->controller->addCSS(array(
+                $this->path.'views/css/freepay-1.5.css',
+            ));
+            $this->context->controller->addJS(array(
+                $this->path.'views/js/bootstrapTab-1.5.js',
+            ));               
+        }
+        
+        if (version_compare(_PS_VERSION_, '1.6', '>='))
+        {
+            $this->context->controller->addCSS(array(
+                $this->path.'views/css/freepay-1.6.css',
+            ));       
+        }
+        
+        $this->context->controller->addJS(array(
+            $this->path.'views/js/handleAdvancedConf.js',
+            $this->path.'views/js/handleShipment.js',
+            $this->path.'views/js/logManagement.js',
+        ));
+        
         return $this->module->fcdisplay(__FILE__, $template);
     }
 

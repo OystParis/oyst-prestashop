@@ -24,6 +24,7 @@ namespace Oyst\Repository;
 use Carrier;
 use Configuration;
 use Order;
+use OrderDetail;
 use OrderHistory;
 use OystPaymentNotification;
 use Tools;
@@ -386,6 +387,7 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
+     * For OneClick
      * @param $orderId
      * @return string
      */
@@ -396,6 +398,21 @@ class OrderRepository extends AbstractOystRepository
             FROM '._DB_PREFIX_.'oyst_api_order
             WHERE orderId = '.(int) $orderId);
     }
+ 
+    /**
+     * For FreePay
+     * @param $orderId
+     * @return string
+     */
+    public function getFreePayOrderGUID($orderId)
+    {
+        return $this->db->getValue('
+            SELECT payment_id
+            FROM '._DB_PREFIX_.'oyst_payment_notification
+            WHERE id_order = '.(int) $orderId);
+    }    
+    
+    
 
     /**
      * @param Order $order

@@ -17,8 +17,6 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-<script type="text/javascript" src="{$shopUrl|escape:'htmlall':'UTF-8'}/modules/oyst/views/js/OystOneClick.js"></script>
-<script type="text/javascript" src="{$oneClickUrl|escape:'htmlall':'UTF-8'}/1click/script/script.min.js"></script>
 
 <script type="text/javascript">
     var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, {$product->id|json_encode});
@@ -30,9 +28,3 @@
         oyst.requestOneCLick(callback);
     };
 </script>
-
-<style type="text/css">
-    #oneClickContainer {
-        margin: 10px !important;
-    }
-</style>
