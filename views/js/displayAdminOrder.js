@@ -26,14 +26,16 @@ $(document).ready(function() {
     standard_refund_button.hide();
     partial_refund_button.hide();
 
-    if (order_can_be_cancelled) {
+    if (order_can_be_cancelled)
+    {
         standard_refund_button.after(cancel_button_html);
         partial_refund_button.hide();
-    } else {
-        if (order_can_be_totally_refunded) {
-            standard_refund_button.after(refund_button_html);
-        }
-        if (order_max_refund > 0) {
+    }
+    else if (order_can_be_totally_refunded)   
+    {
+        standard_refund_button.after(refund_button_html);
+        if (order_max_refund > 0)
+        {
             partial_refund_button.show();
         }
     }

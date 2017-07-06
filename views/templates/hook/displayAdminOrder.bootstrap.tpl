@@ -30,6 +30,7 @@
     var label_wrong_quantity = '{$oyst.label_wrong_quantity|escape:'html':'UTF-8'}';
     var label_wrong_amount = '{$oyst.label_wrong_amount|escape:'html':'UTF-8'}';
     var label_error = '{$oyst.label_error|escape:'html':'UTF-8'}';
+    // Refund & Cancel buttons
+    var cancel_button_html = '<a id="desc-order-freepay-cancel" class="btn btn-default" href="#"> <i class="icon-exchange"></i> ' + label_cancel + '</a>';
+    var refund_button_html = '<a id="desc-order-freepay-refund" class="btn btn-default" href="#"> <i class="icon-exchange"></i> ' + label_refund + '</a>';    
 </script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder-1.6.js"></script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder.js"></script>

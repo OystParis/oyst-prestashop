@@ -122,3 +122,34 @@ div.tab-content {
 #shipment-model .margin-form, .shipment-item .margin-form {
     padding-left: 160px;
 }
+#logManagement, #log, #logContainer, #deleteLogs {
+    margin-top: 15px;
+}
+
+#logName {
+    font-weight: bolder;
+    font-size:14px;
+}
+
+#log {
+    display: none;
+    background-color: #333333;
+    color: snow;
+    padding: 10px;
+    max-height: 400px;
+    overflow: auto;
+    font: message-box;
+}
+
+.shipment-item {
+    border-bottom: 1px solid #C7D6DB;
+    margin-bottom: 15px;
+}
+
+#shipment-model label, .shipment-item label {
+    width: 150px;
+}
+
+#shipment-model .margin-form, .shipment-item .margin-form {
+    padding-left: 160px;
+}

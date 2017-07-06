@@ -60,3 +60,22 @@
 .nav.nav-tabs {
     border-bottom: 1px solid #ddd !important;
 }
+
+#logManagement, #log, #logContainer, #deleteLogs {
+    margin-top: 15px;
+}
+
+#logName {
+    font-weight: bolder;
+    font-size:14px;
+}
+
+#log {
+    display: none;
+    background-color: #333333;
+    color: snow;
+    padding: 10px;
+    max-height: 400px;
+    overflow: auto;
+    font: message-box;
+}

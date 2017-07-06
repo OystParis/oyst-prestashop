@@ -17,7 +17,6 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-<link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/displayAdminOrder-1.5.css" media="all">
 <script>
     var oyst_transaction_id = {$oyst.transaction_id|escape:'html':'UTF-8'};
     var order_can_be_cancelled = {$oyst.order_can_be_cancelled|escape:'html':'UTF-8'};
@@ -30,6 +29,7 @@
     var label_wrong_quantity = '{$oyst.label_wrong_quantity|escape:'html':'UTF-8'}';
     var label_wrong_amount = '{$oyst.label_wrong_amount|escape:'html':'UTF-8'}';
     var label_error = '{$oyst.label_error|escape:'html':'UTF-8'}';
+    // Refund & Cancel buttons
+    var cancel_button_html = '<a id="desc-order-freepay-cancel" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_cancel + '</div></a>';
+    var refund_button_html = '<a id="desc-order-freepay-refund" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_refund + '</div></a>';
 </script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder-1.5.js"></script>
-<script type="text/javascript" src="{$oyst.module_dir|escape:'html':'UTF-8'}views/js/displayAdminOrder.js"></script>
