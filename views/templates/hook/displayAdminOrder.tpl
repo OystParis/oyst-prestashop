@@ -29,4 +29,7 @@
     var label_wrong_quantity = '{$oyst.label_wrong_quantity|escape:'html':'UTF-8'}';
     var label_wrong_amount = '{$oyst.label_wrong_amount|escape:'html':'UTF-8'}';
     var label_error = '{$oyst.label_error|escape:'html':'UTF-8'}';
+    // Refund & Cancel buttons
+    var cancel_button_html = '<a id="desc-order-freepay-cancel" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_cancel + '</div></a>';
+    var refund_button_html = '<a id="desc-order-freepay-refund" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_refund + '</div></a>';
 </script>
