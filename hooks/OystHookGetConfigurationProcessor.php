@@ -209,7 +209,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['module_version']           = $this->module->version;
         $assign['allow_url_fopen_check']    = ini_get('allow_url_fopen');
         $assign['curl_check']               = function_exists('curl_version');
-        $assign['payment_notification_url'] = $this->context->link->getModuleLink('oyst', 'paymentNotification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
+        $assign['payment_notification_url'] = $this->context->link->getModuleLink('oyst', 'paymentnotification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['notification_url']         = $this->context->link->getModuleLink('oyst', 'notification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['configureLink']            = $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name;
         $assign['redirect_success_urls']    = $this->redirect_success_urls;
@@ -263,7 +263,30 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $this->smarty->assign($this->module->name, $assign);
 
         $template = $goToForm || $hasError ? 'getGuestConfigure.tpl' : 'getMerchantConfigure.tpl';
-
+        
+        if (version_compare(_PS_VERSION_, '1.6', '<'))
+        {
+            $this->context->controller->addCSS(array(
+                $this->path.'views/css/freepay-1.5.css',
+            ));
+            $this->context->controller->addJS(array(
+                $this->path.'views/js/bootstrapTab-1.5.js',
+            ));               
+        }
+        
+        if (version_compare(_PS_VERSION_, '1.6', '>='))
+        {
+            $this->context->controller->addCSS(array(
+                $this->path.'views/css/freepay-1.6.css',
+            ));       
+        }
+        
+        $this->context->controller->addJS(array(
+            $this->path.'views/js/handleAdvancedConf.js',
+            $this->path.'views/js/handleShipment.js',
+            $this->path.'views/js/logManagement.js',
+        ));
+        
         return $this->module->fcdisplay(__FILE__, $template);
     }
 
