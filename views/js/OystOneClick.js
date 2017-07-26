@@ -94,7 +94,7 @@ function OystOneClick(url, productId) {
      */
     this.prepareButton = function() {
         // Avoid any event issue due to potential remove / create from loaded oyst script
-        $('#add_to_cart').before($('<div>', {
+        $('#add_to_cart, .add_to_cart').before($('<div>', {
             id: 'oneClickContainer'
         }));
 
