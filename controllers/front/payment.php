@@ -138,9 +138,9 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             $glue = '?';
         }
 
-        $notification = $this->context->link->getModuleLink('oyst', 'paymentNotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
+        $notification = $this->context->link->getModuleLink('oyst', 'paymentnotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
         $errorUrl     = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
-        $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
+        $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentreturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
 
         $urls = array(
             'notification' => $notification,
@@ -161,7 +161,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
                 $url = $this->context->link->getPageLink('history');
                 break;
             case 'PAYMENT_ERROR':
-                $url = $this->context->link->getModuleLink('oyst', 'paymentError');
+                $url = $this->context->link->getModuleLink('oyst', 'paymenterror');
                 break;
             case 'CART':
                 $url = $this->context->link->getPageLink('order');
