@@ -42,7 +42,7 @@ function OystOneClick(url, productId) {
         var product = this.getSelectedProduct();
         // if productAttributeIf is equal to 0, it means its a unique product
         var isExported = product.productAttributeId in this.combinations;
-
+        console.log(product);
         return {
             "isExported": isExported,
             "product": product
@@ -56,10 +56,15 @@ function OystOneClick(url, productId) {
     this.isProductAvailable = function() {
         var productExported = this.isProductExported();
 
-        if (productExported.isExported) {
-            var product = productExported.product;
+        var available = true;
+        if ($('#add_to_cart').css('display') == 'none')
+        {
+            available = false;
+        }
 
-            return 0 < this.combinations[product.productAttributeId].quantity;
+        if (productExported.isExported && available) 
+        {
+            return true;
         }
 
         return false;

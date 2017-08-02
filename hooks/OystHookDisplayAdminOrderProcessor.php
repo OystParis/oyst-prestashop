@@ -63,7 +63,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         );
         $this->smarty->assign($this->module->name, $assign);
         
-        if (version_compare(_PS_VERSION_, '1.5', '<='))
+        if (version_compare(_PS_VERSION_, '1.6', '<'))
         {
             $this->context->controller->addCSS(array(
                 $this->path.'views/css/displayAdminOrder-1.5.css',
