@@ -26,6 +26,10 @@ if (!defined('_PS_VERSION_')) {
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Repository\OrderRepository;
 use Oyst\Repository\ProductRepository;
+use Oyst\Factory\AbstractFreePayPaymentServiceFactory;
+use Oyst\Factory\AbstractOrderServiceFactory;
+use Oyst\Classes\OystPrice;
+use Oyst\Classes\Enum\AbstractOrderState;
 
 class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
 {
@@ -111,23 +115,29 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
         $amountToRefund = $oystOrderRepository->getAmountToRefund($order, $tabAccess);
 
         if ($amountToRefund > 0) {
-            // Make Oyst api call
-            $oystPaymentNotification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
-            $paymentApi = OystApiClientFactory::getClient(
-                OystApiClientFactory::ENTITY_PAYMENT,
-                $this->module->getFreePayApiKey(),
-                $this->module->getUserAgent(),
-                $this->module->getFreePayEnvironment(),
-                $this->module->getCustomFreePayApiUrl()
-            );
-            if (Validate::isLoadedObject($oystPaymentNotification)) {
+            switch ($order->payment) {
+                case 'FreePay':
+                    $PaymentService = AbstractFreePayPaymentServiceFactory::get($this->module, $this->context);
+                    break;
+                case 'OneClick':
+                    $PaymentService = AbstractOneClickPaymentServiceFactory::get($this->module, $this->context);
+                    break;
+            } 
+            $orderService = AbstractOrderServiceFactory::get(
+                $this->module,
+                $this->context
+            );            
+            $guid = $orderService->getOrderRepository()->getFreePayOrderGUID($order->id);
+            if ($guid) {
                 $currency = new Currency($order->id_currency);
-                $oyst = new Oyst();
-                /** @var OystPaymentApi $paymentApi */
-                $response = $paymentApi->cancelOrRefund($oystPaymentNotification->payment_id, new Price($amountToRefund, $currency->iso_code));
-
-                // Set refund status
-                if ($paymentApi->getLastHttpCode() == 200) {
+                $orderService = AbstractOrderServiceFactory::get(
+                $this->module,
+                $this->context
+                );
+                
+                
+                $response = $PaymentService->partialRefund($guid, new OystPrice($amountToRefund, $currency->iso_code), AbstractOrderState::REFUNDED);
+                if ($response) {
                     $history = new OrderHistory();
                     $history->id_order = $order->id;
                     $history->id_employee = 0;
@@ -135,12 +145,6 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                     $history->changeIdOrderState((int)Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'), $order->id);
                     $history->add();
                 }
-            }
-
-            if ($paymentApi->getLastHttpCode() != 200) {
-                unset($_POST['partialRefund']);
-
-                Tools::redirectAdmin(Context::getContext()->link->getAdminLink('AdminOrders').'&vieworder&id_order='.$order->id);
             }
         }
     }
