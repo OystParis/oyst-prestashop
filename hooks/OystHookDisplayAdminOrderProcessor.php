@@ -62,29 +62,33 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             'label_error' => $this->module->l('An error has occured while processing the cancellation of the order:', 'oysthookdisplayadminorderprocessor'),
         );
         $this->smarty->assign($this->module->name, $assign);
-        
-        if (version_compare(_PS_VERSION_, '1.5', '<='))
+
+        $template = 'displayAdminOrder';
+
+        if (version_compare(_PS_VERSION_, '1.6', '<'))
         {
             $this->context->controller->addCSS(array(
                 $this->path.'views/css/displayAdminOrder-1.5.css',
             ));
             $this->context->controller->addJS(array(
                 $this->path.'views/js/displayAdminOrder-1.5.js',
-            ));          
+            ));
         }
-        
+
        if (version_compare(_PS_VERSION_, '1.6', '>='))
        {
-        $this->context->controller->addJS(array(
-            $this->path.'views/js/displayAdminOrder-1.6.js',
-        ));  
+            $this->context->controller->addJS(array(
+                $this->path.'views/js/displayAdminOrder-1.6.js',
+            ));
+
+            $template = 'displayAdminOrder.bootstrap';
        }
-       
+
        $this->context->controller->addJS(array(
             $this->path.'views/js/displayAdminOrder.js',
-        ));        
-       
-        return $this->module->fcdisplay(__FILE__, 'displayAdminOrder.tpl');
+        ));
+
+        return $this->module->fcdisplay(__FILE__, $template.'.tpl');
     }
 
     private function refundOrder($order)

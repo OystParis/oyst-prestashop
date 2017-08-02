@@ -64,19 +64,24 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             );
         }
 
+        // Get Default lang for shop
+        $id_lang = $this->context->language->id;
         $customer_data = array();
         $customer_fields = array(
             'id_gender', 'id_lang', 'lastname', 'firstname', 'birthday', 'email', 'newsletter', 'newsletter_date_add',
             'optin', 'website', 'company', 'siret', 'ape', 'active', 'date_add', 'date_upd',
         );
         foreach ($customer_fields as $field) {
-            $customer_data[$field] = $this->context->customer->$field;
+            if($field == 'id_lang')
+                $customer_data[$field] = $id_lang;
+            else
+                $customer_data[$field] = $this->context->customer->$field;
         }
 
         $user = array(
             'additional_data' => array(
                 'customer' => $customer_data,
-                'addresses' => $this->context->customer->getAddresses($this->context->customer->id_lang),
+                'addresses' => $this->context->customer->getAddresses($id_lang),
             ),
             'addresses' => array($addresses_oyst[1]),
             'billing_addresses' => array($addresses_oyst[0]),
@@ -138,9 +143,9 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             $glue = '?';
         }
 
-        $notification = $this->context->link->getModuleLink('oyst', 'paymentNotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
+        $notification = $this->context->link->getModuleLink('oyst', 'paymentnotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
         $errorUrl     = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
-        $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentReturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
+        $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentreturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
 
         $urls = array(
             'notification' => $notification,
@@ -161,7 +166,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
                 $url = $this->context->link->getPageLink('history');
                 break;
             case 'PAYMENT_ERROR':
-                $url = $this->context->link->getModuleLink('oyst', 'paymentError');
+                $url = $this->context->link->getModuleLink('oyst', 'paymenterror');
                 break;
             case 'CART':
                 $url = $this->context->link->getPageLink('order');
