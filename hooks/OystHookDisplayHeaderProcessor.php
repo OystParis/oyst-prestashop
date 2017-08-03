@@ -34,8 +34,8 @@ class OystHookDisplayHeaderProcessor extends FroggyHookProcessor
             'FC_OYST_TRACKER_URL' => Configuration::get('FC_OYST_TRACKER_URL'),
             'freePayActivated' => (int) Configuration::get('FC_OYST_PAYMENT_FEATURE'),
             'oneClickActivated' => (int) Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
-            'freePayKeyFilled' => (int) !empty($this->module->getFreePayApiKey()),
-            'oneClickKeyFilled' => (int) !empty($this->module->getOneClickApiKey()),
+            'freePayKeyFilled' => (int) $this->module->getFreePayApiKey() != '',
+            'oneClickKeyFilled' => (int) $this->module->getOneClickApiKey() != '',
             'pluginVersion' => $this->module->version,
         ));
 

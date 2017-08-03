@@ -53,7 +53,7 @@ class OystHookActionProductUpdateProcessor extends FroggyHookProcessor
         $succeed = $productService->sendProduct($product);
 
         if (!$succeed) {
-            $this->context->controller->errors[] = 'Can\'t synchronise product to oyst:';
+            $this->context->controller->errors[] = 'Can\'t synchronise product to oyst (while update product):';
             $this->context->controller->errors[] = $productService->getRequester()->getApiClient()->getLastError();
         }
     }

@@ -26,7 +26,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OystPaymentReturnModuleFrontController extends ModuleFrontController
+class OystPaymentreturnModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
 

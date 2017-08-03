@@ -48,7 +48,7 @@ class OystHookActionObjectCombinationAddAfterProcessor extends FroggyHookProcess
         $succeed = $productService->sendProduct($product);
 
         if (!$succeed) {
-            $this->context->controller->errors[] = 'Can\'t synchronise product to oyst:';
+            $this->context->controller->errors[] = 'Can\'t synchronise product to oyst (while combination add product):';
             $this->context->controller->errors[] = $productService->getRequester()->getApiClient()->getLastError();
         }
 
