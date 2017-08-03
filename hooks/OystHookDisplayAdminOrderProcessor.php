@@ -63,8 +63,6 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         );
         $this->smarty->assign($this->module->name, $assign);
 
-        $template = 'displayAdminOrder';
-
         if (version_compare(_PS_VERSION_, '1.6', '<'))
         {
             $this->context->controller->addCSS(array(
@@ -80,15 +78,13 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             $this->context->controller->addJS(array(
                 $this->path.'views/js/displayAdminOrder-1.6.js',
             ));
-
-            $template = 'displayAdminOrder.bootstrap';
        }
 
        $this->context->controller->addJS(array(
             $this->path.'views/js/displayAdminOrder.js',
         ));
 
-        return $this->module->fcdisplay(__FILE__, $template.'.tpl');
+        return $this->module->fcdisplay(__FILE__, 'displayAdminOrder.tpl');
     }
 
     private function refundOrder($order)
