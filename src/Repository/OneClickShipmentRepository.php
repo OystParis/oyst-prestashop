@@ -34,6 +34,17 @@ class OneClickShipmentRepository extends AbstractOystRepository
         return $shipments;
     }
 
+    public function getShipment($id_carrier)
+    {
+    $shipment = $this->db->getRow(
+            'SELECT os.* FROM `'._DB_PREFIX_.'carrier` c
+            LEFT JOIN `'._DB_PREFIX_.'oyst_shipment` os ON (os.id_carrier_reference = c.id_reference)
+            WHERE id_carrier = '.(int)$id_carrier
+        );
+
+        return $shipment;
+    }
+
     /**
      * @param OystShipment[] $oystShipments
      */
