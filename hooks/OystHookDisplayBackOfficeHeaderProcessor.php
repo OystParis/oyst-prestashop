@@ -51,7 +51,22 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
             return '';
         }
 
-        return true;
+        $content = '';
+
+        if (Tools::getValue('controller') == 'AdminProducts' && Tools::isSubmit('id_product')) {
+            $productRepository = new ProductRepository(Db::getInstance());
+            $isProductSent = $productRepository->isProductSent(new Product(Tools::getValue('id_product')));
+
+            /** @var Smarty_Internal_Template $template */
+            $template = Context::getContext()->smarty->createTemplate(dirname(__FILE__).'/../views/templates/hook/displayAdminProduct.tpl');
+            $template->assign(array(
+                'isProductSent' => $isProductSent,
+            ));
+
+            $content = $template->fetch();
+        }
+
+        return $content;
     }
 
     private function fetchExportContent()
@@ -75,6 +90,8 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
         ));
 
         $content = $template->fetch();
+
+        return $content;
     }
 
     public function run()
@@ -105,11 +122,11 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                 case 'OneClick':
                     $PaymentService = AbstractOneClickPaymentServiceFactory::get($this->module, $this->context);
                     break;
-            }
+            } 
             $orderService = AbstractOrderServiceFactory::get(
                 $this->module,
                 $this->context
-            );
+            );            
             $guid = $orderService->getOrderRepository()->getFreePayOrderGUID($order->id);
             if ($guid) {
                 $currency = new Currency($order->id_currency);
@@ -117,8 +134,8 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                 $this->module,
                 $this->context
                 );
-
-
+                
+                
                 $response = $PaymentService->partialRefund($guid, new OystPrice($amountToRefund, $currency->iso_code), AbstractOrderState::REFUNDED);
                 if ($response) {
                     $history = new OrderHistory();
