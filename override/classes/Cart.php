@@ -50,10 +50,7 @@ class Cart extends CartCore
                 $carrier = new Carrier($id_carrier);
 
                 $shipment = $oneClickShipmentRepository->getShipment($id_carrier);
-                // $product_list
-                // $products = $order->getProducts();
                 $total_product_without_taxes = $this->getOrderTotal(true, Cart::ONLY_PRODUCTS);
-                // $total_product_without_taxes = $order->getTotalProductsWithoutTaxes();
 
                 $shipping_cost_with_tax = 0;
                 $shipping_cost_whitout_tax = 0;
@@ -86,10 +83,16 @@ class Cart extends CartCore
                     foreach($product_list as $product) {
                         // Check first product
                         if ($first_product) {
+                            $qty_first_product = $product['cart_quantity'];
                             $shipping_cost_with_tax += $shipment['amount_leader'];
+                            if ($qty_first_product > 1) {
+                                for($i = 1; $i < $qty_first_product; $i++) {
+                                    $shipping_cost_with_tax += $shipment['amount_follower'];
+                                }
+                            }
                             $first_product = false;
                         } else {
-                            $shipping_cost_with_tax += $shipment['amount_follower'];
+                            $shipping_cost_with_tax = $shipping_cost_with_tax + ($product['cart_quantity'] * $shipment['amount_follower']);
                         }
                     }
 
@@ -98,7 +101,6 @@ class Cart extends CartCore
                     }
                 }
 
-                //die(var_dump($shipping_cost_with_tax));
                 if ($use_tax)
                     return (float)$shipping_cost_with_tax;
                 else
@@ -121,7 +123,6 @@ class Cart extends CartCore
                 $shipping_cost_with_tax = 0;
                 $shipping_cost_without_tax = 0;
                 $first_product = true;
-                //die(var_dump($id_carrier));
 
                 if ($id_carrier) {
                     $shipment = $oneClickShipmentRepository->getShipment($id_carrier);
@@ -131,10 +132,16 @@ class Cart extends CartCore
                     {
                         foreach($products as $product) {
                             if ($first_product) {
+                                $qty_first_product = $product['cart_quantity'];
                                 $shipping_cost_with_tax += $shipment['amount_leader'];
+                                if ($qty_first_product > 1) {
+                                    for($i = 1; $i < $qty_first_product; $i++) {
+                                        $shipping_cost_with_tax += $shipment['amount_follower'];
+                                    }
+                                }
                                 $first_product = false;
                             } else {
-                                $shipping_cost_with_tax += $shipment['amount_follower'];
+                                $shipping_cost_with_tax = $shipping_cost_with_tax + ($product['cart_quantity'] * $shipment['amount_follower']);
                             }
                         }
                     }
