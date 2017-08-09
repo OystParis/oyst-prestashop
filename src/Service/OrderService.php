@@ -202,7 +202,7 @@ class OrderService extends AbstractOystService
 
         // Require to get the right price during the validateOrder
         $cart->oystShipment = $oystOrderInfo['shipment'];
-        $cart->id_carrier = Carrier::getCarrierByReference(PSConfiguration::get(Configuration::ONE_CLICK_CARRIER))->id;
+        $cart->id_carrier = Carrier::getCarrierByReference($oystOrderInfo['shipment']['carrier']['id'])->id;
         $delivery_option = $cart->getDeliveryOption();
         $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
         $cart->setDeliveryOption($delivery_option);

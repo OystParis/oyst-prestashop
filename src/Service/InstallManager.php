@@ -79,7 +79,7 @@ class InstallManager
                 productAttributeId INT,
                 importId VARCHAR(60),
                 hasBeenExported TINYINT DEFAULT 0
-            );  
+            );
         ";
 
         return $this->db->execute($query);
