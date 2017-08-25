@@ -28,10 +28,15 @@ function OystOneClick(url, productId) {
     this.url = url;
     this.productId = productId;
     this.combinations = [];
+    this.stockManagement = 1;
     this.button = '#oneClickContainer';
 
     this.setExportedCombinations = function(combinations) {
         this.combinations = combinations;
+    }
+
+    this.setStockManagement = function(stockManagement) {
+        this.stockManagement = stockManagement;
     }
 
     /**
@@ -59,7 +64,10 @@ function OystOneClick(url, productId) {
         if (productExported.isExported) {
             var product = productExported.product;
 
-            return 0 < this.combinations[product.productAttributeId].quantity;
+            if (this.stockManagement)
+                return 0 < this.combinations[product.productAttributeId].quantity;
+            else
+                return true;
         }
 
         return false;
