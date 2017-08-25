@@ -61,6 +61,7 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             'product' => $product,
             'synchronizedCombination' => $synchronizedCombination,
             'stockManagement' => Configuration::get('PS_STOCK_MANAGEMENT'),
+            'oneClickActivated' => (int) Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
         ));
         $this->context->controller->addJS(array(
             $this->path.'views/js/OystOneClick.js',
