@@ -51,7 +51,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
             return '';
         }
 
-        return true;
+        return '';
     }
 
     private function fetchExportContent()
