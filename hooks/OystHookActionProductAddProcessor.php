@@ -49,6 +49,14 @@ class OystHookActionProductAddProcessor extends FroggyHookProcessor
 
         if (Configuration::get('OYST_ONE_CLICK_FEATURE_STATE')) {
             $product = $this->params['product'];
+
+            $active_oneclick = Tools::getValue('active_oneclick');
+
+            if (isset($active_oneclick))
+            {
+                $productRepository = new ProductRepository(Db::getInstance());
+                $productRepository->setActive($product->id, $active_oneclick);
+            }
             $productService = \Oyst\Factory\AbstractProductServiceFactory::get($this->module, $this->context, Db::getInstance());
             $succeed = $productService->sendProduct($product);
 
