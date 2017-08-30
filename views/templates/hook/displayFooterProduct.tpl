@@ -17,7 +17,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-{if $oneClickActivated}
+{if $oneClickActivated && $btnOneClickState}
 
     <script type="text/javascript">
         var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, {$product->id|json_encode});
