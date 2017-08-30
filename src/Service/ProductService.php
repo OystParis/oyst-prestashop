@@ -104,7 +104,7 @@ class ProductService extends AbstractOystService
         $oystProduct = $this->getOystProduct($product);
         $response = $this->requester->call('postProduct', array($oystProduct));
 
-        if ($this->requester->getApiClient()->getLastHttpCode() == 200 && isset($response['imported']) && 1 == $response['imported']) {
+        if ($this->requester->getApiClient()->getLastHttpCode() == 200) {
             $this->productRepository->recordOystProductSent($oystProduct);
             return true;
         }
