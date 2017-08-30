@@ -39,7 +39,7 @@ class ProductRepository extends AbstractOystRepository
     {
         $limitProducts = (int)$limitProducts;
         $query = "
-            SELECT 
+            SELECT
               p.id_product,
               pa.id_product_attribute
             FROM "._DB_PREFIX_."product p
@@ -66,7 +66,7 @@ class ProductRepository extends AbstractOystRepository
     public function getTotalProducts()
     {
         $query = "
-            SELECT 
+            SELECT
               count(1) totalProducts
             FROM "._DB_PREFIX_."product p
             LEFT JOIN "._DB_PREFIX_."product_attribute pa ON pa.id_product = p.id_product
@@ -184,12 +184,12 @@ class ProductRepository extends AbstractOystRepository
         $query = "
             SELECT productId, productAttributeId, importId, hasBeenExported
             FROM "._DB_PREFIX_."oyst_exported_catalog poec
-            WHERE  
+            WHERE
               poec.productId = $productId
         ";
 
         $products = $this->db->executeS($query);
-        
+
         $isSent = count($products);
         if ($isSent && $combinationId) {
             $combinationFound = false;
@@ -216,7 +216,7 @@ class ProductRepository extends AbstractOystRepository
         $query = "
             SELECT productId, productAttributeId, importId, hasBeenExported
             FROM "._DB_PREFIX_."oyst_exported_catalog poec
-            WHERE  
+            WHERE
               poec.productId = $productId
               AND hasBeenExported = 1
         ";
@@ -249,5 +249,46 @@ class ProductRepository extends AbstractOystRepository
         ";
 
         return $this->db->executeS($query);
+    }
+
+    /**
+     * For OneClick
+     * @param $id_product
+     * @return bool
+     */
+    public function getActive($id_product)
+    {
+        return $this->db->getValue('
+            SELECT active_oneclick
+            FROM '._DB_PREFIX_.'oyst_product
+            WHERE id_product = '.(int) $id_product);
+    }
+
+    /**
+     * @param $id_product
+     * @param $active
+     * @return bool
+     */
+    public function setActive($id_product, $active = 1)
+    {
+        $state = $this->getActive($id_product);
+
+        if ($state === false) {
+            return $this->db->insert(
+                    'oyst_product',
+                    array(
+                        'id_product' => (int)$id_product,
+                        'active_oneclick' => (bool)$active
+                    )
+                );
+        } else {
+            return $this->db->update(
+                    'oyst_product',
+                    array(
+                        'active_oneclick' => (bool) $active,
+                    ),
+                    'id_product = '.(int)$id_product
+                );
+        }
     }
 }

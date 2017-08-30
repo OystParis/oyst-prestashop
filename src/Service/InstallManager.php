@@ -22,6 +22,8 @@
 namespace Oyst\Service;
 
 use Carrier;
+use Product;
+use Context;
 use RangePrice;
 use RangeWeight;
 use Db;
@@ -63,6 +65,8 @@ class InstallManager
         $state &= $this->createExportTable();
         $state &= $this->createOrderTable();
         $state &= $this->createShipmentTable();
+        $state &= $this->createProductTable();
+        $state &= $this->populateProductTable();
 
         return $state;
     }
@@ -127,6 +131,42 @@ class InstallManager
     /**
      * @return bool
      */
+    public function createProductTable()
+    {
+        $query = "
+            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_product` (
+                `id_product` int(11) unsigned NOT NULL,
+                `active_oneclick` tinyint(1) NOT NULL DEFAULT 1
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ";
+
+        return $this->db->execute($query);
+    }
+
+    /**
+     * @return bool
+     */
+    public function populateProductTable()
+    {
+        $products = Product::getProducts(Context::getContext()->language->id, 0, 0, 'id_product', 'ASC');
+        $state = true;
+
+        foreach($products as $product) {
+            $state &= $this->db->insert(
+                'oyst_product',
+                array(
+                    'id_product' => (int)$product['id_product'],
+                    'active_oneclick' => 1,
+                )
+            );
+        }
+
+        return $state;
+    }
+
+    /**
+    * @return bool
+    */
     public function dropExportTable()
     {
         $query = "
@@ -160,12 +200,25 @@ class InstallManager
         return $this->db->execute($query);
     }
 
+    /**
+     * @return bool
+     */
+    public function dropProductTable()
+    {
+        $query = "
+            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_product;
+        ";
+
+        return $this->db->execute($query);
+    }
+
     public function uninstall()
     {
         $this->removeCarrier();
         $this->dropExportTable();
         $this->dropOrderTable();
         $this->dropShipmentTable();
+        $this->dropProductTable();
 
         // Remove anything at the end
         $this->removeConfiguration();
