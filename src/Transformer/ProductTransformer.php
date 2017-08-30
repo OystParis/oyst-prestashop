@@ -107,6 +107,7 @@ class ProductTransformer extends AbstractTransformer
 
         // Common fields
         $oystProduct->setActive($product->active);
+        $oystProduct->setMaterialized($product->is_virtual == '0' ? false : true);
         $oystProduct->setManufacturer($product->manufacturer_name);
         $oystProduct->setSize($oystSize);
         $oystProduct->setCondition(($product->condition == 'used' ? 'reused' : $product->condition));
