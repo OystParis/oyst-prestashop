@@ -51,13 +51,18 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             
         }
         
+        //require for load Out Of Stock Information (isAvailableWhenOutOfStock)
+        $product->loadStockData();
+        
         $this->smarty->assign(array(
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
             'product' => $product,
+            'productQuantity' => StockAvailable::getStockAvailableIdByProductId($product->id),
             'synchronizedCombination' => $synchronizedCombination,
             'stockManagement' => Configuration::get('PS_STOCK_MANAGEMENT'),
             'oneClickActivated' => (int) Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
             'btnOneClickState' => $productRepository->getActive($product->id),
+            'allowOosp' => $product->isAvailableWhenOutOfStock((int)$product->out_of_stock),
         ));
         $this->context->controller->addJS(array(
             $this->path.'views/js/OystOneClick.js',

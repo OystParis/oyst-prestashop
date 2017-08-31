@@ -29,6 +29,8 @@ function OystOneClick(url, productId) {
     this.productId = productId;
     this.combinations = [];
     this.stockManagement = 1;
+    this.allowOosp = 0;
+    this.productQuantity = 0;
     this.button = '#oneClickContainer';
 
     this.setExportedCombinations = function(combinations) {
@@ -39,6 +41,14 @@ function OystOneClick(url, productId) {
         this.stockManagement = stockManagement;
     }
 
+    this.setAllowOosp = function(allowOosp) {
+        this.allowOosp = allowOosp;
+    }
+    
+    this.setProductQuantity = function(productQuantity) {
+        this.productQuantity = productQuantity;
+    }
+
     /**
      * Return json with the product information to avoid any redundant code.
      * @returns {{isExported: boolean, product: {productId, productAttributeId: *, quantity: (*|jQuery)}}}
@@ -47,7 +57,7 @@ function OystOneClick(url, productId) {
         var product = this.getSelectedProduct();
         // if productAttributeIf is equal to 0, it means its a unique product
         var isExported = product.productAttributeId in this.combinations;
-
+        
         return {
             "isExported": isExported,
             "product": product
@@ -60,16 +70,18 @@ function OystOneClick(url, productId) {
      */
     this.isProductAvailable = function() {
         var productExported = this.isProductExported();
-
-        if (productExported.isExported) {
-            var product = productExported.product;
-
-            if (this.stockManagement)
-                return 0 < this.combinations[product.productAttributeId].quantity;
+        var product = productExported.product;
+        
+        if (this.stockManagement && !this.allowOosp){
+            if (product.productAttributeId == 0)
+                return 0 < this.productQuantity;
             else
-                return true;
+                return 0 < this.combinations[product.productAttributeId].quantity;
+        } else {
+            return true
         }
 
+        
         return false;
     };
 
