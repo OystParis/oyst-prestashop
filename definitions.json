@@ -1,6 +1,6 @@
 {
     "tab": "payments_gateways",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "need_instance": 0,
 
     "hooks": {
@@ -15,8 +15,6 @@
             "actionProductAdd",
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
-            "actionObjectCombinationAddAfter",
-            "actionObjectCombinationUpdateAfter",
             "actionOrderStatusPostUpdate",
             "actionCarrierUpdate"
         ],

@@ -55,16 +55,7 @@ class OystHookActionProductUpdateProcessor extends FroggyHookProcessor
             $productRepository = new ProductRepository(Db::getInstance());
             $productRepository->setActive($product->id, $active_oneclick);
 
-            $state = $productRepository->getActive($product->id);
-            if ($state) {
-                $productService = \Oyst\Factory\AbstractProductServiceFactory::get($this->module, $this->context, Db::getInstance());
-                $succeed = $productService->sendProduct($product);
-            }
-
-            // if (!$succeed) {
-            //     $this->context->controller->errors[] = 'Can\'t synchronise product to oyst (while update product):';
-            //     $this->context->controller->errors[] = $productService->getRequester()->getApiClient()->getLastError();
-            // }
+            return true;
         }
     }
 }

@@ -356,13 +356,6 @@
                     <strong>{l s='Save' mod='oyst'}</strong>
                 </button>
             </p>
-            <p>
-                {if $oyst.exportRunning}
-                {l s='An export is currently running, please wait until it\'s over' mod='oyst'}
-                {else}
-                <button type="submit" id="module_export_catalog_btn" name="synchronizeProducts"{if $oyst.can_export_catalog} class="btn btn-success"{else} disabled="disabled"{/if}>{l s='Export catalog' mod='oyst'}</button>
-                {/if}
-            </p>
         </div>
     </div>
 </form>
