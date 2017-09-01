@@ -47,7 +47,7 @@ class OystHookActionProductAddProcessor extends FroggyHookProcessor
             return true;
         }
 
-        if (Configuration::get('OYST_ONE_CLICK_FEATURE_STATE')) {
+        if (Configuration::get('OYST_ONE_CLICK_FEATURE_STATE')  && Tools::getIsset('active_oneclick')) {
             $product = $this->params['product'];
 
             $active_oneclick = Tools::getValue('active_oneclick');
