@@ -165,6 +165,12 @@ class ProductTransformer extends AbstractTransformer
             }
 
             if (empty($images)) {
+                foreach (Image::getImages($this->context->language->id, $product->id) as $image) {
+                    $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                }
+            }
+            
+            if (empty($images)) {
                 $images = array(Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png');
             }
 
