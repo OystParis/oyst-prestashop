@@ -22,7 +22,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
 
 use Oyst\Service\Configuration as OConfiguration;
 
-function upgrade_module_1_5_0($module)
+function upgrade_module_1_5_1($module)
 {
     $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
     $oystDb->createProductTable();
