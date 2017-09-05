@@ -27,6 +27,11 @@ use Oyst\Classes\OystUser;
 use Oyst\Service\Http\CurrentRequest;
 use Product;
 use Validate;
+use Oyst;
+use Context;
+use Currency;
+use Configuration as ConfigurationP;
+use Oyst\Factory\AbstractExportProductServiceFactory;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -43,14 +48,15 @@ class OneClickService extends AbstractOystService
      * @return array
      * @throws Exception
      */
-    public function authorizeNewOrder(Product $product, $quantity, Combination $combination = null, OystUser $user = null)
+    public function authorizeNewOrder(Product $product, $quantity, Combination $combination = null, OystUser $user = null, $productLess = null)
     {
         $response = $this->requester->call('authorizeOrder', array(
             $product->id,
             $quantity,
             Validate::isLoadedObject($combination) ? $combination->id : null,
             $user,
-            self::ONE_CLICK_VERSION
+            self::ONE_CLICK_VERSION,
+            $productLess,
         ));
 
         $apiClient = $this->requester->getApiClient();
@@ -113,6 +119,10 @@ class OneClickService extends AbstractOystService
             if ($quantity <= 0) {
                 $data['error'] = 'Bad quantity';
             }
+            
+            Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
+            $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
+            $productLess = $exportProductService->transformProductLess((int) $request->getRequestItem('productId'), (int) $request->getRequestItem('productAttributeId'));
         }
 
         if (isset($data['error'])) {
@@ -130,7 +140,7 @@ class OneClickService extends AbstractOystService
                     ->setEmail($customer->email);
             }
 
-            $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser);
+            $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser, $productLess);
             $data = array_merge($data, $result);
         }
 

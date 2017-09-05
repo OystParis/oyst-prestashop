@@ -47,7 +47,7 @@ class OystHookActionProductAddProcessor extends FroggyHookProcessor
             return true;
         }
 
-        if (Configuration::get('OYST_ONE_CLICK_FEATURE_STATE')) {
+        if (Configuration::get('OYST_ONE_CLICK_FEATURE_STATE')  && Tools::getIsset('active_oneclick')) {
             $product = $this->params['product'];
 
             $active_oneclick = Tools::getValue('active_oneclick');
@@ -57,15 +57,7 @@ class OystHookActionProductAddProcessor extends FroggyHookProcessor
                 $productRepository = new ProductRepository(Db::getInstance());
                 $productRepository->setActive($product->id, $active_oneclick);
             }
-            $productService = \Oyst\Factory\AbstractProductServiceFactory::get($this->module, $this->context, Db::getInstance());
-            $succeed = $productService->sendProduct($product);
-
-            // if (!$succeed) {
-            //     $this->context->controller->errors[] = 'Can\'t synchronise product to oyst (while add product):';
-            //     $this->context->controller->errors[] = $productService->getRequester()->getApiClient()->getLastError();
-            // }
-            //
-            // return $succeed;
+            
             return true;
         }
     }

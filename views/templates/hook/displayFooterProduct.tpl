@@ -23,6 +23,8 @@
         var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, {$product->id|json_encode});
         oyst.setExportedCombinations({$synchronizedCombination|json_encode})
         oyst.setStockManagement({$stockManagement});
+        oyst.setAllowOosp({$allowOosp});
+        oyst.setProductQuantity({$productQuantity});
         oyst.prepareButton();
 
         window.__OYST__ = window.__OYST__ || {};

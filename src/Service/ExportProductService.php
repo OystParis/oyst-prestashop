@@ -123,6 +123,48 @@ class ExportProductService extends AbstractOystService
 
         return $oystProducts;
     }
+    
+    /**
+     * @param int $id_product
+     * @param int $id_combination
+     * @return OystProduct[]
+     * @throws Exception
+     */
+    public function transformProductLess($id_product, $id_combination)
+    {
+        // Tricks requirements for PrestaShop
+        $this->context->cart = new Cart();
+        if (!Validate::isLoadedObject($this->context->currency)) {
+            throw new Exception('Bad Currency object, Did you forget to set it ?');
+        }
+
+        $product = new Product($id_product, false, $this->context->language->id);
+
+        if (!Validate::isLoadedObject($product)) {
+            $this->logger->alert(sprintf('Product %d can\'t be found', $id_product));
+            return null;
+        }
+        
+        if (!($baseOystProduct = $this->productTransformer->transform($product))) {
+            $this->logger->alert(sprintf('Product %d won\'t be exported', $productInfo['id_product']));
+            return null;
+        }
+        $oystProduct = clone $baseOystProduct;
+        
+        if ($id_combination > 0){
+            $combination = new Combination($id_combination);
+            if (Validate::isLoadedObject($combination)) {
+                // We still need the original product to get the current price (discount for example)
+                if (($oystProductVariation = $this->productTransformer->transformCombination($product, $combination))) {
+                    $oystProduct->addVariation($oystProductVariation);
+                }
+            } else {
+                $this->logger->alert(sprintf('Combination %d can\'t be found for produit '.$id_product, $id_combination));
+            }
+        }
+        
+        return $oystProduct;
+    }
 
     /**
      * @param $importId

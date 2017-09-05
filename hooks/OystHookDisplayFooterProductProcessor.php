@@ -36,33 +36,33 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
         if (!Validate::isLoadedObject($product)) {
             return '';
         }
-
+        
         $productRepository = new ProductRepository(Db::getInstance());
-        $exportedProducts = $productRepository->getExportedFromProduct($product);
-
-        if (!$exportedProducts) {
-            return '';
-        }
+        $productCombinations = $product->getAttributeCombinations($this->context->language->id);
 
         $synchronizedCombination = array();
-        foreach ($exportedProducts as $exportedProduct) {
-            if ($exportedProduct['hasBeenExported']) {
+        foreach ($productCombinations as $combination) {
                 $stockAvailable = new StockAvailable(
-                    StockAvailable::getStockAvailableIdByProductId($product->id, $exportedProduct['productAttributeId'])
+                    StockAvailable::getStockAvailableIdByProductId($product->id, $combination['id_product_attribute'])
                 );
-                $synchronizedCombination[$exportedProduct['productAttributeId']] = array(
+                $synchronizedCombination[$combination['id_product_attribute']] = array(
                     'quantity' => $stockAvailable->quantity
                 );
-            }
+            
         }
-
+        
+        //require for load Out Of Stock Information (isAvailableWhenOutOfStock)
+        $product->loadStockData();
+        
         $this->smarty->assign(array(
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
             'product' => $product,
+            'productQuantity' => StockAvailable::getStockAvailableIdByProductId($product->id),
             'synchronizedCombination' => $synchronizedCombination,
             'stockManagement' => Configuration::get('PS_STOCK_MANAGEMENT'),
             'oneClickActivated' => (int) Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
             'btnOneClickState' => $productRepository->getActive($product->id),
+            'allowOosp' => $product->isAvailableWhenOutOfStock((int)$product->out_of_stock),
         ));
         $this->context->controller->addJS(array(
             $this->path.'views/js/OystOneClick.js',
