@@ -292,6 +292,11 @@ class OrderService extends AbstractOystService
                 $data['error'] = 'Address not found or can\'t be created';
             }
 
+            if ($invoiceAddress->phone_mobile == '') {
+                $invoiceAddress->phone_mobile = $oystOrderInfo['user']['phone'];
+                $invoiceAddress->update();
+            }
+
             if (!isset($oystOrderInfo['shipment']['pickup_store'])) {
                 $deliveryAddress = $invoiceAddress;
             } else {
