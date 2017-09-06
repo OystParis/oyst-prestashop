@@ -1,31 +1,8 @@
 <?php
-/*
-* 2007-2016 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Open Software License (OSL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/osl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2016 PrestaShop SA
-*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
+
 use Oyst\Repository\OneClickShipmentRepository;
 
-class Cart extends CartCore
+class FroggyCart extends Cart
 {
     /**
      * Return package shipping cost
@@ -39,7 +16,7 @@ class Cart extends CartCore
      *
      * @return float Shipping total
      */
-    public function getPackageShippingCost($id_carrier = null, $use_tax = true, Country $default_country = null, $product_list = null, $id_zone = null, $payment_method = null)
+    public function getPackageShippingCostOyst($id_carrier = null, $use_tax = true, Country $default_country = null, $product_list = null, $id_zone = null, $payment_method = null)
     {
         if (Module::isInstalled('oyst') || Module::isEnabled('oyst')) {
             if ($payment_method != null && preg_match('/OneClick/i', $payment_method)) {
@@ -113,7 +90,7 @@ class Cart extends CartCore
         }
     }
 
-    public function getTotalShippingCost($delivery_option = null, $use_tax = true, Country $default_country = null, $payment_method = null)
+    public function getTotalShippingCostOyst($delivery_option = null, $use_tax = true, Country $default_country = null, $payment_method = null)
     {
         if (Module::isInstalled('oyst') || Module::isEnabled('oyst')) {
             if ($payment_method != null && preg_match('/OneClick/i', $payment_method)) {
@@ -177,7 +154,7 @@ class Cart extends CartCore
     * @param bool $use_cache Allow using cache of the method CartRule::getContextualValue
     * @return float Order total
     */
-    public function getOrderTotal($with_taxes = true, $type = Cart::BOTH, $products = null, $id_carrier = null, $use_cache = true, $payment_method = null)
+    public function getOrderTotalOyst($with_taxes = true, $type = Cart::BOTH, $products = null, $id_carrier = null, $use_cache = true, $payment_method = null)
     {
         // Dependencies
         $address_factory    = Adapter_ServiceLocator::get('Adapter_AddressFactory');
@@ -233,12 +210,25 @@ class Cart extends CartCore
 
 	if ($with_shipping || $type == Cart::ONLY_DISCOUNTS) {
             if (is_null($products) && is_null($id_carrier)) {
-                //die(var_dump($payment_method));
-                $shipping_fees = $this->getTotalShippingCost(null, (bool)$with_taxes, null, $payment_method);
-                //$shipping_fees = $this->getTotalShippingCost(null, (bool)$with_taxes);
+                if (Module::isInstalled('oyst') || Module::isEnabled('oyst')) {
+                    if ($payment_method != null && preg_match('/OneClick/i', $payment_method)) {
+                        $shipping_fees = $this->getTotalShippingCostOyst(null, (bool)$with_taxes, null, $payment_method);
+                    } else {
+                        $shipping_fees = $this->getTotalShippingCost(null, (bool)$with_taxes);
+                    }
+                } else {
+                    $shipping_fees = $this->getTotalShippingCost(null, (bool)$with_taxes);
+                }
             } else {
-                $shipping_fees = $this->getPackageShippingCost((int)$id_carrier, (bool)$with_taxes, null, $products, null, $payment_method);
-                //$shipping_fees = $this->getPackageShippingCost((int)$id_carrier, (bool)$with_taxes, null, $products);
+                if (Module::isInstalled('oyst') || Module::isEnabled('oyst')) {
+                    if ($payment_method != null && preg_match('/OneClick/i', $payment_method)) {
+                        $shipping_fees = $this->getPackageShippingCostOyst((int)$id_carrier, (bool)$with_taxes, null, $products, null, $payment_method);
+                    } else {
+                        $shipping_fees = $this->getPackageShippingCost((int)$id_carrier, (bool)$with_taxes, null, $products);
+                    }
+                } else {
+                    $shipping_fees = $this->getPackageShippingCost((int)$id_carrier, (bool)$with_taxes, null, $products);
+                }
             }
         } else {
             $shipping_fees = 0;
