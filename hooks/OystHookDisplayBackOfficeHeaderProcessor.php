@@ -102,6 +102,8 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
         if ($amountToRefund > 0) {
             switch ($order->payment) {
                 case 'FreePay':
+                case 'Freepay':
+                case 'Oyst - FreePay and 1Click':
                     $PaymentService = AbstractFreePayPaymentServiceFactory::get($this->module, $this->context);
                     break;
                 case 'OneClick':
