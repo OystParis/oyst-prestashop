@@ -1,0 +1,20 @@
+#!/bin/bash
+
+channel="plugin-communication"
+
+webhook_url="https://hooks.slack.com/services/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"
+
+project=$(echo ${TRAVIS_BUILD_DIR} | rev | cut -d/ -f1 | rev)
+release_url="https://github.com/oystparis/$project/releases/download/${TRAVIS_TAG}/oyst.zip"
+
+text="${TRAVIS_TAG}\nClick <$release_url|here> to download."
+
+if [ -z $webhook_url ] || [ -z $channel ]
+then
+        echo "Missing variable"
+        exit 1
+fi
+
+escapedText=$(echo $text | sed 's/"/\"/g' | sed "s/'/\'/g" )
+json="{\"channel\": \"$channel\", \"text\": \"$escapedText\"}"
+curl -s -d "payload=$json" "$webhook_url"
