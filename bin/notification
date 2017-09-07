@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z ${NOTIF_SALES} ]
+if [ -z $NOTIF_SALES ]
 then
     exit 1
 fi
