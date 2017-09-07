@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -z ${NOTIF_SALES} ]
+then
+    exit 1
+fi
 channel="plugin-communication"
 
 webhook_url="https://hooks.slack.com/services/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"
