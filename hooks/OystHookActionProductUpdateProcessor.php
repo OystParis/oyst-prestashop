@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2013-2016 Froggy Commerce
  *
@@ -19,6 +18,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license   GNU GENERAL PUBLIC LICENSE
  */
+
 /*
  * Security
  */

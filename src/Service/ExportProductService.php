@@ -123,7 +123,7 @@ class ExportProductService extends AbstractOystService
 
         return $oystProducts;
     }
-    
+
     /**
      * @param int $id_product
      * @param int $id_combination
@@ -144,13 +144,13 @@ class ExportProductService extends AbstractOystService
             $this->logger->alert(sprintf('Product %d can\'t be found', $id_product));
             return null;
         }
-        
+
         if (!($baseOystProduct = $this->productTransformer->transform($product))) {
-            $this->logger->alert(sprintf('Product %d won\'t be exported', $productInfo['id_product']));
+            $this->logger->alert(sprintf('Product %d won\'t be exported', $id_product));
             return null;
         }
         $oystProduct = clone $baseOystProduct;
-        
+
         if ($id_combination > 0){
             $combination = new Combination($id_combination);
             if (Validate::isLoadedObject($combination)) {
@@ -162,7 +162,7 @@ class ExportProductService extends AbstractOystService
                 $this->logger->alert(sprintf('Combination %d can\'t be found for produit '.$id_product, $id_combination));
             }
         }
-        
+
         return $oystProduct;
     }
 

@@ -18,6 +18,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license   GNU GENERAL PUBLIC LICENSE
  */
+
 require_once dirname(__FILE__).'/../vendor/autoload.php';
 
 use Oyst\Service\Configuration as OConfiguration;
