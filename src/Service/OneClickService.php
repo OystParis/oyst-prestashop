@@ -24,6 +24,7 @@ namespace Oyst\Service;
 use Combination;
 use Exception;
 use Oyst\Classes\OystUser;
+use Oyst\Classes\OneClickOrderParams;
 use Oyst\Service\Http\CurrentRequest;
 use Product;
 use Validate;
@@ -48,7 +49,7 @@ class OneClickService extends AbstractOystService
      * @return array
      * @throws Exception
      */
-    public function authorizeNewOrder(Product $product, $quantity, Combination $combination = null, OystUser $user = null, $productLess = null)
+    public function authorizeNewOrder(Product $product, $quantity, Combination $combination = null, OystUser $user = null, $productLess = null, $orderParams = null, $context = null)
     {
         $response = $this->requester->call('authorizeOrder', array(
             $product->id,
@@ -57,6 +58,8 @@ class OneClickService extends AbstractOystService
             $user,
             self::ONE_CLICK_VERSION,
             $productLess,
+            $orderParams,
+            $context
         ));
 
         $apiClient = $this->requester->getApiClient();
@@ -119,7 +122,7 @@ class OneClickService extends AbstractOystService
             if ($quantity <= 0) {
                 $data['error'] = 'Bad quantity';
             }
-            
+
             Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
             $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
             $productLess = $exportProductService->transformProductLess((int) $request->getRequestItem('productId'), (int) $request->getRequestItem('productAttributeId'));
@@ -140,7 +143,12 @@ class OneClickService extends AbstractOystService
                     ->setEmail($customer->email);
             }
 
-            $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser, $productLess);
+            if (!$productLess->isMaterialized()) {
+               $oneClickOrdersParams = new OneClickOrderParams();
+               $oneClickOrdersParams->setIsMaterialized($productLess->isMaterialized());
+            }
+
+            $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser, $productLess, $oneClickOrdersParams);
             $data = array_merge($data, $result);
         }
 
