@@ -18,6 +18,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license   GNU GENERAL PUBLIC LICENSE
  */
+
 header('Access-Control-Allow-Origin: *');
 
 use Oyst\Controller\OneClickOrderController;
