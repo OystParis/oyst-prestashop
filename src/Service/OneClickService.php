@@ -143,8 +143,8 @@ class OneClickService extends AbstractOystService
                     ->setEmail($customer->email);
             }
 
+            $oneClickOrdersParams = new OneClickOrderParams();
             if (!$productLess->isMaterialized()) {
-               $oneClickOrdersParams = new OneClickOrderParams();
                $oneClickOrdersParams->setIsMaterialized($productLess->isMaterialized());
             }
 
