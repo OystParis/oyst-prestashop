@@ -135,6 +135,20 @@ class ShipmentService extends AbstractOystService
             9 => 24
         );
 
+        // Set delay carrier in hours
+        $delay = array(
+            0 => 240,
+            1 => 216,
+            2 => 192,
+            3 => 168,
+            4 => 144,
+            5 => 120,
+            6 => 96,
+            7 => 72,
+            8 => 48,
+            9 => 24
+        );
+
         $customer = $this->getCustomer($data['user']);
         if (!Validate::isLoadedObject($customer)) {
             $this->logger->emergency(
@@ -188,6 +202,11 @@ class ShipmentService extends AbstractOystService
             );
             return false;
         }
+
+        $result['order_amount'] = array(
+            "currency" => Context::getContext()->currency->iso_code,
+            "value" => (int)round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100)
+        );
 
         $carriersAvailables = $cart->simulateCarriersOutput();
 
