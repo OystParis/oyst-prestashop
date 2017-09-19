@@ -1,6 +1,6 @@
 {
     "tab": "payments_gateways",
-    "version": "1.5.1",
+    "version": "1.6.0",
     "need_instance": 0,
 
     "hooks": {
@@ -62,6 +62,11 @@
 
         "FC_OYST_CUSTOMER_CONFIG": "",
         "FC_OYST_ADDRESS_CONFIG": "",
-        "FC_OYST_CART_CONFIG": ""
+        "FC_OYST_CART_CONFIG": "",
+
+        "FC_OYST_SHIPMENT_DEFAULT": "0",
+        "FC_OYST_SHIPMENT_HOME_DELIVERY": "",
+        "FC_OYST_SHIPMENT_MONDIAL_RELAY": "",
+        "FC_OYST_SHIPMENT_PICK_UP": ""
     }
 }
