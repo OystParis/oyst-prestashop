@@ -79,6 +79,7 @@
             <ul id="oyst-config-menu" class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="{if $oyst.current_tab == '#tab-content-FreePay'}active{/if}"><a href="#tab-content-FreePay" role="tab" data-toggle="tab">{l s='FreePay' mod='oyst'}</a></li>
                 <li role="presentation" class="{if $oyst.current_tab == '#tab-content-1-click'}active{/if}"><a href="#tab-content-1-click" role="tab" data-toggle="tab">{l s='1-click' mod='oyst'}</a></li>
+                <li role="presentation" class="{if $oyst.current_tab == '#tab-content-shipment-less'}active{/if}"><a href="#tab-content-shipment-less" role="tab" data-toggle="tab">{l s='Settings shipment' mod='oyst'}</a></li>
             </ul>
             <div class="oyst-admin-tab tab-content">
                 <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab|escape:'htmlall':'UTF-8'}"/>
@@ -346,6 +347,33 @@
                                 <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
+                    </fieldset>
+                </div>
+                <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-shipment-less'} active{/if}" id="tab-content-shipment-less">
+                    <fieldset>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
+                                <select name="FC_OYST_SHIPMENT_DEFAULT">
+                                    <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
+                                    {foreach $oyst.carrier_list as $carrier}
+                                        <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                            {foreach from=$oyst.type_list key=value item=name}
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-3">{$name|escape:'htmlall':'UTF-8'}</label>
+                                    <div class="col-md-7 col-lg-7">
+                                        <select name="FC_OYST_SHIPMENT_{strtoupper($value)|escape:'htmlall':'UTF-8'}[]" multiple>
+                                            {foreach $oyst.carrier_list as $carrier}
+                                                <option value="{$carrier.id_reference|intval}" {if in_array($carrier.id_reference, $oyst.shipment_type_selected.{$value})}selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            {/foreach}
                     </fieldset>
                 </div>
             </div>
