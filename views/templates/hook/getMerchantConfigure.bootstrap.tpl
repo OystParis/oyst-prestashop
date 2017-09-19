@@ -350,7 +350,14 @@
                     </fieldset>
                 </div>
                 <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-shipment-less'} active{/if}" id="tab-content-shipment-less">
+                    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                     <fieldset>
+                        <div class="form-group clearfix">
+                           <label class="control-label col-md-3 col-lg-3">{l s='Enable shipment advanced' mod='oyst'}</label>
+                           <div class="col-md-7 col-lg-7" style="height: 31px;">
+                               <input type="checkbox" name="FC_OYST_SHIPMENT_LESS" value="1" {if $oyst.FC_OYST_SHIPMENT_LESS} checked="checked"{/if} />
+                           </div>
+                        </div>
                         <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-7">
@@ -375,6 +382,9 @@
                                 </div>
                             {/foreach}
                     </fieldset>
+                    {else}
+                        <div class="alert alert-info" role="alert">{l s='Please enter key valid for OneClick' mod='oyst'}</div>
+                    {/if}
                 </div>
             </div>
         </div>

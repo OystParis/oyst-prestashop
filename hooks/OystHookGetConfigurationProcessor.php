@@ -49,6 +49,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
+        'FC_OYST_SHIPMENT_LESS'           => 'int',
         'FC_OYST_SHIPMENT_DEFAULT'        => 'int',
         'FC_OYST_SHIPMENT_HOME_DELIVERY'  => array('type' => 'multiple', 'field' => 'FC_OYST_SHIPMENT_HOME_DELIVERY'),
         'FC_OYST_SHIPMENT_MONDIAL_RELAY'  => 'string',
@@ -225,6 +226,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['carrier_list']             = $this->getCarrierList();
         $assign['shipment_list']            = $shipmentList;
         $assign['type_list']                = $shipmentTypes;
+        $assign['shipment_less']            = (int)Configuration::get('FC_OYST_SHIPMENT_LESS');
         $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
         $assign['shipment_type_selected']   = $shipmentTypesSelected;
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
