@@ -23,6 +23,8 @@ namespace Oyst\Service;
 
 use Db;
 use Oyst\Classes\OneClickShipment;
+use Oyst\Classes\ShipmentAmount;
+use Oyst\Classes\OystCarrier;
 use Customer;
 use Cart;
 use Oyst\Repository\AddressRepository;
@@ -184,6 +186,8 @@ class ShipmentService extends AbstractOystService
         foreach($carriersAvailables as $key => $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
 
+            $oneClickShipment = new OneClickShipment();
+
             if ($home_delivery != null) {
                 if (in_array($id_carrier, $home_delivery))
                     $type = "home_delivery";
@@ -198,6 +202,7 @@ class ShipmentService extends AbstractOystService
                 if (in_array($id_carrier, $pick_up))
                     $type = "pick_up";
             }
+            $oystCarrier = new OystCarrier($id_carrier, $shipment['name'], $type);
 
             // Get amount with tax
             $amount = 0;
@@ -207,13 +212,25 @@ class ShipmentService extends AbstractOystService
             $tax_calculator = new TaxCalculator(array($tax));
             $amount += $tax_calculator->addTaxes($shipment['price_tax_exc']);
 
-            $result['shipments'][$key]['amount']['currency'] = Context::getContext()->currency->iso_code;
-            $result['shipments'][$key]['amount']['amount'] = (int)round($amount * 100);
+            $shipmentAmount = new ShipmentAmount($amount, 0, Context::getContext()->currency->iso_code);
+
+            if ($carrier->id_reference == $id_default_carrier) {
+                $primary =  true;
+            }
+
+            $oneClickShipment->setPrimary($primary);
+            $oneClickShipment->setAmount($shipmentAmount);
+            $oneClickShipment->setDelay($delay[(int)$carrier->grade]);
+            $oneClickShipment->setCarrier($oystCarrier);
+
+            /*$result['shipments'][$key]['amount']['currency'] = Context::getContext()->currency->iso_code;
+            $result['shipments'][$key]['amount']['value'] = (int)round($amount * 100);
             $result['shipments'][$key]['delay'] = $delay[(int)$carrier->grade];
             $result['shipments'][$key]['primary'] = ($carrier->id_reference == $id_default_carrier)? true : false;
             $result['shipments'][$key]['carrier']['id'] = $id_carrier;
             $result['shipments'][$key]['carrier']['name'] = $shipment['name'];
-            $result['shipments'][$key]['carrier']['type'] = $type;
+            $result['shipments'][$key]['carrier']['type'] = $type;*/
+            $result['shipments'][] = $oneClickShipment->toArray();
         }
 
         return $result;
