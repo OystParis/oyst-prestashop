@@ -25,6 +25,7 @@ use Combination;
 use Exception;
 use Oyst\Classes\OystUser;
 use Oyst\Classes\OneClickOrderParams;
+use Oyst\Classes\OneClickNotification;
 use Oyst\Service\Http\CurrentRequest;
 use Product;
 use Validate;
@@ -33,6 +34,7 @@ use Context;
 use Currency;
 use Configuration as ConfigurationP;
 use Oyst\Factory\AbstractExportProductServiceFactory;
+use Tools;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -49,7 +51,7 @@ class OneClickService extends AbstractOystService
      * @return array
      * @throws Exception
      */
-    public function authorizeNewOrder(Product $product, $quantity, Combination $combination = null, OystUser $user = null, $productLess = null, $orderParams = null, $context = null)
+    public function authorizeNewOrder(Product $product, $quantity, Combination $combination = null, OystUser $user = null, $productLess = null, OneClickOrderParams $orderParams = null, $context = null, OneClickNotification $notification = null)
     {
         $response = $this->requester->call('authorizeOrder', array(
             $product->id,
@@ -59,7 +61,8 @@ class OneClickService extends AbstractOystService
             self::ONE_CLICK_VERSION,
             $productLess,
             $orderParams,
-            $context
+            $context,
+            $notification
         ));
 
         $apiClient = $this->requester->getApiClient();
@@ -145,10 +148,19 @@ class OneClickService extends AbstractOystService
 
             $oneClickOrdersParams = new OneClickOrderParams();
             if (!$productLess->isMaterialized()) {
-               $oneClickOrdersParams->setIsMaterialized($productLess->isMaterialized());
+                $oneClickOrdersParams->setIsMaterialized($productLess->isMaterialized());
             }
 
-            $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser, $productLess, $oneClickOrdersParams);
+            $oneClickNotification = new OneClickNotification();
+            if (ConfigurationP::get('FC_OYST_SHIPMENT_LESS')) {
+                $oneClickNotification->setShouldAskShipments(true);
+            } else {
+                $oneClickNotification->setShouldAskShipments(false);
+            }
+
+            $oneClickNotification->setUrl(Tools::getHttpHost(true).__PS_BASE_URI__.'modules/oyst/notification.php');
+
+            $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser, $productLess, $oneClickOrdersParams, null, $oneClickNotification);
             $data = array_merge($data, $result);
         }
 
