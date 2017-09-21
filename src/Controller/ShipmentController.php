@@ -35,7 +35,6 @@ class ShipmentController extends AbstractOystController
         $shipmentService = AbstractShipmentServiceFactory::get(new Oyst(), Context::getContext());
         $responseData = $shipmentService->getShipments($data['data']);
 
-	die(var_dump('je suis la .'));
         header('Content-Type: application/json');
         echo json_encode($responseData);
     }
