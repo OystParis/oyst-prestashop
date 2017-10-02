@@ -53,6 +53,10 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                     case OystPaymentNotification::EVENT_AUTHORISATION:
                         $this->convertCartToOrder($notification_item, Tools::getValue('ch'), $event_data);
                         break;
+                    // If authorisation succeed, we create the order
+                    case OystPaymentNotification::EVENT_FRAUD_VALIDATION:
+                        $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
+                        break;
                     // If cancellation is confirmed, we cancel the order
                     case OystPaymentNotification::EVENT_CANCELLATION:
                         $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
@@ -64,6 +68,13 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                         $status = $maxRefund == 0 ? Configuration::get('PS_OS_REFUND') : Configuration::get('OYST_STATUS_PARTIAL_REFUND');
 
                         $this->updateOrderStatus((int)$id_cart, $status);
+                        break;
+                } else {
+                    switch ($notification_item['event_code']) {
+                    // If authorisation succeed, we create the order
+                    case OystPaymentNotification::EVENT_FRAUD_VALIDATION:
+                        $this->module->log('Payment fraud ko received, id_order : '.(int)$notification_item['order_id']);
+                        $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
                         break;
                 }
             }
@@ -132,7 +143,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                 $payment_status = (int) Configuration::get('PS_OS_ERROR');
                 $message = $this->module->l('Cart changed, please retry.').'<br />';
             } else {
-                $payment_status = (int) Configuration::get('PS_OS_PAYMENT');
+                $payment_status = (int) Configuration::get('OYST_STATUS_FRAUD_CHECK');
                 $message = $this->module->l('Payment accepted.').'<br />';
             }
 

@@ -29,6 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class OystPaymentNotification extends ObjectModel
 {
     const EVENT_AUTHORISATION = 'AUTHORISATION';
+    const EVENT_FRAUD_VALIDATION = 'FRAUD_VALIDATION';
     const EVENT_CAPTURE = 'CAPTURE';
     const EVENT_CANCELLATION = 'CANCELLATION';
     const EVENT_REFUND = 'REFUND';
