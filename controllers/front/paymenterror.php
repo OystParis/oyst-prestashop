@@ -22,6 +22,8 @@
 /*
  * Security
  */
+use Oyst\Classes\Enum\AbstractOrderState;
+use Oyst\Factory\AbstractOrderServiceFactory;
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -33,10 +35,39 @@ class OystPaymenterrorModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
+
+        if (Tools::getIsset('id_cart')){
+            $id_cart = Tools::getValue('id_cart');
+            $id_order = Order::getOrderByCartId($id_cart);
+
+            $oyst = new Oyst();
+            $context = Context::getContext();
+            $orderService = AbstractOrderServiceFactory::get(
+                $oyst,
+                $context
+            );
+            $orderService->updateOrderStatus($id_order, AbstractOrderState::DENIED);
+            $this->updateOrderStatus($id_cart, Configuration::get('PS_OS_CANCELED'));
+        }
         if (_PS_OYST_DEBUG_ == 1 && Tools::getValue('debug') == Configuration::get('FC_OYST_HASH_KEY')) {
             $function = 'base64'.'_'.'decode';
             $this->context->smarty->assign('oyst_debug', Tools::jsonDecode($function($this->context->cookie->oyst_debug), true));
         }
         $this->setTemplate('error'.(version_compare(_PS_VERSION_, '1.6.0') ? '.bootstrap' : '').'.tpl');
+    }
+
+    public function updateOrderStatus($id_cart, $id_order_state)
+    {
+        // Get order ID
+        $id_order = Order::getOrderByCartId($id_cart);
+        if ($id_order > 0 && $id_order_state > 0) {
+            // Create new OrderHistory
+            $history = new OrderHistory();
+            $history->id_order = $id_order;
+            $history->id_employee = 0;
+            $history->id_order_state = (int)$id_order_state;
+            $history->changeIdOrderState((int)$id_order_state, $id_order);
+            $history->add();
+        }
     }
 }
