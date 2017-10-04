@@ -32,11 +32,11 @@ function upgrade_module_1_5_2($module) {
     $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD_CHECK'));
 
     if (!Validate::isLoadedObject($orderState)) {
-        
+
         $orderState->name = array(
             $langId => 'En attente de check fraud',
         );
-        $orderState->color = '#FF8C00';
+        $orderState->color = '#980000';
         $orderState->unremovable = true;
         $orderState->deleted = false;
         $orderState->delivery = false;
@@ -47,10 +47,34 @@ function upgrade_module_1_5_2($module) {
         $orderState->hidden = false;
         $orderState->shipped = false;
         $orderState->send_email = false;
-        
+
         $result &= $orderState->add();
 
         Configuration::updateValue('OYST_STATUS_FRAUD_CHECK', $orderState->id);
+    }
+
+    $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
+
+    if (!Validate::isLoadedObject($orderState)) {
+
+        $orderState->name = array(
+            $langId => 'En attente de paiement chez Oyst',
+        );
+        $orderState->color = '#360088';
+        $orderState->unremovable = true;
+        $orderState->deleted = false;
+        $orderState->delivery = false;
+        $orderState->invoice = false;
+        $orderState->logable = false;
+        $orderState->module_name = $oyst->name;
+        $orderState->paid = false;
+        $orderState->hidden = false;
+        $orderState->shipped = false;
+        $orderState->send_email = false;
+
+        $result &= $orderState->add();
+
+        Configuration::updateValue('OYST_STATUS_WAIT_PAYMENT', $orderState->id);
     }
 
     return $result;
