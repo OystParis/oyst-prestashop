@@ -37,6 +37,8 @@ if (!class_exists('FroggyCart', false)) {
 class FroggyPaymentModule extends PaymentModule
 {
 
+    const DEBUG_MODE = false;
+    
     /**
      * @var mixed
      */
