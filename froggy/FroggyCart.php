@@ -184,7 +184,7 @@ class FroggyCart extends Cart
         $ps_use_ecotax = $configuration->get('PS_USE_ECOTAX');
         $ps_round_type = $configuration->get('PS_ROUND_TYPE');
         $ps_ecotax_tax_rules_group_id = $configuration->get('PS_ECOTAX_TAX_RULES_GROUP_ID');
-        $compute_precision = $configuration->get('_PS_PRICE_COMPUTE_PRECISION_');
+        $compute_precision = ((version_compare(_PS_VERSION_, '1.6') < 0) ? 2 : $configuration->get('_PS_PRICE_COMPUTE_PRECISION_'));
 
         if (!$this->id) {
             return 0;

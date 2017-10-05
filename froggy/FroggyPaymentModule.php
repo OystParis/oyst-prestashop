@@ -615,6 +615,7 @@ class FroggyPaymentModule extends PaymentModule
         if (!isset($this->context)) {
             $this->context = Context::getContext();
         }
+        
         $this->context->cart = new FroggyCart((int)$id_cart);
         $this->context->customer = new Customer((int)$this->context->cart->id_customer);
         // The tax cart is loaded before the customer so re-cache the tax calculation method
@@ -778,6 +779,7 @@ class FroggyPaymentModule extends PaymentModule
                     $order->mobile_theme = $this->context->cart->mobile_theme;
                     $order->conversion_rate = $this->context->currency->conversion_rate;
                     $amount_paid = !$dont_touch_amount ? Tools::ps_round((float)$amount_paid, 2) : $amount_paid;
+                    
                     $order->total_paid_real = 0;
 
                     $order->total_products = (float)$this->context->cart->getOrderTotal(false, Cart::ONLY_PRODUCTS, $order->product_list, $id_carrier);
@@ -810,15 +812,15 @@ class FroggyPaymentModule extends PaymentModule
 
                     if (Module::isInstalled('oyst') || Module::isEnabled('oyst')) {
                         if ($payment_method != null && preg_match('/OneClick/i', $payment_method)) {
-                            $order->total_paid_tax_excl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotalOyst(false, Cart::BOTH, $order->product_list, $id_carrier, true, $payment_method), _PS_PRICE_COMPUTE_PRECISION_);
-                            $order->total_paid_tax_incl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotalOyst(true, Cart::BOTH, $order->product_list, $id_carrier, true, $payment_method), _PS_PRICE_COMPUTE_PRECISION_);
+                            $order->total_paid_tax_excl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotalOyst(false, Cart::BOTH, $order->product_list, $id_carrier, true, $payment_method), ((version_compare(_PS_VERSION_, '1.6') < 0) ? 2 : _PS_PRICE_COMPUTE_PRECISION_));
+                            $order->total_paid_tax_incl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotalOyst(true, Cart::BOTH, $order->product_list, $id_carrier, true, $payment_method), ((version_compare(_PS_VERSION_, '1.6') < 0) ? 2 : _PS_PRICE_COMPUTE_PRECISION_));
                         } else {
-                            $order->total_paid_tax_excl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotal(false, Cart::BOTH, $order->product_list, $id_carrier), _PS_PRICE_COMPUTE_PRECISION_);
-                            $order->total_paid_tax_incl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotal(true, Cart::BOTH, $order->product_list, $id_carrier), _PS_PRICE_COMPUTE_PRECISION_);
+                            $order->total_paid_tax_excl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotal(false, Cart::BOTH, $order->product_list, $id_carrier), ((version_compare(_PS_VERSION_, '1.6') < 0) ? 2 : _PS_PRICE_COMPUTE_PRECISION_));
+                            $order->total_paid_tax_incl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotal(true, Cart::BOTH, $order->product_list, $id_carrier), ((version_compare(_PS_VERSION_, '1.6') < 0) ? 2 : _PS_PRICE_COMPUTE_PRECISION_));
                         }
                     } else {
-                        $order->total_paid_tax_excl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotal(false, Cart::BOTH, $order->product_list, $id_carrier), _PS_PRICE_COMPUTE_PRECISION_);
-                        $order->total_paid_tax_incl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotal(true, Cart::BOTH, $order->product_list, $id_carrier), _PS_PRICE_COMPUTE_PRECISION_);
+                        $order->total_paid_tax_excl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotal(false, Cart::BOTH, $order->product_list, $id_carrier), ((version_compare(_PS_VERSION_, '1.6') < 0) ? 2 : _PS_PRICE_COMPUTE_PRECISION_));
+                        $order->total_paid_tax_incl = (float)Tools::ps_round((float)$this->context->cart->getOrderTotal(true, Cart::BOTH, $order->product_list, $id_carrier), ((version_compare(_PS_VERSION_, '1.6') < 0) ? 2 : _PS_PRICE_COMPUTE_PRECISION_));
                     }
                     $order->total_paid = $order->total_paid_tax_incl;
                     $order->round_mode = Configuration::get('PS_PRICE_ROUND_MODE');
