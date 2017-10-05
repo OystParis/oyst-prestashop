@@ -338,7 +338,7 @@ class InstallManager
         $carrier = new OystCarrier(
             PSConfiguration::get(Configuration::ONE_CLICK_CARRIER),
             'Default and Free',
-            OneClickShipment::HOME_DELIVERY
+            OystCarrier::HOME_DELIVERY
         );
 
         $amount = new ShipmentAmount(0, 0, 'EUR');
