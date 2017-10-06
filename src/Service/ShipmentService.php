@@ -200,10 +200,16 @@ class ShipmentService extends AbstractOystService
             return false;
         }
 
-        $result['order_amount'] = array(
-            "currency" => Context::getContext()->currency->iso_code,
-            "value" => (int)round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100)
-        );
+            $result['order_amount'] = array(
+                "currency" => Context::getContext()->currency->iso_code,
+                "value" => (int)round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100)
+            );
+        } else {
+            $this->logger->emergency(
+                'Items not exist ['.$this->serializer->serialize($data).']'
+            );
+            return false;
+        }
 
         $carriersAvailables = $cart->simulateCarriersOutput();
 
