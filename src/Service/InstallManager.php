@@ -61,7 +61,7 @@ class InstallManager
     {
         $state = true;
         $state &= $this->createCarrier();
-        $state &= $this->pushDefaultShipment();
+        // $state &= $this->pushDefaultShipment();
         $state &= $this->createExportTable();
         $state &= $this->createOrderTable();
         $state &= $this->createShipmentTable();
