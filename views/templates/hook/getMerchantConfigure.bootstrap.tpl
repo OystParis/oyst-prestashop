@@ -287,7 +287,6 @@
                     </fieldset>
                 </div>
                 <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-shipment-less'} active{/if}" id="tab-content-shipment-less">
-                    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                     <fieldset>
                         <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
@@ -314,9 +313,6 @@
                                 </div>
                             {/foreach}
                     </fieldset>
-                    {else}
-                        <div class="alert alert-info" role="alert">{l s='Please enter key valid for OneClick' mod='oyst'}</div>
-                    {/if}
                 </div>
             </div>
         </div>
