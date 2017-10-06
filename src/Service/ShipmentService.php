@@ -21,13 +21,14 @@
 
 namespace Oyst\Service;
 
-use Db;
-use Oyst\Classes\OneClickShipment;
-use Oyst\Classes\ShipmentAmount;
+use Oyst\Classes\OneClickShipmentCalculation;
+use Oyst\Classes\OneClickShipmentCatalogLess;
 use Oyst\Classes\OystCarrier;
+use Oyst\Classes\OystPrice;
+use Oyst\Repository\AddressRepository;
+use Db;
 use Customer;
 use Cart;
-use Oyst\Repository\AddressRepository;
 use Address;
 use Tools;
 use Validate;
@@ -118,7 +119,6 @@ class ShipmentService extends AbstractOystService
      */
     public function getShipments($data)
     {
-        $result = array();
 
         // Set delay carrier in hours
         $delay = array(
@@ -163,16 +163,23 @@ class ShipmentService extends AbstractOystService
             return false;
         }
 
-        foreach($data['items'] as $key => $item) {
-            $cart->updateQty($item['quantity'], $item['reference'], null, false, 'up', $address->id);
-            $result['items'][$key]['reference'] = $item['reference'];
-            $result['items'][$key]['quantity'] = $item['quantity'];
-        }
+        if (isset($data['items'])) {
+            foreach($data['items'] as $key => $item) {
+                $cart->updateQty($item['quantity'], $item['reference'], null, false, 'up', $address->id);
+                $result['items'][$key]['reference'] = $item['reference'];
+                $result['items'][$key]['quantity'] = $item['quantity'];
+            }
 
-        $result['order_amount'] = array(
-            "currency" => Context::getContext()->currency->iso_code,
-            "value" => (int)round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100)
-        );
+            $result['order_amount'] = array(
+                "currency" => Context::getContext()->currency->iso_code,
+                "value" => (int)round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100)
+            );
+        } else {
+            $this->logger->emergency(
+                'Items not exist ['.$this->serializer->serialize($data).']'
+            );
+            return false;
+        }
 
         $carriersAvailables = $cart->simulateCarriersOutput();
 
@@ -181,28 +188,28 @@ class ShipmentService extends AbstractOystService
         $mondial_realy = explode(',', PSConfiguration::get('FC_OYST_SHIPMENT_MONDIAL_RELAY'));
         $pick_up = explode(',', PSConfiguration::get('FC_OYST_SHIPMENT_PICK_UP'));
 
-        $type = "home_delivery";
+        $type = OystCarrier::HOME_DELIVERY;
+
+        $oneClickShipmentCalculation = new OneClickShipmentCalculation(array());
 
         foreach($carriersAvailables as $key => $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
 
-            $oneClickShipment = new OneClickShipment();
-
-            if ($home_delivery != null) {
+           if ($home_delivery != null) {
                 if (in_array($id_carrier, $home_delivery))
-                    $type = "home_delivery";
+                    $type = OystCarrier::HOME_DELIVERY;
             }
 
             if ($mondial_realy != null) {
-                if (in_array($id_carrier, $mondial_realy))
-                    $type = "mondial_realy";
+                    if (in_array($id_carrier, $mondial_realy))
+                        $type = OystCarrier::MONDIAL_RELAY;
             }
 
             if ($pick_up != null) {
-                if (in_array($id_carrier, $pick_up))
-                    $type = "pick_up";
+                    if (in_array($id_carrier, $pick_up))
+                        $type = OystCarrier::PICKUP_DELIVERY;
             }
-            $oystCarrier = new OystCarrier($id_carrier, $shipment['name'], $type);
+
 
             // Get amount with tax
             $amount = 0;
@@ -212,27 +219,26 @@ class ShipmentService extends AbstractOystService
             $tax_calculator = new TaxCalculator(array($tax));
             $amount += $tax_calculator->addTaxes($shipment['price_tax_exc']);
 
-            $shipmentAmount = new ShipmentAmount($amount, 0, Context::getContext()->currency->iso_code);
+            $oystPrice = new OystPrice($amount, Context::getContext()->currency->iso_code);
+            $oneClickShipment = new OneClickShipmentCatalogLess();
+            $oystCarrier = new OystCarrier();
+            $oystCarrier->setId($id_carrier);
+            $oystCarrier->setName($shipment['name']);
+            $oystCarrier->setType($type);
 
-            if ($carrier->id_reference == $id_default_carrier) {
-                $primary =  true;
-            }
+            // $primary = false;
+            // if ($carrier->id_reference == $id_default_carrier) {
+            //     $primary =  true;
+            // }
 
-            $oneClickShipment->setPrimary($primary);
-            $oneClickShipment->setAmount($shipmentAmount);
+            $oneClickShipment->setPrimary(true);
+            $oneClickShipment->setAmount($oystPrice);
             $oneClickShipment->setDelay($delay[(int)$carrier->grade]);
             $oneClickShipment->setCarrier($oystCarrier);
 
-            /*$result['shipments'][$key]['amount']['currency'] = Context::getContext()->currency->iso_code;
-            $result['shipments'][$key]['amount']['value'] = (int)round($amount * 100);
-            $result['shipments'][$key]['delay'] = $delay[(int)$carrier->grade];
-            $result['shipments'][$key]['primary'] = ($carrier->id_reference == $id_default_carrier)? true : false;
-            $result['shipments'][$key]['carrier']['id'] = $id_carrier;
-            $result['shipments'][$key]['carrier']['name'] = $shipment['name'];
-            $result['shipments'][$key]['carrier']['type'] = $type;*/
-            $result['shipments'][] = $oneClickShipment->toArray();
+            $oneClickShipmentCalculation->addShipment($oneClickShipment);
         }
 
-        return $result;
+        return $oneClickShipmentCalculation->toJson();
     }
 }

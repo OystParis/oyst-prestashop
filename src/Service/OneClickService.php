@@ -150,6 +150,9 @@ class OneClickService extends AbstractOystService
             if (!$productLess->isMaterialized()) {
                 $oneClickOrdersParams->setIsMaterialized($productLess->isMaterialized());
             }
+            $oneClickOrdersParams->setDelay(2);
+            $oneClickOrdersParams->setManageQuantity(true);
+            $oneClickOrdersParams->setShouldReinitBuffer(false);
 
             $oneClickNotifications = new OneClickNotifications();
             if (ConfigurationP::get('FC_OYST_SHIPMENT_LESS')) {

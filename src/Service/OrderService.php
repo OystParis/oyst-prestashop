@@ -36,6 +36,7 @@ use Oyst\Repository\OrderRepository;
 use Product;
 use ToolsCore;
 use Validate;
+use Db;
 
 /**
  * Class OneClickService
@@ -200,9 +201,14 @@ class OrderService extends AbstractOystService
             }
         }
 
+        $id_reference = Db::getInstance()->getValue('
+                        SELECT `id_reference`
+                        FROM `'._DB_PREFIX_.'carrier`
+                        WHERE id_carrier = '.(int)$oystOrderInfo['shipment']['carrier']['id']);
+
         // Require to get the right price during the validateOrder
         $cart->oystShipment = $oystOrderInfo['shipment'];
-        $cart->id_carrier = Carrier::getCarrierByReference($oystOrderInfo['shipment']['carrier']['id'])->id;
+        $cart->id_carrier = Carrier::getCarrierByReference($id_reference)->id;
         $delivery_option = $cart->getDeliveryOption();
         $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
         $cart->setDeliveryOption($delivery_option);

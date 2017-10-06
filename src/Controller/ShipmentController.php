@@ -36,6 +36,6 @@ class ShipmentController extends AbstractOystController
         $responseData = $shipmentService->getShipments($data['data']);
 
         header('Content-Type: application/json');
-        echo json_encode($responseData);
+        echo $responseData;
     }
 }
