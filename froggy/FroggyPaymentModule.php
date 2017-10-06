@@ -603,14 +603,14 @@ class FroggyPaymentModule extends PaymentModule
         $message = null, $extra_vars = array(), $currency_special = null, $dont_touch_amount = false,
         $secure_key = false, Shop $shop = null)
     {
+        
         if (self::DEBUG_MODE) {
-            if (self::DEBUG_MODE) {
-                if (version_compare(_PS_VERSION_, '1.6') >= 0)
-                    PrestaShopLogger::addLog('PaymentModule::validateOrder - Function called', 1, null, 'Cart', (int)$id_cart, true);
-                else
-                    Logger::addLog('PaymentModule::validateOrder - Function called', 1, null, 'Cart', (int)$id_cart, true);
-            }
+            if (version_compare(_PS_VERSION_, '1.6') >= 0)
+                PrestaShopLogger::addLog('PaymentModule::validateOrder - Function called', 1, null, 'Cart', (int)$id_cart, true);
+            else
+                Logger::addLog('PaymentModule::validateOrder - Function called', 1, null, 'Cart', (int)$id_cart, true);
         }
+        
 
         if (!isset($this->context)) {
             $this->context = Context::getContext();
@@ -829,14 +829,14 @@ class FroggyPaymentModule extends PaymentModule
                     $order->invoice_date = '0000-00-00 00:00:00';
                     $order->delivery_date = '0000-00-00 00:00:00';
 
+                    
                     if (self::DEBUG_MODE) {
-                        if (self::DEBUG_MODE) {
-                            if (version_compare(_PS_VERSION_, '1.6') >= 0)
-                                PrestaShopLogger::addLog('PaymentModule::validateOrder - Order is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                            else
-                                Logger::addLog('PaymentModule::validateOrder - Order is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                        }
+                        if (version_compare(_PS_VERSION_, '1.6') >= 0)
+                            PrestaShopLogger::addLog('PaymentModule::validateOrder - Order is about to be added', 1, null, 'Cart', (int)$id_cart, true);
+                        else
+                            Logger::addLog('PaymentModule::validateOrder - Order is about to be added', 1, null, 'Cart', (int)$id_cart, true);
                     }
+                    
 
                     // Creating order
                     $result = $order->add();
@@ -861,28 +861,28 @@ class FroggyPaymentModule extends PaymentModule
 
                     $order_list[] = $order;
 
+                    
                     if (self::DEBUG_MODE) {
-                        if (self::DEBUG_MODE) {
-                            if (version_compare(_PS_VERSION_, '1.6') >= 0)
-                                PrestaShopLogger::addLog('PaymentModule::validateOrder - OrderDetail is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                            else
-                                Logger::addLog('PaymentModule::validateOrder - OrderDetail is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                        }
+                        if (version_compare(_PS_VERSION_, '1.6') >= 0)
+                            PrestaShopLogger::addLog('PaymentModule::validateOrder - OrderDetail is about to be added', 1, null, 'Cart', (int)$id_cart, true);
+                        else
+                            Logger::addLog('PaymentModule::validateOrder - OrderDetail is about to be added', 1, null, 'Cart', (int)$id_cart, true);
                     }
+                    
 
                     // Insert new Order detail list using cart for the current order
                     $order_detail = new OrderDetail(null, null, $this->context);
                     $order_detail->createList($order, $this->context->cart, $id_order_state, $order->product_list, 0, true, $package_list[$id_address][$id_package]['id_warehouse']);
                     $order_detail_list[] = $order_detail;
 
+                    
                     if (self::DEBUG_MODE) {
-                        if (self::DEBUG_MODE) {
-                            if (version_compare(_PS_VERSION_, '1.6') >= 0)
-                                PrestaShopLogger::addLog('PaymentModule::validateOrder - OrderCarrier is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                            else
-                                Logger::addLog('PaymentModule::validateOrder - OrderCarrier is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                        }
+                        if (version_compare(_PS_VERSION_, '1.6') >= 0)
+                            PrestaShopLogger::addLog('PaymentModule::validateOrder - OrderCarrier is about to be added', 1, null, 'Cart', (int)$id_cart, true);
+                        else
+                            Logger::addLog('PaymentModule::validateOrder - OrderCarrier is about to be added', 1, null, 'Cart', (int)$id_cart, true);
                     }
+                    
 
                     // Adding an entry in order_carrier table
                     if (!is_null($carrier)) {
@@ -912,14 +912,14 @@ class FroggyPaymentModule extends PaymentModule
                 throw new PrestaShopException('The order address country is not active.');
             }
 
+            
             if (self::DEBUG_MODE) {
-                if (self::DEBUG_MODE) {
-                    if (version_compare(_PS_VERSION_, '1.6') >= 0)
-                        PrestaShopLogger::addLog('PaymentModule::validateOrder - Payment is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                    else
-                        Logger::addLog('PaymentModule::validateOrder - Payment is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                }
+                if (version_compare(_PS_VERSION_, '1.6') >= 0)
+                    PrestaShopLogger::addLog('PaymentModule::validateOrder - Payment is about to be added', 1, null, 'Cart', (int)$id_cart, true);
+                else
+                    Logger::addLog('PaymentModule::validateOrder - Payment is about to be added', 1, null, 'Cart', (int)$id_cart, true);
             }
+            
 
             // Register Payment only if the order status validate the order
             if ($order_status->logable) {
@@ -964,12 +964,10 @@ class FroggyPaymentModule extends PaymentModule
                         $message = strip_tags($message, '<br>');
                         if (Validate::isCleanHtml($message)) {
                             if (self::DEBUG_MODE) {
-                                if (self::DEBUG_MODE) {
-                                    if (version_compare(_PS_VERSION_, '1.6') >= 0)
-                                        PrestaShopLogger::addLog('PaymentModule::validateOrder - Message is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                                    else
-                                        Logger::addLog('PaymentModule::validateOrder - Message is about to be added', 1, null, 'Cart', (int)$id_cart, true);
-                                }
+                                if (version_compare(_PS_VERSION_, '1.6') >= 0)
+                                    PrestaShopLogger::addLog('PaymentModule::validateOrder - Message is about to be added', 1, null, 'Cart', (int)$id_cart, true);
+                                else
+                                    Logger::addLog('PaymentModule::validateOrder - Message is about to be added', 1, null, 'Cart', (int)$id_cart, true);
                             }
                             $msg->message = $message;
                             $msg->id_cart = (int)$id_cart;
@@ -1189,14 +1187,14 @@ class FroggyPaymentModule extends PaymentModule
                         }
                     }
 
+                    
                     if (self::DEBUG_MODE) {
-                        if (self::DEBUG_MODE) {
-                            if (version_compare(_PS_VERSION_, '1.6') >= 0)
-                                PrestaShopLogger::addLog('PaymentModule::validateOrder - Hook validateOrder is about to be called', 1, null, 'Cart', (int)$id_cart, true);
-                            else
-                                Logger::addLog('PaymentModule::validateOrder - Hook validateOrder is about to be called', 1, null, 'Cart', (int)$id_cart, true);
-                        }
+                        if (version_compare(_PS_VERSION_, '1.6') >= 0)
+                            PrestaShopLogger::addLog('PaymentModule::validateOrder - Hook validateOrder is about to be called', 1, null, 'Cart', (int)$id_cart, true);
+                        else
+                            Logger::addLog('PaymentModule::validateOrder - Hook validateOrder is about to be called', 1, null, 'Cart', (int)$id_cart, true);
                     }
+                    
                     // Hook validate order
                     Hook::exec('actionValidateOrder', array(
                         'cart' => $this->context->cart,
