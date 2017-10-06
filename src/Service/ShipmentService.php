@@ -221,10 +221,7 @@ class ShipmentService extends AbstractOystService
 
             $oystPrice = new OystPrice($amount, Context::getContext()->currency->iso_code);
             $oneClickShipment = new OneClickShipmentCatalogLess();
-            $oystCarrier = new OystCarrier();
-            $oystCarrier->setId($id_carrier);
-            $oystCarrier->setName($shipment['name']);
-            $oystCarrier->setType($type);
+            $oystCarrier = new OystCarrier($id_carrier, $shipment['name'], $type);
 
             // $primary = false;
             // if ($carrier->id_reference == $id_default_carrier) {
