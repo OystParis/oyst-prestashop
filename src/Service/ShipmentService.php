@@ -60,7 +60,7 @@ class ShipmentService extends AbstractOystService
             $customer->firstname = $user['address']['first_name'];
             $customer->lastname = $user['address']['last_name'];
             $customer->id_lang = PSConfiguration::get('PS_LANG_DEFAULT');
-            $customer->passwd = ToolsCore::encrypt(ToolsCore::passwdGen());
+            $customer->passwd = Tools::encrypt(Tools::passwdGen());
             $customer->add();
         }
 

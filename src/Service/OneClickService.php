@@ -149,6 +149,8 @@ class OneClickService extends AbstractOystService
             $oneClickOrdersParams = new OneClickOrderParams();
             if (!$productLess->isMaterialized()) {
                 $oneClickOrdersParams->setIsMaterialized($productLess->isMaterialized());
+            } else {
+               $oneClickOrdersParams->setIsMaterialized(true);
             }
             $oneClickOrdersParams->setDelay(2);
             $oneClickOrdersParams->setManageQuantity(true);
