@@ -200,17 +200,6 @@ class ShipmentService extends AbstractOystService
             return false;
         }
 
-            $result['order_amount'] = array(
-                "currency" => Context::getContext()->currency->iso_code,
-                "value" => (int)round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100)
-            );
-        } else {
-            $this->logger->emergency(
-                'Items not exist ['.$this->serializer->serialize($data).']'
-            );
-            return false;
-        }
-
         $carriersAvailables = $cart->simulateCarriersOutput();
 
         $id_default_carrier = (int)PSConfiguration::get('FC_OYST_SHIPMENT_DEFAULT');
