@@ -121,7 +121,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 $carriers = $this->getCarrierList();
 
                 foreach($carriers as $carrier) {
-                    $field = 'FC_OYST_SHIPMENT_'.$carrier->id_reference;
+                    $field = 'FC_OYST_SHIPMENT_'.$carrier['id_reference'];
                     $type = Tools::getValue($field);
                     Configuration::updateValue($field, $type);
                 }
