@@ -77,5 +77,7 @@ function upgrade_module_1_5_2($module) {
         Configuration::updateValue('OYST_STATUS_WAIT_PAYMENT', $orderState->id);
     }
 
+    Configuration::updateValue('FC_OYST_PREORDER_FEATURE',0);
+
     return $result;
 }

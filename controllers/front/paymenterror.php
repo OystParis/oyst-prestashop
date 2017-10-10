@@ -35,19 +35,20 @@ class OystPaymenterrorModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
+        if (Configuration::get('FC_OYST_PREORDER_FEATURE')){
+            if (Tools::getIsset('id_cart')){
+                $id_cart = Tools::getValue('id_cart');
+                $id_order = Order::getOrderByCartId($id_cart);
 
-        if (Tools::getIsset('id_cart')){
-            $id_cart = Tools::getValue('id_cart');
-            $id_order = Order::getOrderByCartId($id_cart);
-
-            $oyst = new Oyst();
-            $context = Context::getContext();
-            $orderService = AbstractOrderServiceFactory::get(
-                $oyst,
-                $context
-            );
-            $orderService->updateOrderStatus($id_order, AbstractOrderState::DENIED);
-            $this->updateOrderStatus($id_cart, Configuration::get('PS_OS_CANCELED'));
+                $oyst = new Oyst();
+                $context = Context::getContext();
+                $orderService = AbstractOrderServiceFactory::get(
+                    $oyst,
+                    $context
+                );
+                $orderService->updateOrderStatus($id_order, AbstractOrderState::DENIED);
+                $this->updateOrderStatus($id_cart, Configuration::get('PS_OS_CANCELED'));
+            }
         }
         if (_PS_OYST_DEBUG_ == 1 && Tools::getValue('debug') == Configuration::get('FC_OYST_HASH_KEY')) {
             $function = 'base64'.'_'.'decode';

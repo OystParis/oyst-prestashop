@@ -150,6 +150,10 @@
                     <div class="margin-form env custom">
                         <input type="text" id="OYST_API_CUSTOM_ENDPOINT_FREEPAY" name="OYST_API_CUSTOM_ENDPOINT_FREEPAY" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                     </div>
+                    <label>{l s='Create order before payment' mod='oyst'}</label>
+                    <div class="margin-form">
+                        <input type="checkbox" class="form-control" id="FC_OYST_PREORDER_FEATURE" name="FC_OYST_PREORDER_FEATURE" value="1"{if $oyst.FC_OYST_PREORDER_FEATURE} checked="checked"{/if} />
+                    </div>
                 </div>
                 <div id="tab-content-1-click" class="tab-pane">
                     <h2>{l s='Configuration One-click' mod='oyst'}</h2>

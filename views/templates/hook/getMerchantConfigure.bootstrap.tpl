@@ -182,6 +182,12 @@
                                 <input type="text" id="OYST_API_CUSTOM_ENDPOINT_FREEPAY" name="OYST_API_CUSTOM_ENDPOINT_FREEPAY" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-4">{l s='Create order before payment' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-5" style="height: 31px;">
+                                <input type="checkbox" id="FC_OYST_PREORDER_FEATURE" name="FC_OYST_PREORDER_FEATURE" value="1"{if $oyst.FC_OYST_PREORDER_FEATURE} checked="checked"{/if} />
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
                 <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-1-click'} active{/if}" id="tab-content-1-click">

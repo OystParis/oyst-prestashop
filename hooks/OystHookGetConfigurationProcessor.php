@@ -49,6 +49,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
+        'FC_OYST_PREORDER_FEATURE'        => 'int',
         'FC_OYST_SHIPMENT_DEFAULT'        => 'int',
         'FC_OYST_THEME_BTN'               => 'string',
         'FC_OYST_COLOR_BTN'               => 'string',
