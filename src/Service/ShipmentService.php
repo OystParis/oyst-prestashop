@@ -23,6 +23,7 @@ namespace Oyst\Service;
 
 use Oyst\Classes\OneClickShipmentCalculation;
 use Oyst\Classes\OneClickShipmentCatalogLess;
+use Oyst\Classes\OneClickItem;
 use Oyst\Classes\OystCarrier;
 use Oyst\Classes\OystPrice;
 use Oyst\Repository\AddressRepository;
@@ -166,14 +167,19 @@ class ShipmentService extends AbstractOystService
         if (isset($data['items'])) {
             foreach($data['items'] as $key => $item) {
                 $cart->updateQty($item['quantity'], $item['reference'], null, false, 'up', $address->id);
-                $result['items'][$key]['reference'] = $item['reference'];
-                $result['items'][$key]['quantity'] = $item['quantity'];
+
+                $oneClickItem = new OneClickItem();
+                $oneClickItem->setReference($item['reference']);
+                $oneClickItem->setQuantity($item['quantity']);
+
+                $oneClickShipmentCalculation->addItem($oneClickItem);
             }
 
-            $result['order_amount'] = array(
-                "currency" => Context::getContext()->currency->iso_code,
-                "value" => (int)round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100)
-            );
+            /*$orderAmount = new OystPrice();
+           $orderAmount->setValue(round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100));
+           $orderAmount->setCurrency(Context::getContext()->currency->iso_code);
+
+           $oneClickShipmentCalculation->setOrderAmount($orderAmount);*/
         } else {
             $this->logger->emergency(
                 'Items not exist ['.$this->serializer->serialize($data).']'
