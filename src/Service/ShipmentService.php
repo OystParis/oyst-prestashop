@@ -149,7 +149,7 @@ class ShipmentService extends AbstractOystService
         $this->context->cart = $cart = new Cart();
         $this->context->customer = $customer;
         // For debug but when prod pass in context object currency
-        $this->context->currency = new Currency(Context::getContext()->cookie->id_currency);
+        $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
 
         $cart->id_customer = $customer->id;
         $cart->id_address_delivery = $address->id;
