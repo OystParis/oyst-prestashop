@@ -369,13 +369,14 @@
                                 </select>
                             </div>
                         </div>
-                            {foreach from=$oyst.type_list key=value item=name}
+                            {foreach $oyst.carrier_list as $carrier}
                                 <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{$name|escape:'htmlall':'UTF-8'}</label>
+                                    <label class="control-label col-md-3 col-lg-3">{$carrier.name|escape:'htmlall':'UTF-8'}</label>
                                     <div class="col-md-7 col-lg-7">
-                                        <select name="FC_OYST_SHIPMENT_{strtoupper($value)|escape:'htmlall':'UTF-8'}[]" multiple>
-                                            {foreach $oyst.carrier_list as $carrier}
-                                                <option value="{$carrier.id_reference|intval}" {if in_array($carrier.id_reference, $oyst.shipment_type_selected.{$value})}selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
+                                        <select name="FC_OYST_SHIPMENT_{$carrier.id_reference}">
+                                            <option value="0">{l s='Disabled' mod='oyst'}</option>
+                                            {foreach from=$oyst.type_list key=value item=name}
+                                                <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
                                             {/foreach}
                                         </select>
                                     </div>

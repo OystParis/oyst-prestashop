@@ -51,9 +51,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_CATALOG_FEATURE'         => 'int',
         'FC_OYST_SHIPMENT_LESS'           => 'int',
         'FC_OYST_SHIPMENT_DEFAULT'        => 'int',
-        'FC_OYST_SHIPMENT_HOME_DELIVERY'  => array('type' => 'multiple', 'field' => 'FC_OYST_SHIPMENT_HOME_DELIVERY'),
-        'FC_OYST_SHIPMENT_MONDIAL_RELAY'  => 'string',
-        'FC_OYST_SHIPMENT_PICK_UP'        => 'string',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
@@ -120,6 +117,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 Configuration::updateValue($conf, $value);
             }
 
+            if (Configuration::get('FC_OYST_SHIPMENT_LESS')) {
+                $carriers = $this->getCarrierList();
+
+                foreach($carriers as $carrier) {
+                    $field = 'FC_OYST_SHIPMENT_'.$carrier->id_reference;
+                    $type = Tools::getValue($field);
+                    Configuration::updateValue($field, $type)
+                }
+            }
+
             if (Tools::isSubmit('shipments')) {
                 $oneClickShipmentTransformer = new OneClickShipmentTransformer($this->context);
                 $oneClickShipmentRepository = new OneClickShipmentRepository(Db::getInstance());
@@ -179,12 +186,10 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         );
         $result = $catalogApi->getShipmentTypes();
         $shipmentTypes = array();
-        $shipmentTypesSelected = array();
 
         if (isset($result['types'])) {
             foreach ($result['types'] as $value => $label) {
                 $shipmentTypes[$value] = $this->module->l($label, 'oysthookgetconfigurationprocessor');
-                $shipmentTypesSelected[$value] = explode(',', Configuration::get('FC_OYST_SHIPMENT_'.strtoupper($value)));
             }
         }
 
@@ -228,7 +233,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['type_list']                = $shipmentTypes;
         $assign['shipment_less']            = (int)Configuration::get('FC_OYST_SHIPMENT_LESS');
         $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
-        $assign['shipment_type_selected']   = $shipmentTypesSelected;
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
         $assign['can_export_catalog'] = Configuration::get('OYST_ONE_CLICK_FEATURE_STATE') && !empty($currentOneClickApiKey) && count($shipmentList);
@@ -445,7 +449,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     private function getCarrierList()
     {
-        $carrier_list = Carrier::getCarriers($this->context->language->id, false, false, false, null, Carrier::ALL_CARRIERS);
+        $carrier_list = Carrier::getCarriers($this->context->language->id, true, false, false, null, Carrier::ALL_CARRIERS);
 
         return $carrier_list;
     }
