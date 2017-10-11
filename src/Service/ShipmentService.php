@@ -168,9 +168,7 @@ class ShipmentService extends AbstractOystService
             foreach($data['items'] as $key => $item) {
                 $cart->updateQty($item['quantity'], $item['reference'], null, false, 'up', $address->id);
 
-                $oneClickItem = new OneClickItem();
-                $oneClickItem->setReference($item['reference']);
-                $oneClickItem->setQuantity($item['quantity']);
+                $oneClickItem = new OneClickItem((string)$item['reference'], (int)$item['quantity']);
 
                 $oneClickShipmentCalculation->addItem($oneClickItem);
             }

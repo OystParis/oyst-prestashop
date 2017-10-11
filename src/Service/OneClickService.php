@@ -157,11 +157,7 @@ class OneClickService extends AbstractOystService
             $oneClickOrdersParams->setShouldReinitBuffer(false);
 
             $oneClickNotifications = new OneClickNotifications();
-            if (ConfigurationP::get('FC_OYST_SHIPMENT_LESS')) {
-                $oneClickNotifications->setShouldAskShipments(true);
-            } else {
-                $oneClickNotifications->setShouldAskShipments(false);
-            }
+            $oneClickNotifications->setShouldAskShipments(true);
 
             $oneClickNotifications->setUrl(Tools::getHttpHost(true).__PS_BASE_URI__.'modules/oyst/notification.php');
 

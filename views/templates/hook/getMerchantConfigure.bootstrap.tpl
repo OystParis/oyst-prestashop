@@ -239,93 +239,6 @@
                             </div>
                         </div>
                         <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-3">{l s='Shipments' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <div id="shipment-collection">
-                                {foreach from=$oyst.shipment_list key=index item=shipment}
-                                    <div class="shipment-item">
-                                        <div class="form-group clearfix">
-                                            <label class="control-label col-md-3 col-lg-4">{l s='Carrier' mod='oyst'}</label>
-                                            <div class="col-md-9 col-lg-8">
-                                                <select name="shipments[{$index|escape:'htmlall':'UTF-8'}][id_carrier]">
-                                                {foreach $oyst.carrier_list as $carrier}
-                                                    <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $shipment.id_carrier_reference == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
-                                                {/foreach}
-                                                </select>
-                                                <span class="help-block" style="visibility: hidden;">&nbsp;</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
-                                            <label class="control-label col-md-3 col-lg-4">{l s='Primary' mod='oyst'}</label>
-                                            <div class="col-md-9 col-lg-8">
-                                                <input type="checkbox" class="shipment-primary" name="shipments[{$index|escape:'htmlall':'UTF-8'}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Type' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <select name="shipments[{$index|escape:'htmlall':'UTF-8'}][type]">
-                                                    {foreach from=$oyst.type_list key=value item=name}
-                                                        <option value="{$value|escape:'htmlall':'UTF-8'}"{if $shipment.type == $value} selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
-                                                    {/foreach}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Delay' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="icon-time"></i></span>
-                                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][delay]" value="{$shipment.delay}"/>
-                                                    </div>
-                                                    <span class="help-block">{l s='Value in days' mod='oyst'}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Amount' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <div class="amount-shipment-leader col-xs-6">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">€</span>
-                                                            <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][amount_leader]" value="{$shipment.amount_leader}"/>
-                                                        </div>
-                                                        <span class="help-block">{l s='First product' mod='oyst'}</span>
-                                                    </div>
-                                                    <div class="amount-shipment-follower col-xs-6">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">€</span>
-                                                            <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][amount_follower]" value="{$shipment.amount_follower}"/>
-                                                        </div>
-                                                        <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group clearfix">
-                                                <label class="control-label col-md-3 col-lg-4">{l s='Free shipping from' mod='oyst'}</label>
-                                                <div class="col-md-9 col-lg-8">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon">€</span>
-                                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][free_shipping]" value="{$shipment.free_shipping}"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
-                                            <div class="text-center">
-                                                <button type="button" class="delete-shipment btn btn-danger">{l s='Delete Shipment' mod='oyst'}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {/foreach}
-                                </div>
-                                <button type="button" id="add-shipment"{if $oyst.currentOneClickApiKeyValid} class="btn btn-success"{else} disabled="disabled"{/if}>{l s='Add Shipment' mod='oyst'}</button>
-                                <p class="help-block" id="add-shipment-help"{if $oyst.currentOneClickApiKeyValid} style="display: none;"{/if}>{l s='You have to add a valid API key in order to add your shipments method' mod='oyst'}</p>
-                            </div>
-                        </div>
-                        <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Environment' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-7">
                                 <select name="OYST_API_ENV_ONECLICK">
@@ -352,12 +265,6 @@
                 <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-shipment-less'} active{/if}" id="tab-content-shipment-less">
                     {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                     <fieldset>
-                        <div class="form-group clearfix">
-                           <label class="control-label col-md-3 col-lg-3">{l s='Enable shipment advanced' mod='oyst'}</label>
-                           <div class="col-md-7 col-lg-7" style="height: 31px;">
-                               <input type="checkbox" name="FC_OYST_SHIPMENT_LESS" value="1" {if $oyst.FC_OYST_SHIPMENT_LESS} checked="checked"{/if} />
-                           </div>
-                        </div>
                         <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-7">
