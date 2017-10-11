@@ -73,7 +73,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                             $this->convertCartToOrder($notification_item, Tools::getValue('ch'), $event_data);
                         }
                         break;
-                    // If authorisation succeed, we create the order
+                    // If fraud succeed, we change payment status on succes
                     case OystPaymentNotification::EVENT_FRAUD_VALIDATION:
                         $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
                         break;
