@@ -290,12 +290,6 @@
                     {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                     <fieldset>
                         <div class="form-group clearfix">
-                           <label class="control-label col-md-3 col-lg-3">{l s='Enable shipment advanced' mod='oyst'}</label>
-                           <div class="col-md-7 col-lg-7" style="height: 31px;">
-                               <input type="checkbox" name="FC_OYST_SHIPMENT_LESS" value="1" {if $oyst.FC_OYST_SHIPMENT_LESS} checked="checked"{/if} />
-                           </div>
-                        </div>
-                        <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-7">
                                 <select name="FC_OYST_SHIPMENT_DEFAULT">

@@ -237,10 +237,6 @@
                 </div>
                 <div class="tab-content" id="tab-content-shipment-less">
                     {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                        <label>{l s='Enable shipment advanced' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <input type="checkbox" name="FC_OYST_SHIPMENT_LESS" value="1" {if $oyst.FC_OYST_SHIPMENT_LESS} checked="checked"{/if} />
-                        </div>
                         <label>{l s='Carrier default' mod='oyst'}</label>
                         <div class="margin-form">
                             <select name="FC_OYST_SHIPMENT_DEFAULT">
