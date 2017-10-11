@@ -164,6 +164,8 @@ class ShipmentService extends AbstractOystService
             return false;
         }
 
+        $oneClickShipmentCalculation = new OneClickShipmentCalculation(array());
+
         if (isset($data['items'])) {
             foreach($data['items'] as $key => $item) {
                 $cart->updateQty($item['quantity'], $item['reference'], null, false, 'up', $address->id);
@@ -190,8 +192,6 @@ class ShipmentService extends AbstractOystService
         $id_default_carrier = (int)PSConfiguration::get('FC_OYST_SHIPMENT_DEFAULT');
 
         $type = OystCarrier::HOME_DELIVERY;
-
-        $oneClickShipmentCalculation = new OneClickShipmentCalculation(array());
 
         foreach($carriersAvailables as $key => $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
