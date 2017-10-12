@@ -30,9 +30,6 @@ if (!class_exists('FroggyHookProcessor', false)) {
 if (!class_exists('FroggyDefinitionsModuleParser', false)) {
     require_once(dirname(__FILE__).'/FroggyDefinitionsModuleParser.php');
 }
-if (!class_exists('FroggyCart', false)) {
-    require_once(dirname(__FILE__).'/FroggyCart.php');
-}
 
 class FroggyPaymentModule extends PaymentModule
 {
