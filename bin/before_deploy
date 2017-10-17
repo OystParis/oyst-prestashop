@@ -10,5 +10,7 @@ rm -rf  travis_release/travis_release
 
 cd travis_release
 
-zip -r oyst.zip *
-tar --exclude='oyst.zip' -cvzf oyst.tar.gz *
+mkdir oyst
+rsync -av * oyst --exclude='oyst'
+zip -r oyst.zip oyst
+tar -cvzf oyst.tar.gz oyst
