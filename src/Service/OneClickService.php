@@ -152,7 +152,7 @@ class OneClickService extends AbstractOystService
             } else {
                 $oneClickOrdersParams->setIsMaterialized(true);
             }
-            $oneClickOrdersParams->setDelay(2);
+            $oneClickOrdersParams->setDelay(15);
             $oneClickOrdersParams->setManageQuantity(true);
             $oneClickOrdersParams->setShouldReinitBuffer(false);
 
