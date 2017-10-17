@@ -56,7 +56,6 @@ function upgrade_module_1_2_0($module)
 
     $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
     $oystDb->createExportTable();
-    $oystDb->createCarrier();
 
     // As hook are handled dynamically by parent lib, we don't need to move them elsewhere
     $module->registerHook('displayFooterProduct');
