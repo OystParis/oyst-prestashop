@@ -235,7 +235,7 @@
                         </div>
                     {/foreach}
                 </div>
-                <div class="tab-content" id="tab-content-shipment-less">
+                <div class="tab-pane" id="tab-content-shipment-less">
                     {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                         <label>{l s='Carrier default' mod='oyst'}</label>
                         <div class="margin-form">
