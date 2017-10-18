@@ -137,7 +137,9 @@ class ShipmentService extends AbstractOystService
 
         $customer = $this->getCustomer($data['user']);
         if (!Validate::isLoadedObject($customer)) {
-            $result['error'] = 'Customer not found or can\'t be found';
+            $this->logger->emergency(
+                'Customer not found or can\'t be found ['.$this->serializer->serialize($customer).']'
+            );
         }
 
         $addressRepository = new AddressRepository(Db::getInstance());
@@ -167,7 +169,7 @@ class ShipmentService extends AbstractOystService
         $oneClickShipmentCalculation = new OneClickShipmentCalculation(array());
 
         if (isset($data['items'])) {
-            foreach($data['items'] as $key => $item) {
+            foreach ($data['items'] as $key => $item) {
                 $cart->updateQty($item['quantity'], $item['reference'], null, false, 'up', $address->id);
 
                 //$oneClickItem = new OneClickItem((string)$item['reference'], (int)$item['quantity']);
