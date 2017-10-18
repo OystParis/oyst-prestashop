@@ -138,8 +138,9 @@ class ShipmentService extends AbstractOystService
         $customer = $this->getCustomer($data['user']);
         if (!Validate::isLoadedObject($customer)) {
             $this->logger->emergency(
-                'Customer not found or can\'t be found ['.$this->serializer->serialize($customer).']'
+                'Customer not found or can\'t be found ['.this->serializer->serialize($customer).']'
             );
+            return false;
         }
 
         $addressRepository = new AddressRepository(Db::getInstance());
