@@ -196,7 +196,7 @@ class ShipmentService extends AbstractOystService
 
         $type = OystCarrier::HOME_DELIVERY;
 
-        foreach($carriersAvailables as $key => $shipment) {
+        foreach ($carriersAvailables as $key => $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
 
             $id_reference = Db::getInstance()->getValue('
