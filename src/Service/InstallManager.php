@@ -124,7 +124,7 @@ class InstallManager
         $products = Product::getProducts(Context::getContext()->language->id, 0, 0, 'id_product', 'ASC');
         $state = true;
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $state &= $this->db->insert(
                 'oyst_product',
                 array(

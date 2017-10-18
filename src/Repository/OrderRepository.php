@@ -380,7 +380,7 @@ class OrderRepository extends AbstractOystRepository
             SELECT id_order_history
             FROM "._DB_PREFIX_."order_history
             WHERE id_order = $orderId
-            ORDER BY id_order_history DESC 
+            ORDER BY id_order_history DESC
         ";
 
         return new OrderHistory((int) $this->db->getValue($query));
@@ -398,7 +398,7 @@ class OrderRepository extends AbstractOystRepository
             FROM '._DB_PREFIX_.'oyst_api_order
             WHERE orderId = '.(int) $orderId);
     }
- 
+
     /**
      * For FreePay
      * @param $orderId
@@ -410,9 +410,7 @@ class OrderRepository extends AbstractOystRepository
             SELECT payment_id
             FROM '._DB_PREFIX_.'oyst_payment_notification
             WHERE id_order = '.(int) $orderId);
-    }    
-    
-    
+    }
 
     /**
      * @param Order $order

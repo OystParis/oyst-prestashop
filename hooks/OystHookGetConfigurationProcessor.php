@@ -119,7 +119,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
             $carriers = $this->getCarrierList();
 
-            foreach($carriers as $carrier) {
+            foreach ($carriers as $carrier) {
                 $field = 'FC_OYST_SHIPMENT_'.$carrier['id_reference'];
                 $type = Tools::getValue($field);
                 Configuration::updateValue($field, $type);
@@ -271,8 +271,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $template = $goToForm || $hasError ? 'getGuestConfigure.tpl' : 'getMerchantConfigure.tpl';
 
-        if (version_compare(_PS_VERSION_, '1.6', '<'))
-        {
+        if (version_compare(_PS_VERSION_, '1.6', '<')) {
             $this->context->controller->addCSS(array(
                 $this->path.'views/css/freepay-1.5.css',
             ));
@@ -281,8 +280,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             ));
         }
 
-        if (version_compare(_PS_VERSION_, '1.6', '>='))
-        {
+        if (version_compare(_PS_VERSION_, '1.6', '>=')) {
             $this->context->controller->addCSS(array(
                 $this->path.'views/css/freepay-1.6.css',
             ));

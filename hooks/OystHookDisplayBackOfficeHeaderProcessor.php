@@ -27,6 +27,7 @@ use Oyst\Api\OystApiClientFactory;
 use Oyst\Repository\OrderRepository;
 use Oyst\Repository\ProductRepository;
 use Oyst\Factory\AbstractFreePayPaymentServiceFactory;
+use Oyst\Factory\AbstractOneClickPaymentServiceFactory;
 use Oyst\Factory\AbstractOrderServiceFactory;
 use Oyst\Classes\OystPrice;
 use Oyst\Classes\Enum\AbstractOrderState;
@@ -118,8 +119,8 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
             if ($guid) {
                 $currency = new Currency($order->id_currency);
                 $orderService = AbstractOrderServiceFactory::get(
-                $this->module,
-                $this->context
+                    $this->module,
+                    $this->context
                 );
 
 

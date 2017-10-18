@@ -52,12 +52,11 @@ class OystHookActionProductAddProcessor extends FroggyHookProcessor
 
             $active_oneclick = Tools::getValue('active_oneclick');
 
-            if (isset($active_oneclick))
-            {
+            if (isset($active_oneclick)) {
                 $productRepository = new ProductRepository(Db::getInstance());
                 $productRepository->setActive($product->id, $active_oneclick);
             }
-            
+
             return true;
         }
     }
