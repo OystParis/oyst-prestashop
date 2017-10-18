@@ -50,6 +50,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
         'FC_OYST_SHIPMENT_DEFAULT'        => 'int',
+        'FC_OYST_THEME_BTN'               => 'string',
+        'FC_OYST_COLOR_BTN'               => 'string',
+        'FC_OYST_WIDTH_BTN'               => 'string',
+        'FC_OYST_HEIGHT_BTN'              => 'string',
+        'FC_OYST_POSITION_BTN'            => 'string',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
@@ -116,7 +121,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 Configuration::updateValue($conf, $value);
             }
 
-
             $carriers = $this->getCarrierList();
 
             foreach ($carriers as $carrier) {
@@ -124,7 +128,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 $type = Tools::getValue($field);
                 Configuration::updateValue($field, $type);
             }
-
             if (Tools::isSubmit('shipments')) {
                 $oneClickShipmentTransformer = new OneClickShipmentTransformer($this->context);
                 $oneClickShipmentRepository = new OneClickShipmentRepository(Db::getInstance());
@@ -227,6 +230,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['carrier_list']             = $this->getCarrierList();
         $assign['type_list']                = $shipmentTypes;
         $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
+
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
 
@@ -291,6 +295,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->path.'views/js/handleShipment.js',
             $this->path.'views/js/logManagement.js',
         ));
+
+        // Check for 1.5 ??
+        $this->context->controller->addJqueryPlugin('colorpicker');
 
         return $this->module->fcdisplay(__FILE__, $template);
     }

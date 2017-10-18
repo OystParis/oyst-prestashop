@@ -79,7 +79,6 @@
             <ul id="oyst-config-menu" class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="{if $oyst.current_tab == '#tab-content-FreePay'}active{/if}"><a href="#tab-content-FreePay" role="tab" data-toggle="tab">{l s='FreePay' mod='oyst'}</a></li>
                 <li role="presentation" class="{if $oyst.current_tab == '#tab-content-1-click'}active{/if}"><a href="#tab-content-1-click" role="tab" data-toggle="tab">{l s='1-click' mod='oyst'}</a></li>
-                <li role="presentation" class="{if $oyst.current_tab == '#tab-content-shipment-less'}active{/if}"><a href="#tab-content-shipment-less" role="tab" data-toggle="tab">{l s='Settings shipment' mod='oyst'}</a></li>
             </ul>
             <div class="oyst-admin-tab tab-content">
                 <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab|escape:'htmlall':'UTF-8'}"/>
@@ -271,19 +270,63 @@
                                 </select>
                             </div>
                         </div>
-                            {foreach $oyst.carrier_list as $carrier}
-                                <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{$carrier.name|escape:'htmlall':'UTF-8'}</label>
-                                    <div class="col-md-7 col-lg-7">
-                                        <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
-                                            <option value="0">{l s='Disabled' mod='oyst'}</option>
-                                            {foreach from=$oyst.type_list key=value item=name}
-                                                <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
-                                            {/foreach}
-                                        </select>
+                        {foreach $oyst.carrier_list as $carrier}
+                            <div class="form-group clearfix">
+                                <label class="control-label col-md-3 col-lg-3">{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                                <div class="col-md-7 col-lg-7">
+                                    <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
+                                        <option value="0">{l s='Disabled' mod='oyst'}</option>
+                                        {foreach from=$oyst.type_list key=value item=name}
+                                            <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        {/foreach}
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Style btn 1-Click' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
+                                <select name="FC_OYST_THEME_BTN">
+                                    <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
+                                    <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
+                            <div class="col-lg-7">
+                                <div class="form-group">
+                                    <div class="col-md-2 col-lg-2">
+                                        <div class="input-group">
+                                            <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}" />
+                                        </div>
                                     </div>
                                 </div>
-                            {/foreach}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
+                                <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
+                                <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
+                                <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Position btn 1-Click' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
+                                <select name="FC_OYST_POSITION_BTN">
+                                    <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                    <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                </select>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
