@@ -249,7 +249,7 @@
                         {foreach $oyst.carrier_list as $carrier}
                             <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
                             <div class="margin-form">
-                                <select name="FC_OYST_SHIPMENT_{$carrier.id_reference}">
+                                <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
                                     <option value="0">{l s='Disabled' mod='oyst'}</option>
                                     {foreach from=$oyst.type_list key=value item=name}
                                         <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
