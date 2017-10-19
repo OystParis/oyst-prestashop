@@ -235,32 +235,6 @@
                         </div>
                     {/foreach}
                 </div>
-                <div class="tab-pane" id="tab-content-shipment-less">
-                    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                        <label>{l s='Carrier default' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <select name="FC_OYST_SHIPMENT_DEFAULT">
-                                <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
-                                {foreach $oyst.carrier_list as $carrier}
-                                    <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
-                                {/foreach}
-                            </select>
-                        </div>
-                        {foreach $oyst.carrier_list as $carrier}
-                            <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
-                            <div class="margin-form">
-                                <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
-                                    <option value="0">{l s='Disabled' mod='oyst'}</option>
-                                    {foreach from=$oyst.type_list key=value item=name}
-                                        <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
-                            </div>
-                        {/foreach}
-                    {else}
-                        <p class="error">{l s='Please enter key valid for OneClick' mod='oyst'}</p>
-                    {/if}
-                </div>
                 <div class="margin-form">
                     <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
                         {l s='Save' mod='oyst'}
