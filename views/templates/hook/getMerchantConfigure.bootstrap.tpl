@@ -286,34 +286,6 @@
                             {/foreach}
                     </fieldset>
                 </div>
-                <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-shipment-less'} active{/if}" id="tab-content-shipment-less">
-                    <fieldset>
-                        <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <select name="FC_OYST_SHIPMENT_DEFAULT">
-                                    <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
-                                    {foreach $oyst.carrier_list as $carrier}
-                                        <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
-                            </div>
-                        </div>
-                            {foreach $oyst.carrier_list as $carrier}
-                                <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{$carrier.name|escape:'htmlall':'UTF-8'}</label>
-                                    <div class="col-md-7 col-lg-7">
-                                        <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
-                                            <option value="0">{l s='Disabled' mod='oyst'}</option>
-                                            {foreach from=$oyst.type_list key=value item=name}
-                                                <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
-                                            {/foreach}
-                                        </select>
-                                    </div>
-                                </div>
-                            {/foreach}
-                    </fieldset>
-                </div>
             </div>
         </div>
         <div class="panel-footer">
