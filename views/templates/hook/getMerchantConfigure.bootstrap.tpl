@@ -260,10 +260,6 @@
                                 <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
-                    </fieldset>
-                </div>
-                <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-shipment-less'} active{/if}" id="tab-content-shipment-less">
-                    <fieldset>
                         <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-7">
