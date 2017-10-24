@@ -48,6 +48,7 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
                 $synchronizedCombination[$combination['id_product_attribute']] = array(
                     'quantity' => $stockAvailable->quantity
                 );
+
         }
 
         //require for load Out Of Stock Information (isAvailableWhenOutOfStock)
@@ -59,9 +60,14 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             'productQuantity' => StockAvailable::getStockAvailableIdByProductId($product->id),
             'synchronizedCombination' => $synchronizedCombination,
             'stockManagement' => Configuration::get('PS_STOCK_MANAGEMENT'),
-            'oneClickActivated' => (int) Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
+            'oneClickActivated' => (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
             'btnOneClickState' => $productRepository->getActive($product->id),
             'allowOosp' => $product->isAvailableWhenOutOfStock((int)$product->out_of_stock),
+            'themeBtn' => Configuration::get('FC_OYST_THEME_BTN'),
+            'colorBtn' => Configuration::get('FC_OYST_COLOR_BTN'),
+            'widthBtn' => Configuration::get('FC_OYST_WIDTH_BTN'),
+            'heightBtn' => Configuration::get('FC_OYST_HEIGHT_BTN'),
+            'positionBtn' => Configuration::get('FC_OYST_POSITION_BTN'),
         ));
         $this->context->controller->addJS(array(
             $this->path.'views/js/OystOneClick.js',

@@ -32,6 +32,11 @@ function OystOneClick(url, productId) {
     this.allowOosp = 0;
     this.productQuantity = 0;
     this.button = '#oneClickContainer';
+    this.themeBtn = 'normal';
+    this.colorBtn = '#E91E63';
+    this.widthBtn = '230px';
+    this.heightBtn = '60px';
+    this.positionBtn = 'before';
 
     this.setExportedCombinations = function(combinations) {
         this.combinations = combinations;
@@ -44,9 +49,29 @@ function OystOneClick(url, productId) {
     this.setAllowOosp = function(allowOosp) {
         this.allowOosp = allowOosp;
     }
-    
+
     this.setProductQuantity = function(productQuantity) {
         this.productQuantity = productQuantity;
+    }
+
+    this.setThemeBtn = function(themeBtn) {
+        this.themeBtn = themeBtn;
+    }
+
+    this.setColorBtn = function(colorBtn) {
+        this.colorBtn = colorBtn;
+    }
+
+    this.setWidthBtn = function(widthBtn) {
+        this.widthBtn = widthBtn;
+    }
+
+    this.setHeightBtn = function(heightBtn) {
+        this.heightBtn = heightBtn;
+    }
+
+    this.setPositionBtn = function(positionBtn) {
+        this.positionBtn = positionBtn;
     }
 
     /**
@@ -57,7 +82,7 @@ function OystOneClick(url, productId) {
         var product = this.getSelectedProduct();
         // if productAttributeIf is equal to 0, it means its a unique product
         var isExported = product.productAttributeId in this.combinations;
-        
+
         return {
             "isExported": isExported,
             "product": product
@@ -71,7 +96,7 @@ function OystOneClick(url, productId) {
     this.isProductAvailable = function() {
         var productExported = this.isProductExported();
         var product = productExported.product;
-        
+
         if (this.stockManagement && !this.allowOosp){
             if (product.productAttributeId == 0)
                 return 0 < this.productQuantity;
@@ -81,7 +106,6 @@ function OystOneClick(url, productId) {
             return true
         }
 
-        
         return false;
     };
 
@@ -114,13 +138,28 @@ function OystOneClick(url, productId) {
      */
     this.prepareButton = function() {
         // Avoid any event issue due to potential remove / create from loaded oyst script
-        $('#add_to_cart, .add_to_cart').before($('<div>', {
-            id: 'oneClickContainer'
-        }));
+        if (this.positionBtn == 'after') {
+            $('#add_to_cart, .add_to_cart').after($('<div>', {
+                id: 'oneClickContainer'
+            }));
+        } else {
+            $('#add_to_cart, .add_to_cart').before($('<div>', {
+                id: 'oneClickContainer'
+            }));
+        }
+
 
         $('#oneClickContainer').append($('<div>', {
             id: 'oyst-1click-button'
-        }));
+        }).attr(
+            'data-theme', this.themeBtn
+        ).attr(
+            'data-color', this.colorBtn
+        ).attr(
+            'data-width', this.widthBtn
+        ).attr(
+            'data-height', this.heightBtn
+        ));
 
         this.prepareEvents();
     };
