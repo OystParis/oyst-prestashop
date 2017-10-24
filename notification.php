@@ -22,6 +22,7 @@
 use Oyst\Controller\ExportProductController;
 use Oyst\Service\Http\CurrentRequest;
 use Oyst\Controller\OrderController;
+use Oyst\Controller\ShipmentController;
 
 require_once dirname(__FILE__).'/../../config/config.inc.php';
 require_once dirname(__FILE__).'/oyst.php';
@@ -53,6 +54,11 @@ if ($data && isset($data['event'])) {
                 $orderController = new OrderController($request);
                 $orderController->setLogger($logger);
                 $orderController->createNewOrderAction();
+                break;
+            case 'order.shipments.get':
+                $shipmentController = new ShipmentController($request);
+                $shipmentController->setLogger($logger);
+                $shipmentController->getShipmentsAction();
                 break;
             default:
                 http_response_code(400);

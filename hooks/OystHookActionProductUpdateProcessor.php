@@ -36,12 +36,13 @@ if (!defined('_PS_VERSION_')) {
 /**
  * Class OystHookActionProductUpdateProcessor
  */
-class OystHookActionProductUpdateProcessor extends FroggyHookProcessor {
-
+class OystHookActionProductUpdateProcessor extends FroggyHookProcessor
+{
     /**
      *
      */
-    public function run() {
+    public function run()
+    {
         // If combination is set, it will use this same process on its own
         if (Tools::isSubmit('id_product_attribute') && Tools::getValue('id_product_attribute') > 0) {
             return true;
@@ -56,5 +57,4 @@ class OystHookActionProductUpdateProcessor extends FroggyHookProcessor {
             return true;
         }
     }
-
 }

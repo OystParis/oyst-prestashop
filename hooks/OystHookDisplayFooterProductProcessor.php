@@ -36,7 +36,7 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
         if (!Validate::isLoadedObject($product)) {
             return '';
         }
-        
+
         $productRepository = new ProductRepository(Db::getInstance());
         $productCombinations = $product->getAttributeCombinations($this->context->language->id);
 
@@ -48,12 +48,11 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
                 $synchronizedCombination[$combination['id_product_attribute']] = array(
                     'quantity' => $stockAvailable->quantity
                 );
-            
         }
-        
+
         //require for load Out Of Stock Information (isAvailableWhenOutOfStock)
         $product->loadStockData();
-        
+
         $this->smarty->assign(array(
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
             'product' => $product,

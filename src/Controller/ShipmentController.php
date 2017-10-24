@@ -19,31 +19,23 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-use Oyst\Factory\AbstractProductServiceFactory;
+namespace Oyst\Controller;
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+use Oyst;
+use Context;
+use Currency;
+use Configuration;
+use Oyst\Factory\AbstractShipmentServiceFactory;
 
-/**
- * Class OystHookActionProductAddProcessor
- */
-class OystHookActionObjectProductDeleteAfterProcessor extends FroggyHookProcessor
+class ShipmentController extends AbstractOystController
 {
-    /**
-     * @return bool
-     */
-    public function run()
+    public function getShipmentsAction()
     {
-        /** @var Product $product */
-        $product = $this->params['object'];
-        $productService = AbstractProductServiceFactory::get($this->module, $this->context, Db::getInstance());
-        $oystProduct = $productService->getOystProduct($product);
-        $succeed = $productService->delete($oystProduct);
+        $data = $this->request->getJson();
+        $shipmentService = AbstractShipmentServiceFactory::get(new Oyst(), Context::getContext());
+        $responseData = $shipmentService->getShipments($data['data']);
 
-        return $succeed;
+        header('Content-Type: application/json');
+        echo $responseData;
     }
 }

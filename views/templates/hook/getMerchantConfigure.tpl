@@ -62,6 +62,9 @@
                 <li class="tab-row">
                     <a class="tab-page" href="#tab-content-1-click">1-Click</a>
                 </li>
+                <li  class="tab-row">
+                    <a class="tab-page" href="#tab-content-shipment-less">{l s='Settings shipment' mod='oyst'}</a>
+                </li>
             </ul>
         </div>
         <div class="tab-content" id="tabPane1">
@@ -195,66 +198,6 @@
                             {/if}
                         </div>
                     </div>
-                    <label>{l s='Shipments' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <div id="shipment-collection">
-                            {foreach from=$oyst.shipment_list key=index item=shipment}
-                            <div class="shipment-item">
-                                <label>{l s='Carrier' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <select name="shipments[{$index|escape:'htmlall':'UTF-8'}][id_carrier]">
-                                    {foreach $oyst.carrier_list as $carrier}
-                                        <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $shipment.id_carrier_reference == $carrier.id_reference} selected="selected"{/if}>{$carrier.name}</option>
-                                    {/foreach}
-                                    </select>
-                                </div>
-                                <label>{l s='Primary' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="checkbox" class="shipment-primary" name="shipments[{$index|escape:'htmlall':'UTF-8'}][primary]" value="1"{if $shipment.primary} checked="checked"{/if}/>
-                                </div>
-                                <div class="col-left">
-                                    <label>{l s='Type' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <select name="shipments[{$index|escape:'htmlall':'UTF-8'}][type]">
-                                        {foreach from=$oyst.type_list key=value item=name}
-                                            <option value="{$value|escape:'htmlall':'UTF-8'}"{if $shipment.type == $value} selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
-                                        {/foreach}
-                                        </select>
-                                    </div>
-                                    <label>{l s='Delay' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][delay]" value="{$shipment.delay}"/>
-                                        <br>
-                                        <span class="help-block">{l s='Values in days' mod='oyst'}</span>
-                                    </div>
-                                    <label>{l s='Free shipping from' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][free_shipping]" value="{$shipment.free_shipping}"/>
-                                    </div>
-                                </div>
-                                <div class="col-right">
-                                    <label>{l s='Amount' mod='oyst'}</label>
-                                    <div class="margin-form">
-                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][amount_leader]" value="{$shipment.amount_leader}"/>
-                                        <br>
-                                        <span class="help-block">{l s='First product' mod='oyst'}</span>
-                                    </div>
-                                    <div class="margin-form">
-                                        <input type="text" name="shipments[{$index|escape:'htmlall':'UTF-8'}][amount_follower]" value="{$shipment.amount_follower}"/>
-                                        <br>
-                                        <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
-                                    </div>
-                                </div>
-                                <label></label>
-                                <div class="margin-form">
-                                    <button type="button" class="delete-shipment">{l s='Delete Shipment' mod='oyst'}</button>
-                                </div>
-                            </div>
-                            {/foreach}
-                        </div>
-                        <button type="button" id="add-shipment"{if !$oyst.currentOneClickApiKeyValid} disabled="disabled"{/if}>{l s='Add Shipment' mod='oyst'}</button>
-                        <p class="help-block" id="add-shipment-help" {if $oyst.currentOneClickApiKeyValid} style="display: none;"{/if}>{l s='You have to add a valid API key in order to add your shipment methods' mod='oyst'}</p>
-                    </div>
                     <label>{l s='Environment' mod='oyst'}</label>
                     <div class="margin-form">
                         <select name="OYST_API_ENV_ONECLICK">
@@ -271,6 +214,26 @@
                     <div class="margin-form env custom">
                         <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                     </div>
+                    <label>{l s='Carrier default' mod='oyst'}</label>
+                    <div class="margin-form">
+                        <select name="FC_OYST_SHIPMENT_DEFAULT">
+                            <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
+                            {foreach $oyst.carrier_list as $carrier}
+                                <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    {foreach $oyst.carrier_list as $carrier}
+                        <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                        <div class="margin-form">
+                            <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
+                                <option value="0">{l s='Disabled' mod='oyst'}</option>
+                                {foreach from=$oyst.type_list key=value item=name}
+                                    <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    {/foreach}
                 </div>
                 <div class="margin-form">
                     <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">

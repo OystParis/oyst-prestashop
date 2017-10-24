@@ -151,7 +151,7 @@ class ExportProductService extends AbstractOystService
         }
         $oystProduct = clone $baseOystProduct;
 
-        if ($id_combination > 0){
+        if ($id_combination > 0) {
             $combination = new Combination($id_combination);
             if (Validate::isLoadedObject($combination)) {
                 // We still need the original product to get the current price (discount for example)

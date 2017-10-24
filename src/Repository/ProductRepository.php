@@ -234,7 +234,7 @@ class ProductRepository extends AbstractOystRepository
         $attributes = $combination->getAttributesName($langId);
         $attributesId = array();
 
-        foreach($attributes as $attributeInfo) {
+        foreach ($attributes as $attributeInfo) {
             $attributesId[] = $attributeInfo['id_attribute'];
         }
 
@@ -275,20 +275,20 @@ class ProductRepository extends AbstractOystRepository
 
         if ($state === false) {
             return $this->db->insert(
-                    'oyst_product',
-                    array(
-                        'id_product' => (int)$id_product,
-                        'active_oneclick' => (bool)$active
-                    )
-                );
+                'oyst_product',
+                array(
+                    'id_product' => (int)$id_product,
+                    'active_oneclick' => (bool)$active
+                )
+            );
         } else {
             return $this->db->update(
-                    'oyst_product',
-                    array(
-                        'active_oneclick' => (bool) $active,
-                    ),
-                    'id_product = '.(int)$id_product
-                );
+                'oyst_product',
+                array(
+                    'active_oneclick' => (bool) $active,
+                ),
+                'id_product = '.(int)$id_product
+            );
         }
     }
 }

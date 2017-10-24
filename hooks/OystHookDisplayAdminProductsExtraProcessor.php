@@ -37,7 +37,7 @@ class OystHookDisplayAdminProductsExtraProcessor extends FroggyHookProcessor
         $product = new Product($id_product);
 
         //$oneClickProductRepository = new OneClickProductRepository(Db::getInstance());
-	$productRepository = new ProductRepository(Db::getInstance());
+        $productRepository = new ProductRepository(Db::getInstance());
 
         $this->smarty->assign('oyst', array(
             'OYST_ONE_CLICK_ACTIVE' => Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),

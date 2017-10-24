@@ -48,7 +48,7 @@ class AbstractFreePayPaymentServiceFactory
             $oyst->getUserAgent(),
             $oyst->getFreePayEnvironment(),
             $oyst->getFreePayApiUrl()
-            );
+        );
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
         $logger = new FileLogger();

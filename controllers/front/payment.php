@@ -72,10 +72,11 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             'optin', 'website', 'company', 'siret', 'ape', 'active', 'date_add', 'date_upd',
         );
         foreach ($customer_fields as $field) {
-            if($field == 'id_lang')
+            if ($field == 'id_lang') {
                 $customer_data[$field] = $id_lang;
-            else
+            } else {
                 $customer_data[$field] = $this->context->customer->$field;
+            }
         }
 
         $user = array(

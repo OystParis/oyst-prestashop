@@ -60,11 +60,8 @@ class InstallManager
     public function install()
     {
         $state = true;
-        $state &= $this->createCarrier();
-        $state &= $this->pushDefaultShipment();
         $state &= $this->createExportTable();
         $state &= $this->createOrderTable();
-        $state &= $this->createShipmentTable();
         $state &= $this->createProductTable();
         $state &= $this->populateProductTable();
 
@@ -107,30 +104,6 @@ class InstallManager
     /**
      * @return bool
      */
-    public function createShipmentTable()
-    {
-        $query = "
-            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_shipment` (
-                  `id_oyst_shipment` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `id_carrier_reference` int(10) unsigned NOT NULL,
-                  `primary` tinyint(1) DEFAULT 0,
-                  `type` varchar(128) NOT NULL,
-                  `delay` int(10) unsigned NOT NULL,
-                  `zones` varchar(128) NOT NULL,
-                  `amount_leader` decimal(20,2) NOT NULL,
-                  `amount_follower` decimal(20,2) NOT NULL,
-                  `free_shipping` decimal(20,2) NULL,
-                  `currency` varchar(16) DEFAULT NULL,
-                  PRIMARY KEY (`id_oyst_shipment`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
     public function createProductTable()
     {
         $query = "
@@ -151,7 +124,7 @@ class InstallManager
         $products = Product::getProducts(Context::getContext()->language->id, 0, 0, 'id_product', 'ASC');
         $state = true;
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $state &= $this->db->insert(
                 'oyst_product',
                 array(
@@ -191,18 +164,6 @@ class InstallManager
     /**
      * @return bool
      */
-    public function dropShipmentTable()
-    {
-        $query = "
-            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_shipment;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
     public function dropProductTable()
     {
         $query = "
@@ -214,146 +175,19 @@ class InstallManager
 
     public function uninstall()
     {
-        $this->removeCarrier();
         $this->dropExportTable();
         $this->dropOrderTable();
-        $this->dropShipmentTable();
         $this->dropProductTable();
 
         // Remove anything at the end
         $this->removeConfiguration();
     }
 
-    public function createCarrier()
-    {
-        //Create new carrier
-        $carrier = new Carrier(PSConfiguration::get(Configuration::ONE_CLICK_CARRIER));
-
-        if (Validate::isLoadedObject($carrier)) {
-            return true;
-        }
-
-        $carrier->name = 'Oyst One Click';
-        $carrier->active = true;
-        $carrier->deleted = 0;
-        $carrier->shipping_handling = false;
-        $carrier->shipping_external = true;
-        $carrier->range_behavior = 0;
-        $carrier->is_free = false;
-        $carrier->delay = array(
-            PSConfiguration::get('PS_LANG_DEFAULT') => 'Delay'
-        );
-        $carrier->is_module = true;
-        $carrier->external_module_name = $this->oyst->name;
-        $carrier->need_range = true;
-
-        if ($carrier->add()) {
-            $groups = Group::getGroups(true);
-            foreach ($groups as $group) {
-                $this->db->insert('carrier_group', array(
-                    'id_carrier' => (int)$carrier->id,
-                    'id_group' => (int)$group['id_group']
-                ));
-            }
-
-            $rangePrice = new RangePrice();
-            $rangePrice->id_carrier = $carrier->id;
-            $rangePrice->delimiter1 = '0';
-            $rangePrice->delimiter2 = '1000000';
-            $rangePrice->add();
-
-            $rangeWeight = new RangeWeight();
-            $rangeWeight->id_carrier = $carrier->id;
-            $rangeWeight->delimiter1 = '0';
-            $rangeWeight->delimiter2 = '1000000';
-            $rangeWeight->add();
-
-            $zones = Zone::getZones(true);
-            foreach ($zones as $z) {
-                $this->db->insert(
-                    'carrier_zone',
-                    array('id_carrier' => (int) $carrier->id, 'id_zone' => (int) $z['id_zone'])
-                );
-
-                $this->db->autoExecuteWithNullValues(
-                    _DB_PREFIX_ . 'delivery',
-                    array(
-                        'id_carrier' => $carrier->id,
-                        'id_range_price' => (int) $rangePrice->id,
-                        'id_range_weight' => null,
-                        'id_zone' => (int) $z['id_zone'],
-                        'price' => '0'
-                    ),
-                    'INSERT'
-                );
-
-                $this->db->autoExecuteWithNullValues(
-                    _DB_PREFIX_ . 'delivery',
-                    array(
-                        'id_carrier' => $carrier->id,
-                        'id_range_price' => null,
-                        'id_range_weight' => (int) $rangeWeight->id,
-                        'id_zone' => (int) $z['id_zone'],
-                        'price' => '0'
-                    ),
-                    'INSERT'
-                );
-            }
-
-            PSConfiguration::updateValue(Configuration::ONE_CLICK_CARRIER, $carrier->id);
-            return true;
-        }
-        return false;
-    }
-
     private function removeConfiguration()
     {
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_FEATURE_STATE);
-        PSConfiguration::deleteByName(Configuration::ONE_CLICK_CARRIER);
         PSConfiguration::deleteByName(Configuration::CATALOG_EXPORT_STATE);
         PSConfiguration::deleteByName(Configuration::REQUESTED_CATALOG_DATE);
         PSConfiguration::deleteByName(Configuration::DISPLAY_ADMIN_INFO_STATE);
-    }
-
-    /**
-     * @return bool
-     */
-    private function removeCarrier()
-    {
-        // Carrier should never be deleted because merchant needs to keep record for the orders information.
-        $carrier = new Carrier(PSConfiguration::get(Configuration::ONE_CLICK_CARRIER));
-
-        if (!Validate::isLoadedObject($carrier)) {
-            return true;
-        }
-
-        $carrier->deleted = 1;
-        return $carrier->save();
-    }
-
-    public function pushDefaultShipment()
-    {
-        $shipment = new OneClickShipment();
-
-        $carrier = new OystCarrier(
-            PSConfiguration::get(Configuration::ONE_CLICK_CARRIER),
-            'Default and Free',
-            OystCarrier::HOME_DELIVERY
-        );
-
-        $amount = new ShipmentAmount(0, 0, 'EUR');
-        $shipment
-            ->setCarrier($carrier)
-            ->setAmount($amount)
-            ->setDelay(7)
-            ->setFreeShipping(0)
-            ->setPrimary(true)
-            ->setZones(array('FR'))
-        ;
-
-        $shipmentService = AbstractShipmentServiceFactory::get($this->oyst, $this->oyst->getContext(), $this->db);
-        $shipmentService->pushShipment($shipment);
-
-        return $shipmentService->getRequester()->getApiClient()->getLastHttpCode() == "200";
     }
 }

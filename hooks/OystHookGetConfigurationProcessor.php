@@ -49,6 +49,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_REDIRECT_ERROR_CUSTOM'   => 'string',
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
+        'FC_OYST_SHIPMENT_DEFAULT'        => 'int',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
@@ -113,6 +114,15 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                     }
                 }
                 Configuration::updateValue($conf, $value);
+            }
+
+
+            $carriers = $this->getCarrierList();
+
+            foreach ($carriers as $carrier) {
+                $field = 'FC_OYST_SHIPMENT_'.$carrier['id_reference'];
+                $type = Tools::getValue($field);
+                Configuration::updateValue($field, $type);
             }
 
             if (Tools::isSubmit('shipments')) {
@@ -181,8 +191,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             }
         }
 
-        $shipmentRepository = new OneClickShipmentRepository(Db::getInstance());
-        $shipmentList = $shipmentRepository->getShipments();
         $loggerManager = new LoggerManager();
         $logsFile = $loggerManager->getFiles();
         $filesName = array();
@@ -217,11 +225,10 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['custom_success_error']     = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM'));
         $assign['custom_error_error']       = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
         $assign['carrier_list']             = $this->getCarrierList();
-        $assign['shipment_list']            = $shipmentList;
         $assign['type_list']                = $shipmentTypes;
+        $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
-        $assign['can_export_catalog'] = Configuration::get('OYST_ONE_CLICK_FEATURE_STATE') && !empty($currentOneClickApiKey) && count($shipmentList);
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');
@@ -264,8 +271,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $template = $goToForm || $hasError ? 'getGuestConfigure.tpl' : 'getMerchantConfigure.tpl';
 
-        if (version_compare(_PS_VERSION_, '1.6', '<'))
-        {
+        if (version_compare(_PS_VERSION_, '1.6', '<')) {
             $this->context->controller->addCSS(array(
                 $this->path.'views/css/freepay-1.5.css',
             ));
@@ -274,8 +280,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             ));
         }
 
-        if (version_compare(_PS_VERSION_, '1.6', '>='))
-        {
+        if (version_compare(_PS_VERSION_, '1.6', '>=')) {
             $this->context->controller->addCSS(array(
                 $this->path.'views/css/freepay-1.6.css',
             ));
@@ -435,7 +440,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     private function getCarrierList()
     {
-        $carrier_list = Carrier::getCarriers($this->context->language->id, false, false, false, null, Carrier::ALL_CARRIERS);
+        $carrier_list = Carrier::getCarriers($this->context->language->id, true, false, false, null, Carrier::ALL_CARRIERS);
 
         return $carrier_list;
     }

@@ -141,7 +141,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_aff51d15d8c554003463325f0eb4313
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_0ba29c6a1afacf586b03a26162c72274'] = 'Environnement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_756d97bb256b8580d4d71ee0c547804e'] = 'Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_97f559e8d8c3575af3f669d903ee4111'] = 'Pré-Production';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_90589c47f06eb971d548591f23c285af'] = 'Personnalié';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_90589c47f06eb971d548591f23c285af'] = 'Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_3d704c8eda12958b3d36812e5b1bb8c4'] = 'Activer 1-click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4d587804f19493bc8914920767d83ea3'] = 'Clé API 1-Click Production';

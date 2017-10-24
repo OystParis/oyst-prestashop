@@ -40,7 +40,6 @@ function upgrade_module_1_3_0($module)
 
     $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
     $oystDb->createOrderTable();
-    $oystDb->createShipmentTable();
 
     $module->registerHook('actionOrderStatusPostUpdate');
     $module->registerHook('actionProductAdd');

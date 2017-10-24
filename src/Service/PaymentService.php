@@ -47,7 +47,7 @@ class PaymentService extends AbstractOystService
      * @param int $amount, string $currency
      * @return $this
      */
-    
+
     public function partialRefund($guid, $amount, $status)
     {
          $this->requester->call('cancelOrRefund', array($guid, $amount));
@@ -60,6 +60,6 @@ class PaymentService extends AbstractOystService
             $this->logger->info(sprintf('Oyst order %s has been updated to %s', $guid, $status));
         }
 
-        return $succeed;       
+        return $succeed;
     }
 }

@@ -36,6 +36,7 @@ use Oyst\Repository\OrderRepository;
 use Product;
 use ToolsCore;
 use Validate;
+use Db;
 
 /**
  * Class OneClickService
@@ -79,8 +80,7 @@ class OrderService extends AbstractOystService
     {
         $address = $this->addressRepository->findAddress($oystAddress);
         if (!Validate::isLoadedObject($address)) {
-            // TODO: For now, France only, should be changed for worldwide or European
-            $countryId = (int)CountryCore::getByIso('fr');
+            $countryId = (int)CountryCore::getByIso($oystAddress['country']);
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
@@ -133,11 +133,11 @@ class OrderService extends AbstractOystService
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
-            $address->firstname = $pickupAddress['name'];
+            $address->firstname = ($pickupAddress['name'] != '')? $pickupAddress['name'] : 'none';
             $address->lastname = "";
-            $address->address1 = $pickupAddress['street'];
-            $address->postcode = $pickupAddress['postal_code'];
-            $address->city = $pickupAddress['city'];
+            $address->address1 = ($pickupAddress['street'] != '')? $pickupAddress['street'] : 'none';
+            $address->postcode = ($pickupAddress['postal_code'] != '')? $pickupAddress['postal_code'] : 'none';
+            $address->city = ($pickupAddress['city'] != '')? $pickupAddress['city'] : 'none';
             $address->alias = $alias;
             $address->id_country = $countryId;
             $address->other = 'Pickup Info #'.$pickupId.' type '.$carrierInfo['type'];
@@ -200,9 +200,14 @@ class OrderService extends AbstractOystService
             }
         }
 
+        $id_reference = Db::getInstance()->getValue('
+                        SELECT `id_reference`
+                        FROM `'._DB_PREFIX_.'carrier`
+                        WHERE id_carrier = '.(int)$oystOrderInfo['shipment']['carrier']['id']);
+
         // Require to get the right price during the validateOrder
         $cart->oystShipment = $oystOrderInfo['shipment'];
-        $cart->id_carrier = Carrier::getCarrierByReference($oystOrderInfo['shipment']['carrier']['id'])->id;
+        $cart->id_carrier = Carrier::getCarrierByReference($id_reference)->id;
         $delivery_option = $cart->getDeliveryOption();
         $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
         $cart->setDeliveryOption($delivery_option);

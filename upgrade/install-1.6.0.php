@@ -19,31 +19,16 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-/*
- * Security
- */
-use Oyst\Factory\AbstractProductServiceFactory;
+require_once dirname(__FILE__).'/../vendor/autoload.php';
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+use Oyst\Service\Configuration as OConfiguration;
 
-/**
- * Class OystHookActionProductAddProcessor
- */
-class OystHookActionObjectProductDeleteAfterProcessor extends FroggyHookProcessor
+function upgrade_module_1_6_0($module)
 {
-    /**
-     * @return bool
-     */
-    public function run()
-    {
-        /** @var Product $product */
-        $product = $this->params['object'];
-        $productService = AbstractProductServiceFactory::get($this->module, $this->context, Db::getInstance());
-        $oystProduct = $productService->getOystProduct($product);
-        $succeed = $productService->delete($oystProduct);
+    Configuration::updateValue('FC_OYST_SHIPMENT_DEFAULT', '');
+    Configuration::updateValue('FC_OYST_SHIPMENT_HOME_DELIVERY', '');
+    Configuration::updateValue('FC_OYST_SHIPMENT_MONDIAL_RELAY', '');
+    Configuration::updateValue('FC_OYST_SHIPMENT_PICK_UP', '');
 
-        return $succeed;
-    }
+    return true;
 }
