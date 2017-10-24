@@ -189,5 +189,10 @@ class InstallManager
         PSConfiguration::deleteByName(Configuration::CATALOG_EXPORT_STATE);
         PSConfiguration::deleteByName(Configuration::REQUESTED_CATALOG_DATE);
         PSConfiguration::deleteByName(Configuration::DISPLAY_ADMIN_INFO_STATE);
+        PSConfiguration::deleteByName('FC_OYST_THEME_BTN');
+        PSConfiguration::deleteByName('FC_OYST_COLOR_BTN');
+        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN');
+        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN');
     }
 }

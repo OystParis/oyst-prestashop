@@ -152,6 +152,7 @@
                     </div>
                 </div>
                 <div id="tab-content-1-click" class="tab-pane">
+                    <h2>{l s='Configuration One-click' mod='oyst'}</h2>
                     <label>{l s='Enable OneClick' mod='oyst'}</label>
                     <div class="margin-form">
                         <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
@@ -211,26 +212,7 @@
                     <div class="margin-form env custom">
                         <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                     </div>
-                    <label>{l s='Carrier default' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <select name="FC_OYST_SHIPMENT_DEFAULT">
-                            <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
-                            {foreach $oyst.carrier_list as $carrier}
-                                <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
-                            {/foreach}
-                        </select>
-                    </div>
-                    {foreach $oyst.carrier_list as $carrier}
-                        <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
-                        <div class="margin-form">
-                            <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
-                                <option value="0">{l s='Disabled' mod='oyst'}</option>
-                                {foreach from=$oyst.type_list key=value item=name}
-                                    <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
-                                {/foreach}
-                            </select>
-                        </div>
-                    {/foreach}
+                    <h2>{l s='Custom of button' mod='oyst'}</h2>
                     <label>{l s='Style btn 1-Click' mod='oyst'}</label>
                     <div class="margin-form">
                         <select name="FC_OYST_THEME_BTN">
@@ -263,6 +245,27 @@
                             <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
                         </select>
                     </div>
+                    <h2>{l s='Settings carrier' mod='oyst'}</h2>
+                    <label>{l s='Carrier default' mod='oyst'}</label>
+                    <div class="margin-form">
+                        <select name="FC_OYST_SHIPMENT_DEFAULT">
+                            <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
+                            {foreach $oyst.carrier_list as $carrier}
+                                <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    {foreach $oyst.carrier_list as $carrier}
+                        <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                        <div class="margin-form">
+                            <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
+                                <option value="0">{l s='Disabled' mod='oyst'}</option>
+                                {foreach from=$oyst.type_list key=value item=name}
+                                    <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    {/foreach}
                 </div>
                 <div class="margin-form">
                     <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">

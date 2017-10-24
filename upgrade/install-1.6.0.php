@@ -25,10 +25,11 @@ use Oyst\Service\Configuration as OConfiguration;
 
 function upgrade_module_1_6_0($module)
 {
-    Configuration::updateValue('FC_OYST_SHIPMENT_DEFAULT', '');
-    Configuration::updateValue('FC_OYST_SHIPMENT_HOME_DELIVERY', '');
-    Configuration::updateValue('FC_OYST_SHIPMENT_MONDIAL_RELAY', '');
-    Configuration::updateValue('FC_OYST_SHIPMENT_PICK_UP', '');
+    Configuration::updateValue('FC_OYST_THEME_BTN', '');
+    Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
+    Configuration::updateValue('FC_OYST_WIDTH_BTN', '');
+    Configuration::updateValue('FC_OYST_HEIGHT_BTN', '');
+    Configuration::updateValue('FC_OYST_POSITION_BTN', '');
 
     return true;
 }
