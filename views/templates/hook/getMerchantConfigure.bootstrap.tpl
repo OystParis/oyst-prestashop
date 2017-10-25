@@ -305,6 +305,19 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Custom css' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
+                                <textarea name="FC_OYST_CUSTOM_CSS" rows="10">{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
+                                <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
+                                     <strong>{l s='Reset' mod='oyst'}</strong>
+                                </button>
+                            </div>
+                        </div>
                         <h2 class="col-md-offset-2 col-lg-offset-2 col-md-8 col-lg-8">{l s='Settings carrier' mod='oyst'}</h2>
                         <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
