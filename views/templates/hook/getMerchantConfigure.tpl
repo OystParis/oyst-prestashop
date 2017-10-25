@@ -245,6 +245,15 @@
                             <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
                         </select>
                     </div>
+                    <label>{l s='Position btn 1-Click' mod='oyst'}</label>
+                    <div class="margin-form">
+                        <textarea name="FC_OYST_CUSTOM_CSS" rows="10">{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}</textarea>
+                    </div>
+                    <div class="margin-form">
+                        <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
+                            {l s='Reset' mod='oyst'}
+                        </button>
+                    </div>
                     <h2>{l s='Settings carrier' mod='oyst'}</h2>
                     <label>{l s='Carrier default' mod='oyst'}</label>
                     <div class="margin-form">

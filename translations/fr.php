@@ -96,6 +96,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_756d97bb256b8580d4d71
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_97f559e8d8c3575af3f669d903ee4111'] = 'Pré-Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_90589c47f06eb971d548591f23c285af'] = 'Personnalisé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3d704c8eda12958b3d36812e5b1bb8c4'] = 'Activer 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4d587804f19493bc8914920767d83ea3'] = 'Clé API 1-Click Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_13c2b4c48c17aeb5b6605660e58df705'] = 'Clé API 1-Click Pré-Production';
@@ -114,6 +115,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d0426fd4634123279a8db
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_80092f7900d59aab765d0ddd35dc7231'] = 'Ajouter';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_032d5b0d7cb2444be669d588da5b60a3'] = 'Il faut appliquer une clé API valide pour pouvoir ajouter un mode de livraison';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d1e6660c46eb6011110e01cc1a99aa64'] = 'Personnalisation du bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_960b44c579bc2f6818d2daaf9e4c16f0'] = 'Normal';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4953af21e1b855c91be873e8c05e2c99'] = 'Inversé';
@@ -124,6 +126,12 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_eec6c4bdbd339edf8cbea
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d45bf28725319c027435b3a578d26e7f'] = 'Position bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_00e04b10b071ec3c2add6defcf320011'] = 'Personnalisation css';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_cd70fd892975a5061e814f49beb796bb'] = 'Un export est en cours, merci d\'attendre la fin';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_cdaaf70bf4e764a63ecd28e0a04e3899'] = 'Export du catalogue';
@@ -182,6 +190,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_eec6c4bdbd339edf8cbea68becb8524
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d45bf28725319c027435b3a578d26e7f'] = 'Position bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_00e04b10b071ec3c2add6defcf320011'] = 'Personnalisation css';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_cd70fd892975a5061e814f49beb796bb'] = 'Un export est en cours, merci d\'attendre la fin';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4322c1b2a9d70d92684830ed469187c2'] = 'Exporter le catalogue';
