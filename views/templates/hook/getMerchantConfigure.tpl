@@ -245,7 +245,7 @@
                             <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
                         </select>
                     </div>
-                    <label>{l s='Position btn 1-Click' mod='oyst'}</label>
+                    <label>{l s='Custom css' mod='oyst'}</label>
                     <div class="margin-form">
                         <textarea name="FC_OYST_CUSTOM_CSS" rows="10">{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}</textarea>
                     </div>

@@ -150,6 +150,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         if (Tools::isSubmit('submitOystResetCustom')) {
+            $filename = _PS_MODULE_DIR_.'oyst/views/css/oyst_custom.css';
+            file_put_contents($filename, '');
+
             Configuration::updateValue('FC_OYST_THEME_BTN', '');
             Configuration::updateValue('FC_OYST_COLOR_BTN', '');
             Configuration::updateValue('FC_OYST_WIDTH_BTN', '');
