@@ -193,6 +193,8 @@ class InstallManager
 
         // Remove anything at the end
         $this->removeConfiguration();
+        $filename = _PS_MODULE_DIR_.'oyst/views/css/oyst_custom.css';
+        file_put_contents($filename, '');
     }
 
     private function removeConfiguration()
@@ -206,5 +208,6 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN');
         PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN');
+        PSConfiguration::deleteByName('FC_OYST_CUSTOM_CSS');
     }
 }

@@ -135,6 +135,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b9f5c797ebbf55adccdd8
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_cd70fd892975a5061e814f49beb796bb'] = 'Un export est en cours, merci d\'attendre la fin';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_cdaaf70bf4e764a63ecd28e0a04e3899'] = 'Export du catalogue';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f291ff521a5874e87aa48a59494f835d'] = 'Sélectionner les logs';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_5bcaf72e1549cffdd268db003433b371'] = 'Supprimer les logs';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1ee8731d9b5c8d4bfb26c7bb6e0a21f3'] = 'Actuellement il n\'y a aucun log de disponible';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4725c2b6db34f755b89b741c1d45bc71'] = 'La nouvelle configuration a été sauvegardée !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9b0c85b97abeed9539a4a27522f07b86'] = 'Vous devez activer l\'option \"allow_url_fopen\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1e9a47f645f877ccb0802c12a409fcdf'] = 'Vous devez activer l\'extension \"cURL\" sur votre serveur pour utiliser ce module !';
@@ -162,6 +165,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_756d97bb256b8580d4d71ee0c547804
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_97f559e8d8c3575af3f669d903ee4111'] = 'Pré-Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_90589c47f06eb971d548591f23c285af'] = 'Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_3d704c8eda12958b3d36812e5b1bb8c4'] = 'Activer 1-click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4d587804f19493bc8914920767d83ea3'] = 'Clé API 1-Click Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_13c2b4c48c17aeb5b6605660e58df705'] = 'Clé API 1-Click Pré-Production';
@@ -180,6 +184,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_d0426fd4634123279a8dbfa930d79ce
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_80092f7900d59aab765d0ddd35dc7231'] = 'Ajouter';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_30a46eb72496a3c5ba85efc235959596'] = 'Il faut appliquer une clé API valide pour pouvoir ajouter un mode de livraison';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_d1e6660c46eb6011110e01cc1a99aa64'] = 'Personnalisation du bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_960b44c579bc2f6818d2daaf9e4c16f0'] = 'Normal';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4953af21e1b855c91be873e8c05e2c99'] = 'Inversé';
@@ -192,6 +197,10 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_8cf1672a5fbe49ddd5b6e49d48c7e57
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_00e04b10b071ec3c2add6defcf320011'] = 'Personnalisation css';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_cd70fd892975a5061e814f49beb796bb'] = 'Un export est en cours, merci d\'attendre la fin';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4322c1b2a9d70d92684830ed469187c2'] = 'Exporter le catalogue';
