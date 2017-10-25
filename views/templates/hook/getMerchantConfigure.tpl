@@ -247,7 +247,7 @@
                     </div>
                     <label>{l s='Custom css' mod='oyst'}</label>
                     <div class="margin-form">
-                        <textarea name="FC_OYST_CUSTOM_CSS" rows="10">{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}</textarea>
+                        <textarea name="FC_OYST_CUSTOM_CSS" cols="88" rows="10">{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}</textarea>
                     </div>
                     <div class="margin-form">
                         <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
