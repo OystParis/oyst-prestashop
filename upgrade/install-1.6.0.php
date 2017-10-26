@@ -25,6 +25,9 @@ use Oyst\Service\Configuration as OConfiguration;
 
 function upgrade_module_1_6_0($module)
 {
+    $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
+    $oystDb->dropShipmentTable();
+
     Configuration::updateValue('FC_OYST_SHIPMENT_DEFAULT', '');
     Configuration::updateValue('FC_OYST_SHIPMENT_HOME_DELIVERY', '');
     Configuration::updateValue('FC_OYST_SHIPMENT_MONDIAL_RELAY', '');
