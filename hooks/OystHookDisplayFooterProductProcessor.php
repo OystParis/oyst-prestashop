@@ -48,7 +48,6 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
                 $synchronizedCombination[$combination['id_product_attribute']] = array(
                     'quantity' => $stockAvailable->quantity
                 );
-
         }
 
         //require for load Out Of Stock Information (isAvailableWhenOutOfStock)
