@@ -55,7 +55,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_WIDTH_BTN'               => 'string',
         'FC_OYST_HEIGHT_BTN'              => 'string',
         'FC_OYST_POSITION_BTN'            => 'string',
-        'FC_OYST_CUSTOM_CSS'              => 'string',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
@@ -130,12 +129,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 Configuration::updateValue($field, $type);
             }
 
-            if (Tools::getValue('FC_OYST_CUSTOM_CSS') != '') {
-                $content = Tools::getValue('FC_OYST_CUSTOM_CSS');
-                $filename = _PS_MODULE_DIR_.'oyst/views/css/oyst_custom.css';
-                file_put_contents($filename, $content);
-            }
-
             // Deprecated with shipmentless ?
             if (Tools::isSubmit('shipments')) {
                 $oneClickShipmentTransformer = new OneClickShipmentTransformer($this->context);
@@ -150,15 +143,12 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         if (Tools::isSubmit('submitOystResetCustom')) {
-            $filename = _PS_MODULE_DIR_.'oyst/views/css/oyst_custom.css';
-            file_put_contents($filename, '');
 
             Configuration::updateValue('FC_OYST_THEME_BTN', '');
             Configuration::updateValue('FC_OYST_COLOR_BTN', '');
             Configuration::updateValue('FC_OYST_WIDTH_BTN', '');
             Configuration::updateValue('FC_OYST_HEIGHT_BTN', '');
             Configuration::updateValue('FC_OYST_POSITION_BTN', '');
-            Configuration::updateValue('FC_OYST_CUSTOM_CSS', '');
         }
     }
 

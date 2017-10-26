@@ -73,15 +73,9 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
         ));
 
-        if (filesize(_PS_MODULE_DIR_.'oyst/views/css/oyst_custom.css') > 1) {
-            $this->context->controller->addCSS(array(
-                $this->path.'views/css/oyst_custom.css',
-            ));
-        } else {
-            $this->context->controller->addCSS(array(
-                $this->path.'views/css/oyst.css',
-            ));
-        }
+        $this->context->controller->addCSS(array(
+            $this->path.'views/css/oyst.css',
+        ));
 
         return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');
     }
