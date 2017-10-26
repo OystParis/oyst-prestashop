@@ -212,65 +212,67 @@
                     <div class="margin-form env custom">
                         <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                     </div>
-                    <h2>{l s='Custom of button' mod='oyst'}</h2>
-                    <label>{l s='Style btn 1-Click' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <select name="FC_OYST_THEME_BTN">
-                            <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
-                            <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
-                        </select>
-                    </div>
-                    <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <div class="input-group">
-                            <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}" />
-                        </div>
-                    </div>
-                    <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
-                        <br>
-                        <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
-                    </div>
-                    <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
-                        <br>
-                        <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
-                    </div>
-                    <label>{l s='Position btn 1-Click' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <select name="FC_OYST_POSITION_BTN">
-                            <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
-                            <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
-                        </select>
-                    </div>
-                    <div class="margin-form">
-                        <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
-                            {l s='Reset' mod='oyst'}
-                        </button>
-                    </div>
-                    <h2>{l s='Settings carrier' mod='oyst'}</h2>
-                    <label>{l s='Carrier default' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <select name="FC_OYST_SHIPMENT_DEFAULT">
-                            <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
-                            {foreach $oyst.carrier_list as $carrier}
-                                <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
-                            {/foreach}
-                        </select>
-                    </div>
-                    {foreach $oyst.carrier_list as $carrier}
-                        <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                        <h2>{l s='Custom of button' mod='oyst'}</h2>
+                        <label>{l s='Style btn 1-Click' mod='oyst'}</label>
                         <div class="margin-form">
-                            <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
-                                <option value="0">{l s='Disabled' mod='oyst'}</option>
-                                {foreach from=$oyst.type_list key=value item=name}
-                                    <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                            <select name="FC_OYST_THEME_BTN">
+                                <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
+                                <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
+                            </select>
+                        </div>
+                        <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <div class="input-group">
+                                <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}" />
+                            </div>
+                        </div>
+                        <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
+                            <br>
+                            <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                        </div>
+                        <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                            <br>
+                            <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                        </div>
+                        <label>{l s='Position btn 1-Click' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <select name="FC_OYST_POSITION_BTN">
+                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                            </select>
+                        </div>
+                        <div class="margin-form">
+                            <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
+                                {l s='Reset' mod='oyst'}
+                            </button>
+                        </div>
+                        <h2>{l s='Settings carrier' mod='oyst'}</h2>
+                        <label>{l s='Carrier default' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <select name="FC_OYST_SHIPMENT_DEFAULT">
+                                <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
+                                {foreach $oyst.carrier_list as $carrier}
+                                    <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
                                 {/foreach}
                             </select>
                         </div>
-                    {/foreach}
+                        {foreach $oyst.carrier_list as $carrier}
+                            <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                            <div class="margin-form">
+                                <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
+                                    <option value="0">{l s='Disabled' mod='oyst'}</option>
+                                    {foreach from=$oyst.type_list key=value item=name}
+                                        <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        {/foreach}
+                    {/if}
                 </div>
                 <div class="margin-form">
                     <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
