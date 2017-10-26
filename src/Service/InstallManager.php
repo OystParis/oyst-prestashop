@@ -164,6 +164,17 @@ class InstallManager
     /**
      * @return bool
      */
+    public function dropShipmentTable()
+    {
+        $query = "
+            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_shipment;
+        ";
+        return $this->db->execute($query);
+    }
+
+    /**
+     * @return bool
+     */
     public function dropProductTable()
     {
         $query = "
@@ -177,6 +188,7 @@ class InstallManager
     {
         $this->dropExportTable();
         $this->dropOrderTable();
+        $this->dropShipmentTable();
         $this->dropProductTable();
 
         // Remove anything at the end
