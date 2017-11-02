@@ -265,22 +265,25 @@ class ShipmentService extends AbstractOystService
         // Check exist primary
        $is_primary = false;
 
-       foreach($carriersAvailables as $key => $shipment) {
-           $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
-           if ($id_carrier == $id_default_carrier)
-               $is_primary = true;
-       }
+        foreach($carriersAvailables as $key => $shipment) {
+            $carrier_desintifier = Cart::desintifier($shipment['id_carrier']);
+            $id_carrier = (int)Tools::substr($carrier_desintifier, 0, -1);
+            if ($id_carrier == $id_default_carrier) {
+                $is_primary = true;
+            }
+        }
 
-       // Add first carrier if primary is not exist
-       if (!$is_primary)
-           $oneClickShipmentCalculation->setDefaultPrimaryShipmentByType();
+        // Add first carrier if primary is not exist
+        if (!$is_primary) {
+            $oneClickShipmentCalculation->setDefaultPrimaryShipmentByType();
+        }
 
-       $this->logger->info(
-           sprintf(
-               'New notification oneClickShipmentCalculation [%s]',
-               $oneClickShipmentCalculation->toJson()
-           )
-       );
+        $this->logger->info(
+            sprintf(
+                'New notification oneClickShipmentCalculation [%s]',
+                $oneClickShipmentCalculation->toJson()
+            )
+        );
 
         return $oneClickShipmentCalculation->toJson();
     }

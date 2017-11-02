@@ -49,9 +49,10 @@ class AddressRepository extends AbstractOystRepository
         }
 
         $addressId = (int)$this->db->getValue($query);
-        if (is_numeric($addressId) && $addressId > 0)
+        if (is_numeric($addressId) && $addressId > 0) {
             return new Address($addressId);
-        else
+        } else {
             return false;
+        }
     }
 }

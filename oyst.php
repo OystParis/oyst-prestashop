@@ -197,7 +197,8 @@ class Oyst extends FroggyPaymentModule
         return $result;
     }
 
-    public function updateConstants() {
+    public function updateConstants()
+    {
         Configuration::updateValue('FC_OYST_DELAY', 15);
     }
 
