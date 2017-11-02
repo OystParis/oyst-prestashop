@@ -153,7 +153,7 @@ class OneClickService extends AbstractOystService
                 $oneClickOrdersParams->setIsMaterialized(true);
             }
 
-            $delay = (int)ConfigurationP::get('PS_CURRENCY_DEFAULT');
+            $delay = (int)ConfigurationP::get('FC_OYST_DELAY');
 
             if (is_numeric($delay) && $delay > 0) {
                 $oneClickOrdersParams->setDelay($delay);
@@ -166,7 +166,7 @@ class OneClickService extends AbstractOystService
             $this->logger->info(
                 sprintf(
                     'New notification oneClickOrdersParams [%s]',
-                    json_encode($oneClickOrdersParams)
+                    json_encode($oneClickOrdersParams->toArray())
                 )
             );
 
@@ -178,7 +178,7 @@ class OneClickService extends AbstractOystService
             $this->logger->info(
                 sprintf(
                     'New notification oneClickNotifications [%s]',
-                    json_encode($oneClickNotifications)
+                    json_encode($oneClickNotifications->toArray())
                 )
             );
 

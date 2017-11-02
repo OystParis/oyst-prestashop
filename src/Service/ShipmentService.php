@@ -151,6 +151,7 @@ class ShipmentService extends AbstractOystService
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
+            $address = new Address();
             $address->id_customer = $customer->id;
             $address->firstname = $customer->firstname;
             $address->lastname = $customer->lastname;
