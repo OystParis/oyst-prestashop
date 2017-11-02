@@ -124,7 +124,7 @@ class ShipmentService extends AbstractOystService
 
         // Set delay carrier in hours
         $delay = array(
-            0 => 240,
+            0 => 72,
             1 => 216,
             2 => 192,
             3 => 168,
