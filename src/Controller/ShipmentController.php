@@ -34,6 +34,12 @@ class ShipmentController extends AbstractOystController
         $data = $this->request->getJson();
         $shipmentService = AbstractShipmentServiceFactory::get(new Oyst(), Context::getContext());
         $responseData = $shipmentService->getShipments($data['data']);
+        $this->logger->info(
+            sprintf(
+                'New notification shipments [%s]',
+                $responseData
+            )
+        );
 
         header('Content-Type: application/json');
         echo $responseData;

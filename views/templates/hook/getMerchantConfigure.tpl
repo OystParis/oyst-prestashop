@@ -79,7 +79,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_prod_test_error_freepay}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
@@ -93,7 +93,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_preprod_test_error_freepay}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
@@ -107,7 +107,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_custom_test_error_freepay}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
@@ -164,7 +164,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
                             {if $oyst.apikey_prod_test_error_oneclick}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
@@ -177,7 +177,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
                             {if $oyst.apikey_preprod_test_error_oneclick}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
@@ -190,7 +190,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
                             {if $oyst.apikey_custom_test_error_oneclick}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
@@ -213,6 +213,11 @@
                         <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                     </div>
                     {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                        <h2>{l s='Settings advanced' mod='oyst'}</h2>
+                        <label>{l s='Delay' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}"/>
+                        </div>
                         <h2>{l s='Custom of button' mod='oyst'}</h2>
                         <label>{l s='Style btn 1-Click' mod='oyst'}</label>
                         <div class="margin-form">

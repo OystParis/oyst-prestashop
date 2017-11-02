@@ -48,8 +48,8 @@ class AddressRepository extends AbstractOystRepository
             $query .= ' AND a.alias = "'.pSQL($address['name']).'"';
         }
 
-        $addressId = $this->db->getValue($query);
-        if (is_numeric($addressId))
+        $addressId = (int)$this->db->getValue($query);
+        if (is_numeric($addressId) && $addressId > 0)
             return new Address($addressId);
         else
             return false;

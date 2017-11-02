@@ -152,14 +152,35 @@ class OneClickService extends AbstractOystService
             } else {
                 $oneClickOrdersParams->setIsMaterialized(true);
             }
-            $oneClickOrdersParams->setDelay(15);
+
+            $delay = (int)ConfigurationP::get('PS_CURRENCY_DEFAULT');
+
+            if (is_numeric($delay) && $delay > 0) {
+                $oneClickOrdersParams->setDelay($delay);
+            } else {
+                $oneClickOrdersParams->setDelay(15);
+            }
             $oneClickOrdersParams->setManageQuantity(true);
             $oneClickOrdersParams->setShouldReinitBuffer(false);
+
+            $this->logger->info(
+                sprintf(
+                    'New notification oneClickOrdersParams [%s]',
+                    $this->serializer->serialize($oneClickOrdersParams)
+                )
+            );
 
             $oneClickNotifications = new OneClickNotifications();
             $oneClickNotifications->setShouldAskShipments(true);
 
             $oneClickNotifications->setUrl(Tools::getHttpHost(true).__PS_BASE_URI__.'modules/oyst/notification.php');
+
+            $this->logger->info(
+                sprintf(
+                    'New notification oneClickNotifications [%s]',
+                    $this->serializer->serialize($oneClickNotifications)
+                )
+            );
 
             $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser, $productLess, $oneClickOrdersParams, null, $oneClickNotifications);
             $data = array_merge($data, $result);

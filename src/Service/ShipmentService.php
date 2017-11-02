@@ -163,6 +163,13 @@ class ShipmentService extends AbstractOystService
             $address->add();
         }
 
+        $this->logger->info(
+            sprintf(
+                'New notification address [%s]',
+                $this->serializer->serialize($address)
+            )
+        );
+
         // PS core used this context anywhere.. So we need to fill it properly
         $this->context->cart = $cart = new Cart();
         $this->context->customer = $customer;
@@ -253,6 +260,26 @@ class ShipmentService extends AbstractOystService
                 $oneClickShipmentCalculation->addShipment($oneClickShipment);
             }
         }
+
+        // Check exist primary
+       $is_primary = false;
+
+       foreach($carriersAvailables as $key => $shipment) {
+           $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
+           if ($id_carrier == $id_default_carrier)
+               $is_primary = true;
+       }
+
+       // Add first carrier if primary is not exist
+       if (!$is_primary)
+           $oneClickShipmentCalculation->setDefaultPrimaryShipmentByType();
+
+       $this->logger->info(
+           sprintf(
+               'New notification oneClickShipmentCalculation [%s]',
+               $oneClickShipmentCalculation->toJson()
+           )
+       );
 
         return $oneClickShipmentCalculation->toJson();
     }

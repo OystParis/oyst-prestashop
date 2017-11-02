@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.6.1';
+        $this->version = '1.6.2';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -195,6 +195,10 @@ class Oyst extends FroggyPaymentModule
         }
 
         return $result;
+    }
+
+    public function updateConstants() {
+        Configuration::updateValue('FC_OYST_DELAY', 15);
     }
 
     public function loadSQLFile($sql_file)
