@@ -139,7 +139,7 @@ class ShipmentService extends AbstractOystService
         $customer = $this->getCustomer($data['user']);
         if (!Validate::isLoadedObject($customer)) {
             $this->logger->emergency(
-                'Customer not found or can\'t be found ['.$this->serializer->serialize($customer).']'
+                'Customer not found or can\'t be found ['.json_encode($customer).']'
             );
         }
 
@@ -166,7 +166,7 @@ class ShipmentService extends AbstractOystService
         $this->logger->info(
             sprintf(
                 'New notification address [%s]',
-                $this->serializer->serialize($address)
+                json_encode($address)
             )
         );
 
@@ -186,7 +186,7 @@ class ShipmentService extends AbstractOystService
 
         if (!$cart->add()) {
             $this->logger->emergency(
-                'Can\'t create cart ['.$this->serializer->serialize($cart).']'
+                'Can\'t create cart ['.json_encode($cart).']'
             );
             return false;
         }
@@ -209,7 +209,7 @@ class ShipmentService extends AbstractOystService
            $oneClickShipmentCalculation->setOrderAmount($orderAmount);*/
         } else {
             $this->logger->emergency(
-                'Items not exist ['.$this->serializer->serialize($data).']'
+                'Items not exist ['.json_encode($data).']'
             );
             return false;
         }

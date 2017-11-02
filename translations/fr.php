@@ -123,6 +123,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d0426fd4634123279a8db
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_80092f7900d59aab765d0ddd35dc7231'] = 'Ajouter';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_032d5b0d7cb2444be669d588da5b60a3'] = 'Il faut appliquer une clé API valide pour pouvoir ajouter un mode de livraison';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d1e6660c46eb6011110e01cc1a99aa64'] = 'Personnalisation du bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_960b44c579bc2f6818d2daaf9e4c16f0'] = 'Normal';

@@ -166,7 +166,7 @@ class OneClickService extends AbstractOystService
             $this->logger->info(
                 sprintf(
                     'New notification oneClickOrdersParams [%s]',
-                    $this->serializer->serialize($oneClickOrdersParams)
+                    json_encode($oneClickOrdersParams)
                 )
             );
 
@@ -178,7 +178,7 @@ class OneClickService extends AbstractOystService
             $this->logger->info(
                 sprintf(
                     'New notification oneClickNotifications [%s]',
-                    $this->serializer->serialize($oneClickNotifications)
+                    json_encode($oneClickNotifications)
                 )
             );
 
