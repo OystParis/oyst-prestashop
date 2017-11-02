@@ -48,7 +48,6 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
                 $synchronizedCombination[$combination['id_product_attribute']] = array(
                     'quantity' => $stockAvailable->quantity
                 );
-
         }
 
         //require for load Out Of Stock Information (isAvailableWhenOutOfStock)
@@ -73,9 +72,11 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             $this->path.'views/js/OystOneClick.js',
             trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
         ));
+
         $this->context->controller->addCSS(array(
             $this->path.'views/css/oyst.css',
         ));
+
         return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');
     }
 }

@@ -128,6 +128,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 $type = Tools::getValue($field);
                 Configuration::updateValue($field, $type);
             }
+
+            // Deprecated with shipmentless ?
             if (Tools::isSubmit('shipments')) {
                 $oneClickShipmentTransformer = new OneClickShipmentTransformer($this->context);
                 $oneClickShipmentRepository = new OneClickShipmentRepository(Db::getInstance());
@@ -138,6 +140,15 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 ;
                 $this->configuration_result = $oneClickShipmentService->handleShipmentRequest();
             }
+        }
+
+        if (Tools::isSubmit('submitOystResetCustom')) {
+
+            Configuration::updateValue('FC_OYST_THEME_BTN', '');
+            Configuration::updateValue('FC_OYST_COLOR_BTN', '');
+            Configuration::updateValue('FC_OYST_WIDTH_BTN', '');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN', '');
         }
     }
 

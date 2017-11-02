@@ -79,7 +79,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_prod_test_error_freepay}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
@@ -93,7 +93,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_preprod_test_error_freepay}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
@@ -107,7 +107,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
                             <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                             {if $oyst.apikey_custom_test_error_freepay}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
@@ -152,6 +152,7 @@
                     </div>
                 </div>
                 <div id="tab-content-1-click" class="tab-pane">
+                    <h2>{l s='Configuration One-click' mod='oyst'}</h2>
                     <label>{l s='Enable OneClick' mod='oyst'}</label>
                     <div class="margin-form">
                         <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
@@ -163,7 +164,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
                             {if $oyst.apikey_prod_test_error_oneclick}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
@@ -176,7 +177,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
                             {if $oyst.apikey_preprod_test_error_oneclick}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
@@ -189,7 +190,7 @@
                             <button type="submit" value="1" name="submitOystConfiguration">
                                 {l s='Apply' mod='oyst'}
                             </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://admin.free-pay.com/signup" target="_blank">admin.free-pay.com</a></p>
+                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">admin.free-pay.com</a></p>
                             {if $oyst.apikey_custom_test_error_oneclick}
                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                             {/if}
@@ -211,58 +212,67 @@
                     <div class="margin-form env custom">
                         <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                     </div>
-                    <label>{l s='Carrier default' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <select name="FC_OYST_SHIPMENT_DEFAULT">
-                            <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
-                            {foreach $oyst.carrier_list as $carrier}
-                                <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
-                            {/foreach}
-                        </select>
-                    </div>
-                    {foreach $oyst.carrier_list as $carrier}
-                        <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                        <h2>{l s='Custom of button' mod='oyst'}</h2>
+                        <label>{l s='Style btn 1-Click' mod='oyst'}</label>
                         <div class="margin-form">
-                            <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
-                                <option value="0">{l s='Disabled' mod='oyst'}</option>
-                                {foreach from=$oyst.type_list key=value item=name}
-                                    <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                            <select name="FC_OYST_THEME_BTN">
+                                <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
+                                <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
+                            </select>
+                        </div>
+                        <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <div class="input-group">
+                                <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}" />
+                            </div>
+                        </div>
+                        <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
+                            <br>
+                            <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                        </div>
+                        <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                            <br>
+                            <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                        </div>
+                        <label>{l s='Position btn 1-Click' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <select name="FC_OYST_POSITION_BTN">
+                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                            </select>
+                        </div>
+                        <div class="margin-form">
+                            <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
+                                {l s='Reset' mod='oyst'}
+                            </button>
+                        </div>
+                        <h2>{l s='Settings carrier' mod='oyst'}</h2>
+                        <label>{l s='Carrier default' mod='oyst'}</label>
+                        <div class="margin-form">
+                            <select name="FC_OYST_SHIPMENT_DEFAULT">
+                                <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
+                                {foreach $oyst.carrier_list as $carrier}
+                                    <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
                                 {/foreach}
                             </select>
                         </div>
-                    {/foreach}
-                    <label>{l s='Style btn 1-Click' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <select name="FC_OYST_THEME_BTN">
-                            <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
-                            <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
-                        </select>
-                    </div>
-                    <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <div class="input-group">
-                            <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}" />
-                        </div>
-                    </div>
-                    <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
-                        <br>
-                        <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
-                    </div>
-                    <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
-                        <br>
-                        <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
-                    </div>
-                    <label>{l s='Position btn 1-Click' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <select name="FC_OYST_POSITION_BTN">
-                            <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
-                            <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
-                        </select>
-                    </div>
+                        {foreach $oyst.carrier_list as $carrier}
+                            <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                            <div class="margin-form">
+                                <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
+                                    <option value="0">{l s='Disabled' mod='oyst'}</option>
+                                    {foreach from=$oyst.type_list key=value item=name}
+                                        <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        {/foreach}
+                    {/if}
                 </div>
                 <div class="margin-form">
                     <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">

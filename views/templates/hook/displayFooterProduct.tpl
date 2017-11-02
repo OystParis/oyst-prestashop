@@ -18,7 +18,6 @@
  * @license GNU GENERAL PUBLIC LICENSE
  *}
 {if $oneClickActivated && $btnOneClickState}
-
     <script type="text/javascript">
         var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, {$product->id|json_encode});
         oyst.setExportedCombinations({$synchronizedCombination|json_encode})
@@ -37,11 +36,4 @@
             oyst.requestOneCLick(callback);
         };
     </script>
-
-    <style type="text/css">
-        #oneClickContainer {
-            position:relative;
-            left:0px;
-        }
-    </style>
 {/if}
