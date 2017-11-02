@@ -65,8 +65,6 @@
         "FC_OYST_CART_CONFIG": "",
 
         "FC_OYST_SHIPMENT_DEFAULT": "0",
-        "FC_OYST_SHIPMENT_HOME_DELIVERY": "",
-        "FC_OYST_SHIPMENT_MONDIAL_RELAY": "",
-        "FC_OYST_SHIPMENT_PICK_UP": ""
+        "FC_OYST_DELAY": "15"
     }
 }

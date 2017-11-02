@@ -38,6 +38,7 @@ use Context;
 use Tax;
 use TaxCalculator;
 use Carrier;
+use Country;
 use Configuration as PSConfiguration;
 use Exception;
 
@@ -144,6 +145,23 @@ class ShipmentService extends AbstractOystService
 
         $addressRepository = new AddressRepository(Db::getInstance());
         $address = $addressRepository->findAddress($data['user']['address']);
+        if (!Validate::isLoadedObject($address)) {
+            $countryId = (int)Country::getByIso($data['user']['address']['country']);
+            if (0 >= $countryId) {
+                $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
+            }
+
+            $address->id_customer = $customer->id;
+            $address->firstname = $customer->firstname;
+            $address->lastname = $customer->lastname;
+            $address->address1 = $data['user']['address']['street'];
+            $address->postcode = $data['user']['address']['postcode'];
+            $address->city = $data['user']['address']['city'];
+            $address->alias = 'OystAddress';
+            $address->id_country = $countryId;
+
+            $address->add();
+        }
 
         // PS core used this context anywhere.. So we need to fill it properly
         $this->context->cart = $cart = new Cart();

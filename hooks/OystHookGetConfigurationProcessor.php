@@ -55,6 +55,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_WIDTH_BTN'               => 'string',
         'FC_OYST_HEIGHT_BTN'              => 'string',
         'FC_OYST_POSITION_BTN'            => 'string',
+        'FC_OYST_DELAY'                   => 'int',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',

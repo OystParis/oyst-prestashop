@@ -80,7 +80,7 @@ class OrderService extends AbstractOystService
     {
         $address = $this->addressRepository->findAddress($oystAddress);
         if (!Validate::isLoadedObject($address)) {
-            $countryId = (int)CountryCore::getByIso($oystAddress['country']);
+            $countryId = (int)CountryCore::getByIso('fr');
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
