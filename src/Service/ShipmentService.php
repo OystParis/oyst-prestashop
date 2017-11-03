@@ -38,6 +38,7 @@ use Context;
 use Tax;
 use TaxCalculator;
 use Carrier;
+use Country;
 use Configuration as PSConfiguration;
 use Exception;
 
@@ -123,7 +124,7 @@ class ShipmentService extends AbstractOystService
 
         // Set delay carrier in hours
         $delay = array(
-            0 => 240,
+            0 => 72,
             1 => 216,
             2 => 192,
             3 => 168,
@@ -138,12 +139,37 @@ class ShipmentService extends AbstractOystService
         $customer = $this->getCustomer($data['user']);
         if (!Validate::isLoadedObject($customer)) {
             $this->logger->emergency(
-                'Customer not found or can\'t be found ['.$this->serializer->serialize($customer).']'
+                'Customer not found or can\'t be found ['.json_encode($customer).']'
             );
         }
 
         $addressRepository = new AddressRepository(Db::getInstance());
         $address = $addressRepository->findAddress($data['user']['address']);
+        if (!Validate::isLoadedObject($address)) {
+            $countryId = (int)Country::getByIso($data['user']['address']['country']);
+            if (0 >= $countryId) {
+                $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
+            }
+
+            $address = new Address();
+            $address->id_customer = $customer->id;
+            $address->firstname = $customer->firstname;
+            $address->lastname = $customer->lastname;
+            $address->address1 = $data['user']['address']['street'];
+            $address->postcode = $data['user']['address']['postcode'];
+            $address->city = $data['user']['address']['city'];
+            $address->alias = 'OystAddress';
+            $address->id_country = $countryId;
+
+            $address->add();
+        }
+
+        $this->logger->info(
+            sprintf(
+                'New notification address [%s]',
+                json_encode($address)
+            )
+        );
 
         // PS core used this context anywhere.. So we need to fill it properly
         $this->context->cart = $cart = new Cart();
@@ -161,7 +187,7 @@ class ShipmentService extends AbstractOystService
 
         if (!$cart->add()) {
             $this->logger->emergency(
-                'Can\'t create cart ['.$this->serializer->serialize($cart).']'
+                'Can\'t create cart ['.json_encode($cart).']'
             );
             return false;
         }
@@ -184,7 +210,7 @@ class ShipmentService extends AbstractOystService
            $oneClickShipmentCalculation->setOrderAmount($orderAmount);*/
         } else {
             $this->logger->emergency(
-                'Items not exist ['.$this->serializer->serialize($data).']'
+                'Items not exist ['.json_encode($data).']'
             );
             return false;
         }
@@ -235,6 +261,29 @@ class ShipmentService extends AbstractOystService
                 $oneClickShipmentCalculation->addShipment($oneClickShipment);
             }
         }
+
+        // Check exist primary
+       $is_primary = false;
+
+        foreach($carriersAvailables as $key => $shipment) {
+            $carrier_desintifier = Cart::desintifier($shipment['id_carrier']);
+            $id_carrier = (int)Tools::substr($carrier_desintifier, 0, -1);
+            if ($id_carrier == $id_default_carrier) {
+                $is_primary = true;
+            }
+        }
+
+        // Add first carrier if primary is not exist
+        if (!$is_primary) {
+            $oneClickShipmentCalculation->setDefaultPrimaryShipmentByType();
+        }
+
+        $this->logger->info(
+            sprintf(
+                'New notification oneClickShipmentCalculation [%s]',
+                $oneClickShipmentCalculation->toJson()
+            )
+        );
 
         return $oneClickShipmentCalculation->toJson();
     }

@@ -19,29 +19,13 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-namespace Oyst\Controller;
+require_once dirname(__FILE__).'/../vendor/autoload.php';
 
-use Oyst;
-use Context;
-use Currency;
-use Configuration;
-use Oyst\Factory\AbstractShipmentServiceFactory;
+use Oyst\Service\Configuration as OConfiguration;
 
-class ShipmentController extends AbstractOystController
+function upgrade_module_1_6_1($module)
 {
-    public function getShipmentsAction()
-    {
-        $data = $this->request->getJson();
-        $shipmentService = AbstractShipmentServiceFactory::get(new Oyst(), Context::getContext());
-        $responseData = $shipmentService->getShipments($data['data']);
-        $this->logger->info(
-            sprintf(
-                'New notification shipments [%s]',
-                $responseData
-            )
-        );
+    Configuration::updateValue('FC_OYST_DELAY', '15');
 
-        header('Content-Type: application/json');
-        echo $responseData;
-    }
+    return true;
 }
