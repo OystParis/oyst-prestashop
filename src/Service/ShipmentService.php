@@ -237,14 +237,11 @@ class ShipmentService extends AbstractOystService
                 $type = $type_shipment;
 
                 // Get amount with tax
-                $amount = 0;
                 $carrier = new Carrier($id_carrier);
-                $tax = new Tax();
-                $tax->rate = $carrier->getTaxesRate($address);
-                $tax_calculator = new TaxCalculator(array($tax));
-                $amount += $tax_calculator->addTaxes($shipment['price_tax_exc']);
+                $amount = (float) $shipment['price'];
 
                 $oystPrice = new OystPrice($amount, Context::getContext()->currency->iso_code);
+                
                 $oneClickShipment = new OneClickShipmentCatalogLess();
                 $oystCarrier = new OystCarrier($id_carrier, $shipment['name'], $type);
 
