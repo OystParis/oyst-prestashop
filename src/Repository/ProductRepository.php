@@ -251,6 +251,14 @@ class ProductRepository extends AbstractOystRepository
         return $this->db->executeS($query);
     }
 
+    public function existActive($id_product)
+    {
+        return $this->db->getValue('
+            SELECT COUNT(*)
+            FROM '._DB_PREFIX_.'oyst_product
+            WHERE id_product = '.(int) $id_product);
+    }
+
     /**
      * For OneClick
      * @param $id_product
@@ -258,10 +266,20 @@ class ProductRepository extends AbstractOystRepository
      */
     public function getActive($id_product)
     {
-        return $this->db->getValue('
+        $active = $this->db->getValue('
             SELECT active_oneclick
             FROM '._DB_PREFIX_.'oyst_product
             WHERE id_product = '.(int) $id_product);
+
+        if ($this->existActive($id_product) > 0) {
+            if ($active == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -271,9 +289,7 @@ class ProductRepository extends AbstractOystRepository
      */
     public function setActive($id_product, $active = 1)
     {
-        $state = $this->getActive($id_product);
-
-        if ($state === false) {
+        if ($this->existActive($id_product) == 0) {
             return $this->db->insert(
                 'oyst_product',
                 array(

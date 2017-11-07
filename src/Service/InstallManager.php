@@ -63,7 +63,6 @@ class InstallManager
         $state &= $this->createExportTable();
         $state &= $this->createOrderTable();
         $state &= $this->createProductTable();
-        $state &= $this->populateProductTable();
 
         return $state;
     }
@@ -117,27 +116,6 @@ class InstallManager
     }
 
     /**
-     * @return bool
-     */
-    public function populateProductTable()
-    {
-        $products = Product::getProducts(Context::getContext()->language->id, 0, 0, 'id_product', 'ASC');
-        $state = true;
-
-        foreach ($products as $product) {
-            $state &= $this->db->insert(
-                'oyst_product',
-                array(
-                    'id_product' => (int)$product['id_product'],
-                    'active_oneclick' => 1,
-                )
-            );
-        }
-
-        return $state;
-    }
-
-    /**
     * @return bool
     */
     public function dropExportTable()
@@ -181,6 +159,12 @@ class InstallManager
             DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_product;
         ";
 
+        return $this->db->execute($query);
+    }
+
+    public function truncateProductTable()
+    {
+        $query = "TRUNCATE "._DB_PREFIX_."oyst_product";
         return $this->db->execute($query);
     }
 

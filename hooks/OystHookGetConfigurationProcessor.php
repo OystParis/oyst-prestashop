@@ -150,6 +150,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_HEIGHT_BTN', '');
             Configuration::updateValue('FC_OYST_POSITION_BTN', '');
         }
+
+        if (Tools::isSubmit('submitOystConfigurationReset')) {
+            $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), new Oyst());
+            $oystDb->truncateProductTable();
+        }
     }
 
     /**

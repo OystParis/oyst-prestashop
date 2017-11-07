@@ -260,6 +260,13 @@
                                 <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
+                        <div class="form-group clearfix">
+                            <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
+                                <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info">
+                                     <strong>{l s='Reset product' mod='oyst'}</strong>
+                                </button>
+                            </div>
+                        </div>
                         {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                             <h2 class="col-md-offset-2 col-lg-offset-2 col-md-8 col-lg-8">{l s='Settings advanced' mod='oyst'}</h2>
                             <div class="form-group clearfix">

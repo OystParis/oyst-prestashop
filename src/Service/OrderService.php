@@ -133,6 +133,7 @@ class OrderService extends AbstractOystService
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
+            $address = new Address();
             $address->firstname = ($pickupAddress['name'] != '')? $pickupAddress['name'] : 'none';
             $address->lastname = "";
             $address->address1 = ($pickupAddress['street'] != '')? $pickupAddress['street'] : 'none';
