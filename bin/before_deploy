@@ -2,7 +2,7 @@
 
 mkdir travis_release
 
-cp -r * travis_release
+rsync -av * travis_release --exclude='travis_release'
 
 rm -f   travis_release/.travis.yml
 rm -rf  travis_release/bin
@@ -10,7 +10,8 @@ rm -rf  travis_release/travis_release
 
 cd travis_release
 
-mkdir oyst
-rsync -av * oyst --exclude='oyst'
+mkdir oyst_tmp
+rsync -av * oyst_tmp --exclude='oyst_tmp'
+mv oyst_tmp oyst
 zip -r oyst.zip oyst
 tar -cvzf oyst.tar.gz oyst
