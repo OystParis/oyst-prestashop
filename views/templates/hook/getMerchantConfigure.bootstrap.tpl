@@ -261,7 +261,7 @@
                             </div>
                         </div>
                         <div class="form-group clearfix">
-                            <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
+                            <div class="col-md-offset-8 col-lg-offset-8 col-md-2 col-lg-2">
                                 <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info">
                                      <strong>{l s='Reset product' mod='oyst'}</strong>
                                 </button>
