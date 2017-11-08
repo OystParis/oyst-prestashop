@@ -199,6 +199,7 @@ class Oyst extends FroggyPaymentModule
 
     public function updateConstants()
     {
+        Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
         Configuration::updateValue('FC_OYST_DELAY', 15);
     }
 
