@@ -221,7 +221,7 @@
                         <h2>{l s='Settings advanced' mod='oyst'}</h2>
                         <label>{l s='Delay' mod='oyst'}</label>
                         <div class="margin-form">
-                            <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}"/>
+                            <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
                         </div>
                         <h2>{l s='Custom of button' mod='oyst'}</h2>
                         <label>{l s='Style btn 1-Click' mod='oyst'}</label>
