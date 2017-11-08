@@ -18,6 +18,10 @@
  * @license GNU GENERAL PUBLIC LICENSE
  *}
 {if $oneClickActivated && $btnOneClickState}
+    {if version_compare($smarty.const._PS_VERSION_,'1.6','<')}
+        <script src="{$JSOystOneClick}"></script>
+        <script src="{$JSOneClickUrl}"></script>
+    {/if}
     <script type="text/javascript">
         var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, {$product->id|json_encode});
         oyst.setExportedCombinations({$synchronizedCombination|json_encode})
