@@ -234,7 +234,7 @@
                         <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
                         <div class="margin-form">
                             <div class="input-group">
-                                <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}" />
+                                <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{if $oyst.FC_OYST_COLOR_BTN}{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
                             </div>
                         </div>
                         <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>

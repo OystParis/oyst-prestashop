@@ -204,7 +204,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_960b44c579bc2f6818d2daaf9e4c16f
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4953af21e1b855c91be873e8c05e2c99'] = 'Inversé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_cb5feb1b7314637725a2e73bdc9f7295'] = 'Couleur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_32954654ac8fe66a1d09be19001de2d4'] = 'Longueur';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_8eeadd3ce8c17233097f7387b378f250'] = 'En POURCENTAGE ou PIXEL';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_8eeadd3ce8c17233097f7387b378f250'] = 'En X% ou Xpx';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_eec6c4bdbd339edf8cbea68becb85244'] = 'Hauteur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d45bf28725319c027435b3a578d26e7f'] = 'Position bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
