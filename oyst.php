@@ -239,6 +239,29 @@ class Oyst extends FroggyPaymentModule
             Configuration::updateValue('OYST_STATUS_WAIT_PAYMENT', $orderState->id);
         }
 
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Fraud',
+            );
+            $orderState->color = '#FF8C00';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_FRAUD', $orderState->id);
+        }
+
         return $result;
     }
 
