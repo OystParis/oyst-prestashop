@@ -212,11 +212,16 @@
                     <div class="margin-form env custom">
                         <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                     </div>
+                    <div class="margin-form">
+                        <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
+                            {l s='Reset product' mod='oyst'}
+                        </button>
+                    </div>
                     {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                         <h2>{l s='Settings advanced' mod='oyst'}</h2>
                         <label>{l s='Delay' mod='oyst'}</label>
                         <div class="margin-form">
-                            <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}"/>
+                            <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
                         </div>
                         <h2>{l s='Custom of button' mod='oyst'}</h2>
                         <label>{l s='Style btn 1-Click' mod='oyst'}</label>
@@ -229,7 +234,7 @@
                         <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
                         <div class="margin-form">
                             <div class="input-group">
-                                <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}" />
+                                <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{if $oyst.FC_OYST_COLOR_BTN}{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
                             </div>
                         </div>
                         <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>

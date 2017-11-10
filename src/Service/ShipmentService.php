@@ -241,7 +241,7 @@ class ShipmentService extends AbstractOystService
                 $amount = (float) $shipment['price'];
 
                 $oystPrice = new OystPrice($amount, Context::getContext()->currency->iso_code);
-                
+
                 $oneClickShipment = new OneClickShipmentCatalogLess();
                 $oystCarrier = new OystCarrier($id_carrier, $shipment['name'], $type);
 
@@ -260,9 +260,9 @@ class ShipmentService extends AbstractOystService
         }
 
         // Check exist primary
-       $is_primary = false;
+        $is_primary = false;
 
-        foreach($carriersAvailables as $key => $shipment) {
+        foreach ($carriersAvailables as $key => $shipment) {
             $carrier_desintifier = Cart::desintifier($shipment['id_carrier']);
             $id_carrier = (int)Tools::substr($carrier_desintifier, 0, -1);
             if ($id_carrier == $id_default_carrier) {

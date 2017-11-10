@@ -260,6 +260,13 @@
                                 <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
+                        <div class="form-group clearfix">
+                            <div class="col-md-offset-8 col-lg-offset-8 col-md-2 col-lg-2">
+                                <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info">
+                                     <strong>{l s='Reset product' mod='oyst'}</strong>
+                                </button>
+                            </div>
+                        </div>
                         {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                             <h2 class="col-md-offset-2 col-lg-offset-2 col-md-8 col-lg-8">{l s='Settings advanced' mod='oyst'}</h2>
                             <div class="form-group clearfix">
@@ -284,7 +291,7 @@
                                     <div class="form-group">
                                         <div class="col-md-2 col-lg-2">
                                             <div class="input-group">
-                                                <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}" />
+                                                <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{if $oyst.FC_OYST_COLOR_BTN}{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
                                             </div>
                                         </div>
                                     </div>
