@@ -123,6 +123,18 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
 
                         $this->updateOrderStatus((int)$id_cart, $status);
                         break;
+                    case OystPaymentNotification::EVENT_CAPTURE:
+                        $insert   = array(
+                            'id_order'   => (int) $id_order,
+                            'id_cart'    => (int) $cart->id,
+                            'payment_id' => pSQL($notification_item['payment_id']),
+                            'event_code' => pSQL($notification_item['event_code']),
+                            'event_data' => pSQL(Tools::jsonEncode($notification_item)),
+                            'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $notification_item['event_date']), 0, 19)),
+                            'date_add'   => date('Y-m-d H:i:s'),
+                        );
+                        Db::getInstance()->insert('oyst_payment_notification', $insert);
+                        break;
                 }
             } else {
                 switch ($notification_item['event_code']) {
