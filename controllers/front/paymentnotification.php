@@ -129,7 +129,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                             'id_cart'    => (int) $id_cart,
                             'payment_id' => pSQL($notification_item['payment_id']),
                             'event_code' => pSQL($notification_item['event_code']),
-                            'event_data' => pSQL(Tools::jsonEncode($notification_item)),
+                            'event_data' => pSQL(Tools::jsonEncode($event_data)),
                             'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $notification_item['event_date']), 0, 19)),
                             'date_add'   => date('Y-m-d H:i:s'),
                         );

@@ -172,7 +172,7 @@ class OrderRepository extends AbstractOystRepository
 
         if ($result) {
             $result      = json_decode($result, true);
-            $totalAmount = $result['amount']['value'] / 100;
+            $totalAmount = $result['notification']['amount']['value'] / 100;
             $maxRefund   = $this->calculateMaxRefund($idCart, $totalAmount);
         }
 
