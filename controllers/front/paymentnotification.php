@@ -126,7 +126,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                     case OystPaymentNotification::EVENT_CAPTURE:
                         $insert   = array(
                             'id_order'   => (int) $id_order,
-                            'id_cart'    => (int) $cart->id,
+                            'id_cart'    => (int) $id_cart,
                             'payment_id' => pSQL($notification_item['payment_id']),
                             'event_code' => pSQL($notification_item['event_code']),
                             'event_data' => pSQL(Tools::jsonEncode($notification_item)),
