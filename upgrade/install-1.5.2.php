@@ -19,12 +19,14 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-if (!defined('_PS_VERSION_'))
+if (!defined('_PS_VERSION_')) {
     exit;
+}
 
 require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
-function upgrade_module_1_5_2($module) {
+function upgrade_module_1_5_2($module)
+{
     $result = true;
     $langId = Configuration::get('PS_LANG_DEFAULT');
     $oyst = new Oyst();
@@ -32,7 +34,6 @@ function upgrade_module_1_5_2($module) {
     $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD_CHECK'));
 
     if (!Validate::isLoadedObject($orderState)) {
-
         $orderState->name = array(
             $langId => 'En attente de check fraud',
         );
@@ -56,7 +57,6 @@ function upgrade_module_1_5_2($module) {
     $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
 
     if (!Validate::isLoadedObject($orderState)) {
-
         $orderState->name = array(
             $langId => 'En attente de paiement chez Oyst',
         );
@@ -77,7 +77,7 @@ function upgrade_module_1_5_2($module) {
         Configuration::updateValue('OYST_STATUS_WAIT_PAYMENT', $orderState->id);
     }
 
-    Configuration::updateValue('FC_OYST_PREORDER_FEATURE',0);
+    Configuration::updateValue('FC_OYST_PREORDER_FEATURE', 0);
 
     return $result;
 }

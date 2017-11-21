@@ -112,7 +112,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         $this->module->logNotification('Result payment', $result);
 
         //convert oder to cart before payment (depending configuration)
-        if (Configuration::get('FC_OYST_PREORDER_FEATURE')){
+        if (Configuration::get('FC_OYST_PREORDER_FEATURE')) {
             $this->convertCartToOrder($total_amount);
         }
 

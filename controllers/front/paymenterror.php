@@ -24,6 +24,7 @@
  */
 use Oyst\Classes\Enum\AbstractOrderState;
 use Oyst\Factory\AbstractOrderServiceFactory;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -35,8 +36,8 @@ class OystPaymenterrorModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
-        if (Configuration::get('FC_OYST_PREORDER_FEATURE')){
-            if (Tools::getIsset('id_cart')){
+        if (Configuration::get('FC_OYST_PREORDER_FEATURE')) {
+            if (Tools::getIsset('id_cart')) {
                 $id_cart = Tools::getValue('id_cart');
                 $id_order = Order::getOrderByCartId($id_cart);
 

@@ -249,7 +249,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
         $this->module->validateOrder($cart->id, $payment_status, $transaction['total_paid'], 'Freepay', $message, $transaction, $cart->id_currency, false, $this->context->customer->secure_key, $shop);
         $id_order = Order::getOrderByCartId($cart->id);
 
-        $event_auth = OystPaymentNotification::existEventCode($id_cart, OystPaymentNotification::EVENT_AUTHORISATION);
+        $event_auth = OystPaymentNotification::existEventCode($cart->id, OystPaymentNotification::EVENT_AUTHORISATION);
         if (!$event_auth) {
             $insert   = array(
                 'id_order'   => (int) $id_order,

@@ -218,7 +218,6 @@ class Oyst extends FroggyPaymentModule
         $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
 
         if (!Validate::isLoadedObject($orderState)) {
-
             $orderState->name = array(
                 $langId => 'En attente de paiement chez Oyst',
             );
