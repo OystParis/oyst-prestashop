@@ -91,14 +91,14 @@ class OystPaymentNotification extends ObjectModel
 
     public static function existEventCode($id_cart, $event_code)
     {
-        $sql = 'SELECT COUNT(*)
+        $sql = 'SELECT event_data
         FROM `'._DB_PREFIX_.'oyst_payment_notification`
         WHERE `id_cart` ='.(int)$id_cart.'
         AND event_code = "'.$event_code.'"';
 
-        $exist = Db::getInstance()->getValue($sql);
-        if ($exist > 0) {
-            return true;
+        $exist = Db::getInstance()->getRow($sql);
+        if (count($exist) > 0) {
+            return $exist;
         } else {
             return false;
         }
