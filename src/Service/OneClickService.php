@@ -173,7 +173,7 @@ class OneClickService extends AbstractOystService
             $oneClickNotifications = new OneClickNotifications();
             $oneClickNotifications->setShouldAskShipments(true);
 
-            $oneClickNotifications->setUrl(Tools::getHttpHost(true).__PS_BASE_URI__.'modules/oyst/notification.php');
+            $oneClickNotifications->setUrl($this->oyst->getNotifyUrl());
 
             $this->logger->info(
                 sprintf(

@@ -22,6 +22,10 @@
 require dirname(__FILE__).'/../../config/config.inc.php';
 require dirname(__FILE__).'/oyst.php';
 
+if (Tools::getValue('key') != Configuration::get('FC_OYST_HASH_KEY')) {
+    die('Secure key is invalid');
+}
+
 $response = array(
     'state' => false,
 );

@@ -47,12 +47,12 @@
         </div>
 
         <script type="text/javascript">
-
+            var key = '{$secureKey}';
             {literal}
             $('a.close').on('click', function () {
                 $(this).parent().hide();
 
-                $.post('../modules/oyst/notification-bo.php', {action: 'hideExportInfo'}, function (data) {
+                $.post('../modules/oyst/notification-bo.php?key='+key, {action: 'hideExportInfo'}, function (data) {
                     // Nothing needs to be done here.
                 });
             });

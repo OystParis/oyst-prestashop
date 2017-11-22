@@ -33,6 +33,11 @@ $data = $request->getJson();
 $logger = new \Oyst\Service\Logger\FileLogger();
 $logger->setFile(dirname(__FILE__).'/logs/notification.log');
 
+if (Tools::getValue('key') != Configuration::get('FC_OYST_HASH_KEY')) {
+    $logger->info('New notification : Secure key is invalid');
+    http_response_code(400);
+}
+
 if ($data && isset($data['event'])) {
     $logger->info(
         sprintf(

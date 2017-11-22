@@ -54,6 +54,7 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
         $product->loadStockData();
 
         $this->smarty->assign(array(
+            'secureKey' => Configuration::get('FC_OYST_HASH_KEY'),
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
             'product' => $product,
             'productQuantity' => StockAvailable::getStockAvailableIdByProductId($product->id),
