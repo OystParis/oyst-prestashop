@@ -65,11 +65,22 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                                 );
                                 Db::getInstance()->insert('oyst_payment_notification', $insert);
                             }
+
                             $cart = new Cart((int)$id_cart);
                             $order = new Order((int)$id_order);
                             $amount_paid = (float)($notification_item['amount']['value'] / 100);
+                            $event_fraud = OystPaymentNotification::existEventCode(
+                                $cart->id,
+                                OystPaymentNotification::EVENT_FRAUD_VALIDATION
+                            );
+                            $data = Tools::jsonDecode($event_fraud["event_data"]);
+
                             if ($amount_paid != $cart->getOrderTotal()) {
                                 $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_ERROR'));
+                            } elseif ($event_fraud && $data->notification->success ===  false) {
+                                $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('OYST_STATUS_FRAUD'));
+                            } elseif ($event_fraud && $data->notification->success === true) {
+                                $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
                             } else {
                                 $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('OYST_STATUS_FRAUD_CHECK'));
                             }
