@@ -40,7 +40,8 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         }
 
         // Ajax refund
-        if (Tools::getValue('subaction') == 'freepay-refund') {
+        if (Tools::getValue('subaction') == 'freepay-refund' && !Tools::getValue('generateDiscountRefund')
+        ) {
             $this->refundOrder($order);
         }
 

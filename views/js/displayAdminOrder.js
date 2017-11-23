@@ -23,16 +23,16 @@ $(document).ready(function() {
     var standard_refund_button = $('#desc-order-standard_refund');
     var partial_refund_button = $('#desc-order-partial_refund');
 
-    standard_refund_button.hide();
+    //standard_refund_button.hide();
     partial_refund_button.hide();
 
     if (order_can_be_cancelled) {
         standard_refund_button.after(cancel_button_html);
         partial_refund_button.hide();
     } else {
-        if (order_can_be_totally_refunded) {
+        /*if (order_can_be_totally_refunded) {
             standard_refund_button.after(refund_button_html);
-        }
+        }*/
         if (order_max_refund > 0) {
             partial_refund_button.show();
         }
