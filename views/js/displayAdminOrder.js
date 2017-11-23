@@ -34,7 +34,7 @@ $(document).ready(function() {
             standard_refund_button.after(refund_button_html);
         }*/
         if (order_max_refund > 0) {
-            partial_refund_button.show();
+            partial_refund_button.show().html(refund_button_html);
         }
     }
 
