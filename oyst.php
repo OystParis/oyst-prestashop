@@ -498,7 +498,7 @@ class Oyst extends FroggyPaymentModule
      */
     public function getNotifyUrl()
     {
-        return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/oyst/notification.php';
+        return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/oyst/notification.php?key='.Configuration::get('FC_OYST_HASH_KEY');
     }
 
     /**

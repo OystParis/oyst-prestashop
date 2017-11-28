@@ -73,6 +73,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
             'OYST_IS_EXPORT_STILL_RUNNING' => $this->module->isCatalogExportStillRunning(),
             'exportedProducts' => $exportedProducts,
             'displayPanel' => $this->module->getAdminPanelInformationVisibility(),
+            'secureKey' => Configuration::get('FC_OYST_HASH_KEY'),
         ));
 
         $content = $template->fetch();
