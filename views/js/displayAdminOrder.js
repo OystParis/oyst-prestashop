@@ -23,7 +23,7 @@ $(document).ready(function() {
     var standard_refund_button = $('#desc-order-standard_refund');
     var partial_refund_button = $('#desc-order-partial_refund');
 
-    //standard_refund_button.hide();
+    standard_refund_button.hide();
     partial_refund_button.hide();
 
     if (order_can_be_cancelled) {
