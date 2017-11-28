@@ -8,7 +8,7 @@ $_MODULE['<{oyst}prestashop>paymentnotification_36ec50c0e914dd2fb48a1b27540512ce
 $_MODULE['<{oyst}prestashop>paymentnotification_a495948365afdff85b1f0c6e95fc36f7'] = 'Le paiement a échouché.';
 $_MODULE['<{oyst}prestashop>oysthookadvancedpaymentoptionsprocessor_e77bb171c7ae55bba8b2ed869fadfb19'] = 'Payer par carte bleue';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_d99d59366cc238d329d9fc8c7376d40b'] = 'Annuler la commande';
-$_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_4ad439b4f7069964e258259e049fa90c'] = 'Remboursement standard';
+$_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_4ad439b4f7069964e258259e049fa90c'] = 'Remboursement Freepay';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_9a3f357fa55aab55de39ca79444bc6db'] = 'Êtes vous sûr de vouloir annuler la commande ?';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_1c2d2d2a695caa767b1a65c631e32d39'] = 'Êtes vous sûr de vouloir rembourser la commande dans son intégralité ?';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_c553131fd61f1974f283284d081bd4aa'] = 'La quantité saisie n\'est pas bonne';

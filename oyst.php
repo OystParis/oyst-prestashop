@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.6.5';
+        $this->version = '1.6.6';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -390,6 +390,29 @@ class Oyst extends FroggyPaymentModule
         }
 
         return Configuration::get($key);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFreePayApiUrl()
+    {
+        $FreePayUrl = null;
+        $env = Tools::strtolower($this->getFreePayEnvironment());
+
+        switch ($env) {
+            case \Oyst\Service\Configuration::API_ENV_PROD:
+                $FreePayUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PROD);
+                break;
+            case \Oyst\Service\Configuration::API_ENV_PREPROD:
+                $FreePayUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PREPROD);
+                break;
+            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                $FreePayUrl = Configuration::get(\Oyst\Service\Configuration::API_ENDPOINT_CUSTOM_FREEPAY);
+                break;
+        }
+
+        return $FreePayUrl;
     }
 
     /**
