@@ -154,203 +154,172 @@
                     <div class="margin-form">
                         <input type="checkbox" class="form-control" id="FC_OYST_PREORDER_FEATURE" name="FC_OYST_PREORDER_FEATURE" value="1"{if $oyst.FC_OYST_PREORDER_FEATURE} checked="checked"{/if} />
                     </div>
-                </div>
-                <div id="tab-content-1-click" class="tab-pane">
-                    <h2>{l s='Configuration One-click' mod='oyst'}</h2>
-                    <label>{l s='Enable OneClick' mod='oyst'}</label>
                     <div class="margin-form">
-                        <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
-                    </div>
-                    <div class="env prod" style="display: none;">
-                        <label>{l s='1-Click API Production Key' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                            <button type="submit" value="1" name="submitOystConfiguration">
-                                {l s='Apply' mod='oyst'}
-                            </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                            {if $oyst.apikey_prod_test_error_oneclick}
-                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                            {/if}
-                        </div>
-                    </div>
-                    <div class="env preprod" style="display: none;">
-                        <label>{l s='1-Click API PreProduction Key' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                            <button type="submit" value="1" name="submitOystConfiguration">
-                                {l s='Apply' mod='oyst'}
-                            </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.staging.oyst.com/signup" target="_blank">backoffice.staging.oyst.com</a></p>
-                            {if $oyst.apikey_preprod_test_error_oneclick}
-                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                            {/if}
-                        </div>
-                    </div>
-                    <div class="env custom" style="display: none;">
-                        <label>{l s='1-Click API Custom Key' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                            <button type="submit" value="1" name="submitOystConfiguration">
-                                {l s='Apply' mod='oyst'}
-                            </button>
-                            <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.sandbox.oyst.com/signup" target="_blank">backoffice.sandbox.oyst.com</a></p>
-                            {if $oyst.apikey_custom_test_error_oneclick}
-                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                            {/if}
-                        </div>
-                    </div>
-                    <label>{l s='Environment' mod='oyst'}</label>
-                    <div class="margin-form">
-                        <select name="OYST_API_ENV_ONECLICK">
-                            <option value="prod" {if $oyst.OYST_API_ENV_ONECLICK == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
-                            <option value="preprod" {if $oyst.OYST_API_ENV_ONECLICK == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
-                            <option value="custom" {if $oyst.OYST_API_ENV_ONECLICK == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
-                        </select>
-                    </div>
-                    <label class="env custom">{l s='Endpoint API Custom' mod='oyst'}</label>
-                    <div class="margin-form env custom">
-                        <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLCK" name="OYST_API_CUSTOM_ENDPOINT_ONECLCK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLCK|escape:'htmlall':'UTF-8'}"/>
-                    </div>
-                    <label class="env custom">{l s='Endpoint CDN Custom' mod='oyst'}</label>
-                    <div class="margin-form env custom">
-                        <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
-                    </div>
-                    <div class="margin-form">
-                        <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
-                            {l s='Reset product' mod='oyst'}
+                        <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
+                            {l s='Save' mod='oyst'}
                         </button>
                     </div>
-                    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                        <h2>{l s='Settings advanced' mod='oyst'}</h2>
-                        <label>{l s='Delay' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
-                        </div>
-                        <h2>{l s='Custom of button' mod='oyst'}</h2>
-                        <label>{l s='Style btn 1-Click' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <select name="FC_OYST_THEME_BTN">
-                                <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
-                                <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
-                            </select>
-                        </div>
-                        <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <div class="input-group">
-                                <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{if $oyst.FC_OYST_COLOR_BTN}{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
-                            </div>
-                        </div>
-                        <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
-                            <br>
-                            <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
-                        </div>
-                        <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
-                            <br>
-                            <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
-                        </div>
-                        <label>{l s='Position btn 1-Click' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <select name="FC_OYST_POSITION_BTN">
-                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
-                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
-                            </select>
-                        </div>
-                        <div class="margin-form">
-                            <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
-                                {l s='Reset' mod='oyst'}
-                            </button>
-                        </div>
-                        <h2>{l s='Settings carrier' mod='oyst'}</h2>
-                        <label>{l s='Carrier default' mod='oyst'}</label>
-                        <div class="margin-form">
-                            <select name="FC_OYST_SHIPMENT_DEFAULT">
-                                <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
-                                {foreach $oyst.carrier_list as $carrier}
-                                    <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
-                                {/foreach}
-                            </select>
-                        </div>
-                        {foreach $oyst.carrier_list as $carrier}
-                            <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                </div>
+                <div id="tab-content-1-click" class="tab-pane">
+                    <div class="productTabsSub sidebar">
+                        <ul id="" class="tab">
+                            <li class="tab-row"><a class="tab-page selected" href="#conf-oc">{l s='Configuration One-click' mod='oyst'}</a></li>
+                            <li class="tab-row"><a class="tab-page" href="#custom-btn">{l s='Custom of button' mod='oyst'}</a></li>
+                            <li class="tab-row"><a class="tab-page" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
+                            <li class="tab-row"><a class="tab-page" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
+                        </ul>
+                    </div>
+                    <div id="moduleContainer" class="tab-content-sub">
+                        <div id="conf-oc" class="tab-pane-sub">
+                            <label>{l s='Enable OneClick' mod='oyst'}</label>
                             <div class="margin-form">
-                                <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
-                                    <option value="0">{l s='Disabled' mod='oyst'}</option>
-                                    {foreach from=$oyst.type_list key=value item=name}
-                                        <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
+                                <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
+                            </div>
+                            <div class="env prod" style="display: none;">
+                                <label>{l s='1-Click API Production Key' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                    <button type="submit" value="1" name="submitOystConfiguration">
+                                        {l s='Apply' mod='oyst'}
+                                    </button>
+                                    <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
+                                    {if $oyst.apikey_prod_test_error_oneclick}
+                                    <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                                    {/if}
+                                </div>
+                            </div>
+                            <div class="env preprod" style="display: none;">
+                                <label>{l s='1-Click API PreProduction Key' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                    <button type="submit" value="1" name="submitOystConfiguration">
+                                        {l s='Apply' mod='oyst'}
+                                    </button>
+                                    <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
+                                    {if $oyst.apikey_preprod_test_error_oneclick}
+                                    <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                                    {/if}
+                                </div>
+                            </div>
+                            <div class="env custom" style="display: none;">
+                                <label>{l s='1-Click API Custom Key' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                    <button type="submit" value="1" name="submitOystConfiguration">
+                                        {l s='Apply' mod='oyst'}
+                                    </button>
+                                    <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
+                                    {if $oyst.apikey_custom_test_error_oneclick}
+                                    <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                                    {/if}
+                                </div>
+                            </div>
+                            <label>{l s='Environment' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <select name="OYST_API_ENV_ONECLICK">
+                                    <option value="prod" {if $oyst.OYST_API_ENV_ONECLICK == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
+                                    <option value="preprod" {if $oyst.OYST_API_ENV_ONECLICK == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
+                                    <option value="custom" {if $oyst.OYST_API_ENV_ONECLICK == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
                                 </select>
                             </div>
-                        {/foreach}
-                    {/if}
-                </div>
-                <div class="margin-form">
-                    <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
-                        {l s='Save' mod='oyst'}
-                    </button>
+                            <label class="env custom">{l s='Endpoint API Custom' mod='oyst'}</label>
+                            <div class="margin-form env custom">
+                                <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLCK" name="OYST_API_CUSTOM_ENDPOINT_ONECLCK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLCK|escape:'htmlall':'UTF-8'}"/>
+                            </div>
+                            <label class="env custom">{l s='Endpoint CDN Custom' mod='oyst'}</label>
+                            <div class="margin-form env custom">
+                                <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
+                            </div>
+                            <div class="margin-form">
+                                <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
+                                    {l s='Reset product' mod='oyst'}
+                                </button>
+                            </div>
+                        </div>
+                        <div id="custom-btn" class="tab-pane-sub" style="display:none;">
+                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                <label>{l s='Style btn 1-Click' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <select name="FC_OYST_THEME_BTN">
+                                        <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
+                                        <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
+                                    </select>
+                                </div>
+                                <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <div class="input-group">
+                                        <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{if $oyst.FC_OYST_COLOR_BTN}{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
+                                    </div>
+                                </div>
+                                <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Position btn 1-Click' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <select name="FC_OYST_POSITION_BTN">
+                                        <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                        <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                    </select>
+                                </div>
+                                <div class="margin-form">
+                                    <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
+                                        {l s='Reset' mod='oyst'}
+                                    </button>
+                                </div>
+                            {/if}
+                        </div>
+                        <div id="settings-carrier" class="tab-pane-sub" style="display:none;">
+                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                <label>{l s='Carrier default' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <select name="FC_OYST_SHIPMENT_DEFAULT">
+                                        <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
+                                        {foreach $oyst.carrier_list as $carrier}
+                                            <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                                {foreach $oyst.carrier_list as $carrier}
+                                    <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                                    <div class="margin-form">
+                                        <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
+                                            <option value="0">{l s='Disabled' mod='oyst'}</option>
+                                            {foreach from=$oyst.type_list key=value item=name}
+                                                <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                {/foreach}
+                            {/if}
+                        </div>
+                        <div id="settings-advanced" class="tab-pane-sub" style="display:none;">
+                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                <label>{l s='Delay' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
+                                </div>
+                            {/if}
+                        </div>
+                        <div class="margin-form">
+                            <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
+                                {l s='Save' mod='oyst'}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 {/if}
-
-<div id="shipment-model" style="display: none;">
-    <div class="shipment-item">
-        <label>{l s='Carrier' mod='oyst'}</label>
-        <div class="margin-form">
-            <select name="shipments[__shipment_id__][id_carrier]">
-            {foreach $oyst.carrier_list as $carrier}
-                <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}">{$carrier.name|escape:'htmlall':'UTF-8'}</option>
-            {/foreach}
-            </select>
-        </div>
-        <label>{l s='Primary' mod='oyst'}</label>
-        <div class="margin-form">
-            <input type="checkbox" class="shipment-primary" name="shipments[__shipment_id__][primary]" value="1"/>
-        </div>
-        <div class="col-left">
-            <label>{l s='Type' mod='oyst'}</label>
-            <div class="margin-form">
-                <select name="shipments[__shipment_id__][type]">
-                {foreach from=$oyst.type_list key=value item=name}
-                    <option value="{$value|escape:'htmlall':'UTF-8'}">{$name|escape:'htmlall':'UTF-8'}</option>
-                {/foreach}
-                </select>
-            </div>
-            <label>{l s='Delay' mod='oyst'}</label>
-            <div class="margin-form">
-                <input type="text" name="shipments[__shipment_id__][delay]" value=""/>
-                <br>
-                <span class="help-block">{l s='Values in days' mod='oyst'}</span>
-            </div>
-            <label>{l s='Free shipping from' mod='oyst'}</label>
-            <div class="margin-form">
-                <input type="text" name="shipments[__shipment_id__][free_shipping]" value=""/>
-            </div>
-        </div>
-        <div class="col-right">
-            <label>{l s='Amount' mod='oyst'}</label>
-            <div class="margin-form">
-                <input type="text" name="shipments[__shipment_id__][amount_leader]" value=""/>
-                <br>
-                <span class="help-block">{l s='First product' mod='oyst'}</span>
-            </div>
-            <div class="margin-form">
-                <input type="text" name="shipments[__shipment_id__][amount_follower]" value=""/>
-                <br>
-                <span class="help-block">{l s='Additionnal product' mod='oyst'}</span>
-            </div>
-        </div>
-        <label></label>
-        <div class="margin-form">
-            <button type="button" class="delete-shipment">{l s='Delete Shipment' mod='oyst'}</button>
-        </div>
-    </div>
-</div>
 
 <fieldset id="logManagement">
     <legend>Logs</legend>
