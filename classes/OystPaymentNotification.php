@@ -29,6 +29,7 @@ if (!defined('_PS_VERSION_')) {
 class OystPaymentNotification extends ObjectModel
 {
     const EVENT_AUTHORISATION = 'AUTHORISATION';
+    const EVENT_FRAUD_VALIDATION = 'FRAUD_VALIDATION';
     const EVENT_CAPTURE = 'CAPTURE';
     const EVENT_CANCELLATION = 'CANCELLATION';
     const EVENT_REFUND = 'REFUND';
@@ -86,5 +87,20 @@ class OystPaymentNotification extends ObjectModel
         WHERE `id_cart` = '.(int)$id_cart);
 
         return new OystPaymentNotification($id_oyst_notification);
+    }
+
+    public static function existEventCode($id_cart, $event_code)
+    {
+        $sql = 'SELECT event_data
+        FROM `'._DB_PREFIX_.'oyst_payment_notification`
+        WHERE `id_cart` ='.(int)$id_cart.'
+        AND event_code = "'.$event_code.'"';
+
+        $exist = Db::getInstance()->getRow($sql);
+        if (count($exist) > 0) {
+            return $exist;
+        } else {
+            return false;
+        }
     }
 }

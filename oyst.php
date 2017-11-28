@@ -193,6 +193,73 @@ class Oyst extends FroggyPaymentModule
 
             Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND', $orderState->id);
         }
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD_CHECK'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'En attente de check fraud',
+            );
+            $orderState->color = '#FF8C00';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_FRAUD_CHECK', $orderState->id);
+        }
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'En attente de paiement chez Oyst',
+            );
+            $orderState->color = '#360088';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_WAIT_PAYMENT', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Paiement annulé pour suspicion de fraude',
+            );
+            $orderState->color = '#FF8C00';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_FRAUD', $orderState->id);
+        }
 
         return $result;
     }

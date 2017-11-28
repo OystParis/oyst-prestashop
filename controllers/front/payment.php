@@ -111,6 +111,11 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         $this->module->log($user);
         $this->module->logNotification('Result payment', $result);
 
+        //convert oder to cart before payment (depending configuration)
+        if (Configuration::get('FC_OYST_PREORDER_FEATURE')) {
+            $this->convertCartToOrder($total_amount);
+        }
+
         // Redirect to payment
         if (isset($result['url']) && !empty($result['url'])) {
             Tools::redirect($result['url']);
@@ -145,7 +150,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         }
 
         $notification = $this->context->link->getModuleLink('oyst', 'paymentnotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
-        $errorUrl     = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
+        $errorUrl     = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM')).$glue.'id_cart='.$this->context->cart->id;
         $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentreturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
 
         $urls = array(
@@ -178,5 +183,44 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         }
 
         return $url;
+    }
+    public function convertCartToOrder($total_amount)
+    {
+        // Load cart
+        $cart = new Cart((int)$this->context->cart->id);
+
+        // Build cart hash
+        $cart_hash = md5(Tools::jsonEncode(array($cart->id, $cart->nbProducts())));
+
+        // Load data in context
+        $this->context->cart = $cart;
+        $address = new Address((int) $cart->id_address_invoice);
+        $this->context->country = new Country((int) $address->id_country);
+        $this->context->customer = new Customer((int) $cart->id_customer);
+        $this->context->language = new Language((int) $cart->id_lang);
+        $this->context->currency = new Currency((int) $cart->id_currency);
+
+        // Load shop in context
+        if (isset($cart->id_shop)) {
+            $this->context->shop = new Shop($cart->id_shop);
+        }
+
+        // Set shop
+        if (_PS_VERSION_ < '1.5') {
+            $shop = null;
+        } else {
+            $shop_id = $this->context->shop->id;
+            $shop = new Shop($shop_id);
+        }
+
+        $message = null;
+        $payment_status = (int) Configuration::get('OYST_STATUS_WAIT_PAYMENT');
+
+        // Validate order
+        $this->module->validateOrder($cart->id, $payment_status, $total_amount, 'Freepay', null, null, $cart->id_currency, false, $this->context->customer->secure_key, $shop);
+        $id_order = Order::getOrderByCartId($cart->id);
+
+        $this->module->log('Payment notification send ');
+        $this->module->logNotification('Payment', $id_order);
     }
 }
