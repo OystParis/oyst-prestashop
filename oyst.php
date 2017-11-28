@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.6.4';
+        $this->version = '1.6.5';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -266,6 +266,7 @@ class Oyst extends FroggyPaymentModule
 
     public function updateConstants()
     {
+        Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
         Configuration::updateValue('FC_OYST_DELAY', 15);
     }
 

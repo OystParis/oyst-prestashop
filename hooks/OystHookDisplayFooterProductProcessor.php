@@ -68,10 +68,18 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             'heightBtn' => Configuration::get('FC_OYST_HEIGHT_BTN'),
             'positionBtn' => Configuration::get('FC_OYST_POSITION_BTN'),
         ));
-        $this->context->controller->addJS(array(
-            $this->path.'views/js/OystOneClick.js',
-            trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
-        ));
+
+        if (_PS_VERSION_ >= '1.6.0.0') {
+            $this->context->controller->addJS(array(
+                $this->path.'views/js/OystOneClick.js',
+                trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
+            ));
+        } else {
+            $this->smarty->assign(array(
+                'JSOystOneClick' => $this->path.'views/js/OystOneClick.js',
+                'JSOneClickUrl' => trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
+            ));
+        }
 
         $this->context->controller->addCSS(array(
             $this->path.'views/css/oyst.css',

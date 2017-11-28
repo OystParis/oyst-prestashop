@@ -27,7 +27,6 @@ function upgrade_module_1_5_0($module)
 {
     $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
     $oystDb->createProductTable();
-    $oystDb->populateProductTable();
 
     $module->unregisterHook('actionobjectcombinationaddafter');
     $module->unregisterHook('actionobjectcombinationupdateafter');

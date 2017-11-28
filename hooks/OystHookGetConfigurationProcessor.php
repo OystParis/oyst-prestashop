@@ -146,10 +146,15 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         if (Tools::isSubmit('submitOystResetCustom')) {
             Configuration::updateValue('FC_OYST_THEME_BTN', '');
-            Configuration::updateValue('FC_OYST_COLOR_BTN', '');
+            Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
             Configuration::updateValue('FC_OYST_WIDTH_BTN', '');
             Configuration::updateValue('FC_OYST_HEIGHT_BTN', '');
             Configuration::updateValue('FC_OYST_POSITION_BTN', '');
+        }
+
+        if (Tools::isSubmit('submitOystConfigurationReset')) {
+            $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), new Oyst());
+            $oystDb->truncateProductTable();
         }
     }
 
