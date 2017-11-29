@@ -351,13 +351,17 @@
                                 {foreach $oyst.carrier_list as $carrier}
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{$carrier.name|escape:'htmlall':'UTF-8'}</label>
-                                        <div class="col-md-7 col-lg-7">
+                                        <div class="col-md-5 col-lg-5">
                                             <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
                                                 <option value="0">{l s='Disabled' mod='oyst'}</option>
                                                 {foreach from=$oyst.type_list key=value item=name}
                                                     <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
                                                 {/foreach}
                                             </select>
+                                        </div>
+                                        <label class="control-label col-md-1 col-lg-1">{l s='Delay in days' mod='oyst'}</label>
+                                        <div class="col-md-2 col-lg-2">
+                                          <input name="FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference|escape:'htmlall':'UTF-8'}" value="{if Configuration::get('FC_OYST_SHIPMENT_{$carrier.id_reference}')}{Configuration::get('FC_OYST_SHIPMENT_{$carrier.id_reference')}{/if}" />
                                         </div>
                                     </div>
                                 {/foreach}
