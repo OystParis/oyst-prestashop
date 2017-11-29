@@ -301,7 +301,7 @@
                                     </div>
                                     <label>{l s='Delay in days for %s' sprintf=$carrier.name mod='oyst'}</label>
                                     <div class="margin-form">
-                                        <input name="FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference|escape:'htmlall':'UTF-8'}" value="{if Configuration::get('FC_OYST_SHIPMENT_{$carrier.id_reference}')}{Configuration::get('FC_OYST_SHIPMENT_{$carrier.id_reference')}{/if}" />
+                                        <input name="FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference|escape:'htmlall':'UTF-8'}" {if Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}value="{Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}"{/if} />
                                     </div>
                                 {/foreach}
                             {else}
