@@ -270,6 +270,12 @@
                                         {l s='Reset' mod='oyst'}
                                     </button>
                                 </div>
+                            {else}
+                                <div class="warn">
+                                    <ul>
+                                        <li>{l s='1-Click is enabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+                                    </ul>
+                                </div>
                             {/if}
                         </div>
                         <div id="settings-carrier" class="tab-pane-sub" style="display:none;">
@@ -294,25 +300,29 @@
                                         </select>
                                     </div>
                                 {/foreach}
+                            {else}
+                                <div class="warn">
+                                    <ul>
+                                        <li>{l s='1-Click is enabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+                                    </ul>
+                                </div>
                             {/if}
                         </div>
                         <div id="settings-advanced" class="tab-pane-sub" style="display:none;">
-                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                                <label>{l s='Delay' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
-                                </div>
-                                <div class="margin-form">
-                                    <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
-                                        {l s='Reset product' mod='oyst'}
-                                    </button>
-                                </div>
-                                <div class="margin-form">
-                                    <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-info module_form_reset_btn">
-                                        {l s='Disable product' mod='oyst'}
-                                    </button>
-                                </div>
-                            {/if}
+                            <label>{l s='Delay' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
+                            </div>
+                            <div class="margin-form">
+                                <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
+                                    {l s='Reset product' mod='oyst'}
+                                </button>
+                            </div>
+                            <div class="margin-form">
+                                <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-info module_form_reset_btn">
+                                    {l s='Disable product' mod='oyst'}
+                                </button>
+                            </div>
                         </div>
                         <div class="margin-form">
                             <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">

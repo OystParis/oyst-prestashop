@@ -109,7 +109,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_90589c47f06eb971d5485
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9748f06932412b1f06929aba7f2aec07'] = 'Création de la commande avant le paiement Freepay';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1Click';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d1e6660c46eb6011110e01cc1a99aa64'] = 'Personnalisation du bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
@@ -189,7 +189,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_90589c47f06eb971d548591f23c285a
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9748f06932412b1f06929aba7f2aec07'] = 'Création de la commande avant le paiement Freepay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1Click';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d1e6660c46eb6011110e01cc1a99aa64'] = 'Personnalisation du bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
