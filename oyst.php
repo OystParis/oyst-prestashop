@@ -268,6 +268,8 @@ class Oyst extends FroggyPaymentModule
     {
         Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
         Configuration::updateValue('FC_OYST_DELAY', 15);
+        Configuration::updateValue('FC_OYST_STATE_PAYMENT_ONECLICK', 2);
+        Configuration::updateValue('FC_OYST_STATE_PAYMENT_FREEPAY', 2);
     }
 
     public function loadSQLFile($sql_file)
