@@ -308,8 +308,8 @@
                                     </button>
                                 </div>
                                 <div class="margin-form">
-                                    <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
-                                        {l s='Reset product' mod='oyst'}
+                                    <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-info module_form_reset_btn">
+                                        {l s='Disable product' mod='oyst'}
                                     </button>
                                 </div>
                             {/if}

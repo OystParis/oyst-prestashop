@@ -275,13 +275,6 @@
                                   <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                               </div>
                           </div>
-                          <div class="form-group clearfix">
-                              <div class="col-md-offset-8 col-lg-offset-8 col-md-2 col-lg-2">
-                                  <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info">
-                                       <strong>{l s='Reset product' mod='oyst'}</strong>
-                                  </button>
-                              </div>
-                          </div>
                         </div>
                         <div role="tabpanel" id="custom-btn" class="tab-pane">
                           {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
@@ -372,6 +365,20 @@
                                 <label class="control-label col-md-3 col-lg-3">{l s='Delay' mod='oyst'}</label>
                                 <div class="col-md-7 col-lg-7">
                                     <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <div class="col-md-offset-8 col-lg-offset-8 col-md-2 col-lg-2">
+                                    <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info">
+                                         <strong>{l s='Reset product' mod='oyst'}</strong>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <div class="col-md-offset-8 col-lg-offset-8 col-md-2 col-lg-2">
+                                    <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-info">
+                                         <strong>{l s='Disable product' mod='oyst'}</strong>
+                                    </button>
                                 </div>
                             </div>
                           {/if}

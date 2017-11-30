@@ -156,6 +156,12 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), new Oyst());
             $oystDb->truncateProductTable();
         }
+
+        if (Tools::isSubmit('submitOystConfigurationDisable')) {
+            $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), new Oyst());
+            $oystDb->truncateProductTable();
+            $oystDb->disableProductTable();
+        }
     }
 
     /**
