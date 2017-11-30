@@ -225,7 +225,7 @@ class OrderService extends AbstractOystService
 
         $state = $this->oyst->validateOrder(
             $cart->id,
-            ,
+            $order_state,
             $oystOrderInfo['order_amount']['value'] / 100,
             'Oyst OneClick',
             null,
