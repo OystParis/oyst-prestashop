@@ -176,10 +176,14 @@ function OystOneClick(url, productId) {
             productAttributeId = parseInt($('#idCombination').val()) || 0;
         }
 
+        var quantity = $('input[name="qty"]').val();
+        if (typeof quantity === "undefined")
+            quantity = 1;
+        
         return {
             productId: this.productId,
             productAttributeId: productAttributeId,
-            quantity: $('input[name="qty"]').val(),
+            quantity: quantity,
         }
     };
 
