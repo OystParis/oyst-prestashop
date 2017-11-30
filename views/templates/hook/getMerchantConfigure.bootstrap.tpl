@@ -182,9 +182,19 @@
                                 <input type="text" id="OYST_API_CUSTOM_ENDPOINT_FREEPAY" name="OYST_API_CUSTOM_ENDPOINT_FREEPAY" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-lg-3">{l s='State payment' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
+                                <select id="FC_OYST_STATE_PAYMENT_FREEPAY" name="FC_OYST_STATE_PAYMENT_FREEPAY">
+                                  {foreach from=$oyst.order_state item=state}
+                                      <option value="{$state.id_order_state|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_STATE_PAYMENT_FREEPAY == $state.id_order_state} selected="selected"{/if}>{$state.name|escape:'html':'UTF-8'}</option>
+                                  {/foreach}
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-4">{l s='Create order before payment' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-5" style="height: 31px;">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Create order before payment' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7" style="height: 31px;">
                                 <input type="checkbox" id="FC_OYST_PREORDER_FEATURE" name="FC_OYST_PREORDER_FEATURE" value="1"{if $oyst.FC_OYST_PREORDER_FEATURE} checked="checked"{/if} />
                             </div>
                         </div>
@@ -376,6 +386,16 @@
                                 <label class="control-label col-md-3 col-lg-3">{l s='Delay' mod='oyst'}</label>
                                 <div class="col-md-7 col-lg-7">
                                     <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-lg-3">{l s='State payment' mod='oyst'}</label>
+                                <div class="col-md-7 col-lg-7">
+                                    <select id="FC_OYST_STATE_PAYMENT_ONECLICK" name="FC_OYST_STATE_PAYMENT_ONECLICK">
+                                      {foreach from=$oyst.order_state item=state}
+                                          <option value="{$state.id_order_state|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_STATE_PAYMENT_ONECLICK == $state.id_order_state} selected="selected"{/if}>{$state.name|escape:'html':'UTF-8'}</option>
+                                      {/foreach}
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group clearfix">

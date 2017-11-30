@@ -65,6 +65,8 @@
         "FC_OYST_CART_CONFIG": "",
 
         "FC_OYST_SHIPMENT_DEFAULT": "0",
-        "FC_OYST_DELAY": "15"
+        "FC_OYST_DELAY": "15",
+        "FC_OYST_STATE_PAYMENT_FREEPAY": "2",
+        "FC_OYST_STATE_PAYMENT_ONECLICK": "2"
     }
 }
