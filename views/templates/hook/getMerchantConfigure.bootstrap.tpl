@@ -286,12 +286,6 @@
                         <div role="tabpanel" id="custom-btn" class="tab-pane">
                           {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                               <div class="form-group clearfix">
-                                  <label class="control-label col-md-3 col-lg-3">{l s='Delay' mod='oyst'}</label>
-                                  <div class="col-md-7 col-lg-7">
-                                      <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
-                                  </div>
-                              </div>
-                              <div class="form-group clearfix">
                                   <label class="control-label col-md-3 col-lg-3">{l s='Style btn 1-Click' mod='oyst'}</label>
                                   <div class="col-md-7 col-lg-7">
                                       <select name="FC_OYST_THEME_BTN">

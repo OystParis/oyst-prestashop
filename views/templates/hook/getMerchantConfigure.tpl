@@ -230,11 +230,6 @@
                             <div class="margin-form env custom">
                                 <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                             </div>
-                            <div class="margin-form">
-                                <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
-                                    {l s='Reset product' mod='oyst'}
-                                </button>
-                            </div>
                         </div>
                         <div id="custom-btn" class="tab-pane-sub" style="display:none;">
                             {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
@@ -306,6 +301,16 @@
                                 <label>{l s='Delay' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
+                                </div>
+                                <div class="margin-form">
+                                    <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
+                                        {l s='Reset product' mod='oyst'}
+                                    </button>
+                                </div>
+                                <div class="margin-form">
+                                    <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
+                                        {l s='Reset product' mod='oyst'}
+                                    </button>
                                 </div>
                             {/if}
                         </div>
