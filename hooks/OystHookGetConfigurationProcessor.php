@@ -116,7 +116,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                     $value = Tools::getValue($conf);
                     if ($format == 'int') {
                         $value = (int)$value;
-                    } else if ($format == 'float') {
+                    } elseif ($format == 'float') {
                         $value = (float)$value;
                     }
                 }
@@ -142,6 +142,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 ;
                 $this->configuration_result = $oneClickShipmentService->handleShipmentRequest();
             }
+
+            $this->configuration_result = true;
         }
 
         if (Tools::isSubmit('submitOystResetCustom')) {
@@ -154,13 +156,13 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {
             $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), new Oyst());
-            $oystDb->truncateProductTable();
+            $this->configuration_result = $oystDb->truncateProductTable();
         }
 
         if (Tools::isSubmit('submitOystConfigurationDisable')) {
             $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), new Oyst());
             $oystDb->truncateProductTable();
-            $oystDb->disableProductTable();
+            $this->configuration_result = $oystDb->disableProductTable();
         }
     }
 

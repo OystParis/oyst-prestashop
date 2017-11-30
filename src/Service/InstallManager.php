@@ -174,6 +174,7 @@ class InstallManager
     public function disableProductTable()
     {
         $products = Product::getProducts(Context::getContext()->language->id, 0, 0, 'id_product', 'ASC');
+        $state = false;
 
         foreach ($products as $product) {
             $state &= $this->db->insert(
@@ -185,7 +186,7 @@ class InstallManager
             );
         }
 
-        return true;
+        return $state;
     }
 
     public function uninstall()
