@@ -47,7 +47,7 @@
         </div>
 
         <script type="text/javascript">
-            var key = "{$secureKey|escape:'html':'UTF-8'}";
+            var key = "{$secureKey|escape:'htmlall':'UTF-8'}";
             {literal}
             $('a.close').on('click', function () {
                 $(this).parent().hide();

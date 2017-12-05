@@ -230,6 +230,7 @@ class ShipmentService extends AbstractOystService
                             WHERE id_carrier = '.(int)$id_carrier);
 
             $type_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_".$id_reference);
+            $delay_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_DELAY_".$id_reference);
 
             if (isset($type_shipment) &&
                 $type_shipment != '0'
@@ -252,7 +253,11 @@ class ShipmentService extends AbstractOystService
 
                 $oneClickShipment->setPrimary($primary);
                 $oneClickShipment->setAmount($oystPrice);
-                $oneClickShipment->setDelay($delay[(int)$carrier->grade]);
+                if ($delay_shipment && $delay_shipment != '') {
+                    $oneClickShipment->setDelay((int)$delay_shipment);
+                } else {
+                    $oneClickShipment->setDelay($delay[(int)$carrier->grade]);
+                }
                 $oneClickShipment->setCarrier($oystCarrier);
 
                 $oneClickShipmentCalculation->addShipment($oneClickShipment);

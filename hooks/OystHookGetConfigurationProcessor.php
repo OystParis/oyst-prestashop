@@ -126,9 +126,14 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $carriers = $this->getCarrierList();
 
             foreach ($carriers as $carrier) {
+                // Update type for each carrier
                 $field = 'FC_OYST_SHIPMENT_'.$carrier['id_reference'];
                 $type = Tools::getValue($field);
                 Configuration::updateValue($field, $type);
+                // Update delay for each carrier
+                $field_delay = 'FC_OYST_SHIPMENT_DELAY_'.$carrier['id_reference'];
+                $delay = Tools::getValue($field_delay);
+                Configuration::updateValue($field_delay, $delay);
             }
 
             // Deprecated with shipmentless ?
