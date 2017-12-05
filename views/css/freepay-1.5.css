@@ -21,7 +21,25 @@
 .oyst.configuration select {
     width: 250px;
 }
-
+.productTabsSub ul li.tab-row a {
+    display: block;
+    font-weight: normal;
+    color: #666;
+    padding: 7px 10px;
+    background-color: #FFF;
+    border-top: 1px solid #CCCED7;
+    border-right: 1px solid #CCCED7;
+    border-left: 1px solid #CCCED7;
+}
+.productTabsSub ul li.tab-row:last-child a {
+    border-bottom: 1px solid #CCCED7;
+}
+.productTabsSub ul li.tab-row a.selected {
+    background-color: #EBEDF4;
+    font-weight: bold;
+    color: #000;
+    border-right: none;
+}
 #shipment-collection input[type="text"] {
     width: 140px;
 }

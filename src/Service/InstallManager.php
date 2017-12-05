@@ -168,6 +168,27 @@ class InstallManager
         return $this->db->execute($query);
     }
 
+    /**
+     * @return bool
+     */
+    public function disableProductTable()
+    {
+        $products = Product::getProducts(Context::getContext()->language->id, 0, 0, 'id_product', 'ASC');
+        $state = false;
+
+        foreach ($products as $product) {
+            $state &= $this->db->insert(
+                'oyst_product',
+                array(
+                    'id_product' => (int)$product['id_product'],
+                    'active_oneclick' => 0,
+                )
+            );
+        }
+
+        return $state;
+    }
+
     public function uninstall()
     {
         $this->dropExportTable();

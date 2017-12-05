@@ -24,11 +24,23 @@ $(document).ready(function() {
         e.preventDefault();
         showTab($(this));
     });
+
+    $('.productTabsSub ul.tab li.tab-row a.tab-page').click(function (e) {
+        e.preventDefault();
+        showTabSub($(this));
+    });
 });
 
 function showTab(link) {
     $('.tab-content .tab-pane').hide();
     $(link.attr('href')).show();
     $('.productTabs ul.tab li.tab-row a.tab-page').removeClass('selected');
+    link.addClass('selected');
+}
+
+function showTabSub(link) {
+    $('.tab-content-sub .tab-pane-sub').hide();
+    $(link.attr('href')).show();
+    $('.productTabsSub ul.tab li.tab-row a.tab-page').removeClass('selected');
     link.addClass('selected');
 }
