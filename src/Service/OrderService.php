@@ -220,7 +220,7 @@ class OrderService extends AbstractOystService
         if (PSConfiguration::get('FC_OYST_STATE_PAYMENT_ONECLICK')) {
             $order_state = PSConfiguration::get('FC_OYST_STATE_PAYMENT_ONECLICK');
         } else {
-            $order_state = PSConfiguration::get('PS_OS_PAYMENT')
+            $order_state = PSConfiguration::get('PS_OS_PAYMENT');
         }
 
         $state = $this->oyst->validateOrder(
