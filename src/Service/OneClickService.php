@@ -135,6 +135,12 @@ class OneClickService extends AbstractOystService
             $this->logger->critical(sprintf('Error occurred during oneClick process: %s', $data['error']));
         }
 
+        // Generated context
+        $oystContext = array(
+            'id' => (string)$this->generatedId(),
+            'store_id' => (int)Context::getContext()->shop->id
+        );
+
         if (!isset($data['error'])) {
             $oystUser = null;
             $customer = $this->context->customer;
@@ -144,6 +150,7 @@ class OneClickService extends AbstractOystService
                     ->setLastName($customer->lastname)
                     ->setLanguage($this->context->language->iso_code)
                     ->setEmail($customer->email);
+                $oystContext['id_user'] = $customer->id;
             }
 
             $oneClickOrdersParams = new OneClickOrderParams();
@@ -182,10 +189,20 @@ class OneClickService extends AbstractOystService
                 )
             );
 
-            $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser, $productLess, $oneClickOrdersParams, null, $oneClickNotifications);
+            $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser, $productLess, $oneClickOrdersParams, $oystContext, $oneClickNotifications);
             $data = array_merge($data, $result);
         }
 
         return $data;
+    }
+
+    public function generatedId()
+    {
+        $hash = ConfigurationP::get('FC_OYST_HASH_KEY');
+
+        $datetime = new \DateTime();
+        $datetime = $datetime->format('YmdHis');
+
+        return uniqid().$hash.'-'.$datetime;
     }
 }

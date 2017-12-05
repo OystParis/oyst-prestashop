@@ -288,7 +288,11 @@ class OrderService extends AbstractOystService
                 );
             }
 
-            $customer = $this->getCustomer($oystOrderInfo['user']);
+            if ($oystOrderInfo['context'] && $oystOrderInfo['context']['id_user']) {
+                $customer = new Customer((int)$oystOrderInfo['context']['id_user']);
+            } else {
+                $customer = $this->getCustomer($oystOrderInfo['user']);
+            }
             if (!Validate::isLoadedObject($customer)) {
                 $data['error'] = 'Customer not found or can\'t be found';
             }
