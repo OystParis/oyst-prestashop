@@ -270,7 +270,11 @@ class ShipmentService extends AbstractOystService
         foreach ($carriersAvailables as $key => $shipment) {
             $carrier_desintifier = Cart::desintifier($shipment['id_carrier']);
             $id_carrier = (int)Tools::substr($carrier_desintifier, 0, -1);
-            if ($id_carrier == $id_default_carrier) {
+            $id_reference = Db::getInstance()->getValue('
+                SELECT `id_reference`
+                FROM `'._DB_PREFIX_.'carrier`
+                WHERE id_carrier = '.(int)$id_carrier);
+            if ($id_reference == $id_default_carrier) {
                 $is_primary = true;
             }
         }
