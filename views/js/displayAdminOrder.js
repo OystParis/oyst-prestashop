@@ -22,9 +22,11 @@ $(document).ready(function() {
     // Hide prestashop refund buttons and display custom cancel & refund buttons
     var standard_refund_button = $('#desc-order-standard_refund');
     var partial_refund_button = $('#desc-order-partial_refund');
+    var address_shipping = $('#addressShipping form');
 
     standard_refund_button.hide();
     partial_refund_button.hide();
+    address_shipping.hide();
 
     if (order_can_be_cancelled) {
         standard_refund_button.after(cancel_button_html);
