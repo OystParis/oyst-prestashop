@@ -154,6 +154,14 @@
                     <div class="margin-form">
                         <input type="checkbox" class="form-control" id="FC_OYST_PREORDER_FEATURE" name="FC_OYST_PREORDER_FEATURE" value="1"{if $oyst.FC_OYST_PREORDER_FEATURE} checked="checked"{/if} />
                     </div>
+                    <label>{l s='State payment' mod='oyst'}</label>
+                    <div class="margin-form">
+                        <select id="FC_OYST_STATE_PAYMENT_FREEPAY" name="FC_OYST_STATE_PAYMENT_FREEPAY">
+                            {foreach from=$oyst.order_state item=state}
+                                <option value="{$state.id_order_state|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_STATE_PAYMENT_FREEPAY == $state.id_order_state} selected="selected"{/if}>{$state.name|escape:'html':'UTF-8'}</option>
+                            {/foreach}
+                        </select>
+                    </div>
                     <div class="margin-form">
                         <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
                             {l s='Save' mod='oyst'}
@@ -230,6 +238,14 @@
                             <div class="margin-form env custom">
                                 <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                             </div>
+                            <label>{l s='State payment' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <select id="FC_OYST_STATE_PAYMENT_ONECLICK" name="FC_OYST_STATE_PAYMENT_ONECLICK">
+                                    {foreach from=$oyst.order_state item=state}
+                                        <option value="{$state.id_order_state|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_STATE_PAYMENT_ONECLICK == $state.id_order_state} selected="selected"{/if}>{$state.name|escape:'html':'UTF-8'}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
                         </div>
                         <div id="custom-btn" class="tab-pane-sub" style="display:none;">
                             {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
@@ -273,7 +289,7 @@
                             {else}
                                 <div class="warn">
                                     <ul>
-                                        <li>{l s='1-Click is enabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+                                        <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
                                     </ul>
                                 </div>
                             {/if}
@@ -307,7 +323,7 @@
                             {else}
                                 <div class="warn">
                                     <ul>
-                                        <li>{l s='1-Click is enabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+                                        <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
                                     </ul>
                                 </div>
                             {/if}

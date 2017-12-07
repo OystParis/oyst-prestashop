@@ -182,9 +182,19 @@
                                 <input type="text" id="OYST_API_CUSTOM_ENDPOINT_FREEPAY" name="OYST_API_CUSTOM_ENDPOINT_FREEPAY" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-lg-3">{l s='State payment' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7">
+                                <select id="FC_OYST_STATE_PAYMENT_FREEPAY" name="FC_OYST_STATE_PAYMENT_FREEPAY">
+                                    {foreach from=$oyst.order_state item=state}
+                                        <option value="{$state.id_order_state|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_STATE_PAYMENT_FREEPAY == $state.id_order_state} selected="selected"{/if}>{$state.name|escape:'html':'UTF-8'}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-4">{l s='Create order before payment' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-5" style="height: 31px;">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Create order before payment' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7" style="height: 31px;">
                                 <input type="checkbox" id="FC_OYST_PREORDER_FEATURE" name="FC_OYST_PREORDER_FEATURE" value="1"{if $oyst.FC_OYST_PREORDER_FEATURE} checked="checked"{/if} />
                             </div>
                         </div>
@@ -192,170 +202,168 @@
                 </div>
                 <div role="tabpanel" class="panel tab-pane{if $oyst.current_tab == '#tab-content-1-click'} active{/if}" id="tab-content-1-click" style="border-top: 0;border-radius: initial;">
                     <div class="row">
-                      <div class="col-lg-2 col-md-3">
-                        <ul class="nav nav-pills nav-stacked" role="tablist">
-                          <li role="presentation" class="active"><a role="tab" data-toggle="tab" href="#conf-oc"/>{l s='Configuration One-click' mod='oyst'}</a></li>
-                          <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn"/>{l s='Custom of button' mod='oyst'}</a></li>
-                          <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-carrier" />{l s='Settings carrier' mod='oyst'}</a></li>
-                          <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-advanced" />{l s='Settings advanced' mod='oyst'}</a></li>
-                        </ul>
-                      </div>
-                      <div class="col-lg-10 col-md-9 tab-content">
-                        <div id="conf-oc" class="tab-pane active" role="tabpanel">
-                          <div class="form-group clearfix">
-                             <label class="control-label col-md-3 col-lg-3">{l s='Enable OneClick' mod='oyst'}</label>
-                             <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                 <input type="checkbox" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
-                             </div>
-                          </div>
-                          <div class="form-group clearfix env prod" style="display: none;">
-                              <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Production Key' mod='oyst'}</label>
-                              <div class="col-md-7 col-lg-7">
-                                  <div class="input-group">
-                                      <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                                      <span class="input-group-btn">
-                                          <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
-                                      </span>
-                                  </div>
-                                  <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                                  {if $oyst.apikey_prod_test_error_oneclick}
-                                  <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                  {/if}
-                              </div>
-                          </div>
-                          <div class="form-group clearfix env preprod" style="display: none;">
-                              <label class="control-label col-md-3 col-lg-3">{l s='1-Click API PreProduction Key' mod='oyst'}</label>
-                              <div class="col-md-7 col-lg-7">
-                                  <div class="input-group">
-                                      <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                                      <span class="input-group-btn">
-                                          <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
-                                      </span>
-                                  </div>
-                                  <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                                  {if $oyst.apikey_preprod_test_error_oneclick}
-                                  <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                  {/if}
-                              </div>
-                          </div>
-                          <div class="form-group clearfix env custom" style="display: none;">
-                              <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Custom Key' mod='oyst'}</label>
-                              <div class="col-md-7 col-lg-7">
-                                  <div class="input-group">
-                                      <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                                      <span class="input-group-btn">
-                                          <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
-                                      </span>
-                                  </div>
-                                  <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                                  {if $oyst.apikey_custom_test_error_oneclick}
-                                  <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                  {/if}
-                              </div>
-                          </div>
-                          <div class="form-group clearfix">
-                              <label class="control-label col-md-3 col-lg-3">{l s='Environment' mod='oyst'}</label>
-                              <div class="col-md-7 col-lg-7">
-                                  <select name="OYST_API_ENV_ONECLICK">
-                                      <option value="prod" {if $oyst.OYST_API_ENV_ONECLICK == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
-                                      <option value="preprod" {if $oyst.OYST_API_ENV_ONECLICK == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
-                                      <option value="custom" {if $oyst.OYST_API_ENV_ONECLICK == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
-                                  </select>
-                              </div>
-                          </div>
-                          <div class="form-group clearfix env custom" style="display: none;">
-                              <label class="control-label col-md-3 col-lg-3">{l s='Endpoint API Custom' mod='oyst'}</label>
-                              <div class="col-md-7 col-lg-7">
-                                  <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLCK" name="OYST_API_CUSTOM_ENDPOINT_ONECLCK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLCK|escape:'htmlall':'UTF-8'}"/>
-                              </div>
-                          </div>
-                          <div class="form-group clearfix env custom" style="display: none;">
-                              <label class="control-label col-md-3 col-lg-3">{l s='Endpoint CDN Custom' mod='oyst'}</label>
-                              <div class="col-md-7 col-lg-7">
-                                  <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
-                              </div>
-                          </div>
+                        <div class="col-lg-2 col-md-3">
+                            <ul class="nav nav-pills nav-stacked" role="tablist">
+                                <li role="presentation" class="active"><a role="tab" data-toggle="tab" href="#conf-oc"/>{l s='Configuration One-click' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn"/>{l s='Custom of button' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-carrier" />{l s='Settings carrier' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-advanced" />{l s='Settings advanced' mod='oyst'}</a></li>
+                            </ul>
                         </div>
-                        <div role="tabpanel" id="custom-btn" class="tab-pane">
-                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                        <div class="col-lg-10 col-md-9 tab-content">
+                            <div id="conf-oc" class="tab-pane active" role="tabpanel">
                                 <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Style btn 1-Click' mod='oyst'}</label>
-                                    <div class="col-md-7 col-lg-7">
-                                        <select name="FC_OYST_THEME_BTN">
-                                            <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
-                                            <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
-                                        </select>
+                                    <label class="control-label col-md-3 col-lg-3">{l s='Enable OneClick' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                        <input type="checkbox" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
                                     </div>
                                 </div>
-                                <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
-                                    <div class="col-lg-7">
-                                        <div class="form-group">
-                                            <div class="col-md-2 col-lg-2">
-                                                <div class="input-group">
-                                                    <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{if $oyst.FC_OYST_COLOR_BTN}{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
-                                                </div>
-                                            </div>
+                                <div class="form-group clearfix env prod" style="display: none;">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Production Key' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7">
+                                        <div class="input-group">
+                                            <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
+                                            </span>
                                         </div>
+                                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
+                                        {if $oyst.apikey_prod_test_error_oneclick}
+                                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                                        {/if}
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix env preprod" style="display: none;">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='1-Click API PreProduction Key' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7">
+                                        <div class="input-group">
+                                            <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
+                                            </span>
+                                        </div>
+                                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
+                                        {if $oyst.apikey_preprod_test_error_oneclick}
+                                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                                        {/if}
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix env custom" style="display: none;">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Custom Key' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7">
+                                        <div class="input-group">
+                                            <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
+                                            </span>
+                                        </div>
+                                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
+                                        {if $oyst.apikey_custom_test_error_oneclick}
+                                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
+                                        {/if}
                                     </div>
                                 </div>
                                 <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                                  <label class="control-label col-md-3 col-lg-3">{l s='Environment' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7">
-                                        <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
-                                        <span class="help-block">{l s='In % or px' mod='oyst'}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
-                                    <div class="col-md-7 col-lg-7">
-                                        <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
-                                        <span class="help-block">{l s='In % or px' mod='oyst'}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Position btn 1-Click' mod='oyst'}</label>
-                                    <div class="col-md-7 col-lg-7">
-                                        <select name="FC_OYST_POSITION_BTN">
-                                            <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
-                                            <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                        <select name="OYST_API_ENV_ONECLICK">
+                                            <option value="prod" {if $oyst.OYST_API_ENV_ONECLICK == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
+                                            <option value="preprod" {if $oyst.OYST_API_ENV_ONECLICK == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
+                                            <option value="custom" {if $oyst.OYST_API_ENV_ONECLICK == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group clearfix">
-                                    <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
-                                        <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
-                                           <strong>{l s='Reset' mod='oyst'}</strong>
-                                       </button>
+                                <div class="form-group clearfix env custom" style="display: none;">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='Endpoint API Custom' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7">
+                                        <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLCK" name="OYST_API_CUSTOM_ENDPOINT_ONECLCK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLCK|escape:'htmlall':'UTF-8'}"/>
                                     </div>
                                 </div>
-                            {else}
-                                <div class="alert alert-warning" role="alert">
-                                    <p>{l s='1-Click is enabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
-                                </div>
-                            {/if}
-                        </div>
-                        <div role="tabpanel" id="settings-carrier" class="tab-pane">
-                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                                <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
+                                <div class="form-group clearfix env custom" style="display: none;">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='Endpoint CDN Custom' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7">
-                                        <select name="FC_OYST_SHIPMENT_DEFAULT">
-                                            <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
-                                            {foreach $oyst.carrier_list as $carrier}
-                                                <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
+                                        <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='State payment' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7">
+                                        <select id="FC_OYST_STATE_PAYMENT_ONECLICK" name="FC_OYST_STATE_PAYMENT_ONECLICK">
+                                            {foreach from=$oyst.order_state item=state}
+                                                <option value="{$state.id_order_state|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_STATE_PAYMENT_ONECLICK == $state.id_order_state} selected="selected"{/if}>{$state.name|escape:'html':'UTF-8'}</option>
                                             {/foreach}
                                         </select>
                                     </div>
                                 </div>
-                                {foreach $oyst.carrier_list as $carrier}
+                            </div>
+                            <div role="tabpanel" id="custom-btn" class="tab-pane">
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                                     <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{$carrier.name|escape:'htmlall':'UTF-8'}</label>
-                                        <div class="col-md-5 col-lg-5">
-                                            <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
-                                                <option value="0">{l s='Disabled' mod='oyst'}</option>
-                                                {foreach from=$oyst.type_list key=value item=name}
-                                                    <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Style btn 1-Click' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_THEME_BTN">
+                                                <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
+                                                <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
+                                        <div class="col-lg-7">
+                                            <div class="form-group">
+                                                <div class="col-md-2 col-lg-2">
+                                                    <div class="input-group">
+                                                        <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{if $oyst.FC_OYST_COLOR_BTN}{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Position btn 1-Click' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_POSITION_BTN">
+                                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
+                                            <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
+                                               <strong>{l s='Reset' mod='oyst'}</strong>
+                                           </button>
+                                        </div>
+                                    </div>
+                                {else}
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
+                            <div role="tabpanel" id="settings-carrier" class="tab-pane">
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_SHIPMENT_DEFAULT">
+                                                <option value="0">{l s='Choose carrier default' mod='oyst'}</option>
+                                                {foreach $oyst.carrier_list as $carrier}
+                                                    <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
                                                 {/foreach}
                                             </select>
                                         </div>
@@ -364,32 +372,44 @@
                                           <input name="FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference|escape:'htmlall':'UTF-8'}" {if Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}value="{Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}"{/if} />
                                         </div>
                                     </div>
-                                {/foreach}
-                            {else}
-                                <div class="alert alert-warning" role="alert">
-                                    <p>{l s='1-Click is enabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    {foreach $oyst.carrier_list as $carrier}
+                                        <div class="form-group clearfix">
+                                            <label class="control-label col-md-3 col-lg-3">{$carrier.name|escape:'htmlall':'UTF-8'}</label>
+                                            <div class="col-md-7 col-lg-7">
+                                                <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
+                                                    <option value="0">{l s='Disabled' mod='oyst'}</option>
+                                                    {foreach from=$oyst.type_list key=value item=name}
+                                                        <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
+                                                    {/foreach}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    {/foreach}
+                                {else}
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
+                            <div role="tabpanel" id="settings-advanced" class="tab-pane">
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='Delay' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7">
+                                        <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
+                                    </div>
                                 </div>
-                            {/if}
-                        </div>
-                        <div role="tabpanel" id="settings-advanced" class="tab-pane">
-                            <div class="form-group clearfix">
-                                <label class="control-label col-md-3 col-lg-3">{l s='Delay' mod='oyst'}</label>
-                                <div class="col-md-7 col-lg-7">
-                                    <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
+                                <div class="form-group clearfix">
+                                    <div class="col-md-offset-3 col-lg-offset-3 col-md-7 col-lg-7">
+                                        <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-success">
+                                             <strong>{l s='Reset product' mod='oyst'}</strong>
+                                        </button>
+                                        <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-danger">
+                                             <strong>{l s='Disable product' mod='oyst'}</strong>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group clearfix">
-                                <div class="col-md-offset-3 col-lg-offset-3 col-md-7 col-lg-7">
-                                    <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-success">
-                                         <strong>{l s='Reset product' mod='oyst'}</strong>
-                                    </button>
-                                    <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-danger">
-                                         <strong>{l s='Disable product' mod='oyst'}</strong>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
-                      </div>
                     </div>
                 </div>
             </div>

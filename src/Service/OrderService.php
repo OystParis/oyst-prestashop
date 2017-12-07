@@ -217,9 +217,15 @@ class OrderService extends AbstractOystService
         // Yes not used but it will flush the delivery cache, instead, default carrier will be used
         $cart->getOrderTotal();
 
+        if (PSConfiguration::get('FC_OYST_STATE_PAYMENT_ONECLICK')) {
+            $order_state = PSConfiguration::get('FC_OYST_STATE_PAYMENT_ONECLICK');
+        } else {
+            $order_state = PSConfiguration::get('PS_OS_PAYMENT');
+        }
+
         $state = $this->oyst->validateOrder(
             $cart->id,
-            PSConfiguration::get('PS_OS_PAYMENT'),
+            $order_state,
             $oystOrderInfo['order_amount']['value'] / 100,
             'Oyst OneClick',
             null,

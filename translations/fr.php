@@ -107,6 +107,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_756d97bb256b8580d4d71
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_97f559e8d8c3575af3f669d903ee4111'] = 'Pré-Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_90589c47f06eb971d548591f23c285af'] = 'Personnalisé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2ce2e37ffd6d7f56df7787fc244492af'] = 'Statut de paiement pour la validation de la commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9748f06932412b1f06929aba7f2aec07'] = 'Création de la commande avant le paiement Freepay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
@@ -147,6 +148,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8cf1672a5fbe49ddd5b6e
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_00e04b10b071ec3c2add6defcf320011'] = 'Personnalisation css';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click est désactivé ou n\'est pas configuré.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
@@ -188,6 +190,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_97f559e8d8c3575af3f669d903ee411
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_90589c47f06eb971d548591f23c285af'] = 'Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9748f06932412b1f06929aba7f2aec07'] = 'Création de la commande avant le paiement Freepay';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_2ce2e37ffd6d7f56df7787fc244492af'] = 'Statut de paiement pour la validation de la commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d1e6660c46eb6011110e01cc1a99aa64'] = 'Personnalisation du bouton';
@@ -227,6 +230,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_8cf1672a5fbe49ddd5b6e49d48c7e57
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_00e04b10b071ec3c2add6defcf320011'] = 'Personnalisation css';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click est désactivé ou n\'est pas configuré.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
