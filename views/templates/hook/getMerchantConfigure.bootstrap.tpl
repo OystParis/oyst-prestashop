@@ -379,9 +379,9 @@
                                                     {/foreach}
                                                 </select>
                                             </div>
-                                            <label class="control-label col-md-1 col-lg-1">{l s='Delay in days' mod='oyst'}</label>
-                                            <div class="col-md-2 col-lg-2">
-                                              <input name="FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference|escape:'htmlall':'UTF-8'}" {if Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}value="{Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}"{/if} />
+                                            <label class="control-label col-md-2 col-lg-2">{l s='Delay in days' mod='oyst'}</label>
+                                            <div class="col-md-1 col-lg-1">
+                                              <input type="text" name="FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference|escape:'htmlall':'UTF-8'}" value="{if Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}{Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}{else}3{/if}" />
                                             </div>
                                         </div>
                                     {/foreach}
