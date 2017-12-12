@@ -371,7 +371,7 @@
                                     {foreach $oyst.carrier_list as $carrier}
                                         <div class="form-group clearfix">
                                             <label class="control-label col-md-3 col-lg-3">{$carrier.name|escape:'htmlall':'UTF-8'}</label>
-                                            <div class="col-md-5 col-lg-5">
+                                            <div class="col-md-4 col-lg-4">
                                                 <select name="FC_OYST_SHIPMENT_{$carrier.id_reference|escape:'htmlall':'UTF-8'}">
                                                     <option value="0">{l s='Disabled' mod='oyst'}</option>
                                                     {foreach from=$oyst.type_list key=value item=name}
