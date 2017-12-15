@@ -205,7 +205,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_31b833e6a4e38eed6057da83774ee5d
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_914419aa32f04011357d3b604a86d7eb'] = 'Transporteur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_074de7e7c226d5c60f8af14c20725352'] = 'Par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Type';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de livraison';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de livraison en jours';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_53907db05842c0b7e2ef2e1e89dee2a0'] = 'Valeur en jours';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e268cede04562e8808056adec47ace55'] = 'Livraison offerte à partir de';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_b2f40690858b404ed10e62bdf422c704'] = 'Montant';

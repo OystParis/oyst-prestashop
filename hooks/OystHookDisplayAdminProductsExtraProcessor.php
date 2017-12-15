@@ -35,11 +35,14 @@ class OystHookDisplayAdminProductsExtraProcessor extends FroggyHookProcessor
     {
         $id_product = (int)Tools::getValue('id_product');
         $product = new Product($id_product);
+        $currentOneClickApiKey = $this->module->getOneClickApiKey();
+        $isCurrentOneClickApiKeyValid = Tools::strlen($currentOneClickApiKey) == 64;
 
         //$oneClickProductRepository = new OneClickProductRepository(Db::getInstance());
         $productRepository = new ProductRepository(Db::getInstance());
 
         $this->smarty->assign('oyst', array(
+            'currentOneClickApiKeyValid' => $isCurrentOneClickApiKeyValid,
             'OYST_ONE_CLICK_ACTIVE' => Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
             'product_is_associated_to_shop' => $product->isAssociatedToShop(),
             'active_oneclick' => $productRepository->getActive($id_product)
