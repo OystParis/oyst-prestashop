@@ -202,14 +202,49 @@ class InstallManager
 
     private function removeConfiguration()
     {
-        PSConfiguration::deleteByName(Configuration::ONE_CLICK_FEATURE_STATE);
-        PSConfiguration::deleteByName(Configuration::CATALOG_EXPORT_STATE);
-        PSConfiguration::deleteByName(Configuration::REQUESTED_CATALOG_DATE);
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
+        $orderState->delete();
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_REFUND_PENDING'));
+        $orderState->delete();
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND'));
+        $orderState->delete();
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
+        $orderState->delete();
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD_CHECK'));
+        $orderState->delete();
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
+        $orderState->delete();
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD'));
+        $orderState->delete();
+
+        PSConfiguration::deleteByName(Configuration::API_KEY_PROD_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_KEY_PREPROD_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_KEY_PROD_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::API_KEY_PREPROD_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::API_ENV_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_ENV_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::ONE_CLICK_URL_CUSTOM);
         PSConfiguration::deleteByName(Configuration::DISPLAY_ADMIN_INFO_STATE);
+        PSConfiguration::deleteByName('FC_OYST_GUEST');
+        PSConfiguration::deleteByName('FC_OYST_REDIRECT_SUCCESS');
+        PSConfiguration::deleteByName('FC_OYST_REDIRECT_ERROR');
+        PSConfiguration::deleteByName('FC_OYST_REDIRECT_SUCCESS_CUSTOM');
+        PSConfiguration::deleteByName('FC_OYST_REDIRECT_ERROR_CUSTOM');
+        PSConfiguration::deleteByName('FC_OYST_PAYMENT_FEATURE');
+        PSConfiguration::deleteByName('FC_OYST_CATALOG_FEATURE');
+        PSConfiguration::deleteByName('FC_OYST_PREORDER_FEATURE');
+        PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
         PSConfiguration::deleteByName('FC_OYST_THEME_BTN');
         PSConfiguration::deleteByName('FC_OYST_COLOR_BTN');
         PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN');
         PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN');
+        PSConfiguration::deleteByName('FC_OYST_DELAY');
+        PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_FREEPAY');
+        PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
     }
 }
