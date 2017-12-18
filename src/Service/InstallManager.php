@@ -203,19 +203,19 @@ class InstallManager
 
     private function removeConfiguration()
     {
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
+        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_CANCELLATION_PENDING'));
         $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_REFUND_PENDING'));
+        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_REFUND_PENDING'));
         $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND'));
+        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_PARTIAL_REFUND'));
         $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
+        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
         $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD_CHECK'));
+        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_FRAUD_CHECK'));
         $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
+        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_WAIT_PAYMENT'));
         $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD'));
+        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_FRAUD'));
         $orderState->delete();
 
         PSConfiguration::deleteByName(Configuration::API_KEY_PROD_FREEPAY);
