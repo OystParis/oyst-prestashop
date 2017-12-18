@@ -69,7 +69,7 @@ class OneClickShipmentService extends AbstractOystService
     }
 
     /**
-     * @return bool
+     * @deprecated
      */
     public function updateShipments()
     {

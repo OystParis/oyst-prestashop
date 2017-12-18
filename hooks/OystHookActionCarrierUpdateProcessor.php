@@ -47,6 +47,5 @@ class OystHookActionCarrierUpdateProcessor extends FroggyHookProcessor
             ->setOneClickShipmentRepository($oneClickShipmentRepository)
             ->setOneClickShipmentTransformer($oneClickShipmentTransformer)
         ;
-        $oneClickShipmentService->updateShipments();
     }
 }
