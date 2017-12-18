@@ -35,6 +35,7 @@ use Oyst\Factory\AbstractShipmentServiceFactory;
 use Zone;
 use Group;
 use Validate;
+use OrderState;
 
 class InstallManager
 {
