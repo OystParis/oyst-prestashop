@@ -254,7 +254,7 @@ class ShipmentService extends AbstractOystService
                 $oneClickShipment->setPrimary($primary);
                 $oneClickShipment->setAmount($oystPrice);
                 if ($delay_shipment && $delay_shipment != '') {
-                    $oneClickShipment->setDelay((int)$delay_shipment);
+                    $oneClickShipment->setDelay((int)$delay_shipment * 24);
                 } else {
                     $oneClickShipment->setDelay($delay[(int)$carrier->grade]);
                 }
