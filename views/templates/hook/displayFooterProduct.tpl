@@ -23,7 +23,7 @@
         <script src="{$JSOneClickUrl|escape:'html':'UTF-8'}"></script>
     {/if}
     <script type="text/javascript">
-        $( document ).ready(){
+        $( document).ready(function(){
             var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode}, {$product->id|json_encode});
             oyst.setExportedCombinations({$synchronizedCombination|json_encode})
             oyst.setStockManagement({$stockManagement|intval});
