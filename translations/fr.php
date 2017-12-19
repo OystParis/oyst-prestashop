@@ -236,7 +236,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_4ce331798d09c99901bed35a4beaedb
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_d656fc298c72d199a2bc51867206b68b'] = 'Délai de livraison';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_d656fc298c72d199a2bc51867206b68b'] = 'Délai de livraison en jours';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e13b27dfd442724dc5e3dfcc00c11b4f'] = 'Activer bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e51c9d66405ad052f47710a86d327d28'] = 'Désactiver bouton 1-Click sur les produits';
