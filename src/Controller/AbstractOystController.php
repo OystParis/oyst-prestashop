@@ -65,5 +65,6 @@ abstract class AbstractOystController
     {
         header('Content-Type: application/json');
         echo json_encode($content);
+        http_response_code(200);
     }
 }
