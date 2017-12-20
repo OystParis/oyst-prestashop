@@ -3,6 +3,9 @@ dist: precise
 language: php
 
 php:
+  - 5.3
+  - 5.4
+  - 5.5
   - 5.6
 
 matrix:
@@ -12,7 +15,9 @@ env:
   global:
     - SKIP_CLEANUP=1
 
-script: composer update
+script:
+    - composer update
+    - vendor/bin/phpcs --config-set installed_paths vendor/wimg/php-compatibility && vendor/bin/phpcs --standard=PHPCompatibility --extensions=php --ignore=lib,vendor --runtime-set testVersion ${TRAVIS_PHP_VERSION:0:3} $TRAVIS_BUILD_DIR
 
 before_deploy: ./bin/before_deploy
 

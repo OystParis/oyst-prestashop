@@ -63,8 +63,8 @@ abstract class AbstractOystController
      */
     protected function respondAsJson($content)
     {
+        header("HTTP/1.1 200 OK");
         header('Content-Type: application/json');
         echo json_encode($content);
-        http_response_code(200);
     }
 }

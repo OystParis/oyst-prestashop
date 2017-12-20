@@ -36,10 +36,11 @@ class OneClickOrderController extends AbstractOystController
         if ($this->request->getMethod() === 'POST') {
             $responseData = $oneClickService->requestAuthorizeNewOrderProcess($this->request);
 
+            header("HTTP/1.1 200 OK");
             header('Content-Type: application/json');
             echo json_encode($responseData);
         } else {
-            http_response_code(400);
+            header("HTTP/1.1 400 Bad Request");
         }
     }
 }

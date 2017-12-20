@@ -48,7 +48,7 @@ class OrderController extends AbstractOystController
 
             $this->respondAsJson($responseData);
         } else {
-            http_response_code(400);
+            header("HTTP/1.1 400 Bad Request");
         }
     }
 }
