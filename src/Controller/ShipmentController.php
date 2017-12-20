@@ -43,5 +43,6 @@ class ShipmentController extends AbstractOystController
 
         header('Content-Type: application/json');
         echo $responseData;
+        http_response_code(200);
     }
 }

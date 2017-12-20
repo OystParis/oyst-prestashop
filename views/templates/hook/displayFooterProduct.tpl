@@ -23,21 +23,23 @@
         <script src="{$JSOneClickUrl|escape:'html':'UTF-8'}"></script>
     {/if}
     <script type="text/javascript">
-        var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode}, {$product->id|json_encode});
-        oyst.setExportedCombinations({$synchronizedCombination|json_encode})
-        oyst.setStockManagement({$stockManagement|intval});
-        oyst.setAllowOosp({$allowOosp|intval});
-        oyst.setProductQuantity({$productQuantity|intval});
-        oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
-        oyst.setColorBtn("{$colorBtn|escape:'html':'UTF-8'}");
-        oyst.setWidthBtn("{$widthBtn|escape:'html':'UTF-8'}");
-        oyst.setHeightBtn("{$heightBtn|escape:'html':'UTF-8'}");
-        oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
-        oyst.prepareButton();
+        $( document).ready(function(){
+            var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode}, {$product->id|json_encode});
+            oyst.setExportedCombinations({$synchronizedCombination|json_encode})
+            oyst.setStockManagement({$stockManagement|intval});
+            oyst.setAllowOosp({$allowOosp|intval});
+            oyst.setProductQuantity({$productQuantity|intval});
+            oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
+            oyst.setColorBtn("{$colorBtn|escape:'html':'UTF-8'}");
+            oyst.setWidthBtn("{$widthBtn|escape:'html':'UTF-8'}");
+            oyst.setHeightBtn("{$heightBtn|escape:'html':'UTF-8'}");
+            oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
+            oyst.prepareButton();
 
-        window.__OYST__ = window.__OYST__ || {};
-        window.__OYST__.getOneClickURL = function(callback) {
-            oyst.requestOneCLick(callback);
-        };
+            window.__OYST__ = window.__OYST__ || {};
+            window.__OYST__.getOneClickURL = function(callback) {
+                oyst.requestOneCLick(callback);
+            };
+        });
     </script>
 {/if}
