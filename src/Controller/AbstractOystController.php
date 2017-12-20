@@ -25,50 +25,6 @@ use Oyst;
 use Oyst\Service\Http\CurrentRequest;
 use Psr\Log\AbstractLogger;
 
-abstract class AbstractOystController
-{
-    /**
-     * @var CurrentRequest
-     */
-    protected $request;
-
-    /** @var  AbstractLogger */
-    protected $logger;
-
-    /** @var  Oyst */
-    protected $oyst;
-
-    /**
-     * Oyst\Controller\AbstractOystController constructor.
-     * @param CurrentRequest $request
-     */
-    public function __construct(CurrentRequest $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * @param AbstractLogger $logger
-     * @return $this
-     */
-    public function setLogger(AbstractLogger $logger)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * @param $content
-     */
-    protected function respondAsJson($content)
-    {
-        header('Content-Type: application/json');
-        echo json_encode($content);
-        http_response_code(200);
-    }
-}
-
 if (!function_exists('http_response_code')) {
     function http_response_code($code = null)
     {
@@ -197,5 +153,49 @@ if (!function_exists('http_response_code')) {
             $code = (isset($GLOBALS['http_response_code']) ? $GLOBALS['http_response_code'] : 200);
         }
         return $code;
+    }
+}
+
+abstract class AbstractOystController
+{
+    /**
+     * @var CurrentRequest
+     */
+    protected $request;
+
+    /** @var  AbstractLogger */
+    protected $logger;
+
+    /** @var  Oyst */
+    protected $oyst;
+
+    /**
+     * Oyst\Controller\AbstractOystController constructor.
+     * @param CurrentRequest $request
+     */
+    public function __construct(CurrentRequest $request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * @param AbstractLogger $logger
+     * @return $this
+     */
+    public function setLogger(AbstractLogger $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
+     * @param $content
+     */
+    protected function respondAsJson($content)
+    {
+        header('Content-Type: application/json');
+        echo json_encode($content);
+        http_response_code(200);
     }
 }
