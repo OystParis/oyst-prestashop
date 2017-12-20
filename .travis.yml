@@ -16,7 +16,7 @@ env:
     - SKIP_CLEANUP=1
 
 script:
-    - composer update
+    - composer update --no-dev
     - vendor/bin/phpcs --config-set installed_paths vendor/wimg/php-compatibility && vendor/bin/phpcs --standard=PHPCompatibility --extensions=php --ignore=lib,vendor --runtime-set testVersion ${TRAVIS_PHP_VERSION:0:3} $TRAVIS_BUILD_DIR
 
 before_deploy: ./bin/before_deploy
