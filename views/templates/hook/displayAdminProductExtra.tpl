@@ -17,12 +17,20 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-<h4>{l s='Display button OneClick' mod='oyst'}</h4>
-<div class="separation"></div>
-<div>
-	<label class="text"> {l s='Button OneClick' mod='oyst'}:</label>
-	<input type="radio" name="active_oneclick" id="active_oneclick_on" value="1" {if $oyst.active_oneclick || !$oyst.product_is_associated_to_shop}checked="checked" {/if} />
-	<label for="active_oneclick_on" class="radioCheck">{l s='Yes' mod='oyst'}</label>
-	<input type="radio" name="active_oneclick" id="active_oneclick_off" value="0" {if !$oyst.active_oneclick && $oyst.product_is_associated_to_shop}checked="checked"{/if} />
-	<label for="active_oneclick_off" class="radioCheck">{l s='No' mod='oyst'}</label>
-</div>
+{if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+	<h4>{l s='Display button OneClick' mod='oyst'}</h4>
+	<div class="separation"></div>
+	<div>
+		<label class="text"> {l s='Button OneClick' mod='oyst'}:</label>
+		<input type="radio" name="active_oneclick" id="active_oneclick_on" value="1" {if $oyst.active_oneclick || !$oyst.product_is_associated_to_shop}checked="checked" {/if} />
+		<label for="active_oneclick_on" class="radioCheck">{l s='Yes' mod='oyst'}</label>
+		<input type="radio" name="active_oneclick" id="active_oneclick_off" value="0" {if !$oyst.active_oneclick && $oyst.product_is_associated_to_shop}checked="checked"{/if} />
+		<label for="active_oneclick_off" class="radioCheck">{l s='No' mod='oyst'}</label>
+	</div>
+{else}
+	<div class="warn">
+		<ul>
+			<li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+		</ul>
+	</div>
+{/if}

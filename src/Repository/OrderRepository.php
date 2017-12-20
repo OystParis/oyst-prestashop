@@ -423,7 +423,7 @@ class OrderRepository extends AbstractOystRepository
             'oyst_api_order',
             array(
                 'orderId' => (int) $order->id,
-                'orderGUID' => (string) $orderGuid,
+                'orderGUID' => pSQL($orderGuid),
             )
         );
     }

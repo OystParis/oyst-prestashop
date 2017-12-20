@@ -197,7 +197,7 @@ class Oyst extends FroggyPaymentModule
 
         if (!Validate::isLoadedObject($orderState)) {
             $orderState->name = array(
-                $langId => 'En attente de check fraud',
+                $langId => 'En attente de vérification fraude par Oyst',
             );
             $orderState->color = '#FF8C00';
             $orderState->unremovable = true;
@@ -242,9 +242,9 @@ class Oyst extends FroggyPaymentModule
 
         if (!Validate::isLoadedObject($orderState)) {
             $orderState->name = array(
-                $langId => 'Paiement annulé pour suspicion de fraude',
+                $langId => 'Paiement frauduleux - NE PAS EXPEDIER',
             );
-            $orderState->color = '#FF8C00';
+            $orderState->color = '#980000';
             $orderState->unremovable = true;
             $orderState->deleted = false;
             $orderState->delivery = false;
