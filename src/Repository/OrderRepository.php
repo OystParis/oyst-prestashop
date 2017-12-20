@@ -318,7 +318,8 @@ class OrderRepository extends AbstractOystRepository
         $amount = 0;
         $order_detail_list = array();
         foreach (Tools::getValue('partialRefundProduct') as $id_order_detail => $amount_detail) {
-            $order_detail_list[$id_order_detail]['quantity'] = (int)Tools::getValue('partialRefundProductQuantity')[$id_order_detail];
+            $partialRefundProductQuantity = Tools::getValue('partialRefundProductQuantity');
+            $order_detail_list[$id_order_detail]['quantity'] = (int)$partialRefundProductQuantity[$id_order_detail];
 
             if (empty($amount_detail)) {
                 $order_detail = new OrderDetail((int)$id_order_detail);
