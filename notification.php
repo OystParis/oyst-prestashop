@@ -35,7 +35,7 @@ $logger->setFile(dirname(__FILE__).'/logs/notification.log');
 
 if (Tools::getValue('key') != Configuration::get('FC_OYST_HASH_KEY')) {
     $logger->info('New notification : Secure key is invalid');
-    http_response_code(400);
+    header("HTTP/1.1 400 Bad Request");
 }
 
 if ($data && isset($data['event'])) {
@@ -66,13 +66,13 @@ if ($data && isset($data['event'])) {
                 $shipmentController->getShipmentsAction();
                 break;
             default:
-                http_response_code(400);
+                header("HTTP/1.1 400 Bad Request");
         }
     } catch (Exception $exception) {
         $logger->critical($exception->getMessage());
+        header("HTTP/1.1 500 Internal Server Error");
         header('Content-Type: application/json');
         echo json_encode(array('critical' => $exception->getMessage()));
-        http_response_code(500);
     }
 } else {
     $logger->warning(
@@ -88,5 +88,5 @@ if ($data && isset($data['event'])) {
             'objectType' => 'OystNotification'
         )
     );
-    http_response_code(400);
+    header("HTTP/1.1 400 Bad Request");
 }
