@@ -37,6 +37,7 @@ use Product;
 use ToolsCore;
 use Validate;
 use Db;
+use Tools;
 
 /**
  * Class OneClickService
@@ -118,7 +119,7 @@ class OrderService extends AbstractOystService
         $pickupId = $shipmentInfo['pickup_store']['id'];
         $carrierInfo = $shipmentInfo['carrier'];
 
-        $alias = substr('Pickup_'.str_replace(' ', '_', $pickupAddress['name']), 0, 32);
+        $alias = Tools::substr('Pickup_'.str_replace(' ', '_', $pickupAddress['name']), 0, 32);
         $addressToFind = array(
             'name' => $alias,
             'street' => $pickupAddress['street'],
