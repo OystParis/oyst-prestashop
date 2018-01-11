@@ -59,6 +59,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_DELAY'                   => 'int',
         'FC_OYST_STATE_PAYMENT_FREEPAY'   => 'string',
         'FC_OYST_STATE_PAYMENT_ONECLICK'  => 'string',
+        'FC_OYST_ACTIVE_FRAUD'            => 'int',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',

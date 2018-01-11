@@ -43,7 +43,7 @@ class OystHookDisplayAdminProductsExtraProcessor extends FroggyHookProcessor
 
         $this->smarty->assign('oyst', array(
             'currentOneClickApiKeyValid' => $isCurrentOneClickApiKeyValid,
-            'OYST_ONE_CLICK_ACTIVE' => Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
+            'OYST_ONE_CLICK_FEATURE_STATE' => Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
             'product_is_associated_to_shop' => $product->isAssociatedToShop(),
             'active_oneclick' => $productRepository->getActive($id_product)
         ));

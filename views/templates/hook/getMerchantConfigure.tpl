@@ -162,6 +162,10 @@
                             {/foreach}
                         </select>
                     </div>
+                    <label>{l s='Enable Fraudscoring' mod='oyst'}</label>
+                    <div class="margin-form">
+                        <input type="checkbox" class="form-control" id="FC_OYST_ACTIVE_FRAUD" name="FC_OYST_ACTIVE_FRAUD" value="1"{if $oyst.FC_OYST_ACTIVE_FRAUD} checked="checked"{/if} />
+                    </div>
                     <div class="margin-form">
                         <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
                             {l s='Save' mod='oyst'}

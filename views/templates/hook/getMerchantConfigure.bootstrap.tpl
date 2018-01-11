@@ -198,6 +198,12 @@
                                 <input type="checkbox" id="FC_OYST_PREORDER_FEATURE" name="FC_OYST_PREORDER_FEATURE" value="1"{if $oyst.FC_OYST_PREORDER_FEATURE} checked="checked"{/if} />
                             </div>
                         </div>
+                        <div class="form-group clearfix">
+                            <label class="control-label col-md-3 col-lg-3">{l s='Enable Fraudscoring' mod='oyst'}</label>
+                            <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                <input type="checkbox" name="FC_OYST_ACTIVE_FRAUD" value="1"{if $oyst.FC_OYST_ACTIVE_FRAUD} checked="checked"{/if} />
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
                 <div role="tabpanel" class="panel tab-pane{if $oyst.current_tab == '#tab-content-1-click'} active{/if}" id="tab-content-1-click" style="border-top: 0;border-radius: initial;">
