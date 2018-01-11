@@ -51,18 +51,25 @@ class OneClickService extends AbstractOystService
      * @return array
      * @throws Exception
      */
-    public function authorizeNewOrder(Product $product, $quantity, Combination $combination = null, OystUser $user = null, $productLess = null, OneClickOrderParams $orderParams = null, $context = null, OneClickNotifications $notifications = null)
-    {
-        $response = $this->requester->call('authorizeOrder', array(
-            $product->id,
-            $quantity,
-            Validate::isLoadedObject($combination) ? $combination->id : null,
+    public function authorizeNewOrder(
+        $productLess = null,
+        OneClickNotifications $notifications = null,
+        OystUser $user = null,
+        OneClickOrderParams $orderParams = null,
+        $context = null
+    ) {
+        if (!is_array($productLess)) {
+            $products[] = $productLess;
+        } else {
+            $products = $productLess;
+        }
+        $response = $this->requester->call('authorizeOrderV2', array(
+            $products,
+            $notifications,
             $user,
-            self::ONE_CLICK_VERSION,
-            $productLess,
             $orderParams,
             $context,
-            $notifications
+            null
         ));
 
         $apiClient = $this->requester->getApiClient();
@@ -128,7 +135,11 @@ class OneClickService extends AbstractOystService
 
             Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
             $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
-            $productLess = $exportProductService->transformProductLess((int) $request->getRequestItem('productId'), (int) $request->getRequestItem('productAttributeId'));
+            $productLess[] = $exportProductService->transformProductLess(
+                (int)$request->getRequestItem('productId'),
+                (int) $request->getRequestItem('productAttributeId'),
+                $quantity
+            );
         }
 
         if (isset($data['error'])) {
@@ -154,10 +165,12 @@ class OneClickService extends AbstractOystService
             }
 
             $oneClickOrdersParams = new OneClickOrderParams();
-            if (!$productLess->isMaterialized()) {
-                $oneClickOrdersParams->setIsMaterialized($productLess->isMaterialized());
-            } else {
-                $oneClickOrdersParams->setIsMaterialized(true);
+            foreach ($productLess as $product) {
+                if (!$product->materialized) {
+                    $oneClickOrdersParams->setIsMaterialized($product->materialized);
+                } else {
+                    $oneClickOrdersParams->setIsMaterialized(true);
+                }
             }
 
             $delay = (int)ConfigurationP::get('FC_OYST_DELAY');
@@ -179,7 +192,7 @@ class OneClickService extends AbstractOystService
 
             $oneClickNotifications = new OneClickNotifications();
             $oneClickNotifications->setShouldAskShipments(true);
-
+            $oneClickNotifications->setEvents(array('order.shipments.get'));
             $oneClickNotifications->setUrl($this->oyst->getNotifyUrl());
 
             $this->logger->info(
@@ -189,7 +202,26 @@ class OneClickService extends AbstractOystService
                 )
             );
 
-            $result = $this->authorizeNewOrder($product, $quantity, $combination, $oystUser, $productLess, $oneClickOrdersParams, $oystContext, $oneClickNotifications);
+            $this->logger->info(
+                sprintf(
+                    'New notification products [%s]',
+                    json_encode($productLess)
+                )
+            );
+
+            $this->logger->info(
+                sprintf(
+                    'New notification context [%s]',
+                    json_encode($oystContext)
+                )
+            );
+            $result = $this->authorizeNewOrder(
+                $productLess,
+                $oneClickNotifications,
+                $oystUser,
+                $oneClickOrdersParams,
+                $oystContext
+            );
             $data = array_merge($data, $result);
         }
 
@@ -199,10 +231,8 @@ class OneClickService extends AbstractOystService
     public function generatedId()
     {
         $hash = ConfigurationP::get('FC_OYST_HASH_KEY');
-
         $datetime = new \DateTime();
         $datetime = $datetime->format('YmdHis');
-
         return uniqid().$hash.'-'.$datetime;
     }
 }
