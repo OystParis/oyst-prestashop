@@ -137,7 +137,7 @@ class OneClickService extends AbstractOystService
             $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
             $productLess[] = $exportProductService->transformProductLess(
                 (int)$request->getRequestItem('productId'),
-                (int) $request->getRequestItem('productAttributeId'),
+                (int)$request->getRequestItem('productAttributeId'),
                 $quantity
             );
         }

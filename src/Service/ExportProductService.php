@@ -156,7 +156,7 @@ class ExportProductService extends AbstractOystService
             if (Validate::isLoadedObject($combination)) {
                 // We still need the original product to get the current price (discount for example)
                 if (($oystProductVariation = $this->productTransformer->transformCombination($product, $combination, $quantity))) {
-                    $oystProduct->variation = $oystProductVariation->toArray();
+                    $oystProduct->variations = $oystProductVariation->toArray();
                 }
             } else {
                 $this->logger->alert(sprintf('Combination %d can\'t be found for produit '.$id_product, $id_combination));
