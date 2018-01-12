@@ -39,12 +39,12 @@ $_MODULE['<{oyst}prestashop>displayadminproductextra.bootstrap_90083c8cc3c90ff36
 $_MODULE['<{oyst}prestashop>displayadminproductextra.bootstrap_816c170e4f591f7b33f1aeeb3edc3751'] = 'Bouton 1-Click';
 $_MODULE['<{oyst}prestashop>displayadminproductextra.bootstrap_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
 $_MODULE['<{oyst}prestashop>displayadminproductextra.bootstrap_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
-$_MODULE['<{oyst}prestashop>displayadminproductextra.bootstrap_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click est désactiver. Ou 1-Click n\'est pas configurer.';
+$_MODULE['<{oyst}prestashop>displayadminproductextra.bootstrap_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click n\'est pas configuré ou désactivé.';
 $_MODULE['<{oyst}prestashop>displayadminproductextra_90083c8cc3c90ff36d4507b8211678cc'] = 'Afficher bouton 1-Click';
 $_MODULE['<{oyst}prestashop>displayadminproductextra_816c170e4f591f7b33f1aeeb3edc3751'] = 'Bouton 1-Click';
 $_MODULE['<{oyst}prestashop>displayadminproductextra_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
 $_MODULE['<{oyst}prestashop>displayadminproductextra_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
-$_MODULE['<{oyst}prestashop>displayadminproductextra_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click est désactiver. Ou 1-Click n\'est pas configurer.';
+$_MODULE['<{oyst}prestashop>displayadminproductextra_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click n\'est pas configuré ou désactivé.';
 $_MODULE['<{oyst}prestashop>displaypayment.bootstrap_e77bb171c7ae55bba8b2ed869fadfb19'] = 'Payer par carte bancaire';
 $_MODULE['<{oyst}prestashop>displaypayment_e77bb171c7ae55bba8b2ed869fadfb19'] = 'Payer par carte bancaire';
 $_MODULE['<{oyst}prestashop>displaypaymentreturn.bootstrap_e72f5db7df95fb92f69e9b5ac76f05fe'] = 'Votre commande %s a bien été enregistrée.';
@@ -112,7 +112,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_03105c0dc9a599aa3ece4
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2ce2e37ffd6d7f56df7787fc244492af'] = 'Statut de paiement pour la validation de la commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9748f06932412b1f06929aba7f2aec07'] = 'Création de la commande avant le paiement Freepay';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9f2ca0d2ee656e55405a4a6bdc9ec039'] = 'Activer Fraudscoring';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9f2ca0d2ee656e55405a4a6bdc9ec039'] = 'Activer le gestionnaire de fraude.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d1e6660c46eb6011110e01cc1a99aa64'] = 'Personnalisation du bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
@@ -195,7 +195,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_90589c47f06eb971d548591f23c285a
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_03105c0dc9a599aa3ece4525cf4cf1f1'] = 'URL API Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9748f06932412b1f06929aba7f2aec07'] = 'Création de la commande avant le paiement Freepay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2ce2e37ffd6d7f56df7787fc244492af'] = 'Statut de paiement pour la validation de la commande';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_9f2ca0d2ee656e55405a4a6bdc9ec039'] = 'Activer Fraudscoring';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_9f2ca0d2ee656e55405a4a6bdc9ec039'] = 'Activer le gestionnaire de fraude.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d1e6660c46eb6011110e01cc1a99aa64'] = 'Personnalisation du bouton';
