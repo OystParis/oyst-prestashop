@@ -245,6 +245,7 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN');
         PSConfiguration::deleteByName('FC_OYST_DELAY');
+        PSConfiguration::deleteByName('FC_OYST_ACTIVE_FRAUD');
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_FREEPAY');
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
     }

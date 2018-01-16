@@ -69,17 +69,25 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                             $cart = new Cart((int)$id_cart);
                             $order = new Order((int)$id_order);
                             $amount_paid = (float)($notification_item['amount']['value'] / 100);
-                            $event_fraud = OystPaymentNotification::existEventCode(
-                                $cart->id,
-                                OystPaymentNotification::EVENT_FRAUD_VALIDATION
-                            );
-                            $data = Tools::jsonDecode($event_fraud["event_data"]);
+                            //Check enabled fraud
+                            if (Configuration::get('FC_OYST_ACTIVE_FRAUD')) {
+                                $event_fraud = OystPaymentNotification::existEventCode(
+                                    $cart->id,
+                                    OystPaymentNotification::EVENT_FRAUD_VALIDATION
+                                );
+                                $data = Tools::jsonDecode($event_fraud["event_data"]);
+                                $notification_success = $data->notification->success;
+                            } else {
+                                //Force value for disable fraud
+                                $event_fraud = true;
+                                $notification_success = true;
+                            }
 
                             if ($amount_paid != $cart->getOrderTotal()) {
                                 $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_ERROR'));
-                            } elseif ($event_fraud && $data->notification->success ===  false) {
+                            } elseif ($event_fraud && $notification_success ===  false) {
                                 $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('OYST_STATUS_FRAUD'));
-                            } elseif ($event_fraud && $data->notification->success === true) {
+                            } elseif ($event_fraud && $notification_success === true) {
                                 if (Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY')) {
                                     $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY'));
                                 } else {
@@ -107,16 +115,18 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                             );
                             Db::getInstance()->insert('oyst_payment_notification', $insert);
                         }
-                        $event_auth = OystPaymentNotification::existEventCode($id_cart, OystPaymentNotification::EVENT_AUTHORISATION);
-                        $data = Tools::jsonDecode($event_auth["event_data"]);
-                        if ($event_auth && $notification_item['success'] == 1) {
-                            if (Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY')) {
-                                $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY'));
-                            } else {
-                                $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
+                        if (Configuration::get('FC_OYST_ACTIVE_FRAUD')) {
+                            $event_auth = OystPaymentNotification::existEventCode($id_cart, OystPaymentNotification::EVENT_AUTHORISATION);
+                            $data = Tools::jsonDecode($event_auth["event_data"]);
+                            if ($event_auth && $notification_item['success'] == 1) {
+                                if (Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY')) {
+                                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY'));
+                                } else {
+                                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
+                                }
+                            } elseif ($event_auth && $notification_item['success'] == 0) {
+                                $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('OYST_STATUS_FRAUD'));
                             }
-                        } elseif ($event_auth && $notification_item['success'] == 0) {
-                            $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('OYST_STATUS_FRAUD'));
                         }
                         break;
                     // If cancellation is confirmed, we cancel the order
@@ -161,18 +171,20 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                             );
                             Db::getInstance()->insert('oyst_payment_notification', $insert);
                         }
-                        $event_auth = OystPaymentNotification::existEventCode($id_cart, OystPaymentNotification::EVENT_AUTHORISATION);
-                        $data = Tools::jsonDecode($event_auth["event_data"]);
-                        if ($event_auth && $notification_item['success'] == 1) {
-                            if (Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY')) {
-                                $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY'));
-                            } else {
-                                $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
+                        if (Configuration::get('FC_OYST_ACTIVE_FRAUD')) {
+                            $event_auth = OystPaymentNotification::existEventCode($id_cart, OystPaymentNotification::EVENT_AUTHORISATION);
+                            $data = Tools::jsonDecode($event_auth["event_data"]);
+                            if ($event_auth && $notification_item['success'] == 1) {
+                                if (Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY')) {
+                                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY'));
+                                } else {
+                                    $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_PAYMENT'));
+                                }
+                            } elseif ($event_auth && $notification_item['success'] == 0) {
+                                $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('OYST_STATUS_FRAUD'));
                             }
-                        } elseif ($event_auth && $notification_item['success'] == 0) {
-                            $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('OYST_STATUS_FRAUD'));
+                            $this->module->log('Payment fraud ko received, id_order : '.(int)$notification_item['order_id']);
                         }
-                        $this->module->log('Payment fraud ko received, id_order : '.(int)$notification_item['order_id']);
                         // $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
                         break;
                 }
@@ -242,15 +254,24 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                 $payment_status = (int) Configuration::get('PS_OS_ERROR');
                 $message = $this->module->l('Cart changed, please retry.').'<br />';
             } else {
-                $event_fraud = OystPaymentNotification::existEventCode(
-                    $cart->id,
-                    OystPaymentNotification::EVENT_FRAUD_VALIDATION
-                );
-                $data = Tools::jsonDecode($event_fraud["event_data"]);
-                if ($event_fraud && $data->notification->success ===  false) {
+                //Check enabled fraud
+                if (Configuration::get('FC_OYST_ACTIVE_FRAUD')) {
+                    $event_fraud = OystPaymentNotification::existEventCode(
+                        $cart->id,
+                        OystPaymentNotification::EVENT_FRAUD_VALIDATION
+                    );
+                    $data = Tools::jsonDecode($event_fraud["event_data"]);
+                    $notification_success = $data->notification->success;
+                } else {
+                    //Force value for disable fraud
+                    $event_fraud = true;
+                    $notification_success = true;
+                }
+
+                if ($event_fraud && $notification_success ===  false) {
                     $payment_status = (int) Configuration::get('OYST_STATUS_FRAUD');
                     $message = $this->module->l('Payment fraud.').'<br />';
-                } elseif ($event_fraud && $data->notification->success === true) {
+                } elseif ($event_fraud && $notification_success === true) {
                     if (Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY')) {
                         $payment_status = (int)Configuration::get('FC_OYST_STATE_PAYMENT_FREEPAY');
                     } else {

@@ -1,6 +1,6 @@
 {
     "tab": "payments_gateways",
-    "version": "1.6.7",
+    "version": "1.6.8",
     "need_instance": 0,
 
     "hooks": {
@@ -66,6 +66,7 @@
 
         "FC_OYST_SHIPMENT_DEFAULT": "0",
         "FC_OYST_DELAY": "15",
+        "FC_OYST_ACTIVE_FRAUD": "0",
         "FC_OYST_STATE_PAYMENT_FREEPAY": "2",
         "FC_OYST_STATE_PAYMENT_ONECLICK": "2"
     }
