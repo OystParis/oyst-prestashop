@@ -171,6 +171,7 @@ class OneClickService extends AbstractOystService
                 } else {
                     $oneClickOrdersParams->setIsMaterialized(true);
                 }
+                $result_products[] = $product->toArray();
             }
 
             $delay = (int)ConfigurationP::get('FC_OYST_DELAY');
@@ -205,7 +206,7 @@ class OneClickService extends AbstractOystService
             $this->logger->info(
                 sprintf(
                     'New notification products [%s]',
-                    json_encode($productLess)
+                    json_encode($result_products)
                 )
             );
 
