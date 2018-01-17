@@ -207,12 +207,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $goToForm = false;
         }
 
-        $lastExportDate = Configuration::get(\Oyst\Service\Configuration::REQUESTED_CATALOG_DATE);
-        $hasAlreadyExportProducts = false;
-        if (!empty($lastExportDate)) {
-            $lastExportDate = new DateTime($lastExportDate);
-            $hasAlreadyExportProducts = true;
-        }
         $this->handleContactForm($assign, $hasError, $goToForm);
 
         $catalogApi = OystApiClientFactory::getClient(
@@ -251,10 +245,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         $assign['logsFile'] = $filesName;
-        $assign['lastExportDate'] = $lastExportDate;
-        $assign['hasAlreadyExportProducts'] = $hasAlreadyExportProducts;
         $assign['hasApiKey']     = $hasApiKey;
-        $assign['exportRunning'] = $this->module->isCatalogExportStillRunning();
         $assign['module_dir']    = $this->path;
         $assign['message']       = '';
         $assign['phone']         = Configuration::get('FC_OYST_MERCHANT_PHONE');
@@ -356,22 +347,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     private function postRequest()
     {
-        if (Tools::isSubmit('synchronizeProducts')) {
-            $request = new CurrentRequest();
-            $exportProductService = AbstractExportProductServiceFactory::get($this->module, $this->context);
-            $succeed = $exportProductService->requestNewExport();
-
-            if ($succeed) {
-                Tools::redirect($request->getScheme().$request->getHost().$request->getRequestUri());
-                die();
-            } else {
-                $apiClient = $exportProductService->getRequester()->getApiClient();
-                $this->smarty->assign(array(
-                    'apiError' => $apiClient->getLastError(),
-                ));
-            }
-        }
-
         if (Tools::isSubmit('action') && Tools::getValue('action') == 'getLog') {
             $logManager = new LoggerManager();
             echo $logManager->getContent(Tools::getValue('file'));

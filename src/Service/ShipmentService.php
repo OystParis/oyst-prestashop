@@ -206,12 +206,6 @@ class ShipmentService extends AbstractOystService
 
                 //$oneClickShipmentCalculation->addItem($oneClickItem);
             }
-
-            /*$orderAmount = new OystPrice();
-           $orderAmount->setValue(round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100));
-           $orderAmount->setCurrency(Context::getContext()->currency->iso_code);
-
-           $oneClickShipmentCalculation->setOrderAmount($orderAmount);*/
         } else {
             $this->logger->emergency(
                 'Items not exist ['.json_encode($data).']'

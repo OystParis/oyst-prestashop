@@ -55,40 +55,13 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
         return '';
     }
 
-    private function fetchExportContent()
-    {
-        if (!($isPanelVisible = $this->module->getAdminPanelInformationVisibility())) {
-            return '';
-        }
-
-        $oystProductRepository = new ProductRepository(Db::getInstance());
-        $exportedProducts = $oystProductRepository->getExportedProduct();
-
-        /** @var Smarty_Internal_Template $template */
-        $template = Context::getContext()->smarty->createTemplate(dirname(__FILE__).'/../views/templates/hook/displayBackOfficeHeader.tpl');
-        $exportDate = $this->module->getRequestedCatalogDate();
-        $template->assign(array(
-            'marginRequired' => version_compare(_PS_VERSION_, '1.5', '>'),
-            'OYST_REQUESTED_CATALOG_DATE' => $exportDate ? $exportDate->format(Context::getContext()->language->date_format_full) : false,
-            'OYST_IS_EXPORT_STILL_RUNNING' => $this->module->isCatalogExportStillRunning(),
-            'exportedProducts' => $exportedProducts,
-            'displayPanel' => $this->module->getAdminPanelInformationVisibility(),
-            'secureKey' => Configuration::get('FC_OYST_HASH_KEY'),
-        ));
-
-        $content = $template->fetch();
-
-        return $content;
-    }
-
     public function run()
     {
-        if (!ModuleCore::isInstalled($this->module->name) || !ModuleCore::isEnabled($this->module->name)) {
+        if (!Module::isInstalled($this->module->name) || !Module::isEnabled($this->module->name)) {
             return '';
         }
 
-        $content = $this->fetchExportContent();
-        $content .= $this->fetchProductContent();
+        $content = $this->fetchProductContent();
 
         return $content;
     }
