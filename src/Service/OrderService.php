@@ -269,10 +269,12 @@ class OrderService extends AbstractOystService
         );
 
         $oystOrderInfo = $this->getOrderInfo($orderId);
+
         if ($oystOrderInfo) {
             $products = array();
             foreach ($oystOrderInfo['items'] as $productInfo) {
-                $product = new Product($productInfo['product_reference']);
+                $reference = explode(';', $productInfo['product_reference']);
+                $product = new Product($reference[0]);
 
                 if (!Validate::isLoadedObject($product)) {
                     $data['error'] = 'Product has not been found';
@@ -280,8 +282,8 @@ class OrderService extends AbstractOystService
 
                 $combination = new Combination();
                 // Array will exist but reference could be null
-                if (is_array($productInfo['product']['variations']) && null !== $productInfo['product']['variations']['reference']) {
-                    $combination = new Combination($productInfo['product']['variations']['reference']);
+                if (isset($reference[1])) {
+                    $combination = new Combination($reference[1]);
                     if (!Validate::isLoadedObject($combination)) {
                         $data['error'] = 'Combination has not been found';
                     }
@@ -294,7 +296,7 @@ class OrderService extends AbstractOystService
                 );
             }
 
-            if ($oystOrderInfo['context'] && $oystOrderInfo['context']['id_user']) {
+            if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['id_user'])) {
                 $customer = new Customer((int)$oystOrderInfo['context']['id_user']);
             } else {
                 $customer = $this->getCustomer($oystOrderInfo['user']);

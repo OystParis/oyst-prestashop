@@ -193,7 +193,6 @@ class OneClickService extends AbstractOystService
 
             $oneClickNotifications = new OneClickNotifications();
             $oneClickNotifications->setShouldAskShipments(true);
-            $oneClickNotifications->setEvents(array('order.shipments.get'));
             $oneClickNotifications->setUrl($this->oyst->getNotifyUrl());
 
             $this->logger->info(

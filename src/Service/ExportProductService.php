@@ -145,21 +145,28 @@ class ExportProductService extends AbstractOystService
             return null;
         }
 
-        if (!($baseOystProduct = $this->productTransformer->transform($product, $quantity))) {
+        if (!($oystProduct = $this->productTransformer->transform($product, $quantity, $id_combination))) {
             $this->logger->alert(sprintf('Product %d won\'t be exported', $id_product));
             return null;
         }
-        $oystProduct = clone $baseOystProduct;
 
         if ($id_combination > 0) {
             $combination = new Combination($id_combination);
             if (Validate::isLoadedObject($combination)) {
                 // We still need the original product to get the current price (discount for example)
-                if (($oystProductVariation = $this->productTransformer->transformCombination($product, $combination, $quantity))) {
-                    $oystProduct->variations = $oystProductVariation->toArray();
+                $oystProductVariation = $this->productTransformer->transformCombination(
+                    $product,
+                    $combination,
+                    $quantity
+                );
+                if ($oystProductVariation) {
+                    $variations = array($oystProductVariation);
+                    $oystProduct->variations = $variations;
                 }
             } else {
-                $this->logger->alert(sprintf('Combination %d can\'t be found for produit '.$id_product, $id_combination));
+                $this->logger->alert(
+                    sprintf('Combination %d can\'t be found for produit '.$id_product, $id_combination)
+                );
             }
         }
 
