@@ -76,7 +76,7 @@ class ExportProductService extends AbstractOystService
      * @return OystProduct[]
      * @throws Exception
      */
-    private function transformProducts($products)
+    private function transformProducts($products, $quantity = 1)
     {
         // Tricks requirements for PrestaShop
         $this->context->cart = new Cart();
@@ -101,7 +101,7 @@ class ExportProductService extends AbstractOystService
 
             // We need the base product first in case it doesn't exist
             if (!isset($oystProducts[$product->id])) {
-                if (!($baseOystProduct = $this->productTransformer->transform($product))) {
+                if (!($baseOystProduct = $this->productTransformer->transform($product, $quantity))) {
                     $this->logger->alert(sprintf('Product %d won\'t be exported', $productInfo['id_product']));
                     continue;
                 }
@@ -114,8 +114,8 @@ class ExportProductService extends AbstractOystService
                 $combination = new Combination($productInfo['id_product_attribute']);
                 if (Validate::isLoadedObject($combination)) {
                     // We still need the original product to get the current price (discount for example)
-                    if (($oystProductVariation = $this->productTransformer->transformCombination($product, $combination))) {
-                        $oystProducts[$product->id]->addVariation($oystProductVariation);
+                    if (($oystProductVariation = $this->productTransformer->transformCombination($product, $combination, $quantity))) {
+                        $oystProducts[$product->id]->variation = $oystProductVariation->toArray();
                     }
                 }
             }
@@ -130,7 +130,7 @@ class ExportProductService extends AbstractOystService
      * @return OystProduct[]
      * @throws Exception
      */
-    public function transformProductLess($id_product, $id_combination)
+    public function transformProductLess($id_product, $id_combination, $quantity)
     {
         // Tricks requirements for PrestaShop
         $this->context->cart = new Cart();
@@ -145,21 +145,28 @@ class ExportProductService extends AbstractOystService
             return null;
         }
 
-        if (!($baseOystProduct = $this->productTransformer->transform($product))) {
+        if (!($oystProduct = $this->productTransformer->transform($product, $quantity, $id_combination))) {
             $this->logger->alert(sprintf('Product %d won\'t be exported', $id_product));
             return null;
         }
-        $oystProduct = clone $baseOystProduct;
 
         if ($id_combination > 0) {
             $combination = new Combination($id_combination);
             if (Validate::isLoadedObject($combination)) {
                 // We still need the original product to get the current price (discount for example)
-                if (($oystProductVariation = $this->productTransformer->transformCombination($product, $combination))) {
-                    $oystProduct->addVariation($oystProductVariation);
+                $oystProductVariation = $this->productTransformer->transformCombination(
+                    $product,
+                    $combination,
+                    $quantity
+                );
+                if ($oystProductVariation) {
+                    $variations = array($oystProductVariation);
+                    $oystProduct->variations = $variations;
                 }
             } else {
-                $this->logger->alert(sprintf('Combination %d can\'t be found for produit '.$id_product, $id_combination));
+                $this->logger->alert(
+                    sprintf('Combination %d can\'t be found for produit '.$id_product, $id_combination)
+                );
             }
         }
 

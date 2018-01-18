@@ -196,7 +196,11 @@ class ShipmentService extends AbstractOystService
 
         if (isset($data['items'])) {
             foreach ($data['items'] as $key => $item) {
-                $cart->updateQty($item['quantity'], $item['reference'], (int)$item['variation_reference'], false, 'up', $address->id);
+                $reference = explode(';', $item['reference']);
+                if (!isset($reference[1])) {
+                    $reference[1] = null;
+                }
+                $cart->updateQty($item['quantity'], (int)$reference[0], (int)$reference[1], false, 'up', $address->id);
 
                 //$oneClickItem = new OneClickItem((string)$item['reference'], (int)$item['quantity']);
 
@@ -224,10 +228,11 @@ class ShipmentService extends AbstractOystService
         foreach ($carriersAvailables as $key => $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
 
-            $id_reference = Db::getInstance()->getValue('
-                            SELECT `id_reference`
-                            FROM `'._DB_PREFIX_.'carrier`
-                            WHERE id_carrier = '.(int)$id_carrier);
+            $id_reference = Db::getInstance()->getValue(
+                'SELECT `id_reference`
+                FROM `'._DB_PREFIX_.'carrier`
+                WHERE id_carrier = '.(int)$id_carrier
+            );
 
             $type_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_".$id_reference);
             $delay_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_DELAY_".$id_reference);
@@ -290,6 +295,9 @@ class ShipmentService extends AbstractOystService
                 $oneClickShipmentCalculation->toJson()
             )
         );
+
+        // Delete cart for module relaunch cart
+        $cart->delete();
 
         return $oneClickShipmentCalculation->toJson();
     }
