@@ -19,9 +19,6 @@
     "autoload": {
         "psr-4": {
             "Oyst\\": "src/"
-        },
-        "classmap": [
-            "classes/OystShipment.php"
-        ]
+        }
     }
 }

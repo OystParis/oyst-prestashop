@@ -22,9 +22,9 @@
 /*
  * Security
  */
-use Oyst\Repository\OneClickShipmentRepository;
-use Oyst\Service\OneClickShipmentService;
-use Oyst\Transformer\OneClickShipmentTransformer;
+// use Oyst\Repository\OneClickShipmentRepository;
+// use Oyst\Service\OneClickShipmentService;
+// use Oyst\Transformer\OneClickShipmentTransformer;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -32,20 +32,14 @@ if (!defined('_PS_VERSION_')) {
 
 /**
  * Class OystHookActionProductAddProcessor
+ * @Deprecated for 1.7.0
  */
 class OystHookActionCarrierUpdateProcessor extends FroggyHookProcessor
 {
     /**
-     *
+     * @Deprecated for 1.7.0
      */
     public function run()
     {
-        $oneClickShipmentTransformer = new OneClickShipmentTransformer($this->context);
-        $oneClickShipmentRepository = new OneClickShipmentRepository(Db::getInstance());
-        $oneClickShipmentService = new OneClickShipmentService($this->context, $this->module);
-        $oneClickShipmentService
-            ->setOneClickShipmentRepository($oneClickShipmentRepository)
-            ->setOneClickShipmentTransformer($oneClickShipmentTransformer)
-        ;
     }
 }

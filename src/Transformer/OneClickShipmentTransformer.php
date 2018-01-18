@@ -29,86 +29,8 @@ use \OystShipment;
 
 /**
  * Class ProductTransformer
+ * @Deprecated for 1.7.1
  */
 class OneClickShipmentTransformer extends AbstractTransformer
 {
-
-    /**
-     * @param OystShipment $oystShipment
-     *
-     * @return OneClickShipment
-     */
-    public function transform($oystShipment)
-    {
-        $oneClickShipment = new OneClickShipment();
-        $carrier = Carrier::getCarrierByReference($oystShipment->getIdCarrierReference());
-        $oystCarrier = new OystCarrier(
-            $oystShipment->getIdCarrierReference(),
-            $carrier->name,
-            $oystShipment->getType()
-        );
-
-        $shipmentAmount = new ShipmentAmount(
-            $oystShipment->getAmountFollower(),
-            $oystShipment->getAmountLeader(),
-            $oystShipment->getCurrency()
-        );
-
-        $oneClickShipment->setCarrier($oystCarrier);
-        $oneClickShipment->setAmount($shipmentAmount);
-        $oneClickShipment->setFreeShipping($oystShipment->getFreeShipping());
-        $oneClickShipment->setPrimary($oystShipment->isPrimary());
-        $oneClickShipment->setDelay($oystShipment->getDelay() * 24);
-        $oneClickShipment->setZones(json_decode($oystShipment->getZones()));
-
-        return $oneClickShipment;
-    }
-
-    /**
-     * @param OneClickShipment $oneClickShipment
-     *
-     * @return OystShipment
-     */
-    public function reverseTransform($oneClickShipment)
-    {
-        $oystShipment = new OystShipment();
-
-        $oystShipment
-            ->setIdCarrierReference($oneClickShipment->getCarrier()->getId())
-            ->setPrimary($oneClickShipment->getPrimary())
-            ->setType($oneClickShipment->getCarrier()->getType())
-            ->setDelay($oneClickShipment->getDelay() > 0 ? $oneClickShipment->getDelay() / 24 : 0)
-            ->setAmountLeader($oneClickShipment->getPrimary((float) ($oneClickShipment->getAmount()->getAmountLeader() > 0 ?
-                $oneClickShipment->getAmount()->getAmountLeader() / 100 : 0)))
-            ->setAmountFollower((float) ($oneClickShipment->getAmount()->getAmountFollower() > 0 ?
-                $oneClickShipment->getAmount()->getAmountFollower() / 100 : 0))
-            ->setFreeShipping((float) ($oneClickShipment->getFreeShipping() > 0 ?
-                $oneClickShipment->getFreeShipping() / 100 : 0.0))
-            ->setCurrency($oneClickShipment->getAmount()->getCurrency())
-            ->setZones(json_encode($oneClickShipment->getZones()))
-        ;
-
-        return $oystShipment;
-    }
-
-    /**
-     * @param $shipment
-     * @return OystShipment
-     */
-    public function transformArrayToOystShipment($shipment)
-    {
-        $oystShipment = new OystShipment();
-        $oystShipment->setIdCarrierReference($shipment['id_carrier'])
-            ->setPrimary(isset($shipment['primary']) && $shipment['primary'])
-            ->setType($shipment['type'])
-            ->setDelay($shipment['delay'])
-            ->setAmountLeader($shipment['amount_leader'])
-            ->setAmountFollower($shipment['amount_follower'])
-            ->setFreeShipping($shipment['free_shipping'])
-            ->setCurrency('EUR')
-            ->setZones(json_encode(array('FR')))
-        ;
-
-        return $oystShipment;
-    }
 }

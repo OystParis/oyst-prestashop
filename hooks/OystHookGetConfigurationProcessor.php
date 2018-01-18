@@ -28,12 +28,10 @@ if (!defined('_PS_VERSION_')) {
 
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Factory\AbstractExportProductServiceFactory;
-use Oyst\Repository\OneClickShipmentRepository;
 use Oyst\Service\Configuration as OystConfiguration;
 use Oyst\Service\Http\CurrentRequest;
 use Oyst\Service\Logger\LoggerManager;
 use Oyst\Service\OneClickShipmentService;
-use Oyst\Transformer\OneClickShipmentTransformer;
 
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
@@ -138,20 +136,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 $field_delay = 'FC_OYST_SHIPMENT_DELAY_'.$carrier['id_reference'];
                 $delay = Tools::getValue($field_delay);
                 Configuration::updateValue($field_delay, $delay);
-            }
-
-
-
-            // Deprecated with shipmentless ?
-            if (Tools::isSubmit('shipments')) {
-                $oneClickShipmentTransformer = new OneClickShipmentTransformer($this->context);
-                $oneClickShipmentRepository = new OneClickShipmentRepository(Db::getInstance());
-                $oneClickShipmentService = new OneClickShipmentService($this->context, $this->module);
-                $oneClickShipmentService
-                    ->setOneClickShipmentRepository($oneClickShipmentRepository)
-                    ->setOneClickShipmentTransformer($oneClickShipmentTransformer)
-                ;
-                $this->configuration_result = $oneClickShipmentService->handleShipmentRequest();
             }
 
             $this->configuration_result = true;
