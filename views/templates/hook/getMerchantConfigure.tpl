@@ -338,6 +338,10 @@
                             <div class="margin-form">
                                 <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
                             </div>
+                            <label>{l s='Enable advanced stock' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <input type="checkbox" class="form-control" name="FC_OYST_SHOULD_AS_STOCK" value="1"{if $oyst.FC_OYST_SHOULD_AS_STOCK} checked="checked"{/if} />
+                            </div>
                             <div class="margin-form">
                                 <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
                                     {l s='Reset product' mod='oyst'}

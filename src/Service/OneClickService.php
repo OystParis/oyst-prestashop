@@ -193,6 +193,7 @@ class OneClickService extends AbstractOystService
 
             $oneClickNotifications = new OneClickNotifications();
             $oneClickNotifications->setShouldAskShipments(true);
+            $oneClickNotifications->setShouldAskStock(ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK'));
             $oneClickNotifications->setUrl($this->oyst->getNotifyUrl());
 
             $this->logger->info(
