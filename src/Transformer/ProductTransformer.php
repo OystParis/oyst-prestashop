@@ -129,7 +129,7 @@ class ProductTransformer extends AbstractTransformer
             $attributesInfo = $this->productRepository->getAttributesCombination($combination);
             foreach ($attributesInfo as $attributeInfo) {
                 $informations[$attributeInfo['name']] = $attributeInfo['value'];
-                $title .= ' '.$attributeInfo['name'].':'.$attributeInfo['value'];
+                $title .= ' '.$attributeInfo['value'];
             }
 
             $oystProduct->__set('information', $informations);
@@ -158,9 +158,6 @@ class ProductTransformer extends AbstractTransformer
         $oystProduct->categories = $categories;
         $oystProduct->amountIncludingTax = $oystPrice;
 
-
-        $oystProduct->description = is_array($product->description) ? reset($product->description) : $product->description;
-        $oystProduct->shortDescription = is_array($product->description_short) ? reset($product->description_short) : $product->description_short;
         $oystProduct->url = $this->context->link->getProductLink($product);
         $oystProduct->quantity = $quantity;
 

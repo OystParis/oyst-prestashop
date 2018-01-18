@@ -197,6 +197,9 @@ class ShipmentService extends AbstractOystService
         if (isset($data['items'])) {
             foreach ($data['items'] as $key => $item) {
                 $reference = explode(';', $item['reference']);
+                if (!isset($reference[1])) {
+                    $reference[1] = null;
+                }
                 $cart->updateQty($item['quantity'], (int)$reference[0], (int)$reference[1], false, 'up', $address->id);
 
                 //$oneClickItem = new OneClickItem((string)$item['reference'], (int)$item['quantity']);
