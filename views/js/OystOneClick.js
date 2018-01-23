@@ -37,9 +37,14 @@ function OystOneClick(url, productId) {
     this.widthBtn = '230px';
     this.heightBtn = '60px';
     this.positionBtn = 'before';
+    this.preload = 1;
 
     this.setExportedCombinations = function(combinations) {
         this.combinations = combinations;
+    }
+
+    this.setPreload = function(preload) {
+        this.preload = preload;
     }
 
     this.setStockManagement = function(stockManagement) {
@@ -179,7 +184,7 @@ function OystOneClick(url, productId) {
         var quantity = $('input[name="qty"]').val();
         if (typeof quantity === "undefined")
             quantity = 1;
-        
+
         return {
             productId: this.productId,
             productAttributeId: productAttributeId,
@@ -192,6 +197,13 @@ function OystOneClick(url, productId) {
      */
     this.requestOneCLick = function(oystCallBack) {
         var params = this.getSelectedProduct();
+
+        if (this.preload) {
+          params.preload = this.preload;
+          this.setPreload(0);
+        } else {
+          params.preload = this.preload;
+        }
         params.oneClick = true;
         params.token = '{SuggestToAddSecurityToken}';
 

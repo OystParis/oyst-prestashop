@@ -35,6 +35,7 @@ use Currency;
 use Configuration as ConfigurationP;
 use Oyst\Factory\AbstractExportProductServiceFactory;
 use Tools;
+use StockAvailable;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -101,6 +102,8 @@ class OneClickService extends AbstractOystService
         $product = null;
         $combination = null;
         $quantity = 0;
+        $idProduct = (int)$request->getRequestItem('productId');
+        $idCombination = (int)$request->getRequestItem('productAttributeId');
 
         if (!$request->hasRequest('oneClick')) {
             $data['error'] = 'Missing parameters';
@@ -113,15 +116,14 @@ class OneClickService extends AbstractOystService
         }
 
         if (!isset($data['error'])) {
-            $product = new Product($request->getRequestItem('productId'));
+            $product = new Product($idProduct);
             if (!Validate::isLoadedObject($product)) {
                 $data['error'] = 'Product can\'t be found';
             }
 
             if ($request->hasRequest('productAttributeId')) {
-                $combinationId = (int) $request->getRequestItem('productAttributeId');
-                if ($combinationId > 0) {
-                    $combination = new Combination($request->getRequestItem('productAttributeId'));
+                if ($idCombination > 0) {
+                    $combination = new Combination($idCombination);
                     if (!Validate::isLoadedObject($combination)) {
                         $data['error'] = 'Combination could not be found';
                     }
@@ -136,10 +138,20 @@ class OneClickService extends AbstractOystService
             Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
             $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
             $productLess[] = $exportProductService->transformProductLess(
-                (int)$request->getRequestItem('productId'),
-                (int)$request->getRequestItem('productAttributeId'),
+                $idProduct,
+                $idCombination,
                 $quantity
             );
+
+            // Check preload, and update quantity
+            $load = (int)$request->getRequestItem('preload');
+            if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
+                if ($product->advanced_stock_management == 0 && !ConfigurationP::get('PS_ADVANCED_STOCK_MANAGEMENT')) {
+                    $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
+                    $new_qty = $qty_available - $quantity;
+                    StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                }
+            }
         }
 
         if (isset($data['error'])) {
@@ -194,6 +206,10 @@ class OneClickService extends AbstractOystService
             $oneClickNotifications = new OneClickNotifications();
             $oneClickNotifications->setShouldAskShipments(true);
             $oneClickNotifications->setShouldAskStock(ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK'));
+            if (ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
+                $oneClickNotifications->addEvent('order.stock.released');
+                $oneClickNotifications->addEvent('order.stock.book');
+            }
             $oneClickNotifications->setUrl($this->oyst->getNotifyUrl());
 
             $this->logger->info(

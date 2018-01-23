@@ -38,6 +38,7 @@ use ToolsCore;
 use Validate;
 use Db;
 use Tools;
+use StockAvailable;
 
 /**
  * Class OneClickService
@@ -188,6 +189,14 @@ class OrderService extends AbstractOystService
         }
 
         foreach ($products as $productInfo) {
+            $product = new Product((int)$productInfo['productId']);
+
+            if ($product->advanced_stock_management == 0 && !PSConfiguration::get('PS_ADVANCED_STOCK_MANAGEMENT')) {
+                $qty_available = StockAvailable::getQuantityAvailableByProduct($productInfo['productId'], $productInfo['combinationId']);
+                $new_qty = $qty_available + $productInfo['quantity'];
+                StockAvailable::setQuantity($productInfo['productId'], $productInfo['combinationId'], $new_qty);
+            }
+
             if (!$cart->updateQty($productInfo['quantity'], $productInfo['productId'], $productInfo['combinationId'])) {
                 $this->logger->emergency(
                     sprintf(
