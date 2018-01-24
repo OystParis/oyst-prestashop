@@ -47,7 +47,7 @@ class StockService extends AbstractOystService
             }
 
             foreach ($data['products'] as $product) {
-                $quantity = $product['quantity'];
+                $qty = $product['quantity'];
                 $idProduct = $product['reference'];
                 $idCombination = null;
 
@@ -61,7 +61,7 @@ class StockService extends AbstractOystService
 
                 if ($product->advanced_stock_management == 0 && !PSConfiguration::get('PS_ADVANCED_STOCK_MANAGEMENT')) {
                     $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
-                    $new_qty = $qty_available + $quantity;
+                    $new_qty = $qty_available + $qty;
                     StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
                 }
             }
@@ -81,7 +81,7 @@ class StockService extends AbstractOystService
     public function stockBook($data)
     {
         try {
-            $quantity = $data['quantity'];
+            $qty = $data['quantity'];
             $idProduct = $data['product_reference'];
             $idCombination = null;
 
@@ -92,14 +92,16 @@ class StockService extends AbstractOystService
             }
 
             $product = new Product($idProduct);
-
             if ($product->advanced_stock_management == 0 && !PSConfiguration::get('PS_ADVANCED_STOCK_MANAGEMENT')) {
                 $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
-                $new_qty = $qty_available - $quantity;
-                StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                $new_qty = $qty_available - $qty;
+                if (StockAvailable::outOfStock($idProduct) === 1 || $new_qty >= 0) {
+                    StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                    $oneClickStock = new OneClickStock(1, $data['product_reference']);
+                } else {
+                    $oneClickStock = new OneClickStock(0, $data['product_reference']);
+                }
             }
-
-            $oneClickStock = new OneClickStock(1, $data['product_reference']);
 
             return $oneClickStock->toArray();
 

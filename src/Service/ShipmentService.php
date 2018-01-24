@@ -41,6 +41,8 @@ use Carrier;
 use Country;
 use Configuration as PSConfiguration;
 use Exception;
+use Product;
+use StockAvailable;
 
 class ShipmentService extends AbstractOystService
 {
@@ -171,11 +173,40 @@ class ShipmentService extends AbstractOystService
 
         if (isset($data['items'])) {
             foreach ($data['items'] as $key => $item) {
-                $reference = explode(';', $item['reference']);
-                if (!isset($reference[1])) {
-                    $reference[1] = null;
+                // $reference = explode(';', $item['reference']);
+                // if (!isset($reference[1])) {
+                //     $reference[1] = null;
+                // }
+
+                $idProduct = $item['reference'];
+                $idCombination = 0;
+
+                if (false  !== strpos($idProduct, ';')) {
+                    $p = explode(';', $idProduct);
+                    $idProduct = $p[0];
+                    $idCombination = $p[1];
                 }
-                $cart->updateQty($item['quantity'], (int)$reference[0], (int)$reference[1], false, 'up', $address->id);
+
+                $product = new Product($idProduct);
+
+                // die(var_dump(StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination)));
+                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK')) {
+                    if ($product->advanced_stock_management == 0 && !PSConfiguration::get('PS_ADVANCED_STOCK_MANAGEMENT')) {
+                        $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
+                        $new_qty = $qty_available + $item['quantity'];
+                        StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                    }
+                }
+
+                $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
+
+                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK')) {
+                    if ($product->advanced_stock_management == 0 && !PSConfiguration::get('PS_ADVANCED_STOCK_MANAGEMENT')) {
+                        $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
+                        $new_qty = $qty_available - $item['quantity'];
+                        StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                    }
+                }
 
                 //$oneClickItem = new OneClickItem((string)$item['reference'], (int)$item['quantity']);
 

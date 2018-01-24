@@ -17,6 +17,7 @@ $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_1c2d2d2a695caa767
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_c553131fd61f1974f283284d081bd4aa'] = 'La quantité saisie n\'est pas bonne';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_024ae09e98fa72606806543757012ff2'] = 'Le montant saisi n\'est pas bon';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_2b7091c33002c6db27a2a5165ce431f8'] = 'Une erreur s\'est produite lors de l\'annulation :';
+$_MODULE['<{oyst}prestashop>oysthookdisplayfooterproductprocessor_4d2c41ad87059d5fd9ea5283cee720a5'] = 'Il n\'y a pas assez de produits en stock.';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_782c8b38bce4f2f6975ca7f33ac8189b'] = 'Historique de commandes';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_fb077ecba55e5552916bde26d8b9e794'] = 'Confirmation de commande';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_90589c47f06eb971d548591f23c285af'] = 'Personnalisée';

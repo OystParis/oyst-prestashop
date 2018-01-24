@@ -98,6 +98,8 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             'positionBtn' => Configuration::get('FC_OYST_POSITION_BTN'),
             'restriction_currencies' => $restriction_currencies,
             'restriction_languages' => $restriction_languages,
+            'shouldAsStock' => Configuration::get('FC_OYST_SHOULD_AS_STOCK'),
+            'oyst_error' => $this->module->l('There isn\'t enough product in stock.'),
         ));
 
         if (_PS_VERSION_ >= '1.6.0.0') {

@@ -40,9 +40,6 @@ class StockController extends AbstractOystController
                 $this->respondAsJson($data['data'])
             )
         );
-
-        header("HTTP/1.1 200 OK");
-        header('Content-Type: application/json');
     }
 
     public function stockBook()
