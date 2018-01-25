@@ -406,6 +406,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='Manage quantity' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                        <input type="checkbox" name="FC_OYST_MANAGE_QUANTITY" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY} checked="checked"{/if} />
+                                    </div>
+                                </div>
+                                <div class="form-group clearfix">
                                     <label class="control-label col-md-3 col-lg-3">{l s='Enable advanced stock' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7" style="height: 31px;">
                                         <input type="checkbox" name="FC_OYST_SHOULD_AS_STOCK" value="1"{if $oyst.FC_OYST_SHOULD_AS_STOCK} checked="checked"{/if} />

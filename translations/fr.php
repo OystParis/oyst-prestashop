@@ -139,6 +139,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fbcf3ea984b8f48586fdd
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d656fc298c72d199a2bc51867206b68b'] = 'Délai de livraison en jours';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_67a2832116fd6e31fa47653f6173860f'] = 'Gestion des quantités';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_29ef41c7619b3b7056a3af9068ab4567'] = 'Activer gestion des stocks';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e13b27dfd442724dc5e3dfcc00c11b4f'] = 'Activer bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e51c9d66405ad052f47710a86d327d28'] = 'Désactiver bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_7b12a680a57e92d91c982d757800ec8a'] = 'Restrictions des devises';

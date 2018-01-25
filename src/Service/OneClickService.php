@@ -193,7 +193,7 @@ class OneClickService extends AbstractOystService
             } else {
                 $oneClickOrdersParams->setDelay(15);
             }
-            $oneClickOrdersParams->setManageQuantity(true);
+            $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY'));
             $oneClickOrdersParams->setShouldReinitBuffer(false);
 
             $this->logger->info(
