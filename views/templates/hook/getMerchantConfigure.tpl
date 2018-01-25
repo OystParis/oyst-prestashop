@@ -179,6 +179,7 @@
                             <li class="tab-row"><a class="tab-page" href="#custom-btn">{l s='Custom of button' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
+                            <li class="tab-row"><a class="tab-page" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
                         </ul>
                     </div>
                     <div id="moduleContainer" class="tab-content-sub">
@@ -346,6 +347,34 @@
                                 <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-info module_form_reset_btn">
                                     {l s='Disable product' mod='oyst'}
                                 </button>
+                            </div>
+                        </div>
+                        <div id="settings-restrictions" class="tab-pane-sub" style="display:none;">
+                            <label>{l s='Restrictions of currencies' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <table cellpadding="0" cellspacing="0" class="table">
+                                    <tbody>
+                                        {foreach $oyst.currencies as $currency}
+                                            <tr>
+                                                <td style="text-align: center">{$currency['name']}</td>
+                                                <td style="text-align: center"><input style="margin-top:0;" name="oyst_currency[]" value="{$currency['id_currency']}" {if in_array($currency['id_currency'], $oyst.restriction_currencies)}checked="checked"{/if} type="checkbox"></td>
+                                            </tr>
+                                        {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <label>{l s='Restrictions of languages' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <table cellpadding="0" cellspacing="0" class="table">
+                                    <tbody>
+                                        {foreach $oyst.languages as $lang}
+                                            <tr>
+                                                <td>{$lang['name']}</td>
+                                                <td class="text-center"><input style="margin-top:0;" name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox"></td>
+                                            </tr>
+                                        {/foreach}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="margin-form">

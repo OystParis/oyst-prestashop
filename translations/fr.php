@@ -181,6 +181,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_35b95e4f3de3b2daf150c372eaf2d95
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d1e6660c46eb6011110e01cc1a99aa64'] = 'Personnalisation du bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_21f6bc356cdbbf99796a5a8352d5b246'] = 'Paramètres restrictions';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_3d704c8eda12958b3d36812e5b1bb8c4'] = 'Activer 1-click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4d587804f19493bc8914920767d83ea3'] = 'Clé API 1-Click Production';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_13c2b4c48c17aeb5b6605660e58df705'] = 'Clé API 1-Click Pré-Production';
@@ -205,6 +206,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_d656fc298c72d199a2bc51867206b68
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e13b27dfd442724dc5e3dfcc00c11b4f'] = 'Activer bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e51c9d66405ad052f47710a86d327d28'] = 'Désactiver bouton 1-Click sur les produits';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_7b12a680a57e92d91c982d757800ec8a'] = 'Restrictions des devises';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_578c69a9e28d2854ec76d91a682f6df5'] = 'Restrictions des langues';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_f291ff521a5874e87aa48a59494f835d'] = 'Sélectionner les logs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_5bcaf72e1549cffdd268db003433b371'] = 'Supprimer les logs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1ee8731d9b5c8d4bfb26c7bb6e0a21f3'] = 'Actuellement il n\'y a aucun log de disponible';
