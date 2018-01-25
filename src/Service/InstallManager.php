@@ -248,5 +248,7 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_ACTIVE_FRAUD');
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_FREEPAY');
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
+        PSConfiguration::deleteByName('FC_OYST_CURRENCIES');
+        PSConfiguration::deleteByName('FC_OYST_LANG');
     }
 }

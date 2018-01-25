@@ -179,7 +179,7 @@
                             <li class="tab-row"><a class="tab-page" href="#custom-btn">{l s='Custom of button' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
-                            <li class="tab-row"><a class="tab-page" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
+                            {* <li class="tab-row"><a class="tab-page" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li> *}
                         </ul>
                     </div>
                     <div id="moduleContainer" class="tab-content-sub">
@@ -349,7 +349,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div id="settings-restrictions" class="tab-pane-sub" style="display:none;">
+                        {*<div id="settings-restrictions" class="tab-pane-sub" style="display:none;">
                             <label>{l s='Restrictions of currencies' mod='oyst'}</label>
                             <div class="margin-form">
                                 <table cellpadding="0" cellspacing="0" class="table">
@@ -376,7 +376,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div>*}
                         <div class="margin-form">
                             <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
                                 {l s='Save' mod='oyst'}

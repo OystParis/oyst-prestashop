@@ -272,6 +272,8 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_ACTIVE_FRAUD', 0);
         Configuration::updateValue('FC_OYST_STATE_PAYMENT_ONECLICK', 2);
         Configuration::updateValue('FC_OYST_STATE_PAYMENT_FREEPAY', 2);
+        Configuration::updateValue('FC_OYST_CURRENCIES', Currency::getIdByIsoCode('EUR'));
+        Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
     }
 
     public function loadSQLFile($sql_file)

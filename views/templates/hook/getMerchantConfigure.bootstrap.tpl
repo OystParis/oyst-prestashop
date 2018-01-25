@@ -214,7 +214,7 @@
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn"/>{l s='Custom of button' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-carrier" />{l s='Settings carrier' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-advanced" />{l s='Settings advanced' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-restrictions" />{l s='Settings restrictions' mod='oyst'}</a></li>
+                                {* <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-restrictions" />{l s='Settings restrictions' mod='oyst'}</a></li> *}
                             </ul>
                         </div>
                         <div class="col-lg-10 col-md-9 tab-content">
@@ -416,7 +416,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" id="settings-restrictions" class="tab-pane">
+                            {*<div role="tabpanel" id="settings-restrictions" class="tab-pane">
                                 <div class="row table-responsive clearfix ">
                                     <div class="col-xs-6 overflow-y">
                                         <table class="table">
@@ -455,7 +455,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div>*}
                         </div>
                     </div>
                 </div>
