@@ -214,6 +214,7 @@
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn"/>{l s='Custom of button' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-carrier" />{l s='Settings carrier' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-advanced" />{l s='Settings advanced' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-restrictions" />{l s='Settings restrictions' mod='oyst'}</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-10 col-md-9 tab-content">
@@ -412,6 +413,46 @@
                                         <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-danger">
                                              <strong>{l s='Disable product' mod='oyst'}</strong>
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="settings-restrictions" class="tab-pane">
+                                <div class="row table-responsive clearfix ">
+                                    <div class="col-xs-6 overflow-y">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:40%"><span class="title_box">{l s='Restrictions of currencies' mod='oyst'}</span></th>
+                                                    <th class="text-center"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {foreach $oyst.currencies as $currency}
+                                                    <tr>
+                                                        <td><span>{$currency['name']}</span></td>
+                                                        <td class="text-center"><input name="oyst_currency[]" value="{$currency['id_currency']}" {if in_array($currency['id_currency'], $oyst.restriction_currencies)}checked="checked"{/if} type="checkbox"></td>
+                                                    </tr>
+                                                {/foreach}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-xs-6 overflow-y">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:40%"><span class="title_box">{l s='Restrictions of languages' mod='oyst'}</span></th>
+                                                    <th class="text-center"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {foreach $oyst.languages as $lang}
+                                                    <tr>
+                                                        <td><span>{$lang['name']}</span></td>
+                                                        <td class="text-center"><input name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox"></td>
+                                                    </tr>
+                                                {/foreach}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
