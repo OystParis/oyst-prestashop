@@ -60,6 +60,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_STATE_PAYMENT_FREEPAY'   => 'string',
         'FC_OYST_STATE_PAYMENT_ONECLICK'  => 'string',
         'FC_OYST_ACTIVE_FRAUD'            => 'int',
+        'FC_OYST_LANG'                    => array('type' => 'multiple', 'field' => 'oyst_lang'),
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
@@ -139,6 +140,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                 Configuration::updateValue($field_delay, $delay);
             }
 
+
+
             // Deprecated with shipmentless ?
             if (Tools::isSubmit('shipments')) {
                 $oneClickShipmentTransformer = new OneClickShipmentTransformer($this->context);
@@ -192,6 +195,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $goToConf    = (bool) Tools::getValue('go_to_conf');
         $goToForm    = (bool) Tools::getValue('go_to_form');
         $hasError    = false;
+        $id_lang = $this->context->language->id;
 
         // Merchant comes from the plugin list
         if (!$hasApiKey && !$goToConf) {
@@ -234,6 +238,18 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $filesName[] = basename($logFile);
         }
 
+        // Get restrictions lang
+        $languages = Configuration::get('FC_OYST_LANG');
+        if ($languages != null || $languages != '') {
+            if (false  !== strpos($languages, ',')) {
+                $restriction_languages = explode(',', $languages);
+            } else {
+                $restriction_languages = array($languages);
+            }
+        } else {
+            $restriction_languages = array();
+        }
+
         $assign['logsFile'] = $filesName;
         $assign['lastExportDate'] = $lastExportDate;
         $assign['hasAlreadyExportProducts'] = $hasAlreadyExportProducts;
@@ -263,7 +279,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['carrier_list']             = $this->getCarrierList();
         $assign['type_list']                = $shipmentTypes;
         $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
-        $assign['order_state'] = OrderState::getOrderStates($this->context->language->id);
+        $assign['order_state']              = OrderState::getOrderStates($id_lang);
+        $assign['languages']                = Language::getLanguages(false);
+        $assign['restriction_languages']    = $restriction_languages;
 
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';

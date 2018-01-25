@@ -53,6 +53,34 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
         //require for load Out Of Stock Information (isAvailableWhenOutOfStock)
         $product->loadStockData();
 
+        // Check allow currency
+        $id_currency = $this->context->currency->id;
+        $oyst_currencies = Configuration::get('FC_OYST_CURRENCIES');
+        if ($oyst_currencies != null || $oyst_currencies != '') {
+            if (false  !== strpos($oyst_currencies, ',')) {
+                $currencies = explode(',', $oyst_currencies);
+                $restriction_currencies = in_array($id_currency, $currencies)? true : false;
+            } else {
+                $restriction_currencies = $id_currency == $oyst_currencies ? true : false;
+            }
+        } else {
+            $restriction_currencies = true;
+        }
+
+        // Check allow language
+        $id_lang = $this->context->language->id;
+        $oyst_languages = Configuration::get('FC_OYST_LANG');
+        if ($oyst_languages != null || $oyst_languages != '') {
+            if (false  !== strpos($oyst_languages, ',')) {
+                $languages = explode(',', $oyst_languages);
+                $restriction_languages = in_array($id_lang, $languages)? true : false;
+            } else {
+                $restriction_languages = $id_lang == $oyst_languages ? true : false;
+            }
+        } else {
+            $restriction_languages = true;
+        }
+
         $this->smarty->assign(array(
             'secureKey' => Configuration::get('FC_OYST_HASH_KEY'),
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
@@ -68,6 +96,8 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             'widthBtn' => Configuration::get('FC_OYST_WIDTH_BTN'),
             'heightBtn' => Configuration::get('FC_OYST_HEIGHT_BTN'),
             'positionBtn' => Configuration::get('FC_OYST_POSITION_BTN'),
+            'restriction_currencies' => $restriction_currencies,
+            'restriction_languages' => $restriction_languages,
         ));
 
         if (_PS_VERSION_ >= '1.6.0.0') {
