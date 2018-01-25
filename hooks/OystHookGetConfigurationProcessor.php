@@ -60,7 +60,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_STATE_PAYMENT_FREEPAY'   => 'string',
         'FC_OYST_STATE_PAYMENT_ONECLICK'  => 'string',
         'FC_OYST_ACTIVE_FRAUD'            => 'int',
-        'FC_OYST_CURRENCIES'              => array('type' => 'multiple', 'field' => 'oyst_currency'),
         'FC_OYST_LANG'                    => array('type' => 'multiple', 'field' => 'oyst_lang'),
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
@@ -239,18 +238,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $filesName[] = basename($logFile);
         }
 
-        // Get restrictions currencies
-        $currencies = Configuration::get('FC_OYST_CURRENCIES');
-        if ($currencies != null || $currencies != '') {
-            if (false  !== strpos($currencies, ',')) {
-                $restriction_currencies = explode(',', $currencies);
-            } else {
-                $restriction_currencies = array($currencies);
-            }
-        } else {
-            $restriction_currencies = array();
-        }
-
         // Get restrictions lang
         $languages = Configuration::get('FC_OYST_LANG');
         if ($languages != null || $languages != '') {
@@ -293,8 +280,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['type_list']                = $shipmentTypes;
         $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
         $assign['order_state']              = OrderState::getOrderStates($id_lang);
-        $assign['currencies']               = Currency::getCurrencies();
-        $assign['restriction_currencies']   = $restriction_currencies;
         $assign['languages']                = Language::getLanguages(false);
         $assign['restriction_languages']    = $restriction_languages;
 
