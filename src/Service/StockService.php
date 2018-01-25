@@ -59,7 +59,7 @@ class StockService extends AbstractOystService
 
                 $product = new Product($idProduct);
 
-                if ($product->advanced_stock_management == 0 && !PSConfiguration::get('PS_ADVANCED_STOCK_MANAGEMENT')) {
+                if ($product->advanced_stock_management == 0) {
                     $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
                     $new_qty = $qty_available + $qty;
                     StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
@@ -92,7 +92,7 @@ class StockService extends AbstractOystService
             }
 
             $product = new Product($idProduct);
-            if ($product->advanced_stock_management == 0 && !PSConfiguration::get('PS_ADVANCED_STOCK_MANAGEMENT')) {
+            if ($product->advanced_stock_management == 0) {
                 $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
                 $new_qty = $qty_available - $qty;
                 if (StockAvailable::outOfStock($idProduct) === 1 || $new_qty >= 0) {

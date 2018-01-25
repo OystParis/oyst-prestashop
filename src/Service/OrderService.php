@@ -191,7 +191,7 @@ class OrderService extends AbstractOystService
         foreach ($products as $productInfo) {
             $product = new Product((int)$productInfo['productId']);
 
-            if ($product->advanced_stock_management == 0 && !PSConfiguration::get('PS_ADVANCED_STOCK_MANAGEMENT')) {
+            if ($product->advanced_stock_management == 0) {
                 $qty_available = StockAvailable::getQuantityAvailableByProduct($productInfo['productId'], $productInfo['combinationId']);
                 $new_qty = $qty_available + $productInfo['quantity'];
                 StockAvailable::setQuantity($productInfo['productId'], $productInfo['combinationId'], $new_qty);
