@@ -231,5 +231,7 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
         PSConfiguration::deleteByName('FC_OYST_CURRENCIES');
         PSConfiguration::deleteByName('FC_OYST_LANG');
+        PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');
+        PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
     }
 }

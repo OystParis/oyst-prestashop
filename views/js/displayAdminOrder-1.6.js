@@ -25,7 +25,7 @@ var refund_button_html = '<i class="icon-exchange"></i> ' + label_refund;
 $(document).ready(function() {
     // Display FreePay transaction ID
     var panel_heading = $('.panel-heading-action');
-    panel_heading.before('<span class="badge">Transaction FreePay n°' + oyst_transaction_id + '</span>');
+    panel_heading.before('<span class="badge">Transaction Oyst n°' + oyst_transaction_id + '</span>');
 
     $('#desc-order-partial_refund').click(function() {
         $('input[name^="partialRefundProductQuantity"]').focusout(function(event) {

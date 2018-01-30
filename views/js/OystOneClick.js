@@ -37,9 +37,20 @@ function OystOneClick(url, productId) {
     this.widthBtn = '230px';
     this.heightBtn = '60px';
     this.positionBtn = 'before';
+    this.preload = 1;
+    this.shouldAsStock = 0;
+    this.errorText = 'There isn\'t enough product in stock.';
 
     this.setExportedCombinations = function(combinations) {
         this.combinations = combinations;
+    }
+
+    this.setPreload = function(preload) {
+        this.preload = preload;
+    }
+
+    this.setShouldAskStock = function(shouldAsStock) {
+        this.shouldAsStock = shouldAsStock;
     }
 
     this.setStockManagement = function(stockManagement) {
@@ -72,6 +83,10 @@ function OystOneClick(url, productId) {
 
     this.setPositionBtn = function(positionBtn) {
         this.positionBtn = positionBtn;
+    }
+
+    this.setErrorText = function(errorText) {
+        this.errorText = errorText;
     }
 
     /**
@@ -179,7 +194,28 @@ function OystOneClick(url, productId) {
         var quantity = $('input[name="qty"]').val();
         if (typeof quantity === "undefined")
             quantity = 1;
-        
+
+        if (this.shouldAsStock) {
+            if ($('#quantityAvailable').length && parseInt($('#quantityAvailable').html()) < quantity) {
+                if (!!$.prototype.fancybox) {
+                    $.fancybox.open([
+                      {
+                        type: 'inline',
+                        autoScale: true,
+                        minHeight: 30,
+                        content: '<p class="fancybox-error">' + this.errorText + '</p>'
+                      }
+                    ], {
+                      padding: 0
+                    });
+                    return;
+                } else {
+                    alert(this.errorText);
+                    return;
+                }
+            }
+        }
+
         return {
             productId: this.productId,
             productAttributeId: productAttributeId,
@@ -192,6 +228,14 @@ function OystOneClick(url, productId) {
      */
     this.requestOneCLick = function(oystCallBack) {
         var params = this.getSelectedProduct();
+
+        if (this.preload) {
+          params.preload = this.preload;
+          this.setPreload(0);
+        } else {
+          params.preload = this.preload;
+        }
+
         params.oneClick = true;
         params.token = '{SuggestToAddSecurityToken}';
 

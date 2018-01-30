@@ -17,6 +17,7 @@ $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_1c2d2d2a695caa767
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_c553131fd61f1974f283284d081bd4aa'] = 'La quantité saisie n\'est pas bonne';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_024ae09e98fa72606806543757012ff2'] = 'Le montant saisi n\'est pas bon';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_2b7091c33002c6db27a2a5165ce431f8'] = 'Une erreur s\'est produite lors de l\'annulation :';
+$_MODULE['<{oyst}prestashop>oysthookdisplayfooterproductprocessor_4d2c41ad87059d5fd9ea5283cee720a5'] = 'Il n\'y a pas assez de produits en stock.';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_782c8b38bce4f2f6975ca7f33ac8189b'] = 'Historique de commandes';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_fb077ecba55e5552916bde26d8b9e794'] = 'Confirmation de commande';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_90589c47f06eb971d548591f23c285af'] = 'Personnalisée';
@@ -138,6 +139,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fbcf3ea984b8f48586fdd
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d656fc298c72d199a2bc51867206b68b'] = 'Délai de livraison en jours';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_29ef41c7619b3b7056a3af9068ab4567'] = 'Activer gestion des stocks';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e13b27dfd442724dc5e3dfcc00c11b4f'] = 'Activer bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e51c9d66405ad052f47710a86d327d28'] = 'Désactiver bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_7b12a680a57e92d91c982d757800ec8a'] = 'Restrictions des devises';

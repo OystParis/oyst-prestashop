@@ -23,6 +23,7 @@ use Oyst\Controller\ExportProductController;
 use Oyst\Service\Http\CurrentRequest;
 use Oyst\Controller\OrderController;
 use Oyst\Controller\ShipmentController;
+use Oyst\Controller\StockController;
 
 require_once dirname(__FILE__).'/../../config/config.inc.php';
 require_once dirname(__FILE__).'/oyst.php';
@@ -59,6 +60,16 @@ if ($data && isset($data['event'])) {
                 $shipmentController = new ShipmentController($request);
                 $shipmentController->setLogger($logger);
                 $shipmentController->getShipmentsAction();
+                break;
+            case 'order.stock.released':
+                $stockController = new StockController($request);
+                $stockController->setLogger($logger);
+                $stockController->stockReleased();
+                break;
+            case 'order.stock.book':
+                $stockController = new StockController($request);
+                $stockController->setLogger($logger);
+                $stockController->stockBook();
                 break;
             default:
                 header("HTTP/1.1 400 Bad Request");

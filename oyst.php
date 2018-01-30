@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.7.1';
+        $this->version = '1.8.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -274,6 +274,8 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_STATE_PAYMENT_FREEPAY', 2);
         Configuration::updateValue('FC_OYST_CURRENCIES', Currency::getIdByIsoCode('EUR'));
         Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
+        Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);
+        Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
     }
 
     public function loadSQLFile($sql_file)
