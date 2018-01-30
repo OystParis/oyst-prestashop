@@ -53,7 +53,7 @@ class OrderController extends AbstractOystController
                 $this->respondAsJson($responseData);
             } else {
                 $this->logger->critical(sprintf("Error order exist: [%s]", json_encode($json['data'])));
-                http_response_code(200);
+                header("HTTP/1.1 200 OK");
             }
         } else {
             header("HTTP/1.1 400 Bad Request");
