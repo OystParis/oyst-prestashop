@@ -90,31 +90,6 @@ class ShipmentService extends AbstractOystService
     }
 
     /**
-     * @param OneClickShipment $shipment
-     * @return bool
-     */
-    public function pushShipment(OneClickShipment $shipment)
-    {
-        $this->pushShipments(array($shipment));
-    }
-
-    /**
-     * @param OneClickShipmentService[] $shipments
-     *
-     * @return bool
-     */
-    public function pushShipments($shipments)
-    {
-        $result = $this->requester->call('postShipments', array($shipments));
-
-        if (!isset($result['shipments']) || !count($result['shipments'])) {
-            $this->logger->alert('No shipment(s) sent');
-        }
-
-        return isset($result['shipments']);
-    }
-
-    /**
      * @param $data
      * @return array
      * @throws Exeption
@@ -206,12 +181,6 @@ class ShipmentService extends AbstractOystService
 
                 //$oneClickShipmentCalculation->addItem($oneClickItem);
             }
-
-            /*$orderAmount = new OystPrice();
-           $orderAmount->setValue(round($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) * 100));
-           $orderAmount->setCurrency(Context::getContext()->currency->iso_code);
-
-           $oneClickShipmentCalculation->setOrderAmount($orderAmount);*/
         } else {
             $this->logger->emergency(
                 'Items not exist ['.json_encode($data).']'

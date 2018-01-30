@@ -43,7 +43,7 @@ class AbstractExportProductServiceFactory
      */
     public static function get(\Oyst $oyst, $context)
     {
-               /** @var OystCatalogAPI $apiClient */
+       /** @var OystCatalogAPI $apiClient */
         $apiClient = OystApiClientFactory::getClient(
             OystApiClientFactory::ENTITY_CATALOG,
             $oyst->getOneClickApiKey(),
@@ -84,13 +84,6 @@ class AbstractExportProductServiceFactory
             ->setWeightUnit(PSConfiguration::get('PS_WEIGHT_UNIT'))
             ->setDimensionUnit(PSConfiguration::get('PS_CURRENCY_DEFAULT'))
         ;
-
-        $limitedProduct = (int) getenv('OYST_EXPORT_PRODUCT_NUMBER');
-        if ($limitedProduct <= 0) {
-            $limitedProduct = ExportProductService::EXPORT_REGULAR_NUMBER;
-        }
-
-        $exportProductService->setLimitedProduct($limitedProduct);
 
         return $exportProductService;
     }

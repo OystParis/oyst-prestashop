@@ -61,29 +61,10 @@ class InstallManager
     public function install()
     {
         $state = true;
-        $state &= $this->createExportTable();
         $state &= $this->createOrderTable();
         $state &= $this->createProductTable();
 
         return $state;
-    }
-
-    /**
-     * @return bool
-     */
-    public function createExportTable()
-    {
-        $query = "
-            CREATE TABLE IF NOT EXISTS "._DB_PREFIX_."oyst_exported_catalog
-            (
-                productId INT,
-                productAttributeId INT,
-                importId VARCHAR(60),
-                hasBeenExported TINYINT DEFAULT 0
-            );
-        ";
-
-        return $this->db->execute($query);
     }
 
     /**

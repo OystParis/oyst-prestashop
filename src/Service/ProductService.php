@@ -95,24 +95,6 @@ class ProductService extends AbstractOystService
     }
 
     /**
-     * @param Product $product
-     * @return bool
-     * @throws Exception
-     */
-    public function sendProduct(Product $product)
-    {
-        $oystProduct = $this->getOystProduct($product);
-        $response = $this->requester->call('postProduct', array($oystProduct));
-
-        if ($this->requester->getApiClient()->getLastHttpCode() == 200) {
-            $this->productRepository->recordOystProductSent($oystProduct);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param OystProduct $product
      * @return bool
      */

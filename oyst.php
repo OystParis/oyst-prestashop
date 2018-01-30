@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.7.0';
+        $this->version = '1.7.1';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -333,49 +333,6 @@ class Oyst extends FroggyPaymentModule
     }
 
     /**
-     * @return DateTime|null
-     */
-    public function getRequestedCatalogDate()
-    {
-        $dataRegistered = Configuration::get('OYST_REQUESTED_CATALOG_DATE');
-        $date = $dataRegistered ? new DateTime($dataRegistered) : null;
-
-        return $date;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCatalogExportStillRunning()
-    {
-        return (bool) Configuration::get(Oyst\Service\Configuration::CATALOG_EXPORT_STATE);
-    }
-
-    /**
-     * @param $state
-     * @return $this
-     */
-    public function setAdminPanelInformationVisibility($state)
-    {
-        // TIPS: Maybe better to have an AdminClass / Configuration to handle anything about this
-        $state = (bool) $state ?
-            Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_ENABLE :
-            Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_DISABLE
-        ;
-        Configuration::updateValue(Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_STATE, $state);
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAdminPanelInformationVisibility()
-    {
-        return (bool) Configuration::get(Oyst\Service\Configuration::DISPLAY_ADMIN_INFO_STATE);
-    }
-
-    /**
      * @return string
      */
     public function getFreePayApiKey()
@@ -536,27 +493,5 @@ class Oyst extends FroggyPaymentModule
     public function getContext()
     {
         return $this->context;
-    }
-
-    /**
-     * Method call during the checkout process
-     * @param $cart
-     * @param $shipping_cost
-     * @param $products
-     * @return bool
-     */
-    public function getPackageShippingCost($cart, $shipping_cost, $products)
-    {
-        return $this->getShipmentCost($cart);
-    }
-
-    private function getShipmentCost($cart)
-    {
-        if (isset($cart->oystShipment)) {
-            $cost = $cart->oystShipment['amount']['value'];
-            return ($cost > 0 ? $cost / 100 : 0);
-        }
-
-        return false;
     }
 }

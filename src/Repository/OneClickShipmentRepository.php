@@ -21,38 +21,10 @@
 
 namespace Oyst\Repository;
 
-use \OystShipment;
+/**
+ * @Deprecated for 1.7.1
+ */
 
 class OneClickShipmentRepository extends AbstractOystRepository
 {
-    public function getShipments()
-    {
-        $shipments = $this->db->executeS(
-            'SELECT * FROM '._DB_PREFIX_.'oyst_shipment'
-        );
-
-        return $shipments;
-    }
-
-    public function getShipment($id_carrier)
-    {
-        $shipment = $this->db->getRow(
-            'SELECT os.* FROM `'._DB_PREFIX_.'carrier` c
-            LEFT JOIN `'._DB_PREFIX_.'oyst_shipment` os ON (os.id_carrier_reference = c.id_reference)
-            WHERE id_carrier = '.(int)$id_carrier
-        );
-
-        return $shipment;
-    }
-
-    /**
-     * @param OystShipment[] $oystShipments
-     */
-    public function recordShipments(array $oystShipments)
-    {
-        $this->db->delete('oyst_shipment');
-        foreach ($oystShipments as $oystShipment) {
-            $oystShipment->save();
-        }
-    }
 }

@@ -39,10 +39,6 @@ use Exception;
  */
 class ExportProductService extends AbstractOystService
 {
-    const EXPORT_ALL_PRODUCT = 0;
-
-    const EXPORT_REGULAR_NUMBER = 512;
-
     /** @var ProductRepository */
     protected $productRepository;
 
@@ -53,7 +49,7 @@ class ExportProductService extends AbstractOystService
     private $dimensionUnit;
 
     /** @var int */
-    private $limitedProduct;
+    // private $limitedProduct;
 
     /** @var ProductTransformer */
     private $productTransformer;
@@ -171,97 +167,6 @@ class ExportProductService extends AbstractOystService
         }
 
         return $oystProduct;
-    }
-
-    /**
-     * @param $importId
-     * @return array
-     * @throws Exception
-     */
-    public function sendNewProducts($importId)
-    {
-        if (!$this->productTransformer instanceof ProductTransformer) {
-            throw new Exception('Did you forget to set the ProductTransformer ?');
-        }
-
-        $json = array(
-            'totalCount' => 0,
-            'remaining' => 0,
-            'state' => false,
-        );
-
-        // TODO: Maybe add some log information for this process and store it in a new table ?
-        $prestaShopProducts = $this->productRepository->getProductsNotExported($this->limitedProduct);
-        $products = $this->transformProducts($prestaShopProducts);
-
-        $this->requester->call('postProducts', array($products));
-
-        $apiClient = $this->requester->getApiClient();
-        if ($apiClient->getLastHttpCode() == 200) {
-            $json['state'] = true;
-            $this->productRepository->recordSentProductsFromOystProductList($this->oyst, $prestaShopProducts, $products, $importId);
-            $json['totalCount'] = $this->productRepository->getTotalProducts();
-            $productNotHandled = $this->productRepository->getProductsNotExported(static::EXPORT_ALL_PRODUCT);
-            $totalProductNotHandled = count($productNotHandled);
-            if ($totalProductNotHandled) {
-                $this->logger->warning(sprintf('Product(s) waiting : %s', json_encode($productNotHandled)));
-            } else {
-                $this->logger->info('Export is over');
-                $this->setExportCatalogState(false);
-            }
-            $json['remaining'] = $totalProductNotHandled;
-        } else {
-            $json['httpCode'] = $apiClient->getLastHttpCode();
-            $json['error'] = $apiClient->getLastError();
-        }
-
-        return $json;
-    }
-
-    /**
-     * @return bool
-     */
-    public function requestNewExport()
-    {
-        $this->productRepository->truncateExportTable();
-
-        $this->requester->call('notifyImport');
-
-        $succeed = false;
-        if ($this->requester->getApiClient()->getLastHttpCode() == 200) {
-            PSConfiguration::updateValue('OYST_REQUESTED_CATALOG_DATE', (new DateTime())->format('Y-m-d H:i:s'));
-            $this->setExportCatalogState(true);
-            $this->oyst->setAdminPanelInformationVisibility(true);
-            $succeed = true;
-        }
-
-        return $succeed;
-    }
-
-    /**
-     * @param bool $state
-     * @return $this
-     */
-    public function setExportCatalogState($state)
-    {
-        $state = ((bool) $state) ?
-            Configuration::CATALOG_EXPORT_RUNNING :
-            Configuration::CATALOG_EXPORT_DONE
-        ;
-        PSConfiguration::updateValue(Configuration::CATALOG_EXPORT_STATE, $state);
-
-        return $this;
-    }
-
-    /**
-     * @param int $limitedProduct
-     * @return ExportProductService
-     */
-    public function setLimitedProduct($limitedProduct)
-    {
-        $this->limitedProduct = $limitedProduct;
-
-        return $this;
     }
 
     /**

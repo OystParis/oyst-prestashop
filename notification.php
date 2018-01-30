@@ -49,11 +49,6 @@ if ($data && isset($data['event'])) {
 
     try {
         switch ($data['event']) {
-            case 'catalog.import':
-                $exportProductController = new ExportProductController($request);
-                $exportProductController->setLogger($logger);
-                $exportProductController->exportCatalogAction();
-                break;
             case 'order.new':
             case 'order.v2.new':
                 $orderController = new OrderController($request);
