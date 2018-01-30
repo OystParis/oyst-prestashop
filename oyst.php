@@ -477,7 +477,7 @@ class Oyst extends FroggyPaymentModule
      */
     public function getUserAgent()
     {
-        $userAgent = new \Oyst\Classes\OystUserAgent('PrestaShop-'.$this->version, '', '', 'php', phpversion());
+        $userAgent = new \Oyst\Classes\OystUserAgent('PrestaShop', $this->version, _PS_VERSION_);
         return $userAgent;
     }
 
