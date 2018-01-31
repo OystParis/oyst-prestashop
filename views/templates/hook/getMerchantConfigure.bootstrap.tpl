@@ -306,6 +306,18 @@
                             <div role="tabpanel" id="custom-btn" class="tab-pane">
                                 {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                                     <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Smart button' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <input type="checkbox" name="FC_OYST_SMART_BTN" value="1"{if $oyst.FC_OYST_SMART_BTN} checked="checked"{/if} />
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Border rounded' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <input type="checkbox" name="FC_OYST_BORDER_BTN" value="1"{if $oyst.FC_OYST_BORDER_BTN} checked="checked"{/if} />
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Style btn 1-Click' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
                                             <select name="FC_OYST_THEME_BTN">
