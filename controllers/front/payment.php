@@ -214,7 +214,10 @@ class OystPaymentModuleFrontController extends ModuleFrontController
         }
 
         $message = null;
-        $payment_status = (int) Configuration::get('OYST_STATUS_WAIT_PAYMENT');
+        $payment_status = (int)Configuration::get('OYST_STATUS_WAIT_PAYMENT');
+        if ($payment_status == 0) {
+            $payment_status = (int)Configuration::get('PS_OS_PAYMENT');
+        }
 
         // Validate order
         $this->module->validateOrder($cart->id, $payment_status, $total_amount, 'Freepay', null, null, $cart->id_currency, false, $this->context->customer->secure_key, $shop);
