@@ -85,7 +85,7 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             'secureKey' => Configuration::get('FC_OYST_HASH_KEY'),
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
             'product' => $product,
-            'productQuantity' => StockAvailable::getStockAvailableIdByProductId($product->id),
+            'productQuantity' => StockAvailable::getQuantityAvailableByProduct($product->id),
             'synchronizedCombination' => $synchronizedCombination,
             'stockManagement' => Configuration::get('PS_STOCK_MANAGEMENT'),
             'oneClickActivated' => (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
