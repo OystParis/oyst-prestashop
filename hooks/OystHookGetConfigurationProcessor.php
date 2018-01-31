@@ -63,10 +63,10 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_MANAGE_QUANTITY'         => 'int',
         'FC_OYST_SHOULD_AS_STOCK'         => 'int',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
-        OystConfiguration::API_KEY_PREPROD_FREEPAY => 'string',
+        OystConfiguration::API_KEY_SANDBOX_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
         OystConfiguration::API_KEY_PROD_ONECLICK => 'string',
-        OystConfiguration::API_KEY_PREPROD_ONECLICK => 'string',
+        OystConfiguration::API_KEY_SANDBOX_ONECLICK => 'string',
         OystConfiguration::API_KEY_CUSTOM_ONECLICK => 'string',
         OystConfiguration::API_ENDPOINT_CUSTOM_FREEPAY => 'string',
         OystConfiguration::API_ENDPOINT_CUSTOM_ONECLICK => 'string',
@@ -237,10 +237,10 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['message']       = '';
         $assign['phone']         = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $assign['apikey_prod_test_error_freepay']     = '';
-        $assign['apikey_preprod_test_error_freepay']  = '';
+        $assign['apikey_sandbox_test_error_freepay']  = '';
         $assign['apikey_custom_test_error_freepay']   = '';
         $assign['apikey_prod_test_error_oneclick']    = '';
-        $assign['apikey_preprod_test_error_oneclick'] = '';
+        $assign['apikey_sandbox_test_error_oneclick'] = '';
         $assign['apikey_custom_test_error_oneclick']  = '';
         $assign['result']                   = $this->configuration_result;
         $assign['ps_version']               = Tools::substr(_PS_VERSION_, 0, 3);

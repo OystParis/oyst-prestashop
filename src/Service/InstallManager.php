@@ -200,10 +200,10 @@ class InstallManager
         $orderState->delete();
 
         PSConfiguration::deleteByName(Configuration::API_KEY_PROD_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_KEY_PREPROD_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_KEY_SANDBOX_FREEPAY);
         PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_FREEPAY);
         PSConfiguration::deleteByName(Configuration::API_KEY_PROD_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::API_KEY_PREPROD_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::API_KEY_SANDBOX_ONECLICK);
         PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_ONECLICK);
         PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_FREEPAY);
         PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_ONECLICK);

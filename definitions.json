@@ -36,10 +36,10 @@
         "OYST_API_ENV_ONECLICK": "prod",
 
         "OYST_API_PROD_KEY_FREEPAY": "",
-        "OYST_API_PREPROD_KEY_FREEPAY": "",
+        "OYST_API_SANDBOX_KEY_FREEPAY": "",
         "OYST_API_CUSTOM_KEY_FREEPAY": "",
         "OYST_API_PROD_KEY_ONECLICK": "",
-        "OYST_API_PREPROD_KEY_ONECLICK": "",
+        "OYST_API_SANDBOX_KEY_ONECLICK": "",
         "OYST_API_CUSTOM_KEY_ONECLICK": "",
 
         "OYST_API_CUSTOM_ENDPOINT_FREEPAY": "",
@@ -47,7 +47,7 @@
 
         "FC_OYST_TRACKER_URL": "https://trk.10ru.pt",
         "OYST_ONECLICK_URL_PROD": "https://cdn.oyst.com",
-        "OYST_ONECLICK_URL_PREPROD": "https://cdn.staging.oyst.eu",
+        "OYST_ONECLICK_URL_SANDBOX": "https://cdn.sandbox.oyst.eu",
         "OYST_ONECLICK_URL_CUSTOM": "",
 
         "FC_OYST_REDIRECT_SUCCESS": "ORDER_CONFIRMATION",
