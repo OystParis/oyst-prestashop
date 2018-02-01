@@ -106,18 +106,18 @@
                                 {/if}
                             </div>
                         </div>
-                        <div class="form-group clearfix env preprod" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-3">{l s='FreePay API PreProduction Key' mod='oyst'}</label>
+                        <div class="form-group clearfix env sandbox" style="display: none;">
+                            <label class="control-label col-md-3 col-lg-3">{l s='FreePay API Sandbox Key' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-7">
                                 <div class="input-group">
-                                    <input type="text" id="OYST_API_PREPROD_KEY_FREEPAY" name="OYST_API_PREPROD_KEY_FREEPAY" value="{$oyst.OYST_API_PREPROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
+                                    <input type="text" id="OYST_API_SANDBOX_KEY_FREEPAY" name="OYST_API_SANDBOX_KEY_FREEPAY" value="{$oyst.OYST_API_SANDBOX_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
                                     <span class="input-group-btn">
                                         <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
                                     </span>
                                 </div>
-                                <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.staging.oyst.eu/signup" target="_blank">backoffice.staging.oyst.com</a></p>
+                                <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.sandbox.oyst.eu/signup" target="_blank">backoffice.sandbox.oyst.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
-                                {if $oyst.apikey_preprod_test_error_freepay}
+                                {if $oyst.apikey_sandbox_test_error_freepay}
                                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                 {/if}
                             </div>
@@ -131,7 +131,7 @@
                                         <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
                                     </span>
                                 </div>
-                                <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.sandbox.oyst.eu/signup" target="_blank">backoffice.sandbox.oyst.com</a></p>
+                                <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.staging.oyst.eu/signup" target="_blank">backoffice.staging.oyst.com</a></p>
                                 <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
                                 {if $oyst.apikey_custom_test_error_freepay}
                                 <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
@@ -171,7 +171,7 @@
                             <div class="col-md-7 col-lg-7">
                                 <select name="OYST_API_ENV_FREEPAY">
                                     <option value="prod" {if $oyst.OYST_API_ENV_FREEPAY == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
-                                    <option value="preprod" {if $oyst.OYST_API_ENV_FREEPAY == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
+                                    <option value="sandbox" {if $oyst.OYST_API_ENV_FREEPAY == 'sandbox'}selected="selected"{/if}>{l s='Sandbox' mod='oyst'}</option>
                                     <option value="custom" {if $oyst.OYST_API_ENV_FREEPAY == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
                                 </select>
                             </div>
@@ -240,17 +240,17 @@
                                         {/if}
                                     </div>
                                 </div>
-                                <div class="form-group clearfix env preprod" style="display: none;">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='1-Click API PreProduction Key' mod='oyst'}</label>
+                                <div class="form-group clearfix env sandbox" style="display: none;">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Sandbox Key' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7">
                                         <div class="input-group">
-                                            <input type="text" id="OYST_API_PREPROD_KEY_ONECLICK" name="OYST_API_PREPROD_KEY_ONECLICK" value="{$oyst.OYST_API_PREPROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
+                                            <input type="text" id="OYST_API_SANDBOX_KEY_ONECLICK" name="OYST_API_SANDBOX_KEY_ONECLICK" value="{$oyst.OYST_API_SANDBOX_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
                                             <span class="input-group-btn">
                                                 <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
                                             </span>
                                         </div>
                                         <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                                        {if $oyst.apikey_preprod_test_error_oneclick}
+                                        {if $oyst.apikey_sandbox_test_error_oneclick}
                                             <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                         {/if}
                                     </div>
@@ -275,7 +275,7 @@
                                     <div class="col-md-7 col-lg-7">
                                         <select name="OYST_API_ENV_ONECLICK">
                                             <option value="prod" {if $oyst.OYST_API_ENV_ONECLICK == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
-                                            <option value="preprod" {if $oyst.OYST_API_ENV_ONECLICK == 'preprod'}selected="selected"{/if}>{l s='Preproduction' mod='oyst'}</option>
+                                            <option value="sandbox" {if $oyst.OYST_API_ENV_ONECLICK == 'sandbox'}selected="selected"{/if}>{l s='Sandbox' mod='oyst'}</option>
                                             <option value="custom" {if $oyst.OYST_API_ENV_ONECLICK == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
                                         </select>
                                     </div>

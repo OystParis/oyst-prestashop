@@ -1,4 +1,5 @@
-/*
+<?php
+/**
  * 2013-2016 Froggy Commerce
  *
  * NOTICE OF LICENSE
@@ -15,15 +16,18 @@
  *
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
- * @license GNU GENERAL PUBLIC LICENSE
+ * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-// Refund & Cancel buttons
-var cancel_button_html = '<a id="desc-order-freepay-cancel" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_cancel + '</div></a>';
-var refund_button_html = '<span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_refund + '</div>';
+require_once dirname(__FILE__).'/../vendor/autoload.php';
 
-$(document).ready(function() {
-    // Display FreePay transaction ID
-    var page_title = $('span .breadcrumb');
-    page_title.text(page_title.text() + ' - Transaction Oyst n°' + oyst_transaction_id);
-});
+use Oyst\Service\Configuration as OConfiguration;
+
+/**
+ * @param Oyst $module
+ * @return bool
+ */
+function upgrade_module_1_7_1($module)
+{
+    Configuration::updateValue('OYST_ONECLICK_URL_SANDBOX', 'https://cdn.sandbox.oyst.eu');
+}

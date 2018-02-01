@@ -346,8 +346,8 @@ class Oyst extends FroggyPaymentModule
             case \Oyst\Service\Configuration::API_ENV_PROD:
                 $key = \Oyst\Service\Configuration::API_KEY_PROD_FREEPAY;
                 break;
-            case \Oyst\Service\Configuration::API_ENV_PREPROD:
-                $key = \Oyst\Service\Configuration::API_KEY_PREPROD_FREEPAY;
+            case \Oyst\Service\Configuration::API_ENV_SANDBOX:
+                $key = \Oyst\Service\Configuration::API_KEY_SANDBOX_FREEPAY;
                 break;
             case \Oyst\Service\Configuration::API_ENV_CUSTOM:
                 $key = \Oyst\Service\Configuration::API_KEY_CUSTOM_FREEPAY;
@@ -369,8 +369,8 @@ class Oyst extends FroggyPaymentModule
             case \Oyst\Service\Configuration::API_ENV_PROD:
                 $FreePayUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PROD);
                 break;
-            case \Oyst\Service\Configuration::API_ENV_PREPROD:
-                $FreePayUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PREPROD);
+            case \Oyst\Service\Configuration::API_ENV_SANDBOX:
+                $FreePayUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_SANDBOX);
                 break;
             case \Oyst\Service\Configuration::API_ENV_CUSTOM:
                 $FreePayUrl = Configuration::get(\Oyst\Service\Configuration::API_ENDPOINT_CUSTOM_FREEPAY);
@@ -392,8 +392,8 @@ class Oyst extends FroggyPaymentModule
             case \Oyst\Service\Configuration::API_ENV_PROD:
                 $key = \Oyst\Service\Configuration::API_KEY_PROD_ONECLICK;
                 break;
-            case \Oyst\Service\Configuration::API_ENV_PREPROD:
-                $key = \Oyst\Service\Configuration::API_KEY_PREPROD_ONECLICK;
+            case \Oyst\Service\Configuration::API_ENV_SANDBOX:
+                $key = \Oyst\Service\Configuration::API_KEY_SANDBOX_ONECLICK;
                 break;
             case \Oyst\Service\Configuration::API_ENV_CUSTOM:
                 $key = \Oyst\Service\Configuration::API_KEY_CUSTOM_ONECLICK;
@@ -445,8 +445,8 @@ class Oyst extends FroggyPaymentModule
             case \Oyst\Service\Configuration::API_ENV_PROD:
                 $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PROD);
                 break;
-            case \Oyst\Service\Configuration::API_ENV_PREPROD:
-                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PREPROD);
+            case \Oyst\Service\Configuration::API_ENV_SANDBOX:
+                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_SANDBOX);
                 break;
             case \Oyst\Service\Configuration::API_ENV_CUSTOM:
                 $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_CUSTOM);
@@ -477,7 +477,7 @@ class Oyst extends FroggyPaymentModule
      */
     public function getUserAgent()
     {
-        $userAgent = new \Oyst\Classes\OystUserAgent('PrestaShop-'.$this->version, '', '', 'php', phpversion());
+        $userAgent = new \Oyst\Classes\OystUserAgent('PrestaShop', $this->version, _PS_VERSION_);
         return $userAgent;
     }
 

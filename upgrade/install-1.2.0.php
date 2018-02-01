@@ -52,7 +52,7 @@ function upgrade_module_1_2_0($module)
 
     // TODO: We should not know about this values.. They belongs to the api client
     Configuration::updateValue('OYST_ONECLICK_URL_PROD', 'https://cdn.oyst.com');
-    Configuration::updateValue('OYST_ONECLICK_URL_PREPROD', 'https://cdn.staging.oyst.eu');
+    Configuration::updateValue('OYST_ONECLICK_URL_SANDBOX', 'https://cdn.sandbox.oyst.eu');
 
     $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
     $oystDb->createExportTable();

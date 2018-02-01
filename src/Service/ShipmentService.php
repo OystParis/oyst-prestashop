@@ -248,7 +248,7 @@ class ShipmentService extends AbstractOystService
 
                 $oystPrice = new OystPrice($amount, Context::getContext()->currency->iso_code);
 
-                $oneClickShipment = new OneClickShipmentCatalogLess();
+
                 $oystCarrier = new OystCarrier($id_carrier, $shipment['name'], $type);
 
                 $primary = false;
@@ -256,14 +256,18 @@ class ShipmentService extends AbstractOystService
                     $primary =  true;
                 }
 
-                $oneClickShipment->setPrimary($primary);
-                $oneClickShipment->setAmount($oystPrice);
                 if ($delay_shipment && $delay_shipment != '') {
-                    $oneClickShipment->setDelay((int)$delay_shipment * 24);
+                    $delay_shipment = (int)$delay_shipment * 24;
                 } else {
-                    $oneClickShipment->setDelay($delay[(int)$carrier->grade]);
+                    $delay_shipment = $delay[(int)$carrier->grade];
                 }
-                $oneClickShipment->setCarrier($oystCarrier);
+
+                $oneClickShipment = new OneClickShipmentCatalogLess(
+                    $oystPrice,
+                    $delay_shipment,
+                    $oystCarrier,
+                    $primary
+                );
 
                 $oneClickShipmentCalculation->addShipment($oneClickShipment);
             }
