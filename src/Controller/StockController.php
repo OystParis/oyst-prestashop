@@ -25,6 +25,8 @@ use Oyst;
 use Context;
 use Currency;
 use Configuration;
+use Tools;
+use Db;
 use Oyst\Factory\AbstractStockServiceFactory;
 
 class StockController extends AbstractOystController
@@ -32,8 +34,19 @@ class StockController extends AbstractOystController
     public function stockReleased()
     {
         $data = $this->request->getJson();
-        $shipmentService = AbstractStockServiceFactory::get(new Oyst(), Context::getContext());
-        $responseData = $shipmentService->manageQty($data['data']);
+        $insert   = array(
+            'id_order'   => 0,
+            'id_cart'    => 0,
+            'payment_id' => '',
+            'event_code' => pSQL($data['event']),
+            'event_data' => pSQL(Tools::jsonEncode($data['data'])),
+            'date_event' => date('Y-m-d H:i:s'),
+            'date_add'   => date('Y-m-d H:i:s'),
+        );
+        Db::getInstance()->insert('oyst_payment_notification', $insert);
+
+        $stockService = AbstractStockServiceFactory::get(new Oyst(), Context::getContext());
+        $responseData = $stockService->manageQty($data['data']);
         $this->logger->info(
             sprintf(
                 'New notification stock [%s]',
@@ -45,8 +58,18 @@ class StockController extends AbstractOystController
     public function stockBook()
     {
         $data = $this->request->getJson();
-        $shipmentService = AbstractStockServiceFactory::get(new Oyst(), Context::getContext());
-        $responseData = $shipmentService->stockBook($data['data']);
+        $insert   = array(
+            'id_order'   => 0,
+            'id_cart'    => 0,
+            'payment_id' => '',
+            'event_code' => pSQL($data['event']),
+            'event_data' => pSQL(Tools::jsonEncode($data['data'])),
+            'date_event' => date('Y-m-d H:i:s'),
+            'date_add'   => date('Y-m-d H:i:s'),
+        );
+        Db::getInstance()->insert('oyst_payment_notification', $insert);
+        $stockService = AbstractStockServiceFactory::get(new Oyst(), Context::getContext());
+        $responseData = $stockService->stockBook($data['data']);
 
         $this->logger->info(
             sprintf(

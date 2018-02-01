@@ -47,6 +47,21 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
 
         $oystOrderRepository = new OrderRepository(Db::getInstance());
 
+        switch ($order->payment) {
+            case 'FreePay':
+            case 'Freepay':
+            case 'Oyst - FreePay and 1Click':
+                $method_payment = 'FP';
+                break;
+            case 'OneClick':
+            case 'Oyst OneClick':
+                $method_payment = 'OC';
+                break;
+            default:
+                $method_payment = null;
+                break;
+        }
+
         // Check if order has already been refunded
         $assign = array(
             'module_dir' => $this->path,
@@ -56,11 +71,13 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             'order_max_refund' => $oystOrderRepository->getOrderMaxRefund($order->id_cart, $order->current_state),
             'label_cancel' => $this->module->l('Cancel order', 'oysthookdisplayadminorderprocessor'),
             'label_refund' => $this->module->l('Standard refund', 'oysthookdisplayadminorderprocessor'),
+            'label_refund_oc' => $this->module->l('Standard refund OC', 'oysthookdisplayadminorderprocessor'),
             'label_confirm_cancel' => $this->module->l('Are you sure you want to cancel this order?', 'oysthookdisplayadminorderprocessor'),
             'label_confirm_refund' => $this->module->l('Are you sure you want to totally refund this order?', 'oysthookdisplayadminorderprocessor'),
             'label_wrong_quantity' => $this->module->l('The quantity is wrong', 'oysthookdisplayadminorderprocessor'),
             'label_wrong_amount' => $this->module->l('The amount is wrong', 'oysthookdisplayadminorderprocessor'),
             'label_error' => $this->module->l('An error has occured while processing the cancellation of the order:', 'oysthookdisplayadminorderprocessor'),
+            'method_payment' => $method_payment,
         );
         $this->smarty->assign($this->module->name, $assign);
 

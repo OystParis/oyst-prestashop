@@ -41,7 +41,7 @@ class OrderController extends AbstractOystController
 
             if ($orderExist == 0) {
                 $guid = $orderService->getOrderRepository()->getOrderGUID($orderId);
-                $responseData = $orderService->requestCreateNewOrder($orderId);
+                $responseData = $orderService->requestCreateNewOrder($orderId, $json['event']);
 
                 if ($responseData['state']) {
                     $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);

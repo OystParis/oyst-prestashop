@@ -28,16 +28,21 @@ $(document).ready(function() {
     partial_refund_button.hide();
     address_shipping.hide();
 
-    if (order_can_be_cancelled) {
-        standard_refund_button.after(cancel_button_html);
-        partial_refund_button.hide();
-    } else {
-        /*if (order_can_be_totally_refunded) {
-            standard_refund_button.after(refund_button_html);
-        }*/
-        if (order_max_refund > 0) {
-            partial_refund_button.show().html(refund_button_html);
+    if (method_payment != null && method_payment == 'FP') {
+        if (order_can_be_cancelled) {
+            standard_refund_button.after(cancel_button_html);
+            partial_refund_button.hide();
+        } else {
+            /*if (order_can_be_totally_refunded) {
+                standard_refund_button.after(refund_button_html);
+            }*/
+            if (order_max_refund > 0) {
+                partial_refund_button.show().html(refund_button_html);
+            }
         }
+    }
+    if (method_payment != null && method_payment == 'OC') {
+        partial_refund_button.show().html(refund_oc_button_html);
     }
 
     $('#desc-order-freepay-cancel').click(function() {

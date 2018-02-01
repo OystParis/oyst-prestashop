@@ -159,8 +159,9 @@ class OrderService extends AbstractOystService
      * @param $oystOrderInfo
      * @return bool
      */
-    public function createNewOrder(Customer $customer, Address $invoiceAddress, Address $deliveryAddress, $products, $oystOrderInfo)
+    public function createNewOrder(Customer $customer, Address $invoiceAddress, Address $deliveryAddress, $products, $oystOrderInfo, $event)
     {
+
         // PS core used this context anywhere.. So we need to fill it properly
         $this->context->cart = $cart = new Cart();
         $this->context->customer = $customer;
@@ -248,6 +249,16 @@ class OrderService extends AbstractOystService
         if ($state) {
             $order = new Order(Order::getOrderByCartId($cart->id));
             $this->orderRepository->linkOrderToGUID($order, $oystOrderInfo['id']);
+            $insert   = array(
+                'id_order'   => (int)$order->id,
+                'id_cart'    => (int)$cart->id,
+                'payment_id' => pSQL($oystOrderInfo['id']),
+                'event_code' => pSQL($event),
+                'event_data' => pSQL(Tools::jsonEncode($oystOrderInfo)),
+                'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $oystOrderInfo['created_at']), 0, 19)),
+                'date_add'   => date('Y-m-d H:i:s'),
+            );
+            Db::getInstance()->insert('oyst_payment_notification', $insert);
         }
 
         return $state;
@@ -272,7 +283,7 @@ class OrderService extends AbstractOystService
      *
      * @throws Exception
      */
-    public function requestCreateNewOrder($orderId)
+    public function requestCreateNewOrder($orderId, $event)
     {
         $data = array(
             'state' => false,
@@ -332,7 +343,7 @@ class OrderService extends AbstractOystService
             }
 
             if (!isset($data['error'])) {
-                $state = $this->createNewOrder($customer, $invoiceAddress, $deliveryAddress, $products, $oystOrderInfo);
+                $state = $this->createNewOrder($customer, $invoiceAddress, $deliveryAddress, $products, $oystOrderInfo, $event);
                 $data['state'] = $state;
             }
         } else {
@@ -359,6 +370,27 @@ class OrderService extends AbstractOystService
         } else {
             $succeed = true;
             $this->logger->info(sprintf('Oyst order %s has been updated to %s', $orderId, $status));
+        }
+
+        return $succeed;
+    }
+
+    /**
+     * @param $orderId
+     * @param OystPrice $price
+     *
+     * @return bool
+     */
+    public function refunds($guid, $price)
+    {
+        $this->requester->call('refunds', array($guid, $price));
+
+        $succeed = false;
+        if ($this->requester->getApiClient()->getLastHttpCode() != 200) {
+            $this->logger->warning(sprintf('Oyst order %s has not been updated', $guid));
+        } else {
+            $succeed = true;
+            $this->logger->info(sprintf('Oyst order %s has been updated', $guid));
         }
 
         return $succeed;
