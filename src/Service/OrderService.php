@@ -176,7 +176,7 @@ class OrderService extends AbstractOystService
         $cart->id_customer = $customer->id;
         $cart->id_address_delivery = $deliveryAddress->id;
         $cart->id_address_invoice = $invoiceAddress->id;
-        $cart->id_lang = $customer->id_lang;
+        $cart->id_lang = $this->context->language->id;
         $cart->secure_key = $customer->secure_key;
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
