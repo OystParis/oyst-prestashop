@@ -399,56 +399,68 @@
                                 {/if}
                             </div>
                             <div role="tabpanel" id="settings-advanced" class="tab-pane">
-                                <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Delay' mod='oyst'}</label>
-                                    <div class="col-md-7 col-lg-7">
-                                        <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Delay' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Manage quantity' mod='oyst'}</label>
-                                    <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                        <input type="checkbox" name="FC_OYST_MANAGE_QUANTITY" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY} checked="checked"{/if} />
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Manage quantity' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <input type="checkbox" name="FC_OYST_MANAGE_QUANTITY" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY} checked="checked"{/if} />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group clearfix">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Enable advanced stock' mod='oyst'}</label>
-                                    <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                        <input type="checkbox" name="FC_OYST_SHOULD_AS_STOCK" value="1"{if $oyst.FC_OYST_SHOULD_AS_STOCK} checked="checked"{/if} />
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable advanced stock' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <input type="checkbox" name="FC_OYST_SHOULD_AS_STOCK" value="1"{if $oyst.FC_OYST_SHOULD_AS_STOCK} checked="checked"{/if} />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group clearfix">
-                                    <div class="col-md-offset-3 col-lg-offset-3 col-md-7 col-lg-7">
-                                        <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-success">
-                                             <strong>{l s='Reset product' mod='oyst'}</strong>
-                                        </button>
-                                        <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-danger">
-                                             <strong>{l s='Disable product' mod='oyst'}</strong>
-                                        </button>
+                                    <div class="form-group clearfix">
+                                        <div class="col-md-offset-3 col-lg-offset-3 col-md-7 col-lg-7">
+                                            <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-success">
+                                                 <strong>{l s='Reset product' mod='oyst'}</strong>
+                                            </button>
+                                            <button type="submit" value="1" name="submitOystConfigurationDisable" class="btn btn-danger">
+                                                 <strong>{l s='Disable product' mod='oyst'}</strong>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                {else}
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
                             </div>
                             <div role="tabpanel" id="settings-restrictions" class="tab-pane">
-                                <div class="row table-responsive clearfix ">
-                                    <div class="col-xs-6 overflow-y">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:40%"><span class="title_box">{l s='Restrictions of languages' mod='oyst'}</span></th>
-                                                    <th class="text-center"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {foreach $oyst.languages as $lang}
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="row table-responsive clearfix ">
+                                        <div class="col-xs-6 overflow-y">
+                                            <table class="table">
+                                                <thead>
                                                     <tr>
-                                                        <td><span>{$lang['name']}</span></td>
-                                                        <td class="text-center"><input name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox"></td>
+                                                        <th style="width:40%"><span class="title_box">{l s='Restrictions of languages' mod='oyst'}</span></th>
+                                                        <th class="text-center"></th>
                                                     </tr>
-                                                {/foreach}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {foreach $oyst.languages as $lang}
+                                                        <tr>
+                                                            <td><span>{$lang['name']}</span></td>
+                                                            <td class="text-center"><input name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox"></td>
+                                                        </tr>
+                                                    {/foreach}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
+                                {else}
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
                             </div>
                         </div>
                     </div>
