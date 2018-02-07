@@ -157,7 +157,7 @@ class ShipmentService extends AbstractOystService
         $cart->id_customer = $customer->id;
         $cart->id_address_delivery = $address->id;
         $cart->id_address_invoice = $address->id;
-        $cart->id_lang = $customer->id_lang;
+        $cart->id_lang = $this->context->language->id;
         $cart->secure_key = $customer->secure_key;
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
@@ -190,7 +190,7 @@ class ShipmentService extends AbstractOystService
                 $product = new Product($idProduct);
 
                 // die(var_dump(StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination)));
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK')) {
+                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
                         $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
                         $new_qty = $qty_available + $item['quantity'];
@@ -200,7 +200,7 @@ class ShipmentService extends AbstractOystService
 
                 $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
 
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK')) {
+                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
                         $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
                         $new_qty = $qty_available - $item['quantity'];

@@ -34,6 +34,7 @@ use Psr\Log\AbstractLogger;
 use StockAvailable;
 use Tools;
 use Validate;
+use Link;
 
 /**
  * Class ProductTransformer
@@ -75,6 +76,12 @@ class ProductTransformer extends AbstractTransformer
     {
         $oystProduct = new OystProduct();
         $combination = new Combination();
+
+        if (version_compare(_PS_VERSION_, '1.6', '<')) {
+            $link = new Link();
+        } else {
+            $link = $this->context->link;
+        }
 
         if ($id_combination > 0) {
             $combination = new Combination($id_combination);
@@ -123,7 +130,7 @@ class ProductTransformer extends AbstractTransformer
             // Images
             $images = array();
             foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
-                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                $images[] = $link->getImageLink($product->link_rewrite, $image['id_image']);
             }
             // Information
             $attributesInfo = $this->productRepository->getAttributesCombination($combination);
@@ -145,7 +152,7 @@ class ProductTransformer extends AbstractTransformer
             // Images
             $images = array();
             foreach (Image::getImages($this->context->language->id, $product->id) as $image) {
-                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                $images[] = $link->getImageLink($product->link_rewrite, $image['id_image']);
             }
         }
 
@@ -158,7 +165,7 @@ class ProductTransformer extends AbstractTransformer
         $oystProduct->categories = $categories;
         $oystProduct->amountIncludingTax = $oystPrice;
 
-        $oystProduct->url = $this->context->link->getProductLink($product);
+        $oystProduct->url = $link->getProductLink($product);
         $oystProduct->quantity = $quantity;
 
         if (empty($images)) {
@@ -182,6 +189,11 @@ class ProductTransformer extends AbstractTransformer
      */
     public function transformCombination(Product $product, Combination $combination, $quantity = 1)
     {
+        if (version_compare(_PS_VERSION_, '1.6', '<')) {
+            $link = new Link();
+        } else {
+            $link = $this->context->link;
+        }
         $oystProductVariation = $this->transform($product);
 
         if ($oystProductVariation && $combination && $combination->id) {
@@ -198,12 +210,12 @@ class ProductTransformer extends AbstractTransformer
 
             $images = array();
             foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
-                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                $images[] = $link->getImageLink($product->link_rewrite, $image['id_image']);
             }
 
             if (empty($images)) {
                 foreach (Image::getImages($this->context->language->id, $product->id) as $image) {
-                    $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                    $images[] = $link->getImageLink($product->link_rewrite, $image['id_image']);
                 }
             }
 
