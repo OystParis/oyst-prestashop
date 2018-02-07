@@ -217,9 +217,9 @@ function OystOneClick(url, productId) {
         ).attr(
             'data-height', this.heightBtn
         ).attr(
-            'data-rounded', this.borderBtn
+            'data-rounded', this.borderBtn ? 'true' : 'false'
         ).attr(
-            'data-smart', this.smartBtn
+            'data-smart', this.borderBtn ? 'true' : 'false'
         ));
 
         this.prepareEvents();
