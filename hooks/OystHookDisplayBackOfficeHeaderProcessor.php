@@ -70,6 +70,9 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
 
     private function partialRefundOrder($order)
     {
+        if (OystPaymentNotification::existEventCode($order->id_cart, OystPaymentNotification::EVENT_REFUND)) {
+            return '';
+        }
         $oystOrderRepository = new OrderRepository(Db::getInstance());
         $idTab = $this->context->controller->tabAccess['id_tab'];
         $tabAccess = Profile::getProfileAccess($this->context->employee->id_profile, $idTab);
