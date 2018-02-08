@@ -16,7 +16,8 @@
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
             "actionOrderStatusPostUpdate",
-            "actionCarrierUpdate"
+            "actionCarrierUpdate",
+            "displayShoppingCart"
         ],
         "1.6" : [
             "advancedPaymentOptions"
