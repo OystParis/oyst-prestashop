@@ -40,8 +40,7 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         }
 
         // Ajax refund
-        if (Tools::getValue('subaction') == 'freepay-refund' && !Tools::getValue('generateDiscountRefund')
-        ) {
+        if (Tools::getValue('subaction') == 'freepay-refund' && !Tools::getValue('generateDiscountRefund')) {
             $this->refundOrder($order);
         }
 
@@ -52,13 +51,19 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             case 'Freepay':
             case 'Oyst - FreePay and 1Click':
                 $method_payment = 'FP';
+                $order_can_be_totally_refunded = ($oystOrderRepository->orderCanBeTotallyRefunded($order->id_cart, $order->current_state) ? 1 : 0);
+                $order_max_refund = $oystOrderRepository->getOrderMaxRefund($order->id_cart, $order->current_state);
                 break;
             case 'OneClick':
             case 'Oyst OneClick':
                 $method_payment = 'OC';
+                $order_can_be_totally_refunded = ($oystOrderRepository->orderOystCanBeRefunded($order->id_cart, $order->current_state) ? 1 : 0);
+                $order_max_refund = $oystOrderRepository->getOrderMaxRefundOC($order->id_cart, $order->current_state);
                 break;
             default:
                 $method_payment = null;
+                $order_can_be_totally_refunded = 0;
+                $order_max_refund = 0;
                 break;
         }
 
@@ -67,8 +72,8 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
             'module_dir' => $this->path,
             'transaction_id' => $order->id_cart,
             'order_can_be_cancelled' => ($oystOrderRepository->orderCanBeCancelled($order->id_cart, $order->current_state) ? 1 : 0),
-            'order_can_be_totally_refunded' => ($oystOrderRepository->orderCanBeTotallyRefunded($order->id_cart, $order->current_state) ? 1 : 0),
-            'order_max_refund' => $oystOrderRepository->getOrderMaxRefund($order->id_cart, $order->current_state),
+            'order_can_be_totally_refunded' => $order_can_be_totally_refunded,
+            'order_max_refund' => $order_max_refund,
             'label_cancel' => $this->module->l('Cancel order', 'oysthookdisplayadminorderprocessor'),
             'label_refund' => $this->module->l('Standard refund', 'oysthookdisplayadminorderprocessor'),
             'label_refund_oc' => $this->module->l('Standard refund OC', 'oysthookdisplayadminorderprocessor'),

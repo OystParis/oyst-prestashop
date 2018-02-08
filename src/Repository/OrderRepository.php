@@ -111,6 +111,29 @@ class OrderRepository extends AbstractOystRepository
 
     /**
      * @param int $idCart
+     * @param int $currentState
+     *
+     * @return bool
+     */
+    public function orderOystCanBeRefunded($idCart, $currentState)
+    {
+        // The order must have a CAPTURE event but no REFUND/CANCELLATION event
+        $sql = 'SELECT COUNT(DISTINCT(opn.`id_oyst_payment_notification`))'
+            .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
+            .' WHERE opn.`id_cart` = '.(int) $idCart
+            .' AND opn.`event_code` = "order.v2.new"'
+            .' AND opn.`id_cart` NOT IN ('
+                .'SELECT opn_bis.`id_cart`'
+                .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn_bis'
+            .' WHERE opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_REFUND.'"'.')';
+
+        $result = $this->db->getValue($sql);
+
+        return $result > 0 && $currentState != Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND') && $currentState != Configuration::get('OYST_STATUS_REFUND_PENDING');
+    }
+
+    /**
+     * @param int $idCart
      *
      * @return float
      */
@@ -203,6 +226,43 @@ class OrderRepository extends AbstractOystRepository
         while ($row = $this->db->nextRow($result)) {
             $data       = json_decode($row['event_data'], true);
             $maxRefund -= $data['notification']['amount']['value'] / 100;
+        }
+
+        return $maxRefund;
+    }
+
+    /**
+     * @param int $idCart
+     * @param int $currentState
+     *
+     * @return float
+     */
+    public function getOrderMaxRefundOC($idCart, $currentState)
+    {
+        $maxRefund = 0;
+
+        $sql = 'SELECT opn.`event_data`'
+            .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn'
+            .' WHERE opn.`id_cart` = '.(int) $idCart
+            .' AND opn.`event_code` = "order.v2.new"'
+            .' AND opn.`id_cart` NOT IN ('
+                .'SELECT opn_bis.`id_cart`'
+                .' FROM `'._DB_PREFIX_.'oyst_payment_notification` opn_bis'
+                .' WHERE opn_bis.`event_code` = "'.OystPaymentNotification::EVENT_REFUND.'"'
+            .')';
+
+        // Return data of the event
+        $result = $this->db->getValue($sql);
+
+        if ($result) {
+            $result      = json_decode($result, true);
+            $maxRefund   = $result['order_amount']['value'] / 100;
+        }
+
+        if ($currentState == Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND')
+            || $currentState == Configuration::get('OYST_STATUS_REFUND_PENDING')
+            || $currentState == Configuration::get('OYST_STATUS_PARTIAL_REFUND')) {
+            $maxRefund = 0;
         }
 
         return $maxRefund;

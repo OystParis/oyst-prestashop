@@ -46,7 +46,9 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
             if ($order->module == $this->module->name) {
                 // Partial refund
                 if (Tools::isSubmit('partialRefund') && isset($order)) {
-                    $this->partialRefundOrder($order);
+                    if (!Tools::getValue('generateDiscountRefund')) {
+                        $this->partialRefundOrder($order);
+                    }
                 }
             }
             return '';
@@ -90,6 +92,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                     if ($guid) {
                         $response = $PaymentService->partialRefund($guid, new OystPrice($amountToRefund, $currency->iso_code), AbstractOrderState::REFUNDED);
                     }
+                    $data = '';
                     break;
                 case 'OneClick':
                 case 'Oyst OneClick':
@@ -97,8 +100,14 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                     $OrderService = AbstractOrderServiceFactory::get($this->module, $this->context);
                     $guid = $orderService->getOrderRepository()->getOrderGUID($order->id);
                     if ($guid) {
-                        $response = $OrderService->refunds($guid, new OystPrice($amountToRefund, $currency->iso_code));
+                        $oystPrice = new OystPrice($amountToRefund, $currency->iso_code);
+                        $response = $OrderService->refunds($guid, $oystPrice);
                     }
+                    $data = array(
+                        'amount' => $oystPrice->toArray(),
+                        'event_code' => OystPaymentNotification::EVENT_REFUND,
+                        'order_id' => $guid
+                    );
                     break;
             }
 
@@ -107,7 +116,7 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                 'id_cart'    => (int)$order->id_cart,
                 'payment_id' => pSQL($guid),
                 'event_code' => pSQL(OystPaymentNotification::EVENT_REFUND),
-                'event_data' => '',
+                'event_data' => Tools::jsonEncode($data),
                 'date_event' => date('Y-m-d H:i:s'),
                 'date_add'   => date('Y-m-d H:i:s'),
             );
@@ -118,8 +127,8 @@ class OystHookDisplayBackOfficeHeaderProcessor extends FroggyHookProcessor
                 $history = new OrderHistory();
                 $history->id_order = $order->id;
                 $history->id_employee = 0;
-                $history->id_order_state = (int)Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND');
-                $history->changeIdOrderState((int)Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'), $order->id);
+                $history->id_order_state = (int)Configuration::get('OYST_STATUS_PARTIAL_REFUND');
+                $history->changeIdOrderState((int)Configuration::get('OYST_STATUS_PARTIAL_REFUND'), $order->id);
                 $history->add();
             }
         }

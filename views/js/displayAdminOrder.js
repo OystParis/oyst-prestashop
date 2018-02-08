@@ -42,7 +42,9 @@ $(document).ready(function() {
         }
     }
     if (method_payment != null && method_payment == 'OC') {
-        partial_refund_button.show().html(refund_oc_button_html);
+        if (order_can_be_totally_refunded && order_max_refund > 0) {
+            partial_refund_button.show().html(refund_oc_button_html);
+        }
     }
 
     $('#desc-order-freepay-cancel').click(function() {
