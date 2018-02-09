@@ -304,6 +304,10 @@
                                         <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
                                     </select>
                                 </div>
+                                <label class="control-label col-md-3 col-lg-3">{l s='Id btn add to cart' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_ID_BTN_ADD_TO_CART" value="{if $oyst.FC_OYST_ID_BTN_ADD_TO_CART}{$oyst.FC_OYST_ID_BTN_ADD_TO_CART|escape:'htmlall':'UTF-8'}{else}add_to_cart{/if}"/>
+                                </div>
                                 <div class="margin-form">
                                     <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
                                         {l s='Reset' mod='oyst'}

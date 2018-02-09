@@ -99,6 +99,7 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             'marginLeftBtn' => Configuration::get('FC_OYST_MARGIN_LEFT_BTN'),
             'marginRightBtn' => Configuration::get('FC_OYST_MARGIN_RIGHT_BTN'),
             'positionBtn' => Configuration::get('FC_OYST_POSITION_BTN'),
+            'idBtnAddToCart' => Configuration::get('FC_OYST_ID_BTN_ADD_TO_CART'),
             'restriction_currencies' => $restriction_currencies,
             'restriction_languages' => $restriction_languages,
             'shouldAsStock' => Configuration::get('FC_OYST_SHOULD_AS_STOCK'),
