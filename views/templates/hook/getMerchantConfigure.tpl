@@ -279,6 +279,18 @@
                                     <br>
                                     <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
                                 </div>
+										  <label class="control-label col-md-3 col-lg-3">{l s='Margin top' mod='oyst'}</label>
+										  <div class="margin-form">
+											 	<input type="text" name="FC_OYST_MARGIN_TOP_BTN" value="{$oyst.FC_OYST_MARGIN_TOP_BTN|escape:'htmlall':'UTF-8'}"/>
+											 	<br>
+											 	<span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+										  </div>
+										  <label class="control-label col-md-3 col-lg-3">{l s='Margin left' mod='oyst'}</label>
+										  <div class="margin-form">
+												<input type="text" name="FC_OYST_MARGIN_LEFT_BTN" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN|escape:'htmlall':'UTF-8'}"/>
+											 	<br>
+											 	<span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+										  </div>
                                 <label>{l s='Position btn 1-Click' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <select name="FC_OYST_POSITION_BTN">

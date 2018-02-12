@@ -36,6 +36,8 @@ function OystOneClick(url, productId) {
     this.colorBtn = '#E91E63';
     this.widthBtn = '230px';
     this.heightBtn = '60px';
+    this.marginTopBtn = '0px';
+    this.marginLeftBtn = '0px';
     this.positionBtn = 'before';
     this.preload = 1;
     this.shouldAsStock = 0;
@@ -80,6 +82,14 @@ function OystOneClick(url, productId) {
     this.setHeightBtn = function(heightBtn) {
         this.heightBtn = heightBtn;
     }
+
+	 this.setMarginTopBtn = function(marginTopBtn) {
+		  this.marginTopBtn = marginTopBtn;
+	 };
+
+    this.setMarginLeftBtn = function(marginLeftBtn) {
+        this.marginLeftBtn = marginLeftBtn;
+    };
 
     this.setPositionBtn = function(positionBtn) {
         this.positionBtn = positionBtn;
@@ -163,8 +173,10 @@ function OystOneClick(url, productId) {
             }));
         }
 
-
-        $('#oneClickContainer').append($('<div>', {
+        $('#oneClickContainer').css({
+           'top': this.marginTopBtn,
+           'left': this.marginLeftBtn
+        }).append($('<div>', {
             id: 'oyst-1click-button'
         }).attr(
             'data-theme', this.themeBtn
