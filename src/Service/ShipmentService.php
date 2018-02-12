@@ -192,9 +192,7 @@ class ShipmentService extends AbstractOystService
                 // die(var_dump(StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination)));
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
-                        $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
-                        $new_qty = $qty_available + $item['quantity'];
-                        StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                        StockAvailable::updateQuantity($idProduct, $idCombination, $item['quantity']);
                     }
                 }
 
@@ -202,9 +200,7 @@ class ShipmentService extends AbstractOystService
 
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
-                        $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
-                        $new_qty = $qty_available - $item['quantity'];
-                        StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                        StockAvailable::updateQuantity($idProduct, $idCombination, -$item['quantity']);
                     }
                 }
 

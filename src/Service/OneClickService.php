@@ -95,6 +95,7 @@ class OneClickService extends AbstractOystService
      */
     public function requestAuthorizeNewOrderProcess(CurrentRequest $request)
     {
+
         $data = array(
             'state' => false,
         );
@@ -147,9 +148,7 @@ class OneClickService extends AbstractOystService
             $load = (int)$request->getRequestItem('preload');
             if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
                 if ($product->advanced_stock_management == 0) {
-                    $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
-                    $new_qty = $qty_available - $quantity;
-                    StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                    StockAvailable::updateQuantity($idProduct, $idCombination, -(int)$quantity);
                 }
             }
         }
