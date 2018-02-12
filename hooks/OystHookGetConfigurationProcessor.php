@@ -55,6 +55,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_HEIGHT_BTN'              => 'string',
         'FC_OYST_MARGIN_TOP_BTN'          => 'string',
         'FC_OYST_MARGIN_LEFT_BTN'         => 'string',
+        'FC_OYST_MARGIN_RIGHT_BTN'        => 'string',
         'FC_OYST_POSITION_BTN'            => 'string',
         'FC_OYST_DELAY'                   => 'int',
         'FC_OYST_STATE_PAYMENT_FREEPAY'   => 'string',
@@ -153,6 +154,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_HEIGHT_BTN', '');
             Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN', '');
             Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN', '');
             Configuration::updateValue('FC_OYST_POSITION_BTN', '');
         }
 

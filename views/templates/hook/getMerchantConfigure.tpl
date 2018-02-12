@@ -291,6 +291,12 @@
 											 	<br>
 											 	<span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
 										  </div>
+                                <label class="control-label col-md-3 col-lg-3">{l s='Margin right' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
                                 <label>{l s='Position btn 1-Click' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <select name="FC_OYST_POSITION_BTN">

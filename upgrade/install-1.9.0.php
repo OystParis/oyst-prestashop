@@ -21,15 +21,11 @@
 
 require_once dirname(__FILE__).'/../vendor/autoload.php';
 
-use Oyst\Service\Configuration as OConfiguration;
-
 function upgrade_module_1_9_0($module)
 {
-	$oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
-	$oystDb->dropShipmentTable();
-
 	Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN', '');
 	Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN', '');
+	Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN', '');
 
 	return true;
 }

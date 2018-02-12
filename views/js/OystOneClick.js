@@ -38,6 +38,7 @@ function OystOneClick(url, productId) {
     this.heightBtn = '60px';
     this.marginTopBtn = '0px';
     this.marginLeftBtn = '0px';
+    this.marginRightBtn = '0px';
     this.positionBtn = 'before';
     this.preload = 1;
     this.shouldAsStock = 0;
@@ -90,6 +91,10 @@ function OystOneClick(url, productId) {
     this.setMarginLeftBtn = function(marginLeftBtn) {
         this.marginLeftBtn = marginLeftBtn;
     };
+
+	 this.setMarginRightBtn = function(marginRightBtn) {
+		  this.marginRightBtn = marginRightBtn;
+	 };
 
     this.setPositionBtn = function(positionBtn) {
         this.positionBtn = positionBtn;
@@ -175,7 +180,8 @@ function OystOneClick(url, productId) {
 
         $('#oneClickContainer').css({
            'top': this.marginTopBtn,
-           'left': this.marginLeftBtn
+           'left': this.marginLeftBtn,
+           'right': this.marginRightBtn
         }).append($('<div>', {
             id: 'oyst-1click-button'
         }).attr(

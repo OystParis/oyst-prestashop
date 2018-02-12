@@ -354,6 +354,13 @@
                                             <span class="help-block">{l s='In % or px' mod='oyst'}</span>
                                         </div>
                                     </div>
+											  	<div class="form-group clearfix">
+												  	<label class="control-label col-md-3 col-lg-3">{l s='Margin right' mod='oyst'}</label>
+												  	<div class="col-md-7 col-lg-7">
+													  	<input type="text" name="FC_OYST_MARGIN_RIGHT_BTN" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+													  	<span class="help-block">{l s='In % or px' mod='oyst'}</span>
+												  	</div>
+											  	</div>
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Position btn 1-Click' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
