@@ -57,14 +57,14 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_MARGIN_LEFT_BTN'         => 'string',
         'FC_OYST_MARGIN_RIGHT_BTN'        => 'string',
         'FC_OYST_POSITION_BTN'            => 'string',
+        'FC_OYST_ID_BTN_ADD_TO_CART'            		=> 'string',
         'FC_OYST_DELAY'                   => 'int',
         'FC_OYST_STATE_PAYMENT_FREEPAY'   => 'string',
         'FC_OYST_STATE_PAYMENT_ONECLICK'  => 'string',
         'FC_OYST_ACTIVE_FRAUD'            => 'int',
         'FC_OYST_LANG'                    => array('type' => 'multiple', 'field' => 'oyst_lang'),
-        'FC_OYST_SHOULD_AS_STOCK'            => 'int',
-        'FC_OYST_MANAGE_QUANTITY'         => 'int',
         'FC_OYST_SHOULD_AS_STOCK'         => 'int',
+        'FC_OYST_MANAGE_QUANTITY'         => 'int',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_SANDBOX_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
@@ -156,6 +156,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN', '');
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN', '');
             Configuration::updateValue('FC_OYST_POSITION_BTN', '');
+            Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', 'add_to_cart');
         }
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {

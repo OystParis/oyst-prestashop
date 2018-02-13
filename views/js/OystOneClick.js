@@ -40,6 +40,7 @@ function OystOneClick(url, productId) {
     this.marginLeftBtn = '0px';
     this.marginRightBtn = '0px';
     this.positionBtn = 'before';
+    this.idBtnAddToCart = 'add_to_cart';
     this.preload = 1;
     this.shouldAsStock = 0;
     this.errorText = 'There isn\'t enough product in stock.';
@@ -99,6 +100,10 @@ function OystOneClick(url, productId) {
     this.setPositionBtn = function(positionBtn) {
         this.positionBtn = positionBtn;
     }
+
+	this.setIdBtnAddToCart = function(idBtnAddToCart) {
+		this.idBtnAddToCart = idBtnAddToCart;
+	}
 
     this.setErrorText = function(errorText) {
         this.errorText = errorText;
@@ -169,11 +174,11 @@ function OystOneClick(url, productId) {
     this.prepareButton = function() {
         // Avoid any event issue due to potential remove / create from loaded oyst script
         if (this.positionBtn == 'after') {
-            $('#add_to_cart, .add_to_cart').after($('<div>', {
+            $('#'+this.idBtnAddToCart+', .add_to_cart').after($('<div>', {
                 id: 'oneClickContainer'
             }));
         } else {
-            $('#add_to_cart, .add_to_cart').before($('<div>', {
+            $('#'+this.idBtnAddToCart+', .add_to_cart').before($('<div>', {
                 id: 'oneClickContainer'
             }));
         }

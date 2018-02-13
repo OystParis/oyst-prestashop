@@ -255,6 +255,7 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_ADD_TO_CART');
         PSConfiguration::deleteByName('FC_OYST_DELAY');
         PSConfiguration::deleteByName('FC_OYST_ACTIVE_FRAUD');
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_FREEPAY');
