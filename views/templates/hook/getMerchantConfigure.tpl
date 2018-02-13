@@ -390,18 +390,18 @@
                             {/if}
                         </div>
                         <div id="display-notifications" class="tab-pane-sub" style="display:none;">
-									{if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                               <label>{l s='Notifications' mod='oyst'}</label>
-                               <div class="margin-form">
+						    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                <label>{l s='Notifications' mod='oyst'}</label>
+                                <div class="margin-form">
 
-                               </div>
-									{else}
-                               <div class="warn">
-                                   <ul>
-                                       <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
-                                   </ul>
-                               </div>
-									{/if}
+                                </div>
+                            {else}
+                                <div class="warn">
+                                    <ul>
+                                        <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+                                    </ul>
+                                </div>
+                            {/if}
                         </div>
                         <div class="margin-form">
                             <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">

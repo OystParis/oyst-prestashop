@@ -464,17 +464,32 @@
                                 {/if}
                             </div>
                             <div role="tabpanel" id="display-notifications" class="tab-pane">
-										 {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                                   <div class="row table-responsive clearfix ">
-                                       <div class="col-xs-6 overflow-y">
-
-                                       </div>
-                                   </div>
-										 {else}
-                                   <div class="alert alert-warning" role="alert">
-                                       <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
-                                   </div>
-										 {/if}
+							    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="row table-responsive clearfix ">
+                                        <table id="payment_notifications">
+                                            <thead>
+                                                <tr>
+                                                    {foreach from=$oyst.payment_notifications[0]|array_keys item=col_name}
+                                                    	<th>{$col_name}</th>
+                                                    {/foreach}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {foreach from=$oyst.payment_notifications item=notification}
+                                                	<tr>
+                                                        {foreach from=$notification item=value}
+                                                        	<td>{$value}</td>
+                                                        {/foreach}
+                                                    </tr>
+                                                {/foreach}
+                                            </tbody>
+                                        </table>
+                                    </div>
+								{else}
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
                             </div>
                         </div>
                     </div>

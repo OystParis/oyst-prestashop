@@ -231,6 +231,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $restriction_languages = array();
         }
 
+        // Get notifications
+        $payment_notifications = Db::getInstance()->executeS("SELECT * FROM `"._DB_PREFIX_."oyst_payment_notification`");
+
         $assign['logsFile'] = $filesName;
         $assign['hasApiKey']     = $hasApiKey;
         $assign['module_dir']    = $this->path;
@@ -260,6 +263,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['order_state']              = OrderState::getOrderStates($id_lang);
         $assign['languages']                = Language::getLanguages(false);
         $assign['restriction_languages']    = $restriction_languages;
+        $assign['payment_notifications']    = $payment_notifications;
 
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
@@ -320,10 +324,15 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             ));
         }
 
+        $this->context->controller->addCSS(array(
+            $this->path.'views/js/datatables/datatables.min.css',
+        ));
+
         $this->context->controller->addJS(array(
             $this->path.'views/js/handleAdvancedConf.js',
             $this->path.'views/js/handleShipment.js',
             $this->path.'views/js/logManagement.js',
+            $this->path.'views/js/datatables/datatables.min.js',
         ));
 
         // Check for 1.5 ??
