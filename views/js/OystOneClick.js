@@ -32,8 +32,8 @@ function OystOneClick(url, productId) {
     this.allowOosp = 0;
     this.productQuantity = 0;
     this.button = '#oneClickContainer';
-    this.smartBtn = 1;
-    this.borderBtn = 1;
+    this.smartBtn = true;
+    this.borderBtn = true;
     this.themeBtn = 'normal';
     this.colorBtn = '#E91E63';
     this.widthBtn = '230px';
@@ -219,7 +219,7 @@ function OystOneClick(url, productId) {
         ).attr(
             'data-rounded', this.borderBtn ? 'true' : 'false'
         ).attr(
-            'data-smart', this.borderBtn ? 'true' : 'false'
+            'data-smart', this.smartBtn ? 'true' : 'false'
         ));
 
         this.prepareEvents();
