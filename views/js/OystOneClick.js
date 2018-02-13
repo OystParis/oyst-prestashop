@@ -179,9 +179,9 @@ function OystOneClick(url, productId) {
         }
 
         $('#oneClickContainer').css({
-           'top': this.marginTopBtn,
-           'left': this.marginLeftBtn,
-           'right': this.marginRightBtn
+            'margi-top': this.marginTopBtn,
+            'margin-left': this.marginLeftBtn,
+            'margin-right': this.marginRightBtn
         }).append($('<div>', {
             id: 'oyst-1click-button'
         }).attr(
