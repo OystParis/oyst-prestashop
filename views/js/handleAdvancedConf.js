@@ -42,6 +42,8 @@ $(document).ready(function() {
     });
 
     handleExportCatalogButton(currentTab);
+
+    $('#payment_notifications').DataTable();
 });
 
 function handleExportCatalogButton(clickedTab) {
