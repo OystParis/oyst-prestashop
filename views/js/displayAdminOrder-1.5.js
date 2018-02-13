@@ -18,9 +18,15 @@
  * @license GNU GENERAL PUBLIC LICENSE
  */
 
-// Refund & Cancel buttons
-var cancel_button_html = '<a id="desc-order-freepay-cancel" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_cancel + '</div></a>';
-var refund_button_html = '<span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_refund + '</div>';
+// Refund & Cancel buttons for freepay
+if (method_payment != null && method_payment == 'FP') {
+    var cancel_button_html = '<a id="desc-order-freepay-cancel" class="toolbar_btn" href="#"> <span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_cancel + '</div></a>';
+    var refund_button_html = '<span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_refund + '</div>';
+}
+// Refund for 1-Click
+if (method_payment != null && method_payment == 'OC') {
+    var refund_oc_button_html = '<span class="process-icon-partial_refund process-icon-partialRefund"></span> <div>' + label_refund_oc + '</div>';
+}
 
 $(document).ready(function() {
     // Display FreePay transaction ID

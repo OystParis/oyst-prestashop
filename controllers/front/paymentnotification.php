@@ -131,10 +131,32 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                         break;
                     // If cancellation is confirmed, we cancel the order
                     case OystPaymentNotification::EVENT_CANCELLATION:
+                        $insert   = array(
+                            'id_order'   => (int) $id_order,
+                            'id_cart'    => (int) $id_cart,
+                            'payment_id' => pSQL($notification_item['payment_id']),
+                            'event_code' => pSQL($notification_item['event_code']),
+                            'event_data' => pSQL(Tools::jsonEncode($event_data)),
+                            'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $notification_item['event_date']), 0, 19)),
+                            'date_add'   => date('Y-m-d H:i:s'),
+                        );
+                        Db::getInstance()->insert('oyst_payment_notification', $insert);
+
                         $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
                         break;
                     // If refund is confirmed, we cancel the order
                     case OystPaymentNotification::EVENT_REFUND:
+                        $insert   = array(
+                            'id_order'   => (int) $id_order,
+                            'id_cart'    => (int) $id_cart,
+                            'payment_id' => pSQL($notification_item['payment_id']),
+                            'event_code' => pSQL($notification_item['event_code']),
+                            'event_data' => pSQL(Tools::jsonEncode($event_data)),
+                            'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $notification_item['event_date']), 0, 19)),
+                            'date_add'   => date('Y-m-d H:i:s'),
+                        );
+                        Db::getInstance()->insert('oyst_payment_notification', $insert);
+
                         $oystOrderRepository = new OrderRepository(Db::getInstance());
                         $maxRefund = $oystOrderRepository->calculateOrderMaxRefund($id_cart);
                         $status = $maxRefund == 0 ? Configuration::get('PS_OS_REFUND') : Configuration::get('OYST_STATUS_PARTIAL_REFUND');

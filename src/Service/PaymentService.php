@@ -47,7 +47,6 @@ class PaymentService extends AbstractOystService
      * @param int $amount, string $currency
      * @return $this
      */
-
     public function partialRefund($guid, $amount, $status)
     {
          $this->requester->call('cancelOrRefund', array($guid, $amount));
