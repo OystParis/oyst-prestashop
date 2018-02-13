@@ -232,7 +232,13 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         // Get notifications
-        $payment_notifications = Db::getInstance()->executeS("SELECT * FROM `"._DB_PREFIX_."oyst_payment_notification`");
+        $payment_notification_head = [];
+        $results = Db::getInstance()->executeS("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '"._DB_PREFIX_."oyst_payment_notification' AND TABLE_SCHEMA = '"._DB_NAME_."'");
+        foreach ($results as $key => $result) {
+            if ($result['COLUMN_NAME'] == 'id_oyst_payment_notification')
+                $result['COLUMN_NAME'] = 'id';
+            $payment_notification_head[] = $result['COLUMN_NAME'];
+        }
 
         $assign['logsFile'] = $filesName;
         $assign['hasApiKey']     = $hasApiKey;
@@ -252,6 +258,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['curl_check']               = function_exists('curl_version');
         $assign['payment_notification_url'] = $this->context->link->getModuleLink('oyst', 'paymentNotification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['notification_url']         = $this->context->link->getModuleLink('oyst', 'notification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
+        $assign['notification_bo_url']      = '/modules/oyst/notification-bo.php?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['configureLink']            = $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name;
         $assign['redirect_success_urls']    = $this->redirect_success_urls;
         $assign['redirect_error_urls']      = $this->redirect_error_urls;
@@ -263,7 +270,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['order_state']              = OrderState::getOrderStates($id_lang);
         $assign['languages']                = Language::getLanguages(false);
         $assign['restriction_languages']    = $restriction_languages;
-        $assign['payment_notifications']    = $payment_notifications;
+        $assign['payment_notification_head']= $payment_notification_head;
 
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';

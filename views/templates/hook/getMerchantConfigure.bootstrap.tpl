@@ -19,6 +19,10 @@
  *}
 <link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay-1.6.css" media="all">
 
+<script>
+    var notification_bo_url = "{$oyst.notification_bo_url}";
+</script>
+
 {if isset($oyst.result) && $oyst.result eq 'ok'}
 <div class="bootstrap">
     <div class="alert alert-success">
@@ -469,20 +473,11 @@
                                         <table id="payment_notifications">
                                             <thead>
                                                 <tr>
-                                                    {foreach from=$oyst.payment_notifications[0]|array_keys item=col_name}
+                                                    {foreach from=$oyst.payment_notification_head item=col_name}
                                                     	<th>{$col_name}</th>
                                                     {/foreach}
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                {foreach from=$oyst.payment_notifications item=notification}
-                                                	<tr>
-                                                        {foreach from=$notification item=value}
-                                                        	<td>{$value}</td>
-                                                        {/foreach}
-                                                    </tr>
-                                                {/foreach}
-                                            </tbody>
                                         </table>
                                     </div>
 								{else}
