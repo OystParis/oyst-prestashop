@@ -130,6 +130,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_cb5feb1b7314637725a2e
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_32954654ac8fe66a1d09be19001de2d4'] = 'Longueur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_329107d1abefb182ca0e6b98036188ce'] = 'En % ou PX';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_eec6c4bdbd339edf8cbea68becb85244'] = 'Hauteur';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9d768809cb57b85ec5e4e4693839692e'] = 'Marge supérieure';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_af1c33bd64cf61f9245b75131e2e06f1'] = 'Marge gauche';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_08d4382960e54a51b0225995753fb95c'] = 'Marge droite';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d45bf28725319c027435b3a578d26e7f'] = 'Position bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';

@@ -251,6 +251,9 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_COLOR_BTN');
         PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN');
         PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN');
         PSConfiguration::deleteByName('FC_OYST_DELAY');
         PSConfiguration::deleteByName('FC_OYST_ACTIVE_FRAUD');
