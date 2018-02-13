@@ -32,6 +32,10 @@
     <p class="error"><strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError|escape:'htmlall':'UTF-8'}</p>
 {/if}
 
+<script>
+    var notification_bo_url = "{$notification_bo_url}";
+</script>
+
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
     <div class="oyst configuration">
         <div class="header">

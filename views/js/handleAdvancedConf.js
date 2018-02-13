@@ -43,7 +43,11 @@ $(document).ready(function() {
 
     handleExportCatalogButton(currentTab);
 
-    $('#payment_notifications').DataTable();
+    $('#payment_notifications').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": notification_bo_url+"&action=getNotifications"
+    });
 });
 
 function handleExportCatalogButton(clickedTab) {
