@@ -91,6 +91,8 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             'oneClickActivated' => (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
             'btnOneClickState' => $productRepository->getActive($product->id),
             'allowOosp' => $product->isAvailableWhenOutOfStock((int)$product->out_of_stock),
+            'smartBtn' => Configuration::get('FC_OYST_SMART_BTN'),
+            'borderBtn' => Configuration::get('FC_OYST_BORDER_BTN'),
             'themeBtn' => Configuration::get('FC_OYST_THEME_BTN'),
             'colorBtn' => Configuration::get('FC_OYST_COLOR_BTN'),
             'widthBtn' => Configuration::get('FC_OYST_WIDTH_BTN'),

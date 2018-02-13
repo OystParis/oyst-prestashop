@@ -247,6 +247,8 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_PREORDER_FEATURE');
         PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
         PSConfiguration::deleteByName('OYST_ONE_CLICK_CARRIER');
+        PSConfiguration::deleteByName('FC_OYST_BORDER_BTN');
+        PSConfiguration::deleteByName('FC_OYST_SMART_BTN');
         PSConfiguration::deleteByName('FC_OYST_THEME_BTN');
         PSConfiguration::deleteByName('FC_OYST_COLOR_BTN');
         PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN');

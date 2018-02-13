@@ -49,6 +49,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_CATALOG_FEATURE'         => 'int',
         'FC_OYST_PREORDER_FEATURE'        => 'int',
         'FC_OYST_SHIPMENT_DEFAULT'        => 'int',
+        'FC_OYST_BORDER_BTN'              => 'int',
+        'FC_OYST_SMART_BTN'               => 'int',
         'FC_OYST_THEME_BTN'               => 'string',
         'FC_OYST_COLOR_BTN'               => 'string',
         'FC_OYST_WIDTH_BTN'               => 'string',
@@ -57,7 +59,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_MARGIN_LEFT_BTN'         => 'string',
         'FC_OYST_MARGIN_RIGHT_BTN'        => 'string',
         'FC_OYST_POSITION_BTN'            => 'string',
-        'FC_OYST_ID_BTN_ADD_TO_CART'            		=> 'string',
+        'FC_OYST_ID_BTN_ADD_TO_CART'      => 'string',
         'FC_OYST_DELAY'                   => 'int',
         'FC_OYST_STATE_PAYMENT_FREEPAY'   => 'string',
         'FC_OYST_STATE_PAYMENT_ONECLICK'  => 'string',
@@ -157,6 +159,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN', '');
             Configuration::updateValue('FC_OYST_POSITION_BTN', '');
             Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', 'add_to_cart');
+            Configuration::updateValue('FC_OYST_BORDER_BTN', '');
+            Configuration::updateValue('FC_OYST_SMART_BTN', '');
         }
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {
