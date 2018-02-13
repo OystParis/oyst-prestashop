@@ -215,6 +215,7 @@
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-carrier" />{l s='Settings carrier' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-advanced" />{l s='Settings advanced' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-restrictions" />{l s='Settings restrictions' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#display-notifications" />{l s='Notifications' mod='oyst'}</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-10 col-md-9 tab-content">
@@ -513,6 +514,19 @@
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>
                                 {/if}
+                            </div>
+                            <div role="tabpanel" id="display-notifications" class="tab-pane">
+										 {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                   <div class="row table-responsive clearfix ">
+                                       <div class="col-xs-6 overflow-y">
+
+                                       </div>
+                                   </div>
+										 {else}
+                                   <div class="alert alert-warning" role="alert">
+                                       <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                   </div>
+										 {/if}
                             </div>
                         </div>
                     </div>
