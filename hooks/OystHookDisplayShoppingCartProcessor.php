@@ -71,6 +71,7 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
             'colorBtn' => Configuration::get('FC_OYST_COLOR_BTN'),
             'widthBtn' => Configuration::get('FC_OYST_WIDTH_BTN'),
             'heightBtn' => Configuration::get('FC_OYST_HEIGHT_BTN'),
+            'btnCart' => Configuration::get('FC_OYST_BTN_CART'),
             'restriction_currencies' => $restriction_currencies,
             'restriction_languages' => $restriction_languages,
             'shouldAsStock' => Configuration::get('FC_OYST_SHOULD_AS_STOCK'),
