@@ -389,6 +389,10 @@
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_SHOULD_AS_STOCK" value="1"{if $oyst.FC_OYST_SHOULD_AS_STOCK} checked="checked"{/if} />
                                 </div>
+                                <label>{l s='Enable button cart' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_BTN_CART" value="1"{if $oyst.FC_OYST_BTN_CART} checked="checked"{/if} />
+                                </div>
                                 <div class="margin-form">
                                     <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
                                         {l s='Reset product' mod='oyst'}
