@@ -17,14 +17,14 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-{if $oneClickActivated && $restriction_currencies && $restriction_languages}
+{if $oneClickActivated && $restriction_currencies && $restriction_languages && $controller == 'order'}
     {if version_compare($smarty.const._PS_VERSION_,'1.6','<')}
         <script src="{$JSOystOneClickCart|escape:'html':'UTF-8'}"></script>
         <script src="{$JSOneClickUrl|escape:'html':'UTF-8'}"></script>
     {/if}
     <script type="text/javascript">
         $( document).ready(function(){
-            var oyst = new OystOneClickCart({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode});
+            var oyst = new OystOneClickCart({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode}, "{$controller|escape:'html':'UTF-8'}");
             oyst.setStockManagement({$stockManagement|intval});
             oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
             oyst.setColorBtn("{$colorBtn|escape:'html':'UTF-8'}");
