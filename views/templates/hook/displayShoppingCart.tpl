@@ -25,13 +25,12 @@
     <script type="text/javascript">
         $( document).ready(function(){
             var oyst = new OystOneClickCart({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode}, "{$controller|escape:'html':'UTF-8'}");
-            oyst.setStockManagement({$stockManagement|intval});
+            oyst.setSmartBtn({$smartBtn|intval});
+            oyst.setBorderBtn({$borderBtn|intval});
             oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
             oyst.setColorBtn("{$colorBtn|escape:'html':'UTF-8'}");
             oyst.setWidthBtn("{$widthBtn|escape:'html':'UTF-8'}");
             oyst.setHeightBtn("{$heightBtn|escape:'html':'UTF-8'}");
-            oyst.setShouldAskStock({$shouldAsStock|intval});
-            oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
             oyst.prepareButton();
 
             window.__OYST__ = window.__OYST__ || {};
