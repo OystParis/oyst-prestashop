@@ -130,7 +130,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
                         $value = (float)$value;
                     }
                 }
-                Configuration::updateValue($conf, $value);
+                if ($value) {
+                    Configuration::updateValue($conf, $value);
+                }
             }
 
             $carriers = $this->getCarrierList();
