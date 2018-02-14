@@ -23,10 +23,10 @@
 /**
  * Manage oneClickCart process
  */
-function OystOneClickCart(url) {
+function OystOneClickCart(url, controller) {
 
     this.url = url;
-    // this.productId = productId;
+    this.controller = controller;
     // this.combinations = [];
     this.stockManagement = 1;
     // this.allowOosp = 0;
@@ -62,11 +62,11 @@ function OystOneClickCart(url) {
     }
 
     this.setWidthBtn = function(widthBtn) {
-        this.widthBtn = widthBtn;
+        this.widthBtn = $('.standard-checkout').width()+'px';
     }
 
     this.setHeightBtn = function(heightBtn) {
-        this.heightBtn = heightBtn;
+        this.heightBtn = $('.standard-checkout').outerHeight()+'px';
     }
 
     this.setErrorText = function(errorText) {
@@ -142,7 +142,7 @@ function OystOneClickCart(url) {
         //         id: 'oneClickContainer'
         //     }));
         // } else {
-        $('.standard-checkout').before($('<div>', {
+        $('.standard-checkout').after($('<div>', {
             id: 'oneClickContainer'
         }));
         // }
@@ -158,6 +158,10 @@ function OystOneClickCart(url) {
             'data-width', this.widthBtn
         ).attr(
             'data-height', this.heightBtn
+        ).attr(
+            'data-rounded', false
+        ).attr(
+            'data-smart', false
         ));
 
         // this.prepareEvents();
@@ -211,9 +215,9 @@ function OystOneClickCart(url) {
      * Send request to start oneClick process
      */
     this.requestOneCLick = function(oystCallBack) {
-        // var params = this.getSelectedProduct();
-        var params;
+        var params = {};
 
+        params.controller = this.controller;
         if (this.preload) {
           params.preload = this.preload;
           this.setPreload(0);
