@@ -30,4 +30,8 @@ use Oyst\Service\Configuration as OConfiguration;
 function upgrade_module_1_7_1($module)
 {
     Configuration::updateValue('OYST_ONECLICK_URL_SANDBOX', 'https://cdn.sandbox.oyst.eu');
+    Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);
+    Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
+    Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
+    Configuration::updateValue('FC_OYST_SMART_BTN', 1);
 }

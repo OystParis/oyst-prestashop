@@ -123,6 +123,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4d587804f19493bc89149
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_31159ba8801cef7a7cd6b90eb612c7d0'] = 'Clé API 1-Click Sandbox';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b16e39a55f1dc4b29ab207c121c4b5f1'] = 'Clé API 1-Click Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a967b69d22760a1a8ca92af4fa4b7122'] = 'Smart button';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9f6a3bc372bffcee32c103d45bd3bfa4'] = 'Bords arrondis';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_960b44c579bc2f6818d2daaf9e4c16f0'] = 'Normal';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4953af21e1b855c91be873e8c05e2c99'] = 'Inversé';
@@ -136,7 +138,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_08d4382960e54a51b0225
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d45bf28725319c027435b3a578d26e7f'] = 'Position bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a5e8dee94923d52edc00d39ba852be36'] = 'Id bouton ajout au panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a5e8dee94923d52edc00d39ba852be36'] = 'Identifiant pour le bouton fiche produit';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click est désactivé ou n\'est pas configuré.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
@@ -201,9 +203,13 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_cb5feb1b7314637725a2e73bdc9f729
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_32954654ac8fe66a1d09be19001de2d4'] = 'Longueur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8eeadd3ce8c17233097f7387b378f250'] = '%. ou px';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_eec6c4bdbd339edf8cbea68becb85244'] = 'Hauteur';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_9d768809cb57b85ec5e4e4693839692e'] = 'Marge supérieure';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_af1c33bd64cf61f9245b75131e2e06f1'] = 'Marge gauche';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_08d4382960e54a51b0225995753fb95c'] = 'Marge droite';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d45bf28725319c027435b3a578d26e7f'] = 'Position bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_a5e8dee94923d52edc00d39ba852be36'] = 'Identifiant pour le bouton fiche produit';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click est désactivé ou n\'est pas configuré.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
