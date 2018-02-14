@@ -21,6 +21,7 @@
 
 <script>
     var notification_bo_url = "{$oyst.notification_bo_url}";
+    var module_dir = "{$oyst.module_dir}";
 </script>
 
 {if isset($oyst.result) && $oyst.result eq 'ok'}
@@ -78,7 +79,7 @@
         </p>
     </div>
     {/if}
-    <div class="panel" class="oyst_fieldset">
+    <div class="panel oyst_fieldset">
         <div>
             <ul id="oyst-config-menu" class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="{if $oyst.current_tab == '#tab-content-FreePay'}active{/if}"><a href="#tab-content-FreePay" role="tab" data-toggle="tab">{l s='FreePay' mod='oyst'}</a></li>
@@ -214,12 +215,12 @@
                     <div class="row">
                         <div class="col-lg-2 col-md-3">
                             <ul class="nav nav-pills nav-stacked" role="tablist">
-                                <li role="presentation" class="active"><a role="tab" data-toggle="tab" href="#conf-oc"/>{l s='Configuration One-click' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn"/>{l s='Custom of button' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-carrier" />{l s='Settings carrier' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-advanced" />{l s='Settings advanced' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-restrictions" />{l s='Settings restrictions' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#display-notifications" />{l s='Notifications' mod='oyst'}</a></li>
+                                <li role="presentation" class="active"><a role="tab" data-toggle="tab" href="#conf-oc">{l s='Configuration One-click' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#custom-btn">{l s='Custom of button' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
+                                <li role="presentation" class="" id="tab-notification"><a role="tab" data-toggle="tab" href="#display-notifications">{l s='Notifications' mod='oyst'}</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-10 col-md-9 tab-content">
@@ -521,17 +522,22 @@
                             </div>
                             <div role="tabpanel" id="display-notifications" class="tab-pane">
 							    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                                    <div class="row table-responsive clearfix ">
-                                        <table id="payment_notifications">
-                                            <thead>
-                                                <tr>
-                                                    {foreach from=$oyst.payment_notification_head item=col_name}
-                                                    	<th>{$col_name}</th>
-                                                    {/foreach}
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
+                                    <table id="payment_notifications" class="display nowrap" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                {foreach from=$oyst.payment_notification_head item=col_name}
+                                                    <th>{$col_name}</th>
+                                                {/foreach}
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                {foreach from=$oyst.payment_notification_head item=col_name}
+                                                    <th>{$col_name}</th>
+                                                {/foreach}
+                                            </tr>
+                                        </tfoot>
+                                    </table>
 								{else}
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
