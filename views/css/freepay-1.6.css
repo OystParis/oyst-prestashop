@@ -79,3 +79,8 @@
     overflow: auto;
     font: message-box;
 }
+
+.need-scroll{
+    overflow: auto;
+    max-width: 100px;
+}

@@ -333,6 +333,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $this->context->controller->addCSS(array(
             $this->path.'views/js/datatables/datatables.min.css',
+//            $this->path.'views/js/datatables/datatables.min-1.10.15.css',
         ));
 
         $this->context->controller->addJS(array(
@@ -340,6 +341,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->path.'views/js/handleShipment.js',
             $this->path.'views/js/logManagement.js',
             $this->path.'views/js/datatables/datatables.min.js',
+//            $this->path.'views/js/datatables/datatables.min-1.10.15.js',
+//            $this->path.'views/js/datatables/dataTables.fixedColumns.min.js',
         ));
 
         // Check for 1.5 ??
