@@ -228,6 +228,12 @@ class OneClickService extends AbstractOystService
             $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY'));
             $oneClickOrdersParams->setShouldReinitBuffer(false);
 
+            if ($controller == 'order') {
+                $oneClickOrdersParams->setIsCartCheckout(true);
+            } else {
+                $oneClickOrdersParams->setIsCartCheckout(false);
+            }
+
             $this->logger->info(
                 sprintf(
                     'New notification oneClickOrdersParams [%s]',
