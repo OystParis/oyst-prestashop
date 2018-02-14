@@ -171,3 +171,8 @@ div.tab-content {
 #shipment-model .margin-form, .shipment-item .margin-form {
     padding-left: 160px;
 }
+
+.need-scroll{
+    overflow: auto;
+    max-width: 100px;
+}

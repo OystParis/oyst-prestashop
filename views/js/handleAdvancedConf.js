@@ -44,10 +44,24 @@ $(document).ready(function() {
     handleExportCatalogButton(currentTab);
 
     $('#payment_notifications').DataTable({
-        "processing": true,
-        "serverSide": true,
-        "ajax": notification_bo_url+"&action=getNotifications"
+        scrollX: true,
+        scrollCollapse: true,
+        processing: true,
+        serverSide: true,
+        ajax: notification_bo_url+"&action=getNotifications",
+        "columnDefs": [
+            {className: "need-scroll", "targets": [5]}
+        ],
+        language: {
+            url: module_dir+'/views/js/datatables/localisation/fr_FR.json'
+        }
     });
+
+    $('#tab-notification').on('click', function(){
+        //Redraw the dataTable with the click otherwise the header is bugged because it is generated while being hidden
+        $('#payment_notifications').DataTable().draw();
+    });
+
 });
 
 function handleExportCatalogButton(clickedTab) {
