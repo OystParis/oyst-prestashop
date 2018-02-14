@@ -25,6 +25,7 @@ use Oyst\Controller\OneClickOrderController;
 use Oyst\Service\Http\CurrentRequest;
 
 require_once dirname(__FILE__).'/../../config/config.inc.php';
+require_once dirname(__FILE__).'/../../init.php';
 require dirname(__FILE__).'/oyst.php';
 
 $logger = new \Oyst\Service\Logger\FileLogger();

@@ -73,6 +73,7 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
             'restriction_languages' => $restriction_languages,
             'shouldAsStock' => Configuration::get('FC_OYST_SHOULD_AS_STOCK'),
             'oyst_error' => $this->module->l('There isn\'t enough product in stock.'),
+            'controller' => Context::getContext()->controller->php_self
         ));
 
         if (_PS_VERSION_ >= '1.6.0.0') {
