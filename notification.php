@@ -24,6 +24,7 @@ use Oyst\Service\Http\CurrentRequest;
 use Oyst\Controller\OrderController;
 use Oyst\Controller\ShipmentController;
 use Oyst\Controller\StockController;
+use Oyst\Factory\AbstractOrderServiceFactory;
 
 require_once dirname(__FILE__).'/../../config/config.inc.php';
 require_once dirname(__FILE__).'/oyst.php';
@@ -52,9 +53,20 @@ if ($data && isset($data['event'])) {
         switch ($data['event']) {
             case 'order.new':
             case 'order.v2.new':
+                $oyst = new Oyst();
+                $context = Context::getContext();
+                $orderService = AbstractOrderServiceFactory::get($oyst, $context);
                 $orderController = new OrderController($request);
-                $orderController->setLogger($logger);
-                $orderController->createNewOrderAction();
+                $orderId = $data['data']['order_id'];
+                $orderExist = $orderService->getOrderRepository()->getOrderExist($orderId);
+
+                if ($orderExist == 0) {
+                    $orderController->setLogger($logger);
+                    $orderController->createNewOrderAction();
+                } else {
+                    $this->logger->critical(sprintf("Error order exist: [%s]", json_encode($json['data'])));
+                    header("HTTP/1.1 200 OK");
+                }
                 break;
             case 'order.shipments.get':
                 $shipmentController = new ShipmentController($request);
