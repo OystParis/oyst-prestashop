@@ -17,7 +17,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-{if $oneClickActivated && $restriction_currencies && $restriction_languages && $controller == 'order'}
+{if $oneClickActivated && $restriction_currencies && $restriction_languages && $btnCart && $controller == 'order'}
     {if version_compare($smarty.const._PS_VERSION_,'1.6','<')}
         <script src="{$JSOystOneClickCart|escape:'html':'UTF-8'}"></script>
         <script src="{$JSOneClickUrl|escape:'html':'UTF-8'}"></script>

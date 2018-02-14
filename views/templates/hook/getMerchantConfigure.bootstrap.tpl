@@ -466,6 +466,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable button cart' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <input type="checkbox" name="FC_OYST_BTN_CART" value="1"{if $oyst.FC_OYST_BTN_CART} checked="checked"{/if} />
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
                                         <div class="col-md-offset-3 col-lg-offset-3 col-md-7 col-lg-7">
                                             <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-success">
                                                  <strong>{l s='Reset product' mod='oyst'}</strong>
