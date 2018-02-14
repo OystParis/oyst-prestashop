@@ -176,3 +176,7 @@ div.tab-content {
     overflow: auto;
     max-width: 100px;
 }
+
+#payment_notifications_wrapper, #payment_notifications_wrapper .dataTables_scroll{
+    clear: none;
+}

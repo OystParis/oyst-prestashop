@@ -33,7 +33,8 @@
 {/if}
 
 <script>
-    var notification_bo_url = "{$notification_bo_url}";
+    var notification_bo_url = "{$oyst.notification_bo_url}";
+    var module_dir = "{$oyst.module_dir}";
 </script>
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
@@ -184,7 +185,7 @@
                             <li class="tab-row"><a class="tab-page" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
-                            <li class="tab-row"><a class="tab-page" href="#display-notifications">{l s='Notifications' mod='oyst'}</a></li>
+                            <li class="tab-row" id="tab-notification"><a class="tab-page" href="#display-notifications" >{l s='Notifications' mod='oyst'}</a></li>
                         </ul>
                     </div>
                     <div id="moduleContainer" class="tab-content-sub">
@@ -395,10 +396,22 @@
                         </div>
                         <div id="display-notifications" class="tab-pane-sub" style="display:none;">
 						    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                                <label>{l s='Notifications' mod='oyst'}</label>
-                                <div class="margin-form">
-
-                                </div>
+                                <table id="payment_notifications" class="display nowrap" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        {foreach from=$oyst.payment_notification_head item=col_name}
+                                            <th>{$col_name}</th>
+                                        {/foreach}
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        {foreach from=$oyst.payment_notification_head item=col_name}
+                                            <th>{$col_name}</th>
+                                        {/foreach}
+                                    </tr>
+                                    </tfoot>
+                                </table>
                             {else}
                                 <div class="warn">
                                     <ul>
@@ -446,8 +459,7 @@
 
 <script>
     var currentTab = "{$oyst.current_tab|escape:'html':'UTF-8'}";
-</script>
-<script>
+
     $(function() {
         var logManagement = new LogManagement(window.location.href);
         logManagement.initBackend();
