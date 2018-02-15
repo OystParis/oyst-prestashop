@@ -196,6 +196,10 @@ class OneClickService extends AbstractOystService
             'store_id' => (int)Context::getContext()->shop->id
         );
 
+        if ($controller == 'order') {
+            $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
+        }
+
         if (!isset($data['error'])) {
             $oystUser = null;
             $customer = $this->context->customer;
@@ -229,9 +233,9 @@ class OneClickService extends AbstractOystService
             $oneClickOrdersParams->setShouldReinitBuffer(false);
 
             if ($controller == 'order') {
-                $oneClickOrdersParams->setIsCartCheckout(true);
+                $oneClickOrdersParams->setIsCheckoutCart(true);
             } else {
-                $oneClickOrdersParams->setIsCartCheckout(false);
+                $oneClickOrdersParams->setIsCheckoutCart(false);
             }
 
             $this->logger->info(
