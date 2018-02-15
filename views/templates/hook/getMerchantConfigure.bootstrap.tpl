@@ -539,6 +539,25 @@
                                     </div>
                                 {/if}
                             </div>
+                            <div role="tabpanel" id="display-notifications" class="tab-pane">
+							    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">Tables</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="table_selector" id="table-selector">
+                                                {foreach from=$oyst.notification_tables item=notification_table}
+                                                    <option value="{$notification_table}">{$notification_table}</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <table id="notification-table" class="display nowrap" cellspacing="0" width="100%"></table>
+								{else}
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
                         </div>
                     </div>
                 </div>
