@@ -245,14 +245,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $restriction_languages = array();
         }
 
-        // Get notifications
-        $payment_notification_head = [];
-        $results = Db::getInstance()->executeS("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '"._DB_PREFIX_."oyst_payment_notification' AND TABLE_SCHEMA = '"._DB_NAME_."'");
-        foreach ($results as $key => $result) {
-            if ($result['COLUMN_NAME'] == 'id_oyst_payment_notification')
-                $result['COLUMN_NAME'] = 'id';
-            $payment_notification_head[] = $result['COLUMN_NAME'];
-        }
+        // Table list for notification datatable
+        $notification_tables = array(
+            _DB_PREFIX_.'oyst_payment_notification',
+            _DB_PREFIX_.'oyst_api_order',
+        );
 
         $assign['logsFile'] = $filesName;
         $assign['hasApiKey']     = $hasApiKey;
@@ -284,8 +281,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['order_state']              = OrderState::getOrderStates($id_lang);
         $assign['languages']                = Language::getLanguages(false);
         $assign['restriction_languages']    = $restriction_languages;
-        $assign['payment_notification_head']= $payment_notification_head;
-
+        $assign['notification_tables']      = $notification_tables;
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
 
