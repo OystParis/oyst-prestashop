@@ -396,22 +396,17 @@
                         </div>
                         <div id="display-notifications" class="tab-pane-sub" style="display:none;">
 						    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                                <table id="payment_notifications" class="display nowrap" cellspacing="0" width="100%">
-                                    <thead>
-                                    <tr>
-                                        {foreach from=$oyst.payment_notification_head item=col_name}
-                                            <th>{$col_name}</th>
-                                        {/foreach}
-                                    </tr>
-                                    </thead>
-                                    <tfoot>
-                                    <tr>
-                                        {foreach from=$oyst.payment_notification_head item=col_name}
-                                            <th>{$col_name}</th>
-                                        {/foreach}
-                                    </tr>
-                                    </tfoot>
-                                </table>
+                                <div>
+                                    <label>Tables</label>
+                                    <div class="margin-form">
+                                        <select name="table_selector" id="table-selector">
+                                            {foreach from=$oyst.notification_tables item=notification_table}
+                                                <option value="{$notification_table}">{$notification_table}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                                <table id="notification-table" class="display nowrap" cellspacing="0" width="100%"></table>
                             {else}
                                 <div class="warn">
                                     <ul>

@@ -36,19 +36,39 @@ switch (Tools::getValue('action')) {
         $response['state'] = true;
         break;
 
-    case 'getNotifications':
+    case 'getNotificationsColumns':
+        if (!Tools::getIsset('table'))
+            break;
 
-        $table = _DB_PREFIX_.'oyst_payment_notification';
-        $primaryKey = 'id_oyst_payment_notification';
-
-        // Array of database columns which should be read and sent back to DataTables.
-        // The `db` parameter represents the column name in the database, while the `dt`
-        // parameter represents the DataTables column identifier.
-        $columns = [];
-        $results = Db::getInstance()->executeS("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$table."' AND TABLE_SCHEMA = '"._DB_NAME_."'");
+        $table = pSQL(Tools::getValue('table'));
+        $results = Db::getInstance()->executeS("SHOW COLUMNS FROM ".$table."");
+        $column_names = array();
         foreach ($results as $key => $result) {
+            $column_names[] = $result['Field'];
+        }
+        $response['cols'] = $column_names;
+        break;
+    case 'getNotificationsData':
+
+        if (!Tools::getIsset('table'))
+            die(json_encode(array()));
+
+        $table = pSQL(Tools::getValue('table'));
+        $results = Db::getInstance()->executeS("SHOW COLUMNS FROM ".$table."");
+
+        $columns = array();
+
+        //Fallback if no primary key
+        $primaryKey = $results[0]['Field'];
+        foreach ($results as $key => $result) {
+            if ($result['Key'] == 'PRI')
+                $primaryKey = $result['Field'];
+
+            // Array of database columns which should be read and sent back to DataTables.
+            // The `db` parameter represents the column name in the database, while the `dt`
+            // parameter represents the DataTables column identifier.
             $columns[] = array(
-                'db' => $result['COLUMN_NAME'],
+                'db' => $result['Field'],
                 'dt' => $key
             );
         }

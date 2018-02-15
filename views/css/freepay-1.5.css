@@ -172,11 +172,11 @@ div.tab-content {
     padding-left: 160px;
 }
 
-.need-scroll{
-    overflow: auto;
-    max-width: 100px;
+#notification-table_wrapper, #notification-table_wrapper .dataTables_scroll{
+    clear: none;
 }
 
-#payment_notifications_wrapper, #payment_notifications_wrapper .dataTables_scroll{
-    clear: none;
+#notification-table tr td{
+    max-width:200px;
+    overflow: auto;
 }

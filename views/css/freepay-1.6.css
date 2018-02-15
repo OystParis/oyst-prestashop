@@ -80,7 +80,7 @@
     font: message-box;
 }
 
-.need-scroll{
+#notification-table tr td{
+    max-width:200px;
     overflow: auto;
-    max-width: 100px;
 }
