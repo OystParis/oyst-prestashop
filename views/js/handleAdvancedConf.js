@@ -81,8 +81,6 @@ $(document).ready(function() {
 
     $('#tab-notification').on('click', function(){
         $('#table-selector').change();
-        //Redraw the dataTable with the click otherwise the header is bugged because it is generated while being hidden
-        // $('#notification-table').DataTable().draw();
     });
 
 });
