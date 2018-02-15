@@ -43,7 +43,7 @@ function OystOneClick(url, productId) {
     this.marginRightBtn = '0px';
     this.positionBtn = 'before';
     this.idBtnAddToCart = 'add_to_cart';
-    this.idBtnSmartBtn = 'add_to_cart button';
+    this.idBtnSmartBtn = '#add_to_cart button';
     this.preload = 1;
     this.shouldAsStock = 0;
     this.errorText = 'There isn\'t enough product in stock.';
@@ -90,12 +90,12 @@ function OystOneClick(url, productId) {
 
     this.setWidthBtn = function (widthBtn) {
         if (this.smartBtn) {
-            if (this.widthBtn) {
+            if (widthBtn) {
                 this.widthBtn = widthBtn;
             } else {
-                this.widthBtn = $('#'+this.idBtnSmartBtn).width()+'px';
+                this.widthBtn = $(this.idBtnSmartBtn).width()+'px';
             }
-        } else if (this.widthBtn) {
+        } else if (widthBtn) {
             this.widthBtn = widthBtn;
         } else {
             this.widthBtn = "230px";
@@ -104,12 +104,12 @@ function OystOneClick(url, productId) {
 
     this.setHeightBtn = function (heightBtn) {
         if (this.smartBtn) {
-            if (this.heightBtn) {
+            if (heightBtn) {
                 this.heightBtn = heightBtn;
             } else {
-                this.heightBtn = $('#'+this.idBtnSmartBtn).height()+'px';
+                this.heightBtn = $(this.idBtnSmartBtn).height()+'px';
             }
-        } else if (this.heightBtn) {
+        } else if (heightBtn) {
             this.heightBtn = heightBtn;
         } else {
             this.heightBtn = "60px";

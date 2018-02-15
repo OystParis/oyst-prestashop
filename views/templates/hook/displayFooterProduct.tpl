@@ -31,6 +31,7 @@
             oyst.setProductQuantity({$productQuantity|intval});
             oyst.setSmartBtn({$smartBtn|intval});
             oyst.setBorderBtn({$borderBtn|intval});
+            oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
             oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
             oyst.setColorBtn("{$colorBtn|escape:'html':'UTF-8'}");
             oyst.setWidthBtn("{$widthBtn|escape:'html':'UTF-8'}");
@@ -40,7 +41,6 @@
             oyst.setMarginRightBtn("{$marginRightBtn|escape:'html':'UTF-8'}");
             oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
             oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
-            oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
             oyst.setShouldAskStock({$shouldAsStock|intval});
             oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
             oyst.prepareButton();
