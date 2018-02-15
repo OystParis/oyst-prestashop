@@ -31,6 +31,7 @@
             oyst.setProductQuantity({$productQuantity|intval});
             oyst.setSmartBtn({$smartBtn|intval});
             oyst.setBorderBtn({$borderBtn|intval});
+            oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
             oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
             oyst.setColorBtn("{$colorBtn|escape:'html':'UTF-8'}");
             oyst.setWidthBtn("{$widthBtn|escape:'html':'UTF-8'}");
