@@ -36,13 +36,14 @@ function OystOneClick(url, productId) {
     this.borderBtn = true;
     this.themeBtn = 'normal';
     this.colorBtn = '#E91E63';
-    this.widthBtn = '230px';
-    this.heightBtn = '60px';
+    this.widthBtn = '';
+    this.heightBtn = '';
     this.marginTopBtn = '0px';
     this.marginLeftBtn = '0px';
     this.marginRightBtn = '0px';
     this.positionBtn = 'before';
     this.idBtnAddToCart = 'add_to_cart';
+    this.idBtnSmartBtn = 'add_to_cart button';
     this.preload = 1;
     this.shouldAsStock = 0;
     this.errorText = 'There isn\'t enough product in stock.';
@@ -89,17 +90,29 @@ function OystOneClick(url, productId) {
 
     this.setWidthBtn = function (widthBtn) {
         if (this.smartBtn) {
-            this.widthBtn = $('#add_to_cart button').width()+'px';
-        } else {
+            if (this.widthBtn) {
+                this.widthBtn = widthBtn;
+            } else {
+                this.widthBtn = $('#'+this.idBtnSmartBtn).width()+'px';
+            }
+        } else if (this.widthBtn) {
             this.widthBtn = widthBtn;
+        } else {
+            this.widthBtn = "230px";
         }
     }
 
     this.setHeightBtn = function (heightBtn) {
         if (this.smartBtn) {
-            this.heightBtn = $('#add_to_cart button').height()+'px';
-        } else {
+            if (this.heightBtn) {
+                this.heightBtn = heightBtn;
+            } else {
+                this.heightBtn = $('#'+this.idBtnSmartBtn).height()+'px';
+            }
+        } else if (this.heightBtn) {
             this.heightBtn = heightBtn;
+        } else {
+            this.heightBtn = "60px";
         }
     }
 
@@ -121,6 +134,10 @@ function OystOneClick(url, productId) {
 
     this.setIdBtnAddToCart = function (idBtnAddToCart) {
         this.idBtnAddToCart = idBtnAddToCart;
+    }
+
+    this.setIdSmartBtn = function (idBtnSmartBtn) {
+        this.idBtnSmartBtn = idBtnSmartBtn;
     }
 
     this.setErrorText = function (errorText) {

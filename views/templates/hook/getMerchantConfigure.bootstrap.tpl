@@ -389,6 +389,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id smart btn' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_SMART_BTN" value="{if $oyst.FC_OYST_ID_SMART_BTN}{$oyst.FC_OYST_ID_SMART_BTN|escape:'htmlall':'UTF-8'}{else}add_to_cart button{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
                                         <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
                                             <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
                                                <strong>{l s='Reset' mod='oyst'}</strong>
