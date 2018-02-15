@@ -254,6 +254,14 @@
                         </div>
                         <div id="custom-btn" class="tab-pane-sub" style="display:none;">
                             {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                <label>{l s='Smart button' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_SMART_BTN" value="1"{if $oyst.FC_OYST_SMART_BTN} checked="checked"{/if} />
+                                </div>
+                                <label>{l s='Border rounded' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_BORDER_BTN" value="1"{if $oyst.FC_OYST_BORDER_BTN} checked="checked"{/if} />
+                                </div>
                                 <label>{l s='Style btn 1-Click' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <select name="FC_OYST_THEME_BTN">
@@ -279,18 +287,18 @@
                                     <br>
                                     <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
                                 </div>
-										  <label class="control-label col-md-3 col-lg-3">{l s='Margin top' mod='oyst'}</label>
-										  <div class="margin-form">
-											 	<input type="text" name="FC_OYST_MARGIN_TOP_BTN" value="{$oyst.FC_OYST_MARGIN_TOP_BTN|escape:'htmlall':'UTF-8'}"/>
-											 	<br>
-											 	<span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
-										  </div>
-										  <label class="control-label col-md-3 col-lg-3">{l s='Margin left' mod='oyst'}</label>
-										  <div class="margin-form">
-												<input type="text" name="FC_OYST_MARGIN_LEFT_BTN" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN|escape:'htmlall':'UTF-8'}"/>
-											 	<br>
-											 	<span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
-										  </div>
+                                <label class="control-label col-md-3 col-lg-3">{l s='Margin top' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_MARGIN_TOP_BTN" value="{$oyst.FC_OYST_MARGIN_TOP_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label class="control-label col-md-3 col-lg-3">{l s='Margin left' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_MARGIN_LEFT_BTN" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
                                 <label class="control-label col-md-3 col-lg-3">{l s='Margin right' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
@@ -314,6 +322,8 @@
                                     </button>
                                 </div>
                             {else}
+                                <input type="hidden" name="FC_OYST_SMART_BTN" value="{$oyst.FC_OYST_SMART_BTN|intval}"/>
+                                <input type="hidden" name="FC_OYST_BORDER_BTN" value="{$oyst.FC_OYST_BORDER_BTN|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
@@ -380,6 +390,8 @@
                                     </button>
                                 </div>
                             {else}
+                                <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
+                                <input type="hidden" name="FC_OYST_SHOULD_AS_STOCK" value="{$oyst.FC_OYST_SHOULD_AS_STOCK|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
@@ -403,6 +415,9 @@
                                     </table>
                                 </div>
                             {else}
+                                {foreach $oyst.languages as $lang}
+                                    <input style="display:none;" name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox">
+                                {/foreach}
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>

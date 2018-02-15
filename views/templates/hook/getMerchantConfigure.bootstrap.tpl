@@ -396,6 +396,8 @@
                                         </div>
                                     </div>
                                 {else}
+                                    <input type="hidden" name="FC_OYST_SMART_BTN" value="{$oyst.FC_OYST_SMART_BTN|intval}"/>
+                                    <input type="hidden" name="FC_OYST_BORDER_BTN" value="{$oyst.FC_OYST_BORDER_BTN|intval}"/>
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>
@@ -468,6 +470,8 @@
                                         </div>
                                     </div>
                                 {else}
+                                    <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
+                                    <input type="hidden" name="FC_OYST_SHOULD_AS_STOCK" value="{$oyst.FC_OYST_SHOULD_AS_STOCK|intval}"/>
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>
@@ -496,6 +500,9 @@
                                         </div>
                                     </div>
                                 {else}
+                                    {foreach $oyst.languages as $lang}
+                                        <input style="display:none;" name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox">
+                                    {/foreach}
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>
