@@ -168,7 +168,16 @@ class OrderService extends AbstractOystService
     {
 
         // PS core used this context anywhere.. So we need to fill it properly
-        $this->context->cart = $cart = new Cart();
+        // if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['id_cart'])) {
+        //     $id_cart = $oystOrderInfo['context']['id_cart'];
+        //     $cart = new Cart($id_cart);
+        //     foreach ($cart->getProducts() as $p) {
+        //         $cart->deleteProduct($p['id_product'], $p['id_product_attribute']);
+        //     }
+        //     $this->context->cart = $cart;
+        // } else {
+            $this->context->cart = $cart = new Cart();
+        // }
         $this->context->customer = $customer;
         $this->context->currency = new Currency(Currency::getIdByIsoCode($oystOrderInfo['order_amount']['currency']));
 
