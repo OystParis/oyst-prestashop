@@ -375,6 +375,10 @@
                                 <div class="margin-form">
                                     <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
                                 </div>
+                                <label>{l s='Enabled button product' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_BTN_PRODUCT" value="1"{if $oyst.FC_OYST_BTN_PRODUCT} checked="checked"{/if} />
+                                </div>
                                 <label>{l s='Manage quantity' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_MANAGE_QUANTITY" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY} checked="checked"{/if} />
@@ -387,6 +391,10 @@
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_BTN_CART" value="1"{if $oyst.FC_OYST_BTN_CART} checked="checked"{/if} />
                                 </div>
+                                <label>{l s='Manage quantity for cart' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_MANAGE_QUANTITY_CART" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY_CART} checked="checked"{/if} />
+                                </div>
                                 <div class="margin-form">
                                     <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">
                                         {l s='Reset product' mod='oyst'}
@@ -398,8 +406,10 @@
                                     </button>
                                 </div>
                             {else}
+                                <input type="hidden" name="FC_OYST_BTN_PRODUCT" value="{$oyst.FC_OYST_BTN_PRODUCT|intval}"/>
                                 <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
                                 <input type="hidden" name="FC_OYST_SHOULD_AS_STOCK" value="{$oyst.FC_OYST_SHOULD_AS_STOCK|intval}"/>
+                                <input type="hidden" name="FC_OYST_MANAGE_QUANTITY_CART" value="{$oyst.FC_OYST_MANAGE_QUANTITY_CART|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>

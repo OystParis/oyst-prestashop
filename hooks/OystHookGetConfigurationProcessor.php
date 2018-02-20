@@ -69,6 +69,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_SHOULD_AS_STOCK'         => 'int',
         'FC_OYST_MANAGE_QUANTITY'         => 'int',
         'FC_OYST_BTN_CART'                => 'int',
+        'FC_OYST_MANAGE_QUANTITY_CART'    => 'int',
+        'FC_OYST_BTN_PRODUCT'             => 'int',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_SANDBOX_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
