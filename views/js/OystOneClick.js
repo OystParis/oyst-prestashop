@@ -42,7 +42,7 @@ function OystOneClick(url, productId) {
     this.marginLeftBtn = '0px';
     this.marginRightBtn = '0px';
     this.positionBtn = 'before';
-    this.idBtnAddToCart = 'add_to_cart';
+    this.idBtnAddToCart = '#add_to_cart';
     this.idBtnSmartBtn = '#add_to_cart button';
     this.preload = 1;
     this.shouldAsStock = 0;
@@ -50,43 +50,43 @@ function OystOneClick(url, productId) {
 
     this.setExportedCombinations = function (combinations) {
         this.combinations = combinations;
-    }
+    };
 
     this.setPreload = function (preload) {
         this.preload = preload;
-    }
+    };
 
     this.setShouldAskStock = function (shouldAsStock) {
         this.shouldAsStock = shouldAsStock;
-    }
+    };
 
     this.setStockManagement = function (stockManagement) {
         this.stockManagement = stockManagement;
-    }
+    };
 
     this.setAllowOosp = function (allowOosp) {
         this.allowOosp = allowOosp;
-    }
+    };
 
     this.setProductQuantity = function (productQuantity) {
         this.productQuantity = productQuantity;
-    }
+    };
 
     this.setSmartBtn = function (smartBtn) {
         this.smartBtn = smartBtn;
-    }
+    };
 
     this.setBorderBtn = function (borderBtn) {
         this.borderBtn = borderBtn;
-    }
+    };
 
     this.setThemeBtn = function (themeBtn) {
         this.themeBtn = themeBtn;
-    }
+    };
 
     this.setColorBtn = function (colorBtn) {
         this.colorBtn = colorBtn;
-    }
+    };
 
     this.setWidthBtn = function (widthBtn) {
         if (this.smartBtn) {
@@ -100,7 +100,7 @@ function OystOneClick(url, productId) {
         } else {
             this.widthBtn = "230px";
         }
-    }
+    };
 
     this.setHeightBtn = function (heightBtn) {
         if (this.smartBtn) {
@@ -114,7 +114,7 @@ function OystOneClick(url, productId) {
         } else {
             this.heightBtn = "60px";
         }
-    }
+    };
 
     this.setMarginTopBtn = function (marginTopBtn) {
         this.marginTopBtn = marginTopBtn;
@@ -130,19 +130,19 @@ function OystOneClick(url, productId) {
 
     this.setPositionBtn = function (positionBtn) {
         this.positionBtn = positionBtn;
-    }
+    };
 
     this.setIdBtnAddToCart = function (idBtnAddToCart) {
         this.idBtnAddToCart = idBtnAddToCart;
-    }
+    };
 
     this.setIdSmartBtn = function (idBtnSmartBtn) {
         this.idBtnSmartBtn = idBtnSmartBtn;
-    }
+    };
 
     this.setErrorText = function (errorText) {
         this.errorText = errorText;
-    }
+    };
 
     /**
      * Return json with the product information to avoid any redundant code.
@@ -210,17 +210,17 @@ function OystOneClick(url, productId) {
     this.prepareButton = function () {
         // Avoid any event issue due to potential remove / create from loaded oyst script
         if (this.positionBtn == 'after') {
-            $('#'+this.idBtnAddToCart+', .add_to_cart').after($('<div>', {
+            $(this.idBtnAddToCart).after($('<div>', {
                 id: 'oneClickContainer'
             }));
         } else {
-            $('#'+this.idBtnAddToCart+', .add_to_cart').before($('<div>', {
+            $(this.idBtnAddToCart).before($('<div>', {
                 id: 'oneClickContainer'
             }));
         }
 
         $('#oneClickContainer').css({
-            'margi-top': this.marginTopBtn,
+            'margin-top': this.marginTopBtn,
             'margin-left': this.marginLeftBtn,
             'margin-right': this.marginRightBtn
         }).append($('<div>', {
