@@ -278,6 +278,9 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
         Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
         Configuration::updateValue('FC_OYST_SMART_BTN', 1);
+        Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
+        Configuration::updateValue('FC_OYST_BTN_PRODUCT', 1);
+
     }
 
     public function loadSQLFile($sql_file)
