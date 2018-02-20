@@ -149,6 +149,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d656fc298c72d199a2bc5
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_29ef41c7619b3b7056a3af9068ab4567'] = 'Activer gestion des stocks';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3e757c5a82a0bbe8b6eac15d7530614e'] = 'Activer bouton page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e13b27dfd442724dc5e3dfcc00c11b4f'] = 'Activer bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e51c9d66405ad052f47710a86d327d28'] = 'Désactiver bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_578c69a9e28d2854ec76d91a682f6df5'] = 'Restrictions des langues';
@@ -223,6 +224,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_d656fc298c72d199a2bc51867206b68
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_29ef41c7619b3b7056a3af9068ab4567'] = 'Activer gestion des stocks';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_3e757c5a82a0bbe8b6eac15d7530614e'] = 'Activer bouton page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e13b27dfd442724dc5e3dfcc00c11b4f'] = 'Activer bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e51c9d66405ad052f47710a86d327d28'] = 'Désactiver bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_578c69a9e28d2854ec76d91a682f6df5'] = 'Restrictions des langues';
