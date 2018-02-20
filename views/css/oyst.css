@@ -1,3 +1,6 @@
-#oneClickContainer
+.cart_navigation #oneClickContainer
 {
+    display: inline-block;
+    float: right;
+    margin-right: 10px;
 }

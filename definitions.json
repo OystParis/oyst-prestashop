@@ -16,7 +16,8 @@
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
             "actionOrderStatusPostUpdate",
-            "actionCarrierUpdate"
+            "actionCarrierUpdate",
+            "displayShoppingCart"
         ],
         "1.6" : [
             "advancedPaymentOptions"
@@ -68,6 +69,9 @@
         "FC_OYST_DELAY": "15",
         "FC_OYST_ACTIVE_FRAUD": "0",
         "FC_OYST_STATE_PAYMENT_FREEPAY": "2",
-        "FC_OYST_STATE_PAYMENT_ONECLICK": "2"
+        "FC_OYST_STATE_PAYMENT_ONECLICK": "2",
+        "FC_OYST_BTN_CART": "0",
+        "FC_OYST_MANAGE_QUANTITY_CART": "0",
+        "FC_OYST_BTN_PRODUCT": "1"
     }
 }

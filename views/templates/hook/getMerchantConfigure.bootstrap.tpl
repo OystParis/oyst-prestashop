@@ -454,6 +454,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enabled button product' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <input type="checkbox" name="FC_OYST_BTN_PRODUCT" value="1"{if $oyst.FC_OYST_BTN_PRODUCT} checked="checked"{/if} />
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Manage quantity' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
                                             <input type="checkbox" name="FC_OYST_MANAGE_QUANTITY" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY} checked="checked"{/if} />
@@ -463,6 +469,18 @@
                                         <label class="control-label col-md-3 col-lg-3">{l s='Enable advanced stock' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
                                             <input type="checkbox" name="FC_OYST_SHOULD_AS_STOCK" value="1"{if $oyst.FC_OYST_SHOULD_AS_STOCK} checked="checked"{/if} />
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable button cart' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <input type="checkbox" name="FC_OYST_BTN_CART" value="1"{if $oyst.FC_OYST_BTN_CART} checked="checked"{/if} />
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Manage quantity for cart' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <input type="checkbox" name="FC_OYST_MANAGE_QUANTITY_CART" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY_CART} checked="checked"{/if} />
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
@@ -476,8 +494,10 @@
                                         </div>
                                     </div>
                                 {else}
+                                    <input type="hidden" name="FC_OYST_BTN_PRODUCT" value="{$oyst.FC_OYST_BTN_PRODUCT|intval}"/>
                                     <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
                                     <input type="hidden" name="FC_OYST_SHOULD_AS_STOCK" value="{$oyst.FC_OYST_SHOULD_AS_STOCK|intval}"/>
+                                    <input type="hidden" name="FC_OYST_MANAGE_QUANTITY_CART" value="{$oyst.FC_OYST_MANAGE_QUANTITY_CART|intval}"/>
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>

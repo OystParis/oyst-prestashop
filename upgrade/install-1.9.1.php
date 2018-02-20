@@ -25,14 +25,10 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
  * @param Oyst $module
  * @return bool
  */
-function upgrade_module_1_9_0($module)
+function upgrade_module_1_9_1($module)
 {
-    Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN', '');
-    Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN', '');
-    Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN', '');
-    Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', 'add_to_cart');
-    Configuration::updateValue('FC_OYST_ID_SMART_BTN', '#add_to_cart button');
-    Configuration::updateValue('FC_OYST_BTN_CART', 0);
+    Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
+    Configuration::updateValue('FC_OYST_BTN_PRODUCT', 1);
 
     return true;
 }
