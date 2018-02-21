@@ -26,6 +26,7 @@ use Exception;
 use Oyst\Classes\OystUser;
 use Oyst\Classes\OneClickOrderParams;
 use Oyst\Classes\OneClickNotifications;
+use Oyst\Classes\OneClickCustomization;
 use Oyst\Service\Http\CurrentRequest;
 use Product;
 use Validate;
@@ -36,6 +37,7 @@ use Configuration as ConfigurationP;
 use Oyst\Factory\AbstractExportProductServiceFactory;
 use Tools;
 use StockAvailable;
+use Module;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -57,7 +59,8 @@ class OneClickService extends AbstractOystService
         OneClickNotifications $notifications = null,
         OystUser $user = null,
         OneClickOrderParams $orderParams = null,
-        $context = null
+        $context = null,
+        OneClickCustomization $customization = null
     ) {
         if (!is_array($productLess)) {
             $products[] = $productLess;
@@ -70,7 +73,7 @@ class OneClickService extends AbstractOystService
             $user,
             $orderParams,
             $context,
-            null
+            $customization
         ));
 
         $apiClient = $this->requester->getApiClient();
@@ -109,6 +112,7 @@ class OneClickService extends AbstractOystService
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
         $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
         $load = (int)$request->getRequestItem('preload');
+        $labelCta = $request->getRequestItem('labelCta');
 
         if ($controller == 'order') {
             $products = Context::getContext()->cart->getProducts();
@@ -247,6 +251,20 @@ class OneClickService extends AbstractOystService
                 )
             );
 
+            if ($labelCta && $labelCta != '' && $controller == 'order') {
+                $glue = '&';
+                if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
+                    $glue = '?';
+                }
+                $url = Context::getContext()->link->getModuleLink('oyst', 'oneclickreturn').$glue.'id_cart='.Context::getContext()->cart->id.'&key='.ConfigurationP::get('FC_OYST_HASH_KEY');
+                // $url = Context::getContext()->link->getPageLink('order-confirmation').$glue.'id_cart='.Context::getContext()->cart->id.'&id_module='.Module::getModuleIdByName('oyst').'&key='.$customer->secure_key;
+
+                $oneClickCustomization = new OneClickCustomization();
+                $oneClickCustomization->setCta($labelCta, $url);
+            } else {
+                $oneClickCustomization = null;
+            }
+
             $oneClickNotifications = new OneClickNotifications();
             $oneClickNotifications->setShouldAskShipments(true);
             $oneClickNotifications->setShouldAskStock(ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK'));
@@ -281,7 +299,8 @@ class OneClickService extends AbstractOystService
                 $oneClickNotifications,
                 $oystUser,
                 $oneClickOrdersParams,
-                $oystContext
+                $oystContext,
+                $oneClickCustomization
             );
             $data = array_merge($data, $result);
         }

@@ -65,18 +65,24 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
             'stockManagement' => Configuration::get('PS_STOCK_MANAGEMENT'),
             'oneClickActivated' => (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
-            'smartBtn' => Configuration::get('FC_OYST_SMART_BTN'),
-            'borderBtn' => Configuration::get('FC_OYST_BORDER_BTN'),
-            'themeBtn' => Configuration::get('FC_OYST_THEME_BTN'),
-            'colorBtn' => Configuration::get('FC_OYST_COLOR_BTN'),
-            'widthBtn' => Configuration::get('FC_OYST_WIDTH_BTN'),
-            'heightBtn' => Configuration::get('FC_OYST_HEIGHT_BTN'),
+            'smartBtn' => Configuration::get('FC_OYST_SMART_BTN_CART'),
+            'borderBtn' => Configuration::get('FC_OYST_BORDER_BTN_CART'),
+            'themeBtn' => Configuration::get('FC_OYST_THEME_BTN_CART'),
+            'colorBtn' => Configuration::get('FC_OYST_COLOR_BTN_CART'),
+            'widthBtn' => Configuration::get('FC_OYST_WIDTH_BTN_CART'),
+            'heightBtn' => Configuration::get('FC_OYST_HEIGHT_BTN_CART'),
+            'marginTopBtn' => Configuration::get('FC_OYST_MARGIN_TOP_BTN_CART'),
+            'marginLeftBtn' => Configuration::get('FC_OYST_MARGIN_LEFT_BTN_CART'),
+            'marginRightBtn' => Configuration::get('FC_OYST_MARGIN_RIGHT_BTN_CART'),
+            'idBtnCart' => Configuration::get('FC_OYST_ID_BTN_CART'),
             'btnCart' => Configuration::get('FC_OYST_BTN_CART'),
+            'styles_custom' => $this->addButtonWrapperStyles(),
             'restriction_currencies' => $restriction_currencies,
             'restriction_languages' => $restriction_languages,
             'shouldAsStock' => Configuration::get('FC_OYST_SHOULD_AS_STOCK'),
             'oyst_error' => $this->module->l('There isn\'t enough product in stock.'),
-            'controller' => Context::getContext()->controller->php_self
+            'controller' => Context::getContext()->controller->php_self,
+            'oyst_label_cta' => $this->module->l('Finish order.')
         ));
 
         if (_PS_VERSION_ >= '1.6.0.0') {
@@ -96,5 +102,18 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
         ));
 
         return $this->module->fcdisplay(__FILE__, 'displayShoppingCart.tpl');
+    }
+
+    public function addButtonWrapperStyles()
+    {
+        $styles = Configuration::get('FC_OYST_CUSTOM_CSS');
+
+        if (!$styles && $styles != '') {
+            return null;
+        }
+
+        $styles = rtrim($styles, " \n\r;");
+
+        return $styles;
     }
 }

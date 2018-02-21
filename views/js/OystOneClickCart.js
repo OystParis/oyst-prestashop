@@ -28,52 +28,100 @@ function OystOneClickCart(url, controller)
 
     this.url = url;
     this.controller = controller;
-    this.button = 'standard-checkout';
+    this.idBtnCart = '.standard-checkout';
     this.smartBtn = true;
     this.borderBtn = true;
     this.themeBtn = 'normal';
     this.colorBtn = '#E91E63';
     this.widthBtn = '230px';
     this.heightBtn = '60px';
+    this.marginTopBtn = '0px';
+    this.marginLeftBtn = '0px';
+    this.marginRightBtn = '0px';
+    this.labelCta = 'Finish order.';
     this.preload = 1;
 
     this.setPreload = function (preload) {
         this.preload = preload;
-    }
+    };
 
     this.setThemeBtn = function (themeBtn) {
         this.themeBtn = themeBtn;
-    }
+    };
 
     this.setColorBtn = function (colorBtn) {
         this.colorBtn = colorBtn;
-    }
+    };
 
     this.setWidthBtn = function (widthBtn) {
-        this.widthBtn = $('.'+this.button).width()+'px';
-    }
+        if (this.smartBtn) {
+            if (widthBtn) {
+                this.widthBtn = widthBtn;
+            } else {
+                this.widthBtn = $(this.idBtnCart).width()+'px';
+            }
+        } else if (widthBtn) {
+            this.widthBtn = widthBtn;
+        } else {
+            this.widthBtn = "230px";
+        }
+    };
 
     this.setHeightBtn = function (heightBtn) {
-        this.heightBtn = $('.'+this.button).outerHeight()+'px';
-    }
+        if (this.smartBtn) {
+            if (heightBtn) {
+                this.heightBtn = heightBtn;
+            } else {
+                this.heightBtn = $(this.idBtnCart).outerHeight()+'px';
+            }
+        } else if (heightBtn) {
+            this.heightBtn = heightBtn;
+        } else {
+            this.heightBtn = "60px";
+        }
+    };
 
     this.setSmartBtn = function (smartBtn) {
         this.smartBtn = smartBtn;
-    }
+    };
 
     this.setBorderBtn = function (borderBtn) {
         this.borderBtn = borderBtn;
+    };
+
+    this.setMarginTopBtn = function (marginTopBtn) {
+        this.marginTopBtn = marginTopBtn;
+    };
+
+    this.setMarginLeftBtn = function (marginLeftBtn) {
+        this.marginLeftBtn = marginLeftBtn;
+    };
+
+    this.setMarginRightBtn = function (marginRightBtn) {
+        this.marginRightBtn = marginRightBtn;
+    };
+
+    this.setIdBtnCart = function (idBtnCart) {
+        this.idBtnCart = idBtnCart;
     }
+
+    this.setLabelCta = function (labelCta) {
+        this.labelCta = labelCta;
+    };
 
     /**
      * Initialize requirements
      */
     this.prepareButton = function () {
-        $('.'+this.button).after($('<div>', {
+        $(this.idBtnCart).after($('<div>', {
             id: 'oneClickContainer'
         }));
 
-        $('#oneClickContainer').append($('<div>', {
+        $('#oneClickContainer').css({
+            'margin-top': this.marginTopBtn,
+            'margin-left': this.marginLeftBtn,
+            'margin-right': this.marginRightBtn
+        }).append($('<div>', {
             id: 'oyst-1click-button'
         }).attr(
             'data-theme',
@@ -110,6 +158,7 @@ function OystOneClickCart(url, controller)
             params.preload = this.preload;
         }
 
+        params.labelCta = this.labelCta;
         params.oneClick = true;
         params.token = '{SuggestToAddSecurityToken}';
 
