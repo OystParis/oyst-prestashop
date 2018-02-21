@@ -474,6 +474,19 @@ class OrderRepository extends AbstractOystRepository
     }
 
     /**
+     * For OneClick
+     * @param $orderGuid
+     * @return int
+     */
+    public function getOrderId($orderGuid)
+    {
+        return (int)$this->db->getValue('
+            SELECT orderId
+            FROM '._DB_PREFIX_.'oyst_api_order
+            WHERE orderGUID = "'.pSQL($orderGuid).'"');
+    }
+
+    /**
      * For FreePay
      * @param $orderId
      * @return string
