@@ -29,6 +29,21 @@ function upgrade_module_1_9_1($module)
 {
     Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
     Configuration::updateValue('FC_OYST_BTN_PRODUCT', 1);
+    Configuration::updateValue('FC_OYST_OC_REDIRECT_CONF', '');
+    Configuration::updateValue('FC_OYST_OC_REDIRECT_CONF_CUSTOM', '');
+
+    // Add conf custom btn cart
+    Configuration::updateValue('FC_OYST_THEME_BTN_CART', '');
+    Configuration::updateValue('FC_OYST_COLOR_BTN_CART', '#E91E63');
+    Configuration::updateValue('FC_OYST_WIDTH_BTN_CART', '');
+    Configuration::updateValue('FC_OYST_HEIGHT_BTN_CART', '');
+    Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_CART', '');
+    Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_CART', '');
+    Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_CART', '');
+    Configuration::updateValue('FC_OYST_ID_BTN_CART', '.standard-checkout');
+    Configuration::updateValue('FC_OYST_BORDER_BTN_CART', '');
+    Configuration::updateValue('FC_OYST_SMART_BTN_CART', '');
+    Configuration::updateValue('FC_OYST_CUSTOM_CSS', '');
 
     return true;
 }

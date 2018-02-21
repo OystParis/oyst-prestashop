@@ -61,6 +61,17 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_POSITION_BTN'            => 'string',
         'FC_OYST_ID_BTN_ADD_TO_CART'      => 'string',
         'FC_OYST_ID_SMART_BTN'            => 'string',
+        'FC_OYST_BORDER_BTN_CART'         => 'int',
+        'FC_OYST_SMART_BTN_CART'          => 'int',
+        'FC_OYST_THEME_BTN_CART'          => 'string',
+        'FC_OYST_COLOR_BTN_CART'          => 'string',
+        'FC_OYST_WIDTH_BTN_CART'          => 'string',
+        'FC_OYST_HEIGHT_BTN_CART'         => 'string',
+        'FC_OYST_MARGIN_TOP_BTN_CART'     => 'string',
+        'FC_OYST_MARGIN_LEFT_BTN_CART'    => 'string',
+        'FC_OYST_MARGIN_RIGHT_BTN_CART'   => 'string',
+        'FC_OYST_POSITION_BTN_CART'       => 'string',
+        'FC_OYST_ID_BTN_CART'             => 'string',
         'FC_OYST_DELAY'                   => 'int',
         'FC_OYST_STATE_PAYMENT_FREEPAY'   => 'string',
         'FC_OYST_STATE_PAYMENT_ONECLICK'  => 'string',
@@ -71,6 +82,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_BTN_CART'                => 'int',
         'FC_OYST_MANAGE_QUANTITY_CART'    => 'int',
         'FC_OYST_BTN_PRODUCT'             => 'int',
+        'FC_OYST_OC_REDIRECT_CONF'        => 'string',
+        'FC_OYST_OC_REDIRECT_CONF_CUSTOM' => 'string',
+        'FC_OYST_CUSTOM_CSS'              => 'string',
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_SANDBOX_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
@@ -94,6 +108,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
     /** @var array  */
     public $redirect_cancel_urls = array();
 
+    /** @var array  */
+    public $redirect_oc_conf_urls = array();
+
     public function init()
     {
         if (Configuration::get('FC_OYST_HASH_KEY') == '') {
@@ -110,6 +127,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             'PAYMENT_ERROR' => $this->module->l('Payment error', 'oysthookgetconfigurationprocessor'),
             'CART'          => $this->module->l('Cart', 'oysthookgetconfigurationprocessor'),
             'CUSTOM'        => $this->module->l('Custom', 'oysthookgetconfigurationprocessor')
+        );
+        $this->redirect_oc_conf_urls = array(
+            // 'ORDER_HISTORY'      => $this->module->l('Order history', 'oysthookgetconfigurationprocessor'),
+            'ORDER_CONFIRMATION' => $this->module->l('Order confirmation', 'oysthookgetconfigurationprocessor'),
+            'CUSTOM'             => $this->module->l('Custom', 'oysthookgetconfigurationprocessor')
         );
     }
 
@@ -167,6 +189,20 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_ID_SMART_BTN', '#add_to_cart button');
             Configuration::updateValue('FC_OYST_BORDER_BTN', '');
             Configuration::updateValue('FC_OYST_SMART_BTN', '');
+        }
+
+        if (Tools::isSubmit('submitOystResetCustomCart')) {
+            Configuration::updateValue('FC_OYST_THEME_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_COLOR_BTN_CART', '#E91E63');
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_ID_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_BORDER_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_SMART_BTN_CART', '');
         }
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {
@@ -276,8 +312,10 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['configureLink']            = $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name;
         $assign['redirect_success_urls']    = $this->redirect_success_urls;
         $assign['redirect_error_urls']      = $this->redirect_error_urls;
+        $assign['redirect_oc_conf_urls']    = $this->redirect_oc_conf_urls;
         $assign['custom_success_error']     = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM'));
         $assign['custom_error_error']       = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
+        $assign['custom_conf_error']        = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM'));
         $assign['carrier_list']             = $this->getCarrierList();
         $assign['type_list']                = $shipmentTypes;
         $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
