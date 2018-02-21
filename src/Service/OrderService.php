@@ -78,8 +78,9 @@ class OrderService extends AbstractOystService
      * @param array $oystAddress
      * @return Address
      */
-    private function getInvoiceAddress(Customer $customer, $oystAddress)
+    private function getInvoiceAddress(Customer $customer, $oystUser)
     {
+        $oystAddress = $oystUser['address'];
         $address = $this->addressRepository->findAddress($oystAddress);
         if (!Validate::isLoadedObject($address)) {
             $countryId = (int)CountryCore::getByIso('fr');
@@ -95,6 +96,7 @@ class OrderService extends AbstractOystService
             $address->city = $oystAddress['city'];
             $address->alias = 'OystAddress';
             $address->id_country = $countryId;
+            $address->phone_mobile = $oystUser['phone'];
 
             if (isset($oystAddress['company_name'])) {
                 $address->company = $oystAddress['company_name'];
@@ -114,7 +116,7 @@ class OrderService extends AbstractOystService
      * @param $shipmentInfo
      * @return Address
      */
-    private function getPickupStoreAddress($shipmentInfo)
+    private function getPickupStoreAddress($shipmentInfo, $phone = '0600000000')
     {
         $pickupAddress = $shipmentInfo['pickup_store']['address'];
         $pickupId = $shipmentInfo['pickup_store']['id'];
@@ -144,6 +146,7 @@ class OrderService extends AbstractOystService
             $address->alias = $alias;
             $address->id_country = $countryId;
             $address->other = 'Pickup Info #'.$pickupId.' type '.$carrierInfo['type'];
+            $address->phone_number = $phone;
 
             $address->add();
         }
@@ -326,11 +329,12 @@ class OrderService extends AbstractOystService
                 $data['error'] = 'Customer not found or can\'t be found';
             }
 
-            $invoiceAddress = $this->getInvoiceAddress($customer, $oystOrderInfo['user']['address']);
+            $invoiceAddress = $this->getInvoiceAddress($customer, $oystOrderInfo['user']);
             if (!Validate::isLoadedObject($invoiceAddress)) {
                 $data['error'] = 'Address not found or can\'t be created';
             }
 
+            //Fix for retroactivity for missing phone bug
             if ($invoiceAddress->phone_mobile == '') {
                 $invoiceAddress->phone_mobile = $oystOrderInfo['user']['phone'];
                 $invoiceAddress->update();
@@ -339,7 +343,7 @@ class OrderService extends AbstractOystService
             if (!isset($oystOrderInfo['shipment']['pickup_store'])) {
                 $deliveryAddress = $invoiceAddress;
             } else {
-                $deliveryAddress = $this->getPickupStoreAddress($oystOrderInfo['shipment']);
+                $deliveryAddress = $this->getPickupStoreAddress($oystOrderInfo['shipment'], $oystOrderInfo['user']['phone']);
             }
 
             if (!isset($data['error'])) {
