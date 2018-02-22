@@ -23,9 +23,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{capture name=path}{l s='Order confirmation'}{/capture}
+{capture name=path}{l s='Order confirmation' mod='oyst'}{/capture}
 
-<h1 class="page-heading">{l s='Order confirmation'}</h1>
+<h1 class="page-heading">{l s='Order confirmation' mod='oyst'}</h1>
 
 {assign var='current_step' value='payment'}
 {include file="$tpl_dir./order-steps.tpl"}
@@ -34,7 +34,7 @@
 <p class="alert alert-success">{l s='Your order on %s is complete.' sprintf=$shop_name mod='oyst'}</p>
 
 <div class="box">
-    <p>{l s='Your order ID is:'} <strong>{$id_order_formatted}</strong> . {l s='Your order ID has been sent via email.' mod='oyst'}</p>
+    <p>{l s='Your order ID is:' mod='oyst'} <strong>{$id_order_formatted}</strong> . {l s='Your order ID has been sent via email.' mod='oyst'}</p>
 </div>
 <p class="cart_navigation exclusive">
 	<a class="button-exclusive btn btn-default" href="{$link->getPageLink('history', true)|escape:'html':'UTF-8'}" title="{l s='Go to your order history page' mod='oyst'}"><i class="icon-chevron-left"></i>{l s='View your order history' mod='oyst'}</a>

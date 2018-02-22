@@ -45,7 +45,7 @@
     </script>
     {if $styles_custom}
         <style>
-            {$styles_custom}
+            {$styles_custom|escape:'html':'UTF-8'}
         </style>
     {/if}
 {/if}
