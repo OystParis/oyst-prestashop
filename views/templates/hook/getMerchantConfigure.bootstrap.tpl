@@ -212,6 +212,7 @@
                             <ul class="nav nav-pills nav-stacked" role="tablist">
                                 <li role="presentation" class="active"><a role="tab" data-toggle="tab" href="#conf-oc"/>{l s='Configuration One-click' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn"/>{l s='Custom of button' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn-preview"/>{l s='Custom of button preview' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-carrier" />{l s='Settings carrier' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-advanced" />{l s='Settings advanced' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-restrictions" />{l s='Settings restrictions' mod='oyst'}</a></li>
@@ -409,6 +410,71 @@
                                     </div>
                                 {/if}
                             </div>
+                            <div role="tabpanel" id="custom-btn-preview" class="tab-pane">
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_WIDTH_BTN_QV" value="{$oyst.FC_OYST_WIDTH_BTN_QV|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_HEIGHT_BTN_QV" value="{$oyst.FC_OYST_HEIGHT_BTN_QV|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin top' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_TOP_BTN_QV" value="{$oyst.FC_OYST_MARGIN_TOP_BTN_QV|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin left' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_LEFT_BTN_QV" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN_QV|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin right' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN_QV" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN_QV|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Position btn 1-Click' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_POSITION_BTN_QV">
+                                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN_QV == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN_QV == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Custom CSS' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <textarea name="FC_OYST_CUSTOM_CSS_QV" rows="10">{if $oyst.FC_OYST_CUSTOM_CSS_QV}{$oyst.FC_OYST_CUSTOM_CSS_QV|escape:'htmlall':'UTF-8'}{/if}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
+                                            <button type="submit" value="1" name="submitOystResetCustomPreview" class="btn btn-info module_form_reset_btn">
+                                               <strong>{l s='Reset' mod='oyst'}</strong>
+                                           </button>
+                                        </div>
+                                    </div>
+                                {else}
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
                             <div role="tabpanel" id="settings-carrier" class="tab-pane">
                                 {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                                     <div class="form-group clearfix">
@@ -463,6 +529,12 @@
                                         <label class="control-label col-md-3 col-lg-3">{l s='Enable advanced stock' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
                                             <input type="checkbox" name="FC_OYST_SHOULD_AS_STOCK" value="1"{if $oyst.FC_OYST_SHOULD_AS_STOCK} checked="checked"{/if} />
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable btn preview' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <input type="checkbox" name="FC_OYST_ACTIVE_BTN_QV" value="1"{if $oyst.FC_OYST_ACTIVE_BTN_QV} checked="checked"{/if} />
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
