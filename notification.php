@@ -57,15 +57,35 @@ if ($data && isset($data['event'])) {
                 $context = Context::getContext();
                 $orderService = AbstractOrderServiceFactory::get($oyst, $context);
                 $orderController = new OrderController($request);
-                $orderId = $data['data']['order_id'];
-                $orderExist = $orderService->getOrderRepository()->getOrderExist($orderId);
+                $orderGUID = $data['data']['order_id'];
+                $orderExist = $orderService->getOrderRepository()->getOrderExist($orderGUID);
 
                 if ($orderExist == 0) {
                     $orderController->setLogger($logger);
                     $orderController->createNewOrderAction();
                 } else {
-                    $this->logger->critical(sprintf("Error order exist: [%s]", json_encode($json['data'])));
+                    $orderId = $orderService->getOrderRepository()->getOrderId($orderGUID);
+                    $order = new Order($orderId);
+                    $response = json_encode(
+                        array(
+                            "prestashop_order_id" => ".$order->id.",
+                            "message" => "notification has been already processed."
+                        )
+                    );
+
+                    $insert   = array(
+                        'id_order'   => (int)$order->id,
+                        'id_cart'    => (int)$order->id_cart,
+                        'payment_id' => pSQL($orderGUID),
+                        'event_code' => pSQL($data['event']),
+                        'event_data' => $response,
+                        'date_event' => date('Y-m-d H:i:s'),
+                        'date_add'   => date('Y-m-d H:i:s'),
+                    );
+                    Db::getInstance()->insert('oyst_payment_notification', $insert);
+                    $logger->critical(sprintf("Error order exist: [%s]", json_encode($data['data'])));
                     header("HTTP/1.1 200 OK");
+                    echo $response;
                 }
                 break;
             case 'order.shipments.get':
