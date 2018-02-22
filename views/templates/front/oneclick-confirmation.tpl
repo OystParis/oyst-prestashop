@@ -23,10 +23,10 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{capture name=path}{l s='Order confirmation'}{/capture}
+{capture name=path}{l s='Order confirmation' mod='oyst'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h1>{l s='Order confirmation'}</h1>
+<h1>{l s='Order confirmation' mod='oyst'}</h1>
 
 {assign var='current_step' value='payment'}
 {include file="$tpl_dir./order-steps.tpl"}
@@ -37,7 +37,7 @@
 <p>
     {l s='Your order on %s is complete.' sprintf=$shop_name mod='oyst'}
     <br /><br />
-    {l s='Your order ID is:'} <strong>{$id_order_formatted}</strong> . {l s='Your order ID has been sent to you via e-mail.'}
+    {l s='Your order ID is:' mod='oyst'} <strong>{$id_order_formatted}</strong> . {l s='Your order ID has been sent to you via e-mail.' mod='oyst'}
 </p>
 
-<a href="{$link->getPageLink('history', true)}" title="{l s='Back to orders'}"><img src="{$img_dir}icon/order.gif" alt="{l s='Back to orders'}" class="icon" /></a>
+<a href="{$link->getPageLink('history', true)}" title="{l s='Back to orders'}"><img src="{$img_dir}icon/order.gif" alt="{l s='Back to orders' mod='oyst'}" class="icon" /></a>

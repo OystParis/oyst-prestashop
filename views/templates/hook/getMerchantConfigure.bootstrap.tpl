@@ -495,7 +495,7 @@
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Custom CSS' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <textarea name="FC_OYST_CUSTOM_CSS">{if $oyst.FC_OYST_CUSTOM_CSS}{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}{/if}</textarea>
+                                            <textarea name="FC_OYST_CUSTOM_CSS" rows="10">{if $oyst.FC_OYST_CUSTOM_CSS}{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}{/if}</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">

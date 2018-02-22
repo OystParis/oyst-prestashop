@@ -203,6 +203,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '');
             Configuration::updateValue('FC_OYST_BORDER_BTN_CART', '');
             Configuration::updateValue('FC_OYST_SMART_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_CUSTOM_CSS', '');
         }
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {

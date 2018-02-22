@@ -17,6 +17,7 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
+{capture name=path}{l s='Order return' mod='oyst'}{/capture}
 
 <div>
     <p><img src="{$base_dir|escape:'html':'UTF-8'}img/loader.gif" />
