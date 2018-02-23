@@ -160,7 +160,7 @@ function OystOneClick(url, productId) {
     };
 
     /**
-     * Check is the product is available
+     * Check if the product is available
      * @returns {boolean}
      */
     this.isProductAvailable = function () {
@@ -293,10 +293,29 @@ function OystOneClick(url, productId) {
         var params = this.getSelectedProduct();
 
         if (this.preload) {
-          params.preload = this.preload;
-          this.setPreload(0);
+            params.preload = this.preload;
+            this.setPreload(0);
         } else {
-          params.preload = this.preload;
+            params.preload = this.preload;
+            if (Object.keys(this.combinations).length > 0 && $('#idCombination').val() == ''){
+                var error_msg = 'Please select an attribute';
+                if (!!$.prototype.fancybox) {
+                    $.fancybox.open([
+                        {
+                            type: 'inline',
+                            autoScale: true,
+                            minHeight: 30,
+                            content: '<p class="fancybox-error">' + error_msg + '</p>'
+                        }
+                    ], {
+                        padding: 0
+                    });
+                    return;
+                } else {
+                    alert(error_msg);
+                    return;
+                }
+            }
         }
 
         params.oneClick = true;
