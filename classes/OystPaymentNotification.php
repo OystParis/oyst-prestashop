@@ -51,11 +51,17 @@ class OystPaymentNotification extends ObjectModel
     /** @var string Event Data */
     public $event_data;
 
+    /** @var string Status */
+    public $status;
+
     /** @var string Date Event */
     public $date_event;
 
     /** @var string Date Import */
     public $date_add;
+
+    /** @var string Date update */
+    public $date_upd;
 
     /**
      * @see ObjectModel::$definition
@@ -70,8 +76,10 @@ class OystPaymentNotification extends ObjectModel
             'payment_id' => array('type' => TYPE_STRING, 'required' => true, 'size' => 128),
             'event_code' => array('type' => TYPE_STRING, 'required' => true, 'size' => 128),
             'event_data' => array('type' => TYPE_STRING, 'required' => true, 'size' => 128),
+            'status' => array('type' => TYPE_STRING, 'required', 'size' => 255),
             'date_event' => array('type' => TYPE_DATE, 'validate' => 'isDate'),
             'date_add' => array('type' => TYPE_DATE, 'validate' => 'isDate', 'copy_post' => false),
+            'date_upd' => array('type' => TYPE_DATE, 'validate' => 'isDate', 'copy_post' => false),
         ),
     );
 

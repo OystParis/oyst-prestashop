@@ -144,6 +144,18 @@ class InstallManager
         return $this->db->execute($query);
     }
 
+    /**
+     * @return bool
+     */
+    public function dropNotificationTable()
+    {
+        $query = "
+            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_payment_notification;
+        ";
+
+        return $this->db->execute($query);
+    }
+
     public function truncateProductTable()
     {
         $query = "TRUNCATE "._DB_PREFIX_."oyst_product";
@@ -177,6 +189,7 @@ class InstallManager
         $this->dropOrderTable();
         $this->dropShipmentTable();
         $this->dropProductTable();
+        $this->dropNotificationTable();
 
         // Remove anything at the end
         $this->removeConfiguration();
