@@ -132,6 +132,14 @@ class ProductTransformer extends AbstractTransformer
             foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
                 $images[] = $link->getImageLink($product->link_rewrite, $image['id_image']);
             }
+
+            //If no image for attribute, search default product image
+            if (empty($images)) {
+                foreach (Image::getImages($this->context->language->id, $product->id) as $image) {
+                    $images[] = $link->getImageLink($product->link_rewrite, $image['id_image']);
+                }
+            }
+
             // Information
             $attributesInfo = $this->productRepository->getAttributesCombination($combination);
             foreach ($attributesInfo as $attributeInfo) {
