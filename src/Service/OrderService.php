@@ -96,6 +96,7 @@ class OrderService extends AbstractOystService
             $address->city = $oystAddress['city'];
             $address->alias = 'OystAddress';
             $address->id_country = $countryId;
+            $address->phone = $oystUser['phone'];
             $address->phone_mobile = $oystUser['phone'];
 
             if (isset($oystAddress['company_name'])) {
@@ -146,7 +147,8 @@ class OrderService extends AbstractOystService
             $address->alias = $alias;
             $address->id_country = $countryId;
             $address->other = 'Pickup Info #'.$pickupId.' type '.$carrierInfo['type'];
-            $address->phone_number = $phone;
+            $address->phone = $oystUser['phone'];
+            $address->phone_mobile = $phone;
 
             $address->add();
         }
@@ -332,8 +334,9 @@ class OrderService extends AbstractOystService
                 $data['error'] = 'Address not found or can\'t be created';
             }
 
-            //Fix for retroactivity for missing phone bug
-            if ($invoiceAddress->phone_mobile == '') {
+            //Fix for retroactivity for missing phone bug or phone
+            if ($invoiceAddress->phone_mobile == '' || $invoiceAddress->phone == '') {
+                $invoiceAddress->phone = $oystOrderInfo['user']['phone'];
                 $invoiceAddress->phone_mobile = $oystOrderInfo['user']['phone'];
                 $invoiceAddress->update();
             }
