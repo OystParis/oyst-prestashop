@@ -196,9 +196,7 @@ class OrderService extends AbstractOystService
             $product = new Product((int)$productInfo['productId']);
 
             if ($product->advanced_stock_management == 0  && PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK')) {
-                $qty_available = StockAvailable::getQuantityAvailableByProduct($productInfo['productId'], $productInfo['combinationId']);
-                $new_qty = $qty_available + $productInfo['quantity'];
-                StockAvailable::setQuantity($productInfo['productId'], $productInfo['combinationId'], $new_qty);
+                StockAvailable::updateQuantity($productInfo['productId'], $productInfo['combinationId'], $productInfo['quantity']);
             }
 
             if (!$cart->updateQty($productInfo['quantity'], $productInfo['productId'], $productInfo['combinationId'])) {

@@ -60,9 +60,7 @@ class StockService extends AbstractOystService
                 $product = new Product($idProduct);
 
                 if ($product->advanced_stock_management == 0) {
-                    $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
-                    $new_qty = $qty_available + $qty;
-                    StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                    StockAvailable::updateQuantity($idProduct, $idCombination, $qty);
                 }
             }
 
@@ -96,7 +94,7 @@ class StockService extends AbstractOystService
                 $qty_available = StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination);
                 $new_qty = $qty_available - $qty;
                 if (StockAvailable::outOfStock($idProduct) === 1 || $new_qty >= 0) {
-                    StockAvailable::setQuantity($idProduct, $idCombination, $new_qty);
+                    StockAvailable::updateQuantity($idProduct, $idCombination, -$qty);
                     $oneClickStock = new OneClickStock(1, $data['product_reference']);
                 } else {
                     $oneClickStock = new OneClickStock(0, $data['product_reference']);
