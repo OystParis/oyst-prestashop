@@ -38,7 +38,7 @@ function OystOneClickCart(url, controller)
     this.marginTopBtn = '0px';
     this.marginLeftBtn = '0px';
     this.marginRightBtn = '0px';
-    this.labelCta = 'Finish order.';
+    this.labelCta = 'Return shop.';
     this.preload = 1;
 
     this.setPreload = function (preload) {

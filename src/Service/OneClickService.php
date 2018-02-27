@@ -112,7 +112,11 @@ class OneClickService extends AbstractOystService
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
         $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
         $load = (int)$request->getRequestItem('preload');
-        $labelCta = $request->getRequestItem('labelCta');
+        if ($request->hasRequest('labelCta')) {
+            $labelCta = $request->getRequestItem('labelCta');
+        } else {
+            $labelCta = false;
+        }
 
         if ($controller == 'order') {
             $products = Context::getContext()->cart->getProducts();
@@ -174,17 +178,17 @@ class OneClickService extends AbstractOystService
                     $data['error'] = 'Bad quantity';
                 }
 
+                $productLess[] = $exportProductService->transformProductLess(
+                    $idProduct,
+                    $idCombination,
+                    $quantity
+                );
+
                 // Check preload, and update quantity
                 $load = (int)$request->getRequestItem('preload');
                 if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
                     if ($product->advanced_stock_management == 0) {
                         StockAvailable::updateQuantity($idProduct, $idCombination, -(int)$quantity);
-
-                        $productLess[] = $exportProductService->transformProductLess(
-                            $idProduct,
-                            $idCombination,
-                            $quantity
-                        );
                     }
                 }
             }
