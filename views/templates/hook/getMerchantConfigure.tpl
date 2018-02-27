@@ -32,6 +32,11 @@
     <p class="error"><strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError|escape:'htmlall':'UTF-8'}</p>
 {/if}
 
+<script>
+    var notification_bo_url = "{$oyst.notification_bo_url}";
+    var module_dir = "{$oyst.module_dir}";
+</script>
+
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
     <div class="oyst configuration">
         <div class="header">
@@ -180,6 +185,7 @@
                             <li class="tab-row"><a class="tab-page" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
+                            <li class="tab-row" id="tab-notification"><a class="tab-page" href="#display-notifications" >{l s='Notifications' mod='oyst'}</a></li>
                         </ul>
                     </div>
                     <div id="moduleContainer" class="tab-content-sub">
@@ -429,6 +435,27 @@
                                 </div>
                             {/if}
                         </div>
+                        <div id="display-notifications" class="tab-pane-sub" style="display:none;">
+						    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                <div>
+                                    <label>Tables</label>
+                                    <div class="margin-form">
+                                        <select name="table_selector" id="table-selector">
+                                            {foreach from=$oyst.notification_tables item=notification_table}
+                                                <option value="{$notification_table}">{$notification_table}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                                <table id="notification-table" class="display nowrap" cellspacing="0" width="100%"></table>
+                            {else}
+                                <div class="warn">
+                                    <ul>
+                                        <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+                                    </ul>
+                                </div>
+                            {/if}
+                        </div>
                         <div class="margin-form">
                             <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
                                 {l s='Save' mod='oyst'}
@@ -468,8 +495,7 @@
 
 <script>
     var currentTab = "{$oyst.current_tab|escape:'html':'UTF-8'}";
-</script>
-<script>
+
     $(function() {
         var logManagement = new LogManagement(window.location.href);
         logManagement.initBackend();

@@ -35,6 +35,56 @@ switch (Tools::getValue('action')) {
         $oyst = (new Oyst())->setAdminPanelInformationVisibility(false);
         $response['state'] = true;
         break;
+
+    case 'getNotificationsColumns':
+        if (!Tools::getIsset('table'))
+            break;
+
+        $table = pSQL(Tools::getValue('table'));
+        $results = Db::getInstance()->executeS("SHOW COLUMNS FROM ".$table."");
+        $column_names = array();
+        foreach ($results as $key => $result) {
+            $column_names[] = $result['Field'];
+        }
+        $response['cols'] = $column_names;
+        break;
+    case 'getNotificationsData':
+
+        if (!Tools::getIsset('table'))
+            die(json_encode(array()));
+
+        $table = pSQL(Tools::getValue('table'));
+        $results = Db::getInstance()->executeS("SHOW COLUMNS FROM ".$table."");
+
+        $columns = array();
+
+        //Fallback if no primary key
+        $primaryKey = $results[0]['Field'];
+        foreach ($results as $key => $result) {
+            if ($result['Key'] == 'PRI')
+                $primaryKey = $result['Field'];
+
+            // Array of database columns which should be read and sent back to DataTables.
+            // The `db` parameter represents the column name in the database, while the `dt`
+            // parameter represents the DataTables column identifier.
+            $columns[] = array(
+                'db' => $result['Field'],
+                'dt' => $key
+            );
+        }
+
+        $sql_details = array(
+            'user' => _DB_USER_,
+            'pass' => _DB_PASSWD_,
+            'db'   => _DB_NAME_,
+            'host' => _DB_SERVER_
+        );
+
+        require(_PS_MODULE_DIR_.'oyst/views/js/datatables/ssp.class.php');
+
+        $response = SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns);
+        break;
+
 }
 
 echo json_encode($response);

@@ -42,6 +42,47 @@ $(document).ready(function() {
     });
 
     handleExportCatalogButton(currentTab);
+
+    $('#table-selector').on('change', function(){
+        $.ajax({
+            type: "GET",
+            url: notification_bo_url+"&action=getNotificationsColumns&table="+$('#table-selector').val(),
+            dataType: "json",
+            success: function (data) {
+                var cols = '<tr>';
+                for (var i = 0; i < data.cols.length; i++){
+                    cols += '<td>'+data.cols[i]+'</td>';
+                }
+                var table = $('#notification-table');
+
+                if ($.fn.dataTable.isDataTable(table)) {
+                    table.DataTable().clear();
+                    table.DataTable().destroy();
+
+                }
+
+                table.html('<thead>'+cols+'</thead><tfoot>'+cols+'</tfoot>');
+                table.DataTable({
+                    scrollX: true,
+                    scrollCollapse: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: notification_bo_url+"&action=getNotificationsData&table="+$('#table-selector').val(),
+                    language: {
+                        url: module_dir+'/views/js/datatables/localisation/fr_FR.json'
+                    }
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+            }
+        });
+    });
+
+    $('#tab-notification').on('click', function(){
+        $('#table-selector').change();
+    });
+
 });
 
 function handleExportCatalogButton(clickedTab) {

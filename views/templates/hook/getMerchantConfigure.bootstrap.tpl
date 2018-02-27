@@ -19,6 +19,11 @@
  *}
 <link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay-1.6.css" media="all">
 
+<script>
+    var notification_bo_url = "{$oyst.notification_bo_url}";
+    var module_dir = "{$oyst.module_dir}";
+</script>
+
 {if isset($oyst.result) && $oyst.result eq 'ok'}
 <div class="bootstrap">
     <div class="alert alert-success">
@@ -74,7 +79,7 @@
         </p>
     </div>
     {/if}
-    <div class="panel" class="oyst_fieldset">
+    <div class="panel oyst_fieldset">
         <div>
             <ul id="oyst-config-menu" class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="{if $oyst.current_tab == '#tab-content-FreePay'}active{/if}"><a href="#tab-content-FreePay" role="tab" data-toggle="tab">{l s='FreePay' mod='oyst'}</a></li>
@@ -210,11 +215,12 @@
                     <div class="row">
                         <div class="col-lg-2 col-md-3">
                             <ul class="nav nav-pills nav-stacked" role="tablist">
-                                <li role="presentation" class="active"><a role="tab" data-toggle="tab" href="#conf-oc"/>{l s='Configuration One-click' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn"/>{l s='Custom of button' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-carrier" />{l s='Settings carrier' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-advanced" />{l s='Settings advanced' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#settings-restrictions" />{l s='Settings restrictions' mod='oyst'}</a></li>
+                                <li role="presentation" class="active"><a role="tab" data-toggle="tab" href="#conf-oc">{l s='Configuration One-click' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#custom-btn">{l s='Custom of button' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
+                                <li role="presentation" class="" id="tab-notification"><a role="tab" data-toggle="tab" href="#display-notifications">{l s='Notifications' mod='oyst'}</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-10 col-md-9 tab-content">
@@ -509,6 +515,25 @@
                                     {foreach $oyst.languages as $lang}
                                         <input style="display:none;" name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox">
                                     {/foreach}
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
+                            <div role="tabpanel" id="display-notifications" class="tab-pane">
+							    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">Tables</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="table_selector" id="table-selector">
+                                                {foreach from=$oyst.notification_tables item=notification_table}
+                                                    <option value="{$notification_table}">{$notification_table}</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <table id="notification-table" class="display nowrap" cellspacing="0" width="100%"></table>
+								{else}
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>

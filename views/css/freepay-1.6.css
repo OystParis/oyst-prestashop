@@ -79,3 +79,8 @@
     overflow: auto;
     font: message-box;
 }
+
+#notification-table tr td{
+    max-width:200px;
+    overflow: auto;
+}

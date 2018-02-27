@@ -171,3 +171,12 @@ div.tab-content {
 #shipment-model .margin-form, .shipment-item .margin-form {
     padding-left: 160px;
 }
+
+#notification-table_wrapper, #notification-table_wrapper .dataTables_scroll{
+    clear: none;
+}
+
+#notification-table tr td{
+    max-width:200px;
+    overflow: auto;
+}

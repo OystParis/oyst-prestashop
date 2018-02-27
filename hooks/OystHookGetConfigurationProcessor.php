@@ -245,6 +245,12 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $restriction_languages = array();
         }
 
+        // Table list for notification datatable
+        $notification_tables = array(
+            _DB_PREFIX_.'oyst_payment_notification',
+            _DB_PREFIX_.'oyst_api_order',
+        );
+
         $assign['logsFile'] = $filesName;
         $assign['hasApiKey']     = $hasApiKey;
         $assign['module_dir']    = $this->path;
@@ -263,6 +269,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['curl_check']               = function_exists('curl_version');
         $assign['payment_notification_url'] = $this->context->link->getModuleLink('oyst', 'paymentNotification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['notification_url']         = $this->context->link->getModuleLink('oyst', 'notification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
+        $assign['notification_bo_url']      = '/modules/oyst/notification-bo.php?key='.Configuration::get('FC_OYST_HASH_KEY');
         $assign['configureLink']            = $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name;
         $assign['redirect_success_urls']    = $this->redirect_success_urls;
         $assign['redirect_error_urls']      = $this->redirect_error_urls;
@@ -274,7 +281,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['order_state']              = OrderState::getOrderStates($id_lang);
         $assign['languages']                = Language::getLanguages(false);
         $assign['restriction_languages']    = $restriction_languages;
-
+        $assign['notification_tables']      = $notification_tables;
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
 
@@ -334,10 +341,15 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             ));
         }
 
+        $this->context->controller->addCSS(array(
+            $this->path.'views/js/datatables/datatables.min.css',
+        ));
+
         $this->context->controller->addJS(array(
             $this->path.'views/js/handleAdvancedConf.js',
             $this->path.'views/js/handleShipment.js',
             $this->path.'views/js/logManagement.js',
+            $this->path.'views/js/datatables/datatables.min.js',
         ));
 
         // Check for 1.5 ??
