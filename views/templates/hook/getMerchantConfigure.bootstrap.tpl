@@ -216,8 +216,9 @@
                         <div class="col-lg-2 col-md-3">
                             <ul class="nav nav-pills nav-stacked" role="tablist">
                                 <li role="presentation" class="active"><a role="tab" data-toggle="tab" href="#conf-oc">{l s='Configuration One-click' mod='oyst'}</a></li>
-                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#custom-btn">{l s='Custom of button' mod='oyst'}</a></li>
-                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn-cart"/>{l s='Custom of button cart' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#custom-btn-general">{l s='Customization of button on global' mod='oyst'}</a></li>
+                                <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#custom-btn">{l s='Button product' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn-cart"/>{l s='Button cart' mod='oyst'}</a></li>
                                 <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
                                 <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
                                 <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
@@ -310,18 +311,40 @@
                                     </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" id="custom-btn" class="tab-pane">
+                            <div role="tabpanel" id="custom-btn-general" class="tab-pane">
                                 {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Smart button' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                            <input type="checkbox" name="FC_OYST_SMART_BTN" value="1"{if $oyst.FC_OYST_SMART_BTN} checked="checked"{/if} />
+                                            {* <input type="checkbox" name="FC_OYST_SMART_BTN" value="1"{if $oyst.FC_OYST_SMART_BTN} checked="checked"{/if} /> *}
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_SMART_BTN" id="FC_OYST_SMART_BTN_ON" value="1" {if $oyst.FC_OYST_SMART_BTN == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_SMART_BTN_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_SMART_BTN" id="FC_OYST_SMART_BTN_OFF" value="0" {if $oyst.FC_OYST_SMART_BTN == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_SMART_BTN_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Border rounded' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                            <input type="checkbox" name="FC_OYST_BORDER_BTN" value="1"{if $oyst.FC_OYST_BORDER_BTN} checked="checked"{/if} />
+                                            {* <input type="checkbox" name="FC_OYST_BORDER_BTN" value="1"{if $oyst.FC_OYST_BORDER_BTN} checked="checked"{/if} /> *}
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_BORDER_BTN" id="FC_OYST_BORDER_BTN_ON" value="1" {if $oyst.FC_OYST_BORDER_BTN == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_BORDER_BTN_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_BORDER_BTN" id="FC_OYST_BORDER_BTN_OFF" value="0" {if $oyst.FC_OYST_BORDER_BTN == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_BORDER_BTN_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
@@ -343,6 +366,39 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Custom CSS' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <textarea name="FC_OYST_CUSTOM_CSS" rows="10">{if $oyst.FC_OYST_CUSTOM_CSS}{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}{/if}</textarea>
+                                        </div>
+                                    </div>
+                                {else}
+                                    <input type="hidden" name="FC_OYST_SMART_BTN" value="{$oyst.FC_OYST_SMART_BTN|intval}"/>
+                                    <input type="hidden" name="FC_OYST_BORDER_BTN" value="{$oyst.FC_OYST_BORDER_BTN|intval}"/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
+                            <div role="tabpanel" id="custom-btn" class="tab-pane">
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enabled button product' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            {* <input type="checkbox" name="FC_OYST_BTN_PRODUCT" value="1"{if $oyst.FC_OYST_BTN_PRODUCT} checked="checked"{/if} /> *}
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_BTN_PRODUCT" id="FC_OYST_BTN_PRODUCT_ON" value="1" {if $oyst.FC_OYST_BTN_PRODUCT == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_PRODUCT_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_BTN_PRODUCT" id="FC_OYST_BTN_PRODUCT_OFF" value="0" {if $oyst.FC_OYST_BTN_PRODUCT == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_PRODUCT_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
@@ -409,8 +465,6 @@
                                         </div>
                                     </div>
                                 {else}
-                                    <input type="hidden" name="FC_OYST_SMART_BTN" value="{$oyst.FC_OYST_SMART_BTN|intval}"/>
-                                    <input type="hidden" name="FC_OYST_BORDER_BTN" value="{$oyst.FC_OYST_BORDER_BTN|intval}"/>
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>
@@ -418,39 +472,6 @@
                             </div>
                             <div role="tabpanel" id="custom-btn-cart" class="tab-pane">
                                 {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                                    <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Smart button' mod='oyst'}</label>
-                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                            <input type="checkbox" name="FC_OYST_SMART_BTN_CART" value="1"{if $oyst.FC_OYST_SMART_BTN_CART} checked="checked"{/if} />
-                                        </div>
-                                    </div>
-                                    <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Border rounded' mod='oyst'}</label>
-                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                            <input type="checkbox" name="FC_OYST_BORDER_BTN_CART" value="1"{if $oyst.FC_OYST_BORDER_BTN_CART} checked="checked"{/if} />
-                                        </div>
-                                    </div>
-                                    <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Style btn 1-Click' mod='oyst'}</label>
-                                        <div class="col-md-7 col-lg-7">
-                                            <select name="FC_OYST_THEME_BTN_CART">
-                                                <option value="normal" {if $oyst.FC_OYST_THEME_BTN_CART == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
-                                                <option value="inversed" {if $oyst.FC_OYST_THEME_BTN_CART == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Color' mod='oyst'}</label>
-                                        <div class="col-lg-7">
-                                            <div class="form-group">
-                                                <div class="col-md-2 col-lg-2">
-                                                    <div class="input-group">
-                                                        <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN_CART"  value="{if $oyst.FC_OYST_COLOR_BTN_CART}{$oyst.FC_OYST_COLOR_BTN_CART|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
@@ -493,12 +514,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Custom CSS' mod='oyst'}</label>
-                                        <div class="col-md-7 col-lg-7">
-                                            <textarea name="FC_OYST_CUSTOM_CSS" rows="10">{if $oyst.FC_OYST_CUSTOM_CSS}{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}{/if}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group clearfix">
                                         <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
                                             <button type="submit" value="1" name="submitOystResetCustomCart" class="btn btn-info module_form_reset_btn">
                                                <strong>{l s='Reset' mod='oyst'}</strong>
@@ -506,8 +521,8 @@
                                         </div>
                                     </div>
                                 {else}
-                                    <input type="hidden" name="FC_OYST_SMART_BTN_CART" value="{$oyst.FC_OYST_SMART_BTN_CART|intval}"/>
-                                    <input type="hidden" name="FC_OYST_BORDER_BTN_CART" value="{$oyst.FC_OYST_BORDER_BTN_CART|intval}"/>
+                                    {* <input type="hidden" name="FC_OYST_SMART_BTN_CART" value="{$oyst.FC_OYST_SMART_BTN_CART|intval}"/>
+                                    <input type="hidden" name="FC_OYST_BORDER_BTN_CART" value="{$oyst.FC_OYST_BORDER_BTN_CART|intval}"/> *}
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>
@@ -569,12 +584,6 @@
                                         <label class="control-label col-md-3 col-lg-3">{l s='Delay' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
                                             <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Enabled button product' mod='oyst'}</label>
-                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                            <input type="checkbox" name="FC_OYST_BTN_PRODUCT" value="1"{if $oyst.FC_OYST_BTN_PRODUCT} checked="checked"{/if} />
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
