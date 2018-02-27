@@ -35,6 +35,7 @@
             oyst.setMarginLeftBtn("{$marginLeftBtn|escape:'html':'UTF-8'}");
             oyst.setMarginRightBtn("{$marginRightBtn|escape:'html':'UTF-8'}");
             oyst.setLabelCta("{$oyst_label_cta|escape:'html':'UTF-8'}");
+            oyst.setIdBtnCart("{$idBtnCart|escape:'html':'UTF-8'}");
             oyst.prepareButton();
 
             window.__OYST__ = window.__OYST__ || {};

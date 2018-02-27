@@ -80,9 +80,9 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
             'restriction_currencies' => $restriction_currencies,
             'restriction_languages' => $restriction_languages,
             'shouldAsStock' => Configuration::get('FC_OYST_SHOULD_AS_STOCK'),
-            'oyst_error' => $this->module->l('There isn\'t enough product in stock.'),
+            'oyst_error' => $this->module->l('There isn\'t enough product in stock.', 'oysthookdisplayshoppingcartprocessor'),
             'controller' => Context::getContext()->controller->php_self,
-            'oyst_label_cta' => $this->module->l('Finish order.')
+            'oyst_label_cta' => $this->module->l('Return shop.', 'oysthookdisplayshoppingcartprocessor')
         ));
 
         if (_PS_VERSION_ >= '1.6.0.0') {
