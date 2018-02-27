@@ -35,12 +35,17 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         if (Tools::getValue('key') != Configuration::get('FC_OYST_HASH_KEY')) {
-            die('Secure key is invalid');
+            header("HTTP/1.1 400 Bad Request");
+            die(Tools::jsonEncode(array('result' => 'ko', 'error' => 'Bad API key')));
         }
 
         $event_data = trim(str_replace("'", '', Tools::file_get_contents('php://input')));
         $event_data = Tools::jsonDecode($event_data, true);
 
+        if (empty($event_data)) {
+            header("HTTP/1.1 400 Bad Request");
+            die(Tools::jsonEncode(array('result' => 'ko', 'error' => 'Bad json')));
+        }
         // We store the notification
         $notification_item = $event_data['notification'];
         $id_cart  = $notification_item['order_id'];
@@ -175,6 +180,9 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                         );
                         Db::getInstance()->insert('oyst_payment_notification', $insert);
                         break;
+                    default :
+                        header("HTTP/1.1 400 Bad Request");
+                        die(Tools::jsonEncode(array('result' => 'ko', 'error' => 'Unknown event_code')));
                 }
             } else {
                 switch ($notification_item['event_code']) {
@@ -209,13 +217,18 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                         }
                         // $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
                         break;
+                    default :
+                        header("HTTP/1.1 400 Bad Request");
+                        die(Tools::jsonEncode(array('result' => 'ko', 'error' => 'Unknown event_code')));
                 }
             }
         } catch (Exception $e) {
             $this->module->log($e->getMessage());
+            header("HTTP/1.1 400 Bad Request");
             die(Tools::jsonEncode(array('result' => 'ko', 'error' => $e->getMessage())));
         }
 
+        header("HTTP/1.1 200 OK");
         die(Tools::jsonEncode(array('result' => 'ok')));
     }
 
