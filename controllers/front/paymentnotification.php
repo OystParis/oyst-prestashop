@@ -42,7 +42,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
         $event_data = trim(str_replace("'", '', Tools::file_get_contents('php://input')));
         $event_data = Tools::jsonDecode($event_data, true);
 
-        if (empty($event_data)){
+        if (empty($event_data)) {
             header("HTTP/1.1 400 Bad Request");
             die(Tools::jsonEncode(array('result' => 'ko', 'error' => 'Bad json')));
         }
@@ -228,6 +228,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
             die(Tools::jsonEncode(array('result' => 'ko', 'error' => $e->getMessage())));
         }
 
+        header("HTTP/1.1 200 OK");
         die(Tools::jsonEncode(array('result' => 'ok')));
     }
 
