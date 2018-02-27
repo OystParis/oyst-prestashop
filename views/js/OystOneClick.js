@@ -23,9 +23,10 @@
 /**
  * Manage oneClick process
  */
-function OystOneClick(url, productId) {
+function OystOneClick(url, productId, controller) {
 
     this.url = url;
+    this.controller = controller;
     this.productId = productId;
     this.combinations = [];
     this.stockManagement = 1;
@@ -291,6 +292,8 @@ function OystOneClick(url, productId) {
      */
     this.requestOneCLick = function(oystCallBack) {
         var params = this.getSelectedProduct();
+
+        params.controller = this.controller;
 
         if (this.preload) {
           params.preload = this.preload;

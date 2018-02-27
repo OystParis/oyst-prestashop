@@ -278,6 +278,14 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
         Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
         Configuration::updateValue('FC_OYST_SMART_BTN', 1);
+        Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
+        Configuration::updateValue('FC_OYST_BTN_PRODUCT', 1);
+
+        Configuration::updateValue('FC_OYST_COLOR_BTN_CART', '#E91E63');
+        Configuration::updateValue('FC_OYST_BORDER_BTN_CART', 1);
+        Configuration::updateValue('FC_OYST_SMART_BTN_CART', 1);
+        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.standard-checkout');
+
     }
 
     public function loadSQLFile($sql_file)

@@ -164,9 +164,19 @@ class OrderService extends AbstractOystService
      */
     public function createNewOrder(Customer $customer, Address $invoiceAddress, Address $deliveryAddress, $products, $oystOrderInfo, $event)
     {
-
         // PS core used this context anywhere.. So we need to fill it properly
-        $this->context->cart = $cart = new Cart();
+        if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['id_cart'])) {
+            $id_cart = $oystOrderInfo['context']['id_cart'];
+            $cart = new Cart($id_cart);
+            $products_cart = $cart->getProducts();
+            foreach ($products_cart as $p) {
+                $cart->deleteProduct((int)$p['id_product'], (int)$p['id_product_attribute']);
+            }
+            $this->context->cart = $cart;
+        } else {
+            $this->context->cart = $cart = new Cart();
+        }
+
         $this->context->customer = $customer;
         $this->context->currency = new Currency(Currency::getIdByIsoCode($oystOrderInfo['order_amount']['currency']));
 
@@ -185,12 +195,13 @@ class OrderService extends AbstractOystService
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
 
-        if (!$cart->add()) {
+        if (!$cart->save()) {
             $this->logger->emergency(
                 'Can\'t create cart ['.$this->serializer->serialize($cart).']'
             );
             return false;
         }
+
 
         foreach ($products as $productInfo) {
             $product = new Product((int)$productInfo['productId']);

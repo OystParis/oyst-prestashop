@@ -26,6 +26,7 @@ use Exception;
 use Oyst\Classes\OystUser;
 use Oyst\Classes\OneClickOrderParams;
 use Oyst\Classes\OneClickNotifications;
+use Oyst\Classes\OneClickCustomization;
 use Oyst\Service\Http\CurrentRequest;
 use Product;
 use Validate;
@@ -36,6 +37,7 @@ use Configuration as ConfigurationP;
 use Oyst\Factory\AbstractExportProductServiceFactory;
 use Tools;
 use StockAvailable;
+use Module;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -57,7 +59,8 @@ class OneClickService extends AbstractOystService
         OneClickNotifications $notifications = null,
         OystUser $user = null,
         OneClickOrderParams $orderParams = null,
-        $context = null
+        $context = null,
+        OneClickCustomization $customization = null
     ) {
         if (!is_array($productLess)) {
             $products[] = $productLess;
@@ -70,7 +73,7 @@ class OneClickService extends AbstractOystService
             $user,
             $orderParams,
             $context,
-            null
+            $customization
         ));
 
         $apiClient = $this->requester->getApiClient();
@@ -103,52 +106,90 @@ class OneClickService extends AbstractOystService
         $product = null;
         $combination = null;
         $quantity = 0;
-        $idProduct = (int)$request->getRequestItem('productId');
-        $idCombination = (int)$request->getRequestItem('productAttributeId');
+        $products = null;
+        $controller = $request->getRequestItem('controller');
+        // Deprecated ??
+        Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
+        $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
+        $load = (int)$request->getRequestItem('preload');
+        if ($request->hasRequest('labelCta')) {
+            $labelCta = $request->getRequestItem('labelCta');
+        } else {
+            $labelCta = false;
+        }
+
+        if ($controller == 'order') {
+            $products = Context::getContext()->cart->getProducts();
+
+            if (!$products) {
+                $data['error'] = 'Missing products';
+            }
+        } else {
+            $idProduct = (int)$request->getRequestItem('productId');
+            $idCombination = (int)$request->getRequestItem('productAttributeId');
+
+            if (!$request->hasRequest('productId')) {
+                $data['error'] = 'Missing product';
+            } elseif (!$request->hasRequest('productAttributeId')) {
+                $data['error'] = 'Missing combination, even none selected';
+            } elseif (!$request->hasRequest('quantity')) {
+                $data['error'] = 'Missing quantity';
+            }
+        }
 
         if (!$request->hasRequest('oneClick')) {
             $data['error'] = 'Missing parameters';
-        } elseif (!$request->hasRequest('productId')) {
-            $data['error'] = 'Missing product';
-        } elseif (!$request->hasRequest('productAttributeId')) {
-            $data['error'] = 'Missing combination, even none selected';
-        } elseif (!$request->hasRequest('quantity')) {
-            $data['error'] = 'Missing quantity';
         }
 
         if (!isset($data['error'])) {
-            $product = new Product($idProduct);
-            if (!Validate::isLoadedObject($product)) {
-                $data['error'] = 'Product can\'t be found';
-            }
+            if ($products && $controller == 'order') {
+                foreach ($products as $product) {
+                    $productLess[] = $exportProductService->transformProductLess(
+                        $product['id_product'],
+                        $product['id_product_attribute'],
+                        $product['cart_quantity']
+                    );
 
-            if ($request->hasRequest('productAttributeId')) {
-                if ($idCombination > 0) {
-                    $combination = new Combination($idCombination);
-                    if (!Validate::isLoadedObject($combination)) {
-                        $data['error'] = 'Combination could not be found';
+                    if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
+                        if ($product['advanced_stock_management'] == 0) {
+                            $qty_available = StockAvailable::getQuantityAvailableByProduct($product['id_product'], $product['id_product_attribute']);
+                            $new_qty = $qty_available - $quantity;
+                            StockAvailable::setQuantity($product['id_product'], $product['id_product_attribute'], $new_qty);
+                        }
                     }
                 }
-            }
+            } else {
+                $product = new Product($idProduct);
+                if (!Validate::isLoadedObject($product)) {
+                    $data['error'] = 'Product can\'t be found';
+                }
 
-            $quantity = (int)$request->getRequestItem('quantity');
-            if ($quantity <= 0) {
-                $data['error'] = 'Bad quantity';
-            }
+                if ($request->hasRequest('productAttributeId')) {
+                    if ($idCombination > 0) {
+                        $combination = new Combination($idCombination);
+                        if (!Validate::isLoadedObject($combination)) {
+                            $data['error'] = 'Combination could not be found';
+                        }
+                    }
+                }
 
-            Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
-            $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
-            $productLess[] = $exportProductService->transformProductLess(
-                $idProduct,
-                $idCombination,
-                $quantity
-            );
+                $quantity = (int)$request->getRequestItem('quantity');
+                if ($quantity <= 0) {
+                    $data['error'] = 'Bad quantity';
+                }
 
-            // Check preload, and update quantity
-            $load = (int)$request->getRequestItem('preload');
-            if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
-                if ($product->advanced_stock_management == 0) {
-                    StockAvailable::updateQuantity($idProduct, $idCombination, -(int)$quantity);
+                $productLess[] = $exportProductService->transformProductLess(
+                    $idProduct,
+                    $idCombination,
+                    $quantity
+                );
+
+                // Check preload, and update quantity
+                $load = (int)$request->getRequestItem('preload');
+                if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
+                    if ($product->advanced_stock_management == 0) {
+                        StockAvailable::updateQuantity($idProduct, $idCombination, -(int)$quantity);
+                    }
                 }
             }
         }
@@ -162,6 +203,10 @@ class OneClickService extends AbstractOystService
             'id' => (string)$this->generatedId(),
             'store_id' => (int)Context::getContext()->shop->id
         );
+
+        if ($controller == 'order') {
+            $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
+        }
 
         if (!isset($data['error'])) {
             $oystUser = null;
@@ -192,8 +237,16 @@ class OneClickService extends AbstractOystService
             } else {
                 $oneClickOrdersParams->setDelay(15);
             }
-            $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY'));
+
             $oneClickOrdersParams->setShouldReinitBuffer(false);
+
+            if ($controller == 'order') {
+                $oneClickOrdersParams->setIsCheckoutCart(true);
+                $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY_CART'));
+            } else {
+                $oneClickOrdersParams->setIsCheckoutCart(false);
+                $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY'));
+            }
 
             $this->logger->info(
                 sprintf(
@@ -201,6 +254,20 @@ class OneClickService extends AbstractOystService
                     json_encode($oneClickOrdersParams->toArray())
                 )
             );
+
+            if ($labelCta && $labelCta != '' && $controller == 'order') {
+                $glue = '&';
+                if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
+                    $glue = '?';
+                }
+                $url = Context::getContext()->link->getModuleLink('oyst', 'oneclickreturn').$glue.'id_cart='.Context::getContext()->cart->id.'&key='.ConfigurationP::get('FC_OYST_HASH_KEY');
+                // $url = Context::getContext()->link->getPageLink('order-confirmation').$glue.'id_cart='.Context::getContext()->cart->id.'&id_module='.Module::getModuleIdByName('oyst').'&key='.$customer->secure_key;
+
+                $oneClickCustomization = new OneClickCustomization();
+                $oneClickCustomization->setCta($labelCta, $url);
+            } else {
+                $oneClickCustomization = null;
+            }
 
             $oneClickNotifications = new OneClickNotifications();
             $oneClickNotifications->setShouldAskShipments(true);
@@ -236,7 +303,8 @@ class OneClickService extends AbstractOystService
                 $oneClickNotifications,
                 $oystUser,
                 $oneClickOrdersParams,
-                $oystContext
+                $oystContext,
+                $oneClickCustomization
             );
             $data = array_merge($data, $result);
         }

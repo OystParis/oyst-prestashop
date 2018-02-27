@@ -265,7 +265,24 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
         PSConfiguration::deleteByName('FC_OYST_CURRENCIES');
         PSConfiguration::deleteByName('FC_OYST_LANG');
+        PSConfiguration::deleteByName('FC_OYST_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');
         PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
+        PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY_CART');
+        PSConfiguration::deleteByName('FC_OYST_BTN_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
+        PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
+        // Conf custom btn cart
+        PSConfiguration::deleteByName('FC_OYST_THEME_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_COLOR_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_BORDER_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_SMART_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_CUSTOM_CSS');
     }
 }
