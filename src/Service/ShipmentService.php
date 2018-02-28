@@ -137,12 +137,14 @@ class ShipmentService extends AbstractOystService
             $address->city = $data['user']['address']['city'];
             $address->alias = 'OystAddress';
             $address->id_country = $countryId;
+            $address->phone = $data['user']['phone'];
             $address->phone_mobile = $data['user']['phone'];
 
             $address->add();
         }else{
-            //Fix for retroactivity for missing phone bug
-            if ($address->phone_mobile == '') {
+            //Fix for retroactivity for missing phone bug or phone
+            if ($address->phone_mobile == '' || $address->phone == '') {
+                $address->phone = $data['user']['phone'];
                 $address->phone_mobile = $data['user']['phone'];
                 $address->update();
             }
