@@ -109,6 +109,7 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             'oyst_error' => $this->module->l('There isn\'t enough product in stock.', 'oystHookdisplayfooterproductprocessor'),
             'controller' => Context::getContext()->controller->php_self,
             'enabledBtn' => Configuration::get('FC_OYST_BTN_PRODUCT'),
+            'styles_custom' => $this->addButtonWrapperStyles(),
         ));
 
         if (_PS_VERSION_ >= '1.6.0.0') {
@@ -128,5 +129,18 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
         ));
 
         return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');
+    }
+
+    public function addButtonWrapperStyles()
+    {
+        $styles = Configuration::get('FC_OYST_CUSTOM_CSS');
+
+        if (!$styles && $styles != '') {
+            return null;
+        }
+
+        $styles = rtrim($styles, " \n\r;");
+
+        return $styles;
     }
 }

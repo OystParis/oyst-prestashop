@@ -28,5 +28,10 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
 function upgrade_module_1_10_0($module)
 {
     Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', '#add_to_cart');
+
+    Configuration::deleteByName('FC_OYST_BORDER_BTN_CART');
+    Configuration::deleteByName('FC_OYST_SMART_BTN_CART');
+    Configuration::deleteByName('FC_OYST_THEME_BTN_CART');
+    Configuration::deleteByName('FC_OYST_COLOR_BTN_CART');
     return true;
 }

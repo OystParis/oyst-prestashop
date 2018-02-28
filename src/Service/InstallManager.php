@@ -212,36 +212,10 @@ class InstallManager
         $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_FRAUD'));
         $orderState->delete();
 
-        $carriers = Carrier::getCarriers(Context::getContext()->language->id, true, false, false, null, Carrier::ALL_CARRIERS);
-
-        foreach ($carriers as $carrier) {
-            $field = 'FC_OYST_SHIPMENT_'.$carrier['id_reference'];
-            PSConfiguration::deleteByName($field);
-            $field_delay = 'FC_OYST_SHIPMENT_DELAY_'.$carrier['id_reference'];
-            PSConfiguration::deleteByName($field_delay);
-        }
-
-        PSConfiguration::deleteByName(Configuration::API_KEY_PROD_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_KEY_SANDBOX_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_KEY_PROD_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::API_KEY_SANDBOX_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::API_ENV_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_ENV_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::ONE_CLICK_URL_CUSTOM);
-        PSConfiguration::deleteByName(Configuration::DISPLAY_ADMIN_INFO_STATE);
-
+        // Config module Oyst
         PSConfiguration::deleteByName('FC_OYST_HASH_KEY');
-
-        PSConfiguration::deleteByName('CONF_OYST_FIXED');
-        PSConfiguration::deleteByName('CONF_OYST_VAR');
-        PSConfiguration::deleteByName('CONF_OYST_FIXED_FOREIGN');
-        PSConfiguration::deleteByName('CONF_OYST_VAR_FOREIGN');
-        PSConfiguration::deleteByName('FC_OYST_COUNTRIES');
-
+        PSConfiguration::deleteByName('FC_OYST_GUEST');
+        // State Oyst
         PSConfiguration::deleteByName('OYST_STATUS_CANCELLATION_PENDING');
         PSConfiguration::deleteByName('OYST_STATUS_REFUND_PENDING');
         PSConfiguration::deleteByName('OYST_STATUS_PARTIAL_REFUND');
@@ -249,21 +223,37 @@ class InstallManager
         PSConfiguration::deleteByName('OYST_STATUS_FRAUD_CHECK');
         PSConfiguration::deleteByName('OYST_STATUS_WAIT_PAYMENT');
         PSConfiguration::deleteByName('OYST_STATUS_FRAUD');
-
-        PSConfiguration::deleteByName('FC_OYST_GUEST');
+        // Conf FreePay
+        PSConfiguration::deleteByName(Configuration::API_KEY_PROD_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_KEY_SANDBOX_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_FREEPAY);
+        PSConfiguration::deleteByName(Configuration::API_ENV_FREEPAY);
         PSConfiguration::deleteByName('FC_OYST_REDIRECT_SUCCESS');
         PSConfiguration::deleteByName('FC_OYST_REDIRECT_ERROR');
         PSConfiguration::deleteByName('FC_OYST_REDIRECT_SUCCESS_CUSTOM');
         PSConfiguration::deleteByName('FC_OYST_REDIRECT_ERROR_CUSTOM');
         PSConfiguration::deleteByName('FC_OYST_PAYMENT_FEATURE');
-        PSConfiguration::deleteByName('FC_OYST_CATALOG_FEATURE');
+        PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_FREEPAY');
+        // Conf FreePay advanced
         PSConfiguration::deleteByName('FC_OYST_PREORDER_FEATURE');
-        PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
-        PSConfiguration::deleteByName('OYST_ONE_CLICK_CARRIER');
+        PSConfiguration::deleteByName('FC_OYST_ACTIVE_FRAUD');
+        // Conf 1-Click GENERAL
+        PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::API_KEY_PROD_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::API_KEY_SANDBOX_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::ONE_CLICK_URL_CUSTOM);
+        PSConfiguration::deleteByName(Configuration::API_ENV_ONECLICK);
+        // Conf custom 1-Click global
+        PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
         PSConfiguration::deleteByName('FC_OYST_BORDER_BTN');
         PSConfiguration::deleteByName('FC_OYST_SMART_BTN');
         PSConfiguration::deleteByName('FC_OYST_THEME_BTN');
         PSConfiguration::deleteByName('FC_OYST_COLOR_BTN');
+        PSConfiguration::deleteByName('FC_OYST_CUSTOM_CSS');
+        // Conf custom btn product
+        PSConfiguration::deleteByName('FC_OYST_BTN_PRODUCT');
         PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN');
         PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN');
@@ -272,30 +262,42 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN');
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_ADD_TO_CART');
         PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN');
-        PSConfiguration::deleteByName('FC_OYST_DELAY');
-        PSConfiguration::deleteByName('FC_OYST_ACTIVE_FRAUD');
-        PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_FREEPAY');
-        PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
-        PSConfiguration::deleteByName('FC_OYST_CURRENCIES');
-        PSConfiguration::deleteByName('FC_OYST_LANG');
+        // Conf 1-Click custom btn cart
         PSConfiguration::deleteByName('FC_OYST_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');
-        PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
-        PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY_CART');
-        PSConfiguration::deleteByName('FC_OYST_BTN_PRODUCT');
-        PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
-        PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
-        // Conf custom btn cart
-        PSConfiguration::deleteByName('FC_OYST_THEME_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_COLOR_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_BORDER_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_SMART_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_CUSTOM_CSS');
+        // Conf 1-Click carriers
+        PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
+        PSConfiguration::deleteByName('OYST_ONE_CLICK_CARRIER');
+        $carriers = Carrier::getCarriers(Context::getContext()->language->id, true, false, false, null, Carrier::ALL_CARRIERS);
+
+        foreach ($carriers as $carrier) {
+            $field = 'FC_OYST_SHIPMENT_'.$carrier['id_reference'];
+            PSConfiguration::deleteByName($field);
+            $field_delay = 'FC_OYST_SHIPMENT_DELAY_'.$carrier['id_reference'];
+            PSConfiguration::deleteByName($field_delay);
+        }
+        // Conf 1-Click advanced
+        PSConfiguration::deleteByName('FC_OYST_DELAY');
+        PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
+        PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
+        PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');
+        PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
+        PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY_CART');
+        // Conf 1-Click restrictions
+        PSConfiguration::deleteByName('FC_OYST_CURRENCIES');
+        PSConfiguration::deleteByName('FC_OYST_LANG');
+        PSConfiguration::deleteByName('FC_OYST_COUNTRIES');
+        // Deprecated conf ?
+        PSConfiguration::deleteByName(Configuration::DISPLAY_ADMIN_INFO_STATE);
+        PSConfiguration::deleteByName('CONF_OYST_FIXED');
+        PSConfiguration::deleteByName('CONF_OYST_VAR');
+        PSConfiguration::deleteByName('CONF_OYST_FIXED_FOREIGN');
+        PSConfiguration::deleteByName('CONF_OYST_VAR_FOREIGN');
+        PSConfiguration::deleteByName('FC_OYST_CATALOG_FEATURE');
     }
 }

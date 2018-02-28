@@ -181,8 +181,9 @@
                     <div class="productTabsSub sidebar">
                         <ul id="" class="tab">
                             <li class="tab-row"><a class="tab-page selected" href="#conf-oc">{l s='Configuration One-click' mod='oyst'}</a></li>
-                            <li class="tab-row"><a class="tab-page" href="#custom-btn">{l s='Custom of button' mod='oyst'}</a></li>
-                            <li class="tab-row"><a class="tab-page" href="#custom-btn-cart">{l s='Custom of button cart' mod='oyst'}</a></li>
+                            <li class="tab-row"><a class="tab-page" href="#custom-btn-general">{l s='Customization of button on global' mod='oyst'}</a></li>
+                            <li class="tab-row"><a class="tab-page" href="#custom-btn">{l s='Button product' mod='oyst'}</a></li>
+                            <li class="tab-row"><a class="tab-page" href="#custom-btn-cart">{l s='Button cart' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
@@ -259,7 +260,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div id="custom-btn" class="tab-pane-sub" style="display:none;">
+                        <div id="custom-btn-general" class="tab-pane-sub" style="display:none;">
                             {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                                 <label>{l s='Smart button' mod='oyst'}</label>
                                 <div class="margin-form">
@@ -281,6 +282,33 @@
                                     <div class="input-group">
                                         <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN"  value="{if $oyst.FC_OYST_COLOR_BTN}{$oyst.FC_OYST_COLOR_BTN|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
                                     </div>
+                                </div>
+                                <label>{l s='Custom CSS' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <textarea name="FC_OYST_CUSTOM_CSS" cols="78" rows="10">{if $oyst.FC_OYST_CUSTOM_CSS}{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}{/if}</textarea>
+                                </div>
+                                <div class="margin-form">
+                                    <button type="submit" value="1" name="submitOystResetCustomGlobal" class="btn btn-info module_form_reset_btn">
+                                        {l s='Reset' mod='oyst'}
+                                    </button>
+                                </div>
+                            {else}
+                                <input type="hidden" name="FC_OYST_SMART_BTN" value="{$oyst.FC_OYST_SMART_BTN|intval}"/>
+                                <input type="hidden" name="FC_OYST_BORDER_BTN" value="{$oyst.FC_OYST_BORDER_BTN|intval}"/>
+                                <input type="hidden" name="FC_OYST_THEME_BTN" value="{$oyst.FC_OYST_THEME_BTN|intval}"/>
+                                <input type="hidden" name="FC_OYST_COLOR_BTN" value="{$oyst.FC_OYST_COLOR_BTN|intval}"/>
+                                <div class="warn">
+                                    <ul>
+                                        <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+                                    </ul>
+                                </div>
+                            {/if}
+                        </div>
+                        <div id="custom-btn" class="tab-pane-sub" style="display:none;">
+                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                <label>{l s='Enabled button product' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_BTN_PRODUCT" value="1"{if $oyst.FC_OYST_BTN_PRODUCT} checked="checked"{/if} />
                                 </div>
                                 <label>{l s='Width' mod='oyst'}</label>
                                 <div class="margin-form">
@@ -328,13 +356,12 @@
                                     <input type="text" name="FC_OYST_ID_SMART_BTN" value="{if $oyst.FC_OYST_ID_SMART_BTN}{$oyst.FC_OYST_ID_SMART_BTN|escape:'htmlall':'UTF-8'}{else}#add_to_cart button{/if}"/>
                                 </div>
                                 <div class="margin-form">
-                                    <button type="submit" value="1" name="submitOystResetCustom" class="btn btn-info module_form_reset_btn">
+                                    <button type="submit" value="1" name="submitOystResetCustomProduct" class="btn btn-info module_form_reset_btn">
                                         {l s='Reset' mod='oyst'}
                                     </button>
                                 </div>
                             {else}
-                                <input type="hidden" name="FC_OYST_SMART_BTN" value="{$oyst.FC_OYST_SMART_BTN|intval}"/>
-                                <input type="hidden" name="FC_OYST_BORDER_BTN" value="{$oyst.FC_OYST_BORDER_BTN|intval}"/>
+                                <input type="hidden" name="FC_OYST_BTN_PRODUCT" value="{$oyst.FC_OYST_BTN_PRODUCT|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
@@ -344,26 +371,9 @@
                         </div>
                         <div id="custom-btn-cart" class="tab-pane-sub" style="display:none;">
                             {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
-                                <label>{l s='Smart button' mod='oyst'}</label>
+                                <label>{l s='Enable button cart' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="checkbox" class="form-control" name="FC_OYST_SMART_BTN_CART" value="1"{if $oyst.FC_OYST_SMART_BTN_CART} checked="checked"{/if} />
-                                </div>
-                                <label>{l s='Border rounded' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="checkbox" class="form-control" name="FC_OYST_BORDER_BTN_CART" value="1"{if $oyst.FC_OYST_BORDER_BTN_CART} checked="checked"{/if} />
-                                </div>
-                                <label>{l s='Style btn 1-Click' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <select name="FC_OYST_THEME_BTN_CART">
-                                        <option value="normal" {if $oyst.FC_OYST_THEME_BTN_CART == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
-                                        <option value="inversed" {if $oyst.FC_OYST_THEME_BTN_CART == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
-                                    </select>
-                                </div>
-                                <label>{l s='Color' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <div class="input-group">
-                                        <input type="color" data-hex="true" class="color mColorPickerInput mColorPicker" name="FC_OYST_COLOR_BTN_CART"  value="{if $oyst.FC_OYST_COLOR_BTN_CART}{$oyst.FC_OYST_COLOR_BTN_CART|escape:'htmlall':'UTF-8'}{else}#E91E63{/if}" />
-                                    </div>
+                                    <input type="checkbox" class="form-control" name="FC_OYST_BTN_CART" value="1"{if $oyst.FC_OYST_BTN_CART} checked="checked"{/if} />
                                 </div>
                                 <label>{l s='Width' mod='oyst'}</label>
                                 <div class="margin-form">
@@ -399,18 +409,13 @@
                                 <div class="margin-form">
                                     <input type="text" name="FC_OYST_ID_BTN_CART" value="{if $oyst.FC_OYST_ID_BTN_CART}{$oyst.FC_OYST_ID_BTN_CART|escape:'htmlall':'UTF-8'}{else}.standard-checkout{/if}"/>
                                 </div>
-                                <label>{l s='Custom CSS' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <textarea name="FC_OYST_CUSTOM_CSS" cols="78" rows="10">{if $oyst.FC_OYST_CUSTOM_CSS}{$oyst.FC_OYST_CUSTOM_CSS|escape:'htmlall':'UTF-8'}{/if}</textarea>
-                                </div>
                                 <div class="margin-form">
                                     <button type="submit" value="1" name="submitOystResetCustomCart" class="btn btn-info module_form_reset_btn">
                                         {l s='Reset' mod='oyst'}
                                     </button>
                                 </div>
                             {else}
-                                <input type="hidden" name="FC_OYST_SMART_BTN_CART" value="{$oyst.FC_OYST_SMART_BTN_CART|intval}"/>
-                                <input type="hidden" name="FC_OYST_BORDER_BTN_CART" value="{$oyst.FC_OYST_BORDER_BTN_CART|intval}"/>
+                                <input type="hidden" name="FC_OYST_BTN_CART" value="{$oyst.FC_OYST_BTN_CART|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
@@ -457,7 +462,7 @@
                                 <label>{l s='Confirmation url for button cart' mod='oyst'}</label>
                                 <div class="margin-form urlCustomization">
                                     <select id="FC_OYST_OC_REDIRECT_CONF" name="FC_OYST_OC_REDIRECT_CONF">
-                                    {foreach from=$oyst.redirect_success_urls key=url item=label}
+                                    {foreach from=$oyst.redirect_oc_conf_urls key=url item=label}
                                         <option value="{$url|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_OC_REDIRECT_CONF == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label|escape:'html':'UTF-8'}</option>
                                     {/foreach}
                                     </select>
@@ -470,10 +475,6 @@
                                 <div class="margin-form">
                                     <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
                                 </div>
-                                <label>{l s='Enabled button product' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="checkbox" class="form-control" name="FC_OYST_BTN_PRODUCT" value="1"{if $oyst.FC_OYST_BTN_PRODUCT} checked="checked"{/if} />
-                                </div>
                                 <label>{l s='Manage quantity' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_MANAGE_QUANTITY" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY} checked="checked"{/if} />
@@ -481,10 +482,6 @@
                                 <label>{l s='Enable advanced stock' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_SHOULD_AS_STOCK" value="1"{if $oyst.FC_OYST_SHOULD_AS_STOCK} checked="checked"{/if} />
-                                </div>
-                                <label>{l s='Enable button cart' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="checkbox" class="form-control" name="FC_OYST_BTN_CART" value="1"{if $oyst.FC_OYST_BTN_CART} checked="checked"{/if} />
                                 </div>
                                 <label>{l s='Manage quantity for cart' mod='oyst'}</label>
                                 <div class="margin-form">
@@ -501,7 +498,7 @@
                                     </button>
                                 </div>
                             {else}
-                                <input type="hidden" name="FC_OYST_BTN_PRODUCT" value="{$oyst.FC_OYST_BTN_PRODUCT|intval}"/>
+                                <input type="hidden" name="FC_OYST_OC_REDIRECT_CONF" value="{$oyst.FC_OYST_OC_REDIRECT_CONF|intval}"/>
                                 <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
                                 <input type="hidden" name="FC_OYST_SHOULD_AS_STOCK" value="{$oyst.FC_OYST_SHOULD_AS_STOCK|intval}"/>
                                 <input type="hidden" name="FC_OYST_MANAGE_QUANTITY_CART" value="{$oyst.FC_OYST_MANAGE_QUANTITY_CART|intval}"/>
@@ -539,7 +536,7 @@
                             {/if}
                         </div>
                         <div id="display-notifications" class="tab-pane-sub" style="display:none;">
-						    {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                                 <div>
                                     <label>Tables</label>
                                     <div class="margin-form">

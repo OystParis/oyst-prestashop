@@ -61,10 +61,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_POSITION_BTN'            => 'string',
         'FC_OYST_ID_BTN_ADD_TO_CART'      => 'string',
         'FC_OYST_ID_SMART_BTN'            => 'string',
-        'FC_OYST_BORDER_BTN_CART'         => 'int',
-        'FC_OYST_SMART_BTN_CART'          => 'int',
-        'FC_OYST_THEME_BTN_CART'          => 'string',
-        'FC_OYST_COLOR_BTN_CART'          => 'string',
         'FC_OYST_WIDTH_BTN_CART'          => 'string',
         'FC_OYST_HEIGHT_BTN_CART'         => 'string',
         'FC_OYST_MARGIN_TOP_BTN_CART'     => 'string',
@@ -176,34 +172,34 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $this->configuration_result = true;
         }
 
-        if (Tools::isSubmit('submitOystResetCustom')) {
-            Configuration::updateValue('FC_OYST_THEME_BTN', '');
+        if (Tools::isSubmit('submitOystResetCustomGlobal')) {
+            Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
+            Configuration::updateValue('FC_OYST_SMART_BTN', 1);
+            Configuration::updateValue('FC_OYST_THEME_BTN', 'normal');
             Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
+            Configuration::updateValue('FC_OYST_CUSTOM_CSS', '');
+        }
+
+        if (Tools::isSubmit('submitOystResetCustomProduct')) {
+            Configuration::updateValue('FC_OYST_BTN_PRODUCT', 1);
             Configuration::updateValue('FC_OYST_WIDTH_BTN', '');
             Configuration::updateValue('FC_OYST_HEIGHT_BTN', '');
             Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN', '');
             Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN', '');
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN', '');
-            Configuration::updateValue('FC_OYST_POSITION_BTN', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN', 'before');
             Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', '#add_to_cart');
             Configuration::updateValue('FC_OYST_ID_SMART_BTN', '#add_to_cart button');
-            Configuration::updateValue('FC_OYST_BORDER_BTN', '');
-            Configuration::updateValue('FC_OYST_SMART_BTN', '');
         }
 
         if (Tools::isSubmit('submitOystResetCustomCart')) {
-            Configuration::updateValue('FC_OYST_THEME_BTN_CART', '');
-            Configuration::updateValue('FC_OYST_COLOR_BTN_CART', '#E91E63');
+            Configuration::updateValue('FC_OYST_BTN_CART', 0);
             Configuration::updateValue('FC_OYST_WIDTH_BTN_CART', '');
             Configuration::updateValue('FC_OYST_HEIGHT_BTN_CART', '');
             Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_CART', '');
             Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_CART', '');
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_CART', '');
-            Configuration::updateValue('FC_OYST_ID_BTN_CART', '');
-            Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '');
-            Configuration::updateValue('FC_OYST_BORDER_BTN_CART', '');
-            Configuration::updateValue('FC_OYST_SMART_BTN_CART', '');
-            Configuration::updateValue('FC_OYST_CUSTOM_CSS', '');
+            Configuration::updateValue('FC_OYST_ID_BTN_CART', '.standard-checkout');
         }
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {
