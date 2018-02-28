@@ -30,7 +30,7 @@ function upgrade_module_1_9_0($module)
     Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN', '');
     Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN', '');
     Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN', '');
-    Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', 'add_to_cart');
+    Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', '#add_to_cart');
     Configuration::updateValue('FC_OYST_ID_SMART_BTN', '#add_to_cart button');
 
     return true;
