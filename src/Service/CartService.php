@@ -117,7 +117,9 @@ class CartService extends AbstractOystService
         }
 
         $addressRepository = new AddressRepository(Db::getInstance());
+
         $address = $addressRepository->findAddress($data['user']['address'], $customer);
+
         if (!Validate::isLoadedObject($address)) {
             $countryId = (int)Country::getByIso($data['user']['address']['country']);
             if (0 >= $countryId) {
@@ -227,13 +229,14 @@ class CartService extends AbstractOystService
                     }
                 }
 
-                // $oneClickItem = new OneClickItem((string)$item['product']['reference'], (int)$item['product']['quantity']);
-                // $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
-                // $oneClickItem->setAmountOriginal($amount);
-                // $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
-                // $oneClickItem->setAmountPromotional($crossed_out_amount);
+                $oneClickItem = new OneClickItem((string)$item['product']['reference'], (int)$item['product']['quantity']);
+                $amount = new OystPrice(round($price * 100), Context::getContext()->currency->iso_code);
+                $oneClickItem->setAmountOriginal($amount);
+                $crossed_out_amount = new OystPrice(round($without_reduc_price * 100), Context::getContext()->currency->iso_code);
+                $oneClickItem->setAmountPromotional($crossed_out_amount);
 
-                // $oneClickShipmentCalculation->addItem($oneClickItem);
+                $oneClickShipmentCalculation->addItem($oneClickItem);
+
             }
         } else {
             $this->logger->emergency(

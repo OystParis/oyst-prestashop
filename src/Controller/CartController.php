@@ -27,6 +27,7 @@ use Currency;
 use Configuration;
 use Tools;
 use Db;
+
 use Oyst\Factory\AbstractCartServiceFactory;
 
 class CartController extends AbstractOystController
@@ -44,6 +45,7 @@ class CartController extends AbstractOystController
             'date_add'   => date('Y-m-d H:i:s'),
         );
         Db::getInstance()->insert('oyst_payment_notification', $insert);
+
         $cartService = AbstractCartServiceFactory::get(new Oyst(), Context::getContext());
         $responseData = $cartService->estimate($data['data']['order']);
         $this->logger->info(
