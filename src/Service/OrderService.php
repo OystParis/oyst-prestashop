@@ -61,10 +61,18 @@ class OrderService extends AbstractOystService
         if (count($customerInfo)) {
             $customer = new Customer($customerInfo[0]['id_customer']);
         } else {
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['address']['first_name']);
+            if (isset(Customer::$definition['fields']['firstname']['size']))
+                $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
+
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['address']['last_name']);
+            if (isset(Customer::$definition['fields']['lastname']['size']))
+                $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
+
             $customer = new Customer();
             $customer->email = $user['email'];
-            $customer->firstname = $user['address']['first_name'];
-            $customer->lastname = $user['address']['last_name'];
+            $customer->firstname = $firstname;
+            $customer->lastname = $lastname;
             $customer->id_lang = PSConfiguration::get('PS_LANG_DEFAULT');
             $customer->passwd = ToolsCore::encrypt(ToolsCore::passwdGen());
             $customer->add();
@@ -138,8 +146,16 @@ class OrderService extends AbstractOystService
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
+            if ($pickupAddress['name'] != ''){
+                $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $pickupAddress['name']);
+                if (isset(Address::$definition['fields']['firstname']['size']))
+                    $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+            }else{
+                $firstname = 'none';
+            }
+
             $address = new Address();
-            $address->firstname = ($pickupAddress['name'] != '')? $pickupAddress['name'] : 'none';
+            $address->firstname = $firstname;
             $address->lastname = "";
             $address->address1 = ($pickupAddress['street'] != '')? $pickupAddress['street'] : 'none';
             $address->postcode = ($pickupAddress['postal_code'] != '')? $pickupAddress['postal_code'] : 'none';
