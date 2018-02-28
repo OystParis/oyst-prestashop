@@ -138,8 +138,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_08d4382960e54a51b0225
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d45bf28725319c027435b3a578d26e7f'] = 'Position bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a5e8dee94923d52edc00d39ba852be36'] = 'Identifiant pour le bouton fiche produit';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_aecb24741fe6ae99ae476a32cdfb0a87'] = 'Identifiant pour le smart button';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a5e8dee94923d52edc00d39ba852be36'] = 'Sélecteur pour le bouton fiche produit';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_aecb24741fe6ae99ae476a32cdfb0a87'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click est désactivé ou n\'est pas configuré.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
@@ -212,8 +212,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_08d4382960e54a51b0225995753fb95
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d45bf28725319c027435b3a578d26e7f'] = 'Position bouton 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_a5e8dee94923d52edc00d39ba852be36'] = 'Identifiant pour le bouton fiche produit';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_aecb24741fe6ae99ae476a32cdfb0a87'] = 'Identifiant pour le smart button';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_a5e8dee94923d52edc00d39ba852be36'] = 'Sélecteur pour le bouton fiche produit';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_aecb24741fe6ae99ae476a32cdfb0a87'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_fdd7807b18101cacf412a82d3ff958ce'] = '1-Click est désactivé ou n\'est pas configuré.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
