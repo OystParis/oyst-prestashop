@@ -274,6 +274,7 @@ class OneClickService extends AbstractOystService
                 $oneClickNotifications->addEvent('order.stock.released');
                 $oneClickNotifications->addEvent('order.stock.book');
             }
+            $oneClickNotifications->addEvent('order.cart.estimate');
             $oneClickNotifications->setUrl($this->oyst->getNotifyUrl());
 
             $this->logger->info(

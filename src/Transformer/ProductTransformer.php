@@ -74,7 +74,6 @@ class ProductTransformer extends AbstractTransformer
      */
     public function transform($product, $quantity = 1, $id_combination = 0)
     {
-        $oystProduct = new OystProduct();
         $combination = new Combination();
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
@@ -123,12 +122,22 @@ class ProductTransformer extends AbstractTransformer
         // Combination fields
         if ($combination && $combination->id) {
             $title = is_array($product->name) ? reset($product->name) : $product->name;
-            $oystProduct->reference = (string)$product->id.';'.(string)$combination->id;
-            $oystProduct->ean = $combination->ean13;
-            $oystProduct->weight = $combination->weight;
+
+            // Informations
+            $attributesInfo = $this->productRepository->getAttributesCombination($combination);
+            foreach ($attributesInfo as $attributeInfo) {
+                $informations[$attributeInfo['name']] = $attributeInfo['value'];
+                $title .= ' '.$attributeInfo['value'];
+            }
+
+            $reference = (string)$product->id.';'.(string)$combination->id;
+            $oystProduct = new OystProduct($reference, $title, $oystPrice, $quantity);
+            // $oystProduct->reference = (string)$product->id.';'.(string)$combination->id;
+            $oystProduct->__set('ean', $combination->ean13);
+            $oystProduct->__set('weight', $combination->weight);
             // Stock
             $stockAvailable = new StockAvailable(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
-            $oystProduct->availableQuantity = $stockAvailable->quantity;
+            $oystProduct->__set('availableQuantity', $stockAvailable->quantity);
             // Images
             $images = array();
             foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
@@ -142,23 +151,19 @@ class ProductTransformer extends AbstractTransformer
                 }
             }
 
-            // Information
-            $attributesInfo = $this->productRepository->getAttributesCombination($combination);
-            foreach ($attributesInfo as $attributeInfo) {
-                $informations[$attributeInfo['name']] = $attributeInfo['value'];
-                $title .= ' '.$attributeInfo['value'];
-            }
-
             $oystProduct->__set('information', $informations);
-            $oystProduct->title = $title;
+            // $oystProduct->title = $title;
         } else {
-            $oystProduct->reference = (string)$product->id;
-            $oystProduct->ean = $product->ean13;
-            $oystProduct->weight = $product->weight;
-            $oystProduct->title = is_array($product->name) ? reset($product->name) : $product->name;
+            $title = is_array($product->name) ? reset($product->name) : $product->name;
+            $reference = (string)$product->id;
+            $oystProduct = new OystProduct($reference, $title, $oystPrice, $quantity);
+            // $oystProduct->reference = (string)$product->id;
+            $oystProduct->__set('ean', $product->ean13);
+            $oystProduct->__set('weight', $product->weight);
+            // $oystProduct->title = is_array($product->name) ? reset($product->name) : $product->name;
             // Stock
             $stockAvailable = new StockAvailable(StockAvailable::getStockAvailableIdByProductId($product->id));
-            $oystProduct->availableQuantity = $stockAvailable->quantity;
+            $oystProduct->__set('availableQuantity', $stockAvailable->quantity);
             // Images
             $images = array();
             foreach (Image::getImages($this->context->language->id, $product->id) as $image) {
@@ -167,22 +172,22 @@ class ProductTransformer extends AbstractTransformer
         }
 
         // Common fields
-        $oystProduct->active = $product->active;
-        $oystProduct->materialized = ($product->is_virtual == '0' ? true : false);
-        $oystProduct->manufacturer = $product->manufacturer_name;
-        $oystProduct->size = $oystSize;
-        $oystProduct->condition = ($product->condition == 'used' ? 'reused' : $product->condition);
-        $oystProduct->categories = $categories;
-        $oystProduct->amountIncludingTax = $oystPrice;
+        $oystProduct->__set('active', $product->active);
+        $oystProduct->__set('materialized', ($product->is_virtual == '0' ? true : false));
+        $oystProduct->__set('manufacturer', $product->manufacturer_name);
+        $oystProduct->__set('size', $oystSize);
+        $oystProduct->__set('condition', ($product->condition == 'used' ? 'reused' : $product->condition));
+        $oystProduct->__set('categories', $categories);
+        // $oystProduct->amountIncludingTax = $oystPrice;
 
         $oystProduct->url = $link->getProductLink($product);
-        $oystProduct->quantity = $quantity;
+        // $oystProduct->quantity = $quantity;
 
         if (empty($images)) {
             $images = array(Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png');
         }
 
-        $oystProduct->images = $images;
+        $oystProduct->__set('images', $images);
 
         return $oystProduct;
     }
@@ -209,14 +214,14 @@ class ProductTransformer extends AbstractTransformer
         if ($oystProductVariation && $combination && $combination->id) {
             $oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
 
-            $oystProductVariation->reference = (string)$combination->id;
-            $oystProductVariation->ean = $combination->ean13;
-            $oystProductVariation->weight = $combination->weight;
+            $oystProductVariation->__set('reference', (string)$combination->id);
+            $oystProductVariation->__set('ean', $combination->ean13);
+            $oystProductVariation->__set('weight', $combination->weight);
 
-            $oystProductVariation->amountIncludingTax = $oystPrice;
+            $oystProductVariation->__set('amountIncludingTax', $oystPrice);
             $stockAvailable = new StockAvailable(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
-            $oystProductVariation->availableQuantity = $stockAvailable->quantity;
-            $oystProductVariation->quantity = $quantity;
+            $oystProductVariation->__set('availableQuantity', $stockAvailable->quantity);
+            $oystProductVariation->__set('quantity', $quantity);
 
             $images = array();
             foreach (Image::getImages($this->context->language->id, $product->id, $combination->id) as $image) {
@@ -233,7 +238,7 @@ class ProductTransformer extends AbstractTransformer
                 $images = array(Tools::getShopDomain(true) . '/modules/oyst/view/img/no_image.png');
             }
 
-            $oystProductVariation->images = $images;
+            $oystProductVariation->__set('images', $images);
 
             $attributesInfo = $this->productRepository->getAttributesCombination($combination);
             foreach ($attributesInfo as $attributeInfo) {
