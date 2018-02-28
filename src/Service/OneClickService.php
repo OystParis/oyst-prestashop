@@ -152,9 +152,7 @@ class OneClickService extends AbstractOystService
 
                     if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
                         if ($product['advanced_stock_management'] == 0) {
-                            $qty_available = StockAvailable::getQuantityAvailableByProduct($product['id_product'], $product['id_product_attribute']);
-                            $new_qty = $qty_available - $quantity;
-                            StockAvailable::setQuantity($product['id_product'], $product['id_product_attribute'], $new_qty);
+                            StockAvailable::updateQuantity($product['id_product'], $product['id_product_attribute'], -(int)$product['cart_quantity']);
                         }
                     }
                 }

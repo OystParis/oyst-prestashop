@@ -141,7 +141,7 @@ class ShipmentService extends AbstractOystService
             $address->phone_mobile = $data['user']['phone'];
 
             $address->add();
-        }else{
+        } else {
             //Fix for retroactivity for missing phone bug or phone
             if ($address->phone_mobile == '' || $address->phone == '') {
                 $address->phone = $data['user']['phone'];
