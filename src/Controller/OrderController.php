@@ -37,24 +37,17 @@ class OrderController extends AbstractOystController
             $context = Context::getContext();
             $orderService = AbstractOrderServiceFactory::get($oyst, $context);
             $orderId = $json['data']['order_id'];
-            $orderExist = $orderService->getOrderRepository()->getOrderExist($orderId);
 
-            if ($orderExist == 0) {
-                $guid = $orderService->getOrderRepository()->getOrderGUID($orderId);
-                $responseData = $orderService->requestCreateNewOrder($orderId, $json['event']);
+            $responseData = $orderService->requestCreateNewOrder($orderId, $json['event']);
 
-                if ($responseData['state']) {
-                    $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);
-                } else {
-                    $orderService->updateOrderStatus($orderId, AbstractOrderState::DENIED);
-                    $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData['error'])));
-                }
-
-                $this->respondAsJson($responseData);
+            if ($responseData['state']) {
+                $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);
             } else {
-                $this->logger->critical(sprintf("Error order exist: [%s]", json_encode($json['data'])));
-                header("HTTP/1.1 200 OK");
+                $orderService->updateOrderStatus($orderId, AbstractOrderState::DENIED);
+                $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData['error'])));
             }
+
+            $this->respondAsJson($responseData);
         } else {
             header("HTTP/1.1 400 Bad Request");
         }

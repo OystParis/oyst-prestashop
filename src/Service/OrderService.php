@@ -250,16 +250,19 @@ class OrderService extends AbstractOystService
         if ($state) {
             $order = new Order(Order::getOrderByCartId($cart->id));
             $this->orderRepository->linkOrderToGUID($order, $oystOrderInfo['id']);
-            $insert   = array(
-                'id_order'   => (int)$order->id,
-                'id_cart'    => (int)$cart->id,
-                'payment_id' => pSQL($oystOrderInfo['id']),
-                'event_code' => pSQL($event),
-                'event_data' => pSQL(Tools::jsonEncode($oystOrderInfo)),
-                'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $oystOrderInfo['created_at']), 0, 19)),
-                'date_add'   => date('Y-m-d H:i:s'),
+
+            Db::getInstance()->update(
+                'oyst_payment_notification',
+                array(
+                    'id_order'   => (int)$order->id,
+                    'id_cart'    => (int)$cart->id,
+                    'event_data' => pSQL(Tools::jsonEncode($oystOrderInfo)),
+                    'date_event' => pSQL(Tools::substr(str_replace('T', ' ', $oystOrderInfo['created_at']), 0, 19)),
+                    'status'     => 'finished',
+                    'date_upd'   => date('Y-m-d H:i:s'),
+                ),
+                'payment_id = "'.pSQL($oystOrderInfo['id']).'" AND `status` = "start"'
             );
-            Db::getInstance()->insert('oyst_payment_notification', $insert);
         }
 
         return $state;
