@@ -229,14 +229,12 @@ class CartService extends AbstractOystService
                     }
                 }
 
-                $oneClickItem = new OneClickItem((string)$item['product']['reference'], (int)$item['product']['quantity']);
-                $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
-                $oneClickItem->setAmountOriginal($amount);
-                $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
-                $oneClickItem->setAmountPromotional($crossed_out_amount);
-
-                $oneClickShipmentCalculation->addItem($oneClickItem);
-
+                // $oneClickItem = new OneClickItem((string)$item['product']['reference'], (int)$item['product']['quantity']);
+                // $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
+                // $oneClickItem->setAmountOriginal($amount);
+                // $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
+                // $oneClickItem->setAmountPromotional($crossed_out_amount);
+                // $oneClickShipmentCalculation->addItem($oneClickItem);
             }
         } else {
             $this->logger->emergency(
