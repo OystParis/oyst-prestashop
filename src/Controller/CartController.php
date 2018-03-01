@@ -25,6 +25,8 @@ use Oyst;
 use Context;
 use Currency;
 use Configuration;
+use Tools;
+use Db;
 use Oyst\Factory\AbstractCartServiceFactory;
 
 class CartController extends AbstractOystController
@@ -32,6 +34,16 @@ class CartController extends AbstractOystController
     public function estimateAction()
     {
         $data = $this->request->getJson();
+        $insert   = array(
+            'id_order'   => 0,
+            'id_cart'    => 0,
+            'payment_id' => '',
+            'event_code' => pSQL($data['event']),
+            'event_data' => pSQL(Tools::jsonEncode($data['data'])),
+            'date_event' => date('Y-m-d H:i:s'),
+            'date_add'   => date('Y-m-d H:i:s'),
+        );
+        Db::getInstance()->insert('oyst_payment_notification', $insert);
         $cartService = AbstractCartServiceFactory::get(new Oyst(), Context::getContext());
         $responseData = $cartService->estimate($data['data']['order']);
         $this->logger->info(
