@@ -37,7 +37,7 @@
 <p>
     {l s='Your order on %s is complete.' sprintf=$shop_name mod='oyst'}
     <br /><br />
-    {l s='Your order ID is:' mod='oyst'} <strong>{$id_order_formatted}</strong> . {l s='Your order ID has been sent to you via e-mail.' mod='oyst'}
+    {l s='Your order ID is:' mod='oyst'} <strong>{$reference_order}</strong> . {l s='Your order ID has been sent to you via e-mail.' mod='oyst'}
 </p>
 
 <a href="{$link->getPageLink('history', true)}" title="{l s='Back to orders'}"><img src="{$img_dir}icon/order.gif" alt="{l s='Back to orders' mod='oyst'}" class="icon" /></a>

@@ -34,7 +34,7 @@
 <p class="alert alert-success">{l s='Your order on %s is complete.' sprintf=$shop_name mod='oyst'}</p>
 
 <div class="box">
-    <p>{l s='Your order ID is:' mod='oyst'} <strong>{$id_order_formatted}</strong> . {l s='Your order ID has been sent via email.' mod='oyst'}</p>
+    <p>{l s='Your order ID is:' mod='oyst'} <strong>{$reference_order}</strong> . {l s='Your order ID has been sent via email.' mod='oyst'}</p>
 </div>
 <p class="cart_navigation exclusive">
 	<a class="button-exclusive btn btn-default" href="{$link->getPageLink('history', true)|escape:'html':'UTF-8'}" title="{l s='Go to your order history page' mod='oyst'}"><i class="icon-chevron-left"></i>{l s='View your order history' mod='oyst'}</a>
