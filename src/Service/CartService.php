@@ -63,7 +63,9 @@ class CartService extends AbstractOystService
             $customer->email = $user['email'];
             $customer->firstname = $user['address']['first_name'];
             $customer->lastname = $user['address']['last_name'];
-            $customer->id_lang = PSConfiguration::get('PS_LANG_DEFAULT');
+            if (version_compare(_PS_VERSION_, '1.5.4.0', '>=')) {
+                $customer->id_lang = PSConfiguration::get('PS_LANG_DEFAULT');
+            }
             $customer->passwd = Tools::encrypt(Tools::passwdGen());
             $customer->add();
         }

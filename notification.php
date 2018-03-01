@@ -102,11 +102,6 @@ if ($data && isset($data['event'])) {
                     echo $response;
                 }
                 break;
-            case 'order.shipments.get':
-                $shipmentController = new ShipmentController($request);
-                $shipmentController->setLogger($logger);
-                $shipmentController->getShipmentsAction();
-                break;
             case 'order.stock.released':
                 $stockController = new StockController($request);
                 $stockController->setLogger($logger);
