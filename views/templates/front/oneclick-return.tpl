@@ -1,5 +1,4 @@
-<?php
-/**
+{**
  * 2013-2016 Froggy Commerce
  *
  * NOTICE OF LICENSE
@@ -16,23 +15,17 @@
  *
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
- * @license   GNU GENERAL PUBLIC LICENSE
- */
+ * @license GNU GENERAL PUBLIC LICENSE
+ *}
+{capture name=path}{l s='Order return' mod='oyst'}{/capture}
 
-require_once dirname(__FILE__).'/../vendor/autoload.php';
+<div>
+    <p><img src="{$base_dir|escape:'html':'UTF-8'}img/loader.gif" />
+    <strong>{l s='We did not receive the payment confirmation yet. Please wait a few minutes and refresh this page.' mod='oyst'}</strong></p>
+</div>
 
-/**
- * @param Oyst $module
- * @return bool
- */
-function upgrade_module_1_9_0($module)
-{
-    Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN', '');
-    Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN', '');
-    Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN', '');
-    Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', '#add_to_cart');
-    Configuration::updateValue('FC_OYST_ID_SMART_BTN', '#add_to_cart button');
-    Configuration::updateValue('FC_OYST_BTN_CART', 0);
-
-    return true;
-}
+<script>
+    setTimeout(function() {
+        window.location.href = window.location.href;
+    }, 2000);
+</script>

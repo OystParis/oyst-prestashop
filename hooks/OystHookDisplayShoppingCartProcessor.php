@@ -28,31 +28,10 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
+class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
 {
     public function run()
     {
-        $product = new Product(Tools::getValue('id_product'));
-        if (!Validate::isLoadedObject($product)) {
-            return '';
-        }
-
-        $productRepository = new ProductRepository(Db::getInstance());
-        $productCombinations = $product->getAttributeCombinations($this->context->language->id);
-
-        $synchronizedCombination = array();
-        foreach ($productCombinations as $combination) {
-                $stockAvailable = new StockAvailable(
-                    StockAvailable::getStockAvailableIdByProductId($product->id, $combination['id_product_attribute'])
-                );
-                $synchronizedCombination[$combination['id_product_attribute']] = array(
-                    'quantity' => $stockAvailable->quantity
-                );
-        }
-
-        //require for load Out Of Stock Information (isAvailableWhenOutOfStock)
-        $product->loadStockData();
-
         // Check allow currency
         $id_currency = $this->context->currency->id;
         $oyst_currencies = Configuration::get('FC_OYST_CURRENCIES');
@@ -84,42 +63,36 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
         $this->smarty->assign(array(
             'secureKey' => Configuration::get('FC_OYST_HASH_KEY'),
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
-            'product' => $product,
-            'productQuantity' => StockAvailable::getQuantityAvailableByProduct($product->id),
-            'synchronizedCombination' => $synchronizedCombination,
             'stockManagement' => Configuration::get('PS_STOCK_MANAGEMENT'),
             'oneClickActivated' => (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
-            'btnOneClickState' => $productRepository->getActive($product->id),
-            'allowOosp' => $product->isAvailableWhenOutOfStock((int)$product->out_of_stock),
             'smartBtn' => Configuration::get('FC_OYST_SMART_BTN'),
             'borderBtn' => Configuration::get('FC_OYST_BORDER_BTN'),
             'themeBtn' => Configuration::get('FC_OYST_THEME_BTN'),
             'colorBtn' => Configuration::get('FC_OYST_COLOR_BTN'),
-            'widthBtn' => Configuration::get('FC_OYST_WIDTH_BTN'),
-            'heightBtn' => Configuration::get('FC_OYST_HEIGHT_BTN'),
-            'marginTopBtn' => Configuration::get('FC_OYST_MARGIN_TOP_BTN'),
-            'marginLeftBtn' => Configuration::get('FC_OYST_MARGIN_LEFT_BTN'),
-            'marginRightBtn' => Configuration::get('FC_OYST_MARGIN_RIGHT_BTN'),
-            'positionBtn' => Configuration::get('FC_OYST_POSITION_BTN'),
-            'idBtnAddToCart' => Configuration::get('FC_OYST_ID_BTN_ADD_TO_CART'),
-            'idSmartBtn' => Configuration::get('FC_OYST_ID_SMART_BTN'),
+            'widthBtn' => Configuration::get('FC_OYST_WIDTH_BTN_CART'),
+            'heightBtn' => Configuration::get('FC_OYST_HEIGHT_BTN_CART'),
+            'marginTopBtn' => Configuration::get('FC_OYST_MARGIN_TOP_BTN_CART'),
+            'marginLeftBtn' => Configuration::get('FC_OYST_MARGIN_LEFT_BTN_CART'),
+            'marginRightBtn' => Configuration::get('FC_OYST_MARGIN_RIGHT_BTN_CART'),
+            'idBtnCart' => Configuration::get('FC_OYST_ID_BTN_CART'),
+            'btnCart' => Configuration::get('FC_OYST_BTN_CART'),
+            'styles_custom' => $this->addButtonWrapperStyles(),
             'restriction_currencies' => $restriction_currencies,
             'restriction_languages' => $restriction_languages,
             'shouldAsStock' => Configuration::get('FC_OYST_SHOULD_AS_STOCK'),
-            'oyst_error' => $this->module->l('There isn\'t enough product in stock.', 'oystHookdisplayfooterproductprocessor'),
+            'oyst_error' => $this->module->l('There isn\'t enough product in stock.', 'oysthookdisplayshoppingcartprocessor'),
             'controller' => Context::getContext()->controller->php_self,
-            'enabledBtn' => Configuration::get('FC_OYST_BTN_PRODUCT'),
-            'styles_custom' => $this->addButtonWrapperStyles(),
+            'oyst_label_cta' => $this->module->l('Return shop.', 'oysthookdisplayshoppingcartprocessor')
         ));
 
         if (_PS_VERSION_ >= '1.6.0.0') {
             $this->context->controller->addJS(array(
-                $this->path.'views/js/OystOneClick.js',
+                $this->path.'views/js/OystOneClickCart.js',
                 trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
             ));
         } else {
             $this->smarty->assign(array(
-                'JSOystOneClick' => $this->path.'views/js/OystOneClick.js',
+                'JSOystOneClickCart' => $this->path.'views/js/OystOneClickCart.js',
                 'JSOneClickUrl' => trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
             ));
         }
@@ -128,7 +101,7 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             $this->path.'views/css/oyst.css',
         ));
 
-        return $this->module->fcdisplay(__FILE__, 'displayFooterProduct.tpl');
+        return $this->module->fcdisplay(__FILE__, 'displayShoppingCart.tpl');
     }
 
     public function addButtonWrapperStyles()

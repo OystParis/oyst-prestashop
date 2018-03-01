@@ -27,7 +27,7 @@ use Oyst\Transformer\ProductTransformer;
 use Oyst\Repository\ProductRepository;
 use Product;
 use Validate;
-use Cart;
+// use Cart;
 use Combination;
 use Configuration as PSConfiguration;
 use Context;
@@ -75,7 +75,7 @@ class ExportProductService extends AbstractOystService
     private function transformProducts($products, $quantity = 1)
     {
         // Tricks requirements for PrestaShop
-        $this->context->cart = new Cart();
+        // $this->context->cart = new Cart();
         if (!Validate::isLoadedObject($this->context->currency)) {
             throw new Exception('Bad Currency object, Did you forget to set it ?');
         }
@@ -129,7 +129,7 @@ class ExportProductService extends AbstractOystService
     public function transformProductLess($id_product, $id_combination, $quantity)
     {
         // Tricks requirements for PrestaShop
-        $this->context->cart = new Cart();
+        // $this->context->cart = new Cart();
         if (!Validate::isLoadedObject($this->context->currency)) {
             throw new Exception('Bad Currency object, Did you forget to set it ?');
         }

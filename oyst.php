@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.10.0';
+        $this->version = '1.11.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -267,17 +267,26 @@ class Oyst extends FroggyPaymentModule
 
     public function updateConstants()
     {
-        Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
-        Configuration::updateValue('FC_OYST_DELAY', 15);
+        // Params FreePay
         Configuration::updateValue('FC_OYST_ACTIVE_FRAUD', 0);
-        Configuration::updateValue('FC_OYST_STATE_PAYMENT_ONECLICK', 2);
         Configuration::updateValue('FC_OYST_STATE_PAYMENT_FREEPAY', 2);
-        Configuration::updateValue('FC_OYST_CURRENCIES', Currency::getIdByIsoCode('EUR'));
-        Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
+
+        // Params 1-Click Global
+        Configuration::updateValue('FC_OYST_STATE_PAYMENT_ONECLICK', 2);
+        Configuration::updateValue('FC_OYST_BTN_PRODUCT', 1);
+        Configuration::updateValue('FC_OYST_SMART_BTN', 1);
+        Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
+        Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
+        // Params 1-Click btn cart
+        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.standard-checkout');
+        // Params 1-Click advanced
+        Configuration::updateValue('FC_OYST_DELAY', 15);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);
         Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
-        Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
-        Configuration::updateValue('FC_OYST_SMART_BTN', 1);
+        Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
+        // Params 1-Click restrictions
+        Configuration::updateValue('FC_OYST_CURRENCIES', Currency::getIdByIsoCode('EUR'));
+        Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
     }
 
     public function loadSQLFile($sql_file)
