@@ -166,7 +166,7 @@ class CartService extends AbstractOystService
 
         if (isset($data['items'])) {
             foreach ($data['items'] as $key => $item) {
-                $idProduct = $item['reference'];
+                $idProduct = $item['product']['reference'];
                 $idCombination = 0;
 
                 if (false  !== strpos($idProduct, ';')) {
@@ -183,7 +183,7 @@ class CartService extends AbstractOystService
                     null,
                     false,
                     true,
-                    $item['quantity']
+                    $item['product']['quantity']
                 );
 
                 $without_reduc_price = $product->getPriceWithoutReduct(
@@ -193,22 +193,22 @@ class CartService extends AbstractOystService
 
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, $item['quantity']);
+                        StockAvailable::updateQuantity($idProduct, $idCombination, $item['product']['quantity']);
                     }
                 }
 
-                $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
+                $cart->updateQty($item['product']['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
 
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, -$item['quantity']);
+                        StockAvailable::updateQuantity($idProduct, $idCombination, -$item['product']['quantity']);
                     }
                 }
 
-                $oneClickItem = new OneClickItem((string)$item['reference'], (int)$item['quantity']);
-                $amount = new OystPrice(round($price * 100), Context::getContext()->currency->iso_code);
+                $oneClickItem = new OneClickItem((string)$item['product']['reference'], (int)$item['product']['quantity']);
+                $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
                 $oneClickItem->setAmountOriginal($amount);
-                $crossed_out_amount = new OystPrice(round($without_reduc_price * 100), Context::getContext()->currency->iso_code);
+                $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
                 $oneClickItem->setAmountPromotional($crossed_out_amount);
 
                 $oneClickShipmentCalculation->addItem($oneClickItem);
