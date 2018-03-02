@@ -189,6 +189,18 @@ class OrderService extends AbstractOystService
             return false;
         }
 
+        //If country's context is disabled, this will be throw an exception in the ValidateOrder method so let's check that
+        if (isset($this->context->country) && !$this->context->country->active){
+            $this->context->country = new CountryCore($deliveryAddress->id_country);
+            if (!Validate::isLoadedObject($this->context->country)) {
+                $this->context->country = new CountryCore($invoiceAddress->id_country);
+                $this->logger->emergency(
+                    'Country not found: '.$deliveryAddress->id_country.' or '.$invoiceAddress->id_country
+                );
+                return false;
+            }
+        }
+
         $cart->id_customer = $customer->id;
         $cart->id_address_delivery = $deliveryAddress->id;
         $cart->id_address_invoice = $invoiceAddress->id;
