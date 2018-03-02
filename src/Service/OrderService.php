@@ -125,7 +125,7 @@ class OrderService extends AbstractOystService
      * @param $shipmentInfo
      * @return Address
      */
-    private function getPickupStoreAddress($shipmentInfo, $phone = '0600000000')
+    private function getPickupStoreAddress(Customer $customer, $shipmentInfo, $phone = '0600000000')
     {
         $pickupAddress = $shipmentInfo['pickup_store']['address'];
         $pickupId = $shipmentInfo['pickup_store']['id'];
@@ -147,23 +147,22 @@ class OrderService extends AbstractOystService
             }
 
             if ($pickupAddress['name'] != ''){
-                $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $pickupAddress['name']);
-                if (isset(Address::$definition['fields']['firstname']['size']))
-                    $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+                $pickup_name = $pickupAddress['name'];
             }else{
-                $firstname = 'none';
+                $pickup_name = 'none';
             }
 
             $address = new Address();
-            $address->firstname = $firstname;
-            $address->lastname = "";
-            $address->address1 = ($pickupAddress['street'] != '')? $pickupAddress['street'] : 'none';
+            $address->id_customer = $customer->id;
+            $address->firstname = $customer->firstname;
+            $address->lastname = $customer->lastname;
+            $address->address1 = $pickup_name.' - '.($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none');
             $address->postcode = ($pickupAddress['postal_code'] != '')? $pickupAddress['postal_code'] : 'none';
             $address->city = ($pickupAddress['city'] != '')? $pickupAddress['city'] : 'none';
             $address->alias = $alias;
             $address->id_country = $countryId;
             $address->other = 'Pickup Info #'.$pickupId.' type '.$carrierInfo['type'];
-            $address->phone = $oystUser['phone'];
+            $address->phone = $phone;
             $address->phone_mobile = $phone;
 
             $address->add();
@@ -374,7 +373,7 @@ class OrderService extends AbstractOystService
             if (!isset($oystOrderInfo['shipment']['pickup_store'])) {
                 $deliveryAddress = $invoiceAddress;
             } else {
-                $deliveryAddress = $this->getPickupStoreAddress($oystOrderInfo['shipment'], $oystOrderInfo['user']['phone']);
+                $deliveryAddress = $this->getPickupStoreAddress($customer, $oystOrderInfo['shipment'], $oystOrderInfo['user']['phone']);
             }
 
             if (!isset($data['error'])) {
