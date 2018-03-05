@@ -59,14 +59,13 @@ class ShipmentService extends AbstractOystService
         if (count($customerInfo)) {
             $customer = new Customer($customerInfo[0]['id_customer']);
         } else {
-            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['address']['first_name']);
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
             if (isset(Customer::$definition['fields']['firstname']['size']))
                 $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
 
-            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['address']['last_name']);
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
             if (isset(Customer::$definition['fields']['lastname']['size']))
                 $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
-
 
             $customer = new Customer();
             $customer->email = $user['email'];
@@ -130,17 +129,25 @@ class ShipmentService extends AbstractOystService
         }
 
         $addressRepository = new AddressRepository(Db::getInstance());
-        $address = $addressRepository->findAddress($data['user']['address']);
+        $address = $addressRepository->findAddress($data['user']['address'], $customer);
         if (!Validate::isLoadedObject($address)) {
             $countryId = (int)Country::getByIso($data['user']['address']['country']);
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['firstname']);
+            if (isset(Address::$definition['fields']['firstname']['size']))
+                $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['lastname']);
+            if (isset(Address::$definition['fields']['lastname']['size']))
+                $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+
             $address = new Address();
             $address->id_customer = $customer->id;
-            $address->firstname = $customer->firstname;
-            $address->lastname = $customer->lastname;
+            $address->firstname = $firstname;
+            $address->lastname = $lastname;
             $address->address1 = $data['user']['address']['street'];
             $address->postcode = $data['user']['address']['postcode'];
             $address->city = $data['user']['address']['city'];

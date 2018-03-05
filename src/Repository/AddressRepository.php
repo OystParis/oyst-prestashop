@@ -22,6 +22,7 @@
 namespace Oyst\Repository;
 
 use Address;
+use Customer;
 
 class AddressRepository extends AbstractOystRepository
 {
@@ -29,19 +30,25 @@ class AddressRepository extends AbstractOystRepository
      * @param $address
      * @return Address
      */
-    public function findAddress($address)
+    public function findAddress($address, Customer $customer)
     {
         $address1 = pSQL($address['street']);
         $postcode = pSQL($address['postcode']);
         $city = pSQL($address['city']);
+        $firstname = pSQL($address['firstname']);
+        $lastname = pSQL($address['lastname']);
 
         $query = "
             SELECT a.id_address
             FROM "._DB_PREFIX_."address a
+            INNER JOIN "._DB_PREFIX_."customer c ON a.id_customer = c.id_customer
             WHERE
-              a.address1 = '$address1'
-              AND a.postcode = '$postcode'
-              AND a.city = '$city'
+              a.address1 = '".$address1."'
+              AND a.postcode = '".$postcode."'
+              AND a.city = '".$city."'
+              AND a.firstname = '".$firstname."'
+              AND a.lastname = '".$lastname."'
+              AND c.id_customer = ".$customer->id."
         ";
 
         if (isset($address['name'])) {

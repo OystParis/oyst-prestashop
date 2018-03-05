@@ -61,11 +61,11 @@ class OrderService extends AbstractOystService
         if (count($customerInfo)) {
             $customer = new Customer($customerInfo[0]['id_customer']);
         } else {
-            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['address']['first_name']);
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
             if (isset(Customer::$definition['fields']['firstname']['size']))
                 $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
 
-            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['address']['last_name']);
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
             if (isset(Customer::$definition['fields']['lastname']['size']))
                 $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
 
@@ -89,16 +89,24 @@ class OrderService extends AbstractOystService
     private function getInvoiceAddress(Customer $customer, $oystUser)
     {
         $oystAddress = $oystUser['address'];
-        $address = $this->addressRepository->findAddress($oystAddress);
+        $address = $this->addressRepository->findAddress($oystAddress, $customer);
         if (!Validate::isLoadedObject($address)) {
             $countryId = (int)CountryCore::getByIso('fr');
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['firstname']);
+            if (isset(Address::$definition['fields']['firstname']['size']))
+                $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['lastname']);
+            if (isset(Address::$definition['fields']['lastname']['size']))
+                $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+
             $address->id_customer = $customer->id;
-            $address->firstname = $customer->firstname;
-            $address->lastname = $customer->lastname;
+            $address->firstname = $firstname;
+            $address->lastname = $lastname;
             $address->address1 = $oystAddress['street'];
             $address->postcode = $oystAddress['postcode'];
             $address->city = $oystAddress['city'];
@@ -139,7 +147,7 @@ class OrderService extends AbstractOystService
             'city' => $pickupAddress['city'],
         );
 
-        $address = $this->addressRepository->findAddress($addressToFind);
+        $address = $this->addressRepository->findAddress($addressToFind, $customer);
         if (!Validate::isLoadedObject($address)) {
             $countryId = (int)CountryCore::getByIso('fr');
             if (0 >= $countryId) {
