@@ -62,12 +62,14 @@ class OrderService extends AbstractOystService
             $customer = new Customer($customerInfo[0]['id_customer']);
         } else {
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
-            if (isset(Customer::$definition['fields']['firstname']['size']))
+            if (isset(Customer::$definition['fields']['firstname']['size'])) {
                 $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
+            }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
-            if (isset(Customer::$definition['fields']['lastname']['size']))
+            if (isset(Customer::$definition['fields']['lastname']['size'])) {
                 $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
+            }
 
             $customer = new Customer();
             $customer->email = $user['email'];
@@ -97,12 +99,14 @@ class OrderService extends AbstractOystService
             }
 
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['first_name']);
-            if (isset(Address::$definition['fields']['firstname']['size']))
+            if (isset(Address::$definition['fields']['firstname']['size'])) {
                 $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+            }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['last_name']);
-            if (isset(Address::$definition['fields']['lastname']['size']))
+            if (isset(Address::$definition['fields']['lastname']['size'])) {
                 $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+            }
 
             $address->id_customer = $customer->id;
             $address->firstname = $firstname;
@@ -154,9 +158,9 @@ class OrderService extends AbstractOystService
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
-            if ($pickupAddress['name'] != ''){
+            if ($pickupAddress['name'] != '') {
                 $pickup_name = $pickupAddress['name'];
-            }else{
+            } else {
                 $pickup_name = 'none';
             }
 

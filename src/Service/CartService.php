@@ -59,10 +59,20 @@ class CartService extends AbstractOystService
         if (count($customerInfo)) {
             $customer = new Customer($customerInfo[0]['id_customer']);
         } else {
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
+            if (isset(Customer::$definition['fields']['firstname']['size'])) {
+                $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
+            }
+
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
+            if (isset(Customer::$definition['fields']['lastname']['size'])) {
+                $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
+            }
+
             $customer = new Customer();
             $customer->email = $user['email'];
-            $customer->firstname = $user['address']['first_name'];
-            $customer->lastname = $user['address']['last_name'];
+            $customer->firstname = $firstname;
+            $customer->lastname = $lastname;
             if (version_compare(_PS_VERSION_, '1.5.4.0', '>=')) {
                 $customer->id_lang = PSConfiguration::get('PS_LANG_DEFAULT');
             }
@@ -107,17 +117,27 @@ class CartService extends AbstractOystService
         }
 
         $addressRepository = new AddressRepository(Db::getInstance());
-        $address = $addressRepository->findAddress($data['user']['address']);
+        $address = $addressRepository->findAddress($data['user']['address'], $customer);
         if (!Validate::isLoadedObject($address)) {
             $countryId = (int)Country::getByIso($data['user']['address']['country']);
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
+            if (isset(Address::$definition['fields']['firstname']['size'])) {
+                $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+            }
+
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
+            if (isset(Address::$definition['fields']['lastname']['size'])) {
+                $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+            }
+
             $address = new Address();
             $address->id_customer = $customer->id;
-            $address->firstname = $customer->firstname;
-            $address->lastname = $customer->lastname;
+            $address->firstname = $firstname;
+            $address->lastname = $lastname;
             $address->address1 = $data['user']['address']['street'];
             $address->postcode = $data['user']['address']['postcode'];
             $address->city = $data['user']['address']['city'];
@@ -152,7 +172,7 @@ class CartService extends AbstractOystService
         $cart->id_customer = $customer->id;
         $cart->id_address_delivery = $address->id;
         $cart->id_address_invoice = $address->id;
-        $cart->id_lang = $customer->id_lang;
+        $cart->id_lang = $this->context->language->id;
         $cart->secure_key = $customer->secure_key;
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;

@@ -142,16 +142,16 @@
         },
         {
             "name": "oyst/oyst-php",
-            "version": "v5.0.0",
+            "version": "v5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oystparis/oyst-php.git",
-                "reference": "1d739b3677b1d7a16d06130e23121cab18d14d9b"
+                "reference": "73718f43d4347e3e5a09fbf0ed4e4c9b8643b4b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/1d739b3677b1d7a16d06130e23121cab18d14d9b",
-                "reference": "1d739b3677b1d7a16d06130e23121cab18d14d9b",
+                "url": "https://api.github.com/repos/oystparis/oyst-php/zipball/73718f43d4347e3e5a09fbf0ed4e4c9b8643b4b0",
+                "reference": "73718f43d4347e3e5a09fbf0ed4e4c9b8643b4b0",
                 "shasum": ""
             },
             "require": {
@@ -201,7 +201,7 @@
                 "issues": "https://github.com/oystparis/oyst-php/issues",
                 "source": "https://github.com/oystparis/oyst-php"
             },
-            "time": "2018-02-28T17:05:40+00:00"
+            "time": "2018-03-01T17:30:05+00:00"
         },
         {
             "name": "psr/log",
@@ -252,16 +252,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v4.0.4",
+            "version": "v4.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "74d33aac36208c4d6757807d9f598f0133a3a4eb"
+                "reference": "85eaf6a8ec915487abac52e133efc4a268204428"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/74d33aac36208c4d6757807d9f598f0133a3a4eb",
-                "reference": "74d33aac36208c4d6757807d9f598f0133a3a4eb",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/85eaf6a8ec915487abac52e133efc4a268204428",
+                "reference": "85eaf6a8ec915487abac52e133efc4a268204428",
                 "shasum": ""
             },
             "require": {
@@ -311,7 +311,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2018-01-03T07:38:00+00:00"
+            "time": "2018-02-14T14:11:10+00:00"
         },
         {
             "name": "symfony/polyfill-php55",
@@ -371,7 +371,7 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v2.8.34",
+            "version": "v2.8.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
@@ -431,16 +431,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v2.8.34",
+            "version": "v2.8.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "0af616fd41c3d28858866670e6a96861c023a015"
+                "reference": "c3cfcfcdd154d7465895ba4b425de0a2a6f4326c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/0af616fd41c3d28858866670e6a96861c023a015",
-                "reference": "0af616fd41c3d28858866670e6a96861c023a015",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/c3cfcfcdd154d7465895ba4b425de0a2a6f4326c",
+                "reference": "c3cfcfcdd154d7465895ba4b425de0a2a6f4326c",
                 "shasum": ""
             },
             "require": {
@@ -491,11 +491,11 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2018-01-10T11:05:18+00:00"
+            "time": "2018-02-14T13:58:24+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.34",
+            "version": "v2.8.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -656,16 +656,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v2.8.34",
+            "version": "v2.8.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "d083d1664b219a078f5b35c6ce5eab24fa07ff4b"
+                "reference": "e6a3e8c832096f8902a3e80169fca5d202e7e0d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/d083d1664b219a078f5b35c6ce5eab24fa07ff4b",
-                "reference": "d083d1664b219a078f5b35c6ce5eab24fa07ff4b",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/e6a3e8c832096f8902a3e80169fca5d202e7e0d3",
+                "reference": "e6a3e8c832096f8902a3e80169fca5d202e7e0d3",
                 "shasum": ""
             },
             "require": {
@@ -720,7 +720,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2018-01-29T08:54:45+00:00"
+            "time": "2018-01-31T10:36:06+00:00"
         },
         {
             "name": "wimg/php-compatibility",
