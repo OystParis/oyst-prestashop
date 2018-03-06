@@ -96,11 +96,11 @@ class OrderService extends AbstractOystService
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
-            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['firstname']);
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['first_name']);
             if (isset(Address::$definition['fields']['firstname']['size']))
                 $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
 
-            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['lastname']);
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['last_name']);
             if (isset(Address::$definition['fields']['lastname']['size']))
                 $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
 

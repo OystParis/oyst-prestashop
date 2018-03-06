@@ -35,8 +35,8 @@ class AddressRepository extends AbstractOystRepository
         $address1 = pSQL($address['street']);
         $postcode = pSQL($address['postcode']);
         $city = pSQL($address['city']);
-        $firstname = pSQL($address['firstname']);
-        $lastname = pSQL($address['lastname']);
+        $firstname = pSQL($address['first_name']);
+        $lastname = pSQL($address['last_name']);
 
         $query = "
             SELECT a.id_address
