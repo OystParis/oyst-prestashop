@@ -61,10 +61,18 @@ class OrderService extends AbstractOystService
         if (count($customerInfo)) {
             $customer = new Customer($customerInfo[0]['id_customer']);
         } else {
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
+            if (isset(Customer::$definition['fields']['firstname']['size']))
+                $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
+
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
+            if (isset(Customer::$definition['fields']['lastname']['size']))
+                $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
+
             $customer = new Customer();
             $customer->email = $user['email'];
-            $customer->firstname = $user['address']['first_name'];
-            $customer->lastname = $user['address']['last_name'];
+            $customer->firstname = $firstname;
+            $customer->lastname = $lastname;
             $customer->id_lang = PSConfiguration::get('PS_LANG_DEFAULT');
             $customer->passwd = ToolsCore::encrypt(ToolsCore::passwdGen());
             $customer->add();
@@ -81,16 +89,24 @@ class OrderService extends AbstractOystService
     private function getInvoiceAddress(Customer $customer, $oystUser)
     {
         $oystAddress = $oystUser['address'];
-        $address = $this->addressRepository->findAddress($oystAddress);
+        $address = $this->addressRepository->findAddress($oystAddress, $customer);
         if (!Validate::isLoadedObject($address)) {
             $countryId = (int)CountryCore::getByIso('fr');
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
+            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['first_name']);
+            if (isset(Address::$definition['fields']['firstname']['size']))
+                $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+
+            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['last_name']);
+            if (isset(Address::$definition['fields']['lastname']['size']))
+                $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+
             $address->id_customer = $customer->id;
-            $address->firstname = $customer->firstname;
-            $address->lastname = $customer->lastname;
+            $address->firstname = $firstname;
+            $address->lastname = $lastname;
             $address->address1 = $oystAddress['street'];
             $address->postcode = $oystAddress['postcode'];
             $address->city = $oystAddress['city'];
@@ -117,7 +133,7 @@ class OrderService extends AbstractOystService
      * @param $shipmentInfo
      * @return Address
      */
-    private function getPickupStoreAddress($shipmentInfo, $phone = '0600000000')
+    private function getPickupStoreAddress(Customer $customer, $shipmentInfo, $phone = '0600000000')
     {
         $pickupAddress = $shipmentInfo['pickup_store']['address'];
         $pickupId = $shipmentInfo['pickup_store']['id'];
@@ -131,23 +147,30 @@ class OrderService extends AbstractOystService
             'city' => $pickupAddress['city'],
         );
 
-        $address = $this->addressRepository->findAddress($addressToFind);
+        $address = $this->addressRepository->findAddress($addressToFind, $customer);
         if (!Validate::isLoadedObject($address)) {
             $countryId = (int)CountryCore::getByIso('fr');
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
+            if ($pickupAddress['name'] != ''){
+                $pickup_name = $pickupAddress['name'];
+            }else{
+                $pickup_name = 'none';
+            }
+
             $address = new Address();
-            $address->firstname = ($pickupAddress['name'] != '')? $pickupAddress['name'] : 'none';
-            $address->lastname = "";
-            $address->address1 = ($pickupAddress['street'] != '')? $pickupAddress['street'] : 'none';
+            $address->id_customer = $customer->id;
+            $address->firstname = $customer->firstname;
+            $address->lastname = $customer->lastname;
+            $address->address1 = $pickup_name.' - '.($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none');
             $address->postcode = ($pickupAddress['postal_code'] != '')? $pickupAddress['postal_code'] : 'none';
             $address->city = ($pickupAddress['city'] != '')? $pickupAddress['city'] : 'none';
             $address->alias = $alias;
             $address->id_country = $countryId;
             $address->other = 'Pickup Info #'.$pickupId.' type '.$carrierInfo['type'];
-            $address->phone = $oystUser['phone'];
+            $address->phone = $phone;
             $address->phone_mobile = $phone;
 
             $address->add();
@@ -358,7 +381,7 @@ class OrderService extends AbstractOystService
             if (!isset($oystOrderInfo['shipment']['pickup_store'])) {
                 $deliveryAddress = $invoiceAddress;
             } else {
-                $deliveryAddress = $this->getPickupStoreAddress($oystOrderInfo['shipment'], $oystOrderInfo['user']['phone']);
+                $deliveryAddress = $this->getPickupStoreAddress($customer, $oystOrderInfo['shipment'], $oystOrderInfo['user']['phone']);
             }
 
             if (!isset($data['error'])) {
