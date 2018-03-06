@@ -28,7 +28,7 @@ use Carrier;
 use Cart;
 use Combination;
 use Configuration as PSConfiguration;
-use CountryCore;
+use Country;
 use Currency;
 use Customer;
 use Exception;
@@ -91,7 +91,7 @@ class OrderService extends AbstractOystService
         $oystAddress = $oystUser['address'];
         $address = $this->addressRepository->findAddress($oystAddress, $customer);
         if (!Validate::isLoadedObject($address)) {
-            $countryId = (int)CountryCore::getByIso('fr');
+            $countryId = (int)Country::getByIso('fr');
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
@@ -149,7 +149,7 @@ class OrderService extends AbstractOystService
 
         $address = $this->addressRepository->findAddress($addressToFind, $customer);
         if (!Validate::isLoadedObject($address)) {
-            $countryId = (int)CountryCore::getByIso('fr');
+            $countryId = (int)Country::getByIso('fr');
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
@@ -210,6 +210,18 @@ class OrderService extends AbstractOystService
                 'Currency not found: '.$oystOrderInfo['order_amount']['currency']
             );
             return false;
+        }
+
+        //If country's context is disabled, this will be throw an exception in the ValidateOrder method so let's check that
+        if (isset($this->context->country) && !$this->context->country->active){
+            $this->context->country = new Country($deliveryAddress->id_country);
+            if (!Validate::isLoadedObject($this->context->country)) {
+                $this->context->country = new Country($invoiceAddress->id_country);
+                $this->logger->emergency(
+                    'Country not found: '.$deliveryAddress->id_country.' or '.$invoiceAddress->id_country
+                );
+                return false;
+            }
         }
 
         $cart->id_customer = $customer->id;
