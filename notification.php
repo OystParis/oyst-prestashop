@@ -58,9 +58,9 @@ if ($data && isset($data['event'])) {
                 $orderService = AbstractOrderServiceFactory::get($oyst, $context);
                 $orderController = new OrderController($request);
                 $orderGUID = $data['data']['order_id'];
-                $orderExist = $orderService->getOrderRepository()->getOrderExist($orderGUID);
+                $orderAlreadyBeenTreated = $orderService->getOrderRepository()->isOrderAlreadyBeenTreated($orderGUID);
 
-                if ($orderExist == 0) {
+                if (!$orderAlreadyBeenTreated) {
                     $insert   = array(
                         'id_order'   => 0,
                         'id_cart'    => 0,
