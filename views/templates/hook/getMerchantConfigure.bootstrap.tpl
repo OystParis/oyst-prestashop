@@ -197,12 +197,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group clearfix">
+                        {* Deprecated for version 1.11.0 *}
+                        {* <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Create order before payment' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-7" style="height: 31px;">
                                 <input type="checkbox" id="FC_OYST_PREORDER_FEATURE" name="FC_OYST_PREORDER_FEATURE" value="1"{if $oyst.FC_OYST_PREORDER_FEATURE} checked="checked"{/if} />
                             </div>
-                        </div>
+                        </div> *}
                         <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Enable Fraudscoring' mod='oyst'}</label>
                             <div class="col-md-7 col-lg-7" style="height: 31px;">

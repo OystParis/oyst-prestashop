@@ -35,5 +35,7 @@ function upgrade_module_1_10_0($module)
     Configuration::deleteByName('FC_OYST_SMART_BTN_CART');
     Configuration::deleteByName('FC_OYST_THEME_BTN_CART');
     Configuration::deleteByName('FC_OYST_COLOR_BTN_CART');
+    Configuration::deleteByName('FC_OYST_PREORDER_FEATURE');
+
     return true;
 }
