@@ -21,12 +21,13 @@
 
 namespace Oyst\Service;
 
-use Oyst\Classes\OneClickShipmentCalculation;
+use Oyst\Classes\OneClickOrderCartEstimate;
 use Oyst\Classes\OneClickShipmentCatalogLess;
 use Oyst\Classes\OneClickItem;
 use Oyst\Classes\OystCarrier;
 use Oyst\Classes\OystPrice;
 use Oyst\Repository\AddressRepository;
+use Oyst\Repository\ProductRepository;
 use Db;
 use Customer;
 use Cart;
@@ -43,11 +44,16 @@ use Country;
 use Configuration as PSConfiguration;
 use Exception;
 use StockAvailable;
+use Combination;
+use CartRule;
 
 class CartService extends AbstractOystService
 {
     /** @var AddressRepository */
     private $addressRepository;
+
+    /** @var  ProductRepository */
+    private $productRepository;
 
     /**
      * @param $user
@@ -186,7 +192,7 @@ class CartService extends AbstractOystService
             return false;
         }
 
-        $oneClickShipmentCalculation = new OneClickShipmentCalculation(array());
+        $oneClickOrderCartEstimate = new OneClickOrderCartEstimate(array());
 
         if (isset($data['items'])) {
             foreach ($data['items'] as $key => $item) {
@@ -200,20 +206,6 @@ class CartService extends AbstractOystService
                 }
 
                 $product = new Product($idProduct);
-                $price = $product->getPrice(
-                    true,
-                    $idCombination,
-                    6,
-                    null,
-                    false,
-                    true,
-                    $item['product']['quantity']
-                );
-
-                $without_reduc_price = $product->getPriceWithoutReduct(
-                    false,
-                    $idCombination
-                );
 
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
@@ -229,12 +221,55 @@ class CartService extends AbstractOystService
                     }
                 }
 
-                // $oneClickItem = new OneClickItem((string)$item['product']['reference'], (int)$item['product']['quantity']);
-                // $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
+                // Add cart rule
+                $price = $product->getPrice(
+                    true,
+                    $idCombination,
+                    6,
+                    null,
+                    false,
+                    true,
+                    $item['product']['quantity']
+                );
+
+                $without_reduc_price = $product->getPriceWithoutReduct(
+                    false,
+                    $idCombination
+                );
+
+                $title = is_array($product->name) ? reset($product->name) : $product->name;
+
+                if ($idCombination > 0) {
+                    $combination = new Combination($idCombination);
+                    if (!Validate::isLoadedObject($combination)) {
+                        $this->logger->emergency(
+                            'Combination not exist ['.json_encode($data).']'
+                        );
+                    }
+                }
+
+                // Get attributes for title
+                if ($combination && $combination->id) {
+                    $productRepository = new ProductRepository(Db::getInstance());
+                    $attributesInfo = $productRepository->getAttributesCombination($combination);
+                    foreach ($attributesInfo as $attributeInfo) {
+                        $title .= ' '.$attributeInfo['value'];
+                    }
+                }
+
+                $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
+                $oneClickItem = new OneClickItem(
+                    (string)$item['product']['reference'],
+                    $amount,
+                    (int)$item['product']['quantity']
+                );
                 // $oneClickItem->setAmountOriginal($amount);
-                // $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
-                // $oneClickItem->setAmountPromotional($crossed_out_amount);
-                // $oneClickShipmentCalculation->addItem($oneClickItem);
+
+                $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
+                if ($amount != $crossed_out_amount) {
+                    $oneClickItem->__set('crossedOutAmount', $crossed_out_amount);
+                }
+                $oneClickOrderCartEstimate->addItem($oneClickItem);
             }
         } else {
             $this->logger->emergency(
@@ -242,6 +277,21 @@ class CartService extends AbstractOystService
             );
             return false;
         }
+
+        CartRule::autoRemoveFromCart($this->context);
+        CartRule::autoAddToCart($this->context);
+
+        $cart_rules = $this->context->cart->getCartRules();
+
+        // $customizedDatas = Product::getAllCustomizedDatas($this->context->cart->id);
+        // die(var_dump($customizedDatas));
+
+        // $summaryDetails = $this->context->cart->getSummaryDetails();
+
+        // foreach ($summaryDetails['products'] as $row) {
+        //     var_dump($row);
+        // }
+        die('stop');
 
         $carriersAvailables = $cart->simulateCarriersOutput();
 
@@ -291,7 +341,7 @@ class CartService extends AbstractOystService
                     $primary
                 );
 
-                $oneClickShipmentCalculation->addShipment($oneClickShipment);
+                $oneClickOrderCartEstimate->addShipment($oneClickShipment);
             }
         }
 
@@ -312,19 +362,19 @@ class CartService extends AbstractOystService
 
         // Add first carrier if primary is not exist
         if (!$is_primary) {
-            $oneClickShipmentCalculation->setDefaultPrimaryShipmentByType();
+            $oneClickOrderCartEstimate->setDefaultPrimaryShipmentByType();
         }
 
         $this->logger->info(
             sprintf(
-                'New notification oneClickShipmentCalculation [%s]',
-                $oneClickShipmentCalculation->toJson()
+                'New notification oneClickOrderCartEstimate [%s]',
+                $oneClickOrderCartEstimate->toJson()
             )
         );
 
         // Delete cart for module relaunch cart
         $cart->delete();
 
-        return $oneClickShipmentCalculation->toJson();
+        return $oneClickOrderCartEstimate->toJson();
     }
 }
