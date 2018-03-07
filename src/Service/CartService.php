@@ -46,6 +46,7 @@ use Exception;
 use StockAvailable;
 use Combination;
 use CartRule;
+use Image;
 
 class CartService extends AbstractOystService
 {
@@ -221,7 +222,8 @@ class CartService extends AbstractOystService
                     }
                 }
 
-                // Add cart rule
+                // Add items
+
                 $price = $product->getPrice(
                     true,
                     $idCombination,
@@ -263,7 +265,6 @@ class CartService extends AbstractOystService
                     $amount,
                     (int)$item['product']['quantity']
                 );
-                // $oneClickItem->setAmountOriginal($amount);
 
                 $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
                 if ($amount != $crossed_out_amount) {
@@ -278,27 +279,15 @@ class CartService extends AbstractOystService
             return false;
         }
 
-        CartRule::autoRemoveFromCart($this->context);
-        CartRule::autoAddToCart($this->context);
 
-        $cart_rules = $this->context->cart->getCartRules();
-
-        // $customizedDatas = Product::getAllCustomizedDatas($this->context->cart->id);
-        // die(var_dump($customizedDatas));
-
-        // $summaryDetails = $this->context->cart->getSummaryDetails();
-
-        // foreach ($summaryDetails['products'] as $row) {
-        //     var_dump($row);
-        // }
-        die('stop');
-
+        // Get carriers available
         $carriersAvailables = $cart->simulateCarriersOutput();
-
+        // Get default shipment
         $id_default_carrier = (int)PSConfiguration::get('FC_OYST_SHIPMENT_DEFAULT');
 
         $type = OystCarrier::HOME_DELIVERY;
 
+        // Add carriers
         foreach ($carriersAvailables as $key => $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
 
@@ -363,6 +352,71 @@ class CartService extends AbstractOystService
         // Add first carrier if primary is not exist
         if (!$is_primary) {
             $oneClickOrderCartEstimate->setDefaultPrimaryShipmentByType();
+        }
+
+        // Manage cart rule
+        CartRule::autoRemoveFromCart($this->context);
+        CartRule::autoAddToCart($this->context);
+
+        // Get cart rule group customer
+        //$cart_rules = CartRule::getCustomerCartRules(Context::getContext()->cookie->id_lang, Context::getContext()->cookie->id_customer, true, true, false, $this, true);
+        // Get cart rule with product gift
+        $cart_rules_gift = $this->context->cart->getCartRules(CartRule::FILTER_ACTION_GIFT);
+
+        foreach ($cart_rules_gift as $product_gift) {
+            $reference = $product_gift['gift_product'];
+            $idProduct = (int)$product_gift['gift_product'];
+
+            if ($product_gift['gift_product_attribute'] > 0) {
+                $reference .= ';'.$product_gift['gift_product_attribute'];
+                $idCombination = (int)$product_gift['gift_product_attribute'];
+            }
+
+            $product = new Product($idProduct, false, $this->context->language->id);
+
+            $title = is_array($product->name) ? reset($product->name) : $product->name;
+
+            if ($idCombination > 0) {
+                $combination = new Combination($idCombination);
+                if (!Validate::isLoadedObject($combination)) {
+                    $this->logger->emergency(
+                        'Combination not exist ['.json_encode($data).']'
+                    );
+                }
+            }
+
+            // Get attributes for title
+            if ($combination && $combination->id) {
+                $productRepository = new ProductRepository(Db::getInstance());
+                $attributesInfo = $productRepository->getAttributesCombination($combination);
+                foreach ($attributesInfo as $attributeInfo) {
+                    $title .= ' '.$attributeInfo['value'];
+                }
+            }
+
+            $amount = new OystPrice(0, Context::getContext()->currency->iso_code);
+            $oneClickItemFree = new OneClickItem(
+                (string)$reference,
+                $amount,
+                (int)$product_gift['quantity']
+            );
+
+            $images = array();
+            foreach (Image::getImages($this->context->language->id, $idProduct, $idCombination) as $image) {
+                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+            }
+
+            //If no image for attribute, search default product image
+            if (empty($images)) {
+                foreach (Image::getImages($this->context->language->id, $idProduct) as $image) {
+                    $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                }
+            }
+
+            $oneClickItemFree->__set('title', $title);
+            $oneClickItemFree->__set('message', $product_gift['description']);
+            $oneClickItemFree->__set('images', $images);
+            $oneClickOrderCartEstimate->addFreeItems($oneClickItemFree);
         }
 
         $this->logger->info(
