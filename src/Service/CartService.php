@@ -398,7 +398,7 @@ class CartService extends AbstractOystService
             $oneClickItemFree = new OneClickItem(
                 (string)$reference,
                 $amount,
-                (int)$product_gift['quantity']
+                1
             );
 
             $images = array();
