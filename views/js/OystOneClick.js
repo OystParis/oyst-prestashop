@@ -209,16 +209,23 @@ function OystOneClick(url, productId, controller) {
      * Initialize requirements
      */
     this.prepareButton = function () {
-        // Avoid any event issue due to potential remove / create from loaded oyst script
-        if (this.positionBtn == 'after') {
-            $(this.idBtnAddToCart).after($('<div>', {
-                id: 'oneClickContainer'
-            }));
-        } else {
-            $(this.idBtnAddToCart).before($('<div>', {
-                id: 'oneClickContainer'
-            }));
-        }
+        var selectors = this.idBtnAddToCart.split(',');
+
+        $.each(selectors, function(index, selector){
+            if ($(selector).length){
+                // Avoid any event issue due to potential remove / create from loaded oyst script
+                if (this.positionBtn == 'after') {
+                    $(selector).after($('<div>', {
+                        id: 'oneClickContainer'
+                    }));
+                } else {
+                    $(selector).before($('<div>', {
+                        id: 'oneClickContainer'
+                    }));
+                }
+                return false;
+            }
+        });
 
         $('#oneClickContainer').css({
             'margin-top': this.marginTopBtn,
