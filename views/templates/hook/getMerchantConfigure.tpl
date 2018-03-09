@@ -351,6 +351,7 @@
                                 <label>{l s='Id btn add to cart' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="text" name="FC_OYST_ID_BTN_ADD_TO_CART" value="{if $oyst.FC_OYST_ID_BTN_ADD_TO_CART}{$oyst.FC_OYST_ID_BTN_ADD_TO_CART|escape:'htmlall':'UTF-8'}{else}#add_to_cart{/if}"/>
+                                    <span class="help-block">{l s='You can select multiple selectors separated by commas (jQuery selector)' mod='oyst'}</span>
                                 </div>
                                 <label>{l s='Id smart btn' mod='oyst'}</label>
                                 <div class="margin-form">
