@@ -287,6 +287,7 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');
         PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
         PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY_CART');
+        PSConfiguration::deleteByName('FC_OYST_ONLY_FOR_IP');
         // Conf 1-Click restrictions
         PSConfiguration::deleteByName('FC_OYST_CURRENCIES');
         PSConfiguration::deleteByName('FC_OYST_LANG');

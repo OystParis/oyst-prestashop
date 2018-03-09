@@ -75,6 +75,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_MANAGE_QUANTITY'         => 'int',
         'FC_OYST_BTN_CART'                => 'int',
         'FC_OYST_MANAGE_QUANTITY_CART'    => 'int',
+        'FC_OYST_ONLY_FOR_IP'             => 'string',
         'FC_OYST_BTN_PRODUCT'             => 'int',
         'FC_OYST_OC_REDIRECT_CONF'        => 'string',
         'FC_OYST_OC_REDIRECT_CONF_CUSTOM' => 'string',
@@ -320,6 +321,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['notification_tables']      = $notification_tables;
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
+        $assign['my_ip'] = Tools::getRemoteAddr();
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');
