@@ -179,6 +179,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_29ef41c7619b3b7056a3af9068ab4567'] = 'Activer gestion des stocks';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e4a9deb0f5a00aecea80e5623c1f717a'] = 'Activé uniquement pour l\'ip';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_912e8c6b462d9adc724895ffaa09255b'] = 'Adresses IPs séparées par une virgule';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c770d8e0d1d1943ce239c64dbd6acc20'] = 'Ajouter mon IP';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e13b27dfd442724dc5e3dfcc00c11b4f'] = 'Activer bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e51c9d66405ad052f47710a86d327d28'] = 'Désactiver bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_578c69a9e28d2854ec76d91a682f6df5'] = 'Restrictions des langues';
@@ -264,6 +267,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_29ef41c7619b3b7056a3af9068ab4567'] = 'Activer gestion des stocks';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_e4a9deb0f5a00aecea80e5623c1f717a'] = 'Activé uniquement pour l\'ip';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_c770d8e0d1d1943ce239c64dbd6acc20'] = 'Ajouter mon IP';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_912e8c6b462d9adc724895ffaa09255b'] = 'Adresses IPs séparées par une virgule';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e13b27dfd442724dc5e3dfcc00c11b4f'] = 'Activer bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e51c9d66405ad052f47710a86d327d28'] = 'Désactiver bouton 1-Click sur les produits';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_578c69a9e28d2854ec76d91a682f6df5'] = 'Restrictions des langues';
