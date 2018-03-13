@@ -259,26 +259,26 @@ function OystOneClick(url, productId, controller) {
         if (typeof quantity === "undefined")
             quantity = 1;
 
-        if (this.shouldAsStock) {
-            if ($('#quantityAvailable').length && parseInt($('#quantityAvailable').html()) < quantity) {
-                if (!!$.prototype.fancybox) {
-                    $.fancybox.open([
-                      {
-                        type: 'inline',
-                        autoScale: true,
-                        minHeight: 30,
-                        content: '<p class="fancybox-error">' + this.errorText + '</p>'
-                      }
-                    ], {
-                      padding: 0
-                    });
-                    return;
-                } else {
-                    alert(this.errorText);
-                    return;
-                }
-            }
-        }
+        // if (this.shouldAsStock) {
+        //     if ($('#quantityAvailable').length && parseInt($('#quantityAvailable').html()) < quantity) {
+        //         if (!!$.prototype.fancybox) {
+        //             $.fancybox.open([
+        //               {
+        //                 type: 'inline',
+        //                 autoScale: true,
+        //                 minHeight: 30,
+        //                 content: '<p class="fancybox-error">' + this.errorText + '</p>'
+        //               }
+        //             ], {
+        //               padding: 0
+        //             });
+        //             return;
+        //         } else {
+        //             alert(this.errorText);
+        //             return;
+        //         }
+        //     }
+        // }
 
         return {
             productId: this.productId,
