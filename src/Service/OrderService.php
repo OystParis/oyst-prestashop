@@ -39,6 +39,7 @@ use Validate;
 use Db;
 use Tools;
 use StockAvailable;
+use CartRule;
 
 /**
  * Class OneClickService
@@ -217,7 +218,7 @@ class OrderService extends AbstractOystService
         }
 
         //If country's context is disabled, this will be throw an exception in the ValidateOrder method so let's check that
-        if (isset($this->context->country) && !$this->context->country->active){
+        if (isset($this->context->country) && !$this->context->country->active) {
             $this->context->country = new Country($deliveryAddress->id_country);
             if (!Validate::isLoadedObject($this->context->country)) {
                 $this->context->country = new Country($invoiceAddress->id_country);
@@ -264,6 +265,10 @@ class OrderService extends AbstractOystService
                 return false;
             }
         }
+
+        // Manage cart rule
+        CartRule::autoRemoveFromCart($this->context);
+        CartRule::autoAddToCart($this->context);
 
         $id_reference = Db::getInstance()->getValue('
                         SELECT `id_reference`

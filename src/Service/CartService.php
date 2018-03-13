@@ -112,7 +112,7 @@ class CartService extends AbstractOystService
             9 => 24
         );
 
-        if ($data['context'] && $data['context']['id_user']) {
+        if ($data['context'] && isset($data['context']['id_user'])) {
             $customer = new Customer((int)$data['context']['id_user']);
         } else {
             $customer = $this->getCustomer($data['user']);
@@ -247,15 +247,16 @@ class CartService extends AbstractOystService
                         $this->logger->emergency(
                             'Combination not exist ['.json_encode($data).']'
                         );
+                        return false;
                     }
-                }
 
-                // Get attributes for title
-                if ($combination && $combination->id) {
-                    $productRepository = new ProductRepository(Db::getInstance());
-                    $attributesInfo = $productRepository->getAttributesCombination($combination);
-                    foreach ($attributesInfo as $attributeInfo) {
-                        $title .= ' '.$attributeInfo['value'];
+                    // Get attributes for title
+                    if ($combination && $combination->id) {
+                        $productRepository = new ProductRepository(Db::getInstance());
+                        $attributesInfo = $productRepository->getAttributesCombination($combination);
+                        foreach ($attributesInfo as $attributeInfo) {
+                            $title .= ' '.$attributeInfo['value'];
+                        }
                     }
                 }
 

@@ -38,6 +38,7 @@ use Oyst\Factory\AbstractExportProductServiceFactory;
 use Tools;
 use StockAvailable;
 use Module;
+use CartRule;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -119,7 +120,16 @@ class OneClickService extends AbstractOystService
         }
 
         if ($controller == 'order') {
+            // Check validity cart rule ?
+            foreach (Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT) as $cr) {
+                $cart_rule = new CartRule($cr['obj']->id, Context::getContext()->language->id);
+                Context::getContext()->cart->removeCartRule($cart_rule->id);
+                Context::getContext()->cart->update();
+            }
+
             $products = Context::getContext()->cart->getProducts();
+            // Apply cart rule for gift
+            CartRule::autoAddToCart(Context::getContext());
 
             if (!$products) {
                 $data['error'] = 'Missing products';
