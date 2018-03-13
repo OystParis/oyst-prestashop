@@ -27,11 +27,11 @@ use Currency;
 use Configuration;
 use Tools;
 use Db;
-use Oyst\Factory\AbstractShipmentServiceFactory;
+use Oyst\Factory\AbstractCartServiceFactory;
 
-class ShipmentController extends AbstractOystController
+class CartController extends AbstractOystController
 {
-    public function getShipmentsAction()
+    public function estimateAction()
     {
         $data = $this->request->getJson();
         $insert   = array(
@@ -44,11 +44,11 @@ class ShipmentController extends AbstractOystController
             'date_add'   => date('Y-m-d H:i:s'),
         );
         Db::getInstance()->insert('oyst_payment_notification', $insert);
-        $shipmentService = AbstractShipmentServiceFactory::get(new Oyst(), Context::getContext());
-        $responseData = $shipmentService->getShipments($data['data']);
+        $cartService = AbstractCartServiceFactory::get(new Oyst(), Context::getContext());
+        $responseData = $cartService->estimate($data['data']['order']);
         $this->logger->info(
             sprintf(
-                'New notification shipments [%s]',
+                'New notification order.cart.estimate [%s]',
                 $responseData
             )
         );

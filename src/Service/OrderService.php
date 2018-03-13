@@ -62,12 +62,14 @@ class OrderService extends AbstractOystService
             $customer = new Customer($customerInfo[0]['id_customer']);
         } else {
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
-            if (isset(Customer::$definition['fields']['firstname']['size']))
+            if (isset(Customer::$definition['fields']['firstname']['size'])) {
                 $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
+            }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
-            if (isset(Customer::$definition['fields']['lastname']['size']))
+            if (isset(Customer::$definition['fields']['lastname']['size'])) {
                 $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
+            }
 
             $customer = new Customer();
             $customer->email = $user['email'];
@@ -97,12 +99,14 @@ class OrderService extends AbstractOystService
             }
 
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['first_name']);
-            if (isset(Address::$definition['fields']['firstname']['size']))
+            if (isset(Address::$definition['fields']['firstname']['size'])) {
                 $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+            }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['last_name']);
-            if (isset(Address::$definition['fields']['lastname']['size']))
+            if (isset(Address::$definition['fields']['lastname']['size'])) {
                 $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+            }
 
             $address->id_customer = $customer->id;
             $address->firstname = $firstname;
@@ -154,9 +158,9 @@ class OrderService extends AbstractOystService
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
 
-            if ($pickupAddress['name'] != ''){
+            if ($pickupAddress['name'] != '') {
                 $pickup_name = $pickupAddress['name'];
-            }else{
+            } else {
                 $pickup_name = 'none';
             }
 
@@ -345,7 +349,7 @@ class OrderService extends AbstractOystService
 
         if ($oystOrderInfo) {
             $products = array();
-            foreach ($oystOrderInfo['items'] as $productInfo) {
+            foreach ($oystOrderInfo['order']['items'] as $productInfo) {
                 $reference = explode(';', $productInfo['product_reference']);
                 $product = new Product($reference[0]);
 
@@ -369,35 +373,35 @@ class OrderService extends AbstractOystService
                 );
             }
 
-            if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['id_user'])) {
-                $customer = new Customer((int)$oystOrderInfo['context']['id_user']);
+            if ($oystOrderInfo['order']['context'] && isset($oystOrderInfo['order']['context']['id_user'])) {
+                $customer = new Customer((int)$oystOrderInfo['order']['context']['id_user']);
             } else {
-                $customer = $this->getCustomer($oystOrderInfo['user']);
+                $customer = $this->getCustomer($oystOrderInfo['order']['user']);
             }
             if (!Validate::isLoadedObject($customer)) {
                 $data['error'] = 'Customer not found or can\'t be found';
             }
 
-            $invoiceAddress = $this->getInvoiceAddress($customer, $oystOrderInfo['user']);
+            $invoiceAddress = $this->getInvoiceAddress($customer, $oystOrderInfo['order']['user']);
             if (!Validate::isLoadedObject($invoiceAddress)) {
                 $data['error'] = 'Address not found or can\'t be created';
             }
 
             //Fix for retroactivity for missing phone bug or phone
             if ($invoiceAddress->phone_mobile == '' || $invoiceAddress->phone == '') {
-                $invoiceAddress->phone = $oystOrderInfo['user']['phone'];
-                $invoiceAddress->phone_mobile = $oystOrderInfo['user']['phone'];
+                $invoiceAddress->phone = $oystOrderInfo['order']['user']['phone'];
+                $invoiceAddress->phone_mobile = $oystOrderInfo['order']['user']['phone'];
                 $invoiceAddress->update();
             }
 
-            if (!isset($oystOrderInfo['shipment']['pickup_store'])) {
+            if (!isset($oystOrderInfo['order']['shipment']['pickup_store'])) {
                 $deliveryAddress = $invoiceAddress;
             } else {
-                $deliveryAddress = $this->getPickupStoreAddress($customer, $oystOrderInfo['shipment'], $oystOrderInfo['user']['phone']);
+                $deliveryAddress = $this->getPickupStoreAddress($customer, $oystOrderInfo['order']['shipment'], $oystOrderInfo['order']['user']['phone']);
             }
 
             if (!isset($data['error'])) {
-                $state = $this->createNewOrder($customer, $invoiceAddress, $deliveryAddress, $products, $oystOrderInfo, $event);
+                $state = $this->createNewOrder($customer, $invoiceAddress, $deliveryAddress, $products, $oystOrderInfo['order'], $event);
                 $data['state'] = $state;
             }
         } else {

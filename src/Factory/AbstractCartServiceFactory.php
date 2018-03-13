@@ -26,9 +26,9 @@ use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystCatalogApi;
 use Oyst\Service\Api\Requester;
 use Oyst\Service\Logger\FileLogger;
-use Oyst\Service\ShipmentService;
+use Oyst\Service\CartService;
 
-abstract class AbstractShipmentServiceFactory
+abstract class AbstractCartServiceFactory
 {
     /**
      * Add Factory for this service due to huge redundant code used
@@ -36,13 +36,13 @@ abstract class AbstractShipmentServiceFactory
      * @param \Oyst $oyst
      * @param $context
      * @param Db $db
-     * @return ShipmentService
+     * @return CartService
      */
     public static function get(\Oyst $oyst, $context, Db $db = null)
     {
-        /** @var OystCatalogApi $apiClient */
+        /** @var OystOrderApi $apiClient */
         $apiClient = OystApiClientFactory::getClient(
-            OystApiClientFactory::ENTITY_CATALOG,
+            OystApiClientFactory::ENTITY_ONECLICK,
             $oyst->getOneClickApiKey(),
             $oyst->getUserAgent(),
             $oyst->getOneClickEnvironment(),
@@ -52,17 +52,17 @@ abstract class AbstractShipmentServiceFactory
         $apiClient->setNotifyUrl($oyst->getNotifyUrl());
 
         $logger = new FileLogger();
-        $logger->setFile(dirname(__FILE__).'/../../logs/shipment.log');
+        $logger->setFile(dirname(__FILE__).'/../../logs/cart.log');
         $requester = new Requester($apiClient);
         $requester->setLogger($logger);
 
-        $shipmentService = new ShipmentService($context, $oyst);
+        $cartService = new CartService($context, $oyst);
 
-        $shipmentService
+        $cartService
             ->setRequester($requester)
             ->setLogger($logger)
         ;
 
-        return $shipmentService;
+        return $cartService;
     }
 }

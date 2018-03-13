@@ -31,7 +31,6 @@ use Oyst\Factory\AbstractExportProductServiceFactory;
 use Oyst\Service\Configuration as OystConfiguration;
 use Oyst\Service\Http\CurrentRequest;
 use Oyst\Service\Logger\LoggerManager;
-use Oyst\Service\OneClickShipmentService;
 
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {

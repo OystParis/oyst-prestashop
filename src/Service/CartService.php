@@ -35,16 +35,16 @@ use Tools;
 use Validate;
 use Currency;
 use Context;
+use Product;
 use Tax;
 use TaxCalculator;
 use Carrier;
 use Country;
 use Configuration as PSConfiguration;
 use Exception;
-use Product;
 use StockAvailable;
 
-class ShipmentService extends AbstractOystService
+class CartService extends AbstractOystService
 {
     /** @var AddressRepository */
     private $addressRepository;
@@ -60,12 +60,14 @@ class ShipmentService extends AbstractOystService
             $customer = new Customer($customerInfo[0]['id_customer']);
         } else {
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
-            if (isset(Customer::$definition['fields']['firstname']['size']))
+            if (isset(Customer::$definition['fields']['firstname']['size'])) {
                 $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
+            }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
-            if (isset(Customer::$definition['fields']['lastname']['size']))
+            if (isset(Customer::$definition['fields']['lastname']['size'])) {
                 $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
+            }
 
             $customer = new Customer();
             $customer->email = $user['email'];
@@ -82,31 +84,11 @@ class ShipmentService extends AbstractOystService
     }
 
     /**
-     * @return AddressRepository
-     */
-    public function getAddressRepository()
-    {
-        return $this->addressRepository;
-    }
-
-    /**
-     * @param \Oyst\Repository\AddressRepository $addressRepository
-     *
-     * @return $this
-     */
-    public function setAddressRepository($addressRepository)
-    {
-        $this->addressRepository = $addressRepository;
-
-        return $this;
-    }
-
-    /**
      * @param $data
      * @return array
      * @throws Exeption
      */
-    public function getShipments($data)
+    public function estimate($data)
     {
 
         // Set delay carrier in hours
@@ -123,7 +105,11 @@ class ShipmentService extends AbstractOystService
             9 => 24
         );
 
-        $customer = $this->getCustomer($data['user']);
+        if ($data['context'] && $data['context']['id_user']) {
+            $customer = new Customer((int)$data['context']['id_user']);
+        } else {
+            $customer = $this->getCustomer($data['user']);
+        }
         if (!Validate::isLoadedObject($customer)) {
             $this->logger->emergency(
                 'Customer not found or can\'t be found ['.json_encode($customer).']'
@@ -139,12 +125,14 @@ class ShipmentService extends AbstractOystService
             }
 
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
-            if (isset(Address::$definition['fields']['firstname']['size']))
+            if (isset(Address::$definition['fields']['firstname']['size'])) {
                 $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+            }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
-            if (isset(Address::$definition['fields']['lastname']['size']))
+            if (isset(Address::$definition['fields']['lastname']['size'])) {
                 $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+            }
 
             $address = new Address();
             $address->id_customer = $customer->id;
@@ -200,12 +188,7 @@ class ShipmentService extends AbstractOystService
 
         if (isset($data['items'])) {
             foreach ($data['items'] as $key => $item) {
-                // $reference = explode(';', $item['reference']);
-                // if (!isset($reference[1])) {
-                //     $reference[1] = null;
-                // }
-
-                $idProduct = $item['reference'];
+                $idProduct = $item['product']['reference'];
                 $idCombination = 0;
 
                 if (false  !== strpos($idProduct, ';')) {
@@ -215,25 +198,42 @@ class ShipmentService extends AbstractOystService
                 }
 
                 $product = new Product($idProduct);
+                $price = $product->getPrice(
+                    true,
+                    $idCombination,
+                    6,
+                    null,
+                    false,
+                    true,
+                    $item['product']['quantity']
+                );
 
-                // die(var_dump(StockAvailable::getQuantityAvailableByProduct($idProduct, $idCombination)));
+                $without_reduc_price = $product->getPriceWithoutReduct(
+                    false,
+                    $idCombination
+                );
+
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, $item['quantity']);
+                        StockAvailable::updateQuantity($idProduct, $idCombination, $item['product']['quantity']);
                     }
                 }
 
-                $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
+                $cart->updateQty($item['product']['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
 
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, -$item['quantity']);
+                        StockAvailable::updateQuantity($idProduct, $idCombination, -$item['product']['quantity']);
                     }
                 }
 
-                //$oneClickItem = new OneClickItem((string)$item['reference'], (int)$item['quantity']);
+                // $oneClickItem = new OneClickItem((string)$item['product']['reference'], (int)$item['product']['quantity']);
+                // $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
+                // $oneClickItem->setAmountOriginal($amount);
+                // $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
+                // $oneClickItem->setAmountPromotional($crossed_out_amount);
 
-                //$oneClickShipmentCalculation->addItem($oneClickItem);
+                // $oneClickShipmentCalculation->addItem($oneClickItem);
             }
         } else {
             $this->logger->emergency(
@@ -270,8 +270,6 @@ class ShipmentService extends AbstractOystService
                 $amount = (float) $shipment['price'];
 
                 $oystPrice = new OystPrice($amount, Context::getContext()->currency->iso_code);
-
-
                 $oystCarrier = new OystCarrier($id_carrier, $shipment['name'], $type);
 
                 $primary = false;

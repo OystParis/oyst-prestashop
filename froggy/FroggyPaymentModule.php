@@ -127,7 +127,6 @@ class FroggyPaymentModule extends PaymentModule
             'hookactionproductadd' => 'hookActionProductAdd',
             'hookactionproductupdate' => 'hookActionProductUpdate',
             'hookactionorderstatuspostupdate' => 'hookActionOrderStatusPostUpdate',
-            'hookactioncarrierupdate' => 'hookActionCarrierUpdate',
             'hookactionobjectproductdeleteafter' => 'hookActionObjectProductDeleteAfter',
         );
 
