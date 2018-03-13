@@ -78,7 +78,9 @@ class ProductTransformer extends AbstractTransformer
         $combination = new Combination();
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
-            $link = new Link();
+        	   $protocol_link = (Tools::usingSecureMode() && Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
+        	   $protocol_content = (Tools::usingSecureMode() && Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
+        	   $link = new Link($protocol_link, $protocol_content);
         } else {
             $link = $this->context->link;
         }
@@ -86,7 +88,7 @@ class ProductTransformer extends AbstractTransformer
         if ($id_combination > 0) {
             $combination = new Combination($id_combination);
             if (!Validate::isLoadedObject($combination)) {
-                $this->logger->alert(sprintf('Combination %d can\'t be found for product '.$id_product, $id_combination));
+                $this->logger->alert(sprintf('Combination %d can\'t be found for product '.$product->id, $id_combination));
             } else {
                 $oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
             }
