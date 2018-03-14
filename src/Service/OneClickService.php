@@ -212,6 +212,14 @@ class OneClickService extends AbstractOystService
             'store_id' => (int)Context::getContext()->shop->id
         );
 
+        //Get cart_rules ids
+        $cart_rules = Context::getContext()->cart->getCartRules();
+        if (!empty($cart_rules)){
+            foreach ($cart_rules as $cart_rule) {
+                $oystContext['ids_cart_rule'][] = $cart_rule['obj']->id;
+            }
+        }
+
         if ($controller == 'order') {
             $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
         }
