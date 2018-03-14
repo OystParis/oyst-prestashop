@@ -21,6 +21,7 @@
 
 namespace Oyst\Service;
 
+use Oyst\Classes\OneClickMerchantDiscount;
 use Oyst\Classes\OneClickOrderCartEstimate;
 use Oyst\Classes\OneClickShipmentCatalogLess;
 use Oyst\Classes\OneClickItem;
@@ -92,7 +93,7 @@ class CartService extends AbstractOystService
 
     /**
      * @param $data
-     * @return array
+     * @return string
      * @throws Exeption
      */
     public function estimate($data)
@@ -223,7 +224,6 @@ class CartService extends AbstractOystService
                 }
 
                 // Add items
-
                 $price = $product->getPrice(
                     true,
                     $idCombination,
@@ -247,16 +247,15 @@ class CartService extends AbstractOystService
                         $this->logger->emergency(
                             'Combination not exist ['.json_encode($data).']'
                         );
-                        return false;
                     }
+                }
 
-                    // Get attributes for title
-                    if ($combination && $combination->id) {
-                        $productRepository = new ProductRepository(Db::getInstance());
-                        $attributesInfo = $productRepository->getAttributesCombination($combination);
-                        foreach ($attributesInfo as $attributeInfo) {
-                            $title .= ' '.$attributeInfo['value'];
-                        }
+                // Get attributes for title
+                if ($combination && $combination->id) {
+                    $productRepository = new ProductRepository(Db::getInstance());
+                    $attributesInfo = $productRepository->getAttributesCombination($combination);
+                    foreach ($attributesInfo as $attributeInfo) {
+                        $title .= ' '.$attributeInfo['value'];
                     }
                 }
 
@@ -279,7 +278,6 @@ class CartService extends AbstractOystService
             );
             return false;
         }
-
 
         // Get carriers available
         $carriersAvailables = $cart->simulateCarriersOutput();
@@ -359,65 +357,105 @@ class CartService extends AbstractOystService
         CartRule::autoRemoveFromCart($this->context);
         CartRule::autoAddToCart($this->context);
 
-        // Get cart rule group customer
-        //$cart_rules = CartRule::getCustomerCartRules(Context::getContext()->cookie->id_lang, Context::getContext()->cookie->id_customer, true, true, false, $this, true);
-        // Get cart rule with product gift
-        $cart_rules_gift = $this->context->cart->getCartRules(CartRule::FILTER_ACTION_GIFT);
+        //Get potential cart rules which was auto added
+        $auto_cart_rules = $this->context->cart->getCartRules();
 
-        foreach ($cart_rules_gift as $product_gift) {
-            $reference = $product_gift['gift_product'];
-            $idProduct = (int)$product_gift['gift_product'];
+        if (empty($data['context']['ids_cart_rule']))
+            $data['context']['ids_cart_rule'] = array();
 
-            if ($product_gift['gift_product_attribute'] > 0) {
-                $reference .= ';'.$product_gift['gift_product_attribute'];
-                $idCombination = (int)$product_gift['gift_product_attribute'];
-            }
+        //Merge id auto_add with existent cart_rule
+        foreach ($auto_cart_rules as $auto_cart_rule) {
+            $data['context']['ids_cart_rule'][] = $auto_cart_rule['id_cart_rule'];
+        }
 
-            $product = new Product($idProduct, false, $this->context->language->id);
+        //For each cart_rule, check validity and id it's valid, add it to merchant_discount
+        if (!empty($data['context']['ids_cart_rule'])){
+            foreach ($data['context']['ids_cart_rule'] as $id_cart_rule) {
+                $cart_rule = new CartRule($id_cart_rule, $this->context->language->id);
+                if (Validate::isLoadedObject($cart_rule)){
+                    if ($cart_rule->checkValidity($this->context, false, false)){
+                        $cart_rule_amount = 0;
 
-            $title = is_array($product->name) ? reset($product->name) : $product->name;
+                        if (!empty(floatval($cart_rule->reduction_percent))){
+                            $cart_rule_amount += $cart_rule->getContextualValue(true, $this->context);
+                            $currency_iso_code = $this->context->currency->iso_code;
+                        }
 
-            if ($idCombination > 0) {
-                $combination = new Combination($idCombination);
-                if (!Validate::isLoadedObject($combination)) {
-                    $this->logger->emergency(
-                        'Combination not exist ['.json_encode($data).']'
-                    );
+                        if (!empty(floatval($cart_rule->reduction_amount))){
+                            //Reduction amount case
+                            $cart_rule_amount += $cart_rule->getContextualValue(true, $this->context);
+                            $currency = new Currency($cart_rule->reduction_currency);
+                            if (Validate::isLoadedObject($currency)){
+                                $currency_iso_code = $currency->iso_code;
+                            }else{
+                                $currency_iso_code = $this->context->currency->iso_code;
+                            }
+                        }
+
+                        if (!empty($cart_rule->gift_product)){
+                            $reference = $cart_rule->gift_product;
+                            $idProduct = (int)$cart_rule->gift_product;
+
+                            if ($cart_rule->gift_product_attribute > 0) {
+                                $reference .= ';'.$cart_rule->gift_product_attribute;
+                                $idCombination = (int)$cart_rule->gift_product_attribute;
+                            }
+
+                            $product = new Product($idProduct, false, $this->context->language->id);
+
+                            $title = is_array($product->name) ? reset($product->name) : $product->name;
+
+                            if ($idCombination > 0) {
+                                $combination = new Combination($idCombination);
+                                if (!Validate::isLoadedObject($combination)) {
+                                    $this->logger->emergency(
+                                        'Combination not exist ['.json_encode($data).']'
+                                    );
+                                }
+                            }
+
+                            // Get attributes for title
+                            if ($combination && $combination->id) {
+                                $productRepository = new ProductRepository(Db::getInstance());
+                                $attributesInfo = $productRepository->getAttributesCombination($combination);
+                                foreach ($attributesInfo as $attributeInfo) {
+                                    $title .= ' '.$attributeInfo['value'];
+                                }
+                            }
+
+                            $amount = new OystPrice(0, Context::getContext()->currency->iso_code);
+                            $oneClickItemFree = new OneClickItem(
+                                (string)$reference,
+                                $amount,
+                                1
+                            );
+
+                            $images = array();
+                            foreach (Image::getImages($this->context->language->id, $idProduct, $idCombination) as $image) {
+                                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                            }
+
+                            //If no image for attribute, search default product image
+                            if (empty($images)) {
+                                foreach (Image::getImages($this->context->language->id, $idProduct) as $image) {
+                                    $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                                }
+                            }
+
+                            $oneClickItemFree->__set('title', $title);
+                            $oneClickItemFree->__set('message', $cart_rule->description);
+                            $oneClickItemFree->__set('images', $images);
+                            $oneClickOrderCartEstimate->addFreeItems($oneClickItemFree);
+                        }
+
+                        if ($cart_rule_amount > 0){
+                            $oyst_price = new OystPrice($cart_rule_amount, $currency_iso_code);
+                            $merchand_discount = new OneClickMerchantDiscount($oyst_price, $cart_rule->name);
+                            $oneClickOrderCartEstimate->addMerchantDiscount($merchand_discount);
+                        }
+                    }
                 }
             }
-
-            // Get attributes for title
-            if ($combination && $combination->id) {
-                $productRepository = new ProductRepository(Db::getInstance());
-                $attributesInfo = $productRepository->getAttributesCombination($combination);
-                foreach ($attributesInfo as $attributeInfo) {
-                    $title .= ' '.$attributeInfo['value'];
-                }
-            }
-
-            $amount = new OystPrice(0, Context::getContext()->currency->iso_code);
-            $oneClickItemFree = new OneClickItem(
-                (string)$reference,
-                $amount,
-                1
-            );
-
-            $images = array();
-            foreach (Image::getImages($this->context->language->id, $idProduct, $idCombination) as $image) {
-                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
-            }
-
-            //If no image for attribute, search default product image
-            if (empty($images)) {
-                foreach (Image::getImages($this->context->language->id, $idProduct) as $image) {
-                    $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
-                }
-            }
-
-            $oneClickItemFree->__set('title', $title);
-            $oneClickItemFree->__set('message', $product_gift['description']);
-            $oneClickItemFree->__set('images', $images);
-            $oneClickOrderCartEstimate->addFreeItems($oneClickItemFree);
         }
 
         $this->logger->info(
