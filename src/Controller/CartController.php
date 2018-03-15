@@ -27,7 +27,6 @@ use Currency;
 use Configuration;
 use Tools;
 use Db;
-
 use Oyst\Factory\AbstractCartServiceFactory;
 
 class CartController extends AbstractOystController
