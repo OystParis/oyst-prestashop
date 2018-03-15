@@ -248,14 +248,14 @@ class CartService extends AbstractOystService
                             'Combination not exist ['.json_encode($data).']'
                         );
                     }
-                }
 
-                // Get attributes for title
-                if ($combination && $combination->id) {
-                    $productRepository = new ProductRepository(Db::getInstance());
-                    $attributesInfo = $productRepository->getAttributesCombination($combination);
-                    foreach ($attributesInfo as $attributeInfo) {
-                        $title .= ' '.$attributeInfo['value'];
+                    // Get attributes for title
+                    if ($combination && $combination->id) {
+                        $productRepository = new ProductRepository(Db::getInstance());
+                        $attributesInfo = $productRepository->getAttributesCombination($combination);
+                        foreach ($attributesInfo as $attributeInfo) {
+                            $title .= ' '.$attributeInfo['value'];
+                        }
                     }
                 }
 
