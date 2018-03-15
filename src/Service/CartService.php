@@ -371,7 +371,7 @@ class CartService extends AbstractOystService
 
         $data['context']['ids_cart_rule'] = array_unique($data['context']['ids_cart_rule']);
         //For each cart_rule, check validity and id it's valid, add it to merchant_discount
-        if (!empty($data['context']['ids_cart_rule'])) {
+        if ($data['context']['ids_cart_rule'] != '') {
             foreach ($data['context']['ids_cart_rule'] as $id_cart_rule) {
                 $cart_rule = new CartRule($id_cart_rule, $this->context->language->id);
                 if (Validate::isLoadedObject($cart_rule)) {
@@ -379,12 +379,12 @@ class CartService extends AbstractOystService
                     if ($cart_rule->checkValidity($this->context, true, false)) {
                         $cart_rule_amount = 0;
 
-                        if (!empty(floatval($cart_rule->reduction_percent))) {
+                        if (floatval($cart_rule->reduction_percent) != 0) {
                             $cart_rule_amount += $cart_rule->getContextualValue(true, $this->context);
                             $currency_iso_code = $this->context->currency->iso_code;
                         }
 
-                        if (!empty(floatval($cart_rule->reduction_amount))) {
+                        if (floatval($cart_rule->reduction_amount) != 0) {
                             //Reduction amount case
                             $cart_rule_amount += $cart_rule->getContextualValue(true, $this->context);
                             $currency = new Currency($cart_rule->reduction_currency);
@@ -395,7 +395,7 @@ class CartService extends AbstractOystService
                             }
                         }
 
-                        if (!empty($cart_rule->gift_product)) {
+                        if ($cart_rule->gift_product != '') {
                             $reference = $cart_rule->gift_product;
                             $idProduct = (int)$cart_rule->gift_product;
 
