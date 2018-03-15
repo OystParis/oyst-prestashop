@@ -266,6 +266,10 @@ class OrderService extends AbstractOystService
             }
         }
 
+        // Manage cart rule
+        CartRule::autoRemoveFromCart($this->context);
+        CartRule::autoAddToCart($this->context);
+
         $id_reference = Db::getInstance()->getValue('
                         SELECT `id_reference`
                         FROM `'._DB_PREFIX_.'carrier`
