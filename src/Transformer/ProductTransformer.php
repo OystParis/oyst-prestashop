@@ -35,6 +35,7 @@ use StockAvailable;
 use Tools;
 use Validate;
 use Link;
+use Configuration;
 
 /**
  * Class ProductTransformer
