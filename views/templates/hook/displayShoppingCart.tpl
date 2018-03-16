@@ -24,7 +24,7 @@
     {/if}
     <script type="text/javascript">
         $( document).ready(function(){
-            var oyst = new OystOneClickCart({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode}, "{$controller|escape:'html':'UTF-8'}");
+            var oyst = new OystOneClickCart({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, "{$controller|escape:'html':'UTF-8'}");
             oyst.setSmartBtn({$smartBtn|intval});
             oyst.setBorderBtn({$borderBtn|intval});
             oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
