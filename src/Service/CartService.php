@@ -98,7 +98,6 @@ class CartService extends AbstractOystService
      */
     public function estimate($data)
     {
-
         // Set delay carrier in hours
         $delay = array(
             0 => 72,
@@ -357,9 +356,9 @@ class CartService extends AbstractOystService
         CartRule::autoRemoveFromCart($this->context);
         CartRule::autoAddToCart($this->context);
 
+        $cart_rules_in_cart = array();
         //Get potential cart rules which was auto added
         $auto_cart_rules = $this->context->cart->getCartRules();
-
         if (empty($data['context']['ids_cart_rule'])) {
             $data['context']['ids_cart_rule'] = array();
         }
@@ -367,16 +366,17 @@ class CartService extends AbstractOystService
         //Merge id auto_add with existent cart_rule
         foreach ($auto_cart_rules as $auto_cart_rule) {
             $data['context']['ids_cart_rule'][] = (int)$auto_cart_rule['id_cart_rule'];
+            $cart_rules_in_cart[] = (int)$auto_cart_rule['id_cart_rule'];
         }
 
         $data['context']['ids_cart_rule'] = array_unique($data['context']['ids_cart_rule']);
-        //For each cart_rule, check validity and id it's valid, add it to merchant_discount
+        //For each cart_rule, check validity and if it's valid, add it to merchant_discount
         if ($data['context']['ids_cart_rule'] != '') {
             foreach ($data['context']['ids_cart_rule'] as $id_cart_rule) {
                 $cart_rule = new CartRule($id_cart_rule, $this->context->language->id);
                 if (Validate::isLoadedObject($cart_rule)) {
                     // die(var_dump($cart_rule->checkValidity($this->context, true, false)));
-                    if ($cart_rule->checkValidity($this->context, true, false)) {
+                    if ($cart_rule->checkValidity($this->context, in_array($id_cart_rule, $cart_rules_in_cart), false)) {
                         $cart_rule_amount = 0;
 
                         if (floatval($cart_rule->reduction_percent) != 0) {
@@ -394,8 +394,7 @@ class CartService extends AbstractOystService
                                 $currency_iso_code = $this->context->currency->iso_code;
                             }
                         }
-
-                        if ($cart_rule->gift_product != '') {
+                        if (intval($cart_rule->gift_product) != 0) {
                             $reference = $cart_rule->gift_product;
                             $idProduct = (int)$cart_rule->gift_product;
 
