@@ -3,3 +3,4 @@
 .DS_Store
 config.xml
 config_fr.xml
+composer.lock

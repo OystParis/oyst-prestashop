@@ -39,6 +39,7 @@ use Validate;
 use Db;
 use Tools;
 use StockAvailable;
+use CartRule;
 
 /**
  * Class OneClickService
@@ -217,7 +218,7 @@ class OrderService extends AbstractOystService
         }
 
         //If country's context is disabled, this will be throw an exception in the ValidateOrder method so let's check that
-        if (isset($this->context->country) && !$this->context->country->active){
+        if (isset($this->context->country) && !$this->context->country->active) {
             $this->context->country = new Country($deliveryAddress->id_country);
             if (!Validate::isLoadedObject($this->context->country)) {
                 $this->context->country = new Country($invoiceAddress->id_country);
@@ -264,6 +265,10 @@ class OrderService extends AbstractOystService
                 return false;
             }
         }
+
+        // Manage cart rule
+        CartRule::autoRemoveFromCart($this->context);
+        CartRule::autoAddToCart($this->context);
 
         $id_reference = Db::getInstance()->getValue('
                         SELECT `id_reference`
@@ -371,6 +376,36 @@ class OrderService extends AbstractOystService
                     'combinationId' => $combination->id,
                     'quantity' => $productInfo['quantity'],
                 );
+            }
+
+            if ($oystOrderInfo['order']['is_cart_checkout']) {
+                // Add free item
+                if (($free_items = $oystOrderInfo['order']['merchant_free_items']) &&
+                    isset($oystOrderInfo['order']['merchant_free_items'])) {
+                    foreach ($free_items as $free_item) {
+                        $ref_item = explode(';', $free_item['reference']);
+                        $product = new Product($ref_item[0]);
+
+                        if (!Validate::isLoadedObject($product)) {
+                            $data['error'] = 'Product has not been found';
+                        }
+
+                        $combination = new Combination();
+                        // Array will exist but reference could be null
+                        if (isset($reference[1])) {
+                            $combination = new Combination($ref_item[1]);
+                            if (!Validate::isLoadedObject($combination)) {
+                                $data['error'] = 'Combination has not been found';
+                            }
+                        }
+
+                        $products[] = array(
+                            'productId' => $product->id,
+                            'combinationId' => $combination->id,
+                            'quantity' => $free_item['quantity'],
+                        );
+                    }
+                }
             }
 
             if ($oystOrderInfo['order']['context'] && isset($oystOrderInfo['order']['context']['id_user'])) {

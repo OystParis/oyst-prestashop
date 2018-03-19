@@ -38,6 +38,7 @@ use Oyst\Factory\AbstractExportProductServiceFactory;
 use Tools;
 use StockAvailable;
 use Module;
+use CartRule;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -119,7 +120,28 @@ class OneClickService extends AbstractOystService
         }
 
         if ($controller == 'order') {
-            $products = Context::getContext()->cart->getProducts();
+            // Check validity cart rule ?
+            if (version_compare(_PS_VERSION_, '1.6.0', '>=')) {
+                foreach (Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT) as $cr) {
+                    $cart_rule = new CartRule($cr['obj']->id, Context::getContext()->language->id);
+                    Context::getContext()->cart->removeCartRule($cart_rule->id);
+                    Context::getContext()->cart->update();
+                }
+
+                $products = Context::getContext()->cart->getProducts();
+                // Apply cart rule for gift
+                CartRule::autoAddToCart(Context::getContext());
+            } else {
+                foreach (Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT) as $cr) {
+                    $cart_rule = new CartRule($cr['obj']->id, Context::getContext()->language->id);
+                    $cart_clone = new Cart(Context::getContext()->cart->id);
+                    $cart_clone->removeCartRule($cart_rule->id);
+                }
+
+                $products = $cart_clone->getProducts();
+                // Apply cart rule for gift
+                // CartRule::autoAddToCart(Context::getContext());
+            }
 
             if (!$products) {
                 $data['error'] = 'Missing products';
@@ -201,6 +223,14 @@ class OneClickService extends AbstractOystService
             'id' => (string)$this->generatedId(),
             'store_id' => (int)Context::getContext()->shop->id
         );
+
+        //Get cart_rules ids
+        $cart_rules = Context::getContext()->cart->getCartRules();
+        if (!empty($cart_rules)) {
+            foreach ($cart_rules as $cart_rule) {
+                $oystContext['ids_cart_rule'][] = $cart_rule['obj']->id;
+            }
+        }
 
         if ($controller == 'order') {
             $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
