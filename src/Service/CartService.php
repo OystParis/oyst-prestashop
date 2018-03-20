@@ -214,7 +214,7 @@ class CartService extends AbstractOystService
                     }
                 }
 
-                $cart->updateQty($item['product']['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
+                $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
 
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
@@ -230,7 +230,7 @@ class CartService extends AbstractOystService
                     null,
                     false,
                     true,
-                    $item['product']['quantity']
+                    $item['quantity']
                 );
 
                 $without_reduc_price = $product->getPriceWithoutReduct(
@@ -262,7 +262,7 @@ class CartService extends AbstractOystService
                 $oneClickItem = new OneClickItem(
                     (string)$item['product']['reference'],
                     $amount,
-                    (int)$item['product']['quantity']
+                    (int)$item['quantity']
                 );
 
                 $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
