@@ -32,6 +32,11 @@ $logger = new \Oyst\Service\Logger\FileLogger();
 $logger->setFile(dirname(__FILE__).'/logs/oneClick.log');
 $logger->info(sprintf('New OneClick request from customer: %d', Context::getContext()->customer->id));
 
+if (Tools::getValue('token') != Configuration::get('FC_OYST_HASH_KEY')) {
+    $logger->info('New notification : Secure key is invalid');
+    die('Secure key is invalid');
+}
+
 $oneClickController = new OneClickOrderController(new CurrentRequest());
 $oneClickController->setLogger($logger);
 $oneClickController->authorizeOrderAction();

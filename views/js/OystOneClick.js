@@ -48,6 +48,7 @@ function OystOneClick(url, productId, controller) {
     this.preload = 1;
     this.shouldAsStock = 0;
     this.errorText = 'There isn\'t enough product in stock.';
+    this.token = '';
 
     this.setExportedCombinations = function (combinations) {
         this.combinations = combinations;
@@ -144,6 +145,10 @@ function OystOneClick(url, productId, controller) {
     this.setErrorText = function (errorText) {
         this.errorText = errorText;
     };
+
+    this.setToken = function (token) {
+        this.token = token;
+    }
 
     /**
      * Return json with the product information to avoid any redundant code.
@@ -290,20 +295,20 @@ function OystOneClick(url, productId, controller) {
     /**
      * Send request to start oneClick process
      */
-    this.requestOneCLick = function(oystCallBack) {
+    this.requestOneCLick = function(oystCallBack){
         var params = this.getSelectedProduct();
 
         params.controller = this.controller;
 
         if (this.preload) {
-          params.preload = this.preload;
-          this.setPreload(0);
+            params.preload = this.preload;
+            this.setPreload(0);
         } else {
-          params.preload = this.preload;
+            params.preload = this.preload;
         }
 
         params.oneClick = true;
-        params.token = '{SuggestToAddSecurityToken}';
+        params.token = this.token;
 
         $.post(this.url, params, function(json) {
             if (json.state) {
