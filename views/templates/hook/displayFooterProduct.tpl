@@ -24,7 +24,7 @@
     {/if}
     <script type="text/javascript">
         $( document).ready(function(){
-            var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode}, {$product->id|json_encode}, "{$controller|escape:'html':'UTF-8'}");
+            var oyst = new OystOneClick({$shopUrl|cat:'/modules/oyst/oneClick.php'|json_encode}, {$product->id|json_encode}, "{$controller|escape:'html':'UTF-8'}");
             oyst.setExportedCombinations({$synchronizedCombination|json_encode})
             oyst.setStockManagement({$stockManagement|intval});
             oyst.setAllowOosp({$allowOosp|intval});
@@ -43,6 +43,7 @@
             oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
             oyst.setShouldAskStock({$shouldAsStock|intval});
             oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
+            oyst.setToken("{$secureKey|escape:'html':'UTF-8'}");
             oyst.prepareButton();
 
             window.__OYST__ = window.__OYST__ || {};
