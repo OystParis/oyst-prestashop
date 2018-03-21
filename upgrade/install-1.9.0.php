@@ -25,7 +25,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
  * @param Oyst $module
  * @return bool
  */
-function upgrade_module_1_9_0($module)
+function upgrade_module_1_9_0()
 {
     Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN', '');
     Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN', '');

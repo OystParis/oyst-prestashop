@@ -23,7 +23,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
 
 use Oyst\Service\Configuration as OConfiguration;
 
-function upgrade_module_1_6_6($module)
+function upgrade_module_1_6_6()
 {
     Configuration::updateValue('FC_OYST_STATE_PAYMENT_ONECLICK', 2);
     Configuration::updateValue('FC_OYST_STATE_PAYMENT_FREEPAY', 2);

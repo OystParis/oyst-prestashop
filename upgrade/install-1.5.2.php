@@ -25,7 +25,7 @@ if (!defined('_PS_VERSION_')) {
 
 require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
-function upgrade_module_1_5_2($module)
+function upgrade_module_1_5_2()
 {
     $result = true;
     $langId = Configuration::get('PS_LANG_DEFAULT');

@@ -64,12 +64,12 @@ class OrderService extends AbstractOystService
         } else {
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
             if (isset(Customer::$definition['fields']['firstname']['size'])) {
-                $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
+                $firstname = Tools::substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
             }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
             if (isset(Customer::$definition['fields']['lastname']['size'])) {
-                $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
+                $lastname = Tools::substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
             }
 
             $customer = new Customer();
@@ -101,12 +101,12 @@ class OrderService extends AbstractOystService
 
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['first_name']);
             if (isset(Address::$definition['fields']['firstname']['size'])) {
-                $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+                $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
             }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['last_name']);
             if (isset(Address::$definition['fields']['lastname']['size'])) {
-                $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+                $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
             }
 
             $address->id_customer = $customer->id;

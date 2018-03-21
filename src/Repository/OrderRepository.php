@@ -478,7 +478,8 @@ class OrderRepository extends AbstractOystRepository
      * @param string $orderGuid
      * @return bool
      */
-    public function isOrderAlreadyBeenTreated($orderGuid){
+    public function isOrderAlreadyBeenTreated($orderGuid)
+    {
         return (bool)$this->db->getValue('
             SELECT COUNT(*)
             FROM '._DB_PREFIX_.'oyst_payment_notification

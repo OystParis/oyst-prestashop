@@ -33,8 +33,8 @@
 {/if}
 
 <script>
-    var notification_bo_url = "{$oyst.notification_bo_url}";
-    var module_dir = "{$oyst.module_dir}";
+    var notification_bo_url = "{$oyst.notification_bo_url|escape:'htmlall':'UTF-8}";
+    var module_dir = "{$oyst.module_dir|escape:'htmlall':'UTF-8}";
 </script>
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
@@ -518,8 +518,8 @@
                                         <tbody>
                                             {foreach $oyst.languages as $lang}
                                                 <tr>
-                                                    <td>{$lang['name']}</td>
-                                                    <td class="text-center"><input style="margin-top:0;" name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox"></td>
+                                                    <td>{$lang['name']|escape:'htmlall':'UTF-8'}</td>
+                                                    <td class="text-center"><input style="margin-top:0;" name="oyst_lang[]" value="{$lang['id_lang']|intval}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox"></td>
                                                 </tr>
                                             {/foreach}
                                         </tbody>
@@ -527,7 +527,7 @@
                                 </div>
                             {else}
                                 {foreach $oyst.languages as $lang}
-                                    <input style="display:none;" name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox">
+                                    <input style="display:none;" name="oyst_lang[]" value="{$lang['id_lang']|intval}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox">
                                 {/foreach}
                                 <div class="warn">
                                     <ul>
@@ -543,7 +543,7 @@
                                     <div class="margin-form">
                                         <select name="table_selector" id="table-selector">
                                             {foreach from=$oyst.notification_tables item=notification_table}
-                                                <option value="{$notification_table}">{$notification_table}</option>
+                                                <option value="{$notification_table|escape:'htmlall':'UTF-8'}">{$notification_table|escape:'htmlall':'UTF-8'}</option>
                                             {/foreach}
                                         </select>
                                     </div>

@@ -23,7 +23,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
 
 use Oyst\Service\Configuration as OConfiguration;
 
-function upgrade_module_1_7_0($module)
+function upgrade_module_1_7_0()
 {
     Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
 

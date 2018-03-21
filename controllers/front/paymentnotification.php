@@ -181,7 +181,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                         );
                         Db::getInstance()->insert('oyst_payment_notification', $insert);
                         break;
-                    default :
+                    default:
                         header("HTTP/1.1 400 Bad Request");
                         die(Tools::jsonEncode(array('result' => 'ko', 'error' => 'Unknown event_code')));
                 }
@@ -218,7 +218,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                         }
                         // $this->updateOrderStatus((int)$notification_item['order_id'], Configuration::get('PS_OS_CANCELED'));
                         break;
-                    default :
+                    default:
                         header("HTTP/1.1 400 Bad Request");
                         die(Tools::jsonEncode(array('result' => 'ko', 'error' => 'Unknown event_code')));
                 }

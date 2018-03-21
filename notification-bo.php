@@ -37,8 +37,9 @@ switch (Tools::getValue('action')) {
         break;
 
     case 'getNotificationsColumns':
-        if (!Tools::getIsset('table'))
+        if (!Tools::getIsset('table')) {
             break;
+        }
 
         $table = pSQL(Tools::getValue('table'));
         $results = Db::getInstance()->executeS("SHOW COLUMNS FROM ".$table."");
@@ -49,9 +50,9 @@ switch (Tools::getValue('action')) {
         $response['cols'] = $column_names;
         break;
     case 'getNotificationsData':
-
-        if (!Tools::getIsset('table'))
+        if (!Tools::getIsset('table')) {
             die(json_encode(array()));
+        }
 
         $table = pSQL(Tools::getValue('table'));
         $results = Db::getInstance()->executeS("SHOW COLUMNS FROM ".$table."");
@@ -61,8 +62,9 @@ switch (Tools::getValue('action')) {
         //Fallback if no primary key
         $primaryKey = $results[0]['Field'];
         foreach ($results as $key => $result) {
-            if ($result['Key'] == 'PRI')
+            if ($result['Key'] == 'PRI') {
                 $primaryKey = $result['Field'];
+            }
 
             // Array of database columns which should be read and sent back to DataTables.
             // The `db` parameter represents the column name in the database, while the `dt`
@@ -84,7 +86,6 @@ switch (Tools::getValue('action')) {
 
         $response = SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns);
         break;
-
 }
 
 echo json_encode($response);

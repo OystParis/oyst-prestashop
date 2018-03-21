@@ -28,6 +28,7 @@ use Configuration as PSConfiguration;
 use StockAvailable;
 use Product;
 use Exeption;
+use Tools;
 
 class StockService extends AbstractOystService
 {
@@ -103,7 +104,6 @@ class StockService extends AbstractOystService
             }
 
             return $oneClickStock->toArray();
-
         } catch (Exception $e) {
             $this->logger->emergency($e->getMessage());
             die(Tools::jsonEncode(array('result' => 'ko', 'error' => $e->getMessage())));

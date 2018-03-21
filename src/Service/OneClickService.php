@@ -63,6 +63,8 @@ class OneClickService extends AbstractOystService
         $context = null,
         OneClickCustomization $customization = null
     ) {
+        $products = array();
+
         if (!is_array($productLess)) {
             $products[] = $productLess;
         } else {
@@ -109,6 +111,8 @@ class OneClickService extends AbstractOystService
         $quantity = 0;
         $products = null;
         $controller = $request->getRequestItem('controller');
+        $productLess = array();
+        $result_products = array();
         // Deprecated ??
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
         $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
@@ -279,7 +283,7 @@ class OneClickService extends AbstractOystService
             $this->logger->info(
                 sprintf(
                     'New notification oneClickOrdersParams [%s]',
-                    json_encode($oneClickOrdersParams->toArray())
+                    Tools::jsonEncode($oneClickOrdersParams->toArray())
                 )
             );
 
@@ -310,21 +314,21 @@ class OneClickService extends AbstractOystService
             $this->logger->info(
                 sprintf(
                     'New notification oneClickNotifications [%s]',
-                    json_encode($oneClickNotifications->toArray())
+                    Tools::jsonEncode($oneClickNotifications->toArray())
                 )
             );
 
             $this->logger->info(
                 sprintf(
                     'New notification products [%s]',
-                    json_encode($result_products)
+                    Tools::jsonEncode($result_products)
                 )
             );
 
             $this->logger->info(
                 sprintf(
                     'New notification context [%s]',
-                    json_encode($oystContext)
+                    Tools::jsonEncode($oystContext)
                 )
             );
             $result = $this->authorizeNewOrder(
