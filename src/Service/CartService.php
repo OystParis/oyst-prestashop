@@ -112,6 +112,8 @@ class CartService extends AbstractOystService
             9 => 24
         );
 
+        $amount_total  = 0;
+
         if ($data['context'] && isset($data['context']['id_user'])) {
             $customer = new Customer((int)$data['context']['id_user']);
         } else {
@@ -259,6 +261,9 @@ class CartService extends AbstractOystService
                 }
 
                 $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
+                // Set amount total for cart rule with discount
+                $amount_total += $price;
+
                 $oneClickItem = new OneClickItem(
                     (string)$item['product']['reference'],
                     $amount,
@@ -276,6 +281,40 @@ class CartService extends AbstractOystService
                 'Items not exist ['.json_encode($data).']'
             );
             return false;
+        }
+
+        // Manage cart rule
+        CartRule::autoRemoveFromCart($this->context);
+        CartRule::autoAddToCart($this->context);
+
+        $cart_rules_in_cart = array();
+        //Get potential cart rules which was auto added
+        $auto_cart_rules = $this->context->cart->getCartRules();
+        if (empty($data['context']['ids_cart_rule'])) {
+            $data['context']['ids_cart_rule'] = array();
+        }
+
+        //Merge id auto_add with existent cart_rule
+        foreach ($auto_cart_rules as $auto_cart_rule) {
+            $data['context']['ids_cart_rule'][] = (int)$auto_cart_rule['id_cart_rule'];
+            $cart_rules_in_cart[] = (int)$auto_cart_rule['id_cart_rule'];
+        }
+
+        $data['context']['ids_cart_rule'] = array_unique($data['context']['ids_cart_rule']);
+
+        $free_shipping = false;
+
+        if ($data['context']['ids_cart_rule'] != '') {
+            foreach ($data['context']['ids_cart_rule'] as $id_cart_rule) {
+                $cart_rule = new CartRule($id_cart_rule, $this->context->language->id);
+                if (Validate::isLoadedObject($cart_rule)) {
+                    if ($cart_rule->checkValidity($this->context, in_array($id_cart_rule, $cart_rules_in_cart), false)) {
+                        if ($cart_rule->free_shipping) {
+                            $free_shipping = true;
+                        }
+                    }
+                }
+            }
         }
 
         // Get carriers available
@@ -305,7 +344,11 @@ class CartService extends AbstractOystService
 
                 // Get amount with tax
                 $carrier = new Carrier($id_carrier);
-                $amount = (float) $shipment['price'];
+                if ($free_shipping) {
+                    $amount = 0;
+                } else {
+                    $amount = (float) $shipment['price'];
+                }
 
                 $oystPrice = new OystPrice($amount, Context::getContext()->currency->iso_code);
                 $oystCarrier = new OystCarrier($id_carrier, $shipment['name'], $type);
@@ -352,24 +395,6 @@ class CartService extends AbstractOystService
             $oneClickOrderCartEstimate->setDefaultPrimaryShipmentByType();
         }
 
-        // Manage cart rule
-        CartRule::autoRemoveFromCart($this->context);
-        CartRule::autoAddToCart($this->context);
-
-        $cart_rules_in_cart = array();
-        //Get potential cart rules which was auto added
-        $auto_cart_rules = $this->context->cart->getCartRules();
-        if (empty($data['context']['ids_cart_rule'])) {
-            $data['context']['ids_cart_rule'] = array();
-        }
-
-        //Merge id auto_add with existent cart_rule
-        foreach ($auto_cart_rules as $auto_cart_rule) {
-            $data['context']['ids_cart_rule'][] = (int)$auto_cart_rule['id_cart_rule'];
-            $cart_rules_in_cart[] = (int)$auto_cart_rule['id_cart_rule'];
-        }
-
-        $data['context']['ids_cart_rule'] = array_unique($data['context']['ids_cart_rule']);
         //For each cart_rule, check validity and if it's valid, add it to merchant_discount
         if ($data['context']['ids_cart_rule'] != '') {
             foreach ($data['context']['ids_cart_rule'] as $id_cart_rule) {
@@ -451,6 +476,9 @@ class CartService extends AbstractOystService
                         }
 
                         if ($cart_rule_amount > 0) {
+                            if ($cart_rule_amount > $amount_total) {
+                                $cart_rule_amount = $amount_total;
+                            }
                             $oyst_price = new OystPrice($cart_rule_amount, $currency_iso_code);
                             $merchand_discount = new OneClickMerchantDiscount($oyst_price, $cart_rule->name);
                             $oneClickOrderCartEstimate->addMerchantDiscount($merchand_discount);
