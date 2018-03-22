@@ -199,7 +199,7 @@ class CartService extends AbstractOystService
         $oneClickOrderCartEstimate = new OneClickOrderCartEstimate(array());
 
         if (isset($data['items'])) {
-            foreach ($data['items'] as $key => $item) {
+            foreach ($data['items'] as $item) {
                 $idProduct = $item['product']['reference'];
                 $idCombination = 0;
 
@@ -326,7 +326,7 @@ class CartService extends AbstractOystService
         $type = OystCarrier::HOME_DELIVERY;
 
         // Add carriers
-        foreach ($carriersAvailables as $key => $shipment) {
+        foreach ($carriersAvailables as $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
 
             $id_reference = Db::getInstance()->getValue(
@@ -379,7 +379,7 @@ class CartService extends AbstractOystService
         // Check exist primary
         $is_primary = false;
 
-        foreach ($carriersAvailables as $key => $shipment) {
+        foreach ($carriersAvailables as $shipment) {
             $carrier_desintifier = Cart::desintifier($shipment['id_carrier']);
             $id_carrier = (int)Tools::substr($carrier_desintifier, 0, -1);
             $id_reference = Db::getInstance()->getValue('

@@ -192,7 +192,7 @@ class OrderService extends AbstractOystService
      * @param $oystOrderInfo
      * @return bool
      */
-    public function createNewOrder(Customer $customer, Address $invoiceAddress, Address $deliveryAddress, $products, $oystOrderInfo, $event)
+    public function createNewOrder(Customer $customer, Address $invoiceAddress, Address $deliveryAddress, $products, $oystOrderInfo)
     {
         // PS core used this context anywhere.. So we need to fill it properly
         if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['id_cart'])) {
@@ -344,7 +344,7 @@ class OrderService extends AbstractOystService
      *
      * @throws Exception
      */
-    public function requestCreateNewOrder($orderId, $event)
+    public function requestCreateNewOrder($orderId)
     {
         $data = array(
             'state' => false,
@@ -436,7 +436,7 @@ class OrderService extends AbstractOystService
             }
 
             if (!isset($data['error'])) {
-                $state = $this->createNewOrder($customer, $invoiceAddress, $deliveryAddress, $products, $oystOrderInfo['order'], $event);
+                $state = $this->createNewOrder($customer, $invoiceAddress, $deliveryAddress, $products, $oystOrderInfo['order']);
                 $data['state'] = $state;
             } else {
                 if ($oystOrderInfo['order']['is_cart_checkout']) {

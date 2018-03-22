@@ -194,7 +194,7 @@ class ProductTransformer extends AbstractTransformer
         return $oystProduct;
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform()
     {
         // Implement this method if you need it
     }

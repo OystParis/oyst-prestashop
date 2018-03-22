@@ -51,7 +51,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             $main_phone = $addresses[0]->phone;
         }
 
-        foreach ($addresses as $ka => $address) {
+        foreach ($addresses as $address) {
             $country = new Country($address->id_country, $this->context->language->id);
             $addresses_oyst[] = array(
                 'first_name' => $address->firstname,
@@ -105,7 +105,14 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             $oyst->getFreePayEnvironment(),
             $oyst->getCustomFreePayApiUrl()
         );
-        $result = $paymentApi->payment($total_amount, $currency->iso_code, $this->context->cart->id, $urls, false, $user);
+        $result = $paymentApi->payment(
+            $total_amount,
+            $currency->iso_code,
+            $this->context->cart->id,
+            $urls,
+            false,
+            $user
+        );
 
         // Result payment
         $this->module->log($user);
@@ -140,8 +147,12 @@ class OystPaymentModuleFrontController extends ModuleFrontController
      */
     private function getUrls()
     {
+        $id_cart = $this->context->cart->id;
         // Build hash
-        $cart_hash = hash('sha256', Tools::jsonEncode(array($this->context->cart->id, $this->context->cart->nbProducts(), _COOKIE_KEY_)));
+        $cart_hash = hash(
+            'sha256',
+            Tools::jsonEncode(array($id_cart, $this->context->cart->nbProducts(), _COOKIE_KEY_))
+        );
 
         // Build urls and amount
         $glue = '&';
@@ -149,9 +160,14 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             $glue = '?';
         }
 
+        $url_error = $this->getUrlByName(
+            Configuration::get('FC_OYST_REDIRECT_ERROR'),
+            Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM')
+        );
+        $url_success = $this->context->link->getModuleLink('oyst', 'paymentreturn');
         $notification = $this->context->link->getModuleLink('oyst', 'paymentnotification').$glue.'&ch='.$cart_hash;
-        $errorUrl     = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM')).$glue.'id_cart='.$this->context->cart->id;
-        $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentreturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
+        $errorUrl     = $url_error.$glue.'id_cart='.$id_cart;
+        $successUrl   = $url_success.$glue.'id_cart='.$id_cart.'&key='.$this->context->customer->secure_key;
 
         $urls = array(
             'notification' => $notification,
@@ -224,7 +240,14 @@ class OystPaymentModuleFrontController extends ModuleFrontController
     //     }
     //
     //     // Validate order
-    //     $this->module->validateOrder($cart->id, $payment_status, $total_amount, 'Freepay', null, null, $cart->id_currency, false, $this->context->customer->secure_key, $shop);
+    //     $this->module->validateOrder(
+    //          $cart->id,
+    //          $payment_status,
+    //          $total_amount,
+    //          'Freepay',
+    //          null,
+    //          null,
+    //          $cart->id_currency, false, $this->context->customer->secure_key, $shop);
     //     $id_order = Order::getOrderByCartId($cart->id);
     //
     //     $this->module->log('Payment notification send ');

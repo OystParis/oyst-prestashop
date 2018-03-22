@@ -46,7 +46,7 @@ class StockController extends AbstractOystController
         Db::getInstance()->insert('oyst_payment_notification', $insert);
 
         $stockService = AbstractStockServiceFactory::get(new Oyst(), Context::getContext());
-        $responseData = $stockService->manageQty($data['data']);
+        $stockService->manageQty($data['data']);
         $this->logger->info(
             sprintf(
                 'New notification stock [%s]',

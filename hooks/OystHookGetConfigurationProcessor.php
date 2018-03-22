@@ -356,7 +356,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             }
         }
 
-        foreach ($this->configurations as $conf => $format) {
+        $lists_conf  = array_keys($this->configurations);
+
+        foreach ($lists_conf as $conf) {
             $assign[$conf] = Configuration::get($conf);
         }
 

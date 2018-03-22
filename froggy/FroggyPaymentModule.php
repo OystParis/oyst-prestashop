@@ -357,7 +357,7 @@ class FroggyPaymentModule extends PaymentModule
     protected function deleteConfigurations()
     {
         if (isset($this->configurations) && is_array($this->configurations)) {
-            foreach ($this->configurations as $name => $value) {
+            foreach ($this->getModuleConfigurationsKeys() as $name) {
                 if (!Configuration::deleteByName($name)) {
                     return false;
                 }

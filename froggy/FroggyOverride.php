@@ -67,9 +67,9 @@ class FroggyOverride
             $override_classpath = $this->getClassPath(basename($vo, '.php'), false);
             if (empty($core_classpath)) {
                 unset($overrides[$ko]);
-            } else if (file_exists($override_classpath)) {
+            } elseif (file_exists($override_classpath)) {
                 return false;
-            } else if (!is_writable(dirname($override_classpath))) {
+            } elseif (!is_writable(dirname($override_classpath))) {
                 return false;
             }
         }
