@@ -34,11 +34,6 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
 
     public function initContent()
     {
-        if (Tools::getValue('key') != Configuration::get('FC_OYST_HASH_KEY')) {
-            header("HTTP/1.1 400 Bad Request");
-            die(Tools::jsonEncode(array('result' => 'ko', 'error' => 'Bad API key')));
-        }
-
         $event_data = trim(str_replace("'", '', Tools::file_get_contents('php://input')));
         $event_data = Tools::jsonDecode($event_data, true);
 
@@ -50,6 +45,16 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
         $notification_item = $event_data['notification'];
         $id_cart  = $notification_item['order_id'];
         $id_order = Order::getOrderByCartId($id_cart);
+
+        // Load cart
+        $cart = new Cart((int)$id_cart);
+        // Build cart hash
+        $cart_hash = hash('sha256', Tools::jsonEncode(array($cart->id, $cart->nbProducts(), _COOKIE_KEY_)));
+
+        if (Tools::getValue('ch') != $cart_hash) {
+            header("HTTP/1.1 400 Bad Request");
+            die(Tools::jsonEncode(array('result' => 'ko', 'error' => 'Bad key cart')));
+        }
 
         try {
             if ($notification_item['success'] == 1) {
