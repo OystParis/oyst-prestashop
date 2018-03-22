@@ -60,8 +60,10 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
             $restriction_languages = true;
         }
 
+        $token = hash('sha256', Tools::jsonEncode(array(Configuration::get('FC_OYST_HASH_KEY'), _COOKIE_KEY_)));
+
         $this->smarty->assign(array(
-            'secureKey' => Configuration::get('FC_OYST_HASH_KEY'),
+            'secureKey' => $token,
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
             'stockManagement' => Configuration::get('PS_STOCK_MANAGEMENT'),
             'oneClickActivated' => (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),

@@ -141,7 +141,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
     private function getUrls()
     {
         // Build hash
-        $cart_hash = md5(Tools::jsonEncode(array($this->context->cart->id, $this->context->cart->nbProducts())));
+        $cart_hash = hash('sha256', Tools::jsonEncode(array($this->context->cart->id, $this->context->cart->nbProducts(), _COOKIE_KEY_)));
 
         // Build urls and amount
         $glue = '&';
@@ -149,7 +149,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
             $glue = '?';
         }
 
-        $notification = $this->context->link->getModuleLink('oyst', 'paymentnotification').$glue.'key='.Configuration::get('FC_OYST_HASH_KEY').'&ch='.$cart_hash;
+        $notification = $this->context->link->getModuleLink('oyst', 'paymentnotification').$glue.'&ch='.$cart_hash;
         $errorUrl     = $this->getUrlByName(Configuration::get('FC_OYST_REDIRECT_ERROR'), Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM')).$glue.'id_cart='.$this->context->cart->id;
         $successUrl   = $this->context->link->getModuleLink('oyst', 'paymentreturn').$glue.'id_cart='.$this->context->cart->id.'&key='.$this->context->customer->secure_key;
 
