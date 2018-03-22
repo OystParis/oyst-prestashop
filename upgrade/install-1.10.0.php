@@ -25,7 +25,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
  * @param Oyst $module
  * @return bool
  */
-function upgrade_module_1_10_0($module)
+function upgrade_module_1_10_0()
 {
     Db::getInstance()->execute("ALTER TABLE "._DB_PREFIX_."oyst_payment_notification ADD `status` varchar(255) DEFAULT NULL");
     Db::getInstance()->execute("ALTER TABLE "._DB_PREFIX_."oyst_payment_notification ADD `date_upd` datetime DEFAULT NULL");

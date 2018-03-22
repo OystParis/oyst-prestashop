@@ -23,7 +23,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
 
 use Oyst\Service\Configuration as OConfiguration;
 
-function upgrade_module_1_6_7($module)
+function upgrade_module_1_6_7()
 {
     Configuration::updateValue('FC_OYST_ACTIVE_FRAUD', 0);
 

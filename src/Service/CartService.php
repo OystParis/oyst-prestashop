@@ -69,12 +69,12 @@ class CartService extends AbstractOystService
         } else {
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
             if (isset(Customer::$definition['fields']['firstname']['size'])) {
-                $firstname = substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
+                $firstname = Tools::substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
             }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
             if (isset(Customer::$definition['fields']['lastname']['size'])) {
-                $lastname = substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
+                $lastname = Tools::substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
             }
 
             $customer = new Customer();
@@ -135,12 +135,12 @@ class CartService extends AbstractOystService
 
             $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
             if (isset(Address::$definition['fields']['firstname']['size'])) {
-                $firstname = substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+                $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
             }
 
             $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
             if (isset(Address::$definition['fields']['lastname']['size'])) {
-                $lastname = substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+                $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
             }
 
             $address = new Address();
@@ -379,12 +379,12 @@ class CartService extends AbstractOystService
                     if ($cart_rule->checkValidity($this->context, in_array($id_cart_rule, $cart_rules_in_cart), false)) {
                         $cart_rule_amount = 0;
 
-                        if (floatval($cart_rule->reduction_percent) != 0) {
+                        if ((float)$cart_rule->reduction_percent != 0) {
                             $cart_rule_amount += $cart_rule->getContextualValue(true, $this->context);
                             $currency_iso_code = $this->context->currency->iso_code;
                         }
 
-                        if (floatval($cart_rule->reduction_amount) != 0) {
+                        if ((float)$cart_rule->reduction_amount != 0) {
                             //Reduction amount case
                             $cart_rule_amount += $cart_rule->getContextualValue(true, $this->context);
                             $currency = new Currency($cart_rule->reduction_currency);
@@ -394,7 +394,7 @@ class CartService extends AbstractOystService
                                 $currency_iso_code = $this->context->currency->iso_code;
                             }
                         }
-                        if (intval($cart_rule->gift_product) != 0) {
+                        if ((int)$cart_rule->gift_product != 0) {
                             $reference = $cart_rule->gift_product;
                             $idProduct = (int)$cart_rule->gift_product;
 

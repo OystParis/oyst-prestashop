@@ -20,8 +20,8 @@
 <link type="text/css" rel="stylesheet" href="{$oyst.module_dir|escape:'html':'UTF-8'}views/css/freepay-1.6.css" media="all">
 
 <script>
-    var notification_bo_url = "{$oyst.notification_bo_url}";
-    var module_dir = "{$oyst.module_dir}";
+    var notification_bo_url = "{$oyst.notification_bo_url|escape:'htmlall':'UTF-8'}";
+    var module_dir = "{$oyst.module_dir|escape:'htmlall':'UTF-8'}";
 </script>
 
 {if isset($oyst.result) && $oyst.result eq 'ok'}
@@ -701,8 +701,8 @@
                                                 <tbody>
                                                     {foreach $oyst.languages as $lang}
                                                         <tr>
-                                                            <td><span>{$lang['name']}</span></td>
-                                                            <td class="text-center"><input name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox"></td>
+                                                            <td><span>{$lang['name']|escape:'htmlall':'UTF-8'}</span></td>
+                                                            <td class="text-center"><input name="oyst_lang[]" value="{$lang['id_lang']|intval}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox"></td>
                                                         </tr>
                                                     {/foreach}
                                                 </tbody>
@@ -711,7 +711,7 @@
                                     </div>
                                 {else}
                                     {foreach $oyst.languages as $lang}
-                                        <input style="display:none;" name="oyst_lang[]" value="{$lang['id_lang']}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox">
+                                        <input style="display:none;" name="oyst_lang[]" value="{$lang['id_lang']|intval}" {if in_array($lang['id_lang'], $oyst.restriction_languages)}checked="checked"{/if} type="checkbox">
                                     {/foreach}
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
@@ -725,7 +725,7 @@
                                         <div class="col-md-7 col-lg-7">
                                             <select name="table_selector" id="table-selector">
                                                 {foreach from=$oyst.notification_tables item=notification_table}
-                                                    <option value="{$notification_table}">{$notification_table}</option>
+                                                    <option value="{$notification_table|escape:'htmlall':'UTF-8'}">{$notification_table|escape:'htmlall':'UTF-8'}</option>
                                                 {/foreach}
                                             </select>
                                         </div>

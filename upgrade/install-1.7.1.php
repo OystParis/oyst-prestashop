@@ -27,7 +27,7 @@ use Oyst\Service\Configuration as OConfiguration;
  * @param Oyst $module
  * @return bool
  */
-function upgrade_module_1_7_1($module)
+function upgrade_module_1_7_1()
 {
     Configuration::updateValue('OYST_ONECLICK_URL_SANDBOX', 'https://cdn.sandbox.oyst.eu');
     Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);

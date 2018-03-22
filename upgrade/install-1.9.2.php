@@ -25,7 +25,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
  * @param Oyst $module
  * @return bool
  */
-function upgrade_module_1_9_2($module)
+function upgrade_module_1_9_2()
 {
     return true;
 }

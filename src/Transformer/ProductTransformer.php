@@ -78,9 +78,9 @@ class ProductTransformer extends AbstractTransformer
         $combination = new Combination();
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
-        	   $protocol_link = (Tools::usingSecureMode() && Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
-        	   $protocol_content = (Tools::usingSecureMode() && Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
-        	   $link = new Link($protocol_link, $protocol_content);
+            $protocol_link = (Tools::usingSecureMode() && Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
+            $protocol_content = (Tools::usingSecureMode() && Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
+            $link = new Link($protocol_link, $protocol_content);
         } else {
             $link = $this->context->link;
         }
@@ -126,6 +126,7 @@ class ProductTransformer extends AbstractTransformer
 
             // Informations
             $attributesInfo = $this->productRepository->getAttributesCombination($combination);
+            $informations = array();
             foreach ($attributesInfo as $attributeInfo) {
                 $informations[$attributeInfo['name']] = $attributeInfo['value'];
                 $title .= ' '.$attributeInfo['value'];
@@ -242,6 +243,7 @@ class ProductTransformer extends AbstractTransformer
             $oystProductVariation->__set('images', $images);
 
             $attributesInfo = $this->productRepository->getAttributesCombination($combination);
+            $informations = array();
             foreach ($attributesInfo as $attributeInfo) {
                 $informations[$attributeInfo['name']] = $attributeInfo['value'];
             }

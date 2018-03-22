@@ -378,7 +378,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         $this->context->controller->addCSS(array(
-            $this->path.'views/js/datatables/datatables.min.css',
+            $this->path.'views/css/datatables/datatables.min.css',
         ));
 
         $this->context->controller->addJS(array(
