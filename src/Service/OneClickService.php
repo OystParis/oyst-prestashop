@@ -39,6 +39,7 @@ use Tools;
 use StockAvailable;
 use Module;
 use CartRule;
+use Cart;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -132,9 +133,10 @@ class OneClickService extends AbstractOystService
                 // Apply cart rule for gift
                 CartRule::autoAddToCart(Context::getContext());
             } else {
+                $cart_clone = new Cart(Context::getContext()->cart->id);
+
                 foreach (Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT) as $cr) {
                     $cart_rule = new CartRule($cr['obj']->id, Context::getContext()->language->id);
-                    $cart_clone = new Cart(Context::getContext()->cart->id);
                     $cart_clone->removeCartRule($cart_rule->id);
                 }
 

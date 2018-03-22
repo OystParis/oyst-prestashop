@@ -392,7 +392,7 @@ class OrderService extends AbstractOystService
 
                         $combination = new Combination();
                         // Array will exist but reference could be null
-                        if (isset($reference[1])) {
+                        if (isset($ref_item[1])) {
                             $combination = new Combination($ref_item[1]);
                             if (!Validate::isLoadedObject($combination)) {
                                 $data['error'] = 'Combination has not been found';
