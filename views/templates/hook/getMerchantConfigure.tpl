@@ -33,8 +33,8 @@
 {/if}
 
 <script>
-    var notification_bo_url = "{$oyst.notification_bo_url|escape:'htmlall':'UTF-8}";
-    var module_dir = "{$oyst.module_dir|escape:'htmlall':'UTF-8}";
+    var notification_bo_url = "{$oyst.notification_bo_url|escape:'htmlall':'UTF-8'}";
+    var module_dir = "{$oyst.module_dir|escape:'htmlall':'UTF-8'}";
 </script>
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
