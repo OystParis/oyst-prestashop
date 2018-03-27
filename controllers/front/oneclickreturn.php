@@ -19,6 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
+use Oyst\Factory\AbstractOrderServiceFactory;
 /*
  * Security
  */
@@ -39,6 +40,9 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         // Get parameters
         $id_cart = (int)Tools::getValue('id_cart');
         $key = Tools::getValue('key');
+        $oyst = new Oyst();
+        $context = Context::getContext();
+        $orderService = AbstractOrderServiceFactory::get($oyst, $context);
 
         // Get cart
         $cart = new Cart($id_cart);
@@ -63,6 +67,7 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
 
         // Load cart and order
         $id_order = Order::getOrderByCartId($id_cart);
+        $cartIsError = $orderService->getOrderRepository()->isErrorExist($id_cart);
         $order = new Order($id_order);
 
         // If order exists we redirect to confirmation page
@@ -85,6 +90,11 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
                     break;
             }
 
+            Tools::redirect($url);
+        }
+
+        if ($cartIsError) {
+            $url = $this->context->link->getModuleLink('oyst', 'oneclickerror');
             Tools::redirect($url);
         }
 

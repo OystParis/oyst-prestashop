@@ -438,6 +438,19 @@ class OrderService extends AbstractOystService
             if (!isset($data['error'])) {
                 $state = $this->createNewOrder($customer, $invoiceAddress, $deliveryAddress, $products, $oystOrderInfo['order'], $event);
                 $data['state'] = $state;
+            } else {
+                if ($oystOrderInfo['order']['is_cart_checkout']) {
+                    $insert   = array(
+                        'id_order'   => 0,
+                        'id_cart'    => $oystOrderInfo['order']['context']['id_cart'],
+                        'payment_id' => '',
+                        'event_code' => 'error.found.cart',
+                        'event_data' => pSQL($data['error']),
+                        'date_event' => date('Y-m-d H:i:s'),
+                        'date_add'   => date('Y-m-d H:i:s'),
+                    );
+                    Db::getInstance()->insert('oyst_payment_notification', $insert);
+                }
             }
         } else {
             $data['error'] = $this->requester->getApiClient()->getLastError();
