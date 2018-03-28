@@ -127,7 +127,9 @@ class OneClickService extends AbstractOystService
         if ($controller == 'order') {
             // Check validity cart rule ?
             if (version_compare(_PS_VERSION_, '1.6.0', '>=')) {
-                foreach (Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT) as $cr) {
+                $ids_cart_rule_gift = Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT);
+
+                foreach ($ids_cart_rule_gift as $cr) {
                     $cart_rule = new CartRule($cr['obj']->id, Context::getContext()->language->id);
                     Context::getContext()->cart->removeCartRule($cart_rule->id);
                     Context::getContext()->cart->update();
@@ -135,18 +137,26 @@ class OneClickService extends AbstractOystService
 
                 $products = Context::getContext()->cart->getProducts();
                 // Apply cart rule for gift
-                CartRule::autoAddToCart(Context::getContext());
+                foreach ($ids_cart_rule_gift as $cr) {
+                    $cart_rule = new CartRule($cr['obj']->id, Context::getContext()->language->id);
+                    Context::getContext()->cart->addCartRule($cart_rule->id);
+                    Context::getContext()->cart->update();
+                }
             } else {
                 $cart_clone = new Cart(Context::getContext()->cart->id);
+                $ids_cart_rule_gift = Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT);
 
-                foreach (Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT) as $cr) {
+                foreach ($ids_cart_rule_gift as $cr) {
                     $cart_rule = new CartRule($cr['obj']->id, Context::getContext()->language->id);
                     $cart_clone->removeCartRule($cart_rule->id);
                 }
 
                 $products = $cart_clone->getProducts();
                 // Apply cart rule for gift
-                // CartRule::autoAddToCart(Context::getContext());
+                foreach ($ids_cart_rule_gift as $cr) {
+                    $cart_rule = new CartRule($cr['obj']->id, Context::getContext()->language->id);
+                    $cart_clone->addCartRule($cart_rule->id);
+                }
             }
 
             if (!$products) {
