@@ -43,12 +43,18 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         $oyst = new Oyst();
         $context = Context::getContext();
         $orderService = AbstractOrderServiceFactory::get($oyst, $context);
+        $cartIsError = $orderService->getOrderRepository()->isErrorExist($id_cart);
 
         // Get cart
         $cart = new Cart($id_cart);
         $customer = new Customer($cart->id_customer);
         if (Configuration::get('FC_OYST_HASH_KEY') != $key) {
             die('Wrong security key');
+        }
+
+        if ($cartIsError) {
+            $url = $this->context->link->getModuleLink('oyst', 'oneclickerror');
+            Tools::redirect($url);
         }
 
         // Log user
@@ -67,35 +73,31 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
 
         // Load cart and order
         $id_order = Order::getOrderByCartId($id_cart);
-        $cartIsError = $orderService->getOrderRepository()->isErrorExist($id_cart);
-        $order = new Order($id_order);
 
-        // If order exists we redirect to confirmation page
-        if (Validate::isLoadedObject($order)) {
-            // Build urls and amount
-            $glue = '&';
-            if (Configuration::get('PS_REWRITING_SETTINGS') == 1) {
-                $glue = '?';
+        if ($id_order) {
+            $order = new Order($id_order);
+            // If order exists we redirect to confirmation page
+            if (Validate::isLoadedObject($order)) {
+                // Build urls and amount
+                $glue = '&';
+                if (Configuration::get('PS_REWRITING_SETTINGS') == 1) {
+                    $glue = '?';
+                }
+
+                switch (Configuration::get('FC_OYST_OC_REDIRECT_CONF')) {
+                    case 'ORDER_HISTORY':
+                        $url = $this->context->link->getPageLink('history');
+                        break;
+                    case 'ORDER_CONFIRMATION':
+                        $url = $this->context->link->getModuleLink('oyst', 'oneclickconfirmation').$glue.'id_cart='.$cart->id.'&id_order='.$id_order.'&id_module='.Module::getModuleIdByName('oyst').'&key='.$customer->secure_key;
+                        break;
+                    case 'CUSTOM':
+                        $url = Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
+                        break;
+                }
+
+                Tools::redirect($url);
             }
-
-            switch (Configuration::get('FC_OYST_OC_REDIRECT_CONF')) {
-                case 'ORDER_HISTORY':
-                    $url = $this->context->link->getPageLink('history');
-                    break;
-                case 'ORDER_CONFIRMATION':
-                    $url = $this->context->link->getModuleLink('oyst', 'oneclickconfirmation').$glue.'id_cart='.$cart->id.'&id_order='.$id_order.'&id_module='.Module::getModuleIdByName('oyst').'&key='.$customer->secure_key;
-                    break;
-                case 'CUSTOM':
-                    $url = Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
-                    break;
-            }
-
-            Tools::redirect($url);
-        }
-
-        if ($cartIsError) {
-            $url = $this->context->link->getModuleLink('oyst', 'oneclickerror');
-            Tools::redirect($url);
         }
 
         // If cart in context is the cart we just paid, we create new cart

@@ -493,9 +493,6 @@ class OrderRepository extends AbstractOystRepository
      */
     public function isErrorExist($id_cart)
     {
-        var_dump('SELECT COUNT(*)
-        FROM '._DB_PREFIX_.'oyst_payment_notification
-        WHERE id_cart = '.$id_cart.' AND event_data = "error.found.cart"');
         return (bool)$this->db->getValue(
             'SELECT COUNT(*)
             FROM '._DB_PREFIX_.'oyst_payment_notification
