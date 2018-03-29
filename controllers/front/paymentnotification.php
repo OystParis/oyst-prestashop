@@ -260,7 +260,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
         $cart = new Cart((int)$payment_notification['order_id']);
 
         // Build cart hash
-        $cart_hash = md5(Tools::jsonEncode(array($cart->id, $cart->nbProducts())));
+        $cart_hash = hash('sha256', Tools::jsonEncode(array($cart->id, $cart->nbProducts(), _COOKIE_KEY_)));
 
         // Load data in context
         $this->context->cart = $cart;
