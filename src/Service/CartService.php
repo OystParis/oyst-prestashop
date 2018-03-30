@@ -48,6 +48,7 @@ use StockAvailable;
 use Combination;
 use CartRule;
 use Image;
+use Module;
 
 class CartService extends AbstractOystService
 {
@@ -455,6 +456,65 @@ class CartService extends AbstractOystService
                             $merchand_discount = new OneClickMerchantDiscount($oyst_price, $cart_rule->name);
                             $oneClickOrderCartEstimate->addMerchantDiscount($merchand_discount);
                         }
+                    }
+                }
+            }
+        }
+
+        if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
+            require_once dirname(__FILE__).'/../../../giftonordermodule/Giftonorder.php';
+            if ($data['context']['id_cart'] && (int)$data['context']['id_cart'] > 0) {
+                $giftInCart = \Giftonorder::getGiftsInCart($data['context']['id_cart']);
+                if (count($giftInCart) > 0) {
+                    foreach ($giftInCart as $gift) {
+                        $idCombination = $gift['id_combination'];
+                        $reference = $gift['id_product'].';'.$idCombination;
+                        $product = new Product($gift['id_product'], false, $this->context->language->id);
+                        $title = is_array($product->name) ? reset($product->name) : $product->name;
+
+                        if ($idCombination > 0) {
+                            $combination = new Combination($idCombination);
+                            if (!Validate::isLoadedObject($combination)) {
+                                $this->logger->emergency(
+                                    'Combination not exist ['.json_encode($data).']'
+                                );
+                            }
+                        }
+
+                        // Get attributes for title
+                        if ($combination && $combination->id) {
+                            $productRepository = new ProductRepository(Db::getInstance());
+                            $attributesInfo = $productRepository->getAttributesCombination($combination);
+                            foreach ($attributesInfo as $attributeInfo) {
+                                $title .= ' '.$attributeInfo['value'];
+                            }
+                        }
+
+                        $amount = new OystPrice(0, Context::getContext()->currency->iso_code);
+                        $oneClickItemFree = new OneClickItem(
+                            (string)$reference,
+                            $amount,
+                            1
+                        );
+
+                        $images = array();
+                        foreach (Image::getImages($this->context->language->id, $idProduct, $idCombination) as $image) {
+                            $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                        }
+
+                        //If no image for attribute, search default product image
+                        if (empty($images)) {
+                            foreach (Image::getImages($this->context->language->id, $idProduct) as $image) {
+                                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                            }
+                        }
+
+                        $giftonorder = new \Giftonorder($gift['id_giftonorder']);
+
+                        $oneClickItemFree->__set('title', $title);
+                        $oneClickItemFree->__set('message', $giftonorder->name);
+                        $oneClickItemFree->__set('images', $images);
+                        $oneClickOrderCartEstimate->addFreeItems($oneClickItemFree);
                     }
                 }
             }

@@ -159,6 +159,17 @@ class OneClickService extends AbstractOystService
                 }
             }
 
+            $ids_gift_products = array();
+            if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
+                require_once dirname(__FILE__).'/../../../giftonordermodule/Giftonorder.php';
+                $giftInCart = \Giftonorder::getGiftsInCart(Context::getContext()->cart->id);
+                if (count($giftInCart) > 0) {
+                    foreach ($giftInCart as $gift) {
+                        $ids_gift_products[] = $gift['id_product'];
+                    }
+                }
+            }
+
             if (!$products) {
                 $data['error'] = 'Missing products';
             }
@@ -182,6 +193,11 @@ class OneClickService extends AbstractOystService
         if (!isset($data['error'])) {
             if ($products && $controller == 'order') {
                 foreach ($products as $product) {
+                    if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
+                        if (count($ids_gift_products) > 0 && in_array($product['id_product'], $ids_gift_products)) {
+                            continue;
+                        }
+                    }
                     $productLess[] = $exportProductService->transformProductLess(
                         $product['id_product'],
                         $product['id_product_attribute'],
