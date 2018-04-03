@@ -98,12 +98,12 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
 
                 Tools::redirect($url);
             }
-        }
 
-        // If cart in context is the cart we just paid, we create new cart
-        if ($this->context->cart->id == $cart->id) {
-            $this->context->cart = new Cart();
-            $this->context->cookie->id_cart = 0;
+            // If cart in context is the cart we just paid, we create new cart
+            if ($this->context->cart->id == $cart->id) {
+                $this->context->cart = new Cart();
+                $this->context->cookie->id_cart = 0;
+            }
         }
 
         $this->setTemplate('oneclick-return'.(version_compare(_PS_VERSION_, '1.6.0') ? '.bootstrap' : '').'.tpl');
