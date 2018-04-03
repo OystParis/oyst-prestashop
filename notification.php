@@ -60,19 +60,22 @@ if ($data && isset($data['event'])) {
                 $orderController = new OrderController($request);
                 $orderGUID = $data['data']['order_id'];
                 $orderAlreadyBeenTreated = $orderService->getOrderRepository()->isOrderAlreadyBeenTreated($orderGUID);
+                $forceResendOrder = (isset($data['notification']) && $data['notification']);
 
-                if (!$orderAlreadyBeenTreated) {
-                    $insert   = array(
-                        'id_order'   => 0,
-                        'id_cart'    => 0,
-                        'payment_id' => pSQL($orderGUID),
-                        'event_code' => pSQL($data['event']),
-                        'event_data' => '',
-                        'status'     => 'start',
-                        'date_add'   => date('Y-m-d H:i:s'),
-                        'date_upd'   => date('Y-m-d H:i:s'),
-                    );
-                    Db::getInstance()->insert('oyst_payment_notification', $insert);
+                if (!$orderAlreadyBeenTreated || $forceResendOrder) {
+                    if (!$forceResendOrder) {
+                        $insert   = array(
+                            'id_order'   => 0,
+                            'id_cart'    => 0,
+                            'payment_id' => pSQL($orderGUID),
+                            'event_code' => pSQL($data['event']),
+                            'event_data' => '',
+                            'status'     => 'start',
+                            'date_add'   => date('Y-m-d H:i:s'),
+                            'date_upd'   => date('Y-m-d H:i:s'),
+                        );
+                        Db::getInstance()->insert('oyst_payment_notification', $insert);
+                    }
                     $orderController->setLogger($logger);
                     $orderController->createNewOrderAction();
                 } else {
