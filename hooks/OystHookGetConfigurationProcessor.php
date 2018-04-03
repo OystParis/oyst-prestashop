@@ -286,6 +286,21 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             _DB_PREFIX_.'oyst_api_order',
         );
 
+        $payment_notification_url = $this->context->link->getModuleLink(
+            'oyst',
+            'paymentNotification'
+        );
+        $notification_bo_url = $this->context->link->getModuleLink(
+            'oyst',
+            'notification'
+        );
+        $hash_key = Configuration::get('FC_OYST_HASH_KEY');
+        $name_module = $this->module->name;
+        $params_conf = '&configure='.$name_module.'&tab_module='.$this->module->tab.'&module_name='.$name_module;
+        $custom_success_error = Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM');
+        $custom_error_error = Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM');
+        $custom_conf_error = Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
+
         $assign['logsFile'] = $filesName;
         $assign['hasApiKey']     = $hasApiKey;
         $assign['module_dir']    = $this->path;
@@ -302,16 +317,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['module_version']           = $this->module->version;
         $assign['allow_url_fopen_check']    = ini_get('allow_url_fopen');
         $assign['curl_check']               = function_exists('curl_version');
-        $assign['payment_notification_url'] = $this->context->link->getModuleLink('oyst', 'paymentNotification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
-        $assign['notification_url']         = $this->context->link->getModuleLink('oyst', 'notification').'?key='.Configuration::get('FC_OYST_HASH_KEY');
-        $assign['notification_bo_url']      = '/modules/oyst/notification-bo.php?key='.Configuration::get('FC_OYST_HASH_KEY');
-        $assign['configureLink']            = $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->module->name.'&tab_module='.$this->module->tab.'&module_name='.$this->module->name;
+        $assign['payment_notification_url'] = $payment_notification_url.'?key='.$hash_key;
+        $assign['notification_url']         = $notification_bo_url.'?key='.$hash_key;
+        $assign['notification_bo_url']      = '/modules/oyst/notification-bo.php?key='.$hash_key;
+        $assign['configureLink']            = $this->context->link->getAdminLink('AdminModules', true).$params_conf;
         $assign['redirect_success_urls']    = $this->redirect_success_urls;
         $assign['redirect_error_urls']      = $this->redirect_error_urls;
         $assign['redirect_oc_conf_urls']    = $this->redirect_oc_conf_urls;
-        $assign['custom_success_error']     = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM'));
-        $assign['custom_error_error']       = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM'));
-        $assign['custom_conf_error']        = !Validate::isAbsoluteUrl(Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM'));
+        $assign['custom_success_error']     = !Validate::isAbsoluteUrl($custom_success_error);
+        $assign['custom_error_error']       = !Validate::isAbsoluteUrl($custom_error_error);
+        $assign['custom_conf_error']        = !Validate::isAbsoluteUrl($custom_conf_error);
         $assign['carrier_list']             = $this->getCarrierList();
         $assign['type_list']                = $shipmentTypes;
         $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
@@ -465,7 +480,10 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         if (!$phone || !Validate::isPhoneNumber($phone)) {
             $hasError   = true;
-            $phoneError = $this->module->l('Please enter your phone number in the format 06 00 00 00 00', 'oysthookgetconfigurationprocessor');
+            $phoneError = $this->module->l(
+                'Please enter your phone number in the format 06 00 00 00 00',
+                'oysthookgetconfigurationprocessor'
+            );
         }
 
         if (!$email || !Validate::isEmail($email)) {
@@ -505,20 +523,39 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $dayOfTheWeek    = date('w');
         $currentDateTime = date('Hi');
         $showSubMessage  = true;
-        $message         = $this->module->l('A FreePay customer advisor shall contact you on', 'oysthookgetconfigurationprocessor');
+        $message = $this->module->l(
+            'A FreePay customer advisor shall contact you on',
+            'oysthookgetconfigurationprocessor'
+        );
 
-        if (in_array($dayOfTheWeek, array(0, 1, 2, 3, 4)) && $currentDateTime > '2000') {// Sunday or Monday, Tuesday, Wednesday, Thursday after 8pm
+        if (in_array($dayOfTheWeek, array(0, 1, 2, 3, 4)) && $currentDateTime > '2000') {
+            // Sunday or Monday, Tuesday, Wednesday, Thursday after 8pm
             $showSubMessage = false;
-            $message = $this->module->l('A FreePay customer advisor shall contact you from tomorrow morning 8:30 am on', 'oysthookgetconfigurationprocessor');
-        } elseif (in_array($dayOfTheWeek, array(1, 2, 3, 4, 5)) && $currentDateTime > '0000' && $currentDateTime < '0830') {// Monday, Tuesday, Wednesday, Thursday, Friday between 12:01 am and 8:30 am
+            $message = $this->module->l(
+                'A FreePay customer advisor shall contact you from tomorrow morning 8:30 am on',
+                'oysthookgetconfigurationprocessor'
+            );
+        } elseif (in_array($dayOfTheWeek, array(1, 2, 3, 4, 5))
+            && $currentDateTime > '0000' && $currentDateTime < '0830') {
+            // Monday, Tuesday, Wednesday, Thursday, Friday between 12:01 am and 8:30 am
             $showSubMessage = false;
-            $message = $this->module->l('A FreePay customer advisor shall contact you this morning from 8:30 am on', 'oysthookgetconfigurationprocessor');
-        } elseif ($dayOfTheWeek == 5 && $currentDateTime > '1800' || $dayOfTheWeek == 6) {// Friday after 6 pm and Saturday
+            $message = $this->module->l(
+                'A FreePay customer advisor shall contact you this morning from 8:30 am on',
+                'oysthookgetconfigurationprocessor'
+            );
+        } elseif ($dayOfTheWeek == 5 && $currentDateTime > '1800' || $dayOfTheWeek == 6) {
+            // Friday after 6 pm and Saturday
             $showSubMessage = false;
-            $message = $this->module->l('A FreePay customer advisor shall contact you monday morning from 8:30 am on', 'oysthookgetconfigurationprocessor');
+            $message = $this->module->l(
+                'A FreePay customer advisor shall contact you monday morning from 8:30 am on',
+                'oysthookgetconfigurationprocessor'
+            );
         } elseif (in_array($dayOfTheWeek, array(1, 2, 3, 4, 5)) && $currentDateTime > '1200' && $currentDateTime < '1400') {// Monday, Tuesday, Wednesday, Thursday, Friday entre 12h et 14h
             $showSubMessage = false;
-            $message = $this->module->l('A FreePay customer advisor shall contact you this afternoon from 14:30 pm on', 'oysthookgetconfigurationprocessor');
+            $message = $this->module->l(
+                'A FreePay customer advisor shall contact you this afternoon from 14:30 pm on',
+                'oysthookgetconfigurationprocessor'
+            );
         }
 
         $assign['message'] = $message;
@@ -527,7 +564,14 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     private function getCarrierList()
     {
-        $carrier_list = Carrier::getCarriers($this->context->language->id, true, false, false, null, Carrier::ALL_CARRIERS);
+        $carrier_list = Carrier::getCarriers(
+            $this->context->language->id,
+            true,
+            false,
+            false,
+            null,
+            Carrier::ALL_CARRIERS
+        );
 
         return $carrier_list;
     }

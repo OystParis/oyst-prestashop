@@ -303,8 +303,15 @@ class SSP
      *  @param  string $whereAll WHERE condition to apply to all queries
      *  @return array          Server-side processing response array
      */
-    public static function complex($request, $conn, $table, $primaryKey, $columns, $whereResult = null, $whereAll = null)
-    {
+    public static function complex(
+        $request,
+        $conn,
+        $table,
+        $primaryKey,
+        $columns,
+        $whereResult = null,
+        $whereAll = null
+    ) {
         $bindings = array();
         $db = self::db($conn);
         $localWhereResult = array();
@@ -316,8 +323,8 @@ class SSP
         $order = self::order($request, $columns);
         $where = self::filter($request, $columns, $bindings);
 
-        $whereResult = self::_flatten($whereResult);
-        $whereAll = self::_flatten($whereAll);
+        $whereResult = self::flatten($whereResult);
+        $whereAll = self::flatten($whereAll);
 
         if ($whereResult) {
             $where = $where ?
@@ -521,11 +528,11 @@ class SSP
      * @param  string $join Glue for the concatenation
      * @return string Joined string
      */
-    public static function _flatten($a, $join = ' AND ')
+    public static function flatten($a, $join = ' AND ')
     {
         if (!$a) {
             return '';
-        } else if ($a && is_array($a)) {
+        } elseif ($a && is_array($a)) {
             return implode($join, $a);
         }
         return $a;

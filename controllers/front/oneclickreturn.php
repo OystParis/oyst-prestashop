@@ -58,7 +58,7 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         }
 
         if (isset($this->context->cookie->id_compare)) {
-            $id_compare = $this->context->cookie->id_compare
+            $id_compare = $this->context->cookie->id_compare;
         } else {
             $id_compare = CompareProduct::getIdCompareByIdCustomer($customer->id);
         }
@@ -100,8 +100,8 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
                             'oneclickconfirmation'
                         );
                         $id_module = Module::getModuleIdByName('oyst');
-                        $params = $glue.'id_cart='.$cart->id.'&id_order='.$id_order.'&id_module='.$id_module.'&key='.$customer->secure_key;
-                        $url = $base_url_confirmation.$params;
+                        $params = $glue.'id_cart='.$cart->id.'&id_order='.$id_order.'&id_module='.$id_module;
+                        $url = $base_url_confirmation.$params.'&key='.$customer->secure_key;
                         break;
                     case 'CUSTOM':
                         $url = Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
