@@ -402,7 +402,11 @@ class CartService extends AbstractOystService
                 $cart_rule = new CartRule($id_cart_rule, $this->context->language->id);
                 if (Validate::isLoadedObject($cart_rule)) {
                     // die(var_dump($cart_rule->checkValidity($this->context, true, false)));
-                    if ($cart_rule->checkValidity($this->context, in_array($id_cart_rule, $cart_rules_in_cart), false)) {
+                    if ($cart_rule->checkValidity(
+                        $this->context,
+                        in_array($id_cart_rule, $cart_rules_in_cart),
+                        false
+                    )) {
                         $cart_rule_amount = 0;
 
                         if ((float)$cart_rule->reduction_percent != 0) {
@@ -459,14 +463,21 @@ class CartService extends AbstractOystService
                             );
 
                             $images = array();
-                            foreach (Image::getImages($this->context->language->id, $idProduct, $idCombination) as $image) {
-                                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                            $images_pc = Image::getImages($this->context->language->id, $idProduct, $idCombination);
+                            foreach ($images_pc as $image) {
+                                $images[] = $this->context->link->getImageLink(
+                                    $product->link_rewrite,
+                                    $image['id_image']
+                                );
                             }
 
                             //If no image for attribute, search default product image
                             if (empty($images)) {
                                 foreach (Image::getImages($this->context->language->id, $idProduct) as $image) {
-                                    $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                                    $images[] = $this->context->link->getImageLink(
+                                        $product->link_rewrite,
+                                        $image['id_image']
+                                    );
                                 }
                             }
 
@@ -533,7 +544,10 @@ class CartService extends AbstractOystService
                         //If no image for attribute, search default product image
                         if (empty($images)) {
                             foreach (Image::getImages($this->context->language->id, $idProduct) as $image) {
-                                $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                                $images[] = $this->context->link->getImageLink(
+                                    $product->link_rewrite,
+                                    $image['id_image']
+                                );
                             }
                         }
 

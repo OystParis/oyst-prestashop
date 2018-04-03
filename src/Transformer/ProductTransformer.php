@@ -138,7 +138,9 @@ class ProductTransformer extends AbstractTransformer
             $oystProduct->__set('ean', $combination->ean13);
             $oystProduct->__set('weight', $combination->weight);
             // Stock
-            $stockAvailable = new StockAvailable(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
+            $stockAvailable = new StockAvailable(
+                StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id)
+            );
             $oystProduct->__set('availableQuantity', $stockAvailable->quantity);
             // Images
             $images = array();
@@ -221,7 +223,9 @@ class ProductTransformer extends AbstractTransformer
             $oystProductVariation->__set('weight', $combination->weight);
 
             $oystProductVariation->__set('amountIncludingTax', $oystPrice);
-            $stockAvailable = new StockAvailable(StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id));
+            $stockAvailable = new StockAvailable(
+                StockAvailable::getStockAvailableIdByProductId($product->id, $combination->id)
+            );
             $oystProductVariation->__set('availableQuantity', $stockAvailable->quantity);
             $oystProductVariation->__set('quantity', $quantity);
 
