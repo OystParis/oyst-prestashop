@@ -206,8 +206,9 @@
                         </div> *}
                         <div class="form-group clearfix">
                             <label class="control-label col-md-3 col-lg-3">{l s='Enable Fraudscoring' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7" style="height: 31px;">
+                            <div class="col-md-7 col-lg-7">
                                 <input type="checkbox" name="FC_OYST_ACTIVE_FRAUD" value="1"{if $oyst.FC_OYST_ACTIVE_FRAUD} checked="checked"{/if} />
+                                <span class="help-block">{l s='Allows you to display in your back-office the potentially abnormal orders detected by our algorithm. The management of the fraud is assured by our teams independently of this option.' mod='oyst'}</span>
                             </div>
                         </div>
                     </fieldset>

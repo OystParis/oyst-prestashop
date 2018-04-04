@@ -171,6 +171,7 @@
                     <label>{l s='Enable Fraudscoring' mod='oyst'}</label>
                     <div class="margin-form">
                         <input type="checkbox" class="form-control" id="FC_OYST_ACTIVE_FRAUD" name="FC_OYST_ACTIVE_FRAUD" value="1"{if $oyst.FC_OYST_ACTIVE_FRAUD} checked="checked"{/if} />
+                        <p class="help-block">{l s='Allows you to display in your back-office the potentially abnormal orders detected by our algorithm. The management of the fraud is assured by our teams independently of this option.' mod='oyst'}</p>
                     </div>
                     <div class="margin-form">
                         <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">

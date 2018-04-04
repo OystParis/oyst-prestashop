@@ -130,6 +130,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_03105c0dc9a599aa3ece4
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2ce2e37ffd6d7f56df7787fc244492af'] = 'Statut de paiement pour la validation de la commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9748f06932412b1f06929aba7f2aec07'] = 'Création de la commande avant le paiement Freepay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9f2ca0d2ee656e55405a4a6bdc9ec039'] = 'Activer le gestionnaire de fraude';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b4d3070ef1e8cd8763fda09079dac2f5'] = ' Vous permet de visualiser dans votre back-office les commandes potentiellement anormales détectées par notre algorithme. La gestion de la fraude est assurée par nos équipes indépendamment de cette option.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_93f4176640c89aba90f50b8a7b9b429b'] = 'Personnalisation du bouton au global';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1215422645ebf1cf761b14de2cf1b731'] = 'Bouton produit';
@@ -214,6 +215,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_03105c0dc9a599aa3ece4525cf4cf1f
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9748f06932412b1f06929aba7f2aec07'] = 'Création de la commande avant le paiement Freepay';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2ce2e37ffd6d7f56df7787fc244492af'] = 'Statut de paiement pour la validation de la commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9f2ca0d2ee656e55405a4a6bdc9ec039'] = 'Activer le gestionnaire de fraude';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_b4d3070ef1e8cd8763fda09079dac2f5'] = 'Vous permet de visualiser dans votre back-office les commandes potentiellement anormales détectées par notre algorithme. La gestion de la fraude est assurée par nos équipes indépendamment de cette option.';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_35b95e4f3de3b2daf150c372eaf2d95e'] = 'Configuration 1-Click';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_93f4176640c89aba90f50b8a7b9b429b'] = 'Personnalisation du bouton au global';
