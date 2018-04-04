@@ -314,6 +314,8 @@ class CartService extends AbstractOystService
                 $primary = false;
                 if ($carrier->id_reference == $id_default_carrier) {
                     $primary =  true;
+                    $cart->id_carrier = $id_carrier;
+                    $cart->update();
                 }
 
                 if ($delay_shipment && $delay_shipment != '') {
@@ -345,12 +347,19 @@ class CartService extends AbstractOystService
                 WHERE id_carrier = '.(int)$id_carrier);
             if ($id_reference == $id_default_carrier) {
                 $is_primary = true;
+                $cart->id_carrier = $id_carrier;
+                $cart->update();
             }
         }
 
         // Add first carrier if primary is not exist
         if (!$is_primary) {
             $oneClickOrderCartEstimate->setDefaultPrimaryShipmentByType();
+        }
+
+        if ($data['shipment'] != null) {
+            $cart->id_carrier = (int)$data['shipment']['id'];
+            $cart->update();
         }
 
         // Manage cart rule
@@ -371,12 +380,12 @@ class CartService extends AbstractOystService
         }
 
         $data['context']['ids_cart_rule'] = array_unique($data['context']['ids_cart_rule']);
+
         //For each cart_rule, check validity and if it's valid, add it to merchant_discount
         if ($data['context']['ids_cart_rule'] != '') {
             foreach ($data['context']['ids_cart_rule'] as $id_cart_rule) {
                 $cart_rule = new CartRule($id_cart_rule, $this->context->language->id);
                 if (Validate::isLoadedObject($cart_rule)) {
-                    // die(var_dump($cart_rule->checkValidity($this->context, true, false)));
                     if ($cart_rule->checkValidity($this->context, in_array($id_cart_rule, $cart_rules_in_cart), false)) {
                         $cart_rule_amount = 0;
 
