@@ -488,6 +488,20 @@ class OrderRepository extends AbstractOystRepository
 
     /**
      * For OneClick
+     * @param int $id_cart
+     * @return bool
+     */
+    public function isErrorExist($id_cart)
+    {
+        return (bool)$this->db->getValue(
+            'SELECT COUNT(*)
+            FROM '._DB_PREFIX_.'oyst_payment_notification
+            WHERE id_cart = '.$id_cart.' AND event_code = "error.found.cart"'
+        );
+    }
+
+    /**
+     * For OneClick
      * @param $orderGuid
      * @return int
      */

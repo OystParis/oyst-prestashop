@@ -48,6 +48,10 @@ $_MODULE['<{oyst}prestashop>oneclick-confirmation_88526efe38fd18179a127024aba8c1
 $_MODULE['<{oyst}prestashop>oneclick-confirmation_e19e31ddb54b493059808ec4f2dab4cb'] = 'Votre numéro de commande est le :';
 $_MODULE['<{oyst}prestashop>oneclick-confirmation_b09ffe631344edabac9412ed4c862544'] = 'Votre numéro de commande a été envoyé par e-mail.';
 $_MODULE['<{oyst}prestashop>oneclick-confirmation_9390390581f54c65d6acfc8da4e17362'] = 'Voir l\'historique de vos commandes';
+$_MODULE['<{oyst}prestashop>oneclick-error.bootstrap_840e8d20484ff502ee269c0c1300f3f1'] = 'Commande en erreur';
+$_MODULE['<{oyst}prestashop>oneclick-error.bootstrap_d7d1f4fbae8289169d1d5b3779cef94a'] = 'Une erreur est survenue avec le système de paiement. Veuillez contacter le support.';
+$_MODULE['<{oyst}prestashop>oneclick-error_840e8d20484ff502ee269c0c1300f3f1'] = 'Commande en erreur';
+$_MODULE['<{oyst}prestashop>oneclick-error_d7d1f4fbae8289169d1d5b3779cef94a'] = 'Une erreur est survenue avec le système de paiement. Veuillez contacter le support.';
 $_MODULE['<{oyst}prestashop>oneclick-return.bootstrap_cc894fffb019b528d12951b74d6d2b6e'] = 'Commande en attente de retour';
 $_MODULE['<{oyst}prestashop>oneclick-return.bootstrap_52665408d5d22a492abb8b61844b0488'] = 'Nous n\'avons pas encore reçu la confirmation du paiement. Veuillez attendre quelques minutes pour rafraichir cette page.';
 $_MODULE['<{oyst}prestashop>oneclick-return_cc894fffb019b528d12951b74d6d2b6e'] = 'Commande en attente de retour';
