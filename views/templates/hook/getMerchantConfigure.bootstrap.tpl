@@ -22,6 +22,7 @@
 <script>
     var notification_bo_url = "{$oyst.notification_bo_url|escape:'htmlall':'UTF-8'}";
     var module_dir = "{$oyst.module_dir|escape:'htmlall':'UTF-8'}";
+    var my_ip = "{$oyst.my_ip|escape:'htmlall':'UTF-8'}";
 </script>
 
 {if isset($oyst.result) && $oyst.result eq 'ok'}
@@ -667,6 +668,16 @@
                                                 </label>
                                                 <a class="slide-button btn"></a>
                                             </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable only for ip' mod='oyst'}</label>
+                                        <div class="col-md-6 col-lg-6">
+                                            <input type="text" name="FC_OYST_ONLY_FOR_IP" id="FC_OYST_ONLY_FOR_IP" value="{$oyst.FC_OYST_ONLY_FOR_IP|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='IP address split by a comma' mod='oyst'}</span>
+                                        </div>
+                                        <div class="col-md-1 col-md-1">
+                                            <button type="button" class="btn btn-default" id="get-remote-addr"><i class="icon-plus"></i>{l s='Add my IP' mod='oyst'}</button>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">

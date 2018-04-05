@@ -35,6 +35,7 @@
 <script>
     var notification_bo_url = "{$oyst.notification_bo_url|escape:'htmlall':'UTF-8'}";
     var module_dir = "{$oyst.module_dir|escape:'htmlall':'UTF-8'}";
+    var my_ip = "{$oyst.my_ip|escape:'htmlall':'UTF-8'}";
 </script>
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
@@ -489,6 +490,13 @@
                                 <label>{l s='Manage quantity for cart' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_MANAGE_QUANTITY_CART" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY_CART} checked="checked"{/if} />
+                                </div>
+                                <br>
+                                <label>{l s='Enable only for ip' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_ONLY_FOR_IP" id="FC_OYST_ONLY_FOR_IP" value="{if $oyst.FC_OYST_ONLY_FOR_IP}{$oyst.FC_OYST_ONLY_FOR_IP|escape:'htmlall':'UTF-8'}{/if}"/>
+                                    <button type="button" class="btn btn-default" id="get-remote-addr"><i class="icon-plus"></i>{l s='Add my IP' mod='oyst'}</button>
+                                    <br><span class="help-block">{l s='IP address split by a comma' mod='oyst'}</span>
                                 </div>
                                 <div class="margin-form">
                                     <button type="submit" value="1" name="submitOystConfigurationReset" class="btn btn-info module_form_reset_btn">

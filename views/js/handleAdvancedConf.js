@@ -83,6 +83,15 @@ $(document).ready(function() {
         $('#table-selector').change();
     });
 
+    $('#get-remote-addr').on('click', function(){
+        var ips_field = $('#FC_OYST_ONLY_FOR_IP');
+        if (ips_field.val().length > 0) {
+            ips_field.val(ips_field.val()+','+my_ip);
+        } else {
+            ips_field.val(my_ip);
+        }
+    });
+
 });
 
 function handleExportCatalogButton(clickedTab) {
