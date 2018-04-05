@@ -166,6 +166,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d45bf28725319c027435b
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a5e8dee94923d52edc00d39ba852be36'] = 'Sélecteur pour le bouton fiche produit';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_5b7605931ec82f3745502ee93e3c9b06'] = 'Vous pouvez sélectionner plusieurs sélecteurs en les séparant par des virgules (sélecteur jQuery)';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_aecb24741fe6ae99ae476a32cdfb0a87'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3e757c5a82a0bbe8b6eac15d7530614e'] = 'Activer bouton page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_987015391e3f38ee4f89a2369e2558ea'] = 'Sélecteur pour positionner le bouton';
@@ -250,6 +251,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_d45bf28725319c027435b3a578d26e7
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8cf1672a5fbe49ddd5b6e49d48c7e578'] = 'Bouton 1-Click avant le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_5d04560792344dd7ee8e1cea1973333a'] = 'Bouton 1-Click après le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_a5e8dee94923d52edc00d39ba852be36'] = 'Sélecteur pour le bouton fiche produit';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_5b7605931ec82f3745502ee93e3c9b06'] = 'Vous pouvez sélectionner plusieurs sélecteurs en les séparant par des virgules (sélecteur jQuery)';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_aecb24741fe6ae99ae476a32cdfb0a87'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_3e757c5a82a0bbe8b6eac15d7530614e'] = 'Activer bouton page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_987015391e3f38ee4f89a2369e2558ea'] = 'Sélecteur pour positionner le bouton';
