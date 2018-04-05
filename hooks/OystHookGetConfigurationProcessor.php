@@ -293,6 +293,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_ID_SMART_BTN_ADDR', '#submitAddress');
         }
 
+        if (Tools::isSubmit('submitOystResetCustomLayer')) {
+            Configuration::updateValue('FC_OYST_BTN_LAYER', 0);
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_ID_BTN_CART', '#layer_cart .button-container');
+        }
+
         if (Tools::isSubmit('submitOystConfigurationReset')) {
             $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), new Oyst());
             $this->configuration_result = $oystDb->truncateProductTable();

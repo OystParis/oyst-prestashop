@@ -122,6 +122,7 @@ class OneClickService extends AbstractOystService
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
         $exportProductService = AbstractExportProductServiceFactory::get($oyst, Context::getContext());
         $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
+
         $load = (int)$request->getRequestItem('preload');
         if ($request->hasRequest('labelCta')) {
             $labelCta = $request->getRequestItem('labelCta');
