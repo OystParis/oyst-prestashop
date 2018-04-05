@@ -43,5 +43,6 @@ if (file_exists($config_path)) {
 // Function IsPHPCLI
 function OystIsPHPCLI()
 {
-    return (defined('STDIN') || (Tools::strtolower(php_sapi_name()) == 'cli' && (!isset($_SERVER['REMOTE_ADDR']) || empty($_SERVER['REMOTE_ADDR']))));
+    $address = $_SERVER['REMOTE_ADDR'];
+    return (defined('STDIN') || (Tools::strtolower(php_sapi_name()) == 'cli' && (!isset($address) || empty($address))));
 }

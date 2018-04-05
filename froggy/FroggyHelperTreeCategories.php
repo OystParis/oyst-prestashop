@@ -95,15 +95,31 @@ class FroggyHelperTreeCategories
     {
         $branches = array();
         foreach ($categories as $category) {
-            $branches[] = array('name' => $category['name'], 'id_category' => $category['id_category'], 'checked' => (in_array($category['id_category'], $this->selected_categories) ? true : false), 'children' => (isset($category['children']) ? ' '.$this->renderTreeBranch($category['children']) : ''));
+            $branches[] = array(
+                'name' => $category['name'],
+                'id_category' => $category['id_category'],
+                'checked' => (in_array($category['id_category'], $this->selected_categories) ? true : false),
+                'children' => (isset($category['children']) ? ' '.$this->renderTreeBranch($category['children']) : '')
+            );
         }
         $this->context->smarty->assign('categories_tree_branches', $branches);
         $this->context->smarty->assign('categories_tree_attribute_name', $this->getAttributeName());
-        return $this->module->fcdisplay(dirname(__FILE__).'/../../'.$this->module->name, 'helpers/helper-tree-branch.tpl');
+        return $this->module->fcdisplay(
+            dirname(__FILE__).'/../../'.$this->module->name,
+            'helpers/helper-tree-branch.tpl'
+        );
     }
 
-    public static function getNestedCategories14($root_category = null, $id_lang = false, $active = true, $groups = null, $use_shop_restriction = true, $sql_filter = '', $sql_sort = '', $sql_limit = '')
-    {
+    public static function getNestedCategories14(
+        $root_category = null,
+        $id_lang = false,
+        $active = true,
+        $groups = null,
+        $use_shop_restriction = true,
+        $sql_filter = '',
+        $sql_sort = '',
+        $sql_limit = ''
+    ) {
         if (isset($root_category) && !Validate::isInt($root_category)) {
             die(Tools::displayError());
         }
@@ -152,8 +168,16 @@ class FroggyHelperTreeCategories
         return $categories;
     }
 
-    public static function getNestedCategories($root_category = null, $id_lang = false, $active = true, $groups = null, $use_shop_restriction = true, $sql_filter = '', $sql_sort = '', $sql_limit = '')
-    {
+    public static function getNestedCategories(
+        $root_category = null,
+        $id_lang = false,
+        $active = true,
+        $groups = null,
+        $use_shop_restriction = true,
+        $sql_filter = '',
+        $sql_sort = '',
+        $sql_limit = ''
+    ) {
         if (isset($root_category) && !Validate::isInt($root_category)) {
             die(Tools::displayError());
         }

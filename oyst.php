@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.14.1';
+        $this->version = '1.15.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -367,8 +367,16 @@ class Oyst extends FroggyPaymentModule
             $data_json = Tools::jsonEncode($data);
             $data = var_export($data, true);
         }
-        file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data_json."\n", FILE_APPEND);
-        file_put_contents(dirname(__FILE__).'/logs/log-notification.txt', '['.date('Y-m-d H:i:s').'] '.$data."\n", FILE_APPEND);
+        file_put_contents(
+            dirname(__FILE__).'/logs/log-notification.txt',
+            '['.date('Y-m-d H:i:s').'] '.$data_json."\n",
+            FILE_APPEND
+        );
+        file_put_contents(
+            dirname(__FILE__).'/logs/log-notification.txt',
+            '['.date('Y-m-d H:i:s').'] '.$data."\n",
+            FILE_APPEND
+        );
     }
 
     /**
@@ -523,7 +531,8 @@ class Oyst extends FroggyPaymentModule
      */
     public function getNotifyUrl()
     {
-        return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/oyst/notification.php?key='.Configuration::get('FC_OYST_HASH_KEY');
+        $hash_key = Configuration::get('FC_OYST_HASH_KEY');
+        return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/oyst/notification.php?key='.$hash_key;
     }
 
     /**

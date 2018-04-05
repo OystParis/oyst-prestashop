@@ -336,7 +336,7 @@ class FroggyModule extends Module
     protected function deleteConfigurations()
     {
         if (isset($this->configurations) && is_array($this->configurations)) {
-            foreach ($this->configurations as $name => $value) {
+            foreach ($this->getModuleConfigurationsKeys() as $name) {
                 if (!Configuration::deleteByName($name)) {
                     return false;
                 }
@@ -505,7 +505,7 @@ class FroggyModule extends Module
         $categories = array();
         $categories_selected = Configuration::get($config_name);
         if (!empty($categories_selected)) {
-            foreach (Tools::jsonDecode($categories_selected, true) as $key => $category) {
+            foreach (Tools::jsonDecode($categories_selected, true) as $category) {
                 $categories[] = $category;
             }
         }
@@ -560,7 +560,7 @@ class FroggyModule extends Module
 
 /***** Multi compliancy methods *****/
 
-function FroggyGetAdminLink($params, &$smarty)
+function FroggyGetAdminLink($params)
 {
     // In 1.5, we use getAdminLink method
     if (version_compare(_PS_VERSION_, '1.5.0') >= 0) {
@@ -592,7 +592,7 @@ function FroggyGetAdminLink($params, &$smarty)
     return 'index.php?tab='.$tab.'&token='.$token;
 }
 
-function FroggyDisplaySafeHtml($params, &$smarty)
+function FroggyDisplaySafeHtml($params)
 {
     return $params['s'];
 }

@@ -206,7 +206,11 @@ class OneClickService extends AbstractOystService
 
                     if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
                         if ($product['advanced_stock_management'] == 0) {
-                            StockAvailable::updateQuantity($product['id_product'], $product['id_product_attribute'], -(int)$product['cart_quantity']);
+                            StockAvailable::updateQuantity(
+                                $product['id_product'],
+                                $product['id_product_attribute'],
+                                -(int)$product['cart_quantity']
+                            );
                         }
                     }
                 }
@@ -320,7 +324,9 @@ class OneClickService extends AbstractOystService
                 if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
                     $glue = '?';
                 }
-                $url = Context::getContext()->link->getModuleLink('oyst', 'oneclickreturn').$glue.'id_cart='.Context::getContext()->cart->id.'&key='.ConfigurationP::get('FC_OYST_HASH_KEY');
+                $id_cart_url = Context::getContext()->cart->id;
+                $url = Context::getContext()->link->getModuleLink('oyst', 'oneclickreturn');
+                $url .= $glue.'id_cart='.$id_cart_url.'&key='.ConfigurationP::get('FC_OYST_HASH_KEY');
                 // $url = Context::getContext()->link->getPageLink('order-confirmation').$glue.'id_cart='.Context::getContext()->cart->id.'&id_module='.Module::getModuleIdByName('oyst').'&key='.$customer->secure_key;
 
                 $oneClickCustomization = new OneClickCustomization();

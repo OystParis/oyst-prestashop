@@ -21,7 +21,6 @@
 
 namespace Oyst\Factory;
 
-use Db;
 use Oyst\Api\OystApiClientFactory;
 use Oyst\Api\OystCatalogApi;
 use Oyst\Service\Api\Requester;
@@ -35,10 +34,9 @@ abstract class AbstractCartServiceFactory
      *
      * @param \Oyst $oyst
      * @param $context
-     * @param Db $db
      * @return CartService
      */
-    public static function get(\Oyst $oyst, $context, Db $db = null)
+    public static function get(\Oyst $oyst, $context)
     {
         /** @var OystOrderApi $apiClient */
         $apiClient = OystApiClientFactory::getClient(

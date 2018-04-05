@@ -95,7 +95,6 @@ class OystHookDisplayAdminOrderProcessor extends FroggyHookProcessor
         ob_end_clean();
 
         // Make Oyst api call
-        $result = array('error' => 'Error', 'message' => 'Transaction not found');
         $oyst_payment_notification = OystPaymentNotification::getOystPaymentNotificationFromCartId($order->id_cart);
         if (Validate::isLoadedObject($oyst_payment_notification)) {
             $oyst = new Oyst();

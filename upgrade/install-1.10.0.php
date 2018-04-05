@@ -27,8 +27,12 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
  */
 function upgrade_module_1_10_0()
 {
-    Db::getInstance()->execute("ALTER TABLE "._DB_PREFIX_."oyst_payment_notification ADD `status` varchar(255) DEFAULT NULL");
-    Db::getInstance()->execute("ALTER TABLE "._DB_PREFIX_."oyst_payment_notification ADD `date_upd` datetime DEFAULT NULL");
+    Db::getInstance()->execute(
+        "ALTER TABLE "._DB_PREFIX_."oyst_payment_notification ADD `status` varchar(255) DEFAULT NULL"
+    );
+    Db::getInstance()->execute(
+        "ALTER TABLE "._DB_PREFIX_."oyst_payment_notification ADD `date_upd` datetime DEFAULT NULL"
+    );
     Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', '#add_to_cart');
 
     Configuration::deleteByName('FC_OYST_BORDER_BTN_CART');

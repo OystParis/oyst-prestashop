@@ -32,7 +32,12 @@ function upgrade_module_1_3_0($module)
     // Migrate constants to new ones
     $currentEnv = Configuration::get('OYST_API_ENV');
     if (!$currentEnv || empty($currentEnv) ||
-        !in_array($currentEnv, array(OConfiguration::API_ENV_PROD, OConfiguration::API_ENV_SANDBOX, OConfiguration::API_ENV_CUSTOM))) {
+        !in_array($currentEnv, array(
+            OConfiguration::API_ENV_PROD,
+            OConfiguration::API_ENV_SANDBOX,
+            OConfiguration::API_ENV_CUSTOM
+        ))
+    ) {
         $currentEnv = OConfiguration::API_ENV_PROD;
     }
     Configuration::updateValue(OConfiguration::API_ENV_FREEPAY, $currentEnv);

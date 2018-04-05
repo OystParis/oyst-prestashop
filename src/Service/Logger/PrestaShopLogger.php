@@ -62,18 +62,14 @@ class PrestaShopLogger extends AbstractLogger
             case LogLevel::ALERT:
             case LogLevel::CRITICAL:
                 return 4;
-                break;
             case LogLevel::ERROR:
                 return 3;
-                break;
             case LogLevel::WARNING:
             case LogLevel::NOTICE:
                 return 2;
-                break;
             case LogLevel::INFO:
             case LogLevel::DEBUG:
                 return 1;
-                break;
         }
 
         return 1;

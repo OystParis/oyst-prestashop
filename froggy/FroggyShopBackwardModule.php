@@ -42,7 +42,7 @@ class FroggyShopBackwardModule extends Shop
         return FroggyShopBackwardModule::CONTEXT_ALL;
     }
 
-    public function setContext($var)
+    public function setContext()
     {
         return true;
     }
