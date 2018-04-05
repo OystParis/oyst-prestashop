@@ -536,6 +536,25 @@ class Oyst extends FroggyPaymentModule
     }
 
     /**
+     * @return bool
+     */
+    public function displayBtnCart()
+    {
+        $controller_cart = array(
+            'order',
+            'index',
+            'category',
+        );
+        $controller = Context::getContext()->controller->php_self;
+
+        if (in_array($controller, $controller_cart)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @return Context
      */
     public function getContext()

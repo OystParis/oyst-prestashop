@@ -28,7 +28,7 @@ function OystOneClickCart(url, controller)
 
     this.url = url;
     this.controller = controller;
-    this.idBtnCart = '.standard-checkout';
+    this.idBtnAddToCart = '.standard-checkout';
     this.smartBtn = true;
     this.borderBtn = true;
     this.themeBtn = 'normal';
@@ -58,7 +58,7 @@ function OystOneClickCart(url, controller)
             if (widthBtn) {
                 this.widthBtn = widthBtn;
             } else {
-                this.widthBtn = $(this.idBtnCart).width()+'px';
+                this.widthBtn = $(this.idBtnAddToCart).width()+'px';
             }
         } else if (widthBtn) {
             this.widthBtn = widthBtn;
@@ -72,7 +72,7 @@ function OystOneClickCart(url, controller)
             if (heightBtn) {
                 this.heightBtn = heightBtn;
             } else {
-                this.heightBtn = $(this.idBtnCart).outerHeight()+'px';
+                this.heightBtn = $(this.idBtnAddToCart).outerHeight()+'px';
             }
         } else if (heightBtn) {
             this.heightBtn = heightBtn;
@@ -101,8 +101,8 @@ function OystOneClickCart(url, controller)
         this.marginRightBtn = marginRightBtn;
     };
 
-    this.setIdBtnCart = function (idBtnCart) {
-        this.idBtnCart = idBtnCart;
+    this.setIdBtnAddToCart = function (idBtnAddToCart) {
+        this.idBtnAddToCart = idBtnAddToCart;
     }
 
     this.setLabelCta = function (labelCta) {
@@ -113,7 +113,7 @@ function OystOneClickCart(url, controller)
      * Initialize requirements
      */
     this.prepareButton = function () {
-        $(this.idBtnCart).after($('<div>', {
+        $(this.idBtnAddToCart).after($('<div>', {
             id: 'oneClickContainer'
         }));
 
