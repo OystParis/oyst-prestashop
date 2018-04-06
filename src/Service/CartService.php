@@ -211,18 +211,36 @@ class CartService extends AbstractOystService
 
                 $product = new Product($idProduct);
 
+                if (!$product->active || !$product->available_for_order) {
+                    header('HTTP/1.1 400 Bad request');
+                    header('Content-Type: application/json');
+                    die(json_encode(array(
+                        'code' => 'product-unavailable',
+                        'message' => 'Unvailable product',
+                    )));
+                }
+
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
                         StockAvailable::updateQuantity($idProduct, $idCombination, $item['product']['quantity']);
                     }
                 }
 
-                $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
+                $update_qty_result = $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
 
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
                         StockAvailable::updateQuantity($idProduct, $idCombination, -$item['product']['quantity']);
                     }
+                }
+
+                if (!$update_qty_result) {
+                    header('HTTP/1.1 400 Bad request');
+                    header('Content-Type: application/json');
+                    die(json_encode(array(
+                        'code' => 'stock-unavailable',
+                        'message' => 'Unvailable stock',
+                    )));
                 }
 
                 // Add items
