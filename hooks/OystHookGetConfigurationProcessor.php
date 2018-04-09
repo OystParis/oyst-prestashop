@@ -315,6 +315,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['result']                   = $this->configuration_result;
         $assign['ps_version']               = Tools::substr(_PS_VERSION_, 0, 3);
         $assign['module_version']           = $this->module->version;
+        $assign['oyst_library_version']     = OystApiClientFactory::getVersion();
         $assign['allow_url_fopen_check']    = ini_get('allow_url_fopen');
         $assign['curl_check']               = function_exists('curl_version');
         $assign['payment_notification_url'] = $payment_notification_url.'?key='.$hash_key;
