@@ -187,6 +187,7 @@
                             <li class="tab-row"><a class="tab-page" href="#custom-btn-general">{l s='Customization of button on global' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#custom-btn">{l s='Button product' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#custom-btn-cart">{l s='Button cart' mod='oyst'}</a></li>
+                            <li class="tab-row"><a class="tab-page" href="#custom-btn-layer-cart">{l s='Button layer cart' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
@@ -315,49 +316,49 @@
                                 </div>
                                 <label>{l s='Width' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <input type="text" name="FC_OYST_WIDTH_BTN_PRODUCT" value="{$oyst.FC_OYST_WIDTH_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                     <br>
                                     <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
                                 </div>
                                 <label>{l s='Height' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <input type="text" name="FC_OYST_HEIGHT_BTN_PRODUCT" value="{$oyst.FC_OYST_HEIGHT_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                     <br>
                                     <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
                                 </div>
                                 <label>{l s='Margin top' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="text" name="FC_OYST_MARGIN_TOP_BTN" value="{$oyst.FC_OYST_MARGIN_TOP_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <input type="text" name="FC_OYST_MARGIN_TOP_BTN_PRODUCT" value="{$oyst.FC_OYST_MARGIN_TOP_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                     <br>
                                     <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
                                 </div>
                                 <label>{l s='Margin left' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="text" name="FC_OYST_MARGIN_LEFT_BTN" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <input type="text" name="FC_OYST_MARGIN_LEFT_BTN_PRODUCT" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                     <br>
                                     <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
                                 </div>
                                 <label>{l s='Margin right' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                    <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN_PRODUCT" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                     <br>
                                     <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
                                 </div>
                                 <label>{l s='Position btn 1-Click' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <select name="FC_OYST_POSITION_BTN">
-                                        <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
-                                        <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                    <select name="FC_OYST_POSITION_BTN_PRODUCT">
+                                        <option value="before" {if $oyst.FC_OYST_POSITION_BTN_PRODUCT == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                        <option value="after" {if $oyst.FC_OYST_POSITION_BTN_PRODUCT == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
                                     </select>
                                 </div>
                                 <label>{l s='Id btn add to cart' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="text" name="FC_OYST_ID_BTN_ADD_TO_CART" value="{if $oyst.FC_OYST_ID_BTN_ADD_TO_CART}{$oyst.FC_OYST_ID_BTN_ADD_TO_CART|escape:'htmlall':'UTF-8'}{else}#add_to_cart{/if}"/>
+                                    <input type="text" name="FC_OYST_ID_BTN_PRODUCT" value="{if $oyst.FC_OYST_ID_BTN_PRODUCT}{$oyst.FC_OYST_ID_BTN_PRODUCT|escape:'htmlall':'UTF-8'}{else}#add_to_cart{/if}"/>
                                     <span class="help-block">{l s='You can select multiple selectors separated by commas (jQuery selector)' mod='oyst'}</span>
                                 </div>
                                 <label>{l s='Id smart btn' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="text" name="FC_OYST_ID_SMART_BTN" value="{if $oyst.FC_OYST_ID_SMART_BTN}{$oyst.FC_OYST_ID_SMART_BTN|escape:'htmlall':'UTF-8'}{else}#add_to_cart button{/if}"/>
+                                    <input type="text" name="FC_OYST_ID_SMART_BTN_PRODUCT" value="{if $oyst.FC_OYST_ID_SMART_BTN_PRODUCT}{$oyst.FC_OYST_ID_SMART_BTN_PRODUCT|escape:'htmlall':'UTF-8'}{else}#add_to_cart button{/if}"/>
                                 </div>
                                 <div class="margin-form">
                                     <button type="submit" value="1" name="submitOystResetCustomProduct" class="btn btn-info module_form_reset_btn">
@@ -420,6 +421,60 @@
                                 </div>
                             {else}
                                 <input type="hidden" name="FC_OYST_BTN_CART" value="{$oyst.FC_OYST_BTN_CART|intval}"/>
+                                <div class="warn">
+                                    <ul>
+                                        <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+                                    </ul>
+                                </div>
+                            {/if}
+                        </div>
+                        <div id="custom-btn-layer-cart" class="tab-pane-sub" style="display:none;">
+                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                <label>{l s='Enable button layer cart' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_BTN_LAYER" value="1"{if $oyst.FC_OYST_BTN_LAYER} checked="checked"{/if} />
+                                </div>
+                                <label>{l s='Width' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_WIDTH_BTN_LAYER" value="{$oyst.FC_OYST_WIDTH_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Height' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_HEIGHT_BTN_LAYER" value="{$oyst.FC_OYST_HEIGHT_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Margin top' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_MARGIN_TOP_BTN_LAYER" value="{$oyst.FC_OYST_MARGIN_TOP_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Margin left' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_MARGIN_LEFT_BTN_LAYER" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Margin right' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN_LAYER" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Id btn cart' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_ID_BTN_LAYER" value="{if $oyst.FC_OYST_ID_BTN_LAYER}{$oyst.FC_OYST_ID_BTN_LAYER|escape:'htmlall':'UTF-8'}{else}#layer_cart .button-container{/if}"/>
+                                </div>
+                                <div class="margin-form">
+                                    <button type="submit" value="1" name="submitOystResetCustomCart" class="btn btn-info module_form_reset_btn">
+                                        {l s='Reset' mod='oyst'}
+                                    </button>
+                                </div>
+                            {else}
+                                <input type="hidden" name="FC_OYST_BTN_LAYER" value="{$oyst.FC_OYST_BTN_LAYER|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>

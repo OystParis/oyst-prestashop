@@ -60,7 +60,7 @@ function upgrade_module_1_15_0()
     Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LAYER', '');
     Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LAYER', '');
     Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LAYER', '');
-    Configuration::updateValue('FC_OYST_ID_BTN_LAYER', '.standard-checkout');
+    Configuration::updateValue('FC_OYST_ID_BTN_LAYER', '#layer_cart .button-container');
 
     return true;
 }

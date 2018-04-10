@@ -1,6 +1,6 @@
 {
     "tab": "payments_gateways",
-    "version": "1.15.0",
+    "version": "1.16.0",
     "need_instance": 0,
 
     "hooks": {
@@ -9,14 +9,13 @@
             "displayPayment",
             "displayPaymentReturn",
             "displayAdminOrder" ,
-            "displayFooterProduct",
+            "displayFooter",
             "displayBackOfficeHeader",
             "displayAdminProductsExtra",
             "actionProductAdd",
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
-            "actionOrderStatusPostUpdate",
-            "displayShoppingCart"
+            "actionOrderStatusPostUpdate"
         ],
         "1.6" : [
             "advancedPaymentOptions"

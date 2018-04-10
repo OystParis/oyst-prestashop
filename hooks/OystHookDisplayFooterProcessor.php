@@ -19,7 +19,6 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-use Oyst;
 
 /*
  * Security
@@ -58,8 +57,10 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
 
             $assign['oyst_label_cta'] = $this->module->l(
                 'Return shop.',
-                'oysthookdisplayshoppingcartprocessor'
+                'oysthookdisplayfooterprocessor'
             );
+
+            $products = Context::getContext()->cart->getProducts();
         } else {
             $productRepository = new ProductRepository(Db::getInstance());
             $JSOystOneClick = $this->path.'views/js/OystOneClick.js';
@@ -100,8 +101,8 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         // Params global
         $assign['secureKey'] = $token;
         $assign['oneClickUrl'] = $oneClickUrl;
-        $assign['oneClickActivated'] = (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE');
         $assign['enabledBtn'] = Configuration::get('FC_OYST_BTN_'.$suffix_conf);
+        $assign['oneClickActivated'] = (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE');
         $assign['smartBtn'] = Configuration::get('FC_OYST_SMART_BTN');
         $assign['borderBtn'] = Configuration::get('FC_OYST_BORDER_BTN');
         $assign['themeBtn'] = Configuration::get('FC_OYST_THEME_BTN');
@@ -113,7 +114,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $assign['styles_custom'] = $this->addButtonWrapperStyles();
         $assign['oyst_error'] = $this->module->l(
             'There isn\'t enough product in stock.',
-            'oystHookdisplayfooterproductprocessor'
+            'oystHookdisplayfooterprocessor'
         );
 
         // Params custom global

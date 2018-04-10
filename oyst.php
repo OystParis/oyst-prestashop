@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.15.0';
+        $this->version = '1.16.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -60,11 +60,10 @@ class Oyst extends FroggyPaymentModule
     {
         //List of concerned hooks by the ip restriction
         $filtered_hooks = array(
-            'displayFooterProduct',
+            'displayFooter',
             'displayHeader',
             'displayPayment',
-            'displayPaymentReturn',
-            'displayShoppingCart'
+            'displayPaymentReturn'
         );
         foreach ($filtered_hooks as $filtered_hook) {
             if (strpos($method, $filtered_hook) !== false) {
