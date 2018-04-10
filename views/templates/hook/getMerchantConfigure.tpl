@@ -188,7 +188,7 @@
                             <li class="tab-row"><a class="tab-page" href="#custom-btn-general">{l s='Customization of button on global' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#custom-btn">{l s='Button product' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#custom-btn-cart">{l s='Button cart' mod='oyst'}</a></li>
-                            <li class="tab-row"><a class="tab-page" href="#custom-btn-layer-cart">{l s='Button layer cart' mod='oyst'}</a></li>
+                            {* <li class="tab-row"><a class="tab-page" href="#custom-btn-layer-cart">{l s='Button layer cart' mod='oyst'}</a></li> *}
                             <li class="tab-row"><a class="tab-page" href="#custom-btn-login">{l s='Button login' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#custom-btn-payment">{l s='Button payment' mod='oyst'}</a></li>
                             <li class="tab-row"><a class="tab-page" href="#custom-btn-address">{l s='Button address' mod='oyst'}</a></li>
@@ -443,7 +443,7 @@
                                 </div>
                             {/if}
                         </div>
-                        <div id="custom-btn-layer-cart" class="tab-pane-sub" style="display:none;">
+                        {* <div id="custom-btn-layer-cart" class="tab-pane-sub" style="display:none;">
                             {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                                 <label>{l s='Enable button layer cart' mod='oyst'}</label>
                                 <div class="margin-form">
@@ -509,7 +509,7 @@
                                     </ul>
                                 </div>
                             {/if}
-                        </div>
+                        </div> *}
                         <div id="custom-btn-login" class="tab-pane-sub" style="display:none;">
                             {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                                 <label>{l s='Enabled button login' mod='oyst'}</label>

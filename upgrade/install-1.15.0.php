@@ -78,5 +78,6 @@ function upgrade_module_1_15_0($module)
     Configuration::updateValue('FC_OYST_ID_SMART_BTN_LOGIN', '#SubmitCreate');
     Configuration::updateValue('FC_OYST_POSITION_BTN_LOGIN', 'before');
 
+
     return true;
 }
