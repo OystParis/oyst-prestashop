@@ -9,14 +9,13 @@
             "displayPayment",
             "displayPaymentReturn",
             "displayAdminOrder" ,
-            "displayFooterProduct",
+            "displayFooter",
             "displayBackOfficeHeader",
             "displayAdminProductsExtra",
             "actionProductAdd",
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
-            "actionOrderStatusPostUpdate",
-            "displayShoppingCart"
+            "actionOrderStatusPostUpdate"
         ],
         "1.6" : [
             "advancedPaymentOptions"
