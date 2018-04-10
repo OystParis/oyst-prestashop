@@ -622,7 +622,7 @@
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Id btn cart' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_ID_BTN_LAYER" value="{if $oyst.FC_OYST_ID_BTN_LAYER}{$oyst.FC_OYST_ID_BTN_LAYER|escape:'htmlall':'UTF-8'}{else}.standard-checkout{/if}"/>
+                                            <input type="text" name="FC_OYST_ID_BTN_LAYER" value="{if $oyst.FC_OYST_ID_BTN_LAYER}{$oyst.FC_OYST_ID_BTN_LAYER|escape:'htmlall':'UTF-8'}{else}#layer_cart .button-container{/if}"/>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
