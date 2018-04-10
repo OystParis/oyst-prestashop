@@ -24,6 +24,8 @@ namespace Oyst\Service;
 use Combination;
 use Exception;
 use Oyst\Classes\OystUser;
+use Oyst\Classes\OystPrice;
+use Oyst\Classes\OystProduct;
 use Oyst\Classes\OneClickOrderParams;
 use Oyst\Classes\OneClickNotifications;
 use Oyst\Classes\OneClickCustomization;
@@ -118,6 +120,7 @@ class OneClickService extends AbstractOystService
         // Deprecated ??
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
         $exportProductService = AbstractExportProductServiceFactory::get($oyst, Context::getContext());
+        $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
         $load = (int)$request->getRequestItem('preload');
         if ($request->hasRequest('labelCta')) {
             $labelCta = $request->getRequestItem('labelCta');
@@ -125,7 +128,7 @@ class OneClickService extends AbstractOystService
             $labelCta = false;
         }
 
-        if ($controller == 'order' || $controller == 'index' || $controller == 'category') {
+        if ($controller == "order" || $controller == "index" || $controller == "category") {
             // Check validity cart rule ?
             if (version_compare(_PS_VERSION_, '1.6.0', '>=')) {
                 $ids_cart_rule_gift = Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT);
@@ -171,7 +174,7 @@ class OneClickService extends AbstractOystService
                 }
             }
 
-            if (!$products) {
+            if (!$products && $controller == 'order') {
                 $data['error'] = 'Missing products';
             }
         } else {
@@ -220,6 +223,11 @@ class OneClickService extends AbstractOystService
                         }
                     }
                 }
+            } elseif (!$products && ($controller == 'index' || $controller == 'category')) {
+                $oystPrice = new OystPrice(10, $this->context->currency->iso_code);
+                $oystProduct = new OystProduct("#OYST#", "Product fictif", $oystPrice, 1);
+                $oystProduct->__set('materialized', true);
+                $productLess[] = $oystProduct;
             } else {
                 $product = new Product($idProduct);
                 if (!Validate::isLoadedObject($product)) {

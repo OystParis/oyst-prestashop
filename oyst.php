@@ -60,7 +60,7 @@ class Oyst extends FroggyPaymentModule
     {
         //List of concerned hooks by the ip restriction
         $filtered_hooks = array(
-            'displayFooterProduct',
+            'displayFooter',
             'displayHeader',
             'displayPayment',
             'displayPaymentReturn',
