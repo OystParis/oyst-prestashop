@@ -112,7 +112,7 @@ class OneClickService extends AbstractOystService
         $quantity = 0;
         $products = null;
         $controller = $request->getRequestItem('controller');
-        $productLess = array();
+        $products_less = array();
         $result_products = array();
         // Deprecated ??
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
@@ -198,11 +198,14 @@ class OneClickService extends AbstractOystService
                             continue;
                         }
                     }
-                    $productLess[] = $exportProductService->transformProductLess(
+                    $product_less = $exportProductService->transformProductLess(
                         $product['id_product'],
                         $product['id_product_attribute'],
                         $product['cart_quantity']
                     );
+
+                    $product_less->__set('customizations', Context::getContext()->cart->getProductCustomization($product['id_product']));
+                    $products_less[] = $product_less;
 
                     if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
                         if ($product['advanced_stock_management'] == 0) {
@@ -234,11 +237,20 @@ class OneClickService extends AbstractOystService
                     $data['error'] = 'Bad quantity';
                 }
 
-                $productLess[] = $exportProductService->transformProductLess(
+                $product_less = $exportProductService->transformProductLess(
                     $idProduct,
                     $idCombination,
                     $quantity
                 );
+
+                $customizations = Context::getContext()->cart->getProductCustomization($idProduct);
+                foreach ($customizations as &$customization) {
+                    $customization['quantity'] = $quantity;
+                }
+
+                $product_less->__set('customizations', $customizations);
+
+                $products_less[] = $product_less;
 
                 // Check preload, and update quantity
                 $load = (int)$request->getRequestItem('preload');
@@ -285,7 +297,7 @@ class OneClickService extends AbstractOystService
             }
 
             $oneClickOrdersParams = new OneClickOrderParams();
-            foreach ($productLess as $product) {
+            foreach ($products_less as $product) {
                 if (!$product->materialized) {
                     $oneClickOrdersParams->setIsMaterialized($product->materialized);
                 } else {
@@ -366,7 +378,7 @@ class OneClickService extends AbstractOystService
                 )
             );
             $result = $this->authorizeNewOrder(
-                $productLess,
+                $products_less,
                 $oneClickNotifications,
                 $oystUser,
                 $oneClickOrdersParams,
