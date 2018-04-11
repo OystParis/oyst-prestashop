@@ -55,6 +55,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
             $JSOystOneClick = $this->path.'views/js/OystOneClickCart.js';
 
             $assign['oyst_label_cta'] = $this->module->l('Return shop.', 'oystHookdisplayfooterprocessor');
+            $assign['btnOneClickState'] = true;
 
             $products = Context::getContext()->cart->getProducts();
         } else {
