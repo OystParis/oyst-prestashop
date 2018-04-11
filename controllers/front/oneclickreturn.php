@@ -76,7 +76,7 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         }
 
         // Log user
-        if (!$this->context->user->isLogged()) {
+        if (!$this->context->customer->isLogged()) {
             $this->context->cookie->id_compare = $id_compare;
             $this->context->cookie->id_customer = (int)($customer->id);
             $this->context->cookie->customer_lastname = $customer->lastname;
