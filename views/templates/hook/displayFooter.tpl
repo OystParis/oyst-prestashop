@@ -33,7 +33,6 @@
                 oyst.setExportedCombinations({$synchronizedCombination|json_encode});
                 oyst.setAllowOosp({$allowOosp|intval});
                 oyst.setProductQuantity({$productQuantity|intval});
-                oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
                 oyst.setStockManagement({$stockManagement|intval});
                 oyst.setShouldAskStock({$shouldAsStock|intval});
                 oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
@@ -48,6 +47,7 @@
             oyst.setMarginTopBtn("{$marginTopBtn|escape:'html':'UTF-8'}");
             oyst.setMarginLeftBtn("{$marginLeftBtn|escape:'html':'UTF-8'}");
             oyst.setMarginRightBtn("{$marginRightBtn|escape:'html':'UTF-8'}");
+            oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
             oyst.prepareButton();
 
             window.__OYST__ = window.__OYST__ || {};
