@@ -469,6 +469,13 @@
                                 <div class="margin-form">
                                     <input type="text" name="FC_OYST_ID_BTN_LAYER" value="{if $oyst.FC_OYST_ID_BTN_LAYER}{$oyst.FC_OYST_ID_BTN_LAYER|escape:'htmlall':'UTF-8'}{else}#layer_cart .button-container{/if}"/>
                                 </div>
+                                <label>{l s='Position btn 1-Click' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <select name="FC_OYST_POSITION_BTN_LAYER">
+                                        <option value="before" {if $oyst.FC_OYST_POSITION_BTN_LAYER == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                        <option value="after" {if $oyst.FC_OYST_POSITION_BTN_LAYER == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                    </select>
+                                </div>
                                 <div class="margin-form">
                                     <button type="submit" value="1" name="submitOystResetCustomCart" class="btn btn-info module_form_reset_btn">
                                         {l s='Reset' mod='oyst'}
@@ -476,6 +483,8 @@
                                 </div>
                             {else}
                                 <input type="hidden" name="FC_OYST_BTN_LAYER" value="{$oyst.FC_OYST_BTN_LAYER|intval}"/>
+                                <input type="hidden" name="FC_OYST_WIDTH_BTN_LAYER" value="{$oyst.FC_OYST_WIDTH_BTN_LAYER|intval}"/>
+                                <input type="hidden" name="FC_OYST_HEIGHT_BTN_LAYER" value="{$oyst.FC_OYST_HEIGHT_BTN_LAYER|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
