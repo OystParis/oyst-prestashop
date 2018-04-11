@@ -42,6 +42,7 @@ use StockAvailable;
 use Module;
 use CartRule;
 use Cart;
+use Address;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -223,6 +224,28 @@ class OneClickService extends AbstractOystService
                 $oystProduct = new OystProduct("#OYST#", "Product fictif", $oystPrice, 1);
                 $oystProduct->__set('materialized', true);
                 $productLess[] = $oystProduct;
+
+                if (!$this->context->cookie->id_cart) {
+                    $cart = new Cart();
+                    $cart->id_lang = (int)$this->context->cookie->id_lang;
+                    $cart->id_currency = (int)$this->context->cookie->id_currency;
+                    $cart->id_guest = (int)$this->context->cookie->id_guest;
+                    $cart->id_shop_group = (int)$this->context->shop->id_shop_group;
+                    $cart->id_shop = $this->context->shop->id;
+                    if ($this->context->cookie->id_customer) {
+                        $cart->id_customer = (int)$this->context->cookie->id_customer;
+                        $cart->id_address_delivery = (int)Address::getFirstCustomerAddressId($cart->id_customer);
+                        $cart->id_address_invoice = (int)$cart->id_address_delivery;
+                    } else {
+                        $cart->id_address_delivery = 0;
+                        $cart->id_address_invoice = 0;
+                    }
+                    $cart->save();
+
+                    // Needed if the merchant want to give a free product to every visitors
+                    $this->context->cart = $cart;
+                    $this->context->cookie->id_cart = $cart->id;
+                }
             } else {
                 $product = new Product($idProduct);
                 if (!Validate::isLoadedObject($product)) {

@@ -363,7 +363,7 @@
                                         <label class="control-label col-md-3 col-lg-3">{l s='Style btn 1-Click' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
                                             <select name="FC_OYST_THEME_BTN">
-                                                <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
+                                                <option value="default" {if $oyst.FC_OYST_THEME_BTN == 'default'}selected="selected"{/if}>{l s='Default' mod='oyst'}</option>
                                                 <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
                                             </select>
                                         </div>

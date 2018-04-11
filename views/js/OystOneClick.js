@@ -35,7 +35,7 @@ function OystOneClick(url, productId, controller)
     this.button = '#oneClickContainer';
     this.smartBtn = true;
     this.borderBtn = true;
-    this.themeBtn = 'normal';
+    this.themeBtn = 'default';
     this.colorBtn = '#E91E63';
     this.widthBtn = '';
     this.heightBtn = '';
