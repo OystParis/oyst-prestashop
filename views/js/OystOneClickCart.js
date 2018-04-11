@@ -38,6 +38,7 @@ function OystOneClickCart(url, controller)
     this.marginTopBtn = '0px';
     this.marginLeftBtn = '0px';
     this.marginRightBtn = '0px';
+    this.positionBtn = 'before';
     this.labelCta = 'Return shop.';
     this.preload = 1;
 
@@ -101,6 +102,10 @@ function OystOneClickCart(url, controller)
         this.marginRightBtn = marginRightBtn;
     };
 
+    this.setPositionBtn = function (positionBtn) {
+        this.positionBtn = positionBtn;
+    };
+
     this.setIdBtnAddToCart = function (idBtnAddToCart) {
         this.idBtnAddToCart = idBtnAddToCart;
     }
@@ -113,9 +118,15 @@ function OystOneClickCart(url, controller)
      * Initialize requirements
      */
     this.prepareButton = function () {
-        $(this.idBtnAddToCart).after($('<div>', {
-            id: 'oneClickContainer'
-        }));
+        if (this.positionBtn == 'after') {
+            $(this.idBtnAddToCart).after($('<div>', {
+                id: 'oneClickContainer'
+            }));
+        } else {
+            $(this.idBtnAddToCart).before($('<div>', {
+                id: 'oneClickContainer'
+            }));
+        }
 
         $('#oneClickContainer').css({
             'margin-top': this.marginTopBtn,

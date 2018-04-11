@@ -53,14 +53,15 @@ function upgrade_module_1_15_0()
     Configuration::updateValue('FC_OYST_ID_BTN__PRODUCT', '#add_to_cart');
     Configuration::updateValue('FC_OYST_ID_SMART_BTN_PRODUCT', '#add_to_cart button');
 
-    // Add conf custom btn cart
+    // Add conf custom btn layer
     Configuration::updateValue('FC_OYST_BTN_LAYER', 0);
-    Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '');
-    Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '');
+    Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '214');
+    Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '43');
     Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LAYER', '');
     Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LAYER', '');
     Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LAYER', '');
     Configuration::updateValue('FC_OYST_ID_BTN_LAYER', '#layer_cart .button-container');
+    Configuration::updateValue('FC_OYST_POSITION_BTN_LAYER', 'before');
 
     return true;
 }

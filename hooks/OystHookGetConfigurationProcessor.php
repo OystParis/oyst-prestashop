@@ -79,6 +79,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_MARGIN_LEFT_BTN_LAYER'   => 'string',
         'FC_OYST_MARGIN_RIGHT_BTN_LAYER'  => 'string',
         'FC_OYST_ID_BTN_LAYER'            => 'string',
+        'FC_OYST_POSITION_BTN_LAYER'      => 'string',
         'FC_OYST_OC_REDIRECT_CONF'        => 'string',
         'FC_OYST_OC_REDIRECT_CONF_CUSTOM' => 'string',
         'FC_OYST_DELAY'                   => 'int',
@@ -210,12 +211,13 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         if (Tools::isSubmit('submitOystResetCustomLayer')) {
             Configuration::updateValue('FC_OYST_BTN_LAYER', 0);
-            Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '');
-            Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '214');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '43');
             Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LAYER', '');
             Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LAYER', '');
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LAYER', '');
-            Configuration::updateValue('FC_OYST_ID_BTN_CART', '#layer_cart .button-container');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_LAYER', 'before');
+            Configuration::updateValue('FC_OYST_ID_BTN_LAYER', '#layer_cart .button-container');
         }
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {
