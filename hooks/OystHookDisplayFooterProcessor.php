@@ -19,7 +19,6 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-
 /*
  * Security
  */
@@ -55,10 +54,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         if ($controller != null && $oyst->displayBtnCart()) {
             $JSOystOneClick = $this->path.'views/js/OystOneClickCart.js';
 
-            $assign['oyst_label_cta'] = $this->module->l(
-                'Return shop.',
-                'oysthookdisplayfooterprocessor'
-            );
+            $assign['oyst_label_cta'] = $this->module->l('Return shop.', 'oystHookdisplayfooterprocessor');
 
             $products = Context::getContext()->cart->getProducts();
         } else {
