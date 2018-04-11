@@ -181,7 +181,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         if (Tools::isSubmit('submitOystResetCustomGlobal')) {
             Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
             Configuration::updateValue('FC_OYST_SMART_BTN', 1);
-            Configuration::updateValue('FC_OYST_THEME_BTN', 'normal');
+            Configuration::updateValue('FC_OYST_THEME_BTN', 'default');
             Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
             Configuration::updateValue('FC_OYST_CUSTOM_CSS', '');
         }
