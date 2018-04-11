@@ -148,7 +148,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e984d0bd7cb4da547ed2e
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a967b69d22760a1a8ca92af4fa4b7122'] = 'Smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9f6a3bc372bffcee32c103d45bd3bfa4'] = 'Bords arrondis';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_960b44c579bc2f6818d2daaf9e4c16f0'] = 'Normal';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_7a1920d61156abc05a60135aefe8bc67'] = 'Défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4953af21e1b855c91be873e8c05e2c99'] = 'Inversé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_cb5feb1b7314637725a2e73bdc9f7295'] = 'Couleur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_42e6feb7f76e910efcda54034ecc83ce'] = 'Personnalisation du CSS';
@@ -238,7 +238,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_e984d0bd7cb4da547ed2e344619208c
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_a967b69d22760a1a8ca92af4fa4b7122'] = 'Smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9f6a3bc372bffcee32c103d45bd3bfa4'] = 'Bords arrondis';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_960b44c579bc2f6818d2daaf9e4c16f0'] = 'Normal';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_7a1920d61156abc05a60135aefe8bc67'] = 'Défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4953af21e1b855c91be873e8c05e2c99'] = 'Inversé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_cb5feb1b7314637725a2e73bdc9f7295'] = 'Couleur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_42e6feb7f76e910efcda54034ecc83ce'] = 'Personnalisation du CSS';

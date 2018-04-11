@@ -31,7 +31,7 @@ function OystOneClickCart(url, controller)
     this.idBtnAddToCart = '.standard-checkout';
     this.smartBtn = true;
     this.borderBtn = true;
-    this.themeBtn = 'normal';
+    this.themeBtn = 'default';
     this.colorBtn = '#E91E63';
     this.widthBtn = '230px';
     this.heightBtn = '60px';
