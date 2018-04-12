@@ -16,6 +16,7 @@
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
             "actionOrderStatusPostUpdate",
+            "actionValidateOrder",
             "displayShoppingCart"
         ],
         "1.6" : [
