@@ -129,7 +129,7 @@ class OneClickService extends AbstractOystService
             $labelCta = false;
         }
 
-        if ($controller == "order" || $controller == "index" || $controller == "category") {
+        if ($controller == "order" || $controller == "index" || $controller == "category" || $controller == 'authentication') {
             // Check validity cart rule ?
             if (version_compare(_PS_VERSION_, '1.6.0', '>=')) {
                 $ids_cart_rule_gift = Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT);
@@ -196,7 +196,7 @@ class OneClickService extends AbstractOystService
         }
 
         if (!isset($data['error'])) {
-            if ($products && ($controller == 'order' || $controller == 'index' || $controller == 'category')) {
+            if ($products && ($controller == 'order' || $controller == 'index' || $controller == 'category' || $controller == "authentication")) {
                 foreach ($products as $product) {
                     if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
                         if (count($ids_gift_products) > 0 && in_array($product['id_product'], $ids_gift_products)) {
@@ -313,7 +313,7 @@ class OneClickService extends AbstractOystService
             }
         }
 
-        if ($controller == 'order' || $controller == 'index' || $controller == 'category') {
+        if ($controller == 'order' || $controller == 'index' || $controller == 'category' || $controller == 'authentication') {
             $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
         }
 
@@ -349,7 +349,7 @@ class OneClickService extends AbstractOystService
 
             $oneClickOrdersParams->setShouldReinitBuffer(false);
 
-            if ($controller == 'order' || $controller == 'index' || $controller == 'category') {
+            if ($controller == 'order' || $controller == 'index' || $controller == 'category' || $controller == 'authentication') {
                 $oneClickOrdersParams->setIsCheckoutCart(true);
                 $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY_CART'));
             } else {
@@ -364,7 +364,7 @@ class OneClickService extends AbstractOystService
                 )
             );
 
-            if ($labelCta && $labelCta != '' && ($controller == 'order' || $controller == 'index' || $controller == 'category')) {
+            if ($labelCta && $labelCta != '' && ($controller == 'order' || $controller == 'index' || $controller == 'category' || $controller == 'authentication')) {
                 $glue = '&';
                 if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
                     $glue = '?';
