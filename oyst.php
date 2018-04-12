@@ -550,6 +550,7 @@ class Oyst extends FroggyPaymentModule
             'order',
             'index',
             'category',
+            'authentication'
         );
         $controller = Context::getContext()->controller->php_self;
 
