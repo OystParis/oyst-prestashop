@@ -311,6 +311,11 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
         Configuration::updateValue('FC_OYST_ONLY_FOR_IP', "");
+
+        // Params 1-Click for btn layer
+        Configuration::updateValue('FC_OYST_BTN_LAYER', 0);
+        Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '214');
+        Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '43');
         // Params 1-Click restrictions
         Configuration::updateValue('FC_OYST_CURRENCIES', Currency::getIdByIsoCode('EUR'));
         Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
