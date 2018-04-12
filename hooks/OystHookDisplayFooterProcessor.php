@@ -225,6 +225,10 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
             $access_allow[] = 'category';
         }
 
+        if (Configuration::get('FC_OYST_BTN_LOGIN')) {
+            $access_allow[] = 'authentication';
+        }
+
         return $access_allow;
     }
 
@@ -237,6 +241,8 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
             $btn = 'CART';
         } elseif ($controller == 'index' || $controller == 'category') {
             $btn = 'LAYER';
+        } elseif ($controller == 'authentication') {
+            $btn = 'LOGIN';
         } else {
             $btn = 'PRODUCT';
         }

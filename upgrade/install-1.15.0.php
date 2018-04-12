@@ -67,5 +67,16 @@ function upgrade_module_1_15_0($module)
     Configuration::updateValue('FC_OYST_ID_BTN_LAYER', '#layer_cart .button-container');
     Configuration::updateValue('FC_OYST_POSITION_BTN_LAYER', 'before');
 
+    // Add conf custom btn login
+    Configuration::updateValue('FC_OYST_BTN_LOGIN', 0);
+    Configuration::updateValue('FC_OYST_WIDTH_BTN_LOGIN', '');
+    Configuration::updateValue('FC_OYST_HEIGHT_BTN_LOGIN', '');
+    Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LOGIN', '');
+    Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LOGIN', '');
+    Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LOGIN', '');
+    Configuration::updateValue('FC_OYST_ID_BTN_LOGIN', '#SubmitCreate');
+    Configuration::updateValue('FC_OYST_ID_BTN_FORM_LOGIN', '#submitAccount');
+    Configuration::updateValue('FC_OYST_POSITION_BTN_LOGIN', 'before');
+
     return true;
 }
