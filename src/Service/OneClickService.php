@@ -24,6 +24,8 @@ namespace Oyst\Service;
 use Combination;
 use Exception;
 use Oyst\Classes\OystUser;
+use Oyst\Classes\OystPrice;
+use Oyst\Classes\OystProduct;
 use Oyst\Classes\OneClickOrderParams;
 use Oyst\Classes\OneClickNotifications;
 use Oyst\Classes\OneClickCustomization;
@@ -40,6 +42,7 @@ use StockAvailable;
 use Module;
 use CartRule;
 use Cart;
+use Address;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -114,9 +117,11 @@ class OneClickService extends AbstractOystService
         $controller = $request->getRequestItem('controller');
         $productLess = array();
         $result_products = array();
+        $oyst = new Oyst();
         // Deprecated ??
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
-        $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
+        $exportProductService = AbstractExportProductServiceFactory::get($oyst, Context::getContext());
+        $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
         $load = (int)$request->getRequestItem('preload');
         if ($request->hasRequest('labelCta')) {
             $labelCta = $request->getRequestItem('labelCta');
@@ -124,7 +129,7 @@ class OneClickService extends AbstractOystService
             $labelCta = false;
         }
 
-        if ($controller == 'order') {
+        if ($controller == "order" || $controller == "index" || $controller == "category") {
             // Check validity cart rule ?
             if (version_compare(_PS_VERSION_, '1.6.0', '>=')) {
                 $ids_cart_rule_gift = Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT);
@@ -170,7 +175,7 @@ class OneClickService extends AbstractOystService
                 }
             }
 
-            if (!$products) {
+            if (!$products && $controller == 'order') {
                 $data['error'] = 'Missing products';
             }
         } else {
@@ -191,7 +196,7 @@ class OneClickService extends AbstractOystService
         }
 
         if (!isset($data['error'])) {
-            if ($products && $controller == 'order') {
+            if ($products && ($controller == 'order' || $controller == 'index' || $controller == 'category')) {
                 foreach ($products as $product) {
                     if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
                         if (count($ids_gift_products) > 0 && in_array($product['id_product'], $ids_gift_products)) {
@@ -213,6 +218,33 @@ class OneClickService extends AbstractOystService
                             );
                         }
                     }
+                }
+            } elseif (!$products && ($controller == 'index' || $controller == 'category')) {
+                $oystPrice = new OystPrice(10, $this->context->currency->iso_code);
+                $oystProduct = new OystProduct("#OYST#", "Product fictif", $oystPrice, 1);
+                $oystProduct->__set('materialized', true);
+                $productLess[] = $oystProduct;
+
+                if (!$this->context->cookie->id_cart) {
+                    $cart = new Cart();
+                    $cart->id_lang = (int)$this->context->cookie->id_lang;
+                    $cart->id_currency = (int)$this->context->cookie->id_currency;
+                    $cart->id_guest = (int)$this->context->cookie->id_guest;
+                    $cart->id_shop_group = (int)$this->context->shop->id_shop_group;
+                    $cart->id_shop = $this->context->shop->id;
+                    if ($this->context->cookie->id_customer) {
+                        $cart->id_customer = (int)$this->context->cookie->id_customer;
+                        $cart->id_address_delivery = (int)Address::getFirstCustomerAddressId($cart->id_customer);
+                        $cart->id_address_invoice = (int)$cart->id_address_delivery;
+                    } else {
+                        $cart->id_address_delivery = 0;
+                        $cart->id_address_invoice = 0;
+                    }
+                    $cart->save();
+
+                    // Needed if the merchant want to give a free product to every visitors
+                    $this->context->cart = $cart;
+                    $this->context->cookie->id_cart = $cart->id;
                 }
             } else {
                 $product = new Product($idProduct);
@@ -268,7 +300,7 @@ class OneClickService extends AbstractOystService
             }
         }
 
-        if ($controller == 'order') {
+        if ($controller == 'order' || $controller == 'index' || $controller == 'category') {
             $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
         }
 
@@ -304,7 +336,7 @@ class OneClickService extends AbstractOystService
 
             $oneClickOrdersParams->setShouldReinitBuffer(false);
 
-            if ($controller == 'order') {
+            if ($controller == 'order' || $controller == 'index' || $controller == 'category') {
                 $oneClickOrdersParams->setIsCheckoutCart(true);
                 $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY_CART'));
             } else {
@@ -319,7 +351,7 @@ class OneClickService extends AbstractOystService
                 )
             );
 
-            if ($labelCta && $labelCta != '' && $controller == 'order') {
+            if ($labelCta && $labelCta != '' && ($controller == 'order' || $controller == 'index' || $controller == 'category')) {
                 $glue = '&';
                 if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
                     $glue = '?';
