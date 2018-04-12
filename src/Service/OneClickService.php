@@ -204,7 +204,9 @@ class OneClickService extends AbstractOystService
                         $product['cart_quantity']
                     );
 
-                    $product_less->__set('customizations', Context::getContext()->cart->getProductCustomization($product['id_product']));
+                    $customizations = Context::getContext()->cart->getProductCustomization($product['id_product']);
+
+                    $product_less->__set('customizations', $this->prepareCustomizations($customizations));
                     $products_less[] = $product_less;
 
                     if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
@@ -248,8 +250,7 @@ class OneClickService extends AbstractOystService
                     $customization['quantity'] = $quantity;
                 }
 
-                $product_less->__set('customizations', $customizations);
-
+                $product_less->__set('customizations', $this->prepareCustomizations($customizations));
                 $products_less[] = $product_less;
 
                 // Check preload, and update quantity
@@ -397,5 +398,44 @@ class OneClickService extends AbstractOystService
         $datetime = new \DateTime();
         $datetime = $datetime->format('YmdHis');
         return uniqid().$hash.'-'.$datetime;
+    }
+
+    /**
+     * @param $filename string
+     */
+    private function saveCustomizationFile($filename)
+    {
+        $oyst_dir = _PS_UPLOAD_DIR_.'oyst/';
+        if (!file_exists($oyst_dir)) {
+            mkdir($oyst_dir);
+        }
+        if (file_exists(_PS_UPLOAD_DIR_.$filename)) {
+            copy(_PS_UPLOAD_DIR_.$filename, $oyst_dir.$filename);
+            copy(_PS_UPLOAD_DIR_.$filename.'_small', $oyst_dir.$filename.'_small');
+        }
+    }
+
+    /**
+     * @param $customizations array Prestashop customizations
+     * @return array sorted customizations
+     */
+    private function prepareCustomizations($customizations)
+    {
+        $sorted_customizations = array();
+        //Save uploaded file in oyst folder for order creation
+        foreach ($customizations as $customization) {
+            if (intval($customization['type']) == 0){
+                $this->saveCustomizationFile($customization['value']);
+            }
+            if (!isset($sorted_customizations[$customization['id_customization']])) {
+                $sorted_customizations[$customization['id_customization']]['quantity'] = intval($customization['quantity']);
+            }
+            $sorted_customizations[$customization['id_customization']]['data'][] = array(
+                'type' => intval($customization['type']),
+                'index' => intval($customization['index']),
+                'value' => $customization['value'],
+            );
+        }
+        return $sorted_customizations;
     }
 }

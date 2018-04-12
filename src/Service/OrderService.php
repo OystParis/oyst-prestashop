@@ -259,7 +259,18 @@ class OrderService extends AbstractOystService
 
             if (!empty($productInfo['customizations'])) {
                 foreach ($productInfo['customizations'] as $customization) {
-                    $cart->_addCustomization($productInfo['productId'], $productInfo['combinationId'], $customization['index'], $customization['type'], $customization['value'], 0);
+                    foreach ($customization['data'] as $datum) {
+                        if ($datum['type'] == 0) {
+                            $oyst_upload_dir = _PS_UPLOAD_DIR_.'oyst/';
+                            if (file_exists($oyst_upload_dir.$datum['value'])) {
+                                rename($oyst_upload_dir.$datum['value'], _PS_UPLOAD_DIR_.'/'.$datum['value']);
+                                rename($oyst_upload_dir.$datum['value'].'_small', _PS_UPLOAD_DIR_.'/'.$datum['value'].'_small');
+                            }
+                            $cart->addPictureToProduct($productInfo['productId'], $datum['index'], $datum['type'], $datum['value']);
+                        }elseif ($datum['type'] == 1) {
+                            $cart->addTextFieldToProduct($productInfo['productId'], $datum['index'], $datum['type'], $datum['value']);
+                        }
+                    }
                     $custom_qty += $customization['quantity'];
                     //Get inserted id_customization
                     $id_customization = Db::getInstance()->getValue("SELECT `id_customization` 
