@@ -123,6 +123,13 @@ function OystOneClickCart(url, controller)
      * Initialize requirements
      */
     this.prepareButton = function () {
+
+        // if (controller == "authentication") {
+        //     if ($(this.idBtnFormAccount).length > 0) {
+        //         this.idBtnAddToCart = this.idBtnFormAccount;
+        //     }
+        // }
+
         if (this.positionBtn == 'after') {
             $(this.idBtnAddToCart).after($('<div>', {
                 id: 'oneClickContainer'
