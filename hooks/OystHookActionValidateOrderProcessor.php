@@ -37,56 +37,70 @@ class OystHookActionValidateOrderProcessor extends FroggyHookProcessor
      */
     public function run()
     {
-        /** @var Order $order */
-        $order = $this->params['order'];
-        $amount = $order->getTotalPaid() * 100;
+        $amount = $this->params['order']->total_paid * 100;
+
+        // Get cookie Oyst
+        $cookie_oyst = file_get_contents('https://api.oyst.com/session');
+        $cookie_oyst = json_decode($cookie_oyst);
+
         // Get cURL resource
-        // $ch = curl_init();
+        $ch = curl_init();
 
         // Set url
-        // curl_setopt($ch, CURLOPT_URL, 'https://api.staging.oyst.eu/events/oneclick');
-        // curl_setopt($ch, CURLOPT_URL, 'https://api.sandbox.oyst.eu/events/oneclick');
-        // curl_setopt($ch, CURLOPT_URL, 'https://api.oyst.com/events/oneclick');
+        $env = $this->module->getOneClickEnvironment();
+
+        switch ($env) {
+            case \Oyst\Service\Configuration::API_ENV_PROD:
+                $url = 'https://api.oyst.com/events/oneclick';
+                break;
+            case \Oyst\Service\Configuration::API_ENV_SANDBOX:
+                $url = 'https://api.sandbox.oyst.eu/events/oneclick';
+                break;
+            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                $url = $this->module->getCustomOneClickApiUrl().'/events/oneclick';
+                break;
+            default:
+                $url = 'https://api.oyst.com/events/oneclick';
+                break;
+        }
+
+        curl_setopt($ch, CURLOPT_URL, $url);
 
         // Set method
-        // curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 
         // Set options
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         // Set headers
-        // curl_setopt(
-        //     $ch,
-        //     CURLOPT_HTTPHEADER,
-        //     ["Content-Type: application/json; charset=utf-8"]
-        // );
-        // Create body
-        // $json_array = array(
-        //     "referrer" => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "",
-        //     "tag" => "merchantconfirmationpage:display:",
-        //     "oyst_cookie" => "",
-        //     "user_agent" => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "",
-        //     "cart_amount" => $amount,
-        //     "timestamp" => time()
-        // );
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            ["Content-Type: application/json; charset=utf-8"]
+        );
 
-        // $body = json_encode($json_array);
+
+        // Create body
+        $json_array = array(
+            "referrer" => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "",
+            "tag" => "merchantconfirmationpage:display",
+            "oyst_cookie" => isset($cookie_oyst->esid)? $cookie_oyst->esid : "",
+            "user_agent" => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "",
+            "cart_amount" => $amount,
+            "payment" => $this->params['order']->payment,
+            "timestamp" => time()
+        );
+
+        $body = json_encode($json_array);
 
         // Set body
-        // curl_setopt($ch, CURLOPT_POST, 1);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
 
         // Send the request & save response to $resp
-        // $resp = curl_exec($ch);
-
-        // if(!$resp) {
-        //   die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
-        // } else {
-        //   echo "Response HTTP Status Code : " . curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        //   echo "\nResponse HTTP Body : " . $resp;
-        // }
+        $resp = curl_exec($ch);
 
         // Close request to clear up some resources
-        // curl_close($ch);
+        curl_close($ch);
     }
 }
