@@ -23,6 +23,7 @@ namespace Oyst\Service;
 
 use Address;
 use Order;
+use OrderHistory;
 use Oyst\Repository\AddressRepository;
 use Carrier;
 use Cart;
@@ -479,6 +480,72 @@ class OrderService extends AbstractOystService
         }
 
         return $succeed;
+    }
+
+    public function updateOrderStatusPresta($order_guid, $status, $oystData) {
+        $order_id = $this->getOrderRepository()->getOrderId($order_guid);
+        $order = new Order($order_id);
+
+        if (Validate::isLoadedObject($order)) {
+
+            //TODO Use status as key for Configuration
+            $id_order_state = PSConfiguration::get('OYST_STATUS_FRAUD');
+
+            if ($id_order_state > 0) {
+
+                if ($order->current_state == $id_order_state) {
+                    header("HTTP/1.1 400 Bad Request");
+                    header('Content-Type: application/json');
+                    die(json_encode(array(
+                        'code' => 'status-already-set',
+                        'message' => 'This status is already the current status',
+                    )));
+                }
+                $insert = array(
+                    'id_order' => (int)$order->id,
+                    'id_cart' => (int)$order->id_cart,
+                    'payment_id' => pSQL($order_guid),
+                    'event_code' => pSQL($oystData['event']),
+                    'event_data' => pSQL(Tools::jsonEncode($oystData['data'])),
+                    'status' => 'start',
+                    'date_event' => date('Y-m-d H:i:s'),
+                    'date_add' => date('Y-m-d H:i:s'),
+                    'date_upd' => date('Y-m-d H:i:s'),
+                );
+                Db::getInstance()->insert('oyst_payment_notification', $insert);
+                $id_notification = Db::getInstance()->Insert_ID();
+
+                // Create new OrderHistory
+                $history = new OrderHistory();
+                $history->id_order = $order->id;
+                $history->id_employee = 0;
+                $history->id_order_state = (int)$id_order_state;
+                $history->changeIdOrderState((int)$id_order_state, $order->id);
+                $history->add();
+
+                $update = array(
+                    'status' => 'finished',
+                    'date_upd' => date('Y-m-d H:i:s'),
+                );
+                Db::getInstance()->update('oyst_payment_notification', $update, 'id_oyst_payment_notification = '.$id_notification);
+
+                return json_encode(array('state' => true));
+            } else {
+                header("HTTP/1.1 400 Bad Request");
+                header('Content-Type: application/json');
+                die(json_encode(array(
+                    'code' => 'fraud-status-not-exists',
+                    'message' => 'Status "Fraud" not found in Prestashop',
+                )));
+            }
+        } else {
+            header("HTTP/1.1 400 Bad Request");
+            header('Content-Type: application/json');
+            die(json_encode(array(
+                'code' => 'unknown-order',
+                'message' => 'Order not found',
+            )));
+        }
     }
 
     /**

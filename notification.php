@@ -117,6 +117,11 @@ if ($data && isset($data['event'])) {
                 $cartController->setLogger($logger);
                 $cartController->estimateAction();
                 break;
+            case 'order.update.status':
+                $orderController = new OrderController($request);
+                $orderController->setLogger($logger);
+                $orderController->updateOrderStatus();
+                break;
             default:
                 header("HTTP/1.1 400 Bad Request");
         }
