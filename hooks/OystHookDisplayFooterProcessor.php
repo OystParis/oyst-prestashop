@@ -59,10 +59,14 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
 
             $products = Context::getContext()->cart->getProducts();
 
-            if ($controller == "index" || $controller == "category") {
-                $assign['positionBtn'] = Configuration::get('FC_OYST_POSITION_BTN_LAYER');
+            if ($controller == "index" || $controller == "category" || $controller == "authentication") {
+                $assign['positionBtn'] = Configuration::get('FC_OYST_POSITION_BTN_'.$suffix_conf);
             } else {
                 $assign['positionBtn'] = "before";
+            }
+
+            if ($controller == "authentication") {
+                $assign['idBtnFormAccount'] = Configuration::get('FC_OYST_ID_BTN_FORM_'.$suffix_conf);
             }
         } else {
             $productRepository = new ProductRepository(Db::getInstance());
@@ -102,7 +106,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         }
 
         // Params global
-        $assign['secureKey'] = $token;
+        // $assign['secureKey'] = $token;
         $assign['oneClickUrl'] = $oneClickUrl;
         $assign['enabledBtn'] = Configuration::get('FC_OYST_BTN_'.$suffix_conf);
         $assign['oneClickActivated'] = (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE');
@@ -127,7 +131,6 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $assign['marginTopBtn'] = Configuration::get('FC_OYST_MARGIN_TOP_BTN_'.$suffix_conf);
         $assign['marginLeftBtn'] = Configuration::get('FC_OYST_MARGIN_LEFT_BTN_'.$suffix_conf);
         $assign['marginRightBtn'] = Configuration::get('FC_OYST_MARGIN_RIGHT_BTN_'.$suffix_conf);
-
 
         $this->smarty->assign($assign);
 
