@@ -41,6 +41,7 @@ function OystOneClickCart(url, controller)
     this.positionBtn = 'before';
     this.labelCta = 'Return shop.';
     this.preload = 1;
+    this.idBtnFormAccount = '.account_creation';
 
     this.setPreload = function (preload) {
         this.preload = preload;
@@ -110,6 +111,10 @@ function OystOneClickCart(url, controller)
         this.idBtnAddToCart = idBtnAddToCart;
     }
 
+    this.setIdBtnFormAccount = function (idBtnFormAccount) {
+        this.idBtnFormAccount = idBtnFormAccount;
+    }
+
     this.setLabelCta = function (labelCta) {
         this.labelCta = labelCta;
     };
@@ -118,6 +123,13 @@ function OystOneClickCart(url, controller)
      * Initialize requirements
      */
     this.prepareButton = function () {
+
+        // if (controller == "authentication") {
+        //     if ($(this.idBtnFormAccount).length > 0) {
+        //         this.idBtnAddToCart = this.idBtnFormAccount;
+        //     }
+        // }
+
         if (this.positionBtn == 'after') {
             $(this.idBtnAddToCart).after($('<div>', {
                 id: 'oneClickContainer'
