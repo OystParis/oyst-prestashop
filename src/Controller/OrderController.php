@@ -54,6 +54,11 @@ class OrderController extends AbstractOystController
     }
 
     public function updateOrderStatus() {
+
+        $status_mapping = array(
+            'suspected_fraud' => 'OYST_STATUS_FRAUD',
+        );
+
         $json = $this->request->getJson();
 
         if ($json) {
@@ -62,8 +67,8 @@ class OrderController extends AbstractOystController
             $orderService = AbstractOrderServiceFactory::get($oyst, $context);
             $orderId = $json['data']['order_id'];
 
-            if (isset($json['data']['fraud_status']) && $json['data']['fraud_status'] == 'blocked_drop_shipping') {
-                $responseData = $orderService->updateOrderStatusPresta($orderId, $json['data']['fraud_status'], $json);
+            if (isset($json['data']['status']) && isset($status_mapping[$json['data']['status']])) {
+                $responseData = $orderService->updateOrderStatusPresta($orderId, $json['data']['status'], $json);
                 $this->logger->info(
                     sprintf(
                         'New notification order.update.status [%s]',

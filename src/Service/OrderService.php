@@ -487,9 +487,7 @@ class OrderService extends AbstractOystService
         $order = new Order($order_id);
 
         if (Validate::isLoadedObject($order)) {
-
-            //TODO Use status as key for Configuration
-            $id_order_state = PSConfiguration::get('OYST_STATUS_FRAUD');
+            $id_order_state = PSConfiguration::get($status);
 
             if ($id_order_state > 0) {
 
@@ -498,7 +496,7 @@ class OrderService extends AbstractOystService
                     header('Content-Type: application/json');
                     die(json_encode(array(
                         'code' => 'status-already-set',
-                        'message' => 'This status is already the current status',
+                        'message' => 'This status is the current status',
                     )));
                 }
                 $insert = array(
@@ -535,7 +533,7 @@ class OrderService extends AbstractOystService
                 header('Content-Type: application/json');
                 die(json_encode(array(
                     'code' => 'fraud-status-not-exists',
-                    'message' => 'Status "Fraud" not found in Prestashop',
+                    'message' => 'Status '.$status.' not found in Prestashop',
                 )));
             }
         } else {
