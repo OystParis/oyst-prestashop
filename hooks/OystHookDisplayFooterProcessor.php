@@ -66,7 +66,9 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
             }
 
             if ($controller == "authentication") {
-                $assign['idBtnFormAccount'] = Configuration::get('FC_OYST_ID_BTN_FORM_'.$suffix_conf);
+                $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_SMART_BTN_'.$suffix_conf);
+            } else {
+                $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_BTN_'.$suffix_conf);
             }
         } else {
             $productRepository = new ProductRepository(Db::getInstance());

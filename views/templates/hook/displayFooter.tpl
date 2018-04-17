@@ -29,7 +29,6 @@
                 oyst.setLabelCta("{$oyst_label_cta|escape:'html':'UTF-8'}");
             {else}
                 var oyst = new OystOneClick({$oneClickUrl|json_encode}, {$product->id|json_encode}, "{$controller|escape:'html':'UTF-8'}");
-                oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
                 oyst.setExportedCombinations({$synchronizedCombination|json_encode});
                 oyst.setAllowOosp({$allowOosp|intval});
                 oyst.setProductQuantity({$productQuantity|intval});
@@ -37,10 +36,8 @@
                 oyst.setShouldAskStock({$shouldAsStock|intval});
                 oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
             {/if}
-            {if $controller == "authentication"}
-                oyst.setIdBtnFormAccount("{$idBtnFormAccount|escape:'html':'UTF-8'}");
-            {/if}
             oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
+            oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
             oyst.setSmartBtn({$smartBtn|intval});
             oyst.setBorderBtn({$borderBtn|intval});
             oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
@@ -57,18 +54,6 @@
             window.__OYST__.getOneClickURL = function(callback) {
                 oyst.requestOneCLick(callback);
             };
-
-            $('#SubmitCreate').on('click', function() {
-                {if $controller == "authentication"}
-                    oyst.setIdBtnAddToCart("{$idBtnFormAccount|escape:'html':'UTF-8'}");
-                {/if}
-                oyst.prepareButton();
-
-                window.__OYST__ = window.__OYST__ || {};
-                window.__OYST__.getOneClickURL = function(callback) {
-                    oyst.requestOneCLick(callback);
-                };
-            });
         });
     </script>
     {if $styles_custom}

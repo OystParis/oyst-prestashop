@@ -134,6 +134,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_93f4176640c89aba90f50
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1215422645ebf1cf761b14de2cf1b731'] = 'Bouton produit';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c2203231f692acd954ec241d13fcfccb'] = 'Bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_648d5c916e2e56ca97b1030b6edee2ca'] = 'Bouton page popup';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_57d05763db7564e9d4a955a803d785f4'] = 'Bouton connexion';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_21f6bc356cdbbf99796a5a8352d5b246'] = 'Paramètres restrictions';
@@ -170,6 +171,10 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_aecb24741fe6ae99ae476
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3e757c5a82a0bbe8b6eac15d7530614e'] = 'Activer bouton page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_987015391e3f38ee4f89a2369e2558ea'] = 'Sélecteur pour positionner le bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1693fdde5702dcdeaf275cd6426e2673'] = 'Activer bouton page popup';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_474947af1e4383b108d479d87335a0b0'] = 'Position bouton 1-Click';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8e414f1b4015e9f5bf62515f6adb9599'] = 'Activer bouton page connexion';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f0b50347c164ba3b829ec09c68ac775d'] = 'Sélecteur pour le smart button';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8ab65dbf04b789777f9aee9618b6028a'] = 'Sélecteur pour positionner le bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
@@ -226,6 +231,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_93f4176640c89aba90f50b8a7b9b429
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1215422645ebf1cf761b14de2cf1b731'] = 'Bouton produit';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c2203231f692acd954ec241d13fcfccb'] = 'Bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_648d5c916e2e56ca97b1030b6edee2ca'] = 'Bouton page popup';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_57d05763db7564e9d4a955a803d785f4'] = 'Bouton page connexion';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_21f6bc356cdbbf99796a5a8352d5b246'] = 'Paramètres restrictions';
@@ -260,6 +266,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_aecb24741fe6ae99ae476a32cdfb0a8
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_3e757c5a82a0bbe8b6eac15d7530614e'] = 'Activer bouton page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_987015391e3f38ee4f89a2369e2558ea'] = 'Sélecteur pour positionner le bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1693fdde5702dcdeaf275cd6426e2673'] = 'Activer bouton page popup';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_19ba49c8d49ca6756b3e4a5a3f9ec818'] = 'Activer bouton page connexion';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
