@@ -39,6 +39,7 @@ $logger->setFile(dirname(__FILE__).'/logs/notification.log');
 if (Tools::getValue('key') != Configuration::get('FC_OYST_HASH_KEY')) {
     $logger->info('New notification : Secure key is invalid');
     header("HTTP/1.1 400 Bad Request");
+    die(json_encode(array('error' => 'bad-api-key', 'message' => 'Secure key is invalid')));
 }
 
 if ($data && isset($data['event'])) {
