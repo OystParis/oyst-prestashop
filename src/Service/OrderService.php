@@ -490,7 +490,6 @@ class OrderService extends AbstractOystService
             $id_order_state = PSConfiguration::get($status);
 
             if ($id_order_state > 0) {
-
                 if ($order->current_state == $id_order_state) {
                     header("HTTP/1.1 400 Bad Request");
                     header('Content-Type: application/json');
