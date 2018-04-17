@@ -289,6 +289,16 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_LAYER');
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_LAYER');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_LAYER');
+        // Conf 1-Click custom btn layer cart
+        PSConfiguration::deleteByName('FC_OYST_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_FORM_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_LOGIN');
         // Conf 1-Click carriers
         PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
         PSConfiguration::deleteByName('OYST_ONE_CLICK_CARRIER');
