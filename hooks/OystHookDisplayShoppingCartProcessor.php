@@ -32,9 +32,6 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
 {
     public function run()
     {
-
-        $this->context->cookie->useragent_oyst = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
-
         // Check allow currency
         $id_currency = $this->context->currency->id;
         $oyst_currencies = Configuration::get('FC_OYST_CURRENCIES');

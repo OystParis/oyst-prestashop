@@ -281,6 +281,12 @@ class OneClickService extends AbstractOystService
             }
         }
 
+        $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+
+        if ($user_agent) {
+            $oystContext['user_agent'] = $user_agent;
+        }
+
         if ($controller == 'order') {
             $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
         }

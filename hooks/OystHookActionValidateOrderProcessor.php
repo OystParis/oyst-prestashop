@@ -37,87 +37,74 @@ class OystHookActionValidateOrderProcessor extends FroggyHookProcessor
      */
     public function run()
     {
-        $amount = $this->params['order']->total_paid * 100;
+        $oyst_label = array('OneClick', 'Oyst OneClick');
 
-        // Get cookie Oyst
-        $cookie_oyst = file_get_contents('https://api.oyst.com/session');
-        $cookie_oyst = json_decode($cookie_oyst);
+        if (!in_array($this->params['order']->payment, $oyst_label)) {
+            $amount = $this->params['order']->total_paid * 100;
 
-        // Get cURL resource
-        $ch = curl_init();
+            // Get cookie Oyst
+            $cookie_oyst = file_get_contents('https://api.oyst.com/session');
+            $cookie_oyst = json_decode($cookie_oyst);
 
-        // Set url
-        $env = $this->module->getOneClickEnvironment();
+            // Get cURL resource
+            $ch = curl_init();
 
-        switch ($this->params['order']->payment) {
-            case 'FreePay':
-            case 'Freepay':
-            case 'Oyst - FreePay and 1Click':
-            case 'OneClick':
-            case 'Oyst OneClick':
-                if ($this->context->cookie->useragent_oyst) {
-                    $user_agent = $this->context->cookie->useragent_oyst;
-                } else {
-                    $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
-                }
-                break;
-            default:
-                $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
-                break;
+            // Set url
+            $env = $this->module->getOneClickEnvironment();
+
+            switch ($env) {
+                case \Oyst\Service\Configuration::API_ENV_PROD:
+                    $url = 'https://api.oyst.com/events/oneclick';
+                    break;
+                case \Oyst\Service\Configuration::API_ENV_SANDBOX:
+                    $url = 'https://api.sandbox.oyst.eu/events/oneclick';
+                    break;
+                case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                    $url = $this->module->getCustomOneClickApiUrl().'/events/oneclick';
+                    break;
+                default:
+                    $url = 'https://api.oyst.com/events/oneclick';
+                    break;
+            }
+
+            curl_setopt($ch, CURLOPT_URL, $url);
+
+            // Set method
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+
+            // Set options
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+            // Set headers
+            curl_setopt(
+                $ch,
+                CURLOPT_HTTPHEADER,
+                ["Content-Type: application/json; charset=utf-8"]
+            );
+
+
+            // Create body
+            $json_array = array(
+                "referrer" => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "",
+                "tag" => "merchantconfirmationpage:display",
+                "oyst_cookie" => isset($cookie_oyst->esid)? $cookie_oyst->esid : "",
+                "user_agent" => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "",
+                "cart_amount" => $amount,
+                "payment" => $this->params['order']->payment,
+                "timestamp" => time()
+            );
+
+            $body = json_encode($json_array);
+
+            // Set body
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+
+            // Send the request & save response to $resp
+            $resp = curl_exec($ch);
+
+            // Close request to clear up some resources
+            curl_close($ch);
         }
-
-        switch ($env) {
-            case \Oyst\Service\Configuration::API_ENV_PROD:
-                $url = 'https://api.oyst.com/events/oneclick';
-                break;
-            case \Oyst\Service\Configuration::API_ENV_SANDBOX:
-                $url = 'https://api.sandbox.oyst.eu/events/oneclick';
-                break;
-            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
-                $url = $this->module->getCustomOneClickApiUrl().'/events/oneclick';
-                break;
-            default:
-                $url = 'https://api.oyst.com/events/oneclick';
-                break;
-        }
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        // Set method
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-
-        // Set options
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        // Set headers
-        curl_setopt(
-            $ch,
-            CURLOPT_HTTPHEADER,
-            ["Content-Type: application/json; charset=utf-8"]
-        );
-
-
-        // Create body
-        $json_array = array(
-            "referrer" => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "",
-            "tag" => "merchantconfirmationpage:display",
-            "oyst_cookie" => isset($cookie_oyst->esid)? $cookie_oyst->esid : "",
-            "user_agent" => $user_agent,
-            "cart_amount" => $amount,
-            "payment" => $this->params['order']->payment,
-            "timestamp" => time()
-        );
-
-        $body = json_encode($json_array);
-
-        // Set body
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-
-        // Send the request & save response to $resp
-        $resp = curl_exec($ch);
-
-        // Close request to clear up some resources
-        curl_close($ch);
     }
 }
