@@ -297,7 +297,7 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_LOGIN');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_LOGIN');
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_LOGIN');
-        PSConfiguration::deleteByName('FC_OYST_ID_BTN_FORM_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_LOGIN');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_LOGIN');
         // Conf 1-Click carriers
         PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
