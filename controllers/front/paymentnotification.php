@@ -255,7 +255,7 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                             );
                             Db::getInstance()->insert('oyst_payment_notification', $insert);
                         }
-                        if (Configuration::get('FC_OYST_ACTIVE_FRAUD')) {
+                        if (Configuration::get('FC_OYST_ACTIVE_FRAUD') || (isset($notification_item['force_fraud']) && $notification_item['force_fraud'])) {
                             $event_auth = OystPaymentNotification::existEventCode(
                                 $id_cart,
                                 OystPaymentNotification::EVENT_AUTHORISATION
