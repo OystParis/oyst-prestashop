@@ -237,7 +237,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LOGIN', '');
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LOGIN', '');
             Configuration::updateValue('FC_OYST_POSITION_BTN_LOGIN', 'before');
-            Configuration::updateValue('FC_OYST_ID_BTN_LOGIN', '#center_column');
+            Configuration::updateValue('FC_OYST_ID_BTN_LOGIN', '#SubmitCreate');
             Configuration::updateValue('FC_OYST_ID_SMART_BTN_LOGIN', '#SubmitCreate');
         }
 

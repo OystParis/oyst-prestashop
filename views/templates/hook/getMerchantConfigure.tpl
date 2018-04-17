@@ -538,7 +538,7 @@
                                 </div>
                                 <label>{l s='Id btn add to cart' mod='oyst'}</label>
                                 <div class="margin-form">
-                                    <input type="text" name="FC_OYST_ID_BTN_LOGIN" value="{if $oyst.FC_OYST_ID_BTN_LOGIN}{$oyst.FC_OYST_ID_BTN_LOGIN|escape:'htmlall':'UTF-8'}{else}#center_column{/if}"/>
+                                    <input type="text" name="FC_OYST_ID_BTN_LOGIN" value="{if $oyst.FC_OYST_ID_BTN_LOGIN}{$oyst.FC_OYST_ID_BTN_LOGIN|escape:'htmlall':'UTF-8'}{else}#SubmitCreate{/if}"/>
                                 </div>
                                 <label>{l s='Id smart btn' mod='oyst'}</label>
                                 <div class="margin-form">
