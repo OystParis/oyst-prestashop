@@ -36,9 +36,6 @@
                 oyst.setShouldAskStock({$shouldAsStock|intval});
                 oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
             {/if}
-            {if $controller == "authentication"}
-                oyst.setIdBtnFormAccount("{$idBtnFormAccount|escape:'html':'UTF-8'}");
-            {/if}
             oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
             oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
             oyst.setSmartBtn({$smartBtn|intval});
@@ -57,18 +54,6 @@
             window.__OYST__.getOneClickURL = function(callback) {
                 oyst.requestOneCLick(callback);
             };
-
-            $('#SubmitCreate').on('click', function() {
-                {if $controller == "authentication"}
-                    oyst.setIdBtnAddToCart("{$idBtnFormAccount|escape:'html':'UTF-8'}");
-                {/if}
-                oyst.prepareButton();
-
-                window.__OYST__ = window.__OYST__ || {};
-                window.__OYST__.getOneClickURL = function(callback) {
-                    oyst.requestOneCLick(callback);
-                };
-            });
         });
     </script>
     {if $styles_custom}
