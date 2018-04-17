@@ -730,7 +730,7 @@
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Id btn cart' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_ID_BTN_LOGIN" value="{if $oyst.FC_OYST_ID_BTN_LOGIN}{$oyst.FC_OYST_ID_BTN_LOGIN|escape:'htmlall':'UTF-8'}{else}#center_column{/if}"/>
+                                            <input type="text" name="FC_OYST_ID_BTN_LOGIN" value="{if $oyst.FC_OYST_ID_BTN_LOGIN}{$oyst.FC_OYST_ID_BTN_LOGIN|escape:'htmlall':'UTF-8'}{else}#SubmitCreate{/if}"/>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
