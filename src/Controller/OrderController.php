@@ -68,7 +68,7 @@ class OrderController extends AbstractOystController
             $orderId = $json['data']['order_id'];
 
             if (isset($json['data']['status']) && isset($status_mapping[$json['data']['status']])) {
-                $responseData = $orderService->updateOrderStatusPresta($orderId, $json['data']['status'], $json);
+                $responseData = $orderService->updateOrderStatusPresta($orderId, $status_mapping[$json['data']['status']], $json);
                 $this->logger->info(
                     sprintf(
                         'New notification order.update.status [%s]',
