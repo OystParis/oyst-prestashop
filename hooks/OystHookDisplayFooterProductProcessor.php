@@ -37,6 +37,8 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
             return '';
         }
 
+        $this->context->cookie->useragent_oyst = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+
         $productRepository = new ProductRepository(Db::getInstance());
         $productCombinations = $product->getAttributeCombinations($this->context->language->id);
 

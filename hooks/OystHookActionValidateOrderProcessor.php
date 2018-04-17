@@ -49,6 +49,23 @@ class OystHookActionValidateOrderProcessor extends FroggyHookProcessor
         // Set url
         $env = $this->module->getOneClickEnvironment();
 
+        switch ($this->params['order']->payment) {
+            case 'FreePay':
+            case 'Freepay':
+            case 'Oyst - FreePay and 1Click':
+            case 'OneClick':
+            case 'Oyst OneClick':
+                if ($this->context->cookie->useragent_oyst) {
+                    $user_agent = $this->context->cookie->useragent_oyst;
+                } else {
+                    $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+                }
+                break;
+            default:
+                $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+                break;
+        }
+
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:
                 $url = 'https://api.oyst.com/events/oneclick';
@@ -85,7 +102,7 @@ class OystHookActionValidateOrderProcessor extends FroggyHookProcessor
             "referrer" => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "",
             "tag" => "merchantconfirmationpage:display",
             "oyst_cookie" => isset($cookie_oyst->esid)? $cookie_oyst->esid : "",
-            "user_agent" => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "",
+            "user_agent" => $user_agent,
             "cart_amount" => $amount,
             "payment" => $this->params['order']->payment,
             "timestamp" => time()
