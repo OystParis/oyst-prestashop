@@ -74,7 +74,7 @@ function upgrade_module_1_15_0($module)
     Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LOGIN', '');
     Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LOGIN', '');
     Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LOGIN', '');
-    Configuration::updateValue('FC_OYST_ID_BTN_LOGIN', '#center_column');
+    Configuration::updateValue('FC_OYST_ID_BTN_LOGIN', '#SubmitCreate');
     Configuration::updateValue('FC_OYST_ID_SMART_BTN_LOGIN', '#SubmitCreate');
     Configuration::updateValue('FC_OYST_POSITION_BTN_LOGIN', 'before');
 
