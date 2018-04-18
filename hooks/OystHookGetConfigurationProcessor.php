@@ -417,6 +417,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $custom_error_error = Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM');
         $custom_conf_error = Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
 
+        $days = array(
+            1 => $this->module->l('Monday', 'oysthookgetconfigurationprocessor'),
+            2 => $this->module->l('Tuesday', 'oysthookgetconfigurationprocessor'),
+            3 => $this->module->l('Wednesday', 'oysthookgetconfigurationprocessor'),
+            4 => $this->module->l('Thursday', 'oysthookgetconfigurationprocessor'),
+            5 => $this->module->l('Friday', 'oysthookgetconfigurationprocessor'),
+            6 => $this->module->l('Saturday', 'oysthookgetconfigurationprocessor'),
+            7 => $this->module->l('Sunday', 'oysthookgetconfigurationprocessor')
+        );
+
         $assign['logsFile'] = $filesName;
         $assign['hasApiKey']     = $hasApiKey;
         $assign['module_dir']    = $this->path;
@@ -454,6 +464,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
         $assign['my_ip'] = Tools::getRemoteAddr();
+        $assign['days'] = $days;
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');
