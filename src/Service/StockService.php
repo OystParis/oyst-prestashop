@@ -49,7 +49,7 @@ class StockService extends AbstractOystService
 
             foreach ($data['products'] as $product) {
                 // $qty = (isset($product['quantity']) ? $product['quantity'] : 1);
-                $qty = $product['quantity'];
+                $qty = (isset($product['quantity']) ? $product['quantity'] : 0);
                 $idProduct = $product['reference'];
                 $idCombination = null;
 

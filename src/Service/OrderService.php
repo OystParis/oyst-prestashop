@@ -205,6 +205,10 @@ class OrderService extends AbstractOystService
             $cart = new Cart($id_cart);
             $products_cart = $cart->getProducts();
             foreach ($products_cart as $p) {
+                $customizations = $cart->getProductCustomization($p['id_product']);
+                foreach ($customizations as $customization) {
+                    $cart->deleteProduct((int)$p['id_product'], (int)$p['id_product_attribute'], (int)$customization['id_customization']);
+                }
                 $cart->deleteProduct((int)$p['id_product'], (int)$p['id_product_attribute']);
             }
             $this->context->cart = $cart;
@@ -251,26 +255,64 @@ class OrderService extends AbstractOystService
 
 
         foreach ($products as $productInfo) {
+            $custom_qty = 0;
             $product = new Product((int)$productInfo['productId']);
 
             if ($product->advanced_stock_management == 0  && PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK')) {
                 StockAvailable::updateQuantity($productInfo['productId'], $productInfo['combinationId'], $productInfo['quantity']);
             }
 
-            if (!$cart->updateQty($productInfo['quantity'], $productInfo['productId'], $productInfo['combinationId'])) {
-                $this->logger->emergency(
-                    sprintf(
-                        "Can't add product to cart, please check the quantity.
-                        Product #%d. Combination #%d. Quantity %d",
-                        $productInfo['productId'],
-                        $productInfo['combinationId'],
-                        $productInfo['quantity']
-                    )
-                );
-                return false;
+            if (!empty($productInfo['customizations'])) {
+                foreach ($productInfo['customizations'] as $customization) {
+                    foreach ($customization['data'] as $datum) {
+                        if ($datum['type'] == 0) {
+                            $oyst_upload_dir = _PS_UPLOAD_DIR_.'oyst/';
+                            if (file_exists($oyst_upload_dir.$datum['value'])) {
+                                rename($oyst_upload_dir.$datum['value'], _PS_UPLOAD_DIR_.'/'.$datum['value']);
+                                rename($oyst_upload_dir.$datum['value'].'_small', _PS_UPLOAD_DIR_.'/'.$datum['value'].'_small');
+                            }
+                            $cart->addPictureToProduct($productInfo['productId'], $datum['index'], $datum['type'], $datum['value']);
+                        }elseif ($datum['type'] == 1) {
+                            $cart->addTextFieldToProduct($productInfo['productId'], $datum['index'], $datum['type'], $datum['value']);
+                        }
+                    }
+                    $custom_qty += $customization['quantity'];
+                    //Get inserted id_customization
+                    $id_customization = Db::getInstance()->getValue("SELECT `id_customization` 
+                        FROM `"._DB_PREFIX_."customization`
+                        WHERE `id_product` = ".$productInfo['productId']." 
+                        AND `id_product_attribute` = ".intval($productInfo['combinationId'])." 
+                        AND `id_cart` = ".$cart->id." 
+                        ORDER BY `id_customization` DESC");
+
+                    if (!$cart->updateQty($customization['quantity'], $productInfo['productId'], $productInfo['combinationId'], $id_customization)) {
+                        $this->logger->emergency(
+                            sprintf(
+                                "Can't add product to cart, please check the quantity.
+                                Product #%d. Combination #%d. Quantity %d, Customization %d",
+                                $productInfo['productId'],
+                                $productInfo['combinationId'],
+                                $productInfo['quantity'],
+                                $id_customization
+                            )
+                        );
+                    }
+                }
+            }
+            if ($custom_qty < $productInfo['quantity']) {
+                if (!$cart->updateQty($productInfo['quantity']-$custom_qty, $productInfo['productId'], $productInfo['combinationId'])) {
+                    $this->logger->emergency(
+                        sprintf(
+                            "Can't add product to cart, please check the quantity.
+                            Product #%d. Combination #%d. Quantity %d",
+                            $productInfo['productId'],
+                            $productInfo['combinationId'],
+                            $productInfo['quantity']
+                        )
+                    );
+                }
             }
         }
-
         // Manage cart rule
         CartRule::autoRemoveFromCart($this->context);
         CartRule::autoAddToCart($this->context);
@@ -356,7 +398,6 @@ class OrderService extends AbstractOystService
         );
 
         $oystOrderInfo = $this->getOrderInfo($orderId);
-
         if ($oystOrderInfo) {
             $products = array();
             foreach ($oystOrderInfo['order']['items'] as $productInfo) {
@@ -380,6 +421,7 @@ class OrderService extends AbstractOystService
                     'productId' => $product->id,
                     'combinationId' => $combination->id,
                     'quantity' => $productInfo['quantity'],
+                    'customizations' => $productInfo['product']['customizations'],
                 );
             }
 
