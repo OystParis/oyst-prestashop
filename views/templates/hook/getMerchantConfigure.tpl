@@ -42,6 +42,7 @@
     <div class="oyst configuration">
         <div class="header">
             <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" style="height: 100px;"/></p>
+            <p style="font-size: 12px">Lib v {$oyst.oyst_library_version}</p>
         </div>
         {if $oyst.FC_OYST_GUEST && $oyst.phone}
         <div class="header">
