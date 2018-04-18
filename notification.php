@@ -26,6 +26,7 @@ use Oyst\Controller\ShipmentController;
 use Oyst\Controller\StockController;
 use Oyst\Controller\CartController;
 use Oyst\Factory\AbstractOrderServiceFactory;
+use Configuration as PSConfiguration;
 
 require_once dirname(__FILE__).'/../../config/config.inc.php';
 require_once dirname(__FILE__).'/oyst.php';
@@ -118,6 +119,17 @@ if ($data && isset($data['event'])) {
                 $cartController->estimateAction();
                 break;
             case 'order.update.status':
+                $api_keys = array(
+                    PSConfiguration::get('OYST_API_PROD_KEY_ONECLICK'),
+                    PSConfiguration::get('OYST_API_SANDBOX_KEY_ONECLICK'),
+                    PSConfiguration::get('OYST_API_CUSTOM_KEY_ONECLICK')
+                );
+
+                if (!isset($_SERVER['HTTP_API_HOST']) || !in_array($_SERVER['HTTP_API_HOST'], $api_keys)) {
+                    header("HTTP/1.1 400 Bad Request");
+                    header('Content-Type: application/json');
+                    die(json_encode(array('error' => 'Bad-api-key', 'message' => 'Bad API key')));
+                }
                 $orderController = new OrderController($request);
                 $orderController->setLogger($logger);
                 $orderController->updateOrderStatus();
