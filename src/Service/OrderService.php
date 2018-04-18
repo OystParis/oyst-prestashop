@@ -48,43 +48,13 @@ use CartRule;
  */
 class OrderService extends AbstractOystService
 {
+    use ToolServiceTrait;
+
     /** @var AddressRepository */
     private $addressRepository;
 
     /** @var OrderRepository */
     private $orderRepository;
-
-    /**
-     * @param $user
-     * @return Customer
-     */
-    private function getCustomer($user)
-    {
-        $customerInfo = Customer::getCustomersByEmail($user['email']);
-        if (count($customerInfo)) {
-            $customer = new Customer($customerInfo[0]['id_customer']);
-        } else {
-            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
-            if (isset(Customer::$definition['fields']['firstname']['size'])) {
-                $firstname = Tools::substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
-            }
-
-            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
-            if (isset(Customer::$definition['fields']['lastname']['size'])) {
-                $lastname = Tools::substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
-            }
-
-            $customer = new Customer();
-            $customer->email = $user['email'];
-            $customer->firstname = $firstname;
-            $customer->lastname = $lastname;
-            $customer->id_lang = PSConfiguration::get('PS_LANG_DEFAULT');
-            $customer->passwd = ToolsCore::encrypt(ToolsCore::passwdGen());
-            $customer->add();
-        }
-
-        return $customer;
-    }
 
     /**
      * @param Customer $customer
