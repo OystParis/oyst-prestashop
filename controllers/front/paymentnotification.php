@@ -434,6 +434,12 @@ class OystPaymentnotificationModuleFrontController extends ModuleFrontController
                 'date_add'   => date('Y-m-d H:i:s'),
             );
             Db::getInstance()->insert('oyst_payment_notification', $insert);
+
+            $insert   = array(
+                'orderId'   => (int) $id_order,
+                'orderGUID' => pSQL($payment_notification['payment_id']),
+            );
+            Db::getInstance()->insert('oyst_api_order', $insert);
         }
         $this->module->log('Payment notification received');
         $this->module->logNotification('Payment', $_GET);
