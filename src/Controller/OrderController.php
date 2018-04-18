@@ -53,8 +53,8 @@ class OrderController extends AbstractOystController
         }
     }
 
-    public function updateOrderStatus() {
-
+    public function updateOrderStatus()
+    {
         $status_mapping = array(
             'suspected_fraud' => 'OYST_STATUS_FRAUD',
         );

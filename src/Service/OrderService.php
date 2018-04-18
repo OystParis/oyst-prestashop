@@ -482,7 +482,8 @@ class OrderService extends AbstractOystService
         return $succeed;
     }
 
-    public function updateOrderStatusPresta($order_guid, $status, $oystData) {
+    public function updateOrderStatusPresta($order_guid, $status, $oystData)
+    {
         $order_id = $this->getOrderRepository()->getOrderId($order_guid);
         $order = new Order($order_id);
 
