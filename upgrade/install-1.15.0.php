@@ -25,7 +25,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
  * @param Oyst $module
  * @return bool
  */
-function upgrade_module_1_15_0()
+function upgrade_module_1_15_0($module)
 {
     $module->unregisterHook('displayFooterProduct');
     $module->unregisterHook('displayShoppingCart');
