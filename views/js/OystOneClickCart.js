@@ -113,7 +113,7 @@ function OystOneClickCart(url, controller)
      * Initialize requirements
      */
     this.prepareButton = function () {
-        $(this.idBtnCart).after($('<div>', {
+        $(this.idBtnCart).before($('<div>', {
             id: 'oneClickContainer'
         }));
 

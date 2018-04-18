@@ -210,11 +210,12 @@ function OystOneClick(url, productId, controller) {
      */
     this.prepareButton = function () {
         var selectors = this.idBtnAddToCart.split(',');
+        var oystOneClick = this;
 
         $.each(selectors, function (index, selector) {
             if ($(selector).length) {
                 // Avoid any event issue due to potential remove / create from loaded oyst script
-                if (this.positionBtn == 'after') {
+                if (oystOneClick.positionBtn == 'after') {
                     $(selector).after($('<div>', {
                         id: 'oneClickContainer'
                     }));
