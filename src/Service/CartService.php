@@ -211,18 +211,36 @@ class CartService extends AbstractOystService
 
                 $product = new Product($idProduct);
 
+                if (!$product->active || !$product->available_for_order) {
+                    header('HTTP/1.1 400 Bad request');
+                    header('Content-Type: application/json');
+                    die(json_encode(array(
+                        'code' => 'product-unavailable',
+                        'message' => 'Unvailable product',
+                    )));
+                }
+
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
                         StockAvailable::updateQuantity($idProduct, $idCombination, $item['product']['quantity']);
                     }
                 }
 
-                $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
+                $update_qty_result = $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
 
                 if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
                     if ($product->advanced_stock_management == 0) {
                         StockAvailable::updateQuantity($idProduct, $idCombination, -$item['product']['quantity']);
                     }
+                }
+
+                if (!$update_qty_result) {
+                    header('HTTP/1.1 400 Bad request');
+                    header('Content-Type: application/json');
+                    die(json_encode(array(
+                        'code' => 'stock-unavailable',
+                        'message' => 'Unvailable stock',
+                    )));
                 }
 
                 // Add items
@@ -379,21 +397,39 @@ class CartService extends AbstractOystService
         // Check exist primary
         $is_primary = false;
 
-        foreach ($carriersAvailables as $shipment) {
-            $carrier_desintifier = Cart::desintifier($shipment['id_carrier']);
-            $id_carrier = (int)Tools::substr($carrier_desintifier, 0, -1);
-            $id_reference = Db::getInstance()->getValue('
-                SELECT `id_reference`
-                FROM `'._DB_PREFIX_.'carrier`
-                WHERE id_carrier = '.(int)$id_carrier);
-            if ($id_reference == $id_default_carrier) {
-                $is_primary = true;
+        if (empty($carriersAvailables)){
+            header('HTTP/1.1 400 Bad request');
+            header('Content-Type: application/json');
+            die(json_encode(array(
+                'code' => 'no-shipment',
+                'message' => 'Order has no shipment',
+            )));
+        } else {
+            foreach ($carriersAvailables as $shipment) {
+                $carrier_desintifier = Cart::desintifier($shipment['id_carrier']);
+                $id_carrier = (int)Tools::substr($carrier_desintifier, 0, -1);
+                $id_reference = Db::getInstance()->getValue('
+                    SELECT `id_reference`
+                    FROM `'._DB_PREFIX_.'carrier`
+                    WHERE id_carrier = '.(int)$id_carrier);
+                if ($id_reference == $id_default_carrier) {
+                    $is_primary = true;
+                }
             }
         }
 
         // Add first carrier if primary is not exist
         if (!$is_primary) {
-            $oneClickOrderCartEstimate->setDefaultPrimaryShipmentByType();
+            try {
+                $oneClickOrderCartEstimate->setDefaultPrimaryShipmentByType();
+            } catch (Exception $e) {
+                header('HTTP/1.1 400 Bad request');
+                header('Content-Type: application/json');
+                die(json_encode(array(
+                    'code' => 'no-primary-shipment',
+                    'message' => $e->getMessage(),
+                )));
+            }
         }
 
         //For each cart_rule, check validity and if it's valid, add it to merchant_discount
