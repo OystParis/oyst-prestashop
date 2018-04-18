@@ -592,7 +592,7 @@ class CartService extends AbstractOystService
 
         if ($cart_amount > 0) {
             $cart_amount_oyst = new OystPrice($cart->getOrderTotal(true), Context::getContext()->currency->iso_code);
-            $oneClickOrderCartEstimate->setOrderAmount($cart_amount_oyst);
+            $oneClickOrderCartEstimate->setCartAmount($cart_amount_oyst);
         }
 
         $this->logger->info(
