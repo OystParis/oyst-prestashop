@@ -60,8 +60,9 @@ if ($data && isset($data['event'])) {
                 $orderController = new OrderController($request);
                 $orderGUID = $data['data']['order_id'];
                 $orderAlreadyBeenTreated = $orderService->getOrderRepository()->isOrderAlreadyBeenTreated($orderGUID);
+                $forceResendOrder = (isset($data['notification']) && $data['notification']);
 
-                if (!$orderAlreadyBeenTreated) {
+                if (!$orderAlreadyBeenTreated || $forceResendOrder) {
                     $insert   = array(
                         'id_order'   => 0,
                         'id_cart'    => 0,
@@ -73,6 +74,7 @@ if ($data && isset($data['event'])) {
                         'date_upd'   => date('Y-m-d H:i:s'),
                     );
                     Db::getInstance()->insert('oyst_payment_notification', $insert);
+
                     $orderController->setLogger($logger);
                     $orderController->createNewOrderAction();
                 } else {

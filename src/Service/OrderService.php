@@ -33,6 +33,7 @@ use Currency;
 use Customer;
 use Exception;
 use Oyst\Repository\OrderRepository;
+use Oyst\Service\Http\CurrentRequest;
 use Product;
 use ToolsCore;
 use Validate;
@@ -194,8 +195,11 @@ class OrderService extends AbstractOystService
      */
     public function createNewOrder(Customer $customer, Address $invoiceAddress, Address $deliveryAddress, $products, $oystOrderInfo)
     {
+        $request = new CurrentRequest();
+        $data = $request->getJson();
+        $forceResendOrder = (isset($data['notification']) && $data['notification']);
         // PS core used this context anywhere.. So we need to fill it properly
-        if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['id_cart'])) {
+        if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['id_cart']) && !$forceResendOrder) {
             $id_cart = $oystOrderInfo['context']['id_cart'];
             $cart = new Cart($id_cart);
             $products_cart = $cart->getProducts();
