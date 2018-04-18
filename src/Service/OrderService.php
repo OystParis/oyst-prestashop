@@ -242,17 +242,17 @@ class OrderService extends AbstractOystService
                                 rename($oyst_upload_dir.$datum['value'].'_small', _PS_UPLOAD_DIR_.'/'.$datum['value'].'_small');
                             }
                             $cart->addPictureToProduct($productInfo['productId'], $datum['index'], $datum['type'], $datum['value']);
-                        }elseif ($datum['type'] == 1) {
+                        } elseif ($datum['type'] == 1) {
                             $cart->addTextFieldToProduct($productInfo['productId'], $datum['index'], $datum['type'], $datum['value']);
                         }
                     }
                     $custom_qty += $customization['quantity'];
                     //Get inserted id_customization
-                    $id_customization = Db::getInstance()->getValue("SELECT `id_customization` 
+                    $id_customization = Db::getInstance()->getValue("SELECT `id_customization`
                         FROM `"._DB_PREFIX_."customization`
-                        WHERE `id_product` = ".$productInfo['productId']." 
-                        AND `id_product_attribute` = ".intval($productInfo['combinationId'])." 
-                        AND `id_cart` = ".$cart->id." 
+                        WHERE `id_product` = ".(int)$productInfo['productId']."
+                        AND `id_product_attribute` = ".(int)$productInfo['combinationId']."
+                        AND `id_cart` = ".(int)$cart->id."
                         ORDER BY `id_customization` DESC");
 
                     if (!$cart->updateQty($customization['quantity'], $productInfo['productId'], $productInfo['combinationId'], $id_customization)) {

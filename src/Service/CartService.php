@@ -365,7 +365,7 @@ class CartService extends AbstractOystService
         // Check exist primary
         $is_primary = false;
 
-        if (empty($carriersAvailables)){
+        if (empty($carriersAvailables)) {
             header('HTTP/1.1 400 Bad request');
             header('Content-Type: application/json');
             die(json_encode(array(

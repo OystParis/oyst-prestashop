@@ -424,15 +424,15 @@ class OneClickService extends AbstractOystService
         $sorted_customizations = array();
         //Save uploaded file in oyst folder for order creation
         foreach ($customizations as $customization) {
-            if (intval($customization['type']) == 0){
+            if ((int)$customization['type'] == 0) {
                 $this->saveCustomizationFile($customization['value']);
             }
             if (!isset($sorted_customizations[$customization['id_customization']])) {
-                $sorted_customizations[$customization['id_customization']]['quantity'] = intval($customization['quantity']);
+                $sorted_customizations[$customization['id_customization']]['quantity'] = (int)$customization['quantity'];
             }
             $sorted_customizations[$customization['id_customization']]['data'][] = array(
-                'type' => intval($customization['type']),
-                'index' => intval($customization['index']),
+                'type' => (int)$customization['type'],
+                'index' => (int)$customization['index'],
                 'value' => $customization['value'],
             );
         }
