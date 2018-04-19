@@ -61,6 +61,7 @@
 <form id="module_form" class="defaultForm form-horizontal oyst configuration" method="POST" action="">
     <div align="center" style="font-size: 16px;">
         <p><img src="{$oyst.module_dir|escape:'html':'UTF-8'}views/img/logo-oyst.png" style="height: 100px;"/></p>
+        <p style="font-size: 12px">Lib v {$oyst.oyst_library_version|escape:'htmlall':'UTF-8'}</p>
     </div>
     {if $oyst.FC_OYST_GUEST && $oyst.phone}
     <div class="text-center">

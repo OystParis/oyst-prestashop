@@ -52,4 +52,41 @@ class OrderController extends AbstractOystController
             header("HTTP/1.1 400 Bad Request");
         }
     }
+
+    public function updateOrderStatus()
+    {
+        $status_mapping = array(
+            'suspected_fraud' => 'OYST_STATUS_FRAUD',
+        );
+
+        $json = $this->request->getJson();
+
+        if ($json) {
+            $oyst = new Oyst();
+            $context = Context::getContext();
+            $orderService = AbstractOrderServiceFactory::get($oyst, $context);
+            $orderId = $json['data']['order_id'];
+
+            if (isset($json['data']['status']) && isset($status_mapping[$json['data']['status']])) {
+                $responseData = $orderService->updateOrderStatusPresta($orderId, $status_mapping[$json['data']['status']], $json);
+                $this->logger->info(
+                    sprintf(
+                        'New notification order.update.status [%s]',
+                        $responseData
+                    )
+                );
+
+                header("HTTP/1.1 200 OK");
+                header('Content-Type: application/json');
+                echo $responseData;
+            } else {
+                header("HTTP/1.1 400 Bad Request");
+                header('Content-Type: application/json');
+                die(json_encode(array(
+                    'code' => 'unknown-status',
+                    'message' => 'Status is unknnown',
+                )));
+            }
+        }
+    }
 }

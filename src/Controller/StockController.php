@@ -53,6 +53,16 @@ class StockController extends AbstractOystController
                 $this->respondAsJson($data['data'])
             )
         );
+
+        //Remove unused customization files older than 15 days
+        $now = time();
+        foreach (glob(_PS_UPLOAD_DIR_.'/oyst/*') as $file) {
+            if (is_file($file)) {
+                if ($now - filemtime($file) >= 60 * 60 * 24 * 15) {
+                    unlink($file);
+                }
+            }
+        }
     }
 
     public function stockBook()

@@ -23,6 +23,7 @@ namespace Oyst\Service;
 
 use Address;
 use Order;
+use OrderHistory;
 use Oyst\Repository\AddressRepository;
 use Carrier;
 use Cart;
@@ -47,43 +48,13 @@ use CartRule;
  */
 class OrderService extends AbstractOystService
 {
+    use ToolServiceTrait;
+
     /** @var AddressRepository */
     private $addressRepository;
 
     /** @var OrderRepository */
     private $orderRepository;
-
-    /**
-     * @param $user
-     * @return Customer
-     */
-    private function getCustomer($user)
-    {
-        $customerInfo = Customer::getCustomersByEmail($user['email']);
-        if (count($customerInfo)) {
-            $customer = new Customer($customerInfo[0]['id_customer']);
-        } else {
-            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['first_name']);
-            if (isset(Customer::$definition['fields']['firstname']['size'])) {
-                $firstname = Tools::substr($firstname, 0, Customer::$definition['fields']['firstname']['size']);
-            }
-
-            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $user['last_name']);
-            if (isset(Customer::$definition['fields']['lastname']['size'])) {
-                $lastname = Tools::substr($lastname, 0, Customer::$definition['fields']['lastname']['size']);
-            }
-
-            $customer = new Customer();
-            $customer->email = $user['email'];
-            $customer->firstname = $firstname;
-            $customer->lastname = $lastname;
-            $customer->id_lang = PSConfiguration::get('PS_LANG_DEFAULT');
-            $customer->passwd = ToolsCore::encrypt(ToolsCore::passwdGen());
-            $customer->add();
-        }
-
-        return $customer;
-    }
 
     /**
      * @param Customer $customer
@@ -204,6 +175,10 @@ class OrderService extends AbstractOystService
             $cart = new Cart($id_cart);
             $products_cart = $cart->getProducts();
             foreach ($products_cart as $p) {
+                $customizations = $cart->getProductCustomization($p['id_product']);
+                foreach ($customizations as $customization) {
+                    $cart->deleteProduct((int)$p['id_product'], (int)$p['id_product_attribute'], (int)$customization['id_customization']);
+                }
                 $cart->deleteProduct((int)$p['id_product'], (int)$p['id_product_attribute']);
             }
             $this->context->cart = $cart;
@@ -250,26 +225,64 @@ class OrderService extends AbstractOystService
 
 
         foreach ($products as $productInfo) {
+            $custom_qty = 0;
             $product = new Product((int)$productInfo['productId']);
 
             if ($product->advanced_stock_management == 0  && PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK')) {
                 StockAvailable::updateQuantity($productInfo['productId'], $productInfo['combinationId'], $productInfo['quantity']);
             }
 
-            if (!$cart->updateQty($productInfo['quantity'], $productInfo['productId'], $productInfo['combinationId'])) {
-                $this->logger->emergency(
-                    sprintf(
-                        "Can't add product to cart, please check the quantity.
-                        Product #%d. Combination #%d. Quantity %d",
-                        $productInfo['productId'],
-                        $productInfo['combinationId'],
-                        $productInfo['quantity']
-                    )
-                );
-                return false;
+            if (!empty($productInfo['customizations'])) {
+                foreach ($productInfo['customizations'] as $customization) {
+                    foreach ($customization['data'] as $datum) {
+                        if ($datum['type'] == 0) {
+                            $oyst_upload_dir = _PS_UPLOAD_DIR_.'oyst/';
+                            if (file_exists($oyst_upload_dir.$datum['value'])) {
+                                rename($oyst_upload_dir.$datum['value'], _PS_UPLOAD_DIR_.'/'.$datum['value']);
+                                rename($oyst_upload_dir.$datum['value'].'_small', _PS_UPLOAD_DIR_.'/'.$datum['value'].'_small');
+                            }
+                            $cart->addPictureToProduct($productInfo['productId'], $datum['index'], $datum['type'], $datum['value']);
+                        } elseif ($datum['type'] == 1) {
+                            $cart->addTextFieldToProduct($productInfo['productId'], $datum['index'], $datum['type'], $datum['value']);
+                        }
+                    }
+                    $custom_qty += $customization['quantity'];
+                    //Get inserted id_customization
+                    $id_customization = Db::getInstance()->getValue("SELECT `id_customization`
+                        FROM `"._DB_PREFIX_."customization`
+                        WHERE `id_product` = ".(int)$productInfo['productId']."
+                        AND `id_product_attribute` = ".(int)$productInfo['combinationId']."
+                        AND `id_cart` = ".(int)$cart->id."
+                        ORDER BY `id_customization` DESC");
+
+                    if (!$cart->updateQty($customization['quantity'], $productInfo['productId'], $productInfo['combinationId'], $id_customization)) {
+                        $this->logger->emergency(
+                            sprintf(
+                                "Can't add product to cart, please check the quantity.
+                                Product #%d. Combination #%d. Quantity %d, Customization %d",
+                                $productInfo['productId'],
+                                $productInfo['combinationId'],
+                                $productInfo['quantity'],
+                                $id_customization
+                            )
+                        );
+                    }
+                }
+            }
+            if ($custom_qty < $productInfo['quantity']) {
+                if (!$cart->updateQty($productInfo['quantity']-$custom_qty, $productInfo['productId'], $productInfo['combinationId'])) {
+                    $this->logger->emergency(
+                        sprintf(
+                            "Can't add product to cart, please check the quantity.
+                            Product #%d. Combination #%d. Quantity %d",
+                            $productInfo['productId'],
+                            $productInfo['combinationId'],
+                            $productInfo['quantity']
+                        )
+                    );
+                }
             }
         }
-
         // Manage cart rule
         CartRule::autoRemoveFromCart($this->context);
         CartRule::autoAddToCart($this->context);
@@ -355,7 +368,6 @@ class OrderService extends AbstractOystService
         );
 
         $oystOrderInfo = $this->getOrderInfo($orderId);
-
         if ($oystOrderInfo) {
             $products = array();
             foreach ($oystOrderInfo['order']['items'] as $productInfo) {
@@ -379,6 +391,7 @@ class OrderService extends AbstractOystService
                     'productId' => $product->id,
                     'combinationId' => $combination->id,
                     'quantity' => $productInfo['quantity'],
+                    'customizations' => $productInfo['product']['customizations'],
                 );
             }
 
@@ -483,6 +496,70 @@ class OrderService extends AbstractOystService
         }
 
         return $succeed;
+    }
+
+    public function updateOrderStatusPresta($order_guid, $status, $oystData)
+    {
+        $order_id = $this->getOrderRepository()->getOrderId($order_guid);
+        $order = new Order($order_id);
+
+        if (Validate::isLoadedObject($order)) {
+            $id_order_state = PSConfiguration::get($status);
+
+            if ($id_order_state > 0) {
+                if ($order->current_state == $id_order_state) {
+                    header("HTTP/1.1 400 Bad Request");
+                    header('Content-Type: application/json');
+                    die(json_encode(array(
+                        'code' => 'status-already-set',
+                        'message' => 'This status is the current status',
+                    )));
+                }
+                $insert = array(
+                    'id_order' => (int)$order->id,
+                    'id_cart' => (int)$order->id_cart,
+                    'payment_id' => pSQL($order_guid),
+                    'event_code' => pSQL($oystData['event']),
+                    'event_data' => pSQL(Tools::jsonEncode($oystData['data'])),
+                    'status' => 'start',
+                    'date_event' => date('Y-m-d H:i:s'),
+                    'date_add' => date('Y-m-d H:i:s'),
+                    'date_upd' => date('Y-m-d H:i:s'),
+                );
+                Db::getInstance()->insert('oyst_payment_notification', $insert);
+                $id_notification = Db::getInstance()->Insert_ID();
+
+                // Create new OrderHistory
+                $history = new OrderHistory();
+                $history->id_order = $order->id;
+                $history->id_employee = 0;
+                $history->id_order_state = (int)$id_order_state;
+                $history->changeIdOrderState((int)$id_order_state, $order->id);
+                $history->add();
+
+                $update = array(
+                    'status' => 'finished',
+                    'date_upd' => date('Y-m-d H:i:s'),
+                );
+                Db::getInstance()->update('oyst_payment_notification', $update, 'id_oyst_payment_notification = '.$id_notification);
+
+                return json_encode(array('state' => true));
+            } else {
+                header("HTTP/1.1 400 Bad Request");
+                header('Content-Type: application/json');
+                die(json_encode(array(
+                    'code' => 'fraud-status-not-exists',
+                    'message' => 'Status '.$status.' not found in Prestashop',
+                )));
+            }
+        } else {
+            header("HTTP/1.1 400 Bad Request");
+            header('Content-Type: application/json');
+            die(json_encode(array(
+                'code' => 'unknown-order',
+                'message' => 'Order not found',
+            )));
+        }
     }
 
     /**

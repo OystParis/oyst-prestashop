@@ -112,7 +112,7 @@ class OneClickService extends AbstractOystService
         $quantity = 0;
         $products = null;
         $controller = $request->getRequestItem('controller');
-        $productLess = array();
+        $products_less = array();
         $result_products = array();
         // Deprecated ??
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
@@ -198,11 +198,16 @@ class OneClickService extends AbstractOystService
                             continue;
                         }
                     }
-                    $productLess[] = $exportProductService->transformProductLess(
+                    $product_less = $exportProductService->transformProductLess(
                         $product['id_product'],
                         $product['id_product_attribute'],
                         $product['cart_quantity']
                     );
+
+                    $customizations = Context::getContext()->cart->getProductCustomization($product['id_product']);
+
+                    $product_less->__set('customizations', $this->prepareCustomizations($customizations));
+                    $products_less[] = $product_less;
 
                     if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
                         if ($product['advanced_stock_management'] == 0) {
@@ -234,11 +239,19 @@ class OneClickService extends AbstractOystService
                     $data['error'] = 'Bad quantity';
                 }
 
-                $productLess[] = $exportProductService->transformProductLess(
+                $product_less = $exportProductService->transformProductLess(
                     $idProduct,
                     $idCombination,
                     $quantity
                 );
+
+                $customizations = Context::getContext()->cart->getProductCustomization($idProduct);
+                foreach ($customizations as &$customization) {
+                    $customization['quantity'] = $quantity;
+                }
+
+                $product_less->__set('customizations', $this->prepareCustomizations($customizations));
+                $products_less[] = $product_less;
 
                 // Check preload, and update quantity
                 $load = (int)$request->getRequestItem('preload');
@@ -285,7 +298,7 @@ class OneClickService extends AbstractOystService
             }
 
             $oneClickOrdersParams = new OneClickOrderParams();
-            foreach ($productLess as $product) {
+            foreach ($products_less as $product) {
                 if (!$product->materialized) {
                     $oneClickOrdersParams->setIsMaterialized($product->materialized);
                 } else {
@@ -366,7 +379,7 @@ class OneClickService extends AbstractOystService
                 )
             );
             $result = $this->authorizeNewOrder(
-                $productLess,
+                $products_less,
                 $oneClickNotifications,
                 $oystUser,
                 $oneClickOrdersParams,
@@ -385,5 +398,44 @@ class OneClickService extends AbstractOystService
         $datetime = new \DateTime();
         $datetime = $datetime->format('YmdHis');
         return uniqid().$hash.'-'.$datetime;
+    }
+
+    /**
+     * @param $filename string
+     */
+    private function saveCustomizationFile($filename)
+    {
+        $oyst_dir = _PS_UPLOAD_DIR_.'oyst/';
+        if (!file_exists($oyst_dir)) {
+            mkdir($oyst_dir);
+        }
+        if (file_exists(_PS_UPLOAD_DIR_.$filename)) {
+            copy(_PS_UPLOAD_DIR_.$filename, $oyst_dir.$filename);
+            copy(_PS_UPLOAD_DIR_.$filename.'_small', $oyst_dir.$filename.'_small');
+        }
+    }
+
+    /**
+     * @param $customizations array Prestashop customizations
+     * @return array sorted customizations
+     */
+    private function prepareCustomizations($customizations)
+    {
+        $sorted_customizations = array();
+        //Save uploaded file in oyst folder for order creation
+        foreach ($customizations as $customization) {
+            if ((int)$customization['type'] == 0) {
+                $this->saveCustomizationFile($customization['value']);
+            }
+            if (!isset($sorted_customizations[$customization['id_customization']])) {
+                $sorted_customizations[$customization['id_customization']]['quantity'] = (int)$customization['quantity'];
+            }
+            $sorted_customizations[$customization['id_customization']]['data'][] = array(
+                'type' => (int)$customization['type'],
+                'index' => (int)$customization['index'],
+                'value' => $customization['value'],
+            );
+        }
+        return $sorted_customizations;
     }
 }
