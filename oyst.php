@@ -64,7 +64,8 @@ class Oyst extends FroggyPaymentModule
             'displayHeader',
             'displayPayment',
             'displayPaymentReturn',
-            'displayShoppingCart'
+            'displayShoppingCart',
+            'actionValidateOrder'
         );
         foreach ($filtered_hooks as $filtered_hook) {
             if (strpos($method, $filtered_hook) !== false) {
