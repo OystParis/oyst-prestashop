@@ -25,6 +25,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
  * @param Oyst $module
  * @return bool
  */
+
 function upgrade_module_1_16_0($module)
 {
     // Add conf custom btn cart
@@ -62,6 +63,8 @@ function upgrade_module_1_16_0($module)
     Configuration::updateValue('FC_OYST_ID_BTN_ADDR', '#submitAddress');
     Configuration::updateValue('FC_OYST_ID_SMART_BTN_ADDR', '#submitAddress');
     Configuration::updateValue('FC_OYST_POSITION_BTN_ADDR', 'before');
+
+    Configuration::updateValue('FC_OYST_BUSINESS_DAYS', false);
 
     return true;
 }

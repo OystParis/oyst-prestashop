@@ -992,7 +992,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th class="fixed-width-xs">
-                                                                    <span class="title_box"><input type="checkbox" name="checkme" id="checkme" onclick="checkDelBoxes(this.form, 'groupBox[]', this.checked)"></span>
+                                                                    <span class="title_box"><input type="checkbox" name="checkme" id="checkme" onclick="checkDelBoxes(this.form, 'oyst_days[]', this.checked)"></span>
                                                                 </th>
                                                                 <th class="fixed-width-xs">
                                                                     <span class="title_box">{l s='Day of week' mod='oyst'}</span>
@@ -1003,7 +1003,7 @@
                                                             {foreach $oyst.days key=identifiant item=day}
                                                                 <tr>
                                                                     <td>
-                                                                        <input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_{$identifiant|intval}" value="{$identifiant|intval}" checked="checked">
+                                                                        <input type="checkbox" name="oyst_days[]" class="oyst_days" id="oyst_days_{$identifiant|intval}" value="{$identifiant|intval}" {if in_array($identifiant, $oyst.restriction_business_days)}checked="checked"{/if}>
                                                                     </td>
                                                                     <td>{$day|escape:'htmlall':'UTF-8'}</td>
                                                                 </tr>

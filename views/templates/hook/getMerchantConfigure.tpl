@@ -937,6 +937,28 @@
                                         <input type="text" name="FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference|escape:'htmlall':'UTF-8'}" value="{if Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}{Configuration::get("FC_OYST_SHIPMENT_DELAY_{$carrier.id_reference}")}{else}3{/if}" />
                                     </div>
                                 {/foreach}
+
+                                <label>{l s='Bussiness days' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <table cellspacing="0" cellpadding="0" class="table" style=" width:25em;">
+                                        <tbody>
+                                            <tr>
+                                                <th>
+                                                    <input type="checkbox" name="checkme" id="checkme" class="noborder" onclick="checkDelBoxes(this.form, 'oyst_days[]', this.checked)">
+                                                </th>
+                                                <th>{l s='Day of week' mod='oyst'}</th>
+                                            </tr>
+                                            {foreach $oyst.days key=identifiant item=day}
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="oyst_days[]" class="oyst_days" id="oyst_days_{$identifiant|intval}" value="{$identifiant|intval}" {if in_array($identifiant, $oyst.restriction_business_days)}checked="checked"{/if}>
+                                                    </td>
+                                                    <td>{$day|escape:'htmlall':'UTF-8'}</td>
+                                                </tr>
+                                            {/foreach}
+                                        </tbody>
+                                    </table>
+                                </div>
                             {else}
                                 <div class="warn">
                                     <ul>

@@ -315,7 +315,14 @@ class InstallManager
         // Conf 1-Click carriers
         PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
         PSConfiguration::deleteByName('OYST_ONE_CLICK_CARRIER');
-        $carriers = Carrier::getCarriers(Context::getContext()->language->id, true, false, false, null, Carrier::ALL_CARRIERS);
+        $carriers = Carrier::getCarriers(
+            Context::getContext()->language->id,
+            true,
+            false,
+            false,
+            null,
+            Carrier::ALL_CARRIERS
+        );
 
         foreach ($carriers as $carrier) {
             $field = 'FC_OYST_SHIPMENT_'.$carrier['id_reference'];
@@ -323,6 +330,7 @@ class InstallManager
             $field_delay = 'FC_OYST_SHIPMENT_DELAY_'.$carrier['id_reference'];
             PSConfiguration::deleteByName($field_delay);
         }
+        PSConfiguration::deleteByName('FC_OYST_BUSINESS_DAYS');
         // Conf 1-Click advanced
         PSConfiguration::deleteByName('FC_OYST_DELAY');
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
