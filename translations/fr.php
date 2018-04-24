@@ -26,6 +26,13 @@ $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_fb077ecba55e555291
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_90589c47f06eb971d548591f23c285af'] = 'Personnalisée';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_1e97d97a923eaddd810e056c828e99ea'] = 'Erreur de paiement';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_a85eba4c6c699122b2bb1387ea4813ad'] = 'Panier';
+$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_6f8522e0610541f1ef215a22ffa66ff6'] = 'Lundi';
+$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_5792315f09a5d54fb7e3d066672b507f'] = 'Mardi';
+$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_796c163589f295373e171842f37265d5'] = 'Mercredi';
+$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_78ae6f0cd191d25147e252dc54768238'] = 'Jeudi';
+$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_c33b138a163847cdb6caeeb7c9a126b4'] = 'Vendredi';
+$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_8b7051187b9191cdcdae6ed5a10e5adc'] = 'Samedi';
+$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_9d1a0949c39e66a0cd65240bc0ac9177'] = 'Dimanche';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_e8078c8da633f775afcf018b53400769'] = 'Merci de renseigner votre nom et prénom';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_daa8d486c07ee522a91050732b89a06b'] = 'Merci de renseigner votre email au format victor.marchand@exemple.com';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_1d75af7ead4847536d75284ad31e0e9f'] = 'Merci de renseigner un nombre valide';
@@ -185,6 +192,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c450
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d656fc298c72d199a2bc51867206b68b'] = 'Délai de livraison en jours';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_643046d4345b9cfc270724188d9b54d9'] = 'Jours ouvrés';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e59278675b8f1e052b22b7e5e7d65da7'] = 'Jour de la semaine';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_ea29387282467c818e51540fc1aca0ba'] = 'Url de confirmation pour le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
@@ -281,6 +290,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f2308
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d656fc298c72d199a2bc51867206b68b'] = 'Délai de livraison en jours';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_643046d4345b9cfc270724188d9b54d9'] = 'Jours ouvrés';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_e59278675b8f1e052b22b7e5e7d65da7'] = 'Jour de la semaine';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_ea29387282467c818e51540fc1aca0ba'] = 'Url de confirmation pour le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
