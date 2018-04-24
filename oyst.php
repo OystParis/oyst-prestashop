@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.16.0';
+        $this->version = '1.16.1';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -64,7 +64,8 @@ class Oyst extends FroggyPaymentModule
             'displayHeader',
             'displayPayment',
             'displayPaymentReturn',
-            'displayShoppingCart'
+            'displayShoppingCart',
+            'actionValidateOrder'
         );
         foreach ($filtered_hooks as $filtered_hook) {
             if (strpos($method, $filtered_hook) !== false) {

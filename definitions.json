@@ -1,6 +1,6 @@
 {
     "tab": "payments_gateways",
-    "version": "1.16.0",
+    "version": "1.16.1",
     "need_instance": 0,
 
     "hooks": {
@@ -16,6 +16,7 @@
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
             "actionOrderStatusPostUpdate",
+            "actionValidateOrder",
             "displayShoppingCart"
         ],
         "1.6" : [
