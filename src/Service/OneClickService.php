@@ -26,6 +26,7 @@ use Exception;
 use Oyst\Classes\OystUser;
 use Oyst\Classes\OystPrice;
 use Oyst\Classes\OystProduct;
+use Oyst\Classes\OystAddress;
 use Oyst\Classes\OneClickOrderParams;
 use Oyst\Classes\OneClickNotifications;
 use Oyst\Classes\OneClickCustomization;
@@ -43,6 +44,9 @@ use Module;
 use CartRule;
 use Cart;
 use Address;
+use Customer;
+use Country;
+
 
 /**
  * Class Oyst\Service\OneClickService
@@ -334,6 +338,33 @@ class OneClickService extends AbstractOystService
                     ->setLanguage($this->context->language->iso_code)
                     ->setEmail($customer->email);
                 $oystContext['id_user'] = $customer->id;
+
+                $customerPS = new Customer($customer->id);
+                // Get address for customer
+                $addresses = $customerPS->getAddresses($this->context->language->id);
+                // Get last address for array
+                $last_address = end($addresses);
+                $id_country = Country::getIdByName($this->context->language->id, $last_address['country']);
+                $country_iso = Country::getIsoById($id_country);
+
+                // Build OystAddress
+                $oystAddress = new OystAddress();
+                $oystAddress->setFirstName($customer->firstname);
+                $oystAddress->setLastName($customer->lastname);
+                if ($last_address['company'] != '') {
+                    $oystAddress->setCompanyName($last_address['company']);
+                }
+                $oystAddress->setLabel($last_address['alias']);
+                $oystAddress->setStreet($last_address['address1']);
+                $oystAddress->setComplementary($last_address['address2']);
+                $oystAddress->setCity($last_address['city']);
+                $oystAddress->setPostCode($last_address['postcode']);
+                if ($last_address['state'] != null) {
+                    $oystAddress->setRegion($last_address['state']);
+                }
+                $oystAddress->setCountry($country_iso);
+
+                $oystUser->addAddress($oystAddress);
             }
 
             $oneClickOrdersParams = new OneClickOrderParams();
