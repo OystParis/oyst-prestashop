@@ -24,7 +24,7 @@
     {/if}
     <script type="text/javascript">
         $( document).ready(function(){
-            {if $controller == "order" || $controller == "index" || $controller == "category" || $controller == "authentication"}
+            {if $displayBtnCart}
                 var oyst = new OystOneClickCart({$oneClickUrl|json_encode}, "{$controller|escape:'html':'UTF-8'}");
                 oyst.setLabelCta("{$oyst_label_cta|escape:'html':'UTF-8'}");
             {else}

@@ -72,6 +72,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_MARGIN_RIGHT_BTN_CART'   => 'string',
         'FC_OYST_POSITION_BTN_CART'       => 'string',
         'FC_OYST_ID_BTN_CART'             => 'string',
+        'FC_OYST_ID_SMART_BTN_CART'       => 'string',
         'FC_OYST_BTN_LAYER'               => 'int',
         'FC_OYST_WIDTH_BTN_LAYER'         => 'string',
         'FC_OYST_HEIGHT_BTN_LAYER'        => 'string',
@@ -79,6 +80,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_MARGIN_LEFT_BTN_LAYER'   => 'string',
         'FC_OYST_MARGIN_RIGHT_BTN_LAYER'  => 'string',
         'FC_OYST_ID_BTN_LAYER'            => 'string',
+        'FC_OYST_ID_SMART_BTN_LAYER'      => 'string',
         'FC_OYST_POSITION_BTN_LAYER'      => 'string',
         'FC_OYST_BTN_LOGIN'               => 'int',
         'FC_OYST_WIDTH_BTN_LOGIN'         => 'string',
@@ -215,7 +217,9 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_CART', '');
             Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_CART', '');
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_CART', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_CART', 'before');
             Configuration::updateValue('FC_OYST_ID_BTN_CART', '.standard-checkout');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.standard-checkout');
         }
 
         if (Tools::isSubmit('submitOystResetCustomLayer')) {
@@ -227,6 +231,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LAYER', '');
             Configuration::updateValue('FC_OYST_POSITION_BTN_LAYER', 'before');
             Configuration::updateValue('FC_OYST_ID_BTN_LAYER', '#layer_cart .button-container');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_LAYER', '#layer_cart .button-container');
         }
 
         if (Tools::isSubmit('submitOystResetCustomLogin')) {
