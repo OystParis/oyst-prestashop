@@ -60,11 +60,10 @@ class Oyst extends FroggyPaymentModule
     {
         //List of concerned hooks by the ip restriction
         $filtered_hooks = array(
-            'displayFooterProduct',
+            'displayFooter',
             'displayHeader',
             'displayPayment',
-            'displayPaymentReturn',
-            'displayShoppingCart'
+            'displayPaymentReturn'
         );
         foreach ($filtered_hooks as $filtered_hook) {
             if (strpos($method, $filtered_hook) !== false) {
@@ -310,6 +309,11 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
         Configuration::updateValue('FC_OYST_ONLY_FOR_IP', "");
+
+        // Params 1-Click for btn layer
+        Configuration::updateValue('FC_OYST_BTN_LAYER', 0);
+        Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '214');
+        Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '43');
         // Params 1-Click restrictions
         Configuration::updateValue('FC_OYST_CURRENCIES', Currency::getIdByIsoCode('EUR'));
         Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
@@ -533,6 +537,29 @@ class Oyst extends FroggyPaymentModule
     {
         $hash_key = Configuration::get('FC_OYST_HASH_KEY');
         return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/oyst/notification.php?key='.$hash_key;
+    }
+
+    /**
+     * @return bool
+     */
+    public function displayBtnCart($controller = null)
+    {
+        $controller_cart = array(
+            'order',
+            'index',
+            'category',
+            'authentication',
+            'order-opc',
+        );
+        if ($controller == null) {
+            $controller = Context::getContext()->controller->php_self;
+        }
+
+        if (in_array($controller, $controller_cart)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

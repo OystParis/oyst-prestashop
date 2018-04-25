@@ -18,8 +18,8 @@ $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_1c2d2d2a695caa767
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_c553131fd61f1974f283284d081bd4aa'] = 'La quantité saisie n\'est pas bonne';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_024ae09e98fa72606806543757012ff2'] = 'Le montant saisi n\'est pas bon';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_2b7091c33002c6db27a2a5165ce431f8'] = 'Une erreur s\'est produite lors de l\'annulation :';
+$_MODULE['<{oyst}prestashop>oysthookdisplayfooterprocessor_419f3d4a29f6181b733952587fd5f496'] = 'Retour boutique';
 $_MODULE['<{oyst}prestashop>oysthookdisplayfooterproductprocessor_4d2c41ad87059d5fd9ea5283cee720a5'] = 'Il n\'y a pas assez de produits en stock.';
-$_MODULE['<{oyst}prestashop>oysthookdisplayshoppingcartprocessor_4d2c41ad87059d5fd9ea5283cee720a5'] = 'Il n\'y a pas assez de produits en stock.';
 $_MODULE['<{oyst}prestashop>oysthookdisplayshoppingcartprocessor_419f3d4a29f6181b733952587fd5f496'] = 'Retour boutique.';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_782c8b38bce4f2f6975ca7f33ac8189b'] = 'Historique de commandes';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_fb077ecba55e5552916bde26d8b9e794'] = 'Confirmation de commande';
@@ -27,14 +27,8 @@ $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_90589c47f06eb971d5
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_1e97d97a923eaddd810e056c828e99ea'] = 'Erreur de paiement';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_a85eba4c6c699122b2bb1387ea4813ad'] = 'Panier';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_e8078c8da633f775afcf018b53400769'] = 'Merci de renseigner votre nom et prénom';
-$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_809a38104a5dc7b037d3a80f0a4da7d6'] = 'Merci de renseigner votre numéro de téléphone au format 06 00 00 00 00';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_daa8d486c07ee522a91050732b89a06b'] = 'Merci de renseigner votre email au format victor.marchand@exemple.com';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_1d75af7ead4847536d75284ad31e0e9f'] = 'Merci de renseigner un nombre valide';
-$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_1b212f23ab687e31fa49966534a18dae'] = 'Un conseiller FreePay vous appelle au';
-$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_cbedf289b2a8652e4f12e617f7b47643'] = 'Un conseiller FreePay vous appellera demain matin à partir de 8h30 au';
-$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_638d60a28c17662dcde95823e2b6efbb'] = 'Un conseiller FreePay vous appellera ce matin à partir de 8h30 au';
-$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_c839cbbd70a99758b201960e426c4614'] = 'Un conseiller FreePay vous appellera lundi matin à partir de 8h30 au';
-$_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_b52a25f04605bbba9e1f164582d7d62c'] = 'Un conseiller FreePay vous appellera cette après-midi à partir de 14h30 au';
 $_MODULE['<{oyst}prestashop>error.bootstrap_d7d1f4fbae8289169d1d5b3779cef94a'] = 'Une erreur est survenue avec le système de paiement. Veuillez contacter le support.';
 $_MODULE['<{oyst}prestashop>error_d7d1f4fbae8289169d1d5b3779cef94a'] = 'Une erreur est survenue avec le système de paiement. Veuillez contacter le support.';
 $_MODULE['<{oyst}prestashop>oneclick-confirmation.bootstrap_fb077ecba55e5552916bde26d8b9e794'] = 'Commande confirmation';
@@ -139,6 +133,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_35b95e4f3de3b2daf150c
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_93f4176640c89aba90f50b8a7b9b429b'] = 'Personnalisation du bouton au global';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1215422645ebf1cf761b14de2cf1b731'] = 'Bouton produit';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c2203231f692acd954ec241d13fcfccb'] = 'Bouton panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_648d5c916e2e56ca97b1030b6edee2ca'] = 'Bouton page popup';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_57d05763db7564e9d4a955a803d785f4'] = 'Bouton connexion';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_21f6bc356cdbbf99796a5a8352d5b246'] = 'Paramètres restrictions';
@@ -153,7 +149,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e984d0bd7cb4da547ed2e
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a967b69d22760a1a8ca92af4fa4b7122'] = 'Smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9f6a3bc372bffcee32c103d45bd3bfa4'] = 'Bords arrondis';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_960b44c579bc2f6818d2daaf9e4c16f0'] = 'Normal';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_7a1920d61156abc05a60135aefe8bc67'] = 'Défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4953af21e1b855c91be873e8c05e2c99'] = 'Inversé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_cb5feb1b7314637725a2e73bdc9f7295'] = 'Couleur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_42e6feb7f76e910efcda54034ecc83ce'] = 'Personnalisation du CSS';
@@ -174,6 +170,11 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_5b7605931ec82f3745502
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_aecb24741fe6ae99ae476a32cdfb0a87'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3e757c5a82a0bbe8b6eac15d7530614e'] = 'Activer bouton page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_987015391e3f38ee4f89a2369e2558ea'] = 'Sélecteur pour positionner le bouton';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1693fdde5702dcdeaf275cd6426e2673'] = 'Activer bouton page popup';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_474947af1e4383b108d479d87335a0b0'] = 'Position bouton 1-Click';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8e414f1b4015e9f5bf62515f6adb9599'] = 'Activer bouton page connexion';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f0b50347c164ba3b829ec09c68ac775d'] = 'Sélecteur pour le smart button';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8ab65dbf04b789777f9aee9618b6028a'] = 'Sélecteur pour positionner le bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
@@ -229,6 +230,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_35b95e4f3de3b2daf150c372eaf2d95
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_93f4176640c89aba90f50b8a7b9b429b'] = 'Personnalisation du bouton au global';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1215422645ebf1cf761b14de2cf1b731'] = 'Bouton produit';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c2203231f692acd954ec241d13fcfccb'] = 'Bouton panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_648d5c916e2e56ca97b1030b6edee2ca'] = 'Bouton page popup';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_57d05763db7564e9d4a955a803d785f4'] = 'Bouton page connexion';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_21f6bc356cdbbf99796a5a8352d5b246'] = 'Paramètres restrictions';
@@ -241,7 +244,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_e984d0bd7cb4da547ed2e344619208c
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_a967b69d22760a1a8ca92af4fa4b7122'] = 'Smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9f6a3bc372bffcee32c103d45bd3bfa4'] = 'Bords arrondis';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_960b44c579bc2f6818d2daaf9e4c16f0'] = 'Normal';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_7a1920d61156abc05a60135aefe8bc67'] = 'Défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4953af21e1b855c91be873e8c05e2c99'] = 'Inversé';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_cb5feb1b7314637725a2e73bdc9f7295'] = 'Couleur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_42e6feb7f76e910efcda54034ecc83ce'] = 'Personnalisation du CSS';
@@ -262,6 +265,8 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_5b7605931ec82f3745502ee93e3c9b0
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_aecb24741fe6ae99ae476a32cdfb0a87'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_3e757c5a82a0bbe8b6eac15d7530614e'] = 'Activer bouton page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_987015391e3f38ee4f89a2369e2558ea'] = 'Sélecteur pour positionner le bouton';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_1693fdde5702dcdeaf275cd6426e2673'] = 'Activer bouton page popup';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_19ba49c8d49ca6756b3e4a5a3f9ec818'] = 'Activer bouton page connexion';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
