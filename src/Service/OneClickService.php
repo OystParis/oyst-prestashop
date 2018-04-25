@@ -129,7 +129,7 @@ class OneClickService extends AbstractOystService
             $labelCta = false;
         }
 
-        if ($controller == "order" || $controller == "index" || $controller == "category" || $controller == 'authentication') {
+        if ($oyst->displayBtnCart($controller)) {
             // Check validity cart rule ?
             if (version_compare(_PS_VERSION_, '1.6.0', '>=')) {
                 $ids_cart_rule_gift = Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT);
@@ -175,7 +175,7 @@ class OneClickService extends AbstractOystService
                 }
             }
 
-            if (!$products && $controller == 'order') {
+            if (!$products && ($controller == 'order' || $controller == 'order-opc' )) {
                 $data['error'] = 'Missing products';
             }
         } else {
@@ -196,7 +196,7 @@ class OneClickService extends AbstractOystService
         }
 
         if (!isset($data['error'])) {
-            if ($products && ($controller == 'order' || $controller == 'index' || $controller == 'category' || $controller == "authentication")) {
+            if ($products && $oyst->displayBtnCart($controller)) {
                 foreach ($products as $product) {
                     if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
                         if (count($ids_gift_products) > 0 && in_array($product['id_product'], $ids_gift_products)) {
@@ -226,7 +226,7 @@ class OneClickService extends AbstractOystService
                 }
             } elseif (!$products && ($controller == 'index' || $controller == 'category')) {
                 $oystPrice = new OystPrice(10, $this->context->currency->iso_code);
-                $oystProduct = new OystProduct("#OYST#", "Product fictif", $oystPrice, 1);
+                $oystProduct = new OystProduct('#OYST#', 'Product fictif', $oystPrice, 1);
                 $oystProduct->__set('materialized', true);
                 $productLess[] = $oystProduct;
 
@@ -319,7 +319,7 @@ class OneClickService extends AbstractOystService
             $oystContext['user_agent'] = $user_agent;
         }
 
-        if ($controller == 'order' || $controller == 'index' || $controller == 'category' || $controller == 'authentication') {
+        if ($oyst->displayBtnCart($controller)) {
             $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
         }
 
@@ -355,7 +355,7 @@ class OneClickService extends AbstractOystService
 
             $oneClickOrdersParams->setShouldReinitBuffer(false);
 
-            if ($controller == 'order' || $controller == 'index' || $controller == 'category' || $controller == 'authentication') {
+            if ($oyst->displayBtnCart($controller)) {
                 $oneClickOrdersParams->setIsCheckoutCart(true);
                 $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY_CART'));
             } else {
@@ -370,7 +370,7 @@ class OneClickService extends AbstractOystService
                 )
             );
 
-            if ($labelCta && $labelCta != '' && ($controller == 'order' || $controller == 'index' || $controller == 'category' || $controller == 'authentication')) {
+            if ($labelCta && $labelCta != '' && $oyst->displayBtnCart($controller)) {
                 $glue = '&';
                 if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
                     $glue = '?';
@@ -378,7 +378,6 @@ class OneClickService extends AbstractOystService
                 $id_cart_url = Context::getContext()->cart->id;
                 $url = Context::getContext()->link->getModuleLink('oyst', 'oneclickreturn');
                 $url .= $glue.'id_cart='.$id_cart_url.'&key='.ConfigurationP::get('FC_OYST_HASH_KEY');
-                // $url = Context::getContext()->link->getPageLink('order-confirmation').$glue.'id_cart='.Context::getContext()->cart->id.'&id_module='.Module::getModuleIdByName('oyst').'&key='.$customer->secure_key;
 
                 $oneClickCustomization = new OneClickCustomization();
                 $oneClickCustomization->setCta($labelCta, $url);

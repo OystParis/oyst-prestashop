@@ -36,6 +36,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $token = hash('sha256', Tools::jsonEncode(array(Configuration::get('FC_OYST_HASH_KEY'), _COOKIE_KEY_)));
         $assign = array();
         $oyst = new Oyst();
+        $display_btn_cart = $oyst->displayBtnCart();
 
         if (!in_array($controller, $this->restrictionPage())) {
             return '';
@@ -49,27 +50,16 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $oneClickUrl = $shopUrl.'/modules/oyst/oneClick.php?key='.$token;
         $JSOneClickUrl = trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js';
         $assign['btnOneClickState'] = true;
+        $assign['displayBtnCart'] = $display_btn_cart;
 
         // Params specific for each page
-        if ($controller != null && $oyst->displayBtnCart()) {
+        if ($controller != null && $display_btn_cart) {
             $JSOystOneClick = $this->path.'views/js/OystOneClickCart.js';
 
             $assign['oyst_label_cta'] = $this->module->l('Return shop.', 'oystHookdisplayfooterprocessor');
             $assign['btnOneClickState'] = true;
 
             $products = Context::getContext()->cart->getProducts();
-
-            if ($controller == "index" || $controller == "category" || $controller == "authentication") {
-                $assign['positionBtn'] = Configuration::get('FC_OYST_POSITION_BTN_'.$suffix_conf);
-            } else {
-                $assign['positionBtn'] = "before";
-            }
-
-            if ($controller == "authentication") {
-                $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_SMART_BTN_'.$suffix_conf);
-            } else {
-                $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_BTN_'.$suffix_conf);
-            }
         } else {
             $productRepository = new ProductRepository(Db::getInstance());
             $JSOystOneClick = $this->path.'views/js/OystOneClick.js';
@@ -102,8 +92,8 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
             $assign['productQuantity'] = StockAvailable::getQuantityAvailableByProduct($product->id);
             $assign['synchronizedCombination'] = $synchronizedCombination;
             $assign['allowOosp'] = $product->isAvailableWhenOutOfStock((int)$product->out_of_stock);
-            $assign['positionBtn'] = Configuration::get('FC_OYST_POSITION_BTN_PRODUCT');
-            $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_SMART_BTN_PRODUCT');
+            // $assign['positionBtn'] = Configuration::get('FC_OYST_POSITION_BTN_PRODUCT');
+            // $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_SMART_BTN_PRODUCT');
             $assign['shouldAsStock'] = Configuration::get('FC_OYST_SHOULD_AS_STOCK');
         }
 
@@ -128,6 +118,8 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
 
         // Params custom global
         $assign['idBtnAddToCart'] = Configuration::get('FC_OYST_ID_BTN_'.$suffix_conf);
+        $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_SMART_BTN_'.$suffix_conf);
+        $assign['positionBtn'] = Configuration::get('FC_OYST_POSITION_BTN_'.$suffix_conf);
         $assign['widthBtn'] = Configuration::get('FC_OYST_WIDTH_BTN_'.$suffix_conf);
         $assign['heightBtn'] = Configuration::get('FC_OYST_HEIGHT_BTN_'.$suffix_conf);
         $assign['marginTopBtn'] = Configuration::get('FC_OYST_MARGIN_TOP_BTN_'.$suffix_conf);
@@ -219,6 +211,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
 
         if (Configuration::get('FC_OYST_BTN_CART')) {
             $access_allow[] = 'order';
+            $access_allow[] = 'order-opc';
         }
 
         if (Configuration::get('FC_OYST_BTN_PRODUCT')) {
@@ -242,7 +235,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
      */
     public function getTypeBtn($controller = 'product')
     {
-        if ($controller == 'order') {
+        if ($controller == 'order' || $controller == 'order-opc') {
             $btn = 'CART';
         } elseif ($controller == 'index' || $controller == 'category') {
             $btn = 'LAYER';
