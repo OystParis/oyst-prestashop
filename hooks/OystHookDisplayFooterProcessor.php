@@ -65,18 +65,6 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
             $assign['btnOneClickState'] = true;
 
             $products = Context::getContext()->cart->getProducts();
-
-            if ($controller == "index" || $controller == "category" || $controller == "authentication") {
-                $assign['positionBtn'] = Configuration::get('FC_OYST_POSITION_BTN_'.$suffix_conf);
-            } else {
-                $assign['positionBtn'] = "before";
-            }
-
-            if ($controller == "authentication") {
-                $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_SMART_BTN_'.$suffix_conf);
-            } else {
-                $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_BTN_'.$suffix_conf);
-            }
         } else {
             $productRepository = new ProductRepository(Db::getInstance());
             $JSOystOneClick = $this->path.'views/js/OystOneClick.js';

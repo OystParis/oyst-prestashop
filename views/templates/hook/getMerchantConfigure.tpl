@@ -429,6 +429,17 @@
                                         <option value="after" {if $oyst.FC_OYST_POSITION_BTN_CART == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
                                     </select>
                                 </div>
+                                <label>{l s='Id smart btn' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_ID_SMART_BTN_CART" value="{if $oyst.FC_OYST_ID_SMART_BTN_CART}{$oyst.FC_OYST_ID_SMART_BTN_CART|escape:'htmlall':'UTF-8'}{else}.standard-checkout{/if}"/>
+                                </div>
+                                <label>{l s='Position btn 1-Click' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <select name="FC_OYST_POSITION_BTN_CART">
+                                        <option value="before" {if $oyst.FC_OYST_POSITION_BTN_CART == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                        <option value="after" {if $oyst.FC_OYST_POSITION_BTN_CART == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                    </select>
+                                </div>
                                 <div class="margin-form">
                                     <button type="submit" value="1" name="submitOystResetCustomCart" class="btn btn-info module_form_reset_btn">
                                         {l s='Reset' mod='oyst'}
