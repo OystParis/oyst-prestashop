@@ -279,7 +279,9 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_CART');
         // Conf 1-Click custom btn layer cart
         PSConfiguration::deleteByName('FC_OYST_BTN_LAYER');
         PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_LAYER');
@@ -288,6 +290,7 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_LAYER');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_LAYER');
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_LAYER');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_LAYER');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_LAYER');
         // Conf 1-Click custom btn layer cart
         PSConfiguration::deleteByName('FC_OYST_BTN_LOGIN');

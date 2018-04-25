@@ -544,15 +544,18 @@ class Oyst extends FroggyPaymentModule
     /**
      * @return bool
      */
-    public function displayBtnCart()
+    public function displayBtnCart($controller = null)
     {
         $controller_cart = array(
             'order',
             'index',
             'category',
-            'authentication'
+            'authentication',
+            'order-opc',
         );
-        $controller = Context::getContext()->controller->php_self;
+        if ($controller == null) {
+            $controller = Context::getContext()->controller->php_self;
+        }
 
         if (in_array($controller, $controller_cart)) {
             return true;
