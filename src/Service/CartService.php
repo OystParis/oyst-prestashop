@@ -311,7 +311,8 @@ class CartService extends AbstractOystService
 
         $type = OystCarrier::HOME_DELIVERY;
 
-        $business_days = explode(',', PSConfiguration::get('FC_OYST_BUSINESS_DAYS'));
+        $oyst_business_days = PSConfiguration::get('FC_OYST_BUSINESS_DAYS');
+        $business_days = explode(',', $oyst_business_days);
 
         // Add carriers
         foreach ($carriersAvailables as $shipment) {
@@ -353,15 +354,17 @@ class CartService extends AbstractOystService
                     $delay_shipment = $delay[(int)$carrier->grade];
                 }
 
-                $delay_current = new \DateTime("NOW");
-                $delay_current->add(new \DateInterval("PT".$delay_shipment."H"));
-                $day_of_week = (int)$delay_current->format('N');
-                if (!in_array($day_of_week, $business_days)) {
-                    do {
-                        $delay_shipment += 24;
-                        $delay_current->add(new \DateInterval("PT24H"));
-                        $new_day_of_week = (int)$delay_current->format('N');
-                    } while (!in_array($new_day_of_week, $business_days));
+                if ($oyst_business_days) {
+                    $delay_current = new \DateTime("NOW");
+                    $delay_current->add(new \DateInterval("PT".$delay_shipment."H"));
+                    $day_of_week = (int)$delay_current->format('N');
+                    if (!in_array($day_of_week, $business_days)) {
+                        do {
+                            $delay_shipment += 24;
+                            $delay_current->add(new \DateInterval("PT24H"));
+                            $new_day_of_week = (int)$delay_current->format('N');
+                        } while (!in_array($new_day_of_week, $business_days));
+                    }
                 }
 
                 $oneClickShipment = new OneClickShipmentCatalogLess(
