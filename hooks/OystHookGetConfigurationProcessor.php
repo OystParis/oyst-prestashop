@@ -91,6 +91,15 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_ID_BTN_LOGIN'            => 'string',
         'FC_OYST_ID_SMART_BTN_LOGIN'      => 'string',
         'FC_OYST_POSITION_BTN_LOGIN'      => 'string',
+        'FC_OYST_BTN_PAYMENT'             => 'int',
+        'FC_OYST_WIDTH_BTN_PAYMENT'       => 'string',
+        'FC_OYST_HEIGHT_BTN_PAYMENT'      => 'string',
+        'FC_OYST_MARGIN_TOP_BTN_PAYMENT'  => 'string',
+        'FC_OYST_MARGIN_LEFT_BTN_PAYMENT' => 'string',
+        'FC_OYST_MARGIN_RIGHT_BTN_PAYMENT'=> 'string',
+        'FC_OYST_ID_BTN_PAYMENT'          => 'string',
+        'FC_OYST_ID_SMART_BTN_PAYMENT'    => 'string',
+        'FC_OYST_POSITION_BTN_PAYMENT'    => 'string',
         'FC_OYST_OC_REDIRECT_CONF'        => 'string',
         'FC_OYST_OC_REDIRECT_CONF_CUSTOM' => 'string',
         'FC_OYST_DELAY'                   => 'int',
@@ -249,6 +258,18 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_POSITION_BTN_LOGIN', 'before');
             Configuration::updateValue('FC_OYST_ID_BTN_LOGIN', '#SubmitCreate');
             Configuration::updateValue('FC_OYST_ID_SMART_BTN_LOGIN', '#SubmitCreate');
+        }
+
+        if (Tools::isSubmit('submitOystResetCustomPayment')) {
+            Configuration::updateValue('FC_OYST_BTN_PAYMENT', 0);
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_PAYMENT', 'before');
+            Configuration::updateValue('FC_OYST_ID_BTN_PAYMENT', '#HOOK_PAYMENT');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_PAYMENT', '.payment_module');
         }
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {
