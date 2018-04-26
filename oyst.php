@@ -302,7 +302,7 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
         Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
         // Params 1-Click btn cart
-        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.standard-checkout');
+        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .button-medium');
         // Params 1-Click advanced
         Configuration::updateValue('FC_OYST_DELAY', 15);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);
