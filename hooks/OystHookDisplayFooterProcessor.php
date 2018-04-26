@@ -37,13 +37,18 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $assign = array();
         $oyst = new Oyst();
         $display_btn_cart = $oyst->displayBtnCart();
+        $step = 0;
+
+        if (Tools::getValue('step') != null) {
+            $step = (int)Tools::getValue('step');
+        }
 
         if (!in_array($controller, $this->restrictionPage())) {
             return '';
         }
 
         // Get type btn with controller
-        $suffix_conf = $this->getTypeBtn($controller);
+        $suffix_conf = $this->getTypeBtn($controller, $step);
 
         // Manage url for 1-Click
         $shopUrl = trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/');
@@ -98,7 +103,6 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         }
 
         // Params global
-        // $assign['secureKey'] = $token;
         $assign['oneClickUrl'] = $oneClickUrl;
         $assign['enabledBtn'] = Configuration::get('FC_OYST_BTN_'.$suffix_conf);
         $assign['oneClickActivated'] = (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE');
@@ -233,10 +237,12 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
     /**
      * @return string
      */
-    public function getTypeBtn($controller = 'product')
+    public function getTypeBtn($controller = 'product', $step = 0)
     {
-        if ($controller == 'order' || $controller == 'order-opc') {
+        if (($controller == 'order' && $step != 3) || $controller == 'order-opc') {
             $btn = 'CART';
+        } elseif ($controller == 'order' && $step == 3) {
+            $btn = 'PAYMENT';
         } elseif ($controller == 'index' || $controller == 'category') {
             $btn = 'LAYER';
         } elseif ($controller == 'authentication') {

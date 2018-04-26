@@ -41,5 +41,16 @@ function upgrade_module_1_16_0($module)
     // Add conf custom btn layer
     Configuration::updateValue('FC_OYST_ID_SMART_BTN_LAYER', '#layer_cart .button-container');
 
+    // Add conf custom btn payment
+    Configuration::updateValue('FC_OYST_BTN_PAYMENT', 0);
+    Configuration::updateValue('FC_OYST_WIDTH_BTN_PAYMENT', '');
+    Configuration::updateValue('FC_OYST_HEIGHT_BTN_PAYMENT', '');
+    Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_PAYMENT', '');
+    Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_PAYMENT', '');
+    Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_PAYMENT', '');
+    Configuration::updateValue('FC_OYST_ID_BTN_PAYMENT', '#HOOK_PAYMENT');
+    Configuration::updateValue('FC_OYST_ID_SMART_BTN_PAYMENT', '.payment_module');
+    Configuration::updateValue('FC_OYST_POSITION_BTN_PAYMENT', 'before');
+
     return true;
 }
