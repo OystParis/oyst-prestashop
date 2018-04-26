@@ -9,14 +9,13 @@
             "displayPayment",
             "displayPaymentReturn",
             "displayAdminOrder" ,
-            "displayFooterProduct",
+            "displayFooter",
             "displayBackOfficeHeader",
             "displayAdminProductsExtra",
             "actionProductAdd",
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
-            "actionOrderStatusPostUpdate",
-            "displayShoppingCart"
+            "actionOrderStatusPostUpdate"
         ],
         "1.6" : [
             "advancedPaymentOptions"
@@ -70,6 +69,7 @@
         "FC_OYST_STATE_PAYMENT_FREEPAY": "2",
         "FC_OYST_STATE_PAYMENT_ONECLICK": "2",
         "FC_OYST_BTN_CART": "0",
+        "FC_OYST_BTN_LAYER": "0",
         "FC_OYST_MANAGE_QUANTITY_CART": "0",
         "FC_OYST_ONLY_FOR_IP": "",
         "FC_OYST_BTN_PRODUCT": "1",
