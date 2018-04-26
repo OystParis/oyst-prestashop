@@ -29,7 +29,14 @@ function upgrade_module_1_16_0($module)
 {
     // Add conf custom btn cart
     Configuration::updateValue('FC_OYST_POSITION_BTN_CART', 'before');
-    Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.standard-checkout');
+
+    if (_PS_VERSION_ >= '1.6.0.0') {
+        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .button-medium');
+        Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.cart_navigation .button-medium');
+    } else {
+        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .exclusive');
+        Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.cart_navigation .exclusive');
+    }
 
     // Add conf custom btn layer
     Configuration::updateValue('FC_OYST_ID_SMART_BTN_LAYER', '#layer_cart .button-container');

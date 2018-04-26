@@ -218,8 +218,13 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_CART', '');
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_CART', '');
             Configuration::updateValue('FC_OYST_POSITION_BTN_CART', 'before');
-            Configuration::updateValue('FC_OYST_ID_BTN_CART', '.standard-checkout');
-            Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.standard-checkout');
+            if (_PS_VERSION_ >= '1.6.0.0') {
+                Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .button-medium');
+                Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.cart_navigation .button-medium');
+            } else {
+                Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .exclusive');
+                Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.cart_navigation .exclusive');
+            }
         }
 
         if (Tools::isSubmit('submitOystResetCustomLayer')) {
