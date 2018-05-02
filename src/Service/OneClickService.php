@@ -319,7 +319,6 @@ class OneClickService extends AbstractOystService
             $oystContext['user_agent'] = $user_agent;
         }
 
-
         if ($oyst->displayBtnCart($controller)) {
             $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
         }

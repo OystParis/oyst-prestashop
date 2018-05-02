@@ -21,8 +21,6 @@
 
 require_once dirname(__FILE__).'/../vendor/autoload.php';
 
-use Oyst\Service\Configuration as OConfiguration;
-
 /**
  * @param Oyst $module
  * @return bool
