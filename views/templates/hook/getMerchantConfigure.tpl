@@ -833,12 +833,77 @@
                                     <input type="text" name="FC_OYST_ID_SMART_BTN_PAYMENT" value="{if $oyst.FC_OYST_ID_SMART_BTN_PAYMENT}{$oyst.FC_OYST_ID_SMART_BTN_PAYMENT|escape:'htmlall':'UTF-8'}{else}.payment_module{/if}"/>
                                 </div>
                                 <div class="margin-form">
-                                    <button type="submit" value="1" name="submitOystResetCustomLogin" class="btn btn-info module_form_reset_btn">
+                                    <button type="submit" value="1" name="submitOystResetCustomPayment" class="btn btn-info module_form_reset_btn">
                                         {l s='Reset' mod='oyst'}
                                     </button>
                                 </div>
                             {else}
                                 <input type="hidden" name="FC_OYST_BTN_PAYMENT" value="{$oyst.FC_OYST_BTN_PAYMENT|intval}"/>
+                                <div class="warn">
+                                    <ul>
+                                        <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
+                                    </ul>
+                                </div>
+                            {/if}
+                        </div>
+                        <div id="custom-btn-address" class="tab-pane-sub" style="display:none;">
+                            {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                <label>{l s='Enabled button address' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_BTN_ADDR" value="1"{if $oyst.FC_OYST_BTN_ADDR} checked="checked"{/if} />
+                                </div>
+                                <label>{l s='Width' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_WIDTH_BTN_ADDR" value="{$oyst.FC_OYST_WIDTH_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Height' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_HEIGHT_BTN_ADDR" value="{$oyst.FC_OYST_HEIGHT_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Margin top' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_MARGIN_TOP_BTN_ADDR" value="{$oyst.FC_OYST_MARGIN_TOP_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Margin left' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_MARGIN_LEFT_BTN_ADDR" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Margin right' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN_ADDR" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                    <br>
+                                    <span class="help-block">{l s='In pourcentage or pixel' mod='oyst'}</span>
+                                </div>
+                                <label>{l s='Position btn 1-Click' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <select name="FC_OYST_POSITION_BTN_ADDR">
+                                        <option value="before" {if $oyst.FC_OYST_POSITION_BTN_ADDR == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                        <option value="after" {if $oyst.FC_OYST_POSITION_BTN_ADDR == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                    </select>
+                                </div>
+                                <label>{l s='Id btn add to cart' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_ID_BTN_ADDR" value="{if $oyst.FC_OYST_ID_BTN_ADDR}{$oyst.FC_OYST_ID_BTN_ADDR|escape:'htmlall':'UTF-8'}{else}#submitAddress{/if}"/>
+                                </div>
+                                <label>{l s='Id smart btn' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="text" name="FC_OYST_ID_SMART_BTN_ADDR" value="{if $oyst.FC_OYST_ID_SMART_BTN_ADDR}{$oyst.FC_OYST_ID_SMART_BTN_ADDR|escape:'htmlall':'UTF-8'}{else}#submitAddress{/if}"/>
+                                </div>
+                                <div class="margin-form">
+                                    <button type="submit" value="1" name="submitOystResetCustomAddress" class="btn btn-info module_form_reset_btn">
+                                        {l s='Reset' mod='oyst'}
+                                    </button>
+                                </div>
+                            {else}
+                                <input type="hidden" name="FC_OYST_BTN_ADDR" value="{$oyst.FC_OYST_BTN_ADDR|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>
