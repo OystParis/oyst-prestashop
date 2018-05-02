@@ -231,6 +231,10 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
             $access_allow[] = 'authentication';
         }
 
+        if (Configuration::get('FC_OYST_BTN_ADDR')) {
+            $access_allow[] = 'address';
+        }
+
         return $access_allow;
     }
 
@@ -247,6 +251,8 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
             $btn = 'LAYER';
         } elseif ($controller == 'authentication') {
             $btn = 'LOGIN';
+        } elseif ($controller == 'address') {
+            $btn = 'ADDR';
         } else {
             $btn = 'PRODUCT';
         }

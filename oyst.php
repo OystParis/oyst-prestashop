@@ -316,6 +316,16 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_BTN_LAYER', 0);
         Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '214');
         Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '43');
+
+        // Params 1-Click for btn login
+        Configuration::updateValue('FC_OYST_BTN_LOGIN', 0);
+
+        // Params 1-Click for btn payment
+        Configuration::updateValue('FC_OYST_BTN_PAYMENT', 0);
+
+        // Params 1-Click for btn addr
+        Configuration::updateValue('FC_OYST_BTN_ADDR', 0);
+
         // Params 1-Click restrictions
         Configuration::updateValue('FC_OYST_CURRENCIES', Currency::getIdByIsoCode('EUR'));
         Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
@@ -552,6 +562,7 @@ class Oyst extends FroggyPaymentModule
             'category',
             'authentication',
             'order-opc',
+            'address',
         );
         if ($controller == null) {
             $controller = Context::getContext()->controller->php_self;

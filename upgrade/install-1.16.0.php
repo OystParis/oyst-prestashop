@@ -52,5 +52,16 @@ function upgrade_module_1_16_0($module)
     Configuration::updateValue('FC_OYST_ID_SMART_BTN_PAYMENT', '.payment_module');
     Configuration::updateValue('FC_OYST_POSITION_BTN_PAYMENT', 'before');
 
+    // Add conf custom btn form address
+    Configuration::updateValue('FC_OYST_BTN_ADDR', 0);
+    Configuration::updateValue('FC_OYST_WIDTH_BTN_ADDR', '');
+    Configuration::updateValue('FC_OYST_HEIGHT_BTN_ADDR', '');
+    Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_ADDR', '');
+    Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_ADDR', '');
+    Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_ADDR', '');
+    Configuration::updateValue('FC_OYST_ID_BTN_ADDR', '#submitAddress');
+    Configuration::updateValue('FC_OYST_ID_SMART_BTN_ADDR', '#submitAddress');
+    Configuration::updateValue('FC_OYST_POSITION_BTN_ADDR', 'before');
+
     return true;
 }
