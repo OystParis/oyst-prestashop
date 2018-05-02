@@ -228,7 +228,7 @@ class OneClickService extends AbstractOystService
                 $oystPrice = new OystPrice(10, $this->context->currency->iso_code);
                 $oystProduct = new OystProduct('#OYST#', 'Product fictif', $oystPrice, 1);
                 $oystProduct->__set('materialized', true);
-                $productLess[] = $oystProduct;
+                $products_less[] = $oystProduct;
 
                 if (!$this->context->cookie->id_cart) {
                     $cart = new Cart();
