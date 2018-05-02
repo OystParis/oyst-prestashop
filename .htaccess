@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+<IfModule mod_env.c>
+SetEnv HTTP_MOD_REWRITE On
+</IfModule>
+
+RewriteEngine on
+
+RewriteRule ^modules/oyst/api/(.*)$ /modules/oyst/dispatcher.php?url=$1 [QSA,L]
+
+</IfModule>

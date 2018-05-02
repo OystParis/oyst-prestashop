@@ -21,7 +21,7 @@
 
 namespace Oyst\Controller;
 
-use Oyst;
+//use Oyst;
 use Oyst\Service\Http\CurrentRequest;
 use Psr\Log\AbstractLogger;
 
@@ -36,7 +36,7 @@ abstract class AbstractOystController
     protected $logger;
 
     /** @var  Oyst */
-    protected $oyst;
+//    protected $oyst;
 
     /**
      * Oyst\Controller\AbstractOystController constructor.
@@ -66,5 +66,37 @@ abstract class AbstractOystController
         header("HTTP/1.1 200 OK");
         header('Content-Type: application/json');
         echo json_encode($content);
+    }
+
+    /**
+     * @param $code
+     * @param string $msg
+     */
+    public function respondError($code, $msg = '')
+    {
+        if (!function_exists('http_response_code')) {
+            $text = '';
+            switch ($code) {
+                case 400:
+                    $text = 'Bad Request';
+                    break;
+                case 401:
+                    $text = 'Unauthorized';
+                    break;
+                case 403:
+                    $text = 'Forbidden';
+                    break;
+                case 404:
+                    $text = 'Not Found';
+                    break;
+                case 500:
+                    $text = 'Internal Server Error';
+                    break;
+            }
+            header($_SERVER['SERVER_PROTOCOL'].' '.$code.' '.$text);
+        } else {
+            http_response_code($code);
+        }
+        die($msg);
     }
 }
