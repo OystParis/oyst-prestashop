@@ -2,14 +2,32 @@
 
 namespace Oyst\Controller;
 
+use Cart;
+use Exception;
+use Validate;
+
 class CartController extends AbstractOystController
 {
     public function getCart($params)
     {
-        echo "getCart<pre>";
-        print_r($params);
-        echo "</pre>";
-        exit;
+        if (!empty($params['url']['id'])) {
+            $cart = new Cart((int)$params['url']['id']);
+            if (Validate::isLoadedObject($cart)) {
+                $response = array();
+                try {
+                    $response['products'] = $cart->getProducts(true);
+                    $response['cart_rules'] = $cart->getCartRules();
+                    $response['total'] = $cart->getOrderTotal();
+                    $response['carriers'] = $cart->getDeliveryOptionList();
+                    $this->respondAsJson($response);
+                } catch(Exception $e) {
+                    print_r($e);
+                }
+
+            } else {
+                $this->respondError(400, 'Bad id_cart');
+            }
+        }
     }
 
     public function updateCart($params)
