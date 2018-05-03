@@ -43,6 +43,7 @@ use Tools;
 use StockAvailable;
 use CartRule;
 use Oyst;
+use Module;
 
 /**
  * Class OneClickService
@@ -116,26 +117,28 @@ class OrderService extends AbstractOystService
         $pickupAddress = $shipmentInfo['pickup_store']['address'];
         $pickupId = $shipmentInfo['pickup_store']['id'];
         $carrierInfo = $shipmentInfo['carrier'];
+        if ($pickupAddress['name'] != '') {
+            $pickup_name = $pickupAddress['name'];
+        } else {
+            $pickup_name = 'none';
+        }
 
         $alias = Tools::substr('Pickup_'.str_replace(' ', '_', $pickupAddress['name']), 0, 32);
         $addressToFind = array(
             'name' => $alias,
-            'street' => $pickupAddress['street'],
+            'street' => $pickup_name.' - '.($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none'),
             'postcode' => $pickupAddress['postal_code'],
             'city' => $pickupAddress['city'],
+            'first_name' => $customer->firstname,
+            'last_name' => $customer->lastname,
         );
 
         $address = $this->addressRepository->findAddress($addressToFind, $customer);
+
         if (!Validate::isLoadedObject($address)) {
             $countryId = (int)Country::getByIso('fr');
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
-            }
-
-            if ($pickupAddress['name'] != '') {
-                $pickup_name = $pickupAddress['name'];
-            } else {
-                $pickup_name = 'none';
             }
 
             $address = new Address();
@@ -409,6 +412,35 @@ class OrderService extends AbstractOystService
                 ),
                 'payment_id = "'.pSQL($oystOrderInfo['id']).'" AND `status` = "start"'
             );
+
+            // Insert data on table mr_selected for pickup mondial relay
+            $pickupAddress = $oystOrderInfo['shipment']['pickup_store']['address'];
+            $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
+            $carrierInfo = $oystOrderInfo['shipment']['carrier'];
+
+            if ($carrierInfo['type'] == 'mondial_relay' &&
+                Module::isEnabled('mondialrelay') &&
+                Module::isInstalled('mondialrelay')) {
+                $id_mr_method = (int)Db::getInstance()->getRow(
+                    'SELECT id_mr_method FROM `'._DB_PREFIX_.'mr_method` m
+                    WHERE m.`id_carrier` = '.(int)$carrierInfo['id']
+                );
+
+                $md_data[] = array(
+                    'id_customer' => (int)$customer->id,
+                    'id_method' => (int)$id_mr_method,
+                    'id_cart' => (int)$cart->id,
+                    'id_order' => (int)$order->id,
+                    'MR_Selected_Num' => pSQL($pickupId),
+                    'MR_Selected_LgAdr1' => ($pickupAddress['name'] != '')? pSQL($pickupAddress['name']) : 'NULL',
+                    'MR_Selected_LgAdr3' => ($pickupAddress['street'] != '')? pSQL($pickupAddress['street']) : 'NULL',
+                    'MR_Selected_CP' => ($pickupAddress['postal_code'] != '')? (int)$pickupAddress['postal_code'] : 'NULL',
+                    'MR_Selected_Ville' => ($pickupAddress['city'] != '')? pSQL($pickupAddress['city']) : 'NULL',
+                    'MR_Selected_Pays' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
+                );
+
+                Db::getInstance()->insert('mr_selected', $md_data);
+            }
         }
 
         return $state;
@@ -463,7 +495,7 @@ class OrderService extends AbstractOystService
                     'productId' => $product->id,
                     'combinationId' => $combination->id,
                     'quantity' => $productInfo['quantity'],
-                    'customizations' => $productInfo['product']['customizations'],
+                    'customizations' => isset($productInfo['product']['customizations'])? $productInfo['product']['customizations'] : '',
                 );
             }
 
