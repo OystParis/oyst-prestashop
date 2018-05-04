@@ -19,12 +19,12 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-//require_once dirname(__FILE__) . '/autoload.php';
+require_once dirname(__FILE__) . '/autoload.php';
 
 /**
  * Class Oyst
  */
-class Oyst extends Module
+class Oyst extends FroggyPaymentModule
 {
     /**
      * Constructor
@@ -364,7 +364,7 @@ class Oyst extends Module
             return '';
         }
         if (is_array($data)) {
-            $data_json = Tools::jsonEncode($data);
+            $data_json = json_encode($data);
             $data = var_export($data, true);
         }
         file_put_contents(
