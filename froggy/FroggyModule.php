@@ -178,9 +178,9 @@ class FroggyModule extends Module
                 return false;
             }
 
-//            if (!$this->runDefinitionsSql()) {
-//                return false;
-//            }
+            if (!$this->runDefinitionsSql()) {
+                return false;
+            }
 
             return true;
         }
@@ -208,9 +208,9 @@ class FroggyModule extends Module
                 return false;
             }
 
-//            if (!$this->runDefinitionsSql('uninstall')) {
-//                return false;
-//            }
+            if (!$this->runDefinitionsSql('uninstall')) {
+                return false;
+            }
 
             return true;
         }
