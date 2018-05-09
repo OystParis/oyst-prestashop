@@ -16,8 +16,7 @@
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
             "actionOrderStatusPostUpdate",
-            "actionValidateOrder",
-            "displayShoppingCart"
+            "actionValidateOrder"
         ],
         "1.6" : [
             "advancedPaymentOptions"
