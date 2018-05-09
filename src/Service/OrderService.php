@@ -441,6 +441,35 @@ class OrderService extends AbstractOystService
 
                 Db::getInstance()->insert('mr_selected', $md_data);
             }
+
+            if (($carrierInfo['type'] == 'colissimo_poste' || $carrierInfo['type'] == 'colissimo_commerces') &&
+                Module::isEnabled('soflexibilite') &&
+                Module::isInstalled('soflexibilite')) {
+                if ($carrierInfo['type'] == 'colissimo_poste') {
+                    $delivery_mode = 'BPR';
+                } else {
+                    $delivery_mode = 'A2P';
+                }
+
+                if ($pickupAddress['name'] != '') {
+                    $pickup_name = $pickupAddress['name'];
+                } else {
+                    $pickup_name = 'none';
+                }
+
+                Db::getInstance()->update(
+                    'socolissimo_delivery_info',
+                    array(
+                        'id_cart' => (int)$cart->id,
+                        'id_customer' => (int)$customer->id,
+                        'delivery_mode' => $delivery_mode,
+                        'prid' => pSQL($pickupId),
+                        'prname' => pSQL($pickup_name),
+                        'prfirstname' => pSQL($customer->firstname)
+                    ),
+                    'id_cart = '.(int)$cart->id.' AND id_customer = '.(int)$customer->id
+                );
+            }
         }
 
         return $state;
