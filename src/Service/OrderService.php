@@ -43,6 +43,7 @@ use Tools;
 use StockAvailable;
 use CartRule;
 use Oyst;
+use Module;
 
 /**
  * Class OneClickService
@@ -409,6 +410,39 @@ class OrderService extends AbstractOystService
                 ),
                 'payment_id = "'.pSQL($oystOrderInfo['id']).'" AND `status` = "start"'
             );
+
+            // Insert data on table socolissimo_delivery_info for pickup socolissimo
+            $pickupAddress = $oystOrderInfo['shipment']['pickup_store']['address'];
+            $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
+            $carrierInfo = $oystOrderInfo['shipment']['carrier'];
+            if (($carrierInfo['type'] == 'colissimo_poste' || $carrierInfo['type'] == 'colissimo_commerces') &&
+                Module::isEnabled('soflexibilite') &&
+                Module::isInstalled('soflexibilite')) {
+                if ($carrierInfo['type'] == 'colissimo_poste') {
+                    $delivery_mode = 'BPR';
+                } else {
+                    $delivery_mode = 'A2P';
+                }
+
+                if ($pickupAddress['name'] != '') {
+                    $pickup_name = $pickupAddress['name'];
+                } else {
+                    $pickup_name = 'none';
+                }
+
+                Db::getInstance()->update(
+                    'socolissimo_delivery_info',
+                    array(
+                        'id_cart' => (int)$cart->id,
+                        'id_customer' => (int)$customer->id,
+                        'delivery_mode' => $delivery_mode,
+                        'prid' => pSQL($pickupId),
+                        'prname' => pSQL($pickup_name),
+                        'prfirstname' => pSQL($customer->firstname)
+                    ),
+                    'id_cart = '.(int)$cart->id.' AND id_customer = '.(int)$customer->id
+                );
+            }
         }
 
         return $state;
