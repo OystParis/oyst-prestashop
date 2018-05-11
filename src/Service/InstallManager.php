@@ -251,7 +251,7 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_THEME_BTN');
         PSConfiguration::deleteByName('FC_OYST_COLOR_BTN');
         PSConfiguration::deleteByName('FC_OYST_CUSTOM_CSS');
-        // Conf custom btn product
+        // Old conf custom btn product
         PSConfiguration::deleteByName('FC_OYST_BTN_PRODUCT');
         PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN');
         PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN');
@@ -261,6 +261,17 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN');
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_ADD_TO_CART');
         PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN');
+        // Conf custom btn product
+        PSConfiguration::deleteByName('FC_OYST_BTN_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_ID_ADDTOCART_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_PRODUCT');
         // Conf 1-Click custom btn cart
         PSConfiguration::deleteByName('FC_OYST_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_CART');
@@ -268,11 +279,50 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_CART');
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_CART');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_CART');
+        // Conf 1-Click custom btn layer cart
+        PSConfiguration::deleteByName('FC_OYST_BTN_LAYER');
+        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_LAYER');
+        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_LAYER');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_LAYER');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_LAYER');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_LAYER');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_LAYER');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_LAYER');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_LAYER');
+        // Conf 1-Click custom btn layer cart
+        PSConfiguration::deleteByName('FC_OYST_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_LOGIN');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_LOGIN');
+        // Conf 1-Click custom btn payment
+        PSConfiguration::deleteByName('FC_OYST_BTN_PAYMENT');
+        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_PAYMENT');
+        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_PAYMENT');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_PAYMENT');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_PAYMENT');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_PAYMENT');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_PAYMENT');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_PAYMENT');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_PAYMENT');
         // Conf 1-Click carriers
         PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
         PSConfiguration::deleteByName('OYST_ONE_CLICK_CARRIER');
-        $carriers = Carrier::getCarriers(Context::getContext()->language->id, true, false, false, null, Carrier::ALL_CARRIERS);
+        $carriers = Carrier::getCarriers(
+            Context::getContext()->language->id,
+            true,
+            false,
+            false,
+            null,
+            Carrier::ALL_CARRIERS
+        );
 
         foreach ($carriers as $carrier) {
             $field = 'FC_OYST_SHIPMENT_'.$carrier['id_reference'];
@@ -280,6 +330,7 @@ class InstallManager
             $field_delay = 'FC_OYST_SHIPMENT_DELAY_'.$carrier['id_reference'];
             PSConfiguration::deleteByName($field_delay);
         }
+        PSConfiguration::deleteByName('FC_OYST_BUSINESS_DAYS');
         // Conf 1-Click advanced
         PSConfiguration::deleteByName('FC_OYST_DELAY');
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
