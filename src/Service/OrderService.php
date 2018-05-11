@@ -443,8 +443,11 @@ class OrderService extends AbstractOystService
             }
 
             if (($carrierInfo['type'] == 'colissimo_poste' || $carrierInfo['type'] == 'colissimo_commerces') &&
-                Module::isEnabled('soflexibilite') &&
-                Module::isInstalled('soflexibilite')) {
+                (Module::isEnabled('soflexibilite') &&
+                Module::isInstalled('soflexibilite')) ||
+                (Module::isEnabled('socolissimo') &&
+                Module::isInstalled('socolissimo'))
+            ) {
                 if ($carrierInfo['type'] == 'colissimo_poste') {
                     $delivery_mode = 'BPR';
                 } else {
