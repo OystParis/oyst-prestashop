@@ -414,7 +414,7 @@ class OrderService extends AbstractOystService
             // Insert data on table mr_selected for pickup mondial relay
             $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
             $carrierInfo = $oystOrderInfo['shipment']['carrier'];
-            if ($carrierInfo['type'] == 'dpd' &&
+            if ($carrierInfo['type'] == 'dpd' && $pickupId &&
                 Module::isEnabled('chronopost') &&
                 Module::isInstalled('chronopost')) {
                 $md_data[] = array(
