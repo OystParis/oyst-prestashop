@@ -24,6 +24,9 @@ namespace Oyst\Service;
 use Combination;
 use Exception;
 use Oyst\Classes\OystUser;
+use Oyst\Classes\OystPrice;
+use Oyst\Classes\OystProduct;
+use Oyst\Classes\OystAddress;
 use Oyst\Classes\OneClickOrderParams;
 use Oyst\Classes\OneClickNotifications;
 use Oyst\Classes\OneClickCustomization;
@@ -40,6 +43,10 @@ use StockAvailable;
 use Module;
 use CartRule;
 use Cart;
+use Address;
+use Customer;
+use Country;
+
 
 /**
  * Class Oyst\Service\OneClickService
@@ -114,9 +121,12 @@ class OneClickService extends AbstractOystService
         $controller = $request->getRequestItem('controller');
         $products_less = array();
         $result_products = array();
+        $oyst = new Oyst();
         // Deprecated ??
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
-        $exportProductService = AbstractExportProductServiceFactory::get(new Oyst(), Context::getContext());
+        $exportProductService = AbstractExportProductServiceFactory::get($oyst, Context::getContext());
+        $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
+
         $load = (int)$request->getRequestItem('preload');
         if ($request->hasRequest('labelCta')) {
             $labelCta = $request->getRequestItem('labelCta');
@@ -124,7 +134,7 @@ class OneClickService extends AbstractOystService
             $labelCta = false;
         }
 
-        if ($controller == 'order') {
+        if ($oyst->displayBtnCart($controller)) {
             // Check validity cart rule ?
             if (version_compare(_PS_VERSION_, '1.6.0', '>=')) {
                 $ids_cart_rule_gift = Context::getContext()->cart->getCartRules(CartRule::FILTER_ACTION_GIFT);
@@ -170,7 +180,7 @@ class OneClickService extends AbstractOystService
                 }
             }
 
-            if (!$products) {
+            if (!$products && ($controller == 'order' || $controller == 'order-opc' )) {
                 $data['error'] = 'Missing products';
             }
         } else {
@@ -191,7 +201,7 @@ class OneClickService extends AbstractOystService
         }
 
         if (!isset($data['error'])) {
-            if ($products && $controller == 'order') {
+            if ($products && $oyst->displayBtnCart($controller)) {
                 foreach ($products as $product) {
                     if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
                         if (count($ids_gift_products) > 0 && in_array($product['id_product'], $ids_gift_products)) {
@@ -218,6 +228,33 @@ class OneClickService extends AbstractOystService
                             );
                         }
                     }
+                }
+            } elseif (!$products && ($controller == 'index' || $controller == 'category')) {
+                $oystPrice = new OystPrice(10, $this->context->currency->iso_code);
+                $oystProduct = new OystProduct('#OYST#', 'Product fictif', $oystPrice, 1);
+                $oystProduct->__set('materialized', true);
+                $products_less[] = $oystProduct;
+
+                if (!$this->context->cookie->id_cart) {
+                    $cart = new Cart();
+                    $cart->id_lang = (int)$this->context->cookie->id_lang;
+                    $cart->id_currency = (int)$this->context->cookie->id_currency;
+                    $cart->id_guest = (int)$this->context->cookie->id_guest;
+                    $cart->id_shop_group = (int)$this->context->shop->id_shop_group;
+                    $cart->id_shop = $this->context->shop->id;
+                    if ($this->context->cookie->id_customer) {
+                        $cart->id_customer = (int)$this->context->cookie->id_customer;
+                        $cart->id_address_delivery = (int)Address::getFirstCustomerAddressId($cart->id_customer);
+                        $cart->id_address_invoice = (int)$cart->id_address_delivery;
+                    } else {
+                        $cart->id_address_delivery = 0;
+                        $cart->id_address_invoice = 0;
+                    }
+                    $cart->save();
+
+                    // Needed if the merchant want to give a free product to every visitors
+                    $this->context->cart = $cart;
+                    $this->context->cookie->id_cart = $cart->id;
                 }
             } else {
                 $product = new Product($idProduct);
@@ -281,7 +318,13 @@ class OneClickService extends AbstractOystService
             }
         }
 
-        if ($controller == 'order') {
+        $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+
+        if ($user_agent) {
+            $oystContext['user_agent'] = $user_agent;
+        }
+
+        if ($oyst->displayBtnCart($controller)) {
             $oystContext['id_cart'] = (int)Context::getContext()->cart->id;
         }
 
@@ -295,6 +338,33 @@ class OneClickService extends AbstractOystService
                     ->setLanguage($this->context->language->iso_code)
                     ->setEmail($customer->email);
                 $oystContext['id_user'] = $customer->id;
+
+                $customerPS = new Customer($customer->id);
+                // Get address for customer
+                $addresses = $customerPS->getAddresses($this->context->language->id);
+                // Get last address for array
+                $last_address = end($addresses);
+                $id_country = Country::getIdByName($this->context->language->id, $last_address['country']);
+                $country_iso = Country::getIsoById($id_country);
+
+                // Build OystAddress
+                $oystAddress = new OystAddress();
+                $oystAddress->setFirstName($customer->firstname);
+                $oystAddress->setLastName($customer->lastname);
+                if ($last_address['company'] != '') {
+                    $oystAddress->setCompanyName($last_address['company']);
+                }
+                $oystAddress->setLabel($last_address['alias']);
+                $oystAddress->setStreet($last_address['address1']);
+                $oystAddress->setComplementary($last_address['address2']);
+                $oystAddress->setCity($last_address['city']);
+                $oystAddress->setPostCode($last_address['postcode']);
+                if ($last_address['state'] != null) {
+                    $oystAddress->setRegion($last_address['state']);
+                }
+                $oystAddress->setCountry($country_iso);
+
+                $oystUser->addAddress($oystAddress);
             }
 
             $oneClickOrdersParams = new OneClickOrderParams();
@@ -317,7 +387,7 @@ class OneClickService extends AbstractOystService
 
             $oneClickOrdersParams->setShouldReinitBuffer(false);
 
-            if ($controller == 'order') {
+            if ($oyst->displayBtnCart($controller)) {
                 $oneClickOrdersParams->setIsCheckoutCart(true);
                 $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY_CART'));
             } else {
@@ -332,7 +402,7 @@ class OneClickService extends AbstractOystService
                 )
             );
 
-            if ($labelCta && $labelCta != '' && $controller == 'order') {
+            if ($labelCta && $labelCta != '' && $oyst->displayBtnCart($controller)) {
                 $glue = '&';
                 if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
                     $glue = '?';
@@ -340,7 +410,6 @@ class OneClickService extends AbstractOystService
                 $id_cart_url = Context::getContext()->cart->id;
                 $url = Context::getContext()->link->getModuleLink('oyst', 'oneclickreturn');
                 $url .= $glue.'id_cart='.$id_cart_url.'&key='.ConfigurationP::get('FC_OYST_HASH_KEY');
-                // $url = Context::getContext()->link->getPageLink('order-confirmation').$glue.'id_cart='.Context::getContext()->cart->id.'&id_module='.Module::getModuleIdByName('oyst').'&key='.$customer->secure_key;
 
                 $oneClickCustomization = new OneClickCustomization();
                 $oneClickCustomization->setCta($labelCta, $url);
