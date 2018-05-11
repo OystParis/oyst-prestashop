@@ -473,6 +473,16 @@ class OrderService extends AbstractOystService
                     'id_cart = '.(int)$cart->id.' AND id_customer = '.(int)$customer->id
                 );
             }
+
+            if ($carrierInfo['type'] == 'dpd' &&
+                Module::isEnabled('chronopost') &&
+                Module::isInstalled('chronopost')) {
+                $md_data[] = array(
+                    'id_cart' => (int)$cart->id,
+                    'id_pr' => pSQL($pickupId),
+                );
+                Db::getInstance()->insert('chrono_cart_relais', $md_data);
+            }
         }
 
         return $state;
