@@ -43,6 +43,7 @@ use Tools;
 use StockAvailable;
 use CartRule;
 use Oyst;
+use Module;
 
 /**
  * Class OneClickService
@@ -409,6 +410,19 @@ class OrderService extends AbstractOystService
                 ),
                 'payment_id = "'.pSQL($oystOrderInfo['id']).'" AND `status` = "start"'
             );
+
+            // Insert data on table mr_selected for pickup mondial relay
+            $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
+            $carrierInfo = $oystOrderInfo['shipment']['carrier'];
+            if ($carrierInfo['type'] == 'dpd' &&
+                Module::isEnabled('chronopost') &&
+                Module::isInstalled('chronopost')) {
+                $md_data[] = array(
+                    'id_cart' => (int)$cart->id,
+                    'id_pr' => pSQL($pickupId),
+                );
+                Db::getInstance()->insert('chrono_cart_relais', $md_data);
+            }
         }
 
         return $state;
