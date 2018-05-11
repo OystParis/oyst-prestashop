@@ -42,6 +42,8 @@ use Db;
 use Tools;
 use StockAvailable;
 use CartRule;
+use Oyst;
+use Module;
 
 /**
  * Class OneClickService
@@ -186,6 +188,12 @@ class OrderService extends AbstractOystService
             $this->context->cart = $cart = new Cart();
         }
 
+        if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['user_agent'])) {
+            $user_agent = $oystOrderInfo['context']['user_agent'];
+        } else {
+            $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+        }
+
         $this->context->customer = $customer;
         $this->context->currency = new Currency(Currency::getIdByIsoCode($oystOrderInfo['order_amount']['currency']));
 
@@ -309,6 +317,71 @@ class OrderService extends AbstractOystService
             $order_state = PSConfiguration::get('PS_OS_PAYMENT');
         }
 
+        // Get cookie Oyst
+        $cookie_oyst = file_get_contents('https://api.oyst.com/session');
+        $cookie_oyst = json_decode($cookie_oyst);
+
+        // Get cURL resource
+        $ch = curl_init();
+        $oyst = new Oyst();
+
+        // Set url
+        $env = $oyst->getOneClickEnvironment();
+
+        switch ($env) {
+            case \Oyst\Service\Configuration::API_ENV_PROD:
+                $url = 'https://api.oyst.com/events/oneclick';
+                break;
+            case \Oyst\Service\Configuration::API_ENV_SANDBOX:
+                $url = 'https://api.sandbox.oyst.eu/events/oneclick';
+                break;
+            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                $url = $oyst->getCustomOneClickApiUrl().'/events/oneclick';
+                break;
+            default:
+                $url = 'https://api.oyst.com/events/oneclick';
+                break;
+        }
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        // Set method
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+
+        // Set options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        // Set headers
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            ["Content-Type: application/json; charset=utf-8"]
+        );
+
+
+        // Create body
+        $json_array = array(
+            "referrer" => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "",
+            "tag" => "merchantconfirmationpage:display",
+            "oyst_cookie" => isset($cookie_oyst->esid)? $cookie_oyst->esid : "",
+            "user_agent" => $user_agent,
+            "cart_amount" => $oystOrderInfo['order_amount']['value'],
+            "payment" => "Oyst OneClick",
+            "timestamp" => time()
+        );
+
+        $body = json_encode($json_array);
+
+        // Set body
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+
+        // Send the request & save response to $resp
+        $resp = curl_exec($ch);
+
+        // Close request to clear up some resources
+        curl_close($ch);
+
         $state = $this->oyst->validateOrder(
             $cart->id,
             $order_state,
@@ -337,6 +410,42 @@ class OrderService extends AbstractOystService
                 ),
                 'payment_id = "'.pSQL($oystOrderInfo['id']).'" AND `status` = "start"'
             );
+
+            // Insert data on table socolissimo_delivery_info for pickup socolissimo
+            $pickupAddress = $oystOrderInfo['shipment']['pickup_store']['address'];
+            $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
+            $carrierInfo = $oystOrderInfo['shipment']['carrier'];
+            if (($carrierInfo['type'] == 'colissimo_poste' || $carrierInfo['type'] == 'colissimo_commerces') &&
+                (Module::isEnabled('soflexibilite') &&
+                Module::isInstalled('soflexibilite')) ||
+                (Module::isEnabled('socolissimo') &&
+                Module::isInstalled('socolissimo'))
+            ) {
+                if ($carrierInfo['type'] == 'colissimo_poste') {
+                    $delivery_mode = 'BPR';
+                } else {
+                    $delivery_mode = 'A2P';
+                }
+
+                if ($pickupAddress['name'] != '') {
+                    $pickup_name = $pickupAddress['name'];
+                } else {
+                    $pickup_name = 'none';
+                }
+
+                Db::getInstance()->update(
+                    'socolissimo_delivery_info',
+                    array(
+                        'id_cart' => (int)$cart->id,
+                        'id_customer' => (int)$customer->id,
+                        'delivery_mode' => $delivery_mode,
+                        'prid' => pSQL($pickupId),
+                        'prname' => pSQL($pickup_name),
+                        'prfirstname' => pSQL($customer->firstname)
+                    ),
+                    'id_cart = '.(int)$cart->id.' AND id_customer = '.(int)$customer->id
+                );
+            }
         }
 
         return $state;
