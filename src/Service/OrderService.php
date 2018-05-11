@@ -474,7 +474,7 @@ class OrderService extends AbstractOystService
                 );
             }
 
-            if ($carrierInfo['type'] == 'dpd' &&
+            if ($carrierInfo['type'] == 'dpd' && $pickupId &&
                 Module::isEnabled('chronopost') &&
                 Module::isInstalled('chronopost')) {
                 $md_data[] = array(
