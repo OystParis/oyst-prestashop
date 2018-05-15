@@ -107,6 +107,11 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4725c2b6db34f755b89b7
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9b0c85b97abeed9539a4a27522f07b86'] = 'Vous devez activer l\'option \"allow_url_fopen\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_1e9a47f645f877ccb0802c12a409fcdf'] = 'Vous devez activer l\'extension \"cURL\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_406c32036dc3d8ace81aa915be99a494'] = 'Une erreur est survenue :';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e1354a66ff395e479a20628d2dc59613'] = 'Erreur pour le transporteur par défaut:';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_703b7353e4cb8c09ccf114a072273495'] = 'Veuillez sélectionner un transporteur par défaut';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4522603925acf0da809d21cf2d50ea85'] = 'Erreur pour le type du transporteur par défaut:';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f70a69f82912b6597c16c122dc453f40'] = 'Veuillez sélectionner le type Livraison à domicile pour le transporteur par défaut';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6e4f95cde8845dbb4f02eafb545e09dd'] = 'Valeur actuel pour le transporteur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_de95b43bceeb4b998aed4aed5cef1ae7'] = 'modifier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6a8ce87951bacc4de06442bbf801be7c'] = 'Merci de décrocher';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2c16795b14b1e8d89e5c7baba93e54f9'] = 'Merci de préparer les éléments suivants :';
@@ -185,7 +190,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8e414f1b4015e9f5bf625
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f0b50347c164ba3b829ec09c68ac775d'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8ab65dbf04b789777f9aee9618b6028a'] = 'Sélecteur pour positionner le bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b20d8c92d97776307e9079227849c0fb'] = 'Activer bouton page paiement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_26b0f9a1889064f87ec914403a53a5fc'] = 'Activer bouton page adresse';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_26b0f9a1889064f87ec914403a53a5fc'] = 'Activer le bouton adresse';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a50a8dca91318e8ae3bbed265f33dc83'] = 'Sélecteur pour le bouton adresse';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a56de4c1908646e5eabed7857996da2d'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
@@ -213,6 +218,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_4725c2b6db34f755b89b741c1d45bc7
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9b0c85b97abeed9539a4a27522f07b86'] = 'Vous devez activer l\'option \"allow_url_fopen\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1e9a47f645f877ccb0802c12a409fcdf'] = 'Vous devez activer l\'extension \"cURL\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_406c32036dc3d8ace81aa915be99a494'] = 'Un erreur est survenue :';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_e1354a66ff395e479a20628d2dc59613'] = 'Erreur pour le transporteur par défaut:';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_4522603925acf0da809d21cf2d50ea85'] = 'Erreur pour le type du transporteur par défaut:';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_6e4f95cde8845dbb4f02eafb545e09dd'] = 'Valeur actuel pour le transporteur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_de95b43bceeb4b998aed4aed5cef1ae7'] = 'modifier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6a8ce87951bacc4de06442bbf801be7c'] = 'Merci de décrocher';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2c16795b14b1e8d89e5c7baba93e54f9'] = 'Merci de préparer les documents suivants :';

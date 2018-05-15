@@ -32,6 +32,17 @@
     <p class="error"><strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError|escape:'htmlall':'UTF-8'}</p>
 {/if}
 
+{if isset($oyst.shipment_default) && $oyst.shipment_default == 0}
+    <p class="error"><strong>{l s='Carrier default error:' mod='oyst'}</strong> {l s='Please select carrier default' mod='oyst'}</p>
+{/if}
+
+{if !$oyst.type_shipping_default || $oyst.type_shipping_default != 'home_delivery'}
+    <p class="error">
+        <strong>{l s='Type carrier default error:' mod='oyst'}</strong> {l s='Please select carrier default with home_delivery' mod='oyst'}.
+        {l s='Current value for carrier :' mod='oyst'} <strong>{l s='%s' sprintf=$oyst.name_type_shipping_default}</strong>
+    </p>
+{/if}
+
 <script>
     var notification_bo_url = "{$oyst.notification_bo_url|escape:'htmlall':'UTF-8'}";
     var module_dir = "{$oyst.module_dir|escape:'htmlall':'UTF-8'}";

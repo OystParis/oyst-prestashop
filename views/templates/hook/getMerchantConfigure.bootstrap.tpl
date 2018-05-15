@@ -57,6 +57,23 @@
 </div>
 {/if}
 
+{if isset($oyst.shipment_default) && $oyst.shipment_default == 0}
+<div class="bootstrap">
+    <div class="alert alert-danger">
+        <strong>{l s='Carrier default error:' mod='oyst'}</strong> {l s='Please select carrier default' mod='oyst'}
+    </div>
+</div>
+{/if}
+
+{if !$oyst.type_shipping_default || $oyst.type_shipping_default != 'home_delivery'}
+<div class="bootstrap">
+    <div class="alert alert-danger">
+        <strong>{l s='Type carrier default error:' mod='oyst'}</strong> {l s='Please select carrier default with home_delivery' mod='oyst'}.
+        {l s='Current value for carrier :' mod='oyst'} <strong>{l s='%s' sprintf=$oyst.name_type_shipping_default}</strong>
+    </div>
+</div>
+{/if}
+
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
 <form id="module_form" class="defaultForm form-horizontal oyst configuration" method="POST" action="">
     <div align="center" style="font-size: 16px;">

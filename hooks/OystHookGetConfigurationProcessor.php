@@ -429,6 +429,21 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $custom_success_error = Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM');
         $custom_error_error = Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM');
         $custom_conf_error = Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
+        $shipping_default = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
+
+        // Get Reference carrier
+        $id_reference = Db::getInstance()->getValue('
+            SELECT `id_reference`
+            FROM `'._DB_PREFIX_.'carrier`
+            WHERE id_carrier = '.$shipping_default);
+        if (Validate::isInt($shipping_default) &&
+            $shipping_default != 0 &&
+            Validate::isInt($id_reference) &&
+            $id_reference != 0) {
+            $type_shipping_default = Configuration::get("FC_OYST_SHIPMENT_".$id_reference);
+        } else {
+            $type_shipping_default = false;
+        }
 
         $days = array(
             1 => $this->module->l('Monday', 'oysthookgetconfigurationprocessor'),
@@ -469,7 +484,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['custom_conf_error']        = !Validate::isAbsoluteUrl($custom_conf_error);
         $assign['carrier_list']             = $this->getCarrierList();
         $assign['type_list']                = $shipmentTypes;
-        $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
+        $assign['shipment_default']         = $shipping_default;
         $assign['order_state']              = OrderState::getOrderStates($id_lang);
         $assign['languages']                = Language::getLanguages(false);
         $assign['restriction_languages']    = $restriction_languages;
@@ -479,6 +494,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
         $assign['my_ip'] = Tools::getRemoteAddr();
         $assign['days'] = $days;
+        $assign['type_shipping_default']  = $type_shipping_default;
+        $assign['name_type_shipping_default'] = $shipmentTypes[$type_shipping_default];
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');
