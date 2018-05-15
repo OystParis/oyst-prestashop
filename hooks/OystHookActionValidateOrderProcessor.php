@@ -43,7 +43,7 @@ class OystHookActionValidateOrderProcessor extends FroggyHookProcessor
             $amount = $this->params['order']->total_paid * 100;
 
             // Get cookie Oyst
-            $cookie_oyst = file_get_contents('https://api.oyst.com/session');
+            $cookie_oyst = Tools::file_get_contents('https://api.oyst.com/session');
             $cookie_oyst = json_decode($cookie_oyst);
 
             // Get cURL resource
