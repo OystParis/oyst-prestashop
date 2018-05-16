@@ -111,18 +111,6 @@ class InstallManager
     /**
      * @return bool
      */
-    public function dropOrderTable()
-    {
-        $query = "
-            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_api_order;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
     public function dropShipmentTable()
     {
         $query = "
@@ -138,18 +126,6 @@ class InstallManager
     {
         $query = "
             DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_product;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
-    public function dropNotificationTable()
-    {
-        $query = "
-            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_payment_notification;
         ";
 
         return $this->db->execute($query);
@@ -185,10 +161,8 @@ class InstallManager
     public function uninstall()
     {
         $this->dropExportTable();
-        $this->dropOrderTable();
         $this->dropShipmentTable();
         $this->dropProductTable();
-        $this->dropNotificationTable();
 
         // Remove anything at the end
         $this->removeConfiguration();
