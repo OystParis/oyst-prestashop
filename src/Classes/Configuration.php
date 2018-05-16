@@ -19,7 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-namespace Oyst\Service;
+namespace Oyst\Classes;
 
 class Configuration
 {

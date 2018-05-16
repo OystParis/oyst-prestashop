@@ -26,11 +26,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Oyst\Api\OystApiClientFactory;
-use Oyst\Factory\AbstractExportProductServiceFactory;
-use Oyst\Service\Configuration as OystConfiguration;
-use Oyst\Service\Http\CurrentRequest;
-use Oyst\Service\Logger\LoggerManager;
+use Oyst\Classes\Configuration as OystConfiguration;
+use Oyst\Classes\LoggerManager;
 
 class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 {
@@ -108,10 +105,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
     public function init()
     {
-        if (Configuration::get('FC_OYST_HASH_KEY') == '') {
-            Configuration::updateValue('FC_OYST_HASH_KEY', md5(rand()._RIJNDAEL_IV_).'-'.date('YmdHis'));
-        }
-
         $this->redirect_success_urls = array(
             'ORDER_HISTORY'      => $this->module->l('Order history', 'oysthookgetconfigurationprocessor'),
             'ORDER_CONFIRMATION' => $this->module->l('Order confirmation', 'oysthookgetconfigurationprocessor'),
@@ -202,12 +195,12 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         }
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {
-            $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), new Oyst());
+            $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), new Oyst());
             $this->configuration_result = $oystDb->truncateProductTable();
         }
 
         if (Tools::isSubmit('submitOystConfigurationDisable')) {
-            $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), new Oyst());
+            $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), new Oyst());
             $oystDb->truncateProductTable();
             $this->configuration_result = $oystDb->disableProductTable();
         }
@@ -219,24 +212,11 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
     public function displayModuleConfiguration()
     {
         $assign = array();
-        $currentFreePayApiKey = $this->module->getFreePayApiKey();
-        $currentOneClickApiKey = $this->module->getOneClickApiKey();
-        $hasApiKey = !empty($currentFreePayApiKey) || !empty($currentOneClickApiKey);
 
-        // Keep it simple for now
-        $isCurrentFreePayApiKeyValid = Tools::strlen($currentFreePayApiKey) == 64;
-        $isCurrentOneClickApiKeyValid = Tools::strlen($currentOneClickApiKey) == 64;
-
-        $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $goToConf    = (bool) Tools::getValue('go_to_conf');
         $goToForm    = (bool) Tools::getValue('go_to_form');
         $hasError    = false;
         $id_lang = $this->context->language->id;
-
-        // Merchant comes from the plugin list
-        if (!$hasApiKey && !$goToConf) {
-            $goToForm = empty($clientPhone) && empty($hasApiKey);
-        }
 
         if ($goToConf) {
             Configuration::updateValue('FC_OYST_GUEST', false);
@@ -245,21 +225,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $this->handleContactForm($assign, $hasError, $goToForm);
 
-        $catalogApi = OystApiClientFactory::getClient(
-            OystApiClientFactory::ENTITY_CATALOG,
-            $this->module->getOneClickApiKey(),
-            $this->module->getUserAgent(),
-            $this->module->getOneClickEnvironment(),
-            $this->module->getCustomOneClickApiUrl()
+        $shipmentTypes = array(
+            'home_delivery' => 'selected="selected">Livraison à domicile',
+            'dpd' => 'DPD Relais',
+            'colissimo' => 'Colissimo Point Retrait - Tous',
+            'pick_up' => 'Navette Pick-up',
+            'mondial_relay' => 'Mondial Relay',
+            'relais_colis' => 'Relais Colis',
+            'colissimo_poste' => 'Colissimo Point Retrait - Bureaux de poste',
+            'colissimo_commerces' => 'Colissimo Point Retrait - Commerces',
         );
-        $result = $catalogApi->getShipmentTypes();
-        $shipmentTypes = array();
-
-        if (isset($result['types'])) {
-            foreach ($result['types'] as $value => $label) {
-                $shipmentTypes[$value] = $this->module->l($label, 'oysthookgetconfigurationprocessor');
-            }
-        }
 
         $loggerManager = new LoggerManager();
         $logsFile = $loggerManager->getFiles();
@@ -302,7 +277,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $custom_conf_error = Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
 
         $assign['logsFile'] = $filesName;
-        $assign['hasApiKey']     = $hasApiKey;
         $assign['module_dir']    = $this->path;
         $assign['message']       = '';
         $assign['phone']         = Configuration::get('FC_OYST_MERCHANT_PHONE');
@@ -315,7 +289,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['result']                   = $this->configuration_result;
         $assign['ps_version']               = Tools::substr(_PS_VERSION_, 0, 3);
         $assign['module_version']           = $this->module->version;
-        $assign['oyst_library_version']     = OystApiClientFactory::getVersion();
         $assign['allow_url_fopen_check']    = ini_get('allow_url_fopen');
         $assign['curl_check']               = function_exists('curl_version');
         $assign['payment_notification_url'] = $payment_notification_url.'?key='.$hash_key;
@@ -335,41 +308,14 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['languages']                = Language::getLanguages(false);
         $assign['restriction_languages']    = $restriction_languages;
         $assign['notification_tables']      = $notification_tables;
-        $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
-        $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
-        $assign['my_ip'] = Tools::getRemoteAddr();
+        $assign['current_tab']              = Tools::getValue('current_tab') ?: '#tab-content-1-click';
+        $assign['my_ip']                    = Tools::getRemoteAddr();
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');
 
         if ($isGuest && $clientPhone) {
             $this->showMessageToMerchant($assign);
-        }
-
-        if ($hasApiKey && (!empty($currentFreePayApiKey) && !$isCurrentFreePayApiKeyValid || !empty($currentOneClickApiKey) && !$isCurrentOneClickApiKeyValid)) {
-            $envFreePay = Tools::strtolower($this->module->getFreePayEnvironment());
-            $envOneClick = Tools::strtolower($this->module->getOneClickEnvironment());
-
-            if (!$isCurrentFreePayApiKeyValid) {
-                $key = 'apikey_'.$envFreePay.'_test_error_freepay';
-
-                if (array_key_exists($key, $assign)) {
-                    $assign[$key] = !$isCurrentFreePayApiKeyValid;
-                }
-            }
-
-            if (!$isCurrentOneClickApiKeyValid) {
-                $key = 'apikey_'.$envOneClick.'_test_error_oneclick';
-
-                if (array_key_exists($key, $assign)) {
-                    $assign[$key] = !$isCurrentOneClickApiKeyValid;
-                }
-            }
-
-            // First time merchant enter a key after submitting the contact form
-            if ($isGuest) {
-                Configuration::updateValue('FC_OYST_GUEST', false);
-            }
         }
 
         $lists_conf  = array_keys($this->configurations);
@@ -380,7 +326,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
 
         $this->smarty->assign($this->module->name, $assign);
 
-        $template = $goToForm || $hasError ? 'getGuestConfigure.tpl' : 'getMerchantConfigure.tpl';
+        $template = 'getMerchantConfigure.tpl';
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
             $this->context->controller->addCSS(array(

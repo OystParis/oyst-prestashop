@@ -19,12 +19,11 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-namespace Oyst\Service\Logger;
+namespace Oyst\Classes;
 
 use DateTime;
 use Exception;
 use Guzzle\Common\Exception\InvalidArgumentException;
-use Logger;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 use Tools;

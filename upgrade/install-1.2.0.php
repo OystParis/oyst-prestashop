@@ -21,7 +21,7 @@
 
 require_once dirname(__FILE__).'/../vendor/autoload.php';
 
-use Oyst\Service\Configuration as OConfiguration;
+use Oyst\Classes\Configuration as OConfiguration;
 
 /**
  * @param Oyst $module
@@ -48,13 +48,13 @@ function upgrade_module_1_2_0($module)
         Configuration::updateValue('OYST_API_PROD_KEY_FREEPAY', Configuration::get('FC_OYST_API_KEY'));
     }
 
-    Configuration::updateValue('OYST_API_ENV', \Oyst\Service\Configuration::API_ENV_PROD);
+    Configuration::updateValue('OYST_API_ENV', \Oyst\Classes\Configuration::API_ENV_PROD);
 
     // TODO: We should not know about this values.. They belongs to the api client
     Configuration::updateValue('OYST_ONECLICK_URL_PROD', 'https://cdn.oyst.com');
     Configuration::updateValue('OYST_ONECLICK_URL_SANDBOX', 'https://cdn.sandbox.oyst.eu');
 
-    $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
+    $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), $module);
     $oystDb->createExportTable();
 
     // As hook are handled dynamically by parent lib, we don't need to move them elsewhere

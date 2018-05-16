@@ -27,25 +27,8 @@ use Psr\Log\AbstractLogger;
 
 abstract class AbstractOystController
 {
-    /**
-     * @var CurrentRequest
-     */
-    protected $request;
-
     /** @var  AbstractLogger */
     protected $logger;
-
-    /** @var  Oyst */
-//    protected $oyst;
-
-    /**
-     * Oyst\Controller\AbstractOystController constructor.
-     * @param CurrentRequest $request
-     */
-    public function __construct(CurrentRequest $request)
-    {
-        $this->request = $request;
-    }
 
     /**
      * @param AbstractLogger $logger
