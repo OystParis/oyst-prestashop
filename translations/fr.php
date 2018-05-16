@@ -136,6 +136,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c2203231f692acd954ec2
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_648d5c916e2e56ca97b1030b6edee2ca'] = 'Bouton page popup';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_57d05763db7564e9d4a955a803d785f4'] = 'Bouton connexion';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a70d0de42671b589af5812435d075aa3'] = 'Bouton paiement';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_31a3e70aaa79153beba73f1ffef86a99'] = 'Bouton adresse';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_21f6bc356cdbbf99796a5a8352d5b246'] = 'Paramètres restrictions';
@@ -177,6 +178,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8e414f1b4015e9f5bf625
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f0b50347c164ba3b829ec09c68ac775d'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8ab65dbf04b789777f9aee9618b6028a'] = 'Sélecteur pour positionner le bouton';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b20d8c92d97776307e9079227849c0fb'] = 'Activer bouton page paiement';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_26b0f9a1889064f87ec914403a53a5fc'] = 'Activer bouton page adresse';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a50a8dca91318e8ae3bbed265f33dc83'] = 'Sélecteur pour le bouton adresse';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a56de4c1908646e5eabed7857996da2d'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
@@ -235,6 +239,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_c2203231f692acd954ec241d13fcfcc
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_648d5c916e2e56ca97b1030b6edee2ca'] = 'Bouton page popup';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_57d05763db7564e9d4a955a803d785f4'] = 'Bouton page connexion';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_a70d0de42671b589af5812435d075aa3'] = 'Bouton page paiement';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_31a3e70aaa79153beba73f1ffef86a99'] = 'Bouton adresse';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4ce331798d09c99901bed35a4beaedbd'] = 'Configuration des Transporteurs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2c5a97707a5ebc2b938a49ab0ccbbd85'] = 'Paramètres avancés';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_21f6bc356cdbbf99796a5a8352d5b246'] = 'Paramètres restrictions';
@@ -271,6 +276,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_987015391e3f38ee4f89a2369e2558e
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1693fdde5702dcdeaf275cd6426e2673'] = 'Activer bouton page popup';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_19ba49c8d49ca6756b3e4a5a3f9ec818'] = 'Activer bouton page connexion';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_f7c26700f7863c8f5c292053916a6f22'] = 'Bouton page paiement';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_57a93aed5880d4872d5f2173c9d485d6'] = 'Activer le bouton adresse';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
