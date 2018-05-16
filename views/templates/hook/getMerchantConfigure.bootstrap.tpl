@@ -84,137 +84,10 @@
     <div class="panel oyst_fieldset">
         <div>
             <ul id="oyst-config-menu" class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="{if $oyst.current_tab == '#tab-content-FreePay'}active{/if}"><a href="#tab-content-FreePay" role="tab" data-toggle="tab">{l s='FreePay' mod='oyst'}</a></li>
                 <li role="presentation" class="{if $oyst.current_tab == '#tab-content-1-click'}active{/if}"><a href="#tab-content-1-click" role="tab" data-toggle="tab">{l s='1-click' mod='oyst'}</a></li>
             </ul>
             <div class="oyst-admin-tab tab-content">
                 <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab|escape:'htmlall':'UTF-8'}"/>
-                <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-FreePay'} active{/if}" id="tab-content-FreePay">
-                    <fieldset>
-                        <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-3">{l s='Enable FreePay' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                <input type="checkbox" id="FC_OYST_PAYMENT_FEATURE" name="FC_OYST_PAYMENT_FEATURE" value="1"{if $oyst.FC_OYST_PAYMENT_FEATURE} checked="checked"{/if} />
-                            </div>
-                        </div>
-                        <div class="form-group clearfix env prod" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-3">{l s='FreePay API Production Key' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <div class="input-group">
-                                    <input type="text" id="OYST_API_PROD_KEY_FREEPAY" name="OYST_API_PROD_KEY_FREEPAY" value="{$oyst.OYST_API_PROD_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
-                                    </span>
-                                </div>
-                                <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
-                                {if $oyst.apikey_prod_test_error_freepay}
-                                <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                {/if}
-                            </div>
-                        </div>
-                        <div class="form-group clearfix env sandbox" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-3">{l s='FreePay API Sandbox Key' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <div class="input-group">
-                                    <input type="text" id="OYST_API_SANDBOX_KEY_FREEPAY" name="OYST_API_SANDBOX_KEY_FREEPAY" value="{$oyst.OYST_API_SANDBOX_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
-                                    </span>
-                                </div>
-                                <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.sandbox.oyst.eu/signup" target="_blank">backoffice.sandbox.oyst.com</a></p>
-                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
-                                {if $oyst.apikey_sandbox_test_error_freepay}
-                                <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                {/if}
-                            </div>
-                        </div>
-                        <div class="form-group clearfix env custom" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-3">{l s='FreePay API Custom Key' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <div class="input-group">
-                                    <input type="text" id="OYST_API_CUSTOM_KEY_FREEPAY" name="OYST_API_CUSTOM_KEY_FREEPAY" value="{$oyst.OYST_API_CUSTOM_KEY_FREEPAY|escape:'htmlall':'UTF-8'}"/>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
-                                    </span>
-                                </div>
-                                <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.staging.oyst.eu/signup" target="_blank">backoffice.staging.oyst.com</a></p>
-                                <p class="help-block">{l s='A problem? Go to' mod='oyst'} <a href="https://free-pay.zendesk.com/hc/fr/articles/115003312045-Comment-installer-FreePay-sur-Prestashop-" target="_blank">{l s='intallation help' mod='oyst'}</a></p>
-                                {if $oyst.apikey_custom_test_error_freepay}
-                                <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                {/if}
-                            </div>
-                        </div>
-                        <div class="form-group clearfix urlCustomization">
-                            <label class="control-label col-md-3 col-lg-3">{l s='Success Url' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <select id="FC_OYST_REDIRECT_SUCCESS" name="FC_OYST_REDIRECT_SUCCESS">
-                                {foreach from=$oyst.redirect_success_urls key=url item=label}
-                                    <option value="{$url|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_REDIRECT_SUCCESS == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label|escape:'html':'UTF-8'}</option>
-                                {/foreach}
-                                </select>
-                                <input type="text" id="FC_OYST_REDIRECT_SUCCESS_CUSTOM" name="FC_OYST_REDIRECT_SUCCESS_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_SUCCESS_CUSTOM|escape:'htmlall':'UTF-8'}"/>
-                                {if $oyst.custom_success_error}
-                                <div class="alert alert-danger customUrlText">{l s='This is not a valid URL!' mod='oyst'}</div>
-                                {/if}
-                            </div>
-                        </div>
-                        <div class="form-group clearfix urlCustomization">
-                            <label class="control-label col-md-3 col-lg-3">{l s='Error Url' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <select id="FC_OYST_REDIRECT_ERROR" name="FC_OYST_REDIRECT_ERROR">
-                                {foreach from=$oyst.redirect_error_urls key=url item=label}
-                                    <option value="{$url|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_REDIRECT_ERROR == $url} selected="selected"{/if}{if $url == 'CUSTOM'} class="customUrl"{/if}>{$label|escape:'html':'UTF-8'}</option>
-                                {/foreach}
-                                </select>
-                                <input type="text" id="FC_OYST_REDIRECT_ERROR_CUSTOM" name="FC_OYST_REDIRECT_ERROR_CUSTOM" class="customUrlText" disabled="disabled" value="{$oyst.FC_OYST_REDIRECT_ERROR_CUSTOM|escape:'htmlall':'UTF-8'}"/>
-                                {if $oyst.custom_error_error}
-                                <div class="alert alert-danger customUrlText">{l s='This is not a valid URL!' mod='oyst'}</div>
-                                {/if}
-                            </div>
-                        </div>
-                        <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-3">{l s='Environment' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <select name="OYST_API_ENV_FREEPAY">
-                                    <option value="prod" {if $oyst.OYST_API_ENV_FREEPAY == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
-                                    <option value="sandbox" {if $oyst.OYST_API_ENV_FREEPAY == 'sandbox'}selected="selected"{/if}>{l s='Sandbox' mod='oyst'}</option>
-                                    <option value="custom" {if $oyst.OYST_API_ENV_FREEPAY == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group clearfix env custom" style="display: none;">
-                            <label class="control-label col-md-3 col-lg-3">{l s='Endpoint API Custom' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <input type="text" id="OYST_API_CUSTOM_ENDPOINT_FREEPAY" name="OYST_API_CUSTOM_ENDPOINT_FREEPAY" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_FREEPAY|escape:'htmlall':'UTF-8'}"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3 col-lg-3">{l s='State payment' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <select id="FC_OYST_STATE_PAYMENT_FREEPAY" name="FC_OYST_STATE_PAYMENT_FREEPAY">
-                                    {foreach from=$oyst.order_state item=state}
-                                        <option value="{$state.id_order_state|escape:'html':'UTF-8'}"{if $oyst.FC_OYST_STATE_PAYMENT_FREEPAY == $state.id_order_state} selected="selected"{/if}>{$state.name|escape:'html':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
-                            </div>
-                        </div>
-                        {* Deprecated for version 1.11.0 *}
-                        {* <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-3">{l s='Create order before payment' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                <input type="checkbox" id="FC_OYST_PREORDER_FEATURE" name="FC_OYST_PREORDER_FEATURE" value="1"{if $oyst.FC_OYST_PREORDER_FEATURE} checked="checked"{/if} />
-                            </div>
-                        </div> *}
-                        <div class="form-group clearfix">
-                            <label class="control-label col-md-3 col-lg-3">{l s='Enable Fraudscoring' mod='oyst'}</label>
-                            <div class="col-md-7 col-lg-7">
-                                <input type="checkbox" name="FC_OYST_ACTIVE_FRAUD" value="1"{if $oyst.FC_OYST_ACTIVE_FRAUD} checked="checked"{/if} />
-                                <span class="help-block">{l s='Allows you to display in your back-office the potentially abnormal orders detected by our algorithm. The management of the fraud is assured by our teams independently of this option.' mod='oyst'}</span>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
                 <div role="tabpanel" class="panel tab-pane{if $oyst.current_tab == '#tab-content-1-click'} active{/if}" id="tab-content-1-click" style="border-top: 0;border-radius: initial;">
                     <div class="row">
                         <div class="col-lg-2 col-md-3">
@@ -326,7 +199,7 @@
                                 </div>
                             </div>
                             <div role="tabpanel" id="custom-btn-general" class="tab-pane">
-                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE}
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Smart button' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
@@ -404,7 +277,7 @@
                                 {/if}
                             </div>
                             <div role="tabpanel" id="custom-btn" class="tab-pane">
-                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE}
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Enabled button product' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
@@ -493,7 +366,7 @@
                                 {/if}
                             </div>
                             <div role="tabpanel" id="custom-btn-cart" class="tab-pane">
-                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE}
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Enable button cart' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
@@ -566,7 +439,7 @@
                                 {/if}
                             </div>
                             <div role="tabpanel" id="settings-carrier" class="tab-pane">
-                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE}
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Carrier default' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
@@ -602,7 +475,7 @@
                                 {/if}
                             </div>
                             <div role="tabpanel" id="settings-advanced" class="tab-pane">
-                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE}
                                     <div class="form-group clearfix urlCustomization">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Confirmation url for button cart' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
@@ -702,7 +575,7 @@
                                 {/if}
                             </div>
                             <div role="tabpanel" id="settings-restrictions" class="tab-pane">
-                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE}
                                     <div class="row table-responsive clearfix ">
                                         <div class="col-xs-6 overflow-y">
                                             <table class="table">
@@ -733,7 +606,7 @@
                                 {/if}
                             </div>
                             <div role="tabpanel" id="display-notifications" class="tab-pane">
-                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE}
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">Tables</label>
                                         <div class="col-md-7 col-lg-7">

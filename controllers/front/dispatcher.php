@@ -16,7 +16,6 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
     public function init()
     {
         Route::addRoute('GET', '/cart/{id}', 'Cart', 'getCart');
-        Route::addRoute('GET', '/session/cart-id', 'Session', 'getCartId', false);
         Route::addRoute('PUT', '/script-tag', 'ScriptTag', 'setUrl');
         Route::addRoute('PUT', '/customer/search', 'Customer', 'search');
         Route::addRoute('PUT', '/cart/{id}', 'Cart', 'updateCart');

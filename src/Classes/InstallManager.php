@@ -19,7 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-namespace Oyst\Service;
+namespace Oyst\Classes;
 
 use Carrier;
 use Product;
@@ -28,9 +28,6 @@ use RangePrice;
 use RangeWeight;
 use Db;
 use Configuration as PSConfiguration;
-use Oyst\Classes\OneClickShipment;
-use Oyst\Classes\OystCarrier;
-use Oyst\Classes\ShipmentAmount;
 use Zone;
 use Group;
 use Validate;

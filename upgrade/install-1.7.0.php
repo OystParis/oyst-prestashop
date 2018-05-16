@@ -21,7 +21,7 @@
 
 require_once dirname(__FILE__).'/../vendor/autoload.php';
 
-use Oyst\Service\Configuration as OConfiguration;
+use Oyst\Classes\Configuration as OConfiguration;
 
 function upgrade_module_1_7_0()
 {

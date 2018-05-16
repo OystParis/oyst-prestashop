@@ -21,11 +21,11 @@
 
 require_once dirname(__FILE__).'/../vendor/autoload.php';
 
-use Oyst\Service\Configuration as OConfiguration;
+use Oyst\Classes\Configuration as OConfiguration;
 
 function upgrade_module_1_4_0($module)
 {
-    $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
+    $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), $module);
     $oystDb->createProductTable();
 
     $module->registerHook('displayAdminProductsExtra');

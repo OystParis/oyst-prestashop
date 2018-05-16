@@ -19,7 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-namespace Oyst\Service\Logger;
+namespace Oyst\Classes;
 
 use Tools;
 

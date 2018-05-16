@@ -253,7 +253,6 @@ class FroggyPaymentModule extends PaymentModule
             $fo->uninstallOverrides();
             return false;
         }
-        return true;
     }
 
     /**

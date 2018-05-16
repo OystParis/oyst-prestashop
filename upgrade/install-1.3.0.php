@@ -21,7 +21,7 @@
 
 require_once dirname(__FILE__).'/../vendor/autoload.php';
 
-use Oyst\Service\Configuration as OConfiguration;
+use Oyst\Classes\Configuration as OConfiguration;
 
 /**
  * @param Oyst $module
@@ -43,7 +43,7 @@ function upgrade_module_1_3_0($module)
     Configuration::updateValue(OConfiguration::API_ENV_FREEPAY, $currentEnv);
     Configuration::updateValue(OConfiguration::API_ENV_ONECLICK, $currentEnv);
 
-    $oystDb = new \Oyst\Service\InstallManager(Db::getInstance(), $module);
+    $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), $module);
     $oystDb->createOrderTable();
 
     $module->registerHook('actionOrderStatusPostUpdate');
