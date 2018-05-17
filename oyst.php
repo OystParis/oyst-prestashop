@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.16.0';
+        $this->version = '1.17.1';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -60,11 +60,11 @@ class Oyst extends FroggyPaymentModule
     {
         //List of concerned hooks by the ip restriction
         $filtered_hooks = array(
-            'displayFooterProduct',
+            'displayFooter',
             'displayHeader',
             'displayPayment',
             'displayPaymentReturn',
-            'displayShoppingCart'
+            'actionValidateOrder'
         );
         foreach ($filtered_hooks as $filtered_hook) {
             if (strpos($method, $filtered_hook) !== false) {
@@ -303,13 +303,28 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
         Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
         // Params 1-Click btn cart
-        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.standard-checkout');
+        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .button-medium');
         // Params 1-Click advanced
         Configuration::updateValue('FC_OYST_DELAY', 15);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);
         Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
         Configuration::updateValue('FC_OYST_ONLY_FOR_IP', "");
+
+        // Params 1-Click for btn layer
+        Configuration::updateValue('FC_OYST_BTN_LAYER', 0);
+        Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '214');
+        Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '43');
+
+        // Params 1-Click for btn login
+        Configuration::updateValue('FC_OYST_BTN_LOGIN', 0);
+
+        // Params 1-Click for btn payment
+        Configuration::updateValue('FC_OYST_BTN_PAYMENT', 0);
+
+        // Params 1-Click for btn addr
+        Configuration::updateValue('FC_OYST_BTN_ADDR', 0);
+
         // Params 1-Click restrictions
         Configuration::updateValue('FC_OYST_CURRENCIES', Currency::getIdByIsoCode('EUR'));
         Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
@@ -533,6 +548,30 @@ class Oyst extends FroggyPaymentModule
     {
         $hash_key = Configuration::get('FC_OYST_HASH_KEY');
         return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/oyst/notification.php?key='.$hash_key;
+    }
+
+    /**
+     * @return bool
+     */
+    public function displayBtnCart($controller = null)
+    {
+        $controller_cart = array(
+            'order',
+            'index',
+            'category',
+            'authentication',
+            'order-opc',
+            'address',
+        );
+        if ($controller == null) {
+            $controller = Context::getContext()->controller->php_self;
+        }
+
+        if (in_array($controller, $controller_cart)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
