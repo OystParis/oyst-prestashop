@@ -143,7 +143,15 @@ class OrderService extends AbstractOystService
             $address->id_customer = $customer->id;
             $address->firstname = $customer->firstname;
             $address->lastname = $customer->lastname;
-            $address->address1 = $pickup_name.' - '.($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none');
+
+            if ($carrierInfo['type'] == 'dpd' && $pickupId &&
+                Module::isEnabled('chronopost') &&
+                Module::isInstalled('chronopost')) {
+                    $address->address1 = ($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none');
+                    $address->company = $pickup_name;
+            } else {
+                $address->address1 = $pickup_name.' - '.($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none');
+            }
             $address->postcode = ($pickupAddress['postal_code'] != '')? $pickupAddress['postal_code'] : 'none';
             $address->city = ($pickupAddress['city'] != '')? $pickupAddress['city'] : 'none';
             $address->alias = $alias;
