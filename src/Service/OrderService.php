@@ -468,7 +468,9 @@ class OrderService extends AbstractOystService
                         'delivery_mode' => $delivery_mode,
                         'prid' => pSQL($pickupId),
                         'prname' => pSQL($pickup_name),
-                        'prfirstname' => pSQL($customer->firstname)
+                        'prfirstname' => pSQL($customer->firstname),
+                        'cecountry' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
+                        'ceemail' => pSQL($customer->email)
                     ),
                     'id_cart = '.(int)$cart->id.' AND id_customer = '.(int)$customer->id
                 );
