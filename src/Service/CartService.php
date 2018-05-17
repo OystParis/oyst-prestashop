@@ -509,7 +509,7 @@ class CartService extends AbstractOystService
             if ($data['context']['id_cart'] && (int)$data['context']['id_cart'] > 0) {
                 $sql = 'SELECT go.*
                         FROM `'._DB_PREFIX_.'giftonorder_order` as go
-                        WHERE go.id_cart = '.(int)$id_cart;
+                        WHERE go.id_cart = '.(int)$data['context']['id_cart'];
 
                 $giftInCart = Db::getInstance()->ExecuteS($sql);
                 if (!$giftInCart) {
