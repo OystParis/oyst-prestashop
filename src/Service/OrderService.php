@@ -354,7 +354,7 @@ class OrderService extends AbstractOystService
         curl_setopt(
             $ch,
             CURLOPT_HTTPHEADER,
-            ["Content-Type: application/json; charset=utf-8"]
+            array("Content-Type: application/json; charset=utf-8")
         );
 
 

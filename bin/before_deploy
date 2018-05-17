@@ -15,5 +15,6 @@ rsync -av * oyst_tmp --exclude='oyst_tmp'
 mv oyst_tmp oyst
 rm -rf oyst/vendor/squizlabs/
 rm -rf oyst/vendor/wimg/
+php addons.php oyst/vendor/
 zip -r oyst.zip oyst
 tar -cvzf oyst.tar.gz oyst
