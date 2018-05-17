@@ -1000,6 +1000,9 @@
                                         </div>
                                     </div>
                                 {else}
+                                    {foreach $oyst.restriction_business_days item=day}
+                                        <input type="hidden" name="oyst_days[]" value="{$day|intval}"/>
+                                    {/foreach}
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>

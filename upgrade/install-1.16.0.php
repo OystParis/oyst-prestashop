@@ -78,7 +78,7 @@ function upgrade_module_1_16_0($module)
     Configuration::updateValue('FC_OYST_ID_SMART_BTN_ADDR', '#submitAddress');
     Configuration::updateValue('FC_OYST_POSITION_BTN_ADDR', 'before');
 
-    Configuration::updateValue('FC_OYST_BUSINESS_DAYS', false);
+    Configuration::updateValue('FC_OYST_BUSINESS_DAYS', '1,2,3,4,5,6');
 
     return true;
 }
