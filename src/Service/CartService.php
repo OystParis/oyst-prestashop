@@ -507,7 +507,14 @@ class CartService extends AbstractOystService
         if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
             require_once dirname(__FILE__).'/../../../giftonordermodule/Giftonorder.php';
             if ($data['context']['id_cart'] && (int)$data['context']['id_cart'] > 0) {
-                $giftInCart = \Giftonorder::getGiftsInCart($data['context']['id_cart']);
+                $sql = 'SELECT go.*
+                        FROM `'._DB_PREFIX_.'giftonorder_order` as go
+                        WHERE go.id_cart = '.(int)$id_cart;
+
+                $giftInCart = Db::getInstance()->ExecuteS($sql);
+                if (!$giftInCart) {
+                    $giftInCart = array();
+                }
                 if (count($giftInCart) > 0) {
                     foreach ($giftInCart as $gift) {
                         $idCombination = $gift['id_combination'];
