@@ -84,7 +84,7 @@ function addIndex($path, $cli = false)
             $dirname = isset($exp[0])? $exp[0].'/' : '';
             if (count($exp) === 2 && $file->isFile()) {
                 if (!file_exists($dirname.'index.php')) {
-                    if (copyFile(getcwd().'sources/index.php', $dirname.'index.php') === true) {
+                    if (copyFile(getcwd().'/bin/sources/index.php', $dirname.'index.php') === true) {
                         continue;
                     }
                 }
@@ -92,7 +92,7 @@ function addIndex($path, $cli = false)
                 if ($file->isDir()) {
                     $dirname = str_replace('\\', '/', $file->getPathname().'/');
                     if (!file_exists($dirname.'index.php')) {
-                        if (copyFile(getcwd().'sources/index.php', $dirname.'index.php') === true) {
+                        if (copyFile(getcwd().'/bin/sources/index.php', $dirname.'index.php') === true) {
                             continue;
                         }
                     }
