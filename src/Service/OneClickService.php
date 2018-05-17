@@ -43,6 +43,7 @@ use Module;
 use CartRule;
 use Cart;
 use Address;
+use Db;
 
 /**
  * Class Oyst\Service\OneClickService
