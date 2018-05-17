@@ -167,8 +167,14 @@ class OneClickService extends AbstractOystService
 
             $ids_gift_products = array();
             if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
-                require_once dirname(__FILE__).'/../../../giftonordermodule/Giftonorder.php';
-                $giftInCart = \Giftonorder::getGiftsInCart(Context::getContext()->cart->id);
+                $sql = 'SELECT go.*
+                        FROM `'._DB_PREFIX_.'giftonorder_order` as go
+                        WHERE go.id_cart = '.(int)Context::getContext()->cart->id;
+
+                $giftInCart = Db::getInstance()->ExecuteS($sql);
+                if (!$giftInCart) {
+                    $giftInCart = array();
+                }
                 if (count($giftInCart) > 0) {
                     foreach ($giftInCart as $gift) {
                         $ids_gift_products[] = $gift['id_product'];

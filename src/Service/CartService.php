@@ -505,7 +505,6 @@ class CartService extends AbstractOystService
         }
 
         if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
-            require_once dirname(__FILE__).'/../../../giftonordermodule/Giftonorder.php';
             if ($data['context']['id_cart'] && (int)$data['context']['id_cart'] > 0) {
                 $sql = 'SELECT go.*
                         FROM `'._DB_PREFIX_.'giftonorder_order` as go
