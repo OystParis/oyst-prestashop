@@ -38,28 +38,4 @@ if (!file_exists(dirname(__FILE__).'/vendor/autoload.php')) {
 
 require_once dirname(__FILE__).'/vendor/autoload.php';
 
-/*
- * Include Froggy Library
- */
-if (!class_exists('FroggyModule', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/froggy/FroggyModule.php';
-}
-if (!class_exists('FroggyPaymentModule', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/froggy/FroggyPaymentModule.php';
-}
-
-/*
- * Include Oyst SDK
- */
-if (!class_exists('OystSDK', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystSDK.php';
-}
-
-/*
- * Include Oyst Payment Notification Class
- */
-if (!class_exists('OystPaymentNotification', false)) {
-    require_once _PS_MODULE_DIR_.'/oyst/classes/OystPaymentNotification.php';
-}
-
 define('_PS_OYST_DEBUG_', 0);

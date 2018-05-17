@@ -24,7 +24,7 @@ require_once dirname(__FILE__) . '/autoload.php';
 /**
  * Class Oyst
  */
-class Oyst extends FroggyPaymentModule
+class Oyst extends PaymentModule
 {
     /**
      * Constructor
@@ -56,28 +56,28 @@ class Oyst extends FroggyPaymentModule
         }
     }
 
-    public function __call($method, $args)
-    {
-        //List of concerned hooks by the ip restriction
-        $filtered_hooks = array(
-            'displayFooterProduct',
-            'displayHeader',
-            'displayPayment',
-            'displayShoppingCart'
-        );
-        foreach ($filtered_hooks as $filtered_hook) {
-            if (strpos($method, $filtered_hook) !== false) {
-                $ip = Tools::getRemoteAddr();
-                if (!empty($ip) && Configuration::hasKey('FC_OYST_ONLY_FOR_IP')) {
-                    $authorized_ips = Configuration::get('FC_OYST_ONLY_FOR_IP');
-                    if (!empty($authorized_ips) && strpos($authorized_ips, $ip) === false) {
-                        return null;
-                    }
-                }
-            }
-        }
-        return parent::__call($method, $args);
-    }
+//    public function __call($method, $args)
+//    {
+//        //List of concerned hooks by the ip restriction
+//        $filtered_hooks = array(
+//            'displayFooterProduct',
+//            'displayHeader',
+//            'displayPayment',
+//            'displayShoppingCart'
+//        );
+//        foreach ($filtered_hooks as $filtered_hook) {
+//            if (strpos($method, $filtered_hook) !== false) {
+//                $ip = Tools::getRemoteAddr();
+//                if (!empty($ip) && Configuration::hasKey('FC_OYST_ONLY_FOR_IP')) {
+//                    $authorized_ips = Configuration::get('FC_OYST_ONLY_FOR_IP');
+//                    if (!empty($authorized_ips) && strpos($authorized_ips, $ip) === false) {
+//                        return null;
+//                    }
+//                }
+//            }
+//        }
+//        return parent::__call($method, $args);
+//    }
 
     public function uninstall()
     {
@@ -90,6 +90,10 @@ class Oyst extends FroggyPaymentModule
     public function install()
     {
         $result = parent::install();
+
+        $result &= $this->registerHook('header');
+        $result &= $this->registerHook('displayPaymentReturn');
+        $result &= $this->registerHook('adminProductsExtra');
 
         // Clear cache
         Cache::clean('Module::getModuleIdByName_oyst');
@@ -328,7 +332,7 @@ class Oyst extends FroggyPaymentModule
      */
     public function getContent()
     {
-        return $this->hookGetConfiguration();
+        return '';
     }
 
     /**
@@ -371,5 +375,17 @@ class Oyst extends FroggyPaymentModule
     public function getContext()
     {
         return $this->context;
+    }
+
+    public function hookHeader($params)
+    {
+        //TODO Condition on IP + if product page and 1-click enable/disable
+        if (Configuration::hasKey('FC_OYST_SCRIPT_TAG_URL')) {
+            if (version_compare(_PS_VERSION_, '1.7', '<')) {
+                $this->context->controller->addJS(Configuration::get('FC_OYST_SCRIPT_TAG_URL'));
+            } else {
+                $this->context->controller->registerJavascript('modules-oyst', Configuration::get('FC_OYST_SCRIPT_TAG_URL'), ['position' => 'bottom', 'priority' => 150, 'server' => 'remote']);
+            }
+        }
     }
 }

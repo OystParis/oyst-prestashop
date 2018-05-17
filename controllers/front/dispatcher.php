@@ -9,7 +9,7 @@ require __DIR__.'/../../vendor/autoload.php';
 require __DIR__.'/../../../../init.php';
 
 use Oyst\Classes\Route;
-use Oyst\Service\Http\CurrentRequest;
+use Oyst\Classes\CurrentRequest;
 
 class OystDispatcherModuleFrontController extends ModuleFrontController
 {
