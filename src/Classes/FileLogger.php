@@ -23,9 +23,7 @@ namespace Oyst\Classes;
 
 use DateTime;
 use Exception;
-use Guzzle\Common\Exception\InvalidArgumentException;
 use Psr\Log\AbstractLogger;
-use Psr\Log\LogLevel;
 use Tools;
 
 class FileLogger extends AbstractLogger
@@ -35,7 +33,6 @@ class FileLogger extends AbstractLogger
     public function setFile($file)
     {
         $this->file = $file;
-
         return $this;
     }
 
