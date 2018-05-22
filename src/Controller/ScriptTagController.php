@@ -3,14 +3,13 @@
 namespace Oyst\Controller;
 
 use Configuration;
-use Oyst\Classes\FileLogger;
 
 class ScriptTagController extends AbstractOystController
 {
-    public function _construct()
+    public function __construct()
     {
-        $this->logger = new FileLogger();
-        $this->logger->setFile(dirname(__FILE__).'/../../logs/script-tag.log');
+        parent::__construct();
+        $this->setLogName('script-tag');
     }
 
     public function setUrl($params)

@@ -21,34 +21,40 @@
 
 namespace Oyst\Controller;
 
-//use Oyst;
-use Oyst\Service\Http\CurrentRequest;
-use Psr\Log\AbstractLogger;
+use Oyst\Classes\FileLogger;
 
 abstract class AbstractOystController
 {
-    /** @var  AbstractLogger */
-    protected $logger;
+    /** @var  FileLogger */
+    public $logger;
 
-    /**
-     * @param AbstractLogger $logger
-     * @return $this
-     */
-    public function setLogger(AbstractLogger $logger)
+    public function __construct()
     {
-        $this->logger = $logger;
-
-        return $this;
+        $this->logger = new FileLogger();
+        $this->setLogName('global');
     }
 
     /**
-     * @param $content
+     * @param $name string
      */
-    protected function respondAsJson($content)
+    public function setLogName($name)
+    {
+        $this->logger->setFile(dirname(__FILE__).'/../../logs/'.$name.'.log');
+    }
+
+    /**
+     * @param string $content
+     * @param bool $already_json
+     */
+    protected function respondAsJson($content, $already_json = false)
     {
         header("HTTP/1.1 200 OK");
         header('Content-Type: application/json');
-        echo json_encode($content);
+        if ($already_json) {
+            echo $content;
+        } else {
+            echo json_encode($content);
+        }
     }
 
     /**

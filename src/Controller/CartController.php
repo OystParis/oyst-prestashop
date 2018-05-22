@@ -4,15 +4,14 @@ namespace Oyst\Controller;
 
 use Cart;
 use Exception;
-use Oyst\Classes\FileLogger;
 use Validate;
 
 class CartController extends AbstractOystController
 {
-    public function _construct()
+    public function __construct()
     {
-        $this->logger = new FileLogger();
-        $this->logger->setFile(dirname(__FILE__).'/../../logs/cart.log');
+        parent::__construct();
+        $this->setLogName('cart');
     }
 
     public function getCart($params)

@@ -5,15 +5,14 @@ namespace Oyst\Controller;
 use Customer;
 use Db;
 use Language;
-use Oyst\Classes\FileLogger;
 use Validate;
 
 class CustomerController extends AbstractOystController
 {
-    public function _construct()
+    public function __construct()
     {
-        $this->logger = new FileLogger();
-        $this->logger->setFile(dirname(__FILE__).'/../../logs/customer.log');
+        parent::__construct();
+        $this->setLogName('customer');
     }
 
     public function search($params)

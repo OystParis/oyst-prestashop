@@ -19,6 +19,8 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
+use Oyst\Classes\OystAPIKey;
+
 require_once dirname(__FILE__) . '/autoload.php';
 
 /**
@@ -300,8 +302,8 @@ class Oyst extends PaymentModule
         Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
 
         //Generate API key if not exists
-        if (!Configuration::hasKey('FC_OYST_API_KEY')) {
-            Configuration::updateValue('FC_OYST_API_KEY', Tools::passwdGen(32));
+        if (!Configuration::hasKey(OystAPIKey::CONFIG_KEY)) {
+            OystAPIKey::generateAPIKey();
         }
     }
 
@@ -332,7 +334,7 @@ class Oyst extends PaymentModule
      */
     public function getContent()
     {
-        return '';
+        return OystAPIKey::getAPIKey();
     }
 
     /**
@@ -379,7 +381,6 @@ class Oyst extends PaymentModule
 
     public function hookHeader($params)
     {
-        //TODO Condition on IP + if product page and 1-click enable/disable
         if (Configuration::hasKey('FC_OYST_SCRIPT_TAG_URL')) {
             if (version_compare(_PS_VERSION_, '1.7', '<')) {
                 $this->context->controller->addJS(Configuration::get('FC_OYST_SCRIPT_TAG_URL'));

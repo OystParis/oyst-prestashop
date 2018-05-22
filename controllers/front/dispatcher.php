@@ -10,15 +10,19 @@ require __DIR__.'/../../../../init.php';
 
 use Oyst\Classes\Route;
 use Oyst\Classes\CurrentRequest;
+use Oyst\Classes\OystAPIKey;
 
 class OystDispatcherModuleFrontController extends ModuleFrontController
 {
     public function init()
     {
+        //All routes are prefixed by /oyst
         Route::addRoute('GET', '/cart/{id}', 'Cart', 'getCart');
+        Route::addRoute('GET', '/config', 'Config', 'getConfig');
         Route::addRoute('PUT', '/script-tag', 'ScriptTag', 'setUrl');
         Route::addRoute('PUT', '/customer/search', 'Customer', 'search');
         Route::addRoute('PUT', '/cart/{id}', 'Cart', 'updateCart');
+        Route::addRoute('PUT', '/config', 'Config', 'setConfig');
 
         $request = new CurrentRequest();
 
@@ -58,7 +62,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
                 die('401 Unauthorized');
             }
 
-            if (!WebserviceKey::isKeyActive($key)) {
+            if (!OystAPIKey::isKeyActive($key)) {
                 $this->printError(401, 'Bad API key');
             }
         }
@@ -79,6 +83,15 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         $method = $route['method'];
         $controller_obj = new $controller($request);
 
+        $controller_obj->logger->info(
+            sprintf(
+                "New call from route %s (%s@%s) [%s]",
+                $request->getMethod().' '.$request->getRequestUri(),
+                $route['controller'],
+                $route['method'],
+                (!empty($params) ? print_r($params, true) : '')
+            )
+        );
         if (empty($params)) {
             $controller_obj->$method();
         } else {
