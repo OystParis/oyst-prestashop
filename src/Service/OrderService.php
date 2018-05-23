@@ -118,7 +118,11 @@ class OrderService extends AbstractOystService
         $pickupId = $shipmentInfo['pickup_store']['id'];
         $carrierInfo = $shipmentInfo['carrier'];
         if ($pickupAddress['name'] != '') {
-            $pickup_name = $pickupAddress['name'];
+            if ($carrierInfo['type'] == 'colissimo_poste' || $carrierInfo['type'] == 'colissimo_commerces') {
+                $pickup_name = 'So Colissimo '.$pickupAddress['name'];
+            } else {
+                $pickup_name = $pickupAddress['name'];
+            }
         } else {
             $pickup_name = 'none';
         }
@@ -126,7 +130,7 @@ class OrderService extends AbstractOystService
         $alias = Tools::substr('Pickup_'.str_replace(' ', '_', $pickupAddress['name']), 0, 32);
         $addressToFind = array(
             'name' => $alias,
-            'street' => $pickup_name.' - '.($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none'),
+            'street' => ($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none'),
             'postcode' => $pickupAddress['postal_code'],
             'city' => $pickupAddress['city'],
             'first_name' => $customer->firstname,
@@ -145,7 +149,8 @@ class OrderService extends AbstractOystService
             $address->id_customer = $customer->id;
             $address->firstname = $customer->firstname;
             $address->lastname = $customer->lastname;
-            $address->address1 = $pickup_name.' - '.($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none');
+            $address->address1 = ($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none');
+            $address->company = $pickup_name;
             $address->postcode = ($pickupAddress['postal_code'] != '')? $pickupAddress['postal_code'] : 'none';
             $address->city = ($pickupAddress['city'] != '')? $pickupAddress['city'] : 'none';
             $address->alias = $alias;
@@ -460,7 +465,7 @@ class OrderService extends AbstractOystService
                     $pickup_name = 'none';
                 }
 
-                Db::getInstance()->update(
+                Db::getInstance()->insert(
                     'socolissimo_delivery_info',
                     array(
                         'id_cart' => (int)$cart->id,
@@ -469,10 +474,16 @@ class OrderService extends AbstractOystService
                         'prid' => pSQL($pickupId),
                         'prname' => pSQL($pickup_name),
                         'prfirstname' => pSQL($customer->firstname),
+                        'pradress1' => pSQL($deliveryAddress->address1),
+                        'przipcode' => pSQL($deliveryAddress->postcode),
+                        'prtown' => pSQL($deliveryAddress->country),
                         'cecountry' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
-                        'ceemail' => pSQL($customer->email)
-                    ),
-                    'id_cart = '.(int)$cart->id.' AND id_customer = '.(int)$customer->id
+                        'cephonenumber' => pSQL($deliveryAddress->phone),
+                        'ceemail' => pSQL($customer->email),
+                        'cecompanyname' => pSQL($pickup_name),
+                        'cename' => pSQL($customer->lastname),
+                        'cefirstname' => pSQL($customer->firstname),
+                    )
                 );
             }
 
