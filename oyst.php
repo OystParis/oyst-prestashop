@@ -381,6 +381,13 @@ class Oyst extends PaymentModule
 
     public function hookHeader($params)
     {
+        //Only for test
+        if (Tools::getIsset('show-context')) {
+            echo "<pre>";
+            print_r($this->context);
+            echo "</pre>";
+            exit;
+        }
         if (Configuration::hasKey('FC_OYST_SCRIPT_TAG_URL')) {
             if (version_compare(_PS_VERSION_, '1.7', '<')) {
                 $this->context->controller->addJS(Configuration::get('FC_OYST_SCRIPT_TAG_URL'));
