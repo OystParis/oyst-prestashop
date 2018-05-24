@@ -57,10 +57,31 @@ class InstallManager
     public function install()
     {
         $state = true;
+        $state &= $this->createNotificationTable();
         $state &= $this->createOrderTable();
         $state &= $this->createProductTable();
 
         return $state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function createNotificationTable()
+    {
+        $query = "
+            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_notification` (
+              `id_notification` int(11) NOT NULL AUTO_INCREMENT,
+              `oyst_order_id` varchar(255) NOT NULL,
+              `order_id` int(11) DEFAULT NULL,
+              `status` varchar(255) NOT NULL,
+              `date_add` datetime NOT NULL,
+              `date_upd` datetime NOT NULL,
+              PRIMARY KEY (`id_notification`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        ";
+
+        return $this->db->execute($query);
     }
 
     /**
@@ -88,6 +109,18 @@ class InstallManager
                 `id_product` int(11) unsigned NOT NULL,
                 `active_oneclick` tinyint(1) NOT NULL DEFAULT 1
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ";
+
+        return $this->db->execute($query);
+    }
+
+    /**
+     * @return bool
+     */
+    public function dropNotificationTable()
+    {
+        $query = "
+            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_notification;
         ";
 
         return $this->db->execute($query);
@@ -135,18 +168,6 @@ class InstallManager
     {
         $query = "
             DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_product;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
-    public function dropNotificationTable()
-    {
-        $query = "
-            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_payment_notification;
         ";
 
         return $this->db->execute($query);
