@@ -11,12 +11,12 @@ class OystAPIKey
 
     public static function generateAPIKey()
     {
-        self::setAPIKey(Tools::passwdGen(32));
+        return self::setAPIKey(Tools::passwdGen(32));
     }
 
     public static function setAPIKey($key)
     {
-        PSConfiguration::updateValue(self::CONFIG_KEY, $key);
+        return PSConfiguration::updateValue(self::CONFIG_KEY, $key);
     }
 
     public static function getAPIKey()

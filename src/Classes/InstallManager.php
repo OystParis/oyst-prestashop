@@ -21,17 +21,10 @@
 
 namespace Oyst\Classes;
 
-use Carrier;
-use Product;
-use Context;
-use RangePrice;
-use RangeWeight;
 use Db;
-use Configuration as PSConfiguration;
-use Zone;
-use Group;
-use Validate;
+use Configuration;
 use OrderState;
+use Validate;
 
 class InstallManager
 {
@@ -58,10 +51,183 @@ class InstallManager
     {
         $state = true;
         $state &= $this->createNotificationTable();
-        $state &= $this->createOrderTable();
-        $state &= $this->createProductTable();
+        $state &= $this->installOrderStates();
+
+        //Generate API key if not exists
+        if (!Configuration::hasKey(OystAPIKey::CONFIG_KEY)) {
+            $state &= OystAPIKey::generateAPIKey();
+        }
 
         return $state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function installOrderStates()
+    {
+        $result = true;
+        $langId = Configuration::get('PS_LANG_DEFAULT');
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Annulation en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_CANCELLATION_PENDING', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_REFUND_PENDING'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Remboursement en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_REFUND_PENDING', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Remboursement partiel en cours',
+            );
+            $orderState->color = '#FFF168';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND_PEND', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Remboursement partiel',
+            );
+            $orderState->color = '#FF7F50';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND', $orderState->id);
+        }
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD_CHECK'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'En attente de vérification fraude par Oyst',
+            );
+            $orderState->color = '#FF8C00';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_FRAUD_CHECK', $orderState->id);
+        }
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'En attente de paiement chez Oyst',
+            );
+            $orderState->color = '#360088';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_WAIT_PAYMENT', $orderState->id);
+        }
+
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'Paiement frauduleux - NE PAS EXPEDIER',
+            );
+            $orderState->color = '#980000';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $this->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_FRAUD', $orderState->id);
+        }
+
+        return $result;
     }
 
     /**
@@ -87,36 +253,6 @@ class InstallManager
     /**
      * @return bool
      */
-    public function createOrderTable()
-    {
-        $query = "
-            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_api_order` (
-                  `orderId` int(11) DEFAULT NULL,
-                  `orderGUID` varchar(64) CHARACTER SET latin1 DEFAULT NULL
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
-    public function createProductTable()
-    {
-        $query = "
-            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_product` (
-                `id_product` int(11) unsigned NOT NULL,
-                `active_oneclick` tinyint(1) NOT NULL DEFAULT 1
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
     public function dropNotificationTable()
     {
         $query = "
@@ -126,196 +262,41 @@ class InstallManager
         return $this->db->execute($query);
     }
 
-    /**
-    * @return bool
-    */
-    public function dropExportTable()
-    {
-        $query = "
-            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_exported_catalog;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
-    public function dropOrderTable()
-    {
-        $query = "
-            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_api_order;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
-    public function dropShipmentTable()
-    {
-        $query = "
-            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_shipment;
-        ";
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
-    public function dropProductTable()
-    {
-        $query = "
-            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_product;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    public function truncateProductTable()
-    {
-        $query = "TRUNCATE "._DB_PREFIX_."oyst_product";
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
-    public function disableProductTable()
-    {
-        $products = Product::getProducts(Context::getContext()->language->id, 0, 0, 'id_product', 'ASC');
-        $state = false;
-
-        foreach ($products as $product) {
-            $state &= $this->db->insert(
-                'oyst_product',
-                array(
-                    'id_product' => (int)$product['id_product'],
-                    'active_oneclick' => 0,
-                )
-            );
-        }
-
-        return $state;
-    }
-
     public function uninstall()
     {
-        $this->dropExportTable();
-        $this->dropOrderTable();
-        $this->dropShipmentTable();
-        $this->dropProductTable();
         $this->dropNotificationTable();
-
         // Remove anything at the end
         $this->removeConfiguration();
     }
 
     private function removeConfiguration()
     {
-        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_CANCELLATION_PENDING'));
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
         $orderState->delete();
-        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_REFUND_PENDING'));
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_REFUND_PENDING'));
         $orderState->delete();
-        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_PARTIAL_REFUND'));
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND'));
         $orderState->delete();
-        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
         $orderState->delete();
-        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_FRAUD_CHECK'));
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD_CHECK'));
         $orderState->delete();
-        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_WAIT_PAYMENT'));
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
         $orderState->delete();
-        $orderState = new OrderState(PSConfiguration::get('OYST_STATUS_FRAUD'));
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD'));
         $orderState->delete();
 
-        // Config module Oyst
-        PSConfiguration::deleteByName('FC_OYST_HASH_KEY');
-        PSConfiguration::deleteByName('FC_OYST_GUEST');
         // State Oyst
-        PSConfiguration::deleteByName('OYST_STATUS_CANCELLATION_PENDING');
-        PSConfiguration::deleteByName('OYST_STATUS_REFUND_PENDING');
-        PSConfiguration::deleteByName('OYST_STATUS_PARTIAL_REFUND');
-        PSConfiguration::deleteByName('OYST_STATUS_PARTIAL_REFUND_PEND');
-        PSConfiguration::deleteByName('OYST_STATUS_FRAUD_CHECK');
-        PSConfiguration::deleteByName('OYST_STATUS_WAIT_PAYMENT');
-        PSConfiguration::deleteByName('OYST_STATUS_FRAUD');
-        // Conf FreePay
-        PSConfiguration::deleteByName(Configuration::API_KEY_PROD_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_KEY_SANDBOX_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_FREEPAY);
-        PSConfiguration::deleteByName(Configuration::API_ENV_FREEPAY);
-        PSConfiguration::deleteByName('FC_OYST_REDIRECT_SUCCESS');
-        PSConfiguration::deleteByName('FC_OYST_REDIRECT_ERROR');
-        PSConfiguration::deleteByName('FC_OYST_REDIRECT_SUCCESS_CUSTOM');
-        PSConfiguration::deleteByName('FC_OYST_REDIRECT_ERROR_CUSTOM');
-        PSConfiguration::deleteByName('FC_OYST_PAYMENT_FEATURE');
-        PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_FREEPAY');
-        // Conf FreePay advanced
-        PSConfiguration::deleteByName('FC_OYST_PREORDER_FEATURE');
-        PSConfiguration::deleteByName('FC_OYST_ACTIVE_FRAUD');
-        // Conf 1-Click GENERAL
-        PSConfiguration::deleteByName(Configuration::API_ENDPOINT_CUSTOM_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::API_KEY_PROD_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::API_KEY_SANDBOX_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_ONECLICK);
-        PSConfiguration::deleteByName(Configuration::ONE_CLICK_URL_CUSTOM);
-        PSConfiguration::deleteByName(Configuration::API_ENV_ONECLICK);
-        // Conf custom 1-Click global
-        PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
-        PSConfiguration::deleteByName('FC_OYST_BORDER_BTN');
-        PSConfiguration::deleteByName('FC_OYST_SMART_BTN');
-        PSConfiguration::deleteByName('FC_OYST_THEME_BTN');
-        PSConfiguration::deleteByName('FC_OYST_COLOR_BTN');
-        PSConfiguration::deleteByName('FC_OYST_CUSTOM_CSS');
-        // Conf custom btn product
-        PSConfiguration::deleteByName('FC_OYST_BTN_PRODUCT');
-        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN');
-        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN');
-        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN');
-        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN');
-        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN');
-        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN');
-        PSConfiguration::deleteByName('FC_OYST_ID_BTN_ADD_TO_CART');
-        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN');
-        // Conf 1-Click custom btn cart
-        PSConfiguration::deleteByName('FC_OYST_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_CART');
-        PSConfiguration::deleteByName('FC_OYST_ID_BTN_CART');
-        // Conf 1-Click carriers
-        PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
-        PSConfiguration::deleteByName('OYST_ONE_CLICK_CARRIER');
-        $carriers = Carrier::getCarriers(Context::getContext()->language->id, true, false, false, null, Carrier::ALL_CARRIERS);
+        Configuration::deleteByName('OYST_STATUS_CANCELLATION_PENDING');
+        Configuration::deleteByName('OYST_STATUS_REFUND_PENDING');
+        Configuration::deleteByName('OYST_STATUS_PARTIAL_REFUND');
+        Configuration::deleteByName('OYST_STATUS_PARTIAL_REFUND_PEND');
+        Configuration::deleteByName('OYST_STATUS_FRAUD_CHECK');
+        Configuration::deleteByName('OYST_STATUS_WAIT_PAYMENT');
+        Configuration::deleteByName('OYST_STATUS_FRAUD');
 
-        foreach ($carriers as $carrier) {
-            $field = 'FC_OYST_SHIPMENT_'.$carrier['id_reference'];
-            PSConfiguration::deleteByName($field);
-            $field_delay = 'FC_OYST_SHIPMENT_DELAY_'.$carrier['id_reference'];
-            PSConfiguration::deleteByName($field_delay);
-        }
-        // Conf 1-Click advanced
-        PSConfiguration::deleteByName('FC_OYST_DELAY');
-        PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
-        PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
-        PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');
-        PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
-        PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY_CART');
-        PSConfiguration::deleteByName('FC_OYST_ONLY_FOR_IP');
-        // Conf 1-Click restrictions
-        PSConfiguration::deleteByName('FC_OYST_CURRENCIES');
-        PSConfiguration::deleteByName('FC_OYST_LANG');
-        PSConfiguration::deleteByName('FC_OYST_COUNTRIES');
-        // Deprecated conf ?
-        PSConfiguration::deleteByName(Configuration::DISPLAY_ADMIN_INFO_STATE);
-        PSConfiguration::deleteByName('CONF_OYST_FIXED');
-        PSConfiguration::deleteByName('CONF_OYST_VAR');
-        PSConfiguration::deleteByName('CONF_OYST_FIXED_FOREIGN');
-        PSConfiguration::deleteByName('CONF_OYST_VAR_FOREIGN');
-        PSConfiguration::deleteByName('FC_OYST_CATALOG_FEATURE');
+        Configuration::deleteByName(OystAPIKey::CONFIG_KEY);
+        Configuration::deleteByName('OYST_CONFIG_CACHE');
+        Configuration::deleteByName('OYST_SCRIPT_TAG_URL');
     }
 }
