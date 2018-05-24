@@ -46,10 +46,12 @@ abstract class AbstractOystController
      * @param string $content
      * @param bool $already_json
      */
-    protected function respondAsJson($content, $already_json = false)
+    protected function respondAsJson($content, $already_json = false, $define_header = true)
     {
-        header("HTTP/1.1 200 OK");
-        header('Content-Type: application/json');
+        if ($define_header) {
+            header("HTTP/1.1 200 OK");
+            header('Content-Type: application/json');
+        }
         if ($already_json) {
             echo $content;
         } else {

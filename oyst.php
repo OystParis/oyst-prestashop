@@ -58,29 +58,6 @@ class Oyst extends PaymentModule
         }
     }
 
-//    public function __call($method, $args)
-//    {
-//        //List of concerned hooks by the ip restriction
-//        $filtered_hooks = array(
-//            'displayFooterProduct',
-//            'displayHeader',
-//            'displayPayment',
-//            'displayShoppingCart'
-//        );
-//        foreach ($filtered_hooks as $filtered_hook) {
-//            if (strpos($method, $filtered_hook) !== false) {
-//                $ip = Tools::getRemoteAddr();
-//                if (!empty($ip) && Configuration::hasKey('FC_OYST_ONLY_FOR_IP')) {
-//                    $authorized_ips = Configuration::get('FC_OYST_ONLY_FOR_IP');
-//                    if (!empty($authorized_ips) && strpos($authorized_ips, $ip) === false) {
-//                        return null;
-//                    }
-//                }
-//            }
-//        }
-//        return parent::__call($method, $args);
-//    }
-
     public function uninstall()
     {
         $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), $this);
