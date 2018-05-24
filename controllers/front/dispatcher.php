@@ -40,7 +40,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         }
 
         //Check auth
-        if (!$route['required_auth']) {
+        if ($route['required_auth']) {
             //set http auth headers for apache+php-cgi work around
             if (isset($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/Basic\s+(.*)$/i', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
                 list($name, $password) = explode(':', base64_decode($matches[1]));
