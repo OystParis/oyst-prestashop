@@ -20,7 +20,7 @@ class ConfigController extends AbstractOystController
 
         $id_lang = Language::getIdByIso('FR');
         //Get carriers
-        $carriers = Carrier::getCarriers($id_lang, false, false, false, null, Carrier::ALL_CARRIERS);
+        $carriers = Carrier::getCarriers($id_lang, true, false, false, null, Carrier::ALL_CARRIERS);
         foreach ($carriers as $carrier) {
             $results['carriers'][] = array(
                 'id_carrier' => $carrier['id_carrier'],
@@ -29,7 +29,7 @@ class ConfigController extends AbstractOystController
         }
 
         //Get countries
-        $countries = Country::getCountries($id_lang);
+        $countries = Country::getCountries($id_lang, true);
         foreach ($countries as $country) {
             $results['countries'][] = array(
                 'id_country' => $country['id_country'],
