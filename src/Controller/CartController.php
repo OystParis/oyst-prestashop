@@ -6,6 +6,7 @@ use Address;
 use Carrier;
 use Cart;
 use Configuration;
+use Context;
 use Currency;
 use Customer;
 use Exception;
@@ -34,10 +35,14 @@ class CartController extends AbstractOystController
                 $errors = array();
                 $response = array();
                 try {
+                    $context = Context::getContext();
                     $response['cart'] = $cart;
                     $response['products'] = $cart->getProducts(true);
                     $carriers = array();
                     foreach ($response['products'] as &$product) {
+                        //Get image link
+                        $product['image'] = $context->link->getImageLink($product['link_rewrite'], $product['id_image']);
+
                         //Get customizations
                         if (!empty($product['id_customization'])) {
                             $customizations = $cart->getProductCustomization($product['id_product']);
