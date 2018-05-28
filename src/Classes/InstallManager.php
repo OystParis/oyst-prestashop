@@ -296,7 +296,6 @@ class InstallManager
         Configuration::deleteByName('OYST_STATUS_FRAUD');
 
         Configuration::deleteByName(OystAPIKey::CONFIG_KEY);
-        Configuration::deleteByName('OYST_CONFIG_CACHE');
         Configuration::deleteByName('OYST_SCRIPT_TAG_URL');
     }
 }
