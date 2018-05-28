@@ -2,7 +2,9 @@
 
 namespace Oyst\Controller;
 
-use Configuration;
+use Carrier;
+use Country;
+use Language;
 
 class ConfigController extends AbstractOystController
 {
@@ -14,19 +16,27 @@ class ConfigController extends AbstractOystController
 
     public function getConfig()
     {
-        if (Configuration::hasKey('OYST_CONFIG_CACHE')) {
-            $this->respondAsJson(Configuration::get('OYST_CONFIG_CACHE'), true);
-        } else {
-            $this->respondError(400, "No config stored");
-        }
-    }
+        $results = array();
 
-    public function setConfig($params)
-    {
-        if (Configuration::updateValue('OYST_CONFIG_CACHE', json_encode($params['data']))) {
-            $this->respondAsJson('OK');
-        } else {
-            $this->respondError(400, "Error on save");
+        $id_lang = Language::getIdByIso('FR');
+        //Get carriers
+        $carriers = Carrier::getCarriers($id_lang, false, false, false, null, Carrier::ALL_CARRIERS);
+        foreach ($carriers as $carrier) {
+            $results['carriers'][] = array(
+                'id_carrier' => $carrier['id_carrier'],
+                'name' => $carrier['name'],
+            );
         }
+
+        //Get countries
+        $countries = Country::getCountries($id_lang);
+        foreach ($countries as $country) {
+            $results['countries'][] = array(
+                'id_country' => $country['id_country'],
+                'name' => $country['name'],
+                'iso_code' => $country['iso_code'],
+            );
+        }
+        $this->respondAsJson($results);
     }
 }
