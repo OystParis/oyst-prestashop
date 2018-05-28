@@ -84,4 +84,17 @@ class Notification extends ObjectModel
         }
         return $notification;
     }
+
+    public static function getOystOrderIdByOrderId($id_order) {
+        $oyst_order_id = Db::getInstance()->getValue("SELECT `oyst_order_id` 
+            FROM `"._DB_PREFIX_."oyst_notification` 
+            WHERE `order_id` = ".$id_order." 
+            ORDER BY `id_notification` DESC");
+
+        if (!empty($oyst_order_id)) {
+            return $oyst_order_id;
+        } else {
+            return 0;
+        }
+    }
 }
