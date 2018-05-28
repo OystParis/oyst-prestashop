@@ -43,7 +43,7 @@ abstract class AbstractOystController
     }
 
     /**
-     * @param string $content
+     * @param mixed $content
      * @param bool $already_json
      */
     protected function respondAsJson($content, $already_json = false, $define_header = true)
