@@ -88,6 +88,6 @@ abstract class AbstractOystController
         } else {
             http_response_code($code);
         }
-        die($msg);
+        die(json_encode(array('error' => $msg)));
     }
 }

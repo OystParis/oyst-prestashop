@@ -38,7 +38,7 @@ class Notification extends ObjectModel
             $res = $this->save();
         } catch (Exception $e) {
             header($_SERVER['SERVER_PROTOCOL'].' 400 Bad request');
-            print_r($e->getMessage());
+            echo json_encode(array('error' => print_r($e->getMessage())));
             exit;
         }
         return $res;
@@ -52,7 +52,7 @@ class Notification extends ObjectModel
             $res = $this->save();
         } catch (Exception $e) {
             header($_SERVER['SERVER_PROTOCOL'].' 400 Bad request');
-            print_r($e->getMessage());
+            echo json_encode(array('error' => print_r($e->getMessage())));
             exit;
         }
         return $res;
