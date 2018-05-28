@@ -10,6 +10,7 @@ use Currency;
 use Customer;
 use Exception;
 use Message;
+use Order;
 use Oyst;
 use Oyst\Classes\Notification;
 use Product;
@@ -101,6 +102,16 @@ class CartController extends AbstractOystController
                     $currency = new Currency($cart->id_currency);
                     $response['currency'] = $currency->iso_code;
 
+                    //Check if cart is linked to an order
+                    $response['order'] = array();
+                    $order_id = Order::getIdByCartId($cart->id);
+                    if (!empty($order_id)) {
+                        $response['order'] = array(
+                            'order_id' => $order_id,
+                            'order_reference' => Order::getUniqReferenceOf($order_id),
+                            'oyst_order_id' => Notification::getOystOrderIdByOrderId($order_id)
+                        );
+                    }
                     $this->respondAsJson($response);
                 } catch(Exception $e) {
                     print_r($e);
@@ -119,13 +130,9 @@ class CartController extends AbstractOystController
             //TODO Manage PUT arguments for update carrier, address etc
 
             if (!empty($params['data']['finalize'])) {
-                $id_order = $this->createOrderFromCart($params);
-                $this->respondAsJson(array('id_order' => $id_order));
-                exit;
+                $this->createOrderFromCart($params);
             }
-
             $this->getCart($params);
-
         } else {
             $this->respondError(400, 'id_cart is missing');
         }
