@@ -44,6 +44,7 @@ use StockAvailable;
 use CartRule;
 use Oyst;
 use Module;
+use Context;
 
 /**
  * Class OneClickService
@@ -426,9 +427,11 @@ class OrderService extends AbstractOystService
             if ($carrierInfo['type'] == 'mondial_relay' &&
                 Module::isEnabled('mondialrelay') &&
                 Module::isInstalled('mondialrelay')) {
-                $id_mr_method = (int)Db::getInstance()->getRow(
-                    'SELECT id_mr_method FROM `'._DB_PREFIX_.'mr_method` m
-                    WHERE m.`id_carrier` = '.(int)$carrierInfo['id']
+                $id_mr_method = (int)Db::getInstance()->getValue(
+                    'SELECT m.id_mr_method
+                    FROM `'._DB_PREFIX_.'mr_method` m
+                    LEFT JOIN `'._DB_PREFIX_.'mr_method_shop` ms ON (ms.id_mr_method = m.id_mr_method)
+                    WHERE m.`id_carrier` = '.(int)$carrierInfo['id'].' AND ms.`id_shop` = '.(int)Context::getContext()->shop->id
                 );
 
                 $md_data[] = array(
@@ -465,29 +468,39 @@ class OrderService extends AbstractOystService
                     $pickup_name = 'none';
                 }
 
+                $module = Module::getInstanceByName('soflexibilite');
+
+                $data = array(
+                    'id_cart' => (int)$cart->id,
+                    'id_customer' => (int)$customer->id,
+                    'delivery_mode' => $delivery_mode,
+                    'prid' => pSQL($pickupId),
+                    'prname' => pSQL($pickup_name),
+                    'prfirstname' => pSQL($customer->firstname),
+                    'pradress1' => pSQL($deliveryAddress->address1),
+                    'przipcode' => pSQL($deliveryAddress->postcode),
+                    'prtown' => pSQL($deliveryAddress->country),
+                    'cecountry' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
+                    'cephonenumber' => pSQL(str_replace('+33', '0', $deliveryAddress->phone)),
+                    'ceemail' => pSQL($customer->email),
+                    'cecompanyname' => pSQL($pickup_name),
+                );
+
+                // Check version module soflexibilite
+                if ($module instanceof Module) {
+                    if ($module->version > '3.0' && $module->name == 'soflexibilite') {
+                        $data['cename'] = pSQL($customer->lastname);
+                        $data['cefirstname'] = pSQL($customer->firstname);
+                    }
+                }
+
                 Db::getInstance()->insert(
                     'socolissimo_delivery_info',
-                    array(
-                        'id_cart' => (int)$cart->id,
-                        'id_customer' => (int)$customer->id,
-                        'delivery_mode' => $delivery_mode,
-                        'prid' => pSQL($pickupId),
-                        'prname' => pSQL($pickup_name),
-                        'prfirstname' => pSQL($customer->firstname),
-                        'pradress1' => pSQL($deliveryAddress->address1),
-                        'przipcode' => pSQL($deliveryAddress->postcode),
-                        'prtown' => pSQL($deliveryAddress->country),
-                        'cecountry' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
-                        'cephonenumber' => pSQL($deliveryAddress->phone),
-                        'ceemail' => pSQL($customer->email),
-                        'cecompanyname' => pSQL($pickup_name),
-                        'cename' => pSQL($customer->lastname),
-                        'cefirstname' => pSQL($customer->firstname),
-                    )
+                    $data
                 );
             }
 
-            if ($carrierInfo['type'] == 'dpd' && $pickupId &&
+            if ($carrierInfo['type'] == 'colissimo' && $pickupId &&
                 Module::isEnabled('chronopost') &&
                 Module::isInstalled('chronopost')) {
                 $md_data[] = array(
