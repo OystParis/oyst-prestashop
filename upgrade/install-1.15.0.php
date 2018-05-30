@@ -35,6 +35,16 @@ function upgrade_module_1_15_0($module)
     $module->unregisterHook('displayShoppingCart');
     $module->registerHook('displayFooter');
 
+    // Get old configuration
+    Configuration::updateValue('FC_OYST_WIDTH_BTN_PRODUCT', Configuration::get('FC_OYST_WIDTH_BTN'));
+    Configuration::updateValue('FC_OYST_HEIGHT_BTN_PRODUCT', Configuration::get('FC_OYST_HEIGHT_BTN'));
+    Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_PRODUCT', Configuration::get('FC_OYST_MARGIN_TOP_BTN'));
+    Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_PRODUCT', Configuration::get('FC_OYST_MARGIN_LEFT_BTN'));
+    Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_PRODUCT', Configuration::get('FC_OYST_MARGIN_RIGHT_BTN'));
+    Configuration::updateValue('FC_OYST_POSITION_BTN_PRODUCT', Configuration::get('FC_OYST_POSITION_BTN'));
+    Configuration::updateValue('FC_OYST_ID_BTN_PRODUCT', Configuration::get('FC_OYST_ID_BTN_ADD_TO_CART'));
+    Configuration::updateValue('FC_OYST_ID_SMART_BTN_PRODUCT', Configuration::get('FC_OYST_ID_SMART_BTN'));
+
     // Remove old configuration button product
     Configuration::deleteByName('FC_OYST_BTN_PRODUCT');
     Configuration::deleteByName('FC_OYST_WIDTH_BTN');
@@ -48,14 +58,6 @@ function upgrade_module_1_15_0($module)
 
     // Rename configuration button product
     Configuration::updateValue('FC_OYST_BTN_PRODUCT', 1);
-    Configuration::updateValue('FC_OYST_WIDTH_BTN_PRODUCT');
-    Configuration::updateValue('FC_OYST_HEIGHT_BTN_PRODUCT');
-    Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_PRODUCT');
-    Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_PRODUCT');
-    Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_PRODUCT');
-    Configuration::updateValue('FC_OYST_POSITION_BTN_PRODUCT', 'before');
-    Configuration::updateValue('FC_OYST_ID_BTN__PRODUCT', '#add_to_cart');
-    Configuration::updateValue('FC_OYST_ID_SMART_BTN_PRODUCT', '#add_to_cart button');
 
     // Add conf custom btn layer
     Configuration::updateValue('FC_OYST_BTN_LAYER', 0);

@@ -27,14 +27,28 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
  */
 function upgrade_module_1_16_0($module)
 {
+    // Get old configuration
+    Configuration::updateValue('FC_OYST_WIDTH_BTN_PRODUCT', Configuration::get('FC_OYST_WIDTH_BTN'));
+    Configuration::updateValue('FC_OYST_HEIGHT_BTN_PRODUCT', Configuration::get('FC_OYST_HEIGHT_BTN'));
+    Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_PRODUCT', Configuration::get('FC_OYST_MARGIN_TOP_BTN'));
+    Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_PRODUCT', Configuration::get('FC_OYST_MARGIN_LEFT_BTN'));
+    Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_PRODUCT', Configuration::get('FC_OYST_MARGIN_RIGHT_BTN'));
+    Configuration::updateValue('FC_OYST_POSITION_BTN_PRODUCT', Configuration::get('FC_OYST_POSITION_BTN'));
+    Configuration::updateValue('FC_OYST_ID_BTN_PRODUCT', Configuration::get('FC_OYST_ID_BTN_ADD_TO_CART'));
+    Configuration::updateValue('FC_OYST_ID_SMART_BTN_PRODUCT', Configuration::get('FC_OYST_ID_SMART_BTN'));
+
     // Add conf custom btn cart
     Configuration::updateValue('FC_OYST_POSITION_BTN_CART', 'before');
 
     if (_PS_VERSION_ >= '1.6.0.0') {
-        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .button-medium');
+        if (!Configuration::get('FC_OYST_ID_BTN_CART')) {
+            Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .button-medium');
+        }
         Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.cart_navigation .button-medium');
     } else {
-        Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .exclusive');
+        if (!Configuration::get('FC_OYST_ID_BTN_CART')) {
+            Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .exclusive');
+        }
         Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.cart_navigation .exclusive');
     }
 
