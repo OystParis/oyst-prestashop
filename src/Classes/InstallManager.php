@@ -295,7 +295,6 @@ class InstallManager
         Configuration::deleteByName('OYST_STATUS_WAIT_PAYMENT');
         Configuration::deleteByName('OYST_STATUS_FRAUD');
 
-        Configuration::deleteByName(OystAPIKey::CONFIG_KEY);
         Configuration::deleteByName('OYST_SCRIPT_TAG_URL');
     }
 }
