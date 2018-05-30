@@ -136,14 +136,19 @@ class CartController extends AbstractOystController
         if (!empty($params['url']['id'])) {
             $cart = new Cart((int)$params['url']['id']);
             if (Validate::isLoadedObject($cart)) {
+                $errors = [];
+                //Carrier
                 if (!empty($params['data']['id_carrier'])) {
                     $cart->id_carrier = $params['data']['id_carrier'];
 
                     //TODO Manage access point here (with module exception etc)
                 }
 
+                //Products
+                //Gestion quantité +/- et suppression produits
+
+                //Customer & address
                 //TODO Manage different address delivery and address invoice
-                $errors = [];
                 $id_customer = 0;
                 $id_address = 0;
                 //First, search customer (id, email, phone)
@@ -168,8 +173,12 @@ class CartController extends AbstractOystController
                                     }
                                 }
                             }
-                            //If address not find, use first has default
+
+                            //If no address find by id, search with address informations
                             if (empty($id_address)) {
+                                //TODO Chercher addresse
+
+                                //If address not find, use first has default
                                 $id_address = $finded_customer['addresses'][0]['id_address'];
                             }
                         } else if(!empty($params['data']['address'])) {
@@ -302,6 +311,10 @@ class CartController extends AbstractOystController
     {
         $required_fields = array();
         foreach ($object_name::$definition['fields'] as $field_name => $field) {
+            //Exception
+            if ($object_name == 'Customer' && $field_name == 'passwd') {
+                continue;
+            }
             if (isset($field['required']) && $field['required']) {
                 $required_fields[] = $field_name;
             }
@@ -328,7 +341,9 @@ class CartController extends AbstractOystController
                 if (isset($object_name::$definition['fields'][$field_name]['size'])) {
                     $value = Tools::substr($value, 0, $object_name::$definition['fields'][$field_name]['size']);
                 }
-                $object->$field_name = $value;
+                if (property_exists($object_name, $field_name)) {
+                    $object->$field_name = $value;
+                }
             }
 
             //Exception management
