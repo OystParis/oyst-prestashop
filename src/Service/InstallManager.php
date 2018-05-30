@@ -212,7 +212,7 @@ class InstallManager
         $orderState->delete();
 
         // Config module Oyst
-        PSConfiguration::deleteByName('FC_OYST_HASH_KEY');
+        // PSConfiguration::deleteByName('FC_OYST_HASH_KEY');
         PSConfiguration::deleteByName('FC_OYST_GUEST');
         // State Oyst
         PSConfiguration::deleteByName('OYST_STATUS_CANCELLATION_PENDING');
