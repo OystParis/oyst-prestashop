@@ -39,6 +39,7 @@ class ObjectService {
     public function createObject($object_name, $fields)
     {
         $errors = [];
+        $object = null;
         $id = 0;
         $object_required_fields = $this->getRequiredFields($object_name);
         foreach ($object_required_fields as $object_required_field) {
@@ -80,7 +81,6 @@ class ObjectService {
             } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
-
         }
         return array(
             'id' => $id,
