@@ -144,8 +144,16 @@ class CartController extends AbstractOystController
                 }
 
                 //Products
-                //Gestion quantité +/- et suppression produits
-
+                if (!empty($params['data']['products'])) {
+                    foreach ($params['data']['products'] as $product) {
+                        if (isset($product['quantity']) && isset($product['id_product'])) {
+                            if (!isset($product['id_product_attribute'])) {
+                                $product['id_product_attribute'] = 0;
+                            }
+                        }
+                        $cart->updateQty($product['quantity'], $product['id_product'], $product['id_product_attribute']);
+                    }
+                }
 
                 //Customer & address
                 //TODO Manage different address delivery and address invoice
