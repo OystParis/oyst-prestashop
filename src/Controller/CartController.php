@@ -9,13 +9,13 @@ use Configuration;
 use Context;
 use Currency;
 use Customer;
-use Db;
 use Exception;
-use Language;
 use Message;
 use Order;
 use Oyst;
 use Oyst\Classes\Notification;
+use Oyst\Services\CustomerService;
+use Oyst\Services\ObjectService;
 use Product;
 use Tools;
 use Validate;
@@ -140,12 +140,12 @@ class CartController extends AbstractOystController
                 //Carrier
                 if (!empty($params['data']['id_carrier'])) {
                     $cart->id_carrier = $params['data']['id_carrier'];
-
                     //TODO Manage access point here (with module exception etc)
                 }
 
                 //Products
                 //Gestion quantité +/- et suppression produits
+
 
                 //Customer & address
                 //TODO Manage different address delivery and address invoice
@@ -154,15 +154,19 @@ class CartController extends AbstractOystController
                 //First, search customer (id, email, phone)
                 //If found => set customer id to cart and check if address
                 if (!empty($params['data']['customer'])) {
-                    $finded_customer = $this->searchCustomer($params['data']['customer']);
+                    $customer_service = CustomerService::getInstance();
+                    $object_service = ObjectService::getInstance();
+                    $finded_customer = $customer_service->searchCustomer($params['data']['customer']);
                     //If customer is not finded and we have informations for create him => do it
                     if (empty($finded_customer['customer_obj'])) {
-                        $result = $this->createObject('Customer', $params['data']);
+                        $result = $object_service->createObject('Customer', $params['data']['customer']);
                         $id_customer = $result['id'];
-                        $errors['customer'] = $result['errors'];
+                        if (!empty($result['errors'])) {
+                            $errors['customer'] = $result['errors'];
+                        }
                     } else {
                         //If customer exists, but no address => Create it
-                        $id_customer = $finded_customer['customer_obj'];
+                        $id_customer = $finded_customer['customer_obj']->id;
 
                         //If address defined in data and exists in customer addresses
                         if (!empty($finded_customer['addresses'])) {
@@ -176,15 +180,38 @@ class CartController extends AbstractOystController
 
                             //If no address find by id, search with address informations
                             if (empty($id_address)) {
-                                //TODO Chercher addresse
+                                $fields_to_find = array(
+                                    'firstname',
+                                    'lastname',
+                                    'address1',
+                                    'postcode',
+                                    'city',
+                                );
 
-                                //If address not find, use first has default
-                                $id_address = $finded_customer['addresses'][0]['id_address'];
+                                //If fields required for searching are all present in data
+                                if (count(array_diff($fields_to_find, array_keys($params['data']['address']))) == 0) {
+                                    foreach ($finded_customer['addresses'] as $address) {
+                                        $address_finded = true;
+                                        foreach ($fields_to_find as $field_to_find) {
+                                            $address_finded &= ($address[$field_to_find] == $params['data']['address'][$field_to_find]);
+                                        }
+                                        if ($address_finded) {
+                                            $id_address = $address['id_address'];
+                                            break;
+                                        }
+                                    }
+                                }
                             }
-                        } else if(!empty($params['data']['address'])) {
-                            //No address, create it
-                            $result = $this->createObject('Address', $params['data']['address']);
-                            $id_address = $result['id'];
+                        }
+                    }
+
+                    if (!empty($id_customer) && empty($id_address) && !empty($params['data']['address'])) {
+                        //No address, create it
+                        $result = $object_service->createObject('Address', $params['data']['address']);
+                        $result['object']->id_customer = $id_customer;
+                        $result['object']->save();
+                        $id_address = $result['id'];
+                        if (empty($result['errors'])) {
                             $errors['address'] = $result['errors'];
                         }
                     }
@@ -247,7 +274,6 @@ class CartController extends AbstractOystController
                 if ($oyst->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), $total, $oyst->displayName, NULL, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
                     $notification->complete($oyst->currentOrder);
                     $this->logger->info('Cart '.$cart->id.' transformed into order '.$oyst->currentOrder);
-                    return $oyst->currentOrder;
                 } else {
                     $this->respondError(400, 'Order creation failed');
                 }
@@ -258,120 +284,5 @@ class CartController extends AbstractOystController
         } else {
             $this->respondError(400, 'Bad id_cart');
         }
-    }
-
-    public function searchCustomer($customer_infos)
-    {
-        $id_lang_fr = Language::getIdByIso('fr');
-
-        //Search on id
-        if (!empty($customer_infos['id_customer'])) {
-            $customer = new Customer((int)$customer_infos['id_customer']);
-            if (Validate::isLoadedObject($customer)) {
-                $addresses = $customer->getAddresses($id_lang_fr);
-            }
-        }
-
-        //Search on email
-        if (empty($addresses) && !empty($customer_infos['email'])) {
-            $customer = new Customer();
-            $customer->getByEmail($customer_infos['email']);
-            if (Validate::isLoadedObject($customer)) {
-                $addresses = $customer->getAddresses($id_lang_fr);
-            }
-        }
-
-        //Search on phone number
-        if (empty($addresses) && !empty($customer_infos['phone'])) {
-            $id_customer = Db::getInstance()->getValue("SELECT `c`.`id_customer` 
-                FROM `"._DB_PREFIX_."customer` `c`
-                INNER JOIN `"._DB_PREFIX_."address` `a` ON `c`.`id_customer` = `a`.`id_customer`
-                WHERE `a`.`phone` LIKE '".$customer_infos['phone']."' OR `a`.`phone_mobile` LIKE '".$customer_infos['phone']."'
-                ORDER BY `c`.`date_upd` DESC");
-
-            $customer = new Customer($id_customer);
-            if (Validate::isLoadedObject($customer)) {
-                $addresses = $customer->getAddresses($id_lang_fr);
-            }
-        }
-
-        $results = array();
-
-        if (Validate::isLoadedObject($customer)) {
-            $results['customer_obj'] = $customer;
-        }
-
-        if (!empty($addresses)) {
-            $results['addresses'] = $addresses;
-        }
-        return $results;
-    }
-
-    public function getRequiredFields($object_name)
-    {
-        $required_fields = array();
-        foreach ($object_name::$definition['fields'] as $field_name => $field) {
-            //Exception
-            if ($object_name == 'Customer' && $field_name == 'passwd') {
-                continue;
-            }
-            if (isset($field['required']) && $field['required']) {
-                $required_fields[] = $field_name;
-            }
-        }
-        return $required_fields;
-    }
-
-    public function createObject($object_name, $fields)
-    {
-        $errors = [];
-        $id = 0.
-        $object_required_fields = $this->getRequiredFields($object_name);
-        foreach ($object_required_fields as $object_required_field) {
-            if (!isset($fields[$object_required_field])) {
-                $errors[] = 'Missing field '.$object_required_field;
-            }
-        }
-        if (empty($errors)) {
-            $object = new $object_name();
-            foreach ($fields as $field_name => $value) {
-                if (in_array($field_name, array('firstname', 'lastname'))) {
-                    $value = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $value);
-                }
-                if (isset($object_name::$definition['fields'][$field_name]['size'])) {
-                    $value = Tools::substr($value, 0, $object_name::$definition['fields'][$field_name]['size']);
-                }
-                if (property_exists($object_name, $field_name)) {
-                    $object->$field_name = $value;
-                }
-            }
-
-            //Exception management
-            if ($object_name == 'Customer') {
-                if (version_compare(_PS_VERSION_, '1.5.4.0', '>=')) {
-                    $object->id_lang = Configuration::get('PS_LANG_DEFAULT');
-                }
-                //TODO Ask: Générer pass dans connecteur ou envoyer un pass vide ?
-                $password = Tools::passwdGen();
-
-                if (version_compare(_PS_VERSION_, '1.7', '<')) {
-                    $object->passwd = Tools::encrypt($password);
-                } else {
-                    $object->passwd = Tools::hash($password);
-                }
-            }
-
-            try  {
-                $object->add();
-                $id = $object->id;
-            } catch (Exception $e) {
-                $errors[] = $e->getMessage();
-            }
-
-        }
-        return array(
-            'id' => $id,
-            'errors' => $errors,
-        );
     }
 }
