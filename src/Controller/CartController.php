@@ -146,6 +146,7 @@ class CartController extends AbstractOystController
 
                 //Products
                 if (!empty($params['data']['products'])) {
+                    $cart_products = $cart->getProducts(false, false, null, false);
                     foreach ($params['data']['products'] as $product) {
                         if (isset($product['quantity']) && isset($product['id_product'])) {
                             if (!isset($product['id_product_attribute'])) {
@@ -153,7 +154,21 @@ class CartController extends AbstractOystController
                             }
                         }
                         //TODO Manage customization
-                        $cart->updateQty($product['quantity'], $product['id_product'], $product['id_product_attribute']);
+                        if ($product['quantity'] <= 0) {
+                            $cart->deleteProduct($product['id_product'], $product['id_product_attribute']);
+                        } else {
+                            $cart_product_quantity = 0;
+                            foreach ($cart_products as $cart_product) {
+                                if ($cart_product['id_product'] == $product['id_product'] && $cart_product['id_product_attribute'] == $product['id_product_attribute']) {
+                                    $cart_product_quantity = $cart_product['cart_quantity'];
+                                }
+                            }
+                            if ($product['quantity'] < $cart_product_quantity) {
+                                $cart->updateQty($cart_product_quantity-$product['quantity'], $product['id_product'], $product['id_product_attribute'], false, 'down');
+                            } elseif ($product['quantity'] > $cart_product_quantity) {
+                                $cart->updateQty($product['quantity']-$cart_product_quantity, $product['id_product'], $product['id_product_attribute'], false, 'up');
+                            }
+                        }
                     }
                 }
 
