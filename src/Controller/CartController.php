@@ -7,6 +7,7 @@ use Carrier;
 use Cart;
 use Configuration;
 use Context;
+use Country;
 use Currency;
 use Customer;
 use Exception;
@@ -234,11 +235,19 @@ class CartController extends AbstractOystController
 
                     if (!empty($id_customer) && empty($id_address) && !empty($params['data']['address'])) {
                         //No address, create it
+                        if (!empty($params['data']['address']['country'])) {
+                            if ($id_country = Country::getByIso($params['data']['address']['country'])) {
+                                $params['data']['address']['id_country'] = $id_country;
+                            } else {
+                                $errors[] = "Country code not exists";
+                            }
+                        }
                         $result = $object_service->createObject('Address', $params['data']['address']);
-                        $result['object']->id_customer = $id_customer;
-                        $result['object']->save();
-                        $id_address = $result['id'];
                         if (empty($result['errors'])) {
+                            $result['object']->id_customer = $id_customer;
+                            $result['object']->save();
+                            $id_address = $result['id'];
+                        } else {
                             $errors['address'] = $result['errors'];
                         }
                     }
