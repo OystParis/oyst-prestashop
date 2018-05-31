@@ -139,7 +139,8 @@ class CartController extends AbstractOystController
                 $errors = [];
                 //Carrier
                 if (!empty($params['data']['id_carrier'])) {
-                    $cart->id_carrier = $params['data']['id_carrier'];
+                    $carrier = Carrier::getCarrierByReference($params['data']['id_carrier']);
+                    $cart->id_carrier = $carrier->id_carrier;
                     //TODO Manage access point here (with module exception etc)
                 }
 
@@ -151,9 +152,12 @@ class CartController extends AbstractOystController
                                 $product['id_product_attribute'] = 0;
                             }
                         }
+                        //TODO Manage customization
                         $cart->updateQty($product['quantity'], $product['id_product'], $product['id_product_attribute']);
                     }
                 }
+
+                //TODO Manage cart_rule
 
                 //Customer & address
                 //TODO Manage different address delivery and address invoice
