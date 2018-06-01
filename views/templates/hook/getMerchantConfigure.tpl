@@ -47,6 +47,8 @@
     var notification_bo_url = "{$oyst.notification_bo_url|escape:'htmlall':'UTF-8'}";
     var module_dir = "{$oyst.module_dir|escape:'htmlall':'UTF-8'}";
     var my_ip = "{$oyst.my_ip|escape:'htmlall':'UTF-8'}";
+    var state_oc = "{$oyst.OYST_ONE_CLICK_FEATURE_STATE}";
+    var key_valid = "{$oyst.currentOneClickApiKeyValid}";
 </script>
 
 {if $oyst.allow_url_fopen_check && $oyst.curl_check}
@@ -921,6 +923,7 @@
                                             <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
                                         {/foreach}
                                     </select>
+                                    <p class="error-carrier_default help-block" style="color:red;font-weight:bold;">{l s='Please select one carrier default' mod='oyst'}</p>
                                 </div>
                                 {foreach $oyst.carrier_list as $carrier}
                                     <label>{$carrier.name|escape:'htmlall':'UTF-8'}</label>
@@ -931,6 +934,7 @@
                                                 <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
                                             {/foreach}
                                         </select>
+                                        <p class="error-carrier_{$carrier.id_reference}_type error-carrier_type help-block" style="color:red;font-weight:bold;">{l s='Please select type home delivery for carrier default' mod='oyst'}</p>
                                     </div>
                                     <label>{l s='Delay in days' mod='oyst'}</label>
                                     <div class="margin-form">

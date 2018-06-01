@@ -195,7 +195,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a50a8dca91318e8ae3bbe
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a56de4c1908646e5eabed7857996da2d'] = 'Sélecteur pour le smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_dbadaff5cac3a968baf1cc78f0971693'] = 'Veuillez configurer le transporteur choisi par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a433ebac8ea99847e24ce12e6016e8ef'] = 'Veuillez choisir un transporteur par défaut, celui ci devra être obligatoirement configuré en \'livraison à domicile\'';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_d656fc298c72d199a2bc51867206b68b'] = 'Délai de livraison en jours';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_643046d4345b9cfc270724188d9b54d9'] = 'Jours ouvrés';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e59278675b8f1e052b22b7e5e7d65da7'] = 'Jour de la semaine';
@@ -219,7 +221,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_9b0c85b97abeed9539a4a27522f07b8
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1e9a47f645f877ccb0802c12a409fcdf'] = 'Vous devez activer l\'extension \"cURL\" sur votre serveur pour utiliser ce module !';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_406c32036dc3d8ace81aa915be99a494'] = 'Un erreur est survenue :';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e1354a66ff395e479a20628d2dc59613'] = 'Erreur pour le transporteur par défaut:';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_703b7353e4cb8c09ccf114a072273495'] = 'Veuillez sélectionner un transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_4522603925acf0da809d21cf2d50ea85'] = 'Erreur pour le type du transporteur par défaut:';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_f70a69f82912b6597c16c122dc453f40'] = 'Veuillez sélectionner le type Livraison à domicile pour le transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6e4f95cde8845dbb4f02eafb545e09dd'] = 'Valeur actuel pour le transporteur';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_de95b43bceeb4b998aed4aed5cef1ae7'] = 'modifier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6a8ce87951bacc4de06442bbf801be7c'] = 'Merci de décrocher';
@@ -296,7 +300,9 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_f7c26700f7863c8f5c292053916a6f2
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_57a93aed5880d4872d5f2173c9d485d6'] = 'Activer le bouton adresse';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_6522af86c20cbc643c45055ba9f23082'] = 'Transporteur par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_fbcf3ea984b8f48586fdd5c055d2cb24'] = 'Choisissez votre transporteur par défaut';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_dbadaff5cac3a968baf1cc78f0971693'] = 'Veuillez configurer le transporteur choisi par défaut';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_a433ebac8ea99847e24ce12e6016e8ef'] = 'Veuillez choisir un transporteur par défaut, celui ci devra être obligatoirement configuré en \'livraison à domicile\'';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_d656fc298c72d199a2bc51867206b68b'] = 'Délai de livraison en jours';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_643046d4345b9cfc270724188d9b54d9'] = 'Jours ouvrés';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e59278675b8f1e052b22b7e5e7d65da7'] = 'Jour de la semaine';
