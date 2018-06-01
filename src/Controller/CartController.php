@@ -83,7 +83,7 @@ class CartController extends AbstractOystController
                     if (!empty($errors)) {
                         $this->respondError(400, 'Error on carriers recuperation : '.print_r($errors, true));
                     }
-                    $response['carriers'] = $carriers;
+                    $response['available_carriers'] = $carriers;
 
                     //Message
                     $message = Message::getMessageByCartId($cart->id);
@@ -141,7 +141,11 @@ class CartController extends AbstractOystController
                 //Carrier
                 if (!empty($params['data']['id_carrier'])) {
                     $carrier = Carrier::getCarrierByReference($params['data']['id_carrier']);
-                    $cart->id_carrier = $carrier->id_carrier;
+                    if (Validate::isLoadedObject($carrier)) {
+                        $cart->id_carrier = $carrier->id;
+                    } else {
+                        $errors[] = 'Carrier not founded';
+                    }
                     //TODO Manage access point here (with module exception etc)
                 }
 
