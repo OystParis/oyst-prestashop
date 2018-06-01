@@ -112,6 +112,8 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_OC_REDIRECT_CONF'        => 'string',
         'FC_OYST_OC_REDIRECT_CONF_CUSTOM' => 'string',
         'FC_OYST_DELAY'                   => 'int',
+        'FC_OYST_BUSINESS_DAYS'           => array('type' => 'multiple', 'field' => 'oyst_days'),
+        'FC_OYST_LANG'                    => array('type' => 'multiple', 'field' => 'oyst_lang'),
         'FC_OYST_SHOULD_AS_STOCK'         => 'int',
         'FC_OYST_MANAGE_QUANTITY'         => 'int',
         'FC_OYST_MANAGE_QUANTITY_CART'    => 'int',
@@ -396,6 +398,17 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $restriction_languages = array();
         }
 
+        $business_days = Configuration::get('FC_OYST_BUSINESS_DAYS');
+        if ($business_days || $business_days != '') {
+            if (false  !== strpos($business_days, ',')) {
+                $restriction_business_days = explode(',', $business_days);
+            } else {
+                $restriction_business_days = array($business_days);
+            }
+        } else {
+            $restriction_business_days = array();
+        }
+
         // Table list for notification datatable
         $notification_tables = array(
             _DB_PREFIX_.'oyst_payment_notification',
@@ -416,6 +429,16 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $custom_success_error = Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM');
         $custom_error_error = Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM');
         $custom_conf_error = Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
+
+        $days = array(
+            1 => $this->module->l('Monday', 'oysthookgetconfigurationprocessor'),
+            2 => $this->module->l('Tuesday', 'oysthookgetconfigurationprocessor'),
+            3 => $this->module->l('Wednesday', 'oysthookgetconfigurationprocessor'),
+            4 => $this->module->l('Thursday', 'oysthookgetconfigurationprocessor'),
+            5 => $this->module->l('Friday', 'oysthookgetconfigurationprocessor'),
+            6 => $this->module->l('Saturday', 'oysthookgetconfigurationprocessor'),
+            7 => $this->module->l('Sunday', 'oysthookgetconfigurationprocessor')
+        );
 
         $assign['logsFile'] = $filesName;
         $assign['hasApiKey']     = $hasApiKey;
@@ -450,10 +473,12 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['order_state']              = OrderState::getOrderStates($id_lang);
         $assign['languages']                = Language::getLanguages(false);
         $assign['restriction_languages']    = $restriction_languages;
+        $assign['restriction_business_days'] = $restriction_business_days;
         $assign['notification_tables']      = $notification_tables;
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
         $assign['my_ip'] = Tools::getRemoteAddr();
+        $assign['days'] = $days;
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');

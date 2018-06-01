@@ -968,7 +968,41 @@
                                             </div>
                                         </div>
                                     {/foreach}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Bussiness days' mod='oyst'}</label>
+                                        <div class="col-lg-9">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="fixed-width-xs">
+                                                                    <span class="title_box"><input type="checkbox" name="checkme" id="checkme" onclick="checkDelBoxes(this.form, 'oyst_days[]', this.checked)"></span>
+                                                                </th>
+                                                                <th class="fixed-width-xs">
+                                                                    <span class="title_box">{l s='Day of week' mod='oyst'}</span>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {foreach $oyst.days key=identifiant item=day}
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="checkbox" name="oyst_days[]" class="oyst_days" id="oyst_days_{$identifiant|intval}" value="{$identifiant|intval}" {if in_array($identifiant, $oyst.restriction_business_days)}checked="checked"{/if}>
+                                                                    </td>
+                                                                    <td>{$day|escape:'htmlall':'UTF-8'}</td>
+                                                                </tr>
+                                                            {/foreach}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 {else}
+                                    {foreach $oyst.restriction_business_days item=day}
+                                        <input type="hidden" name="oyst_days[]" value="{$day|intval}"/>
+                                    {/foreach}
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>
