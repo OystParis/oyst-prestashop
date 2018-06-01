@@ -23,6 +23,8 @@
     var notification_bo_url = "{$oyst.notification_bo_url|escape:'htmlall':'UTF-8'}";
     var module_dir = "{$oyst.module_dir|escape:'htmlall':'UTF-8'}";
     var my_ip = "{$oyst.my_ip|escape:'htmlall':'UTF-8'}";
+    var state_oc = "{$oyst.OYST_ONE_CLICK_FEATURE_STATE}";
+    var key_valid = "{$oyst.currentOneClickApiKeyValid}";
 </script>
 
 {if isset($oyst.result) && $oyst.result eq 'ok'}
@@ -53,6 +55,23 @@
 <div class="bootstrap">
     <div class="alert alert-danger">
         <strong>{l s='Got an API error:' mod='oyst'}</strong> {$apiError|escape:'htmlall':'UTF-8'}
+    </div>
+</div>
+{/if}
+
+{if isset($oyst.shipment_default) && $oyst.shipment_default == 0}
+<div class="bootstrap">
+    <div class="alert alert-danger">
+        <strong>{l s='Carrier default error:' mod='oyst'}</strong> {l s='Please select carrier default' mod='oyst'}
+    </div>
+</div>
+{/if}
+
+{if !$oyst.type_shipping_default || $oyst.type_shipping_default != 'home_delivery'}
+<div class="bootstrap">
+    <div class="alert alert-danger">
+        <strong>{l s='Type carrier default error:' mod='oyst'}</strong> {l s='Please select carrier default with home_delivery' mod='oyst'}.
+        {l s='Current value for carrier :' mod='oyst'} <strong>{l s='%s' sprintf=$oyst.name_type_shipping_default}</strong>
     </div>
 </div>
 {/if}
@@ -223,6 +242,10 @@
                                 <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#custom-btn-general">{l s='Customization of button on global' mod='oyst'}</a></li>
                                 <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#custom-btn">{l s='Button product' mod='oyst'}</a></li>
                                 <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn-cart"/>{l s='Button cart' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn-layer-cart"/>{l s='Button layer cart' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn-login"/>{l s='Button login' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn-payment"/>{l s='Button payment' mod='oyst'}</a></li>
+                                <li role="presentation" class="" ><a role="tab" data-toggle="tab" href="#custom-btn-address"/>{l s='Button address' mod='oyst'}</a></li>
                                 <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-carrier">{l s='Settings carrier' mod='oyst'}</a></li>
                                 <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-advanced">{l s='Settings advanced' mod='oyst'}</a></li>
                                 <li role="presentation" class=""><a role="tab" data-toggle="tab" href="#settings-restrictions">{l s='Settings restrictions' mod='oyst'}</a></li>
@@ -363,7 +386,7 @@
                                         <label class="control-label col-md-3 col-lg-3">{l s='Style btn 1-Click' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
                                             <select name="FC_OYST_THEME_BTN">
-                                                <option value="normal" {if $oyst.FC_OYST_THEME_BTN == 'normal'}selected="selected"{/if}>{l s='Normal' mod='oyst'}</option>
+                                                <option value="default" {if $oyst.FC_OYST_THEME_BTN == 'default'}selected="selected"{/if}>{l s='Default' mod='oyst'}</option>
                                                 <option value="inversed" {if $oyst.FC_OYST_THEME_BTN == 'inversed'}selected="selected"{/if}>{l s='Inversed' mod='oyst'}</option>
                                             </select>
                                         </div>
@@ -424,58 +447,58 @@
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_WIDTH_BTN" value="{$oyst.FC_OYST_WIDTH_BTN|escape:'htmlall':'UTF-8'}"/>
+                                            <input type="text" name="FC_OYST_WIDTH_BTN_PRODUCT" value="{$oyst.FC_OYST_WIDTH_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                             <span class="help-block">{l s='In % or px' mod='oyst'}</span>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_HEIGHT_BTN" value="{$oyst.FC_OYST_HEIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                            <input type="text" name="FC_OYST_HEIGHT_BTN_PRODUCT" value="{$oyst.FC_OYST_HEIGHT_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                             <span class="help-block">{l s='In % or px' mod='oyst'}</span>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Margin top' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_MARGIN_TOP_BTN" value="{$oyst.FC_OYST_MARGIN_TOP_BTN|escape:'htmlall':'UTF-8'}"/>
+                                            <input type="text" name="FC_OYST_MARGIN_TOP_BTN_PRODUCT" value="{$oyst.FC_OYST_MARGIN_TOP_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                             <span class="help-block">{l s='In % or px' mod='oyst'}</span>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Margin left' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_MARGIN_LEFT_BTN" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                            <input type="text" name="FC_OYST_MARGIN_LEFT_BTN_PRODUCT" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                             <span class="help-block">{l s='In % or px' mod='oyst'}</span>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Margin right' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN|escape:'htmlall':'UTF-8'}"/>
+                                            <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN_PRODUCT" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
                                             <span class="help-block">{l s='In % or px' mod='oyst'}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Position btn 1-Click' mod='oyst'}</label>
-                                        <div class="col-md-7 col-lg-7">
-                                            <select name="FC_OYST_POSITION_BTN">
-                                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
-                                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
-                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Id btn add to cart' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_ID_BTN_ADD_TO_CART" value="{if $oyst.FC_OYST_ID_BTN_ADD_TO_CART}{$oyst.FC_OYST_ID_BTN_ADD_TO_CART|escape:'htmlall':'UTF-8'}{else}#add_to_cart{/if}"/>
+                                            <input type="text" name="FC_OYST_ID_BTN_PRODUCT" value="{if $oyst.FC_OYST_ID_BTN_PRODUCT}{$oyst.FC_OYST_ID_BTN_PRODUCT|escape:'htmlall':'UTF-8'}{else}#add_to_cart{/if}"/>
                                             <span class="help-block">{l s='You can select multiple selectors separated by commas (jQuery selector)' mod='oyst'}</span>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Id smart btn' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_ID_SMART_BTN" value="{if $oyst.FC_OYST_ID_SMART_BTN}{$oyst.FC_OYST_ID_SMART_BTN|escape:'htmlall':'UTF-8'}{else}#add_to_cart button{/if}"/>
+                                            <input type="text" name="FC_OYST_ID_SMART_BTN_PRODUCT" value="{if $oyst.FC_OYST_ID_SMART_BTN_PRODUCT}{$oyst.FC_OYST_ID_SMART_BTN_PRODUCT|escape:'htmlall':'UTF-8'}{else}#add_to_cart button{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Position btn 1-Click' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_POSITION_BTN_PRODUCT">
+                                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN_PRODUCT == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN_PRODUCT == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
@@ -548,7 +571,22 @@
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Id btn cart' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7">
-                                            <input type="text" name="FC_OYST_ID_BTN_CART" value="{if $oyst.FC_OYST_ID_BTN_CART}{$oyst.FC_OYST_ID_BTN_CART|escape:'htmlall':'UTF-8'}{else}.standard-checkout{/if}"/>
+                                            <input type="text" name="FC_OYST_ID_BTN_CART" value="{if $oyst.FC_OYST_ID_BTN_CART}{$oyst.FC_OYST_ID_BTN_CART|escape:'htmlall':'UTF-8'}{else}.cart_navigation .button-medium{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id smart btn' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_SMART_BTN_CART" value="{if $oyst.FC_OYST_ID_SMART_BTN_CART}{$oyst.FC_OYST_ID_SMART_BTN_CART|escape:'htmlall':'UTF-8'}{else}.cart_navigation .button-medium{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Position btn 1-Click' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_POSITION_BTN_CART">
+                                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN_CART == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN_CART == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
@@ -565,6 +603,360 @@
                                     </div>
                                 {/if}
                             </div>
+                            <div role="tabpanel" id="custom-btn-layer-cart" class="tab-pane">
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable button layer cart' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_BTN_LAYER" id="FC_OYST_BTN_LAYER_ON" value="1" {if $oyst.FC_OYST_BTN_LAYER == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_LAYER_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_BTN_LAYER" id="FC_OYST_BTN_LAYER_OFF" value="0" {if $oyst.FC_OYST_BTN_LAYER == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_LAYER_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_WIDTH_BTN_LAYER" value="{$oyst.FC_OYST_WIDTH_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_HEIGHT_BTN_LAYER" value="{$oyst.FC_OYST_HEIGHT_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin top' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_TOP_BTN_LAYER" value="{$oyst.FC_OYST_MARGIN_TOP_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin left' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_LEFT_BTN_LAYER" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin right' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN_LAYER" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN_LAYER|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id btn cart' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_BTN_LAYER" value="{if $oyst.FC_OYST_ID_BTN_LAYER}{$oyst.FC_OYST_ID_BTN_LAYER|escape:'htmlall':'UTF-8'}{else}#layer_cart .button-container{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id smart btn' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_SMART_BTN_LAYER" value="{if $oyst.FC_OYST_ID_SMART_BTN_LAYER}{$oyst.FC_OYST_ID_SMART_BTN_LAYER|escape:'htmlall':'UTF-8'}{else}#layer_cart .button-container{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Position btn layer 1-Click' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_POSITION_BTN_LAYER">
+                                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN_LAYER == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN_LAYER == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
+                                            <button type="submit" value="1" name="submitOystResetCustomLayer" class="btn btn-info module_form_reset_btn">
+                                               <strong>{l s='Reset' mod='oyst'}</strong>
+                                           </button>
+                                        </div>
+                                    </div>
+                                {else}
+                                    <input type="hidden" name="FC_OYST_BTN_LAYER" value="{$oyst.FC_OYST_BTN_LAYER|intval}"/>
+                                    <input type="hidden" name="FC_OYST_WIDTH_BTN_LAYER" value="{$oyst.FC_OYST_WIDTH_BTN_LAYER|intval}"/>
+                                    <input type="hidden" name="FC_OYST_HEIGHT_BTN_LAYER" value="{$oyst.FC_OYST_HEIGHT_BTN_LAYER|intval}"/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
+                            <div role="tabpanel" id="custom-btn-login" class="tab-pane">
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable button login' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_BTN_LOGIN" id="FC_OYST_BTN_LOGIN_ON" value="1" {if $oyst.FC_OYST_BTN_LOGIN == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_LOGIN_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_BTN_LOGIN" id="FC_OYST_BTN_LOGIN_OFF" value="0" {if $oyst.FC_OYST_BTN_LOGIN == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_LOGIN_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_WIDTH_BTN_LOGIN" value="{$oyst.FC_OYST_WIDTH_BTN_LOGIN|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_HEIGHT_BTN_LOGIN" value="{$oyst.FC_OYST_HEIGHT_BTN_LOGIN|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin top' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_TOP_BTN_LOGIN" value="{$oyst.FC_OYST_MARGIN_TOP_BTN_LOGIN|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin left' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_LEFT_BTN_LOGIN" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN_LOGIN|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin right' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN_LOGIN" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN_LOGIN|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id btn cart' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_BTN_LOGIN" value="{if $oyst.FC_OYST_ID_BTN_LOGIN}{$oyst.FC_OYST_ID_BTN_LOGIN|escape:'htmlall':'UTF-8'}{else}#SubmitCreate{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id btn cart for form' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_SMART_BTN_LOGIN" value="{if $oyst.FC_OYST_ID_SMART_BTN_LOGIN}{$oyst.FC_OYST_ID_SMART_BTN_LOGIN|escape:'htmlall':'UTF-8'}{else}#SubmitCreate{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Position btn login 1-Click' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_POSITION_BTN_LOGIN">
+                                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN_LOGIN == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN_LOGIN == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
+                                            <button type="submit" value="1" name="submitOystResetCustomLogin" class="btn btn-info module_form_reset_btn">
+                                               <strong>{l s='Reset' mod='oyst'}</strong>
+                                           </button>
+                                        </div>
+                                    </div>
+                                {else}
+                                    <input type="hidden" name="FC_OYST_BTN_LOGIN" value="{$oyst.FC_OYST_BTN_LOGIN|intval}"/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
+                            <div role="tabpanel" id="custom-btn-payment" class="tab-pane">
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable button payment' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_BTN_PAYMENT" id="FC_OYST_BTN_PAYMENT_ON" value="1" {if $oyst.FC_OYST_BTN_PAYMENT == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_PAYMENT_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_BTN_PAYMENT" id="FC_OYST_BTN_PAYMENT_OFF" value="0" {if $oyst.FC_OYST_BTN_PAYMENT == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_PAYMENT_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_WIDTH_BTN_PAYMENT" value="{$oyst.FC_OYST_WIDTH_BTN_PAYMENT|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_HEIGHT_BTN_PAYMENT" value="{$oyst.FC_OYST_HEIGHT_BTN_PAYMENT|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin top' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_TOP_BTN_PAYMENT" value="{$oyst.FC_OYST_MARGIN_TOP_BTN_PAYMENT|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin left' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_LEFT_BTN_PAYMENT" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN_PAYMENT|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin right' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN_PAYMENT" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN_PAYMENT|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id btn cart' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_BTN_PAYMENT" value="{if $oyst.FC_OYST_ID_BTN_PAYMENT}{$oyst.FC_OYST_ID_BTN_PAYMENT|escape:'htmlall':'UTF-8'}{else}#HOOK_PAYMENT{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id btn cart for form' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_SMART_BTN_PAYMENT" value="{if $oyst.FC_OYST_ID_SMART_BTN_PAYMENT}{$oyst.FC_OYST_ID_SMART_BTN_PAYMENT|escape:'htmlall':'UTF-8'}{else}.payment_module{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Position btn login 1-Click' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_POSITION_BTN_PAYMENT">
+                                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN_PAYMENT == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN_PAYMENT == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
+                                            <button type="submit" value="1" name="submitOystResetCustomPayment" class="btn btn-info module_form_reset_btn">
+                                               <strong>{l s='Reset' mod='oyst'}</strong>
+                                           </button>
+                                        </div>
+                                    </div>
+                                {else}
+                                    <input type="hidden" name="FC_OYST_BTN_PAYMENT" value="{$oyst.FC_OYST_BTN_PAYMENT|intval}"/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
+                            <div role="tabpanel" id="custom-btn-address" class="tab-pane">
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable button address' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_BTN_ADDR" id="FC_OYST_BTN_ADDR_ON" value="1" {if $oyst.FC_OYST_BTN_ADDR == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_ADDR_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_BTN_ADDR" id="FC_OYST_BTN_ADDR_OFF" value="0" {if $oyst.FC_OYST_BTN_ADDR == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_BTN_ADDR_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Width' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_WIDTH_BTN_ADDR" value="{$oyst.FC_OYST_WIDTH_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Height' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_HEIGHT_BTN_ADDR" value="{$oyst.FC_OYST_HEIGHT_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin top' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_TOP_BTN_ADDR" value="{$oyst.FC_OYST_MARGIN_TOP_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin left' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_LEFT_BTN_ADDR" value="{$oyst.FC_OYST_MARGIN_LEFT_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Margin right' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_MARGIN_RIGHT_BTN_ADDR" value="{$oyst.FC_OYST_MARGIN_RIGHT_BTN_ADDR|escape:'htmlall':'UTF-8'}"/>
+                                            <span class="help-block">{l s='In % or px' mod='oyst'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id btn address' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_BTN_ADDR" value="{if $oyst.FC_OYST_ID_BTN_ADDR}{$oyst.FC_OYST_ID_BTN_ADDR|escape:'htmlall':'UTF-8'}{else}#submitAddress{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Id btn address for form' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <input type="text" name="FC_OYST_ID_SMART_BTN_ADDR" value="{if $oyst.FC_OYST_ID_SMART_BTN_ADDR}{$oyst.FC_OYST_ID_SMART_BTN_ADDR|escape:'htmlall':'UTF-8'}{else}#submitAddress{/if}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Position btn login 1-Click' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7">
+                                            <select name="FC_OYST_POSITION_BTN_ADDR">
+                                                <option value="before" {if $oyst.FC_OYST_POSITION_BTN_ADDR == 'before'}selected="selected"{/if}>{l s='Before button add to cart' mod='oyst'}</option>
+                                                <option value="after" {if $oyst.FC_OYST_POSITION_BTN_ADDR == 'after'}selected="selected"{/if}>{l s='After button add to cart' mod='oyst'}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <div class="col-md-offset-9 col-lg-offset-9 col-md-1 col-lg-1">
+                                            <button type="submit" value="1" name="submitOystResetCustomAddress" class="btn btn-info module_form_reset_btn">
+                                               <strong>{l s='Reset' mod='oyst'}</strong>
+                                           </button>
+                                        </div>
+                                    </div>
+                                {else}
+                                    <input type="hidden" name="FC_OYST_BTN_ADDR" value="{$oyst.FC_OYST_BTN_ADDR|intval}"/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
+                                    </div>
+                                {/if}
+                            </div>
                             <div role="tabpanel" id="settings-carrier" class="tab-pane">
                                 {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
                                     <div class="form-group clearfix">
@@ -576,6 +968,7 @@
                                                     <option value="{$carrier.id_reference|escape:'htmlall':'UTF-8'}"{if $oyst.shipment_default == $carrier.id_reference} selected="selected"{/if}>{$carrier.name|escape:'htmlall':'UTF-8'}</option>
                                                 {/foreach}
                                             </select>
+                                            <p class="error-carrier_default help-block" style="color:red;font-weight:bold;">{l s='Please select one carrier default' mod='oyst'}</p>
                                         </div>
                                     </div>
                                     {foreach $oyst.carrier_list as $carrier}
@@ -588,6 +981,7 @@
                                                         <option value="{$value|escape:'htmlall':'UTF-8'}" {if $value ==  Configuration::get("FC_OYST_SHIPMENT_{$carrier.id_reference}")}selected="selected"{/if}>{$name|escape:'htmlall':'UTF-8'}</option>
                                                     {/foreach}
                                                 </select>
+                                                <p class="error-carrier_{$carrier.id_reference}_type error-carrier_type help-block" style="color:red;font-weight:bold;">{l s='Please select type home delivery for carrier default' mod='oyst'}</p>
                                             </div>
                                             <label class="control-label col-md-2 col-lg-2">{l s='Delay in days' mod='oyst'}</label>
                                             <div class="col-md-1 col-lg-1">
@@ -595,7 +989,41 @@
                                             </div>
                                         </div>
                                     {/foreach}
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Bussiness days' mod='oyst'}</label>
+                                        <div class="col-lg-9">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="fixed-width-xs">
+                                                                    <span class="title_box"><input type="checkbox" name="checkme" id="checkme" onclick="checkDelBoxes(this.form, 'oyst_days[]', this.checked)"></span>
+                                                                </th>
+                                                                <th class="fixed-width-xs">
+                                                                    <span class="title_box">{l s='Day of week' mod='oyst'}</span>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {foreach $oyst.days key=identifiant item=day}
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="checkbox" name="oyst_days[]" class="oyst_days" id="oyst_days_{$identifiant|intval}" value="{$identifiant|intval}" {if in_array($identifiant, $oyst.restriction_business_days)}checked="checked"{/if}>
+                                                                    </td>
+                                                                    <td>{$day|escape:'htmlall':'UTF-8'}</td>
+                                                                </tr>
+                                                            {/foreach}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 {else}
+                                    {foreach $oyst.restriction_business_days item=day}
+                                        <input type="hidden" name="oyst_days[]" value="{$day|intval}"/>
+                                    {/foreach}
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>

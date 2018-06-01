@@ -92,6 +92,40 @@ $(document).ready(function() {
         }
     });
 
+    $('.error-carrier_default').hide();
+    $('.error-carrier_type').hide();
+
+    $('#module_form').submit(function (e) {
+        if (state_oc && key_valid) {
+            $('.error-carrier_type').hide();
+            var state = true;
+            var shipment_default = $('select[name="FC_OYST_SHIPMENT_DEFAULT"] option:selected').val();
+            var shipment_type = $('select[name="FC_OYST_SHIPMENT_'+shipment_default+'"] option:selected').val();
+
+            console.log(shipment_default);
+            if (shipment_default == 0) {
+                $('.error-carrier_default').show();
+                state = false;
+            } else {
+                $('.error-carrier_default').hide();
+            }
+
+            if (shipment_type != 'home_delivery') {
+                $('.error-carrier_'+shipment_default+'_type').show();
+                state = false;
+            } else {
+                $('.error-carrier_default').hide();
+            }
+
+            if (!state) {
+                e.preventDefault();
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
+    });
 });
 
 function handleExportCatalogButton(clickedTab) {

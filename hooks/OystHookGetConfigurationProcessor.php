@@ -47,18 +47,24 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_PAYMENT_FEATURE'         => 'int',
         'FC_OYST_CATALOG_FEATURE'         => 'int',
         'FC_OYST_SHIPMENT_DEFAULT'        => 'int',
+        'FC_OYST_ACTIVE_FRAUD'            => 'int',
+        'FC_OYST_STATE_PAYMENT_FREEPAY'   => 'string',
+        'FC_OYST_STATE_PAYMENT_ONECLICK'  => 'string',
         'FC_OYST_BORDER_BTN'              => 'int',
         'FC_OYST_SMART_BTN'               => 'int',
         'FC_OYST_THEME_BTN'               => 'string',
         'FC_OYST_COLOR_BTN'               => 'string',
-        'FC_OYST_WIDTH_BTN'               => 'string',
-        'FC_OYST_HEIGHT_BTN'              => 'string',
-        'FC_OYST_MARGIN_TOP_BTN'          => 'string',
-        'FC_OYST_MARGIN_LEFT_BTN'         => 'string',
-        'FC_OYST_MARGIN_RIGHT_BTN'        => 'string',
-        'FC_OYST_POSITION_BTN'            => 'string',
-        'FC_OYST_ID_BTN_ADD_TO_CART'      => 'string',
-        'FC_OYST_ID_SMART_BTN'            => 'string',
+        'FC_OYST_CUSTOM_CSS'              => 'string',
+        'FC_OYST_BTN_PRODUCT'             => 'int',
+        'FC_OYST_WIDTH_BTN_PRODUCT'       => 'string',
+        'FC_OYST_HEIGHT_BTN_PRODUCT'      => 'string',
+        'FC_OYST_MARGIN_TOP_BTN_PRODUCT'  => 'string',
+        'FC_OYST_MARGIN_LEFT_BTN_PRODUCT' => 'string',
+        'FC_OYST_MARGIN_RIGHT_BTN_PRODUCT'=> 'string',
+        'FC_OYST_POSITION_BTN_PRODUCT'    => 'string',
+        'FC_OYST_ID_BTN_PRODUCT'          => 'string',
+        'FC_OYST_ID_SMART_BTN_PRODUCT'    => 'string',
+        'FC_OYST_BTN_CART'                => 'int',
         'FC_OYST_WIDTH_BTN_CART'          => 'string',
         'FC_OYST_HEIGHT_BTN_CART'         => 'string',
         'FC_OYST_MARGIN_TOP_BTN_CART'     => 'string',
@@ -66,20 +72,53 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_MARGIN_RIGHT_BTN_CART'   => 'string',
         'FC_OYST_POSITION_BTN_CART'       => 'string',
         'FC_OYST_ID_BTN_CART'             => 'string',
+        'FC_OYST_ID_SMART_BTN_CART'       => 'string',
+        'FC_OYST_BTN_LAYER'               => 'int',
+        'FC_OYST_WIDTH_BTN_LAYER'         => 'string',
+        'FC_OYST_HEIGHT_BTN_LAYER'        => 'string',
+        'FC_OYST_MARGIN_TOP_BTN_LAYER'    => 'string',
+        'FC_OYST_MARGIN_LEFT_BTN_LAYER'   => 'string',
+        'FC_OYST_MARGIN_RIGHT_BTN_LAYER'  => 'string',
+        'FC_OYST_ID_BTN_LAYER'            => 'string',
+        'FC_OYST_ID_SMART_BTN_LAYER'      => 'string',
+        'FC_OYST_POSITION_BTN_LAYER'      => 'string',
+        'FC_OYST_BTN_LOGIN'               => 'int',
+        'FC_OYST_WIDTH_BTN_LOGIN'         => 'string',
+        'FC_OYST_HEIGHT_BTN_LOGIN'        => 'string',
+        'FC_OYST_MARGIN_TOP_BTN_LOGIN'    => 'string',
+        'FC_OYST_MARGIN_LEFT_BTN_LOGIN'   => 'string',
+        'FC_OYST_MARGIN_RIGHT_BTN_LOGIN'  => 'string',
+        'FC_OYST_ID_BTN_LOGIN'            => 'string',
+        'FC_OYST_ID_SMART_BTN_LOGIN'      => 'string',
+        'FC_OYST_POSITION_BTN_LOGIN'      => 'string',
+        'FC_OYST_BTN_PAYMENT'             => 'int',
+        'FC_OYST_WIDTH_BTN_PAYMENT'       => 'string',
+        'FC_OYST_HEIGHT_BTN_PAYMENT'      => 'string',
+        'FC_OYST_MARGIN_TOP_BTN_PAYMENT'  => 'string',
+        'FC_OYST_MARGIN_LEFT_BTN_PAYMENT' => 'string',
+        'FC_OYST_MARGIN_RIGHT_BTN_PAYMENT'=> 'string',
+        'FC_OYST_ID_BTN_PAYMENT'          => 'string',
+        'FC_OYST_ID_SMART_BTN_PAYMENT'    => 'string',
+        'FC_OYST_POSITION_BTN_PAYMENT'    => 'string',
+        'FC_OYST_BTN_ADDR'                => 'int',
+        'FC_OYST_WIDTH_BTN_ADDR'          => 'string',
+        'FC_OYST_HEIGHT_BTN_ADDR'         => 'string',
+        'FC_OYST_MARGIN_TOP_BTN_ADDR'     => 'string',
+        'FC_OYST_MARGIN_LEFT_BTN_ADDR'    => 'string',
+        'FC_OYST_MARGIN_RIGHT_BTN_ADDR'   => 'string',
+        'FC_OYST_ID_BTN_ADDR'             => 'string',
+        'FC_OYST_ID_SMART_BTN_ADDR'       => 'string',
+        'FC_OYST_POSITION_BTN_ADDR'       => 'string',
+        'FC_OYST_OC_REDIRECT_CONF'        => 'string',
+        'FC_OYST_OC_REDIRECT_CONF_CUSTOM' => 'string',
         'FC_OYST_DELAY'                   => 'int',
-        'FC_OYST_STATE_PAYMENT_FREEPAY'   => 'string',
-        'FC_OYST_STATE_PAYMENT_ONECLICK'  => 'string',
-        'FC_OYST_ACTIVE_FRAUD'            => 'int',
+        'FC_OYST_BUSINESS_DAYS'           => array('type' => 'multiple', 'field' => 'oyst_days'),
         'FC_OYST_LANG'                    => array('type' => 'multiple', 'field' => 'oyst_lang'),
         'FC_OYST_SHOULD_AS_STOCK'         => 'int',
         'FC_OYST_MANAGE_QUANTITY'         => 'int',
-        'FC_OYST_BTN_CART'                => 'int',
         'FC_OYST_MANAGE_QUANTITY_CART'    => 'int',
         'FC_OYST_ONLY_FOR_IP'             => 'string',
-        'FC_OYST_BTN_PRODUCT'             => 'int',
-        'FC_OYST_OC_REDIRECT_CONF'        => 'string',
-        'FC_OYST_OC_REDIRECT_CONF_CUSTOM' => 'string',
-        'FC_OYST_CUSTOM_CSS'              => 'string',
+        'FC_OYST_LANG'                    => array('type' => 'multiple', 'field' => 'oyst_lang'),
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',
         OystConfiguration::API_KEY_SANDBOX_FREEPAY => 'string',
         OystConfiguration::API_KEY_CUSTOM_FREEPAY => 'string',
@@ -174,21 +213,21 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         if (Tools::isSubmit('submitOystResetCustomGlobal')) {
             Configuration::updateValue('FC_OYST_BORDER_BTN', 1);
             Configuration::updateValue('FC_OYST_SMART_BTN', 1);
-            Configuration::updateValue('FC_OYST_THEME_BTN', 'normal');
+            Configuration::updateValue('FC_OYST_THEME_BTN', 'default');
             Configuration::updateValue('FC_OYST_COLOR_BTN', '#E91E63');
             Configuration::updateValue('FC_OYST_CUSTOM_CSS', '');
         }
 
         if (Tools::isSubmit('submitOystResetCustomProduct')) {
             Configuration::updateValue('FC_OYST_BTN_PRODUCT', 1);
-            Configuration::updateValue('FC_OYST_WIDTH_BTN', '');
-            Configuration::updateValue('FC_OYST_HEIGHT_BTN', '');
-            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN', '');
-            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN', '');
-            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN', '');
-            Configuration::updateValue('FC_OYST_POSITION_BTN', 'before');
-            Configuration::updateValue('FC_OYST_ID_BTN_ADD_TO_CART', '#add_to_cart');
-            Configuration::updateValue('FC_OYST_ID_SMART_BTN', '#add_to_cart button');
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_PRODUCT', '');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_PRODUCT', '');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_PRODUCT', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_PRODUCT', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_PRODUCT', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_PRODUCT', 'before');
+            Configuration::updateValue('FC_OYST_ID_BTN_PRODUCT', '#add_to_cart');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_PRODUCT', '#add_to_cart button');
         }
 
         if (Tools::isSubmit('submitOystResetCustomCart')) {
@@ -198,7 +237,86 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_CART', '');
             Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_CART', '');
             Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_CART', '');
-            Configuration::updateValue('FC_OYST_ID_BTN_CART', '.standard-checkout');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_CART', 'before');
+            if (_PS_VERSION_ >= '1.6.0.0') {
+                Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .button-medium');
+                Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.cart_navigation .button-medium');
+            } else {
+                Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .exclusive');
+                Configuration::updateValue('FC_OYST_ID_SMART_BTN_CART', '.cart_navigation .exclusive');
+            }
+        }
+
+        if (Tools::isSubmit('submitOystResetCustomLayer')) {
+            Configuration::updateValue('FC_OYST_BTN_LAYER', 0);
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '214');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '43');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_LAYER', 'before');
+            Configuration::updateValue('FC_OYST_ID_BTN_LAYER', '#layer_cart .button-container');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_LAYER', '#layer_cart .button-container');
+        }
+
+        if (Tools::isSubmit('submitOystResetCustomLogin')) {
+            Configuration::updateValue('FC_OYST_BTN_LOGIN', 0);
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_LOGIN', 'before');
+            Configuration::updateValue('FC_OYST_ID_BTN_LOGIN', '#SubmitCreate');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_LOGIN', '#SubmitCreate');
+        }
+
+        if (Tools::isSubmit('submitOystResetCustomPayment')) {
+            Configuration::updateValue('FC_OYST_BTN_PAYMENT', 0);
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_PAYMENT', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_PAYMENT', 'before');
+            Configuration::updateValue('FC_OYST_ID_BTN_PAYMENT', '#HOOK_PAYMENT');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_PAYMENT', '.payment_module');
+        }
+
+        if (Tools::isSubmit('submitOystResetCustomAddress')) {
+            Configuration::updateValue('FC_OYST_BTN_ADDR', 0);
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_ADDR', '');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_ADDR', '');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_ADDR', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_ADDR', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_ADDR', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_ADDR', 'before');
+            Configuration::updateValue('FC_OYST_ID_BTN_ADDR', '#submitAddress');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_ADDR', '#submitAddress');
+        }
+
+        if (Tools::isSubmit('submitOystResetCustomLayer')) {
+            Configuration::updateValue('FC_OYST_BTN_LAYER', 0);
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_LAYER', '214');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_LAYER', '43');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LAYER', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_LAYER', 'before');
+            Configuration::updateValue('FC_OYST_ID_BTN_LAYER', '#layer_cart .button-container');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_LAYER', '#layer_cart .button-container');
+        }
+
+        if (Tools::isSubmit('submitOystResetCustomLogin')) {
+            Configuration::updateValue('FC_OYST_BTN_LOGIN', 0);
+            Configuration::updateValue('FC_OYST_WIDTH_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_HEIGHT_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_MARGIN_TOP_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_MARGIN_LEFT_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_MARGIN_RIGHT_BTN_LOGIN', '');
+            Configuration::updateValue('FC_OYST_POSITION_BTN_LOGIN', 'before');
+            Configuration::updateValue('FC_OYST_ID_BTN_LOGIN', '#SubmitCreate');
+            Configuration::updateValue('FC_OYST_ID_SMART_BTN_LOGIN', '#SubmitCreate');
         }
 
         if (Tools::isSubmit('submitOystConfigurationReset')) {
@@ -280,6 +398,17 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
             $restriction_languages = array();
         }
 
+        $business_days = Configuration::get('FC_OYST_BUSINESS_DAYS');
+        if ($business_days || $business_days != '') {
+            if (false  !== strpos($business_days, ',')) {
+                $restriction_business_days = explode(',', $business_days);
+            } else {
+                $restriction_business_days = array($business_days);
+            }
+        } else {
+            $restriction_business_days = array();
+        }
+
         // Table list for notification datatable
         $notification_tables = array(
             _DB_PREFIX_.'oyst_payment_notification',
@@ -300,6 +429,31 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $custom_success_error = Configuration::get('FC_OYST_REDIRECT_SUCCESS_CUSTOM');
         $custom_error_error = Configuration::get('FC_OYST_REDIRECT_ERROR_CUSTOM');
         $custom_conf_error = Configuration::get('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
+        $shipping_default = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
+
+        // Get Reference carrier
+        $id_reference = Db::getInstance()->getValue('
+            SELECT `id_reference`
+            FROM `'._DB_PREFIX_.'carrier`
+            WHERE id_carrier = '.$shipping_default);
+        if (Validate::isInt($shipping_default) &&
+            $shipping_default != 0 &&
+            Validate::isInt($id_reference) &&
+            $id_reference != 0) {
+            $type_shipping_default = Configuration::get("FC_OYST_SHIPMENT_".$id_reference);
+        } else {
+            $type_shipping_default = false;
+        }
+
+        $days = array(
+            1 => $this->module->l('Monday', 'oysthookgetconfigurationprocessor'),
+            2 => $this->module->l('Tuesday', 'oysthookgetconfigurationprocessor'),
+            3 => $this->module->l('Wednesday', 'oysthookgetconfigurationprocessor'),
+            4 => $this->module->l('Thursday', 'oysthookgetconfigurationprocessor'),
+            5 => $this->module->l('Friday', 'oysthookgetconfigurationprocessor'),
+            6 => $this->module->l('Saturday', 'oysthookgetconfigurationprocessor'),
+            7 => $this->module->l('Sunday', 'oysthookgetconfigurationprocessor')
+        );
 
         $assign['logsFile'] = $filesName;
         $assign['hasApiKey']     = $hasApiKey;
@@ -330,14 +484,18 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['custom_conf_error']        = !Validate::isAbsoluteUrl($custom_conf_error);
         $assign['carrier_list']             = $this->getCarrierList();
         $assign['type_list']                = $shipmentTypes;
-        $assign['shipment_default']         = (int)Configuration::get('FC_OYST_SHIPMENT_DEFAULT');
+        $assign['shipment_default']         = $shipping_default;
         $assign['order_state']              = OrderState::getOrderStates($id_lang);
         $assign['languages']                = Language::getLanguages(false);
         $assign['restriction_languages']    = $restriction_languages;
+        $assign['restriction_business_days'] = $restriction_business_days;
         $assign['notification_tables']      = $notification_tables;
         $assign['currentOneClickApiKeyValid'] = $isCurrentOneClickApiKeyValid && count($shipmentTypes);
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
         $assign['my_ip'] = Tools::getRemoteAddr();
+        $assign['days'] = $days;
+        $assign['type_shipping_default']  = $type_shipping_default;
+        $assign['name_type_shipping_default'] = $shipmentTypes[$type_shipping_default];
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');
