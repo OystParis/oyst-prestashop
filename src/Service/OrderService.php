@@ -434,6 +434,7 @@ class OrderService extends AbstractOystService
                     WHERE m.`id_carrier` = '.(int)$carrierInfo['id'].' AND ms.`id_shop` = '.(int)Context::getContext()->shop->id
                 );
 
+                $md_data = array();
                 $md_data[] = array(
                     'id_customer' => (int)$customer->id,
                     'id_method' => (int)$id_mr_method,
@@ -503,6 +504,7 @@ class OrderService extends AbstractOystService
             if ($carrierInfo['type'] == 'colissimo' && $pickupId &&
                 Module::isEnabled('chronopost') &&
                 Module::isInstalled('chronopost')) {
+                $md_data = array();
                 $md_data[] = array(
                     'id_cart' => (int)$cart->id,
                     'id_pr' => pSQL($pickupId),
