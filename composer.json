@@ -7,7 +7,7 @@
     ],
     "require": {
         "php": ">=5.3",
-        "oyst/oyst-php": "^6.0.0",
+        "oyst/oyst-php": "^7.0.0",
         "symfony/serializer": "^2.8.19",
         "symfony/property-access": "^2.8.19",
         "psr/log": "^1.0"
