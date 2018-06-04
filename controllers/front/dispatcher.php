@@ -20,7 +20,6 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         Route::addRoute('GET', '/cart/{id}', 'Cart', 'getCart');
         Route::addRoute('GET', '/config', 'Config', 'getConfig');
         Route::addRoute('PUT', '/script-tag', 'ScriptTag', 'setUrl');
-        Route::addRoute('PUT', '/customer/search', 'Customer', 'search');
         Route::addRoute('PUT', '/cart/{id}', 'Cart', 'updateCart');
 
         $request = new CurrentRequest();
@@ -56,7 +55,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
             } else {
                 header($_SERVER['SERVER_PROTOCOL'].' 401 Unauthorized');
                 header('WWW-Authenticate: Basic realm="Welcome to Oyst Webservice, please enter the authentication key as the login. No password required."');
-                die('401 Unauthorized');
+                $this->printError(401, 'Bad API key');
             }
 
             if (!OystAPIKey::isKeyActive($key)) {
