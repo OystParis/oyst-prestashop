@@ -5,6 +5,7 @@ namespace Oyst\Controller;
 use Address;
 use Carrier;
 use Cart;
+use CartRule;
 use Configuration;
 use Context;
 use Country;
@@ -18,6 +19,7 @@ use Oyst\Classes\Notification;
 use Oyst\Services\CustomerService;
 use Oyst\Services\ObjectService;
 use Product;
+use Shop;
 use Tools;
 use Validate;
 use Warehouse;
@@ -30,7 +32,7 @@ class CartController extends AbstractOystController
         $this->setLogName('cart');
     }
 
-    public function getCart($params)
+    public function getCart($params, $display = true)
     {
         if (!empty($params['url']['id'])) {
             $cart = new Cart((int)$params['url']['id']);
@@ -120,7 +122,11 @@ class CartController extends AbstractOystController
                             'oyst_order_id' => Notification::getOystOrderIdByOrderId($order_id)
                         );
                     }
-                    $this->respondAsJson($response);
+                    if ($display) {
+                        $this->respondAsJson($response);
+                    } else {
+                        return $response;
+                    }
                 } catch(Exception $e) {
                     print_r($e);
                 }
@@ -130,10 +136,12 @@ class CartController extends AbstractOystController
         } else {
             $this->respondError(400, 'id_cart is missing');
         }
+        return array();
     }
 
     public function updateCart($params)
     {
+        $returned_errors = array();
         if (!empty($params['url']['id'])) {
             $cart = new Cart((int)$params['url']['id']);
             if (Validate::isLoadedObject($cart)) {
@@ -177,7 +185,33 @@ class CartController extends AbstractOystController
                     }
                 }
 
-                //TODO Manage cart_rule
+                if (!empty($params['data']['discount_coupon'])) {
+                    $context = Context::getContext();
+                    $context->cart = $cart;
+                    $context->currency = new Currency($cart->id_currency);
+                    $context->shop = new Shop($cart->id_shop);
+
+                    if (($cart_rule = new CartRule(CartRule::getIdByCode($params['data']['discount_coupon']))) && Validate::isLoadedObject($cart_rule)) {
+                        if ($error = $cart_rule->checkValidity($context, false, true)) {
+                            if (empty($error)) {
+                                $error_msg = 'Unknown error';
+                            } else {
+                                $error_msg = $error;
+                            }
+                            $returned_errors['invalid_coupons'][] = array(
+                                'code' => $params['data']['discount_coupon'],
+                                'error' => $error_msg,
+                            );
+                        } else {
+                            $cart->addCartRule($cart_rule->id);
+                        }
+                    } else {
+                        $returned_errors['invalid_coupons'][] = array(
+                            'code' => $params['data']['discount_coupon'],
+                            'error' => 'Code node found',
+                        );
+                    }
+                }
 
                 //Customer & address
                 //TODO Manage different address delivery and address invoice
@@ -272,6 +306,9 @@ class CartController extends AbstractOystController
                     $errors['cart'] = $e->getMessage();
                 }
 
+                CartRule::autoAddToCart();
+                CartRule::autoRemoveFromCart();
+
                 if (!empty($errors)) {
                     $this->respondError(400, $errors);
                 }
@@ -279,7 +316,9 @@ class CartController extends AbstractOystController
                 if (!empty($params['data']['finalize'])) {
                     $this->createOrderFromCart($params);
                 }
-                $this->getCart($params);
+                $response = $this->getCart($params, false);
+                $response = array_merge($response, $returned_errors);
+                $this->respondAsJson($response);
             } else {
                 $this->respondError(400, 'Bad id_cart');
             }

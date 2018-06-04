@@ -122,6 +122,6 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         } else {
             http_response_code($code);
         }
-        die(json_encode($msg));
+        die(json_encode(array('error' => $msg)));
     }
 }
