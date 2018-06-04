@@ -88,6 +88,7 @@ abstract class AbstractOystController
         } else {
             http_response_code($code);
         }
+        header('Content-Type: application/json');
         die(json_encode(array('error' => $msg)));
     }
 }
