@@ -34,6 +34,7 @@ class OystPaymentModuleFrontController extends ModuleFrontController
 
     public function initContent()
     {
+        $this->context->cookie->useragent_oyst = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
         $currency = new Currency($this->context->cart->id_currency);
         $total_amount = (int)round($this->context->cart->getOrderTotal() * 100);
 

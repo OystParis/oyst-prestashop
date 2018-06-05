@@ -53,6 +53,17 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
             die('Wrong security key');
         }
 
+        if ($this->context->cookie->count > 0) {
+            $this->context->cookie->count += 1;
+        } else {
+            $this->context->cookie->count = 1;
+        }
+
+        if ($this->context->cookie->count > 10) {
+            unset($this->context->cookie->count);
+            $cartIsError = true;
+        }
+
         if ($cartIsError) {
             $url = $this->context->link->getModuleLink('oyst', 'oneclickerror');
             Tools::redirect($url);
@@ -65,18 +76,20 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         }
 
         // Log user
-        $this->context->cookie->id_compare = $id_compare;
-        $this->context->cookie->id_customer = (int)($customer->id);
-        $this->context->cookie->customer_lastname = $customer->lastname;
-        $this->context->cookie->customer_firstname = $customer->firstname;
-        $this->context->cookie->logged = 1;
-        $customer->logged = 1;
-        $this->context->cookie->is_guest = $customer->isGuest();
-        $this->context->cookie->passwd = $customer->passwd;
-        $this->context->cookie->email = $customer->email;
-        // Add customer to the context
-        $this->context->customer = $customer;
-        $this->context->cookie->write();
+        if (!$this->context->customer->isLogged()) {
+            $this->context->cookie->id_compare = $id_compare;
+            $this->context->cookie->id_customer = (int)($customer->id);
+            $this->context->cookie->customer_lastname = $customer->lastname;
+            $this->context->cookie->customer_firstname = $customer->firstname;
+            $this->context->cookie->logged = 1;
+            $customer->logged = 1;
+            $this->context->cookie->is_guest = $customer->isGuest();
+            $this->context->cookie->passwd = $customer->passwd;
+            $this->context->cookie->email = $customer->email;
+            // Add customer to the context
+            $this->context->customer = $customer;
+            $this->context->cookie->write();
+        }
 
         // Load cart and order
         $id_order = Order::getOrderByCartId($id_cart);
