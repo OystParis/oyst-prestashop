@@ -22,6 +22,7 @@
 namespace Oyst\Controller;
 
 use Oyst;
+use Order;
 use Context;
 use Oyst\Classes\Enum\AbstractOrderState;
 use Oyst\Factory\AbstractOrderServiceFactory;
@@ -39,11 +40,12 @@ class OrderController extends AbstractOystController
             $orderId = $json['data']['order_id'];
 
             $responseData = $orderService->requestCreateNewOrder($orderId);
+            $order_id_ps = $orderService->getOrderRepository()->getOrderId($orderId);
 
             if ($responseData['state']) {
-                $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);
+                $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED, Order::getUniqReferenceOf($order_id_ps));
             } else {
-                $orderService->updateOrderStatus($orderId, AbstractOrderState::DENIED);
+                $orderService->updateOrderStatus($orderId, AbstractOrderState::DENIED, Order::getUniqReferenceOf($order_id_ps));
                 $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData['error'])));
             }
 

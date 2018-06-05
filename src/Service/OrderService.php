@@ -420,8 +420,10 @@ class OrderService extends AbstractOystService
             );
 
             // Insert data on table mr_selected for pickup mondial relay
-            $pickupAddress = $oystOrderInfo['shipment']['pickup_store']['address'];
-            $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
+            if (isset($oystOrderInfo['order']['shipment']['pickup_store'])) {
+                $pickupAddress = $oystOrderInfo['shipment']['pickup_store']['address'];
+                $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
+            }
             $carrierInfo = $oystOrderInfo['shipment']['carrier'];
 
             if ($carrierInfo['type'] == 'mondial_relay' &&
@@ -657,16 +659,16 @@ class OrderService extends AbstractOystService
      *
      * @return bool
      */
-    public function updateOrderStatus($orderId, $status)
+    public function updateOrderStatus($orderId, $status, $orderReference = null)
     {
-        $this->requester->call('updateStatus', array((string) $orderId, $status));
+        $this->requester->call('updateStatus', array((string) $orderId, $status, $orderReference));
 
         $succeed = false;
         if ($this->requester->getApiClient()->getLastHttpCode() != 200) {
-            $this->logger->warning(sprintf('Oyst order %s has not been updated to %s', $orderId, $status));
+            $this->logger->warning(sprintf('Oyst order %s #%s has not been updated to %s', $orderId, $orderReference, $status));
         } else {
             $succeed = true;
-            $this->logger->info(sprintf('Oyst order %s has been updated to %s', $orderId, $status));
+            $this->logger->info(sprintf('Oyst order %s #%s has been updated to %s', $orderId, $orderReference, $status));
         }
 
         return $succeed;
