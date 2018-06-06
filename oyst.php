@@ -166,10 +166,16 @@ class Oyst extends PaymentModule
             exit;
         }
         if (Configuration::hasKey('OYST_SCRIPT_TAG_URL')) {
+            $oyst_ajax_url = Tools::getShopDomainSsl(true).'/modules/oyst/ajax.php';
             if (version_compare(_PS_VERSION_, '1.7', '<')) {
                 $this->context->controller->addJS(Configuration::get('OYST_SCRIPT_TAG_URL'));
+                $this->context->controller->addJS('modules/'.$this->name.'/views/js/oyst.js');
+                $this->context->smarty->assign('oyst_ajax_url', $oyst_ajax_url);
+                //TODO Use a template to define oyst_ajax_url variable to JS
             } else {
-                $this->context->controller->registerJavascript('modules-oyst', Configuration::get('OYST_SCRIPT_TAG_URL'), ['position' => 'bottom', 'priority' => 150, 'server' => 'remote']);
+                $this->context->controller->registerJavascript('modules-oyst-supertag', Configuration::get('OYST_SCRIPT_TAG_URL'), ['position' => 'bottom', 'priority' => 150, 'server' => 'remote']);
+                $this->context->controller->registerJavascript('modules-oyst', 'modules/'.$this->name.'/views/js/oyst.js', ['position' => 'bottom', 'priority' => 150]);
+                Media::addJsDef(array('oyst_ajax_url' => $oyst_ajax_url));
             }
         }
     }
