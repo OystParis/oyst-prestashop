@@ -146,16 +146,6 @@ class CartController extends AbstractOystController
             $cart = new Cart((int)$params['url']['id']);
             if (Validate::isLoadedObject($cart)) {
                 $errors = [];
-                //Carrier
-                if (!empty($params['data']['id_carrier'])) {
-                    $carrier = Carrier::getCarrierByReference($params['data']['id_carrier']);
-                    if (Validate::isLoadedObject($carrier)) {
-                        $cart->id_carrier = $carrier->id;
-                    } else {
-                        $errors[] = 'Carrier not founded';
-                    }
-                    //TODO Manage access point here (with module exception etc)
-                }
 
                 //Products
                 if (!empty($params['data']['products'])) {
@@ -217,7 +207,7 @@ class CartController extends AbstractOystController
                 //TODO Manage different address delivery and address invoice
                 $id_customer = 0;
                 $id_address = 0;
-                //First, search customer (id, email, phone)
+                //First, search customer (id, email)
                 //If found => set customer id to cart and check if address
                 if (!empty($params['data']['customer'])) {
                     $customer_service = CustomerService::getInstance();
@@ -298,6 +288,18 @@ class CartController extends AbstractOystController
                 if (!empty($id_address)) {
                     $cart->id_address_delivery = $id_address;
                     $cart->id_address_invoice = $id_address;
+                }
+
+                //Carrier
+                if (!empty($params['data']['id_carrier_reference'])) {
+                    $carrier = Carrier::getCarrierByReference($params['data']['id_carrier_reference']);
+                    if (Validate::isLoadedObject($carrier)) {
+                        $cart->id_carrier = $carrier->id;
+                        $cart->delivery_option = json_encode(array($cart->id_address_delivery => $cart->id_carrier.','));
+                    } else {
+                        $errors[] = 'Carrier not founded';
+                    }
+                    //TODO Manage access point here (with module exception etc)
                 }
 
                 try {
