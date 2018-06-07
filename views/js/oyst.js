@@ -3,11 +3,11 @@
 function oystOneClick() {
     //If on product page, add product to cart
     if ($('#product').length) {
-        let params = $('#add-to-cart-or-refresh').serialize() + "&add=1&action=update";
+        var params = $('#add-to-cart-or-refresh').serialize() + "&add=1&action=update";
 
         $.ajax({
             type: "POST",
-            url: "http://prestashop-1_7_3_0.dijon.bwagence.fr:8084/panier",
+            url: prestashop.urls.pages.cart,
             data: params,
             dataType: "json",
             success: function (data) {
@@ -25,8 +25,11 @@ function oystOneClick() {
 function getIdCart() {
     $.ajax({
         type: "GET",
-        url: oyst_ajax_url,
-        data: {'action':'get_id_cart'},
+        url: prestashop.urls.base_url+'module/oyst/ajax',
+        data: {
+            'ajax': true,
+            'action':'get_id_cart'
+        },
         dataType: "json",
         success: function (data) {
             console.log(data);

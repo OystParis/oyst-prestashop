@@ -1,12 +1,10 @@
 <?php
 
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 require __DIR__.'/../../vendor/autoload.php';
-require __DIR__.'/../../../../init.php';
 
 use Oyst\Classes\Route;
 use Oyst\Classes\CurrentRequest;
