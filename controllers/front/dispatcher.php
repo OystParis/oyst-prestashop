@@ -21,6 +21,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         Route::addRoute('GET', '/config', 'Config', 'getConfig');
         Route::addRoute('PUT', '/script-tag', 'ScriptTag', 'setUrl');
         Route::addRoute('PUT', '/cart/{id}', 'Cart', 'updateCart');
+        Route::addRoute('PUT', '/order/{id}', 'Order', 'updateOrder');
 
         $request = new CurrentRequest();
 
