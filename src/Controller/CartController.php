@@ -18,6 +18,7 @@ use Oyst;
 use Oyst\Classes\Notification;
 use Oyst\Services\CustomerService;
 use Oyst\Services\ObjectService;
+use Oyst\Services\OrderService;
 use Product;
 use Shop;
 use Tools;
@@ -114,12 +115,14 @@ class CartController extends AbstractOystController
 
                     //Check if cart is linked to an order
                     $response['order'] = array();
-                    $order_id = Order::getIdByCartId($cart->id);
-                    if (!empty($order_id)) {
+                    $order = Order::getByCartId($cart->id);
+                    if (Validate::isLoadedObject($order)) {
                         $response['order'] = array(
-                            'order_id' => $order_id,
-                            'order_reference' => Order::getUniqReferenceOf($order_id),
-                            'oyst_order_id' => Notification::getOystOrderIdByOrderId($order_id)
+                            'order_id' => $order->id,
+                            'order_reference' => $order->reference,
+                            'oyst_order_id' => Notification::getOystOrderIdByOrderId($order->id),
+                            'id_order_state' => $order->current_state,
+                            'tracking' => OrderService::getInstance()->getTrackingNumber($order->id)
                         );
                     }
                     if ($display) {
@@ -128,7 +131,7 @@ class CartController extends AbstractOystController
                         return $response;
                     }
                 } catch(Exception $e) {
-                    print_r($e);
+                    $this->respondError(400, $e->getMessage());
                 }
             } else {
                 $this->respondError(400, 'Bad id_cart');
