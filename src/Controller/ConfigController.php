@@ -24,7 +24,7 @@ class ConfigController extends AbstractOystController
         $carriers = Carrier::getCarriers($id_lang, true, false, false, null, Carrier::ALL_CARRIERS);
         foreach ($carriers as $carrier) {
             $results['carriers'][] = array(
-                'id_carrier' => $carrier['id_reference'],
+                'id_carrier_reference' => $carrier['id_reference'],
                 'name' => $carrier['name'],
             );
         }
