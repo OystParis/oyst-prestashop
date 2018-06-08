@@ -26,6 +26,8 @@ use Tools;
 use Configuration as PSConfiguration;
 use Mail;
 use Context;
+use Module;
+use ReflectionClass;
 
 trait ToolServiceTrait
 {
@@ -33,7 +35,7 @@ trait ToolServiceTrait
      * @param $user
      * @return Customer
      */
-    public function getCustomer($user)
+    public function getCustomer($user, $rewards = null)
     {
         $customerInfo = Customer::getCustomersByEmail($user['email']);
         if (count($customerInfo)) {
@@ -66,6 +68,22 @@ trait ToolServiceTrait
 
             if (empty($password)) {
                 $password = str_repeat('*', Tools::strlen(Tools::getValue('passwd')));
+            }
+
+            if (Module::isInstalled('allinone_rewards') && Module::isEnabled('allinone_rewards')) {
+                require_once(_PS_MODULE_DIR_.'/allinone_rewards/allinone_rewards.php');
+                require_once(_PS_MODULE_DIR_.'/allinone_rewards/plugins/RewardsSponsorshipPlugin.php');
+
+                if (!empty($rewards['rewards_sponsor_id'])) {
+                    $allinone_rewards = new \allinone_rewards;
+                    $rewardsGenericPlugin = new \RewardsSponsorshipPlugin($allinone_rewards);
+                    $sponsor = new Customer($rewards['rewards_sponsor_id']);
+
+                    $reflection_class = new ReflectionClass("RewardsSponsorshipPlugin");
+                    $reflection_method = $reflection_class->getMethod("_createSponsorship");
+                    $reflection_method->setAccessible(true);
+                    $result = $reflection_method->invokeArgs($rewardsGenericPlugin, array($sponsor, $customer));
+                }
             }
 
             Mail::Send(

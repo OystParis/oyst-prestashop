@@ -602,7 +602,7 @@ class OrderService extends AbstractOystService
             if ($oystOrderInfo['order']['context'] && isset($oystOrderInfo['order']['context']['id_user'])) {
                 $customer = new Customer((int)$oystOrderInfo['order']['context']['id_user']);
             } else {
-                $customer = $this->getCustomer($oystOrderInfo['order']['user']);
+                $customer = $this->getCustomer($oystOrderInfo['order']['user'], $oystOrderInfo['order']['context']['rewards']);
             }
             if (!Validate::isLoadedObject($customer)) {
                 $data['error'] = 'Customer not found or can\'t be found';

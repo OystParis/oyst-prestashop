@@ -81,12 +81,14 @@ class CartService extends AbstractOystService
             9 => 24
         );
 
-        $amount_total  = 0;
+        $amount_total = 0;
+        // For debug but when prod pass in context object currency
+        $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
 
         if ($data['context'] && isset($data['context']['id_user'])) {
             $customer = new Customer((int)$data['context']['id_user']);
         } else {
-            $customer = $this->getCustomer($data['user']);
+            $customer = $this->getCustomer($data['user'], $data['context']['rewards']);
         }
         if (!Validate::isLoadedObject($customer)) {
             $this->logger->emergency(
@@ -146,8 +148,6 @@ class CartService extends AbstractOystService
         // PS core used this context anywhere.. So we need to fill it properly
         $this->context->cart = $cart = new Cart();
         $this->context->customer = $customer;
-        // For debug but when prod pass in context object currency
-        $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
 
         $cart->id_customer = $customer->id;
         $cart->id_address_delivery = $address->id;

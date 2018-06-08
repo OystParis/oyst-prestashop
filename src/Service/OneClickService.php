@@ -373,6 +373,12 @@ class OneClickService extends AbstractOystService
                 $oystUser->addAddress($oystAddress);
             }
 
+            if (Module::isInstalled('allinone_rewards') && Module::isEnabled('allinone_rewards')) {
+                $oystContext['rewards']['rewards_sponsor_id'] = $this->context->cookie->rewards_sponsor_id;
+                $oystContext['rewards']['rewards_sponsorship_id'] = $this->context->cookie->rewards_sponsorship_id;
+                $oystContext['rewards']['rewards_sponsor_channel'] = $this->context->cookie->rewards_sponsor_channel;
+            }
+
             $oneClickOrdersParams = new OneClickOrderParams();
             foreach ($products_less as $product) {
                 if (!$product->materialized) {
