@@ -5,6 +5,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require __DIR__.'/../../vendor/autoload.php';
+require _PS_ROOT_DIR_.'/init.php';
 
 use Oyst\Classes\Route;
 use Oyst\Classes\CurrentRequest;
@@ -19,7 +20,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         Route::addRoute('GET', '/config', 'Config', 'getConfig');
         Route::addRoute('PUT', '/script-tag', 'ScriptTag', 'setUrl');
         Route::addRoute('PUT', '/cart/{id}', 'Cart', 'updateCart');
-        Route::addRoute('PUT', '/order/{id}', 'Order', 'updateOrder');
+        Route::addRoute('POST', '/order/{id}', 'Order', 'updateOrder');
 
         $request = new CurrentRequest();
 
