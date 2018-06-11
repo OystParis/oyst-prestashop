@@ -2,7 +2,6 @@
 
 namespace Oyst\Controller;
 
-use Address;
 use Carrier;
 use Cart;
 use CartRule;
@@ -10,20 +9,14 @@ use Configuration;
 use Context;
 use Country;
 use Currency;
-use Customer;
 use Exception;
-use Message;
-use Order;
 use Oyst;
 use Oyst\Classes\Notification;
+use Oyst\Services\CartService;
 use Oyst\Services\CustomerService;
 use Oyst\Services\ObjectService;
-use Oyst\Services\OrderService;
-use Product;
 use Shop;
-use Tools;
 use Validate;
-use Warehouse;
 
 class CartController extends AbstractOystController
 {
@@ -33,108 +26,14 @@ class CartController extends AbstractOystController
         $this->setLogName('cart');
     }
 
-    public function getCart($params, $display = true)
+    public function getCart($params)
     {
         if (!empty($params['url']['id'])) {
-            $cart = new Cart((int)$params['url']['id']);
-            if (Validate::isLoadedObject($cart)) {
-                $errors = array();
-                $response = array();
-                try {
-                    $context = Context::getContext();
-                    $response['cart'] = $cart;
-                    $response['products'] = $cart->getProducts(true);
-                    $carriers = array();
-                    foreach ($response['products'] as &$product) {
-                        //Get image link
-                        $product['image'] = $context->link->getImageLink($product['link_rewrite'], $product['id_image']);
-
-                        //Get customizations
-                        if (!empty($product['id_customization'])) {
-                            $customizations = $cart->getProductCustomization($product['id_product']);
-                            foreach ($customizations as &$customization) {
-                                if ($customization['type'] == Product::CUSTOMIZE_FILE) {
-                                    $customization['type_name'] = 'file';
-                                    $customization['value'] = Tools::getShopDomainSsl(true).'/upload/'.$customization['value'];
-                                } elseif ($customization['type'] == Product::CUSTOMIZE_TEXTFIELD) {
-                                    $customization['type_name'] = 'textfield';
-                                } else {
-                                    $customization['type_name'] = 'undefined';
-                                }
-                            }
-                            $product['customizations'] = $customizations;
-                        }
-
-                        $warehouse_list = Warehouse::getProductWarehouseList($product['id_product'], $product['id_product_attribute'], $cart->id_shop);
-                        if (count($warehouse_list) == 0) {
-                            $warehouse_list = Warehouse::getProductWarehouseList($product['id_product'], $product['id_product_attribute']);
-                        }
-                        if (empty($warehouse_list)) {
-                            $warehouse_list = array(0 => array('id_warehouse' => 0));
-                        }
-
-                        //Get availables carriers for cart
-                        foreach ($warehouse_list as $warehouse) {
-                            $product_carriers = Carrier::getAvailableCarrierList(new Product($product['id_product']), $warehouse['id_warehouse'], $cart->id_address_delivery, $cart->id_shop, $cart, $errors);
-                            if (empty($carriers)) {
-                                $carriers = $product_carriers;
-                            } else {
-                                $carriers = array_intersect($carriers, $product_carriers);
-                            }
-                        }
-                    }
-                    if (!empty($errors)) {
-                        $this->respondError(400, 'Error on carriers recuperation : '.print_r($errors, true));
-                    }
-                    $response['available_carriers'] = $carriers;
-
-                    //Message
-                    $message = Message::getMessageByCartId($cart->id);
-                    $response['message'] = $message['message'];
-
-                    //Customer
-                    if (!empty($cart->id_customer)) {
-                        $customer = new Customer($cart->id_customer);
-                        if (Validate::isLoadedObject($customer)) {
-                            $response['customer'] = $customer;
-                        }
-                    }
-
-                    //Address
-                    if (!empty($cart->id_address_delivery)) {
-                        $address = new Address($cart->id_address_delivery);
-                        if (Validate::isLoadedObject($address)) {
-                            $response['address'] = $address;
-                        }
-                    }
-
-                    $response['cart_rules'] = $cart->getCartRules();
-                    $response['total'] = $cart->getOrderTotal();
-                    $currency = new Currency($cart->id_currency);
-                    $response['currency'] = $currency->iso_code;
-
-                    //Check if cart is linked to an order
-                    $response['order'] = array();
-                    $order = Order::getByCartId($cart->id);
-                    if (Validate::isLoadedObject($order)) {
-                        $response['order'] = array(
-                            'order_id' => $order->id,
-                            'order_reference' => $order->reference,
-                            'oyst_order_id' => Notification::getOystOrderIdByOrderId($order->id),
-                            'id_order_state' => $order->current_state,
-                            'tracking' => OrderService::getInstance()->getTrackingNumber($order->id)
-                        );
-                    }
-                    if ($display) {
-                        $this->respondAsJson($response);
-                    } else {
-                        return $response;
-                    }
-                } catch(Exception $e) {
-                    $this->respondError(400, $e->getMessage());
-                }
+            $response = CartService::getInstance()->getCart($params['url']['id']);
+            if (empty($response['errors'])) {
+                $this->respondAsJson($response);
             } else {
-                $this->respondError(400, 'Bad id_cart');
+                $this->respondError(400, $response['errors']);
             }
         } else {
             $this->respondError(400, 'id_cart is missing');
@@ -321,9 +220,13 @@ class CartController extends AbstractOystController
                 if (!empty($params['data']['finalize'])) {
                     $this->createOrderFromCart($params);
                 }
-                $response = $this->getCart($params, false);
-                $response = array_merge($response, $returned_errors);
-                $this->respondAsJson($response);
+                $response = CartService::getInstance()->getCart($cart->id);
+                if (empty($response['errors'])) {
+                    $response = array_merge($response, $returned_errors);
+                    $this->respondAsJson($response);
+                } else {
+                    $this->respondError(400, $response['errors']);
+                }
             } else {
                 $this->respondError(400, 'Bad id_cart');
             }
