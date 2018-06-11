@@ -2,6 +2,9 @@
 
 namespace Oyst\Services;
 
+use Address;
+use Carrier;
+use Customer;
 use Db;
 use Order;
 use OrderCarrier;
@@ -40,5 +43,37 @@ class OrderService {
             }
         }
         return '';
+    }
+
+    /**
+     * @param $id_order
+     * @return array
+     */
+    public function getOrder($id_order)
+    {
+        $result = array();
+        //Get order info (carrier, state etc)
+        $order = new Order($id_order);
+        if (Validate::isLoadedObject($order)) {
+            $result['order'] = json_decode(json_encode($order), true);
+            $carrier = new Carrier($order->id_carrier);
+            if (Validate::isLoadedObject($carrier)) {
+                $result['order']['id_carrier_reference'] = $carrier->id_reference;
+            }
+
+            //Get order details
+            $result['products'] = $order->getProductsDetail();
+
+            //Get customer infos
+            $result['customer'] = new Customer($order->id_customer);
+
+            //Get addresses (invoice + delivery)
+            $result['address_delivery'] = new Address($order->id_address_delivery);
+            $result['address_invoice'] = new Address($order->id_address_invoice);
+        } else {
+            $result['errors'] = "Order not exists";
+        }
+
+        return $result;
     }
 }
