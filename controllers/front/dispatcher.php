@@ -4,7 +4,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require __DIR__.'/../../vendor/autoload.php';
+require dirname(__FILE__).'/../../vendor/autoload.php';
 require _PS_ROOT_DIR_.'/init.php';
 
 use Oyst\Classes\Route;
@@ -18,6 +18,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         //All routes are prefixed by /oyst
         Route::addRoute('GET', '/cart/{id}', 'Cart', 'getCart');
         Route::addRoute('GET', '/config', 'Config', 'getConfig');
+        Route::addRoute('GET', '/order/{id}', 'Order', 'getOrder');
         Route::addRoute('PUT', '/script-tag', 'ScriptTag', 'setUrl');
         Route::addRoute('PUT', '/cart/{id}', 'Cart', 'updateCart');
         Route::addRoute('POST', '/order/{id}', 'Order', 'updateOrder');

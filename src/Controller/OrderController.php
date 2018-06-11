@@ -4,6 +4,7 @@ namespace Oyst\Controller;
 
 use Order;
 use Oyst\Classes\Notification;
+use Oyst\Services\OrderService;
 use Validate;
 
 class OrderController extends AbstractOystController
@@ -12,6 +13,22 @@ class OrderController extends AbstractOystController
     {
         parent::__construct();
         $this->setLogName('order');
+    }
+
+    public function getOrder($params)
+    {
+        if (!empty($params['url']['id'])) {
+            $id_order = Notification::getOrderIdByOystOrderId($params['url']['id']);
+
+            $response = OrderService::getInstance()->getOrder($id_order);
+            if (empty($response['errors'])) {
+                $this->respondAsJson($response);
+            } else {
+                $this->respondError(400, $response['errors']);
+            }
+        } else {
+            $this->respondError(400, 'id_order is missing');
+        }
     }
 
     public function updateOrder($params)
