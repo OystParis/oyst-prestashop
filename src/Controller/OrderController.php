@@ -52,6 +52,15 @@ class OrderController extends AbstractOystController
                     $amount = 0;
                     $amount_choosen = false;
                     $products_list = array();
+                    //Get order details
+                    foreach ($order->getProductsDetail() as $order_detail) {
+                        $products_list[] = array(
+                            'id_order_detail' => $order_detail['id_order_detail'],
+                            'unit_price' => $order_detail['unit_price_tax_excl'],
+                            'quantity' => $order_detail['product_quantity'],
+                        );
+                    };
+
                     $shipping_cost = $order->total_shipping_tax_excl;
 
                     if (OrderSlip::create($order, $products_list, $shipping_cost, $amount, $amount_choosen)) {
