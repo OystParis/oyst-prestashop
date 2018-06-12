@@ -19,6 +19,15 @@ class OystAjaxModuleFrontController extends ModuleFrontController
                 $id_cart = Context::getContext()->cart->id;
                 die(json_encode(array('id_cart' => $id_cart)));
                 break;
+
+            case 'check_http_authorization':
+                if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+                    die(json_encode(array('http_authorization' => 1)));
+                } else {
+                    die(json_encode(array('http_authorization' => 0)));
+                }
+                break;
+
             default:
                 die(json_encode(array('error' => 'Unknown action')));
         }
