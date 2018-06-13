@@ -1,12 +1,11 @@
 <?php
 
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require __DIR__.'/../../vendor/autoload.php';
-require __DIR__.'/../../../../init.php';
+require dirname(__FILE__).'/../../vendor/autoload.php';
+require _PS_ROOT_DIR_.'/init.php';
 
 use Oyst\Classes\Route;
 use Oyst\Classes\CurrentRequest;
@@ -20,9 +19,10 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         Route::addRoute('GET', '/cart/{id}', 'Cart', 'getCart');
         Route::addRoute('GET', '/config', 'Config', 'getConfig');
         Route::addRoute('GET', '/informations/{name}', 'Information', 'getInformation');
+        Route::addRoute('GET', '/order/{id}', 'Order', 'getOrder');
         Route::addRoute('PUT', '/script-tag', 'ScriptTag', 'setUrl');
-        Route::addRoute('PUT', '/customer/search', 'Customer', 'search');
         Route::addRoute('PUT', '/cart/{id}', 'Cart', 'updateCart');
+        Route::addRoute('POST', '/order/{id}', 'Order', 'updateOrder');
 
         $request = new CurrentRequest();
 
@@ -41,15 +41,13 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         //Check auth
         if ($route['required_auth']) {
             //set http auth headers for apache+php-cgi work around
-            if (isset($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/Basic\s+(.*)$/i', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
-                list($name, $password) = explode(':', base64_decode($matches[1]));
-                $_SERVER['PHP_AUTH_USER'] = strip_tags($name);
+            if (isset($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/Bearer\s+(.*)$/i', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+                $_SERVER['PHP_AUTH_USER'] = $matches[1];
             }
 
             //set http auth headers for apache+php-cgi work around if variable gets renamed by apache
-            if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION']) && preg_match('/Basic\s+(.*)$/i', $_SERVER['REDIRECT_HTTP_AUTHORIZATION'], $matches)) {
-                list($name, $password) = explode(':', base64_decode($matches[1]));
-                $_SERVER['PHP_AUTH_USER'] = strip_tags($name);
+            if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION']) && preg_match('/Bearer\s+(.*)$/i', $_SERVER['REDIRECT_HTTP_AUTHORIZATION'], $matches)) {
+                $_SERVER['PHP_AUTH_USER'] = $matches[1];
             }
 
             if (isset($_SERVER['PHP_AUTH_USER'])) {
@@ -59,7 +57,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
             } else {
                 header($_SERVER['SERVER_PROTOCOL'].' 401 Unauthorized');
                 header('WWW-Authenticate: Basic realm="Welcome to Oyst Webservice, please enter the authentication key as the login. No password required."');
-                die('401 Unauthorized');
+                $this->printError(401, 'Bad API key');
             }
 
             if (!OystAPIKey::isKeyActive($key)) {
@@ -125,6 +123,6 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         } else {
             http_response_code($code);
         }
-        die($msg);
+        die(json_encode(array('error' => $msg)));
     }
 }

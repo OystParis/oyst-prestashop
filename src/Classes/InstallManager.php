@@ -24,7 +24,7 @@ namespace Oyst\Classes;
 use Db;
 use Configuration;
 use OrderState;
-use Validate;
+use Tools;
 
 class InstallManager
 {
@@ -51,183 +51,43 @@ class InstallManager
     {
         $state = true;
         $state &= $this->createNotificationTable();
-        $state &= $this->installOrderStates();
+        $state &= $this->updateConstants();
 
         //Generate API key if not exists
         if (!Configuration::hasKey(OystAPIKey::CONFIG_KEY)) {
             $state &= OystAPIKey::generateAPIKey();
         }
 
+        //Check if HTTP_AUTHORIZATION is catchable in PHP
+        if (!Configuration::get('PS_WEBSERVICE_CGI_HOST')) {
+            $fields = array(
+                'ajax' => 1,
+                'action' => 'check_http_authorization'
+            );
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, Tools::getShopDomainSsl(true).'/module/oyst/ajax?'.http_build_query($fields));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Authorization: test'
+            ));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $response = json_decode(curl_exec($ch), true);
+            curl_close($ch);
+            if (!$response['http_authorization']) {
+                Configuration::updateValue('PS_WEBSERVICE_CGI_HOST', 1);
+                Tools::generateHtaccess();
+            }
+        }
         return $state;
     }
 
-    /**
-     * @return bool
-     */
-    public function installOrderStates()
+    public function updateConstants()
     {
-        $result = true;
-        $langId = Configuration::get('PS_LANG_DEFAULT');
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
-
-        if (!Validate::isLoadedObject($orderState)) {
-            $orderState->name = array(
-                $langId => 'Annulation en cours',
-            );
-            $orderState->color = '#FFF168';
-            $orderState->unremovable = true;
-            $orderState->deleted = false;
-            $orderState->delivery = false;
-            $orderState->invoice = false;
-            $orderState->logable = false;
-            $orderState->module_name = $this->name;
-            $orderState->paid = false;
-            $orderState->hidden = false;
-            $orderState->shipped = false;
-            $orderState->send_email = false;
-
-            $result &= $orderState->add();
-
-            Configuration::updateValue('OYST_STATUS_CANCELLATION_PENDING', $orderState->id);
+        $state = true;
+        //Generate API key if not exists
+        if (!Configuration::hasKey(OystAPIKey::CONFIG_KEY)) {
+            $state &= OystAPIKey::generateAPIKey();
         }
-
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_REFUND_PENDING'));
-
-        if (!Validate::isLoadedObject($orderState)) {
-            $orderState->name = array(
-                $langId => 'Remboursement en cours',
-            );
-            $orderState->color = '#FFF168';
-            $orderState->unremovable = true;
-            $orderState->deleted = false;
-            $orderState->delivery = false;
-            $orderState->invoice = false;
-            $orderState->logable = false;
-            $orderState->module_name = $this->name;
-            $orderState->paid = false;
-            $orderState->hidden = false;
-            $orderState->shipped = false;
-            $orderState->send_email = false;
-
-            $result &= $orderState->add();
-
-            Configuration::updateValue('OYST_STATUS_REFUND_PENDING', $orderState->id);
-        }
-
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
-
-        if (!Validate::isLoadedObject($orderState)) {
-            $orderState->name = array(
-                $langId => 'Remboursement partiel en cours',
-            );
-            $orderState->color = '#FFF168';
-            $orderState->unremovable = true;
-            $orderState->deleted = false;
-            $orderState->delivery = false;
-            $orderState->invoice = false;
-            $orderState->logable = false;
-            $orderState->module_name = $this->name;
-            $orderState->paid = false;
-            $orderState->hidden = false;
-            $orderState->shipped = false;
-            $orderState->send_email = false;
-
-            $result &= $orderState->add();
-
-            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND_PEND', $orderState->id);
-        }
-
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND'));
-
-        if (!Validate::isLoadedObject($orderState)) {
-            $orderState->name = array(
-                $langId => 'Remboursement partiel',
-            );
-            $orderState->color = '#FF7F50';
-            $orderState->unremovable = true;
-            $orderState->deleted = false;
-            $orderState->delivery = false;
-            $orderState->invoice = false;
-            $orderState->logable = false;
-            $orderState->module_name = $this->name;
-            $orderState->paid = false;
-            $orderState->hidden = false;
-            $orderState->shipped = false;
-            $orderState->send_email = false;
-
-            $result &= $orderState->add();
-
-            Configuration::updateValue('OYST_STATUS_PARTIAL_REFUND', $orderState->id);
-        }
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD_CHECK'));
-
-        if (!Validate::isLoadedObject($orderState)) {
-            $orderState->name = array(
-                $langId => 'En attente de vérification fraude par Oyst',
-            );
-            $orderState->color = '#FF8C00';
-            $orderState->unremovable = true;
-            $orderState->deleted = false;
-            $orderState->delivery = false;
-            $orderState->invoice = false;
-            $orderState->logable = false;
-            $orderState->module_name = $this->name;
-            $orderState->paid = false;
-            $orderState->hidden = false;
-            $orderState->shipped = false;
-            $orderState->send_email = false;
-
-            $result &= $orderState->add();
-
-            Configuration::updateValue('OYST_STATUS_FRAUD_CHECK', $orderState->id);
-        }
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
-
-        if (!Validate::isLoadedObject($orderState)) {
-            $orderState->name = array(
-                $langId => 'En attente de paiement chez Oyst',
-            );
-            $orderState->color = '#360088';
-            $orderState->unremovable = true;
-            $orderState->deleted = false;
-            $orderState->delivery = false;
-            $orderState->invoice = false;
-            $orderState->logable = false;
-            $orderState->module_name = $this->name;
-            $orderState->paid = false;
-            $orderState->hidden = false;
-            $orderState->shipped = false;
-            $orderState->send_email = false;
-
-            $result &= $orderState->add();
-
-            Configuration::updateValue('OYST_STATUS_WAIT_PAYMENT', $orderState->id);
-        }
-
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD'));
-
-        if (!Validate::isLoadedObject($orderState)) {
-            $orderState->name = array(
-                $langId => 'Paiement frauduleux - NE PAS EXPEDIER',
-            );
-            $orderState->color = '#980000';
-            $orderState->unremovable = true;
-            $orderState->deleted = false;
-            $orderState->delivery = false;
-            $orderState->invoice = false;
-            $orderState->logable = false;
-            $orderState->module_name = $this->name;
-            $orderState->paid = false;
-            $orderState->hidden = false;
-            $orderState->shipped = false;
-            $orderState->send_email = false;
-
-            $result &= $orderState->add();
-
-            Configuration::updateValue('OYST_STATUS_FRAUD', $orderState->id);
-        }
-
-        return $result;
+        return $state;
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Oyst\Controller;
 use Carrier;
 use Country;
 use Language;
+use OrderState;
 
 class ConfigController extends AbstractOystController
 {
@@ -23,7 +24,7 @@ class ConfigController extends AbstractOystController
         $carriers = Carrier::getCarriers($id_lang, true, false, false, null, Carrier::ALL_CARRIERS);
         foreach ($carriers as $carrier) {
             $results['carriers'][] = array(
-                'id_carrier' => $carrier['id_carrier'],
+                'id_carrier_reference' => $carrier['id_reference'],
                 'name' => $carrier['name'],
             );
         }
@@ -37,6 +38,16 @@ class ConfigController extends AbstractOystController
                 'iso_code' => $country['iso_code'],
             );
         }
+
+        //Get status
+        $order_states = OrderState::getOrderStates($id_lang);
+        foreach ($order_states as $order_state) {
+            $results['order_states'][] = array(
+                'id_order_state' => $order_state['id_order_state'],
+                'name' => $order_state['name'],
+            );
+        }
+
         $this->respondAsJson($results);
     }
 }
