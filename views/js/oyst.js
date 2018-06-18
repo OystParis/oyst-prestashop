@@ -1,5 +1,12 @@
 "use strict";
 
+window.__OYST__ = window.__OYST__ || {};
+
+window.__OYST__.getCartPageItems = () => {
+    console.log('passage');
+    return 18;
+};
+
 function oystOneClick() {
     //If on product page, add product to cart
     if ($('#product').length) {
