@@ -6,19 +6,23 @@ use Address;
 use Carrier;
 use Cart;
 use Context;
+use Country;
 use Currency;
 use Customer;
 use Exception;
+use Gender;
+use Language;
 use Message;
-use Order;
-use Oyst\Classes\Notification;
+use Oyst\Classes\Checkout;
+use Pack;
 use Product;
-use Tools;
+use Shop;
 use Validate;
 use Warehouse;
 
 class CartService {
 
+    private $id_lang;
     private static $instance;
     public static function getInstance()
     {
@@ -28,7 +32,9 @@ class CartService {
         return self::$instance;
     }
 
-    private function __construct() {}
+    private function __construct() {
+        $this->id_lang = Language::getIdByIso('FR');
+    }
 
     private function __clone() {}
 
@@ -36,36 +42,111 @@ class CartService {
     {
         $response = array();
         $cart = new Cart((int)$id_cart);
+        if (!empty($cart->id_lang)) {
+            $this->id_lang = $cart->id_lang;
+        }
+
         if (Validate::isLoadedObject($cart)) {
             try {
                 $context = Context::getContext();
-                $response['cart'] = $cart;
-                $response['products'] = $cart->getProducts(true);
-                $carriers = array();
-                $carriers_errors = array();
-                foreach ($response['products'] as &$product) {
-                    //Get image link
-                    $product['image'] = $context->link->getImageLink($product['link_rewrite'], $product['id_image']);
 
-                    //Get customizations
-                    if (!empty($product['id_customization'])) {
-                        $customizations = $cart->getProductCustomization($product['id_product']);
-                        foreach ($customizations as &$customization) {
-                            if ($customization['type'] == Product::CUSTOMIZE_FILE) {
-                                $customization['type_name'] = 'file';
-                                $customization['value'] = Tools::getShopDomainSsl(true).'/upload/'.$customization['value'];
-                            } elseif ($customization['type'] == Product::CUSTOMIZE_TEXTFIELD) {
-                                $customization['type_name'] = 'textfield';
-                            } else {
-                                $customization['type_name'] = 'undefined';
-                            }
+                $response['id_oyst'] = Checkout::getIdOystFromIdCart($cart->id);
+                $response['ip'] = CustomerService::getInstance()->getLastIpFromIdCustomer($cart->id_customer);
+
+                //Customer
+                if (!empty($cart->id_customer)) {
+                    $customer = new Customer($cart->id_customer);
+                    if (Validate::isLoadedObject($customer)) {
+                        $gender = new Gender($customer->id_gender, $this->id_lang);
+                        $response['user'] = array(
+                            'email' => $customer->email,
+                            'firstname' => $customer->firstname,
+                            'lastname' => $customer->lastname,
+                            'id_oyst' => \Oyst\Classes\Customer::getIdCustomerFromIdCustomerOyst($customer->id),
+                            'gender' => $gender->name,
+                            'newsletter' => $customer->newsletter,
+                            'birthday' => $customer->birthday,
+                            'siret' => $customer->siret,
+                            'ape' => $customer->ape,
+                        );
+                    }
+                }
+
+                //Products
+                //TODO Remove free item from products list
+                $cart_products = $cart->getProducts(true);
+
+                foreach ($cart_products as $cart_product) {
+                    //Pack content
+                    if (Pack::isPack($cart_product['id_product'])) {
+                        $cart_product['is_pack'] = 1;
+                        foreach (Pack::getItems($cart_product['id_product'], $this->id_lang) as $item) {
+                            $package_item = $this->productObjectToItem($item);
+                            $package_item['total'] = $package_item['price']*$package_item['pack_quantity'];
+                            $package_item['total_wt'] = $package_item['price_wt']*$package_item['pack_quantity'];
+                            $package_item['cart_quantity'] = $cart_product['quantity']*$package_item['pack_quantity'];
+                            $response['packages'][] = $this->formatItem($package_item);
                         }
-                        $product['customizations'] = $customizations;
+                    }
+                    $response['items'][] = $this->formatItem($cart_product);
+                }
+
+                if (!isset($response['packages'])) {
+                    $response['packages'] = array();
+                }
+
+                //TODO Check for module like crossselling
+                $response['proposal_items'] = array();
+
+                $response['promotions'] = array(
+                    'free_items' => array(),
+                    'discounts' => array(),
+                    'coupons' => array(),
+                );
+
+                $cart_rules = $cart->getCartRules();
+
+                foreach ($cart_rules as $cart_rule) {
+                    if (!empty($cart_rule['gift_product'])) {
+                        $product_obj = new Product($cart_rule['gift_product'], false, $this->id_lang);
+                        $free_items = $this->productObjectToItem($product_obj);
+                        $free_items['id_product_attribute'] = $cart_rule['gift_product_attribute'];
+                        $free_items['cart_quantity'] = 1;
+                        $response['promotions']['free_items'][] = $this->formatItem($free_items);
                     }
 
-                    $warehouse_list = Warehouse::getProductWarehouseList($product['id_product'], $product['id_product_attribute'], $cart->id_shop);
+                    $amount = $cart_rule['obj']->getContextualValue(true, $context);
+                    if (!empty($amount)) {
+                        //discounts
+                        if (empty($cart_rule['code'])) {
+                            $response['promotions']['discounts'][] = array(
+                                'id_discount' => $cart_rule['id_cart_rule'],
+                                'label' => $cart_rule['name'],
+                                'amount_tax_incl' => $amount,
+                            );
+                        //Coupons
+                        } else {
+                            $response['promotions']['coupons'][] = array(
+                                'label' => $cart_rule['name'],
+                                'code' => $cart_rule['code'],
+                                'amount' => $amount,
+                            );
+                        }
+                    }
+                }
+
+                //TODO loyalty points
+                $response['user_advantages'] = array(
+                    'points_fidelity' => array(),
+                    'balance' => array(),
+                );
+
+                $carriers = array();
+                $carriers_errors = array();
+                foreach ($cart_products as $cart_product) {
+                    $warehouse_list = Warehouse::getProductWarehouseList($cart_product['id_product'], $cart_product['id_product_attribute'], $cart->id_shop);
                     if (count($warehouse_list) == 0) {
-                        $warehouse_list = Warehouse::getProductWarehouseList($product['id_product'], $product['id_product_attribute']);
+                        $warehouse_list = Warehouse::getProductWarehouseList($cart_product['id_product'], $cart_product['id_product_attribute']);
                     }
                     if (empty($warehouse_list)) {
                         $warehouse_list = array(0 => array('id_warehouse' => 0));
@@ -73,7 +154,7 @@ class CartService {
 
                     //Get availables carriers for cart
                     foreach ($warehouse_list as $warehouse) {
-                        $product_carriers = Carrier::getAvailableCarrierList(new Product($product['id_product']), $warehouse['id_warehouse'], $cart->id_address_delivery, $cart->id_shop, $cart, $carriers_errors);
+                        $product_carriers = Carrier::getAvailableCarrierList(new Product($cart_product['id_product']), $warehouse['id_warehouse'], $cart->id_address_delivery, $cart->id_shop, $cart, $carriers_errors);
                         if (empty($carriers)) {
                             $carriers = $product_carriers;
                         } else {
@@ -83,54 +164,232 @@ class CartService {
                 }
                 if (!empty($carriers_errors)) {
                     $response['errors'][] = 'Error on carriers recuperation : '.print_r($carriers_errors, true);
-                } else {
-                    $response['available_carriers'] = $carriers;
                 }
 
-                //Message
-                $message = Message::getMessageByCartId($cart->id);
-                $response['message'] = $message['message'];
-
-                //Customer
-                if (!empty($cart->id_customer)) {
-                    $customer = new Customer($cart->id_customer);
-                    if (Validate::isLoadedObject($customer)) {
-                        $response['customer'] = $customer;
-                    }
+                //Shipping
+                $selected_carrier = array();
+                if (!empty($cart->id_carrier)) {
+                    $selected_carrier_obj = new Carrier($cart->id_carrier, $this->id_lang);
+                    $selected_carrier = array(
+                        'label' => $selected_carrier_obj->name,
+                        'reference' => $selected_carrier_obj->id_reference,
+                        'delivery_delay' => $selected_carrier_obj->delay,
+                    );
                 }
-
-                //Address
+                $response['shipping'] = array(
+                    'address' => array(),
+                    'carrier' => $selected_carrier,
+                );
                 if (!empty($cart->id_address_delivery)) {
                     $address = new Address($cart->id_address_delivery);
                     if (Validate::isLoadedObject($address)) {
-                        $response['address'] = $address;
+                        $response['shipping']['address'] = $this->formatAddress($address);
+                    }
+                }
+                $response['shipping']['amount_tax_incl'] = $cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
+
+                $response['billing'] = array(
+                    'address' => array(),
+                );
+                if (!empty($cart->id_address_invoice)) {
+                    $address = new Address($cart->id_address_invoice);
+                    if (Validate::isLoadedObject($address)) {
+                        $response['billing']['address'] = $this->formatAddress($address);
                     }
                 }
 
-                $response['cart_rules'] = $cart->getCartRules();
-                $response['total'] = $cart->getOrderTotal();
+                //Available carriers
+                $available_carriers = array();
+                foreach ($carriers as $id_carrier) {
+                    $carrier_obj = new Carrier($id_carrier, $this->id_lang);
+                    if (Validate::isLoadedObject($carrier_obj)) {
+                        $available_carriers[] = array(
+                            'label' => $carrier_obj->name,
+                            'reference' => $carrier_obj->id_reference,
+                            'delivery_delay' => $carrier_obj->delay,
+                        );
+                    }
+                }
+                $response['available_carriers'] = $available_carriers;
+
+                //Shop
+                $response['shop'] = array();
+                $shop_obj = new Shop($cart->id_shop);
+                if (Validate::isLoadedObject($shop_obj)) {
+                    $response['shop'] = array(
+                        'label' => $shop_obj->name,
+                        'code' => $shop_obj->id,
+                        'url' => $shop_obj->getBaseURL(),
+                    );
+                }
+
+                //Totals
+
+                $response['totals'] = array(
+                    'tax_incl' => array(
+                        'total_items' => $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS),
+                        'total_shipping' => $cart->getOrderTotal(true, Cart::ONLY_SHIPPING),
+                        'total_discount' => $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS),
+                        'total' => $cart->getOrderTotal(true, Cart::BOTH),
+                        'total_tax' => $cart->getOrderTotal(true, Cart::BOTH)-$cart->getOrderTotal(false, Cart::BOTH),
+                    ),
+                    'tax_excl' => array(
+                        'total_items' => $cart->getOrderTotal(false, Cart::ONLY_PRODUCTS),
+                        'total_shipping' => $cart->getOrderTotal(false, Cart::ONLY_SHIPPING),
+                        'total_discount' => $cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS),
+                        'total' => $cart->getOrderTotal(false, Cart::BOTH),
+                    ),
+                );
+
+                //Currency
                 $currency = new Currency($cart->id_currency);
                 $response['currency'] = $currency->iso_code;
 
-                //Check if cart is linked to an order
-                $response['order'] = array();
-                $order = Order::getByCartId($cart->id);
-                if (Validate::isLoadedObject($order)) {
-                    $response['order'] = array(
-                        'order_id' => $order->id,
-                        'order_reference' => $order->reference,
-                        'oyst_order_id' => Notification::getOystOrderIdByOrderId($order->id),
-                        'id_order_state' => $order->current_state,
-                        'tracking' => OrderService::getInstance()->getTrackingNumber($order->id)
-                    );
-                }
+                //Message
+                $order_message = Message::getMessageByCartId($cart->id);
+                $response['message'] = array(
+                    'gift' => $cart->gift_message,
+                    'order' => $order_message['message'],
+                );
+
+                //TODO Checkout agreements
+                $response['checkout_agreements'] = array(
+                    'acceptance_message' => '',
+                    'full_agreements' => '',
+                );
+
+                $response['context'] = array();
+
             } catch(Exception $e) {
                 $response['errors'][] = $e->getMessage();
             }
         } else {
             $response['errors'][] = 'Bad id_cart';
         }
-        return $response;
+        return array('checkout' => $response);
     }
 
+    /**
+     * @param Product $product_obj
+     * @return array
+     */
+    public function productObjectToItem(Product $product_obj)
+    {
+        if (is_object($product_obj)) {
+            $item_formated = json_decode(json_encode($product_obj), true);
+            //Define fields for formatItem compatibility
+            $item_formated['id_product'] = $item_formated['id'];
+            $item_formated['id_product_attribute'] = 0;
+            $item_formated['reference_package'] = $item_formated['id_product'].'-'.$item_formated['id_product_attribute'];
+            $item_formated['price_wt'] = Product::getPriceStatic($item_formated['id_product'], true);
+            $item_formated['price_without_reduction'] = Product::getPriceStatic($item_formated['id_product'], false, null, 6, null, false, false);
+            $item_formated['price_without_reduction_wt'] = Product::getPriceStatic($item_formated['id_product'], true, null, 6, null, false, false);
+            $item_formated['total'] = $item_formated['price'];
+            $item_formated['total_wt'] = $item_formated['price_wt'];
+            $item_formated['quantity_available'] = $item_formated['quantity'];
+        } else {
+            $item_formated = $product_obj;
+        }
+        return $item_formated;
+    }
+
+    /**
+     * @param Address $address
+     * @return array
+     */
+    public function formatAddress(Address $address)
+    {
+        return array(
+            'alias' => 'Adresse oyst',
+            'company' => $address->company,
+            'lastname' => $address->lastname,
+            'firstname' => $address->firstname,
+            'address1' => $address->address1,
+            'address2' => $address->address2,
+            'postcode' => $address->postcode,
+            'city' => $address->city,
+            'country' => array(
+                'code' => Country::getIsoById($address->id_country),
+                'label' => Country::getNameById($this->id_lang, $address->id_country),
+            ),
+            'other' => $address->other,
+            'phone' => $address->phone,
+            'phone_mobile' => $address->phone_mobile,
+            'vat_number' => $address->vat_number,
+            'dni' => $address->dni,
+        );
+    }
+
+    /**
+     * @param $item
+     * @return array
+     */
+    public function formatItem($item)
+    {
+        if (isset($item['price_without_reduction_wt'])) {
+            $price_without_discount_tax_incl = $item['price_without_reduction_wt'];
+        } else {
+            $price_without_discount_tax_incl = $item['price_without_reduction']*(1+ $item['rate']/100);
+        }
+        $image = Context::getContext()->link->getImageLink($item['link_rewrite'], $item['id_image']);
+
+        //Get customizations
+//        if (!empty($item_formated['id_customization'])) {
+//            $customizations = $cart->getProductCustomization($item_formated['id_product']);
+//            foreach ($customizations as &$customization) {
+//                if ($customization['type'] == Product::CUSTOMIZE_FILE) {
+//                    $customization['type_name'] = 'file';
+//                    $customization['value'] = Tools::getShopDomainSsl(true).'/upload/'.$customization['value'];
+//                } elseif ($customization['type'] == Product::CUSTOMIZE_TEXTFIELD) {
+//                    $customization['type_name'] = 'textfield';
+//                } else {
+//                    $customization['type_name'] = 'undefined';
+//                }
+//            }
+//            $item_formated['customizations'] = $customizations;
+//        }
+
+        $product_type = 'simple';
+        if (isset($item['is_virtual']) && $item['is_virtual']) {
+            $product_type = 'virtual';
+        }
+        if (isset($item['is_pack']) && $item['is_pack']) {
+            $product_type = 'bundle';
+        }
+
+        return array(
+            'reference' => $item['id_product'].'-'.$item['id_product_attribute'],
+            'reference_parent' => '',
+            'reference_package' => (isset($item['reference_package']) ? $item['reference_package'] : ''),
+            'attribute_configurable' => array(
+                'code' => '',
+                'label' => '',
+            ),
+            'quantity' => $item['cart_quantity'],
+            'quantity_available ' => $item['quantity_available'],
+            'quantity_minimal ' => $item['minimal_quantity'],
+            'name' => $item['name'],
+            'type' => $product_type, //"simple", "configurable", "virtual", "downloadable", "bundle"},
+            'description_short' => $item['description_short'],
+            'availability_status' => '',//{enum  => "now", "later"},
+            'availability_date' => '',
+            'availability_label' => '',
+            'price' => array(
+                'tax_excl ' => $item['price'],
+                'tax_incl ' => $item['price_wt'],
+                'without_discount_tax_excl ' => $item['price_without_reduction'],
+                'without_discount_tax_incl ' => $price_without_discount_tax_incl,
+                'total_tax_excl ' => $item['total'],
+                'total_tax_incl ' => $item['total_wt'],
+                'discount_tax_incl ' => $price_without_discount_tax_incl-$item['price_wt'],
+            ),
+            'width' => $item['width'],
+            'height' => $item['height'],
+            'depth' => $item['depth'],
+            'weight' => $item['weight'],
+            'tax_rate' => $item['rate'],
+            'tax_name ' => $item['tax_name'],
+            'image' => $image,
+        );
+    }
 }

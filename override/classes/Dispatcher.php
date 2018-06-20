@@ -6,7 +6,7 @@ class Dispatcher extends DispatcherCore
     {
         $this->default_routes['oyst_rule'] = array(
             'controller' => 'dispatcher',
-            'rule' => 'oyst/{request}',
+            'rule' => 'oyst-oneclick/{request}',
             'keywords' => array(
                 'request' => array('regexp' => '.*', 'param' => 'request'),
             ),

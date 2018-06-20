@@ -18,7 +18,7 @@ use Oyst\Services\ObjectService;
 use Shop;
 use Validate;
 
-class CartController extends AbstractOystController
+class CheckoutController extends AbstractOystController
 {
     public function __construct()
     {
