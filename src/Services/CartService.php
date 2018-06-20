@@ -73,22 +73,36 @@ class CartService {
                 }
 
                 //Products
-                //TODO Remove free item from products list
-                $cart_products = $cart->getProducts(true);
+                $cart_products = $cart->getProductsWithSeparatedGifts();
+                $response['items'] = array();
+
+                $response['promotions'] = array(
+                    'free_items' => array(),
+                    'discounts' => array(),
+                    'coupons' => array(),
+                );
 
                 foreach ($cart_products as $cart_product) {
-                    //Pack content
-                    if (Pack::isPack($cart_product['id_product'])) {
-                        $cart_product['is_pack'] = 1;
-                        foreach (Pack::getItems($cart_product['id_product'], $this->id_lang) as $item) {
-                            $package_item = $this->productObjectToItem($item);
-                            $package_item['total'] = $package_item['price']*$package_item['pack_quantity'];
-                            $package_item['total_wt'] = $package_item['price_wt']*$package_item['pack_quantity'];
-                            $package_item['cart_quantity'] = $cart_product['quantity']*$package_item['pack_quantity'];
-                            $response['packages'][] = $this->formatItem($package_item);
+                    if ($cart_product['is_gift']) {
+                        $response['promotions']['free_items'][] = $this->formatItem($cart_product);
+                    } else {
+                        //Pack content
+                        if (Pack::isPack($cart_product['id_product'])) {
+                            $cart_product['is_pack'] = 1;
+                            foreach (Pack::getItems($cart_product['id_product'], $this->id_lang) as $item) {
+                                $package_item = $this->productObjectToItem($item);
+                                $package_item['total'] = $package_item['price']*$package_item['pack_quantity'];
+                                $package_item['total_wt'] = $package_item['price_wt']*$package_item['pack_quantity'];
+                                $package_item['cart_quantity'] = $cart_product['quantity']*$package_item['pack_quantity'];
+                                $cover = Product::getCover($package_item['id_product']);
+                                if (!empty($cover['id_image'])) {
+                                    $package_item['id_image'] = $package_item['id_product'].'-'.$cover['id_image'];
+                                }
+                                $response['packages'][] = $this->formatItem($package_item);
+                            }
                         }
+                        $response['items'][] = $this->formatItem($cart_product);
                     }
-                    $response['items'][] = $this->formatItem($cart_product);
                 }
 
                 if (!isset($response['packages'])) {
@@ -98,23 +112,9 @@ class CartService {
                 //TODO Check for module like crossselling
                 $response['proposal_items'] = array();
 
-                $response['promotions'] = array(
-                    'free_items' => array(),
-                    'discounts' => array(),
-                    'coupons' => array(),
-                );
-
                 $cart_rules = $cart->getCartRules();
 
                 foreach ($cart_rules as $cart_rule) {
-                    if (!empty($cart_rule['gift_product'])) {
-                        $product_obj = new Product($cart_rule['gift_product'], false, $this->id_lang);
-                        $free_items = $this->productObjectToItem($product_obj);
-                        $free_items['id_product_attribute'] = $cart_rule['gift_product_attribute'];
-                        $free_items['cart_quantity'] = 1;
-                        $response['promotions']['free_items'][] = $this->formatItem($free_items);
-                    }
-
                     $amount = $cart_rule['obj']->getContextualValue(true, $context);
                     if (!empty($amount)) {
                         //discounts
@@ -287,6 +287,7 @@ class CartService {
             $item_formated['total'] = $item_formated['price'];
             $item_formated['total_wt'] = $item_formated['price_wt'];
             $item_formated['quantity_available'] = $item_formated['quantity'];
+            $item_formated['rate'] = $product_obj->getTaxesRate();
         } else {
             $item_formated = $product_obj;
         }
