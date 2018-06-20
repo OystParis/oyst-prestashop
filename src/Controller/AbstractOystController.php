@@ -28,9 +28,12 @@ abstract class AbstractOystController
     /** @var  FileLogger */
     public $logger;
 
+    public $logs_path;
+
     public function __construct()
     {
         $this->logger = new FileLogger();
+        $this->logs_path = dirname(__FILE__).'/../../logs/';
         $this->setLogName('global');
     }
 
@@ -39,7 +42,7 @@ abstract class AbstractOystController
      */
     public function setLogName($name)
     {
-        $this->logger->setFile(dirname(__FILE__).'/../../logs/'.$name.'.log');
+        $this->logger->setFile($this->logs_path.$name.'.log');
     }
 
     /**

@@ -18,6 +18,8 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         //All routes are prefixed by /oyst
         Route::addRoute('GET', '/checkout/{id}', 'Checkout', 'getCart');
         Route::addRoute('GET', '/config', 'Config', 'getConfig');
+        Route::addRoute('GET', '/informations/{name}', 'Information', 'getInformation');
+        Route::addRoute('GET', '/customer/{id}', 'Customer', 'getCustomer');
         Route::addRoute('GET', '/order/{id}', 'Order', 'getOrder');
         Route::addRoute('PUT', '/script-tag', 'ScriptTag', 'setUrl');
         Route::addRoute('PUT', '/checkout/{id}', 'Checkout', 'updateCart');
