@@ -48,6 +48,7 @@
             oyst.setMarginLeftBtn("{$marginLeftBtn|escape:'html':'UTF-8'}");
             oyst.setMarginRightBtn("{$marginRightBtn|escape:'html':'UTF-8'}");
             oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
+            oyst.setOneClickModalUrl("{$oneClickModalUrl|escape:'html':'UTF-8'}");
             oyst.prepareButton();
 
             window.__OYST__ = window.__OYST__ || {};

@@ -244,6 +244,9 @@ class InstallManager
         PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_ONECLICK);
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_URL_CUSTOM);
         PSConfiguration::deleteByName(Configuration::API_ENV_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_PROD);
+        PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_SANDBOX);
+        PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_CUSTOM);
         // Conf custom 1-Click global
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
         PSConfiguration::deleteByName('FC_OYST_BORDER_BTN');

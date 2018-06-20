@@ -50,10 +50,13 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         // Get type btn with controller
         $suffix_conf = $this->getTypeBtn($controller, $step);
 
+
         // Manage url for 1-Click
+        $baseOneClickUrl = trim($this->module->getOneClickUrl(), '/');
+        $baseOneClickModalUrl = trim($this->module->getOneClickModalUrl(), '/');
         $shopUrl = trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/');
         $oneClickUrl = $shopUrl.'/modules/oyst/oneClick.php?key='.$token;
-        $JSOneClickUrl = trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js';
+        $JSOneClickUrl = $baseOneClickUrl.'/1click/script/script.min.js';
         $assign['btnOneClickState'] = true;
         $assign['displayBtnCart'] = $display_btn_cart;
 
@@ -129,6 +132,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $assign['marginTopBtn'] = Configuration::get('FC_OYST_MARGIN_TOP_BTN_'.$suffix_conf);
         $assign['marginLeftBtn'] = Configuration::get('FC_OYST_MARGIN_LEFT_BTN_'.$suffix_conf);
         $assign['marginRightBtn'] = Configuration::get('FC_OYST_MARGIN_RIGHT_BTN_'.$suffix_conf);
+        $assign['oneClickModalUrl'] = $baseOneClickModalUrl;
 
         $this->smarty->assign($assign);
 
