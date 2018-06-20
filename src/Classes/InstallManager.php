@@ -51,6 +51,8 @@ class InstallManager
     {
         $state = true;
         $state &= $this->createNotificationTable();
+        $state &= $this->createCheckoutTable();
+        $state &= $this->createCustomerTable();
         $state &= $this->updateConstants();
 
         //Generate API key if not exists
@@ -66,9 +68,7 @@ class InstallManager
             );
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, Tools::getShopDomainSsl(true).'/module/oyst/ajax?'.http_build_query($fields));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Authorization: test'
-            ));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: test'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $response = json_decode(curl_exec($ch), true);
             curl_close($ch);
@@ -78,6 +78,14 @@ class InstallManager
             }
         }
         return $state;
+    }
+
+    public function uninstall()
+    {
+        $this->dropNotificationTable();
+        $this->dropCheckoutTable();
+        $this->dropCustomerTable();
+        $this->removeConfiguration();
     }
 
     public function updateConstants()
@@ -104,7 +112,39 @@ class InstallManager
               `date_add` datetime NOT NULL,
               `date_upd` datetime NOT NULL,
               PRIMARY KEY (`id_notification`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+            ) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8mb4;
+        ";
+
+        return $this->db->execute($query);
+    }
+
+    /**
+     * @return bool
+     */
+    public function createCheckoutTable()
+    {
+        $query = "
+            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_checkout` (
+                `id_cart` int(11) NOT NULL,
+                `oyst_cart_id` int(11) NOT NULL,
+                PRIMARY KEY (`id_cart`,`oyst_cart_id`)
+            ) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8mb4;
+        ";
+
+        return $this->db->execute($query);
+    }
+
+    /**
+     * @return bool
+     */
+    public function createCustomerTable()
+    {
+        $query = "
+            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_customer` (
+                `id_customer` int(11) NOT NULL,
+                `oyst_customer_id` int(11) NOT NULL,
+                PRIMARY KEY (`id_customer`,`oyst_customer_id`)
+        ) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8mb4;
         ";
 
         return $this->db->execute($query);
@@ -122,39 +162,32 @@ class InstallManager
         return $this->db->execute($query);
     }
 
-    public function uninstall()
+    /**
+     * @return bool
+     */
+    public function dropCheckoutTable()
     {
-        $this->dropNotificationTable();
-        // Remove anything at the end
-        $this->removeConfiguration();
+        $query = "
+            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_checkout;
+        ";
+
+        return $this->db->execute($query);
+    }
+
+    /**
+     * @return bool
+     */
+    public function dropCustomerTable()
+    {
+        $query = "
+            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_customer;
+        ";
+
+        return $this->db->execute($query);
     }
 
     private function removeConfiguration()
     {
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_CANCELLATION_PENDING'));
-        $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_REFUND_PENDING'));
-        $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND'));
-        $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_PARTIAL_REFUND_PEND'));
-        $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD_CHECK'));
-        $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_WAIT_PAYMENT'));
-        $orderState->delete();
-        $orderState = new OrderState(Configuration::get('OYST_STATUS_FRAUD'));
-        $orderState->delete();
-
-        // State Oyst
-        Configuration::deleteByName('OYST_STATUS_CANCELLATION_PENDING');
-        Configuration::deleteByName('OYST_STATUS_REFUND_PENDING');
-        Configuration::deleteByName('OYST_STATUS_PARTIAL_REFUND');
-        Configuration::deleteByName('OYST_STATUS_PARTIAL_REFUND_PEND');
-        Configuration::deleteByName('OYST_STATUS_FRAUD_CHECK');
-        Configuration::deleteByName('OYST_STATUS_WAIT_PAYMENT');
-        Configuration::deleteByName('OYST_STATUS_FRAUD');
-
         Configuration::deleteByName('OYST_SCRIPT_TAG_URL');
     }
 }

@@ -3,6 +3,7 @@
 namespace Oyst\Services;
 
 use Customer;
+use Db;
 use Language;
 use Validate;
 
@@ -52,5 +53,32 @@ class CustomerService {
             $results['addresses'] = $addresses;
         }
         return $results;
+    }
+
+    /**
+     * @param $id_customer
+     * @return array
+     */
+    public function getIpsFromIdCustomer($id_customer)
+    {
+        $res = Db::getInstance()->executeS("SELECT INET_NTOA(`c`.`ip_address`) `ip_address` 
+            FROM `"._DB_PREFIX_."connections` `c` 
+            INNER JOIN `"._DB_PREFIX_."guest` `g` ON `c`.`id_guest` = `g`.`id_guest`
+            WHERE `g`.`id_customer` = ".$id_customer);
+        $ips = array();
+        foreach ($res as $r) {
+            $ips[] = $r['ip_address'];
+        }
+        return array_unique($ips);
+    }
+
+    /**
+     * @param $id_customer
+     * @return string
+     */
+    public function getLastIpFromIdCustomer($id_customer)
+    {
+        $ips = $this->getIpsFromIdCustomer($id_customer);
+        return (isset($ips[0]) ? $ips[0] : '');
     }
 }
