@@ -30,4 +30,6 @@ function upgrade_module_1_18_0($module)
 {
     Configuration::updateValue('OYST_ONECLICKMODAL_URL_PROD', 'https://oneclick.oyst.com');
     Configuration::updateValue('OYST_ONECLICKMODAL_URL_SANDBOX', 'https://oneclick.sandbox.oyst.eu');
+
+    return true;
 }

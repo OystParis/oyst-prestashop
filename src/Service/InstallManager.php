@@ -315,6 +315,16 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_PAYMENT');
         PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_PAYMENT');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_PAYMENT');
+        // Conf 1-Click custom btn addr
+        PSConfiguration::deleteByName('FC_OYST_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_ADDR');
         // Conf 1-Click carriers
         PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
         PSConfiguration::deleteByName('OYST_ONE_CLICK_CARRIER');
