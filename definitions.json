@@ -1,6 +1,6 @@
 {
     "tab": "payments_gateways",
-    "version": "1.16.0",
+    "version": "1.19.0",
     "need_instance": 0,
 
     "hooks": {
@@ -9,14 +9,14 @@
             "displayPayment",
             "displayPaymentReturn",
             "displayAdminOrder" ,
-            "displayFooterProduct",
+            "displayFooter",
             "displayBackOfficeHeader",
             "displayAdminProductsExtra",
             "actionProductAdd",
             "actionProductUpdate",
             "actionObjectProductDeleteAfter",
             "actionOrderStatusPostUpdate",
-            "displayShoppingCart"
+            "actionValidateOrder"
         ],
         "1.6" : [
             "advancedPaymentOptions"
@@ -50,6 +50,10 @@
         "OYST_ONECLICK_URL_SANDBOX": "https://cdn.sandbox.oyst.eu",
         "OYST_ONECLICK_URL_CUSTOM": "",
 
+        "OYST_ONECLICKMODAL_URL_PROD": "https://oneclick.oyst.com",
+        "OYST_ONECLICKMODAL_URL_SANDBOX": "https://oneclick.sandbox.oyst.eu",
+        "OYST_ONECLICKMODAL_URL_CUSTOM": "",
+
         "FC_OYST_REDIRECT_SUCCESS": "ORDER_CONFIRMATION",
         "FC_OYST_REDIRECT_ERROR": "PAYMENT_ERROR",
 
@@ -70,6 +74,7 @@
         "FC_OYST_STATE_PAYMENT_FREEPAY": "2",
         "FC_OYST_STATE_PAYMENT_ONECLICK": "2",
         "FC_OYST_BTN_CART": "0",
+        "FC_OYST_BTN_LAYER": "0",
         "FC_OYST_MANAGE_QUANTITY_CART": "0",
         "FC_OYST_ONLY_FOR_IP": "",
         "FC_OYST_BTN_PRODUCT": "1",

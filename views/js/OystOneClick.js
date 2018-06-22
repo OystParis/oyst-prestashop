@@ -23,8 +23,8 @@
 /**
  * Manage oneClick process
  */
-function OystOneClick(url, productId, controller) {
-
+function OystOneClick(url, productId, controller)
+{
     this.url = url;
     this.controller = controller;
     this.productId = productId;
@@ -35,7 +35,7 @@ function OystOneClick(url, productId, controller) {
     this.button = '#oneClickContainer';
     this.smartBtn = true;
     this.borderBtn = true;
-    this.themeBtn = 'normal';
+    this.themeBtn = 'default';
     this.colorBtn = '#E91E63';
     this.widthBtn = '';
     this.heightBtn = '';
@@ -45,9 +45,12 @@ function OystOneClick(url, productId, controller) {
     this.positionBtn = 'before';
     this.idBtnAddToCart = '#add_to_cart';
     this.idBtnSmartBtn = '#add_to_cart button';
+    this.labelCta = 'Return shop.';
     this.preload = 1;
     this.shouldAsStock = 0;
     this.errorText = 'There isn\'t enough product in stock.';
+    this.oneClickModalUrl;
+    this.isCheckoutCart = true;
 
     this.setExportedCombinations = function (combinations) {
         this.combinations = combinations;
@@ -145,6 +148,14 @@ function OystOneClick(url, productId, controller) {
         this.errorText = errorText;
     };
 
+    this.setLabelCta = function (labelCta) {
+        this.labelCta = labelCta;
+    };
+
+    this.setOneClickModalUrl = function (oneClickModalUrl) {
+        this.oneClickModalUrl = oneClickModalUrl;
+    };
+
     /**
      * Return json with the product information to avoid any redundant code.
      * @returns {{isExported: boolean, product: {productId, productAttributeId: *, quantity: (*|jQuery)}}}
@@ -235,17 +246,23 @@ function OystOneClick(url, productId, controller) {
         }).append($('<div>', {
             id: 'oyst-1click-button'
         }).attr(
-            'data-theme', this.themeBtn
+            'data-theme',
+            this.themeBtn
         ).attr(
-            'data-color', this.colorBtn
+            'data-color',
+            this.colorBtn
         ).attr(
-            'data-width', this.widthBtn
+            'data-width',
+            this.widthBtn
         ).attr(
-            'data-height', this.heightBtn
+            'data-height',
+            this.heightBtn
         ).attr(
-            'data-rounded', this.borderBtn ? 'true' : 'false'
+            'data-rounded',
+            this.borderBtn ? 'true' : 'false'
         ).attr(
-            'data-smart', this.smartBtn ? 'true' : 'false'
+            'data-smart',
+            this.smartBtn ? 'true' : 'false'
         ));
 
         this.prepareEvents();
@@ -255,7 +272,7 @@ function OystOneClick(url, productId, controller) {
      * On Click, retrieve the right product / combination information
      * @returns {{productId, productAttributeId: *, quantity: (*|jQuery)}}
      */
-    this.getSelectedProduct = function() {
+    this.getSelectedProduct = function () {
 
         var productAttributeId = null;
 
@@ -264,28 +281,29 @@ function OystOneClick(url, productId, controller) {
         }
 
         var quantity = $('input[name="qty"]').val();
-        if (typeof quantity === "undefined")
+        if (typeof quantity === "undefined") {
             quantity = 1;
+        }
 
         // if (this.shouldAsStock) {
-        //     if ($('#quantityAvailable').length && parseInt($('#quantityAvailable').html()) < quantity) {
-        //         if (!!$.prototype.fancybox) {
-        //             $.fancybox.open([
-        //               {
-        //                 type: 'inline',
-        //                 autoScale: true,
-        //                 minHeight: 30,
-        //                 content: '<p class="fancybox-error">' + this.errorText + '</p>'
-        //               }
-        //             ], {
-        //               padding: 0
-        //             });
-        //             return;
-        //         } else {
-        //             alert(this.errorText);
-        //             return;
-        //         }
-        //     }
+        if ($('#quantityAvailable').length && parseInt($('#quantityAvailable').html()) < quantity) {
+            if (!!$.prototype.fancybox) {
+                $.fancybox.open([
+                  {
+                    type: 'inline',
+                    autoScale: true,
+                    minHeight: 30,
+                    content: '<p class="fancybox-error">' + this.errorText + '</p>'
+                  }
+                ], {
+                  padding: 0
+                });
+                return;
+            } else {
+                alert(this.errorText);
+                return;
+            }
+        }
         // }
 
         return {
@@ -298,28 +316,33 @@ function OystOneClick(url, productId, controller) {
     /**
      * Send request to start oneClick process
      */
-    this.requestOneCLick = function(oystCallBack) {
+    this.requestOneCLick = function (oystCallBack) {
         var params = this.getSelectedProduct();
 
         params.controller = this.controller;
 
         if (this.preload) {
-          params.preload = this.preload;
-          this.setPreload(0);
+            params.preload = this.preload;
+            this.setPreload(0);
         } else {
-          params.preload = this.preload;
+            params.preload = this.preload;
         }
 
+        params.labelCta = this.labelCta;
         params.oneClick = true;
         params.token = '{SuggestToAddSecurityToken}';
 
-        $.post(this.url, params, function(json) {
-            if (json.state) {
-                oystCallBack(null, json.url);
-            } else {
-                // display properly the error to try again
-                alert('Error occurred, please try later or contact us');
-            }
-        });
+        if (params.preload) {
+            oystCallBack(null, this.oneClickModalUrl+'/?isCheckoutCart='+this.isCheckoutCart);
+        } else {
+            $.post(this.url, params, function (json) {
+                if (json.state) {
+                    oystCallBack(null, json.url);
+                } else {
+                    // display properly the error to try again
+                    alert('Error occurred, please try later or contact us');
+                }
+            });
+        }
     }
 };

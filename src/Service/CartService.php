@@ -144,7 +144,12 @@ class CartService extends AbstractOystService
         );
 
         // PS core used this context anywhere.. So we need to fill it properly
-        $this->context->cart = $cart = new Cart();
+        // PS core used this context anywhere.. So we need to fill it properly
+        if ($data['context'] && isset($data['context']['id_cart'])) {
+            $this->context->cart = $cart = new Cart((int)$data['context']['id_cart']);
+        } else {
+            $this->context->cart = $cart = new Cart();
+        }
         $this->context->customer = $customer;
         // For debug but when prod pass in context object currency
         $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
@@ -157,25 +162,26 @@ class CartService extends AbstractOystService
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
 
-        if (!$cart->add()) {
+        if (!$cart->save()) {
             $this->logger->emergency(
-                'Can\'t create cart ['.json_encode($cart).']'
+                'Can\'t save cart ['.json_encode($cart).']'
             );
             return false;
         }
 
         $oneClickOrderCartEstimate = new OneClickOrderCartEstimate(array());
 
-        if (isset($data['items'])) {
-            foreach ($data['items'] as $item) {
-                $idProduct = $item['product']['reference'];
-                $idCombination = 0;
+        if ($cart->id && count($cart->getProducts()) > 0) {
+            foreach ($cart->getProducts() as $item) {
+                $idProduct = $item['id_product'];
+                $idCombination = $item['id_product_attribute'];
+                $quantity = $item['cart_quantity'];
 
-                if (false  !== strpos($idProduct, ';')) {
-                    $p = explode(';', $idProduct);
-                    $idProduct = $p[0];
-                    $idCombination = $p[1];
-                }
+                // if (false  !== strpos($idProduct, ';')) {
+                //     $p = explode(';', $idProduct);
+                //     $idProduct = $p[0];
+                //     $idCombination = $p[1];
+                // }
 
                 $product = new Product($idProduct);
 
@@ -188,28 +194,28 @@ class CartService extends AbstractOystService
                     )));
                 }
 
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
-                    if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, $item['product']['quantity']);
-                    }
-                }
+                // if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
+                //     if ($product->advanced_stock_management == 0) {
+                //         StockAvailable::updateQuantity($idProduct, $idCombination, $item['product']['quantity']);
+                //     }
+                // }
 
-                $update_qty_result = $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
+                // $update_qty_result = $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
 
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
-                    if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, -$item['product']['quantity']);
-                    }
-                }
+                // if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
+                //     if ($product->advanced_stock_management == 0) {
+                //         StockAvailable::updateQuantity($idProduct, $idCombination, -$item['product']['quantity']);
+                //     }
+                // }
 
-                if (!$update_qty_result) {
-                    header('HTTP/1.1 400 Bad request');
-                    header('Content-Type: application/json');
-                    die(json_encode(array(
-                        'code' => 'stock-unavailable',
-                        'message' => 'Unvailable stock',
-                    )));
-                }
+                // if (!$update_qty_result) {
+                //     header('HTTP/1.1 400 Bad request');
+                //     header('Content-Type: application/json');
+                //     die(json_encode(array(
+                //         'code' => 'stock-unavailable',
+                //         'message' => 'Unvailable stock',
+                //     )));
+                // }
 
                 // Add items
                 $price = $product->getPrice(
@@ -219,7 +225,7 @@ class CartService extends AbstractOystService
                     null,
                     false,
                     true,
-                    $item['quantity']
+                    $quantity
                 );
 
                 $without_reduc_price = $product->getPriceWithoutReduct(
@@ -252,9 +258,9 @@ class CartService extends AbstractOystService
                 $amount_total += $price;
 
                 $oneClickItem = new OneClickItem(
-                    (string)$item['product']['reference'],
+                    (string)$idProduct,
                     $amount,
-                    (int)$item['quantity']
+                    (int)$quantity
                 );
 
                 $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
@@ -311,6 +317,9 @@ class CartService extends AbstractOystService
 
         $type = OystCarrier::HOME_DELIVERY;
 
+        $oyst_business_days = PSConfiguration::get('FC_OYST_BUSINESS_DAYS');
+        $business_days = explode(',', $oyst_business_days);
+
         // Add carriers
         foreach ($carriersAvailables as $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
@@ -349,6 +358,19 @@ class CartService extends AbstractOystService
                     $delay_shipment = (int)$delay_shipment * 24;
                 } else {
                     $delay_shipment = $delay[(int)$carrier->grade];
+                }
+
+                if ($oyst_business_days) {
+                    $delay_current = new \DateTime("NOW");
+                    $delay_current->add(new \DateInterval("PT".$delay_shipment."H"));
+                    $day_of_week = (int)$delay_current->format('N');
+                    if (!in_array($day_of_week, $business_days)) {
+                        do {
+                            $delay_shipment += 24;
+                            $delay_current->add(new \DateInterval("PT24H"));
+                            $new_day_of_week = (int)$delay_current->format('N');
+                        } while (!in_array($new_day_of_week, $business_days));
+                    }
                 }
 
                 $oneClickShipment = new OneClickShipmentCatalogLess(
@@ -505,9 +527,15 @@ class CartService extends AbstractOystService
         }
 
         if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
-            require_once dirname(__FILE__).'/../../../giftonordermodule/Giftonorder.php';
             if ($data['context']['id_cart'] && (int)$data['context']['id_cart'] > 0) {
-                $giftInCart = \Giftonorder::getGiftsInCart($data['context']['id_cart']);
+                $sql = 'SELECT go.*
+                        FROM `'._DB_PREFIX_.'giftonorder_order` as go
+                        WHERE go.id_cart = '.(int)$data['context']['id_cart'];
+
+                $giftInCart = Db::getInstance()->ExecuteS($sql);
+                if (!$giftInCart) {
+                    $giftInCart = array();
+                }
                 if (count($giftInCart) > 0) {
                     foreach ($giftInCart as $gift) {
                         $idCombination = $gift['id_combination'];
@@ -574,7 +602,7 @@ class CartService extends AbstractOystService
         );
 
         // Delete cart for module relaunch cart
-        $cart->delete();
+        // $cart->delete();
 
         return $oneClickOrderCartEstimate->toJson();
     }
