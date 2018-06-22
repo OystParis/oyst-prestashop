@@ -55,6 +55,21 @@
             window.__OYST__.getOneClickURL = function(callback) {
                 oyst.requestOneCLick(callback);
             };
+
+            var allowOystRedirectSelf = true;
+            window.addEventListener('message', function (event) {
+                if (event.data.type == "ORDER_COMPLETE") {
+                    allowOystRedirectSelf = false;
+                }
+
+                if (event.data.type == "ORDER_CANCEL") {
+                    allowOystRedirectSelf = true;
+                }
+
+                if (event.data.type == "MODAL_CLOSE" && allowOystRedirectSelf) {
+                    window.location.reload(false);
+                }
+            });
         });
     </script>
     {if $styles_custom}
