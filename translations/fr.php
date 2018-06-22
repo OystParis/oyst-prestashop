@@ -2,6 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{oyst}prestashop>oyst_ccf69e0675356b06a9ecf64d03965887'] = 'Oyst - FreePay et 1Click';
+$_MODULE['<{oyst}prestashop>oyst_f02ec3a64585faf1432e28cbad8c2cb5'] = 'Oyst permet d’acheter en 1-Click depuis n’importe quelle page de n’importe quel site marchand. Boostez votre taux de conversion jusqu’à x2 sur desktop et x5 sur mobile';
 $_MODULE['<{oyst}prestashop>paymentnotification_59a70e9e7e2b51dbde1027c899d1dd40'] = 'Le prix payé ne correspond au montant du panier.';
 $_MODULE['<{oyst}prestashop>paymentnotification_572f9af7615560af2cba038cc1948287'] = 'Le panier a été modifé, veuillez réessayez.';
 $_MODULE['<{oyst}prestashop>paymentnotification_9c688609b66dcae41c6965d4b97cefb6'] = 'Paiement annulé pour suspicion de fraude';
