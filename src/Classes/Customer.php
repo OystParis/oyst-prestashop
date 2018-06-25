@@ -28,4 +28,9 @@ class Customer
             FROM `"._DB_PREFIX_."oyst_customer` 
             WHERE `oyst_customer_id` = '".$oyst_customer_id."'");
     }
+
+    public static function createOystCustomerLink($id_customer, $oyst_customer_id)
+    {
+        return Db::getInstance()->execute('INSERT INTO `"._DB_PREFIX_."oyst_customer` (`id_customer`, `oyst_customer_id`) VALUES ('.$id_customer.', "'.$oyst_customer_id.'")');
+    }
 }
