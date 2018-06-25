@@ -27,8 +27,9 @@ class CustomerService {
         $id_lang_fr = Language::getIdByIso('fr');
 
         //Search on id
-        if (!empty($customer_infos['id_customer'])) {
-            $customer = new Customer((int)$customer_infos['id_customer']);
+        if (!empty($customer_infos['id_oyst'])) {
+            $id_customer = \Oyst\Classes\Customer::getIdCustomerFromIdCustomerOyst($customer_infos['id_oyst']);
+            $customer = new Customer((int)$id_customer);
             if (Validate::isLoadedObject($customer)) {
                 $addresses = $customer->getAddresses($id_lang_fr);
             }
