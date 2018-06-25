@@ -167,18 +167,29 @@ class CartService {
                 }
 
                 //Shipping
+
+                //Available carriers
+                $available_carriers = array();
+                foreach ($carriers as $id_carrier) {
+                    $carrier_obj = new Carrier($id_carrier, $this->id_lang);
+                    if (Validate::isLoadedObject($carrier_obj)) {
+                        $available_carriers[] = array(
+                            'label' => $carrier_obj->name,
+                            'reference' => $carrier_obj->id_reference,
+                            'delivery_delay' => $carrier_obj->delay,
+                        );
+                    }
+                }
+
                 $selected_carrier = array();
                 if (!empty($cart->id_carrier)) {
                     $selected_carrier_obj = new Carrier($cart->id_carrier, $this->id_lang);
-                    $selected_carrier = array(
-                        'label' => $selected_carrier_obj->name,
-                        'reference' => $selected_carrier_obj->id_reference,
-                        'delivery_delay' => $selected_carrier_obj->delay,
-                    );
+                    $selected_carrier = $selected_carrier_obj->id_reference;
                 }
                 $response['shipping'] = array(
                     'address' => array(),
-                    'carrier' => $selected_carrier,
+                    'carriers_available' => $available_carriers,
+                    'carrier_applied' => $selected_carrier,
                 );
                 if (!empty($cart->id_address_delivery)) {
                     $address = new Address($cart->id_address_delivery);
@@ -197,20 +208,6 @@ class CartService {
                         $response['billing']['address'] = $this->formatAddress($address);
                     }
                 }
-
-                //Available carriers
-                $available_carriers = array();
-                foreach ($carriers as $id_carrier) {
-                    $carrier_obj = new Carrier($id_carrier, $this->id_lang);
-                    if (Validate::isLoadedObject($carrier_obj)) {
-                        $available_carriers[] = array(
-                            'label' => $carrier_obj->name,
-                            'reference' => $carrier_obj->id_reference,
-                            'delivery_delay' => $carrier_obj->delay,
-                        );
-                    }
-                }
-                $response['available_carriers'] = $available_carriers;
 
                 //Shop
                 $response['shop'] = array();
