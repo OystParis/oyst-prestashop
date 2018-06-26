@@ -14,7 +14,7 @@ class Customer
     {
         $res = Db::getInstance()->getValue("SELECT `oyst_customer_id` 
             FROM `"._DB_PREFIX_."oyst_customer` 
-            WHERE `id_customer` = '".$id_customer."'");
+            WHERE `id_customer` = ".(int)$id_customer);
         return (empty($res) ? '' : $res);
     }
 
@@ -31,6 +31,6 @@ class Customer
 
     public static function createOystCustomerLink($id_customer, $oyst_customer_id)
     {
-        return Db::getInstance()->execute('INSERT INTO `"._DB_PREFIX_."oyst_customer` (`id_customer`, `oyst_customer_id`) VALUES ('.$id_customer.', "'.$oyst_customer_id.'")');
+        return Db::getInstance()->execute("INSERT IGNORE INTO `"._DB_PREFIX_."oyst_customer` (`id_customer`, `oyst_customer_id`) VALUES (".$id_customer.", '".$oyst_customer_id."');");
     }
 }

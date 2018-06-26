@@ -28,4 +28,9 @@ class Checkout
             FROM `"._DB_PREFIX_."oyst_checkout` 
             WHERE `oyst_cart_id` = '".$oyst_cart_id."'");
     }
+
+    public static function createOystCheckoutLink($id_cart, $oyst_checkout_id)
+    {
+        return Db::getInstance()->execute("INSERT IGNORE INTO `"._DB_PREFIX_."oyst_checkout` (`id_cart`, `oyst_cart_id`) VALUES (".$id_cart.", '".$oyst_checkout_id."');");
+    }
 }

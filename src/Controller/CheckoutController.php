@@ -55,6 +55,10 @@ class CheckoutController extends AbstractOystController
                     $context->shop = new Shop($cart->id_shop);
 
                     $data = $params['data']['checkout'];
+
+                    if (!empty($data['id_oyst'])) {
+                        Oyst\Classes\Checkout::createOystCheckoutLink($cart->id, $data['id_oyst']);
+                    }
                     //Products
                     if (!empty($data['items'])) {
                         $cart_products = $cart->getProducts(false, false, null, false);
@@ -128,13 +132,11 @@ class CheckoutController extends AbstractOystController
                         $customer_service = CustomerService::getInstance();
                         $object_service = ObjectService::getInstance();
                         $finded_customer = $customer_service->searchCustomer($data['user']);
+
                         //If customer is not finded and we have informations for create him => do it
                         if (empty($finded_customer['customer_obj'])) {
                             $result = $object_service->createObject('Customer', $data['user']);
                             $id_customer = $result['id'];
-                            if (!empty($data['user']['id_oyst'])) {
-                                Oyst\Classes\Customer::createOystCustomerLink($id_customer, $data['user']['id_oyst']);
-                            }
                             if (!empty($result['errors'])) {
                                 $errors['customer'] = $result['errors'];
                             }
@@ -151,11 +153,14 @@ class CheckoutController extends AbstractOystController
                             }
                         }
 
+                        if (!empty($data['user']['id_oyst'])) {
+                            Oyst\Classes\Customer::createOystCustomerLink($id_customer, $data['user']['id_oyst']);
+                        }
 
                         //Create delivery address if not exists
                         if (!empty($id_customer) && empty($id_address_delivery) && !empty($data['shipping']['address'])) {
                             //No address, create it
-                            if (!empty($data['shipping']['address']['country']['code'])) {
+                            if (!empty($data['shipping']['address']['country'])) {
                                 if ($id_country = Country::getByIso($data['shipping']['address']['country']['code'])) {
                                     $data['shipping']['address']['id_country'] = $id_country;
                                 } else {
@@ -210,8 +215,8 @@ class CheckoutController extends AbstractOystController
                     }
 
                     //Carrier
-                    if (!empty($data['shipping']['carrier_applied'])) {
-                        $carrier = Carrier::getCarrierByReference($data['shipping']['carrier_applied']);
+                    if (!empty($data['shipping']['carrier_applied']['reference'])) {
+                        $carrier = Carrier::getCarrierByReference($data['shipping']['carrier_applied']['reference']);
                         if (Validate::isLoadedObject($carrier)) {
                             $cart->id_carrier = $carrier->id;
                             $cart->delivery_option = json_encode(array($cart->id_address_delivery => $cart->id_carrier.','));
