@@ -59,25 +59,24 @@ class CheckoutController extends AbstractOystController
                     if (!empty($data['items'])) {
                         $cart_products = $cart->getProducts(false, false, null, false);
                         foreach ($data['items'] as $product) {
-                            if (isset($product['quantity']) && isset($product['id_product'])) {
-                                if (!isset($product['id_product_attribute'])) {
-                                    $product['id_product_attribute'] = 0;
-                                }
-                            }
+                            $ids = explode('-', $product['reference']);
+                            $id_product = (isset($ids[0]) ? $ids[0] : 0);
+                            $id_product_attribute = (isset($ids[1]) ? $ids[1] : 0);
+
                             //TODO Manage customization
                             if ($product['quantity'] <= 0) {
-                                $cart->deleteProduct($product['id_product'], $product['id_product_attribute']);
+                                $cart->deleteProduct($id_product, $id_product_attribute);
                             } else {
                                 $cart_product_quantity = 0;
                                 foreach ($cart_products as $cart_product) {
-                                    if ($cart_product['id_product'] == $product['id_product'] && $cart_product['id_product_attribute'] == $product['id_product_attribute']) {
+                                    if ($cart_product['id_product'] == $id_product && $cart_product['id_product_attribute'] == $id_product_attribute) {
                                         $cart_product_quantity = $cart_product['cart_quantity'];
                                     }
                                 }
                                 if ($product['quantity'] < $cart_product_quantity) {
-                                    $cart->updateQty($cart_product_quantity - $product['quantity'], $product['id_product'], $product['id_product_attribute'], false, 'down');
+                                    $cart->updateQty($cart_product_quantity - $product['quantity'], $id_product, $id_product_attribute, false, 'down');
                                 } elseif ($product['quantity'] > $cart_product_quantity) {
-                                    $cart->updateQty($product['quantity'] - $cart_product_quantity, $product['id_product'], $product['id_product_attribute'], false, 'up');
+                                    $cart->updateQty($product['quantity'] - $cart_product_quantity, $id_product, $id_product_attribute, false, 'up');
                                 }
                             }
                         }
@@ -120,9 +119,9 @@ class CheckoutController extends AbstractOystController
                     }
 
                     //Customer & address
-                    //TODO Manage different address delivery and address invoice
                     $id_customer = 0;
-                    $id_address = 0;
+                    $id_address_delivery = 0;
+                    $id_address_invoice = 0;
                     //First, search customer (id, email)
                     //If found => set customer id to cart and check his addresses
                     if (!empty($data['user'])) {
@@ -146,36 +145,18 @@ class CheckoutController extends AbstractOystController
                             //If address defined in data and exists in customer addresses
                             if (!empty($finded_customer['addresses'])) {
                                 //Search with address informations
-                                if (empty($id_address)) {
-                                    $fields_to_find = array(
-                                        'firstname',
-                                        'lastname',
-                                        'address1',
-                                        'postcode',
-                                        'city',
-                                    );
-
-                                    //If fields required for searching are all present in data
-                                    if (count(array_diff($fields_to_find, array_keys($data['shipping']['address']))) == 0) {
-                                        foreach ($finded_customer['addresses'] as $address) {
-                                            $address_finded = true;
-                                            foreach ($fields_to_find as $field_to_find) {
-                                                $address_finded &= ($address[$field_to_find] == $data['shipping']['address'][$field_to_find]);
-                                            }
-                                            if ($address_finded) {
-                                                $id_address = $address['id_address'];
-                                                break;
-                                            }
-                                        }
-                                    }
+                                if (empty($id_address_delivery)) {
+                                    $id_address_delivery = $this->findExistentAddress($finded_customer['addresses'], $data['shipping']['address']);
                                 }
                             }
                         }
 
-                        if (!empty($id_customer) && empty($id_address) && !empty($data['shipping']['address'])) {
+
+                        //Create delivery address if not exists
+                        if (!empty($id_customer) && empty($id_address_delivery) && !empty($data['shipping']['address'])) {
                             //No address, create it
-                            if (!empty($data['shipping']['address']['country'])) {
-                                if ($id_country = Country::getByIso($data['shipping']['address']['country'])) {
+                            if (!empty($data['shipping']['address']['country']['code'])) {
+                                if ($id_country = Country::getByIso($data['shipping']['address']['country']['code'])) {
                                     $data['shipping']['address']['id_country'] = $id_country;
                                 } else {
                                     $errors[] = "Country code not exists";
@@ -185,9 +166,34 @@ class CheckoutController extends AbstractOystController
                             if (empty($result['errors'])) {
                                 $result['object']->id_customer = $id_customer;
                                 $result['object']->save();
-                                $id_address = $result['id'];
+                                $id_address_delivery = $result['id'];
+                                $finded_customer['addresses'] = json_decode(json_encode($result['object']), true);
                             } else {
-                                $errors['address'] = $result['errors'];
+                                $errors['address_delivery'] = $result['errors'];
+                            }
+                        }
+
+                        //Search address invoice
+                        if (!empty($finded_customer['addresses'])) {
+                            $id_address_invoice = $this->findExistentAddress($finded_customer['addresses'], $data['shipping']['address']);
+
+                            //If not found, create it
+                            if (empty($id_address_invoice)) {
+                                if (!empty($data['billing']['address']['country']['code'])) {
+                                    if ($id_country = Country::getByIso($data['billing']['address']['country']['code'])) {
+                                        $data['billing']['address']['id_country'] = $id_country;
+                                    } else {
+                                        $errors[] = "Country code not exists";
+                                    }
+                                }
+                                $result = $object_service->createObject('Address', $data['billing']['address']);
+                                if (empty($result['errors'])) {
+                                    $result['object']->id_customer = $id_customer;
+                                    $result['object']->save();
+                                    $id_address_invoice = $result['id'];
+                                } else {
+                                    $errors['address_invoice'] = $result['errors'];
+                                }
                             }
                         }
                     }
@@ -196,9 +202,11 @@ class CheckoutController extends AbstractOystController
                         $cart->id_customer = $id_customer;
                     }
 
-                    if (!empty($id_address)) {
-                        $cart->id_address_delivery = $id_address;
-                        $cart->id_address_invoice = $id_address;
+                    if (!empty($id_address_delivery)) {
+                        $cart->id_address_delivery = $id_address_delivery;
+                    }
+                    if (!empty($id_address_invoice)) {
+                        $cart->id_address_invoice = $id_address_invoice;
                     }
 
                     //Carrier
@@ -242,6 +250,35 @@ class CheckoutController extends AbstractOystController
         } else {
             $this->respondError(400, 'id_cart is missing');
         }
+    }
+
+
+    private function findExistentAddress($existent_addresses, $address)
+    {
+        $fields_to_find = array(
+            'firstname',
+            'lastname',
+            'address1',
+            'postcode',
+            'city',
+        );
+
+        $id_address = 0;
+
+        //If fields required for searching are all present in data
+        if (count(array_diff($fields_to_find, array_keys($address))) == 0) {
+            foreach ($existent_addresses as $existant_address) {
+                $address_finded = true;
+                foreach ($fields_to_find as $field_to_find) {
+                    $address_finded &= ($existant_address[$field_to_find] == $address[$field_to_find]);
+                }
+                if ($address_finded) {
+                    $id_address = $existant_address['id_address'];
+                    break;
+                }
+            }
+        }
+        return $id_address;
     }
 
     public function createOrderFromCart($params)
