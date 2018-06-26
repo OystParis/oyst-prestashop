@@ -39,8 +39,13 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         parent::initContent();
 
         // Get parameters
-        $id_cart = (int)Tools::getValue('id_cart');
+        $id_cart = (int)$this->context->cookie->oyst_id_cart;
         $key = Tools::getValue('key');
+
+        if ($id_cart == 0 && Configuration::get('FC_OYST_HASH_KEY') != $key) {
+            Tools::redirect('/');
+        }
+
         $oyst = new Oyst();
         $context = Context::getContext();
         $orderService = AbstractOrderServiceFactory::get($oyst, $context);
@@ -49,8 +54,16 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         // Get cart
         $cart = new Cart($id_cart);
         $customer = new Customer($cart->id_customer);
-        if (Configuration::get('FC_OYST_HASH_KEY') != $key) {
-            die('Wrong security key');
+
+        if ($this->context->cookie->count > 0) {
+            $this->context->cookie->count += 1;
+        } else {
+            $this->context->cookie->count = 1;
+        }
+
+        if ($this->context->cookie->count > 10) {
+            unset($this->context->cookie->count);
+            $cartIsError = true;
         }
 
         if ($cartIsError) {
@@ -65,18 +78,20 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         }
 
         // Log user
-        $this->context->cookie->id_compare = $id_compare;
-        $this->context->cookie->id_customer = (int)($customer->id);
-        $this->context->cookie->customer_lastname = $customer->lastname;
-        $this->context->cookie->customer_firstname = $customer->firstname;
-        $this->context->cookie->logged = 1;
-        $customer->logged = 1;
-        $this->context->cookie->is_guest = $customer->isGuest();
-        $this->context->cookie->passwd = $customer->passwd;
-        $this->context->cookie->email = $customer->email;
-        // Add customer to the context
-        $this->context->customer = $customer;
-        $this->context->cookie->write();
+        if (!$this->context->customer->isLogged()) {
+            $this->context->cookie->id_compare = $id_compare;
+            $this->context->cookie->id_customer = (int)($customer->id);
+            $this->context->cookie->customer_lastname = $customer->lastname;
+            $this->context->cookie->customer_firstname = $customer->firstname;
+            $this->context->cookie->logged = 1;
+            $customer->logged = 1;
+            $this->context->cookie->is_guest = $customer->isGuest();
+            $this->context->cookie->passwd = $customer->passwd;
+            $this->context->cookie->email = $customer->email;
+            // Add customer to the context
+            $this->context->customer = $customer;
+            $this->context->cookie->write();
+        }
 
         // Load cart and order
         $id_order = Order::getOrderByCartId($id_cart);
@@ -101,7 +116,7 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
                             'oneclickconfirmation'
                         );
                         $id_module = Module::getModuleIdByName('oyst');
-                        $params = $glue.'id_cart='.$cart->id.'&id_order='.$id_order.'&id_module='.$id_module;
+                        $params = $glue.'id_order='.$id_order.'&id_module='.$id_module;
                         $url = $base_url_confirmation.$params.'&key='.$customer->secure_key;
                         break;
                     case 'CUSTOM':
