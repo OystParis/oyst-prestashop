@@ -30,6 +30,7 @@ class OystAPIKey
 
     public static function isKeyActive($key)
     {
-        return (!empty(self::getAPIKey()) && self::getAPIKey() == $key);
+        $api_key = self::getAPIKey();
+        return (!empty($api_key) && $api_key == $key);
     }
 }
