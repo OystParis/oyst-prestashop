@@ -47,6 +47,7 @@ class CartService {
         }
 
         if (Validate::isLoadedObject($cart)) {
+            $taxes = array();
             try {
                 $context = Context::getContext();
 
@@ -62,7 +63,7 @@ class CartService {
                             'email' => $customer->email,
                             'firstname' => $customer->firstname,
                             'lastname' => $customer->lastname,
-                            'id_oyst' => \Oyst\Classes\Customer::getIdCustomerFromIdCustomerOyst($customer->id),
+                            'id_oyst' => \Oyst\Classes\Customer::getIdOystFromIdCustomer($customer->id),
                             'gender' => $gender->name,
                             'newsletter' => $customer->newsletter,
                             'birthday' => $customer->birthday,
@@ -83,6 +84,15 @@ class CartService {
                 );
 
                 foreach ($cart_products as $cart_product) {
+                    if (!isset($taxes[$cart_product['rate']])) {
+                        $taxes[$cart_product['rate']] = array(
+                            'rate' => $cart_product['rate'],
+                            'label' => $cart_product['tax_name'],
+                            'amount' => 0,
+                        );
+                    }
+                    $taxes[$cart_product['rate']]['amount'] += $cart_product['total_wt'] - $cart_product['total'];
+
                     if ($cart_product['is_gift']) {
                         $response['promotions']['free_items'][] = $this->formatItem($cart_product);
                     } else {
@@ -115,21 +125,24 @@ class CartService {
                 $cart_rules = $cart->getCartRules();
 
                 foreach ($cart_rules as $cart_rule) {
-                    $amount = $cart_rule['obj']->getContextualValue(true, $context);
+                    $amount_tax_incl = $cart_rule['obj']->getContextualValue(true, $context);
+                    $amount_tax_excl = $cart_rule['obj']->getContextualValue(false, $context);
                     if (!empty($amount)) {
                         //discounts
                         if (empty($cart_rule['code'])) {
                             $response['promotions']['discounts'][] = array(
                                 'id_discount' => $cart_rule['id_cart_rule'],
                                 'label' => $cart_rule['name'],
-                                'amount_tax_incl' => $amount,
+                                'amount_tax_incl' => $amount_tax_incl,
+                                'amount_tax_excl' => $amount_tax_excl,
                             );
                         //Coupons
                         } else {
                             $response['promotions']['coupons'][] = array(
                                 'label' => $cart_rule['name'],
                                 'code' => $cart_rule['code'],
-                                'amount' => $amount,
+                                'amount_tax_incl' => $amount_tax_incl,
+                                'amount_tax_excl' => $amount_tax_excl,
                             );
                         }
                     }
@@ -181,16 +194,22 @@ class CartService {
                     }
                 }
 
-                $selected_carrier = array();
-                if (!empty($cart->id_carrier)) {
-                    $selected_carrier_obj = new Carrier($cart->id_carrier, $this->id_lang);
-                    $selected_carrier = $selected_carrier_obj->id_reference;
-                }
                 $response['shipping'] = array(
                     'address' => array(),
                     'carriers_available' => $available_carriers,
-                    'carrier_applied' => $selected_carrier,
+                    'carrier_applied' => array(),
                 );
+                if (!empty($cart->id_carrier)) {
+                    $selected_carrier_obj = new Carrier($cart->id_carrier, $this->id_lang);
+                    if (Validate::isLoadedObject($selected_carrier_obj)) {
+                        $response['shipping']['carrier_applied'] = array(
+                            'label' => $selected_carrier_obj->name,
+                            'reference' => $selected_carrier_obj->id_reference,
+                            'delivery_delay' => $selected_carrier_obj->delay,
+                        );
+                    }
+
+                }
                 if (!empty($cart->id_address_delivery)) {
                     $address = new Address($cart->id_address_delivery);
                     if (Validate::isLoadedObject($address)) {
@@ -228,13 +247,20 @@ class CartService {
                         'total_shipping' => $cart->getOrderTotal(true, Cart::ONLY_SHIPPING),
                         'total_discount' => $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS),
                         'total' => $cart->getOrderTotal(true, Cart::BOTH),
-                        'total_tax' => $cart->getOrderTotal(true, Cart::BOTH)-$cart->getOrderTotal(false, Cart::BOTH),
                     ),
                     'tax_excl' => array(
                         'total_items' => $cart->getOrderTotal(false, Cart::ONLY_PRODUCTS),
                         'total_shipping' => $cart->getOrderTotal(false, Cart::ONLY_SHIPPING),
                         'total_discount' => $cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS),
                         'total' => $cart->getOrderTotal(false, Cart::BOTH),
+                    ),
+                    //TODO Separate taxes by tax rate
+                    'taxes' => array(
+                        array(
+                            "label" => "TVA total",
+                            "amount" => $cart->getOrderTotal(true, Cart::BOTH)-$cart->getOrderTotal(false, Cart::BOTH),
+                            "rate" => "20"
+                        ),
                     ),
                 );
 
@@ -245,8 +271,14 @@ class CartService {
                 //Message
                 $order_message = Message::getMessageByCartId($cart->id);
                 $response['message'] = array(
-                    'gift' => $cart->gift_message,
-                    'order' => $order_message['message'],
+                    array(
+                        'type' => 'gift',
+                        'content' => $cart->gift_message,
+                    ),
+                    array(
+                        'type' => 'order',
+                        'content' => $order_message['message'],
+                    ),
                 );
 
                 //TODO Checkout agreements
