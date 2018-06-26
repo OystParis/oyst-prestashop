@@ -413,9 +413,10 @@ class OneClickService extends AbstractOystService
                 if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
                     $glue = '?';
                 }
-                $id_cart_url = Context::getContext()->cart->id;
+                // $id_cart_url = Context::getContext()->cart->id;
                 $url = Context::getContext()->link->getModuleLink('oyst', 'oneclickreturn');
-                $url .= $glue.'id_cart='.$id_cart_url.'&key='.ConfigurationP::get('FC_OYST_HASH_KEY');
+                $url .= $glue.'key='.ConfigurationP::get('FC_OYST_HASH_KEY');
+                $this->context->cookie->oyst_id_cart = Context::getContext()->cart->id;
 
                 $oneClickCustomization = new OneClickCustomization();
                 $oneClickCustomization->setCta($labelCta, $url);

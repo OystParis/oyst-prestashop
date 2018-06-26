@@ -45,7 +45,7 @@ class OystOneclickconfirmationModuleFrontController extends ModuleFrontControlle
     {
         parent::init();
 
-        $this->id_cart = (int)(Tools::getValue('id_cart', 0));
+        $this->id_cart = (int)$this->context->cookie->oyst_id_cart;
 
         $redirectLink = 'index.php?controller=history';
 
