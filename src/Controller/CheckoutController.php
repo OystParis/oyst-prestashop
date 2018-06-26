@@ -226,6 +226,21 @@ class CheckoutController extends AbstractOystController
                         //TODO Manage access point here (with module exception etc)
                     }
 
+                    //Messages
+                    if (!empty($data['messages'])) {
+                        foreach ($data['messages'] as $message) {
+                            switch ($message['type']) {
+                                case 'gift':
+                                    $cart->gift_message = $message['content'];
+                                    break;
+
+                                case 'order':
+                                    //TODO create order message
+                                    break;
+                            }
+                        }
+                    }
+
                     try {
                         $cart->save();
                     } catch (Exception $e) {
