@@ -48,6 +48,12 @@
                 oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
                 oyst.prepareButton();
 
+                window.addEventListener('message', function (event) {
+                    if (event.data.type == 'ORDER_REQUEST') {
+                        oyst.setPreload(0);
+                    }
+                });
+
                 window.__OYST__ = window.__OYST__ || {};
                 window.__OYST__.getOneClickURL = function(callback) {
                     oyst.requestOneCLick(callback);

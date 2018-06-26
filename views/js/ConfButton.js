@@ -50,6 +50,12 @@ $(document).ready(function () {
     oyst.setPositionBtn(positionBtn);
     oyst.prepareButton();
 
+    window.addEventListener('message', function (event) {
+        if (event.data.type == 'ORDER_REQUEST') {
+            oyst.setPreload(0);
+        }
+    });
+
     window.__OYST__ = window.__OYST__ || {};
     window.__OYST__.getOneClickURL = function (callback) {
         oyst.requestOneCLick(callback);
