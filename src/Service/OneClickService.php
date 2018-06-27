@@ -224,16 +224,6 @@ class OneClickService extends AbstractOystService
 
                     $product_less->__set('customizations', $this->prepareCustomizations($customizations));
                     $products_less[] = $product_less;
-
-                    if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
-                        if ($product['advanced_stock_management'] == 0) {
-                            StockAvailable::updateQuantity(
-                                $product['id_product'],
-                                $product['id_product_attribute'],
-                                -(int)$product['cart_quantity']
-                            );
-                        }
-                    }
                 }
             } elseif (!$products && ($controller == 'index' || $controller == 'category')) {
                 $oystPrice = new OystPrice(10, $this->context->currency->iso_code);
@@ -295,14 +285,6 @@ class OneClickService extends AbstractOystService
 
                 $product_less->__set('customizations', $this->prepareCustomizations($customizations));
                 $products_less[] = $product_less;
-
-                // Check preload, and update quantity
-                $load = (int)$request->getRequestItem('preload');
-                if ($load == 0 && ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
-                    if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, -(int)$quantity);
-                    }
-                }
             }
         }
 
@@ -425,11 +407,8 @@ class OneClickService extends AbstractOystService
 
             $oneClickNotifications = new OneClickNotifications();
             $oneClickNotifications->setShouldAskShipments(true);
-            $oneClickNotifications->setShouldAskStock(ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK'));
-            if (ConfigurationP::get('FC_OYST_SHOULD_AS_STOCK')) {
-                $oneClickNotifications->addEvent('order.stock.released');
-                $oneClickNotifications->addEvent('order.stock.book');
-            }
+            // Deprecated for v1.19
+            $oneClickNotifications->setShouldAskStock(false);
             $oneClickNotifications->addEvent('order.cart.estimate');
             $oneClickNotifications->setUrl($this->oyst->getNotifyUrl());
 

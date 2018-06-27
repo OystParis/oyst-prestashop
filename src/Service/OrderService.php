@@ -244,9 +244,9 @@ class OrderService extends AbstractOystService
             $custom_qty = 0;
             $product = new Product((int)$productInfo['productId']);
 
-            if ($product->advanced_stock_management == 0  && PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK')) {
-                StockAvailable::updateQuantity($productInfo['productId'], $productInfo['combinationId'], $productInfo['quantity']);
-            }
+            // if ($product->advanced_stock_management == 0  && PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK')) {
+            //     StockAvailable::updateQuantity($productInfo['productId'], $productInfo['combinationId'], $productInfo['quantity']);
+            // }
 
             if (!empty($productInfo['customizations'])) {
                 foreach ($productInfo['customizations'] as $customization) {

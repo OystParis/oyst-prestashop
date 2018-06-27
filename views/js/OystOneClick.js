@@ -46,7 +46,6 @@ function OystOneClick(url, productId, controller)
     this.idBtnAddToCart = '#add_to_cart';
     this.idBtnSmartBtn = '#add_to_cart button';
     this.preload = 1;
-    this.shouldAsStock = 0;
     this.errorText = 'There isn\'t enough product in stock.';
 
     this.setExportedCombinations = function (combinations) {
@@ -55,10 +54,6 @@ function OystOneClick(url, productId, controller)
 
     this.setPreload = function (preload) {
         this.preload = preload;
-    };
-
-    this.setShouldAskStock = function (shouldAsStock) {
-        this.shouldAsStock = shouldAsStock;
     };
 
     this.setStockManagement = function (stockManagement) {
@@ -273,27 +268,6 @@ function OystOneClick(url, productId, controller)
         if (typeof quantity === "undefined") {
             quantity = 1;
         }
-
-        // if (this.shouldAsStock) {
-        //     if ($('#quantityAvailable').length && parseInt($('#quantityAvailable').html()) < quantity) {
-        //         if (!!$.prototype.fancybox) {
-        //             $.fancybox.open([
-        //               {
-        //                 type: 'inline',
-        //                 autoScale: true,
-        //                 minHeight: 30,
-        //                 content: '<p class="fancybox-error">' + this.errorText + '</p>'
-        //               }
-        //             ], {
-        //               padding: 0
-        //             });
-        //             return;
-        //         } else {
-        //             alert(this.errorText);
-        //             return;
-        //         }
-        //     }
-        // }
 
         return {
             productId: this.productId,

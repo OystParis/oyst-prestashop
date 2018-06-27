@@ -188,19 +188,7 @@ class CartService extends AbstractOystService
                     )));
                 }
 
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
-                    if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, $item['product']['quantity']);
-                    }
-                }
-
                 $update_qty_result = $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
-
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
-                    if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, -$item['product']['quantity']);
-                    }
-                }
 
                 if (!$update_qty_result) {
                     header('HTTP/1.1 400 Bad request');

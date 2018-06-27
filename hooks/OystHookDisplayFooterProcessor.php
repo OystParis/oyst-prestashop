@@ -99,7 +99,6 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
             $assign['allowOosp'] = $product->isAvailableWhenOutOfStock((int)$product->out_of_stock);
             // $assign['positionBtn'] = Configuration::get('FC_OYST_POSITION_BTN_PRODUCT');
             // $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_SMART_BTN_PRODUCT');
-            $assign['shouldAsStock'] = Configuration::get('FC_OYST_SHOULD_AS_STOCK');
         }
 
         // Params global

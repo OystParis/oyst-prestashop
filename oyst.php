@@ -307,7 +307,6 @@ class Oyst extends FroggyPaymentModule
         // Params 1-Click advanced
         Configuration::updateValue('FC_OYST_DELAY', 15);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);
-        Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
         Configuration::updateValue('FC_OYST_ONLY_FOR_IP', "");
 

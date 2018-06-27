@@ -978,10 +978,6 @@
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_MANAGE_QUANTITY" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY} checked="checked"{/if} />
                                 </div>
-                                <label>{l s='Enable advanced stock' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="checkbox" class="form-control" name="FC_OYST_SHOULD_AS_STOCK" value="1"{if $oyst.FC_OYST_SHOULD_AS_STOCK} checked="checked"{/if} />
-                                </div>
                                 <label>{l s='Manage quantity for cart' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_MANAGE_QUANTITY_CART" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY_CART} checked="checked"{/if} />
@@ -1006,7 +1002,6 @@
                             {else}
                                 <input type="hidden" name="FC_OYST_OC_REDIRECT_CONF" value="{$oyst.FC_OYST_OC_REDIRECT_CONF|intval}"/>
                                 <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
-                                <input type="hidden" name="FC_OYST_SHOULD_AS_STOCK" value="{$oyst.FC_OYST_SHOULD_AS_STOCK|intval}"/>
                                 <input type="hidden" name="FC_OYST_MANAGE_QUANTITY_CART" value="{$oyst.FC_OYST_MANAGE_QUANTITY_CART|intval}"/>
                                 <div class="warn">
                                     <ul>

@@ -336,7 +336,9 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
         PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');
-        PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
+        if (PSConfiguration::hasKey('FC_OYST_SHOULD_AS_STOCK')) {
+            PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
+        }
         PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY_CART');
         PSConfiguration::deleteByName('FC_OYST_ONLY_FOR_IP');
         // Conf 1-Click restrictions

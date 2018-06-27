@@ -33,7 +33,6 @@
                 oyst.setAllowOosp({$allowOosp|intval});
                 oyst.setProductQuantity({$productQuantity|intval});
                 oyst.setStockManagement({$stockManagement|intval});
-                oyst.setShouldAskStock({$shouldAsStock|intval});
                 oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
             {/if}
             oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
