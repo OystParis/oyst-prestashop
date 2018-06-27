@@ -188,19 +188,7 @@ class CartService extends AbstractOystService
                     )));
                 }
 
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
-                    if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, $item['product']['quantity']);
-                    }
-                }
-
                 $update_qty_result = $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
-
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
-                    if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, -$item['product']['quantity']);
-                    }
-                }
 
                 if (!$update_qty_result) {
                     header('HTTP/1.1 400 Bad request');
@@ -311,6 +299,9 @@ class CartService extends AbstractOystService
 
         $type = OystCarrier::HOME_DELIVERY;
 
+        $oyst_business_days = PSConfiguration::get('FC_OYST_BUSINESS_DAYS');
+        $business_days = explode(',', $oyst_business_days);
+
         // Add carriers
         foreach ($carriersAvailables as $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
@@ -349,6 +340,19 @@ class CartService extends AbstractOystService
                     $delay_shipment = (int)$delay_shipment * 24;
                 } else {
                     $delay_shipment = $delay[(int)$carrier->grade];
+                }
+
+                if ($oyst_business_days) {
+                    $delay_current = new \DateTime("NOW");
+                    $delay_current->add(new \DateInterval("PT".$delay_shipment."H"));
+                    $day_of_week = (int)$delay_current->format('N');
+                    if (!in_array($day_of_week, $business_days)) {
+                        do {
+                            $delay_shipment += 24;
+                            $delay_current->add(new \DateInterval("PT24H"));
+                            $new_day_of_week = (int)$delay_current->format('N');
+                        } while (!in_array($new_day_of_week, $business_days));
+                    }
                 }
 
                 $oneClickShipment = new OneClickShipmentCatalogLess(
@@ -505,9 +509,15 @@ class CartService extends AbstractOystService
         }
 
         if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
-            require_once dirname(__FILE__).'/../../../giftonordermodule/Giftonorder.php';
             if ($data['context']['id_cart'] && (int)$data['context']['id_cart'] > 0) {
-                $giftInCart = \Giftonorder::getGiftsInCart($data['context']['id_cart']);
+                $sql = 'SELECT go.*
+                        FROM `'._DB_PREFIX_.'giftonorder_order` as go
+                        WHERE go.id_cart = '.(int)$data['context']['id_cart'];
+
+                $giftInCart = Db::getInstance()->ExecuteS($sql);
+                if (!$giftInCart) {
+                    $giftInCart = array();
+                }
                 if (count($giftInCart) > 0) {
                     foreach ($giftInCart as $gift) {
                         $idCombination = $gift['id_combination'];

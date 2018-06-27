@@ -81,7 +81,6 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
             'styles_custom' => $this->addButtonWrapperStyles(),
             'restriction_currencies' => $restriction_currencies,
             'restriction_languages' => $restriction_languages,
-            'shouldAsStock' => Configuration::get('FC_OYST_SHOULD_AS_STOCK'),
             'oyst_error' => $this->module->l(
                 'There isn\'t enough product in stock.',
                 'oysthookdisplayshoppingcartprocessor'
