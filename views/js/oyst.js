@@ -2,47 +2,39 @@
 
 window.__OYST__ = window.__OYST__ || {};
 
-window.__OYST__.getCartPageItems = () => {
+window.__OYST__.getCart = () => {
+    return 16;
     console.log('passage');
-    return 18;
-};
-
-function oystOneClick() {
     //If on product page, add product to cart
-    if ($('#product').length) {
+    if (typeof prestashop.page.page_name !== "undefined" && prestashop.page.page_name === 'product') {
         var params = $('#add-to-cart-or-refresh').serialize() + "&add=1&action=update";
 
-        $.ajax({
+        return $.ajax({
             type: "POST",
             url: prestashop.urls.pages.cart,
             data: params,
-            dataType: "json",
-            success: function (data) {
-                getIdCart();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-
-            }
+            dataType: "json"
+        }).done(function() {
+            console.log('product added to cart');
+            return getIdCart();
         });
     } else {
-        getIdCart();
+        return getIdCart();
     }
-}
+};
 
 function getIdCart() {
-    $.ajax({
+    return $.ajax({
         type: "GET",
         url: prestashop.urls.base_url+'module/oyst/ajax',
         data: {
             'ajax': true,
             'action':'get_id_cart'
         },
-        dataType: "json",
-        success: function (data) {
-            console.log(data);
-        },
-        error: function() {
-            console.log('Error :o');
-        }
+        dataType: "json"
+    }).done(function(data) {
+        console.log('return id_cart');
+        console.log(data['id_cart']);
+        return data['id_cart'];
     })
 }

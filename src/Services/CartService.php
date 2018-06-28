@@ -5,10 +5,12 @@ namespace Oyst\Services;
 use Address;
 use Carrier;
 use Cart;
+use Combination;
 use Context;
 use Country;
 use Currency;
 use Customer;
+use Db;
 use Exception;
 use Gender;
 use Language;
@@ -55,6 +57,7 @@ class CartService {
                 $response['ip'] = CustomerService::getInstance()->getLastIpFromIdCustomer($cart->id_customer);
 
                 //Customer
+                $response['user'] = array();
                 if (!empty($cart->id_customer)) {
                     $customer = new Customer($cart->id_customer);
                     if (Validate::isLoadedObject($customer)) {
@@ -199,6 +202,8 @@ class CartService {
                     'carriers_available' => $available_carriers,
                     'carrier_applied' => array(),
                 );
+
+                //Applied carrier
                 if (!empty($cart->id_carrier)) {
                     $selected_carrier_obj = new Carrier($cart->id_carrier, $this->id_lang);
                     if (Validate::isLoadedObject($selected_carrier_obj)) {
@@ -208,8 +213,9 @@ class CartService {
                             'delivery_delay' => $selected_carrier_obj->delay,
                         );
                     }
-
                 }
+
+                //Addresses
                 if (!empty($cart->id_address_delivery)) {
                     $address = new Address($cart->id_address_delivery);
                     if (Validate::isLoadedObject($address)) {
@@ -225,6 +231,9 @@ class CartService {
                     $address = new Address($cart->id_address_invoice);
                     if (Validate::isLoadedObject($address)) {
                         $response['billing']['address'] = $this->formatAddress($address);
+                        if (!empty($response['user'])) {
+                            $response['user']['phone_mobile'] = (!empty($response['billing']['address']['phone_mobile']) ? $response['billing']['address']['phone_mobile'] : $response['billing']['address']['phone']);
+                        }
                     }
                 }
 
@@ -295,7 +304,7 @@ class CartService {
         } else {
             $response['errors'][] = 'Bad id_cart';
         }
-        return array('checkout' => $response);
+        return $response;
     }
 
     /**
@@ -387,14 +396,31 @@ class CartService {
             $product_type = 'bundle';
         }
 
+        $attributes_variant = array();
+        if (!empty($item['id_product_attribute'])) {
+            $attributes = Db::getInstance()->executeS("SELECT al.`id_attribute`, al.`name` value_name, agl.`public_name` attribute_name 
+                FROM "._DB_PREFIX_."product_attribute_combination pac
+                INNER JOIN "._DB_PREFIX_."attribute a ON a.id_attribute = pac.id_attribute
+                INNER JOIN "._DB_PREFIX_."attribute_lang al ON (pac.id_attribute = al.id_attribute AND al.id_lang=".$this->id_lang.")
+                INNER JOIN "._DB_PREFIX_."attribute_group_lang agl ON (a.id_attribute_group = agl.id_attribute_group AND agl.id_lang=".$this->id_lang.")
+                WHERE pac.id_product_attribute=".$item['id_product_attribute']);
+
+            if (!empty($attributes)) {
+                foreach ($attributes as $attribute) {
+                    $attributes_variant[] = array(
+                        'code' => $attribute['id_attribute'],
+                        'label' => $attribute['attribute_name'].' : '.$attribute['value_name']
+                    );
+                }
+            }
+            $product_type = 'configurable';
+        }
+
         return array(
             'reference' => $item['id_product'].'-'.$item['id_product_attribute'],
             'reference_parent' => '',
             'reference_package' => (isset($item['reference_package']) ? $item['reference_package'] : ''),
-            'attribute_configurable' => array(
-                'code' => '',
-                'label' => '',
-            ),
+            'attributes_variant' => $attributes_variant,
             'quantity' => $item['cart_quantity'],
             'quantity_available ' => $item['quantity_available'],
             'quantity_minimal ' => $item['minimal_quantity'],
