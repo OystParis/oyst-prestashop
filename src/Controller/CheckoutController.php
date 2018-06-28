@@ -45,7 +45,7 @@ class CheckoutController extends AbstractOystController
     {
         $returned_errors = array();
         if (!empty($params['url']['id'])) {
-            if (!empty($params['data']['checkout'])) {
+            if (!empty($params['data'])) {
                 $cart = new Cart((int)$params['url']['id']);
                 if (Validate::isLoadedObject($cart)) {
                     $errors = [];
@@ -54,7 +54,7 @@ class CheckoutController extends AbstractOystController
                     $context->currency = new Currency($cart->id_currency);
                     $context->shop = new Shop($cart->id_shop);
 
-                    $data = $params['data']['checkout'];
+                    $data = $params['data'];
 
                     if (!empty($data['id_oyst'])) {
                         Oyst\Classes\Checkout::createOystCheckoutLink($cart->id, $data['id_oyst']);
