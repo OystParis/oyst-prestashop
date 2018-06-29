@@ -117,12 +117,12 @@ class OystHookDisplayFooterProductProcessor extends FroggyHookProcessor
         if (_PS_VERSION_ >= '1.6.0.0') {
             $this->context->controller->addJS(array(
                 $this->path.'views/js/OystOneClick.js',
-                trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
+                trim($this->module->getOneClickUrl(), '/'),
             ));
         } else {
             $this->smarty->assign(array(
                 'JSOystOneClick' => $this->path.'views/js/OystOneClick.js',
-                'JSOneClickUrl' => trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
+                'JSOneClickUrl' => trim($this->module->getOneClickUrl(), '/'),
             ));
         }
 

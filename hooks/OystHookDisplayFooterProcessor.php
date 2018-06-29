@@ -53,7 +53,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         // Manage url for 1-Click
         $shopUrl = trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/');
         $oneClickUrl = $shopUrl.'/modules/oyst/oneClick.php?key='.$token;
-        $JSOneClickUrl = trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js';
+        $JSOneClickUrl = trim($this->module->getOneClickUrl(), '/');
         $assign['btnOneClickState'] = true;
         $assign['displayBtnCart'] = $display_btn_cart;
 
