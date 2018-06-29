@@ -33,7 +33,6 @@ $(document).ready(function () {
         oyst.setAllowOosp(allowOosp);
         oyst.setProductQuantity(productQuantity);
         oyst.setStockManagement(stockManagement);
-        oyst.setShouldAskStock(shouldAsStock);
         oyst.setErrorText(oyst_error);
     }
     oyst.setIdBtnAddToCart(idBtnAddToCart);
