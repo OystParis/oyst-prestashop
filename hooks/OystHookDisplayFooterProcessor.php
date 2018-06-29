@@ -59,7 +59,9 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $JSConfButton = $this->path.'views/js/ConfButton.js';
         $shopUrl = trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/');
         $oneClickUrl = $shopUrl.'/modules/oyst/oneClick.php?key='.$token;
-        $JSOneClickUrl = trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js';
+        $JSOneClickUrl = trim($this->module->getOneClickUrl(), '/');
+        $assign['btnOneClickState'] = true;
+        $assign['displayBtnCart'] = $display_btn_cart;
 
         // Params specific for each page
         if ($controller != null && $display_btn_cart) {

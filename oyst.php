@@ -504,10 +504,10 @@ class Oyst extends FroggyPaymentModule
 
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:
-                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PROD);
+                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PROD).'/1click/script/script.min.js';
                 break;
             case \Oyst\Service\Configuration::API_ENV_SANDBOX:
-                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_SANDBOX);
+                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_SANDBOX).'/1click/script/script.min.js';
                 break;
             case \Oyst\Service\Configuration::API_ENV_CUSTOM:
                 $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_CUSTOM);
