@@ -39,7 +39,7 @@ class Oyst extends FroggyPaymentModule
 
         $this->author = 'Oyst';
         $this->displayName = $this->l('Oyst - FreePay and 1Click');
-        $this->description = $this->l('FreePay is a full service online payment solution entirely free: 0% commission, 0% installation fee, 0% subscription. With FreePay, eliminate your transaction costs, increase your margins.');
+        $this->description = $this->l('Oyst is an online shopping solution allowing users to buy in 1-click on any website, from any page (not only any more through the traditional “cart” page).');
         $this->module_key = 'b79be2b346400227a9c886c9239470e4';
         $this->is_eu_compatible = 1;
         $this->currencies = true;

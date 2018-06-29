@@ -167,12 +167,7 @@ function OystOneClickCart(url, controller)
         var params = {};
 
         params.controller = this.controller;
-        if (this.preload) {
-            params.preload = this.preload;
-            this.setPreload(0);
-        } else {
-            params.preload = this.preload;
-        }
+        params.preload = this.preload;
 
         params.labelCta = this.labelCta;
         params.oneClick = true;

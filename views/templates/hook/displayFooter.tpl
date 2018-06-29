@@ -20,41 +20,48 @@
 {if $oneClickActivated  && $btnOneClickState && $restriction_currencies && $restriction_languages && $enabledBtn}
     {if version_compare($smarty.const._PS_VERSION_,'1.6','<')}
         <script src="{$JSOystOneClick|escape:'html':'UTF-8'}"></script>
+        <script type="text/javascript">
+            $( document).ready(function () {
+                {if $displayBtnCart}
+                    var oyst = new OystOneClickCart({$oneClickUrl|json_encode}, "{$controller|escape:'html':'UTF-8'}");
+                    oyst.setLabelCta("{$oyst_label_cta|escape:'html':'UTF-8'}");
+                {else}
+                    var oyst = new OystOneClick({$oneClickUrl|json_encode}, {$product->id|json_encode}, "{$controller|escape:'html':'UTF-8'}");
+                    oyst.setExportedCombinations({$synchronizedCombination|json_encode});
+                    oyst.setAllowOosp({$allowOosp|intval});
+                    oyst.setProductQuantity({$productQuantity|intval});
+                    oyst.setStockManagement({$stockManagement|intval});
+                    oyst.setShouldAskStock({$shouldAsStock|intval});
+                    oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
+                {/if}
+                oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
+                oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
+                oyst.setSmartBtn({$smartBtn|intval});
+                oyst.setBorderBtn({$borderBtn|intval});
+                oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
+                oyst.setColorBtn("{$colorBtn|escape:'html':'UTF-8'}");
+                oyst.setWidthBtn("{$widthBtn|escape:'html':'UTF-8'}");
+                oyst.setHeightBtn("{$heightBtn|escape:'html':'UTF-8'}");
+                oyst.setMarginTopBtn("{$marginTopBtn|escape:'html':'UTF-8'}");
+                oyst.setMarginLeftBtn("{$marginLeftBtn|escape:'html':'UTF-8'}");
+                oyst.setMarginRightBtn("{$marginRightBtn|escape:'html':'UTF-8'}");
+                oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
+                oyst.prepareButton();
+
+                window.addEventListener('message', function (event) {
+                    if (event.data.type == 'ORDER_REQUEST') {
+                        oyst.setPreload(0);
+                    }
+                });
+
+                window.__OYST__ = window.__OYST__ || {};
+                window.__OYST__.getOneClickURL = function(callback) {
+                    oyst.requestOneCLick(callback);
+                };
+            });
+        </script>
         <script src="{$JSOneClickUrl|escape:'html':'UTF-8'}"></script>
     {/if}
-    <script type="text/javascript">
-        $( document).ready(function(){
-            {if $displayBtnCart}
-                var oyst = new OystOneClickCart({$oneClickUrl|json_encode}, "{$controller|escape:'html':'UTF-8'}");
-                oyst.setLabelCta("{$oyst_label_cta|escape:'html':'UTF-8'}");
-            {else}
-                var oyst = new OystOneClick({$oneClickUrl|json_encode}, {$product->id|json_encode}, "{$controller|escape:'html':'UTF-8'}");
-                oyst.setExportedCombinations({$synchronizedCombination|json_encode});
-                oyst.setAllowOosp({$allowOosp|intval});
-                oyst.setProductQuantity({$productQuantity|intval});
-                oyst.setStockManagement({$stockManagement|intval});
-                oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
-            {/if}
-            oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
-            oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
-            oyst.setSmartBtn({$smartBtn|intval});
-            oyst.setBorderBtn({$borderBtn|intval});
-            oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
-            oyst.setColorBtn("{$colorBtn|escape:'html':'UTF-8'}");
-            oyst.setWidthBtn("{$widthBtn|escape:'html':'UTF-8'}");
-            oyst.setHeightBtn("{$heightBtn|escape:'html':'UTF-8'}");
-            oyst.setMarginTopBtn("{$marginTopBtn|escape:'html':'UTF-8'}");
-            oyst.setMarginLeftBtn("{$marginLeftBtn|escape:'html':'UTF-8'}");
-            oyst.setMarginRightBtn("{$marginRightBtn|escape:'html':'UTF-8'}");
-            oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
-            oyst.prepareButton();
-
-            window.__OYST__ = window.__OYST__ || {};
-            window.__OYST__.getOneClickURL = function(callback) {
-                oyst.requestOneCLick(callback);
-            };
-        });
-    </script>
     {if $styles_custom}
         <style>
             {$styles_custom|escape:'html':'UTF-8'}

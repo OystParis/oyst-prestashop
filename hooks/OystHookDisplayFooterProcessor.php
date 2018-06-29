@@ -32,12 +32,15 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
 {
     public function run()
     {
-        $controller = Context::getContext()->controller->php_self;
-        $token = hash('sha256', Tools::jsonEncode(array(Configuration::get('FC_OYST_HASH_KEY'), _COOKIE_KEY_)));
+        $step = 0;
         $assign = array();
         $oyst = new Oyst();
         $display_btn_cart = $oyst->displayBtnCart();
-        $step = 0;
+        $restriction_languages = $this->restrictionsLanguages();
+        $restriction_currencies = $this->restrictionsCurrencies();
+        $controller = Context::getContext()->controller->php_self;
+        $oneClickActivated = (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE');
+        $token = hash('sha256', Tools::jsonEncode(array(Configuration::get('FC_OYST_HASH_KEY'), _COOKIE_KEY_)));
 
         if (Tools::getValue('step') != null) {
             $step = (int)Tools::getValue('step');
@@ -51,23 +54,24 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $suffix_conf = $this->getTypeBtn($controller, $step);
 
         // Manage url for 1-Click
+        $assign['btnOneClickState'] = true;
+        $assign['displayBtnCart'] = $display_btn_cart;
+        $JSConfButton = $this->path.'views/js/ConfButton.js';
         $shopUrl = trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/');
         $oneClickUrl = $shopUrl.'/modules/oyst/oneClick.php?key='.$token;
         $JSOneClickUrl = trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js';
-        $assign['btnOneClickState'] = true;
-        $assign['displayBtnCart'] = $display_btn_cart;
 
         // Params specific for each page
         if ($controller != null && $display_btn_cart) {
             $JSOystOneClick = $this->path.'views/js/OystOneClickCart.js';
 
-            $assign['oyst_label_cta'] = $this->module->l('Return shop.', 'oystHookdisplayfooterprocessor');
             $assign['btnOneClickState'] = true;
+            $assign['oyst_label_cta'] = $this->module->l('Return shop.', 'oystHookdisplayfooterprocessor');
 
             $products = Context::getContext()->cart->getProducts();
         } else {
-            $productRepository = new ProductRepository(Db::getInstance());
             $JSOystOneClick = $this->path.'views/js/OystOneClick.js';
+            $productRepository = new ProductRepository(Db::getInstance());
 
             $product = new Product(Tools::getValue('id_product'));
             if (!Validate::isLoadedObject($product)) {
@@ -78,44 +82,42 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
 
             $synchronizedCombination = array();
             foreach ($productCombinations as $combination) {
-                    $stockAvailable = new StockAvailable(
-                        StockAvailable::getStockAvailableIdByProductId(
-                            $product->id,
-                            $combination['id_product_attribute']
-                        )
-                    );
-                    $synchronizedCombination[$combination['id_product_attribute']] = array(
-                        'quantity' => $stockAvailable->quantity
-                    );
+                $stockAvailable = new StockAvailable(
+                    StockAvailable::getStockAvailableIdByProductId(
+                        $product->id,
+                        $combination['id_product_attribute']
+                    )
+                );
+                $synchronizedCombination[$combination['id_product_attribute']] = array(
+                    'quantity' => $stockAvailable->quantity
+                );
             }
 
             //require for load Out Of Stock Information (isAvailableWhenOutOfStock)
             $product->loadStockData();
 
-            $assign['btnOneClickState'] = $productRepository->getActive($product->id);
             $assign['product'] = $product;
-            $assign['productQuantity'] = StockAvailable::getQuantityAvailableByProduct($product->id);
             $assign['synchronizedCombination'] = $synchronizedCombination;
+            $assign['btnOneClickState'] = $productRepository->getActive($product->id);
+            $assign['productQuantity'] = StockAvailable::getQuantityAvailableByProduct($product->id);
             $assign['allowOosp'] = $product->isAvailableWhenOutOfStock((int)$product->out_of_stock);
-            // $assign['positionBtn'] = Configuration::get('FC_OYST_POSITION_BTN_PRODUCT');
-            // $assign['idSmartBtn'] = Configuration::get('FC_OYST_ID_SMART_BTN_PRODUCT');
         }
 
         // Params global
         $assign['oneClickUrl'] = $oneClickUrl;
         $assign['enabledBtn'] = Configuration::get('FC_OYST_BTN_'.$suffix_conf);
-        $assign['oneClickActivated'] = (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE');
+        $assign['oneClickActivated'] = $oneClickActivated;
         $assign['smartBtn'] = Configuration::get('FC_OYST_SMART_BTN');
         $assign['borderBtn'] = Configuration::get('FC_OYST_BORDER_BTN');
         $assign['themeBtn'] = Configuration::get('FC_OYST_THEME_BTN');
         $assign['colorBtn'] = Configuration::get('FC_OYST_COLOR_BTN');
-        $assign['restriction_currencies'] = $this->restrictionsCurrencies();
-        $assign['restriction_languages'] = $this->restrictionsLanguages();
+        $assign['restriction_currencies'] = $restriction_currencies;
+        $assign['restriction_languages'] = $restriction_languages;
         $assign['stockManagement'] = Configuration::get('PS_STOCK_MANAGEMENT');
         $assign['controller'] = $controller;
         $assign['styles_custom'] = $this->addButtonWrapperStyles();
         $assign['oyst_error'] = $this->module->l(
-            'There isn\'t enough product in stock.',
+            'There isnt enough product in stock.',
             'oystHookdisplayfooterprocessor'
         );
 
@@ -131,21 +133,27 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
 
         $this->smarty->assign($assign);
 
+        $this->context->controller->addCSS(array(
+            $this->path.'views/css/oyst.css',
+        ));
+
         if (_PS_VERSION_ >= '1.6.0.0') {
-            $this->context->controller->addJS(array(
-                $JSOystOneClick,
-                $JSOneClickUrl,
-            ));
+            if ($oneClickActivated  && $assign['btnOneClickState'] && $restriction_currencies && $restriction_languages && Configuration::get('FC_OYST_BTN_'.$suffix_conf)) {
+                Media::addJsDef(
+                    $assign
+                );
+                $this->context->controller->addJS(array(
+                    $JSOystOneClick,
+                    $JSConfButton,
+                    $JSOneClickUrl,
+                ));
+            }
         } else {
             $this->smarty->assign(array(
                 'JSOystOneClick' => $JSOystOneClick,
                 'JSOneClickUrl' => $JSOneClickUrl,
             ));
         }
-
-        $this->context->controller->addCSS(array(
-            $this->path.'views/css/oyst.css',
-        ));
 
         return $this->module->fcdisplay(__FILE__, 'displayFooter.tpl');
     }

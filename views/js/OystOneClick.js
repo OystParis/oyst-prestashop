@@ -284,12 +284,7 @@ function OystOneClick(url, productId, controller)
 
         params.controller = this.controller;
 
-        if (this.preload) {
-            params.preload = this.preload;
-            this.setPreload(0);
-        } else {
-            params.preload = this.preload;
-        }
+        params.preload = this.preload;
 
         params.oneClick = true;
         params.token = '{SuggestToAddSecurityToken}';
