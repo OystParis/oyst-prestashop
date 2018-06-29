@@ -17,17 +17,27 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-{if $oneClickActivated && $restriction_currencies && $restriction_languages && $btnCart && $controller == 'order'}
+{if $oneClickActivated  && $btnOneClickState && $restriction_currencies && $restriction_languages && $enabledBtn}
     {if version_compare($smarty.const._PS_VERSION_,'1.6','<')}
-        <script src="{$JSOystOneClickCart|escape:'html':'UTF-8'}"></script>
+        <script src="{$JSOystOneClick|escape:'html':'UTF-8'}"></script>
         <script src="{$JSOneClickUrl|escape:'html':'UTF-8'}"></script>
     {/if}
     <script type="text/javascript">
         $( document).ready(function(){
-            var oyst = new OystOneClickCart({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode}, "{$controller|escape:'html':'UTF-8'}");
+            {if $displayBtnCart}
+                var oyst = new OystOneClickCart({$oneClickUrl|json_encode}, "{$controller|escape:'html':'UTF-8'}");
+                oyst.setLabelCta("{$oyst_label_cta|escape:'html':'UTF-8'}");
+            {else}
+                var oyst = new OystOneClick({$oneClickUrl|json_encode}, {$product->id|json_encode}, "{$controller|escape:'html':'UTF-8'}");
+                oyst.setExportedCombinations({$synchronizedCombination|json_encode});
+                oyst.setAllowOosp({$allowOosp|intval});
+                oyst.setProductQuantity({$productQuantity|intval});
+                oyst.setStockManagement({$stockManagement|intval});
+                oyst.setShouldAskStock({$shouldAsStock|intval});
+                oyst.setErrorText("{$oyst_error|escape:'html':'UTF-8'}");
+            {/if}
             oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
             oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
-            oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
             oyst.setSmartBtn({$smartBtn|intval});
             oyst.setBorderBtn({$borderBtn|intval});
             oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
@@ -37,7 +47,7 @@
             oyst.setMarginTopBtn("{$marginTopBtn|escape:'html':'UTF-8'}");
             oyst.setMarginLeftBtn("{$marginLeftBtn|escape:'html':'UTF-8'}");
             oyst.setMarginRightBtn("{$marginRightBtn|escape:'html':'UTF-8'}");
-            oyst.setLabelCta("{$oyst_label_cta|escape:'html':'UTF-8'}");
+            oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
             oyst.prepareButton();
 
             window.__OYST__ = window.__OYST__ || {};
