@@ -1,40 +1,48 @@
 "use strict";
 
+let firstLoad = true;
+
 window.__OYST__ = window.__OYST__ || {};
 
-window.__OYST__.getCart = () => {
-    return 16;
-    console.log('passage');
-    //If on product page, add product to cart
-    if (typeof prestashop.page.page_name !== "undefined" && prestashop.page.page_name === 'product') {
-        var params = $('#add-to-cart-or-refresh').serialize() + "&add=1&action=update";
+window.__OYST__.getCart = async function() {
+    console.log('passage get cart oyst.js');
 
-        return $.ajax({
-            type: "POST",
-            url: prestashop.urls.pages.cart,
-            data: params,
-            dataType: "json"
-        }).done(function() {
-            console.log('product added to cart');
-            return getIdCart();
-        });
+    if (firstLoad) {
+        firstLoad = false;
     } else {
-        return getIdCart();
+        if (prestashop.page.page_name === 'product') {
+            await addProductToCart();
+        }
+        return getCartId();
     }
 };
+//arrow function
 
-function getIdCart() {
-    return $.ajax({
-        type: "GET",
-        url: prestashop.urls.base_url+'module/oyst/ajax',
-        data: {
-            'ajax': true,
-            'action':'get_id_cart'
-        },
-        dataType: "json"
-    }).done(function(data) {
-        console.log('return id_cart');
-        console.log(data['id_cart']);
-        return data['id_cart'];
-    })
+function addProductToCart()
+{
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest();
+        var url = prestashop.urls.pages.cart;
+        var params = $('#add-to-cart-or-refresh').serialize() + "&add=1&action=update";
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onload = () => {
+            //check status si != 200 => reject
+            resolve(xhr.responseText);
+        }
+        xhr.onerror = () => reject(new Error(`Received code ${xhr.status} from GET id cart`));
+        xhr.send(params);
+    });
+}
+
+function getCartId() {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", prestashop.urls.base_url + 'module/oyst/ajax?ajax=true&action=get_id_cart');
+        xhr.onload = () => {
+            resolve(xhr.responseText);
+        }
+        xhr.onerror = () => reject(new Error(`Received code ${xhr.status} from GET id cart`));
+        xhr.send();
+    });
 }
