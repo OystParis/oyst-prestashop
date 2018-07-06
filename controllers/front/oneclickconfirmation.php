@@ -79,6 +79,9 @@ class OystOneclickconfirmationModuleFrontController extends ModuleFrontControlle
             'id_order_formatted' => sprintf('#%06d', $this->id_order),
         ));
 
+        unset($this->context->cookie->oyst_key);
+        unset($this->context->cookie->oyst_id_cart);
+
         $this->setTemplate('oneclick-confirmation'.(version_compare(_PS_VERSION_, '1.6.0', '>=') ? '.bootstrap' : '').'.tpl');
     }
 }

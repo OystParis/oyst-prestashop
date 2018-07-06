@@ -40,7 +40,7 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
 
         // Get parameters
         $id_cart = (int)$this->context->cookie->oyst_id_cart;
-        $key = Tools::getValue('key');
+        $key = $this->context->cookie->oyst_key;
 
         if ($id_cart == 0 && Configuration::get('FC_OYST_HASH_KEY') != $key) {
             Tools::redirect('/');

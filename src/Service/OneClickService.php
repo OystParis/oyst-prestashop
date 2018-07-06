@@ -391,13 +391,12 @@ class OneClickService extends AbstractOystService
             );
 
             if ($labelCta && $labelCta != '' && $oyst->displayBtnCart($controller)) {
-                $glue = '&';
-                if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
-                    $glue = '?';
-                }
-                // $id_cart_url = Context::getContext()->cart->id;
+                // $glue = '&';
+                // if (ConfigurationP::get('PS_REWRITING_SETTINGS') == 1) {
+                //     $glue = '?';
+                // }
                 $url = Context::getContext()->link->getModuleLink('oyst', 'oneclickreturn');
-                $url .= $glue.'key='.ConfigurationP::get('FC_OYST_HASH_KEY');
+                $this->context->cookie->oyst_key = ConfigurationP::get('FC_OYST_HASH_KEY');
                 $this->context->cookie->oyst_id_cart = Context::getContext()->cart->id;
 
                 $oneClickCustomization = new OneClickCustomization();
@@ -412,6 +411,13 @@ class OneClickService extends AbstractOystService
             $oneClickNotifications->setShouldAskStock(false);
             $oneClickNotifications->addEvent('order.cart.estimate');
             $oneClickNotifications->setUrl($this->oyst->getNotifyUrl());
+
+            $this->logger->info(
+                sprintf(
+                    'New notification oneClickCustomization  [%s]',
+                    Tools::jsonEncode($oneClickCustomization ->toArray())
+                )
+            );
 
             $this->logger->info(
                 sprintf(
