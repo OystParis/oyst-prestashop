@@ -412,12 +412,14 @@ class OneClickService extends AbstractOystService
             $oneClickNotifications->addEvent('order.cart.estimate');
             $oneClickNotifications->setUrl($this->oyst->getNotifyUrl());
 
-            $this->logger->info(
-                sprintf(
-                    'New notification oneClickCustomization  [%s]',
-                    Tools::jsonEncode($oneClickCustomization ->toArray())
-                )
-            );
+            if ($oneClickCustomization) {
+                $this->logger->info(
+                    sprintf(
+                        'New notification oneClickCustomization  [%s]',
+                        Tools::jsonEncode($oneClickCustomization ->toArray())
+                    )
+                );
+            }
 
             $this->logger->info(
                 sprintf(
