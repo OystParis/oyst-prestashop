@@ -67,6 +67,9 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
             'shopUrl' => trim(Tools::getShopDomainSsl(true).__PS_BASE_URI__, '/'),
             'stockManagement' => Configuration::get('PS_STOCK_MANAGEMENT'),
             'oneClickActivated' => (int)Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
+            'idBtnAddToCart' => Configuration::get('FC_OYST_ID_BTN_CART'),
+            'idSmartBtn' => Configuration::get('FC_OYST_ID_SMART_BTN_CART'),
+            'positionBtn' => Configuration::get('FC_OYST_POSITION_BTN_CART'),
             'smartBtn' => Configuration::get('FC_OYST_SMART_BTN'),
             'borderBtn' => Configuration::get('FC_OYST_BORDER_BTN'),
             'themeBtn' => Configuration::get('FC_OYST_THEME_BTN'),
@@ -76,12 +79,10 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
             'marginTopBtn' => Configuration::get('FC_OYST_MARGIN_TOP_BTN_CART'),
             'marginLeftBtn' => Configuration::get('FC_OYST_MARGIN_LEFT_BTN_CART'),
             'marginRightBtn' => Configuration::get('FC_OYST_MARGIN_RIGHT_BTN_CART'),
-            'idBtnCart' => Configuration::get('FC_OYST_ID_BTN_CART'),
             'btnCart' => Configuration::get('FC_OYST_BTN_CART'),
             'styles_custom' => $this->addButtonWrapperStyles(),
             'restriction_currencies' => $restriction_currencies,
             'restriction_languages' => $restriction_languages,
-            'shouldAsStock' => Configuration::get('FC_OYST_SHOULD_AS_STOCK'),
             'oyst_error' => $this->module->l(
                 'There isn\'t enough product in stock.',
                 'oysthookdisplayshoppingcartprocessor'
@@ -93,12 +94,12 @@ class OystHookDisplayShoppingCartProcessor extends FroggyHookProcessor
         if (_PS_VERSION_ >= '1.6.0.0') {
             $this->context->controller->addJS(array(
                 $this->path.'views/js/OystOneClickCart.js',
-                trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
+                trim($this->module->getOneClickUrl(), '/'),
             ));
         } else {
             $this->smarty->assign(array(
                 'JSOystOneClickCart' => $this->path.'views/js/OystOneClickCart.js',
-                'JSOneClickUrl' => trim($this->module->getOneClickUrl(), '/').'/1click/script/script.min.js',
+                'JSOneClickUrl' => trim($this->module->getOneClickUrl(), '/'),
             ));
         }
 
