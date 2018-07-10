@@ -193,6 +193,8 @@ class CartService {
                             'label' => $carrier_obj->name,
                             'reference' => $carrier_obj->id_reference,
                             'delivery_delay' => $carrier_obj->delay,
+                            'amount_tax_incl' => $cart->getCarrierCost($id_carrier, true),
+                            'amount_tax_excl' => $cart->getCarrierCost($id_carrier, false),
                         );
                     }
                 }
@@ -211,6 +213,8 @@ class CartService {
                             'label' => $selected_carrier_obj->name,
                             'reference' => $selected_carrier_obj->id_reference,
                             'delivery_delay' => $selected_carrier_obj->delay,
+                            'amount_tax_incl' => $cart->getCarrierCost($cart->id_carrier, true),
+                            'amount_tax_excl' => $cart->getCarrierCost($cart->id_carrier, false),
                         );
                     }
                 }
@@ -249,7 +253,6 @@ class CartService {
                 }
 
                 //Totals
-
                 $response['totals'] = array(
                     'tax_incl' => array(
                         'total_items' => $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS),
@@ -418,8 +421,8 @@ class CartService {
 
         return array(
             'reference' => $item['id_product'].'-'.$item['id_product_attribute'],
-            'reference_parent' => '',
-            'reference_package' => (isset($item['reference_package']) ? $item['reference_package'] : ''),
+            'internal_reference' => '',
+            //'reference_package' => (isset($item['reference_package']) ? $item['reference_package'] : ''),
             'attributes_variant' => $attributes_variant,
             'quantity' => $item['cart_quantity'],
             'quantity_available' => $item['quantity_available'],
@@ -437,7 +440,6 @@ class CartService {
                 'without_discount_tax_incl' => $price_without_discount_tax_incl,
                 'total_tax_excl' => $item['total'],
                 'total_tax_incl' => $item['total_wt'],
-                'discount_tax_incl' => $price_without_discount_tax_incl-$item['price_wt'],
             ),
             'width' => $item['width'],
             'height' => $item['height'],
@@ -446,6 +448,22 @@ class CartService {
             'tax_rate' => $item['rate'],
             'tax_name' => $item['tax_name'],
             'image' => $image,
+            'user_input' => array(
+//                array(
+//                    'key' => '',
+//                    'value' => '',
+//                ),
+            ),
+            'oyst_display' => 'normal',
+            'discounts' => array(
+//                array(
+//                    'id' => 0,
+//                    'label' => '',
+//                    'amount_tax_incl' => 0,
+//                    'amount_tax_excl' => 0,
+//                ),
+            ),
+            'child_items' => array()
         );
     }
 }
