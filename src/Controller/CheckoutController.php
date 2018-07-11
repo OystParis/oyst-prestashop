@@ -317,7 +317,7 @@ class CheckoutController extends AbstractOystController
 
         $cart = new Cart((int)$params['url']['id']);
         if (Validate::isLoadedObject($cart)) {
-            $notification = Notification::getNotificationByOystOrderId($params['data']['id_oyst_order']);
+            $notification = Notification::getNotificationByOystId($params['data']['id_oyst_order']);
 
             if ($notification->isAlreadyFinished()) {
                 $this->respondError(400, 'Order already created');
