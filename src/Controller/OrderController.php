@@ -19,7 +19,7 @@ class OrderController extends AbstractOystController
     public function getOrder($params)
     {
         if (!empty($params['url']['id'])) {
-            $id_order = Notification::getOrderIdByOystOrderId($params['url']['id']);
+            $id_order = Notification::getOrderIdByOystId($params['url']['id']);
 
             $response = OrderService::getInstance()->getOrder($id_order);
             if (empty($response['errors'])) {
@@ -35,7 +35,7 @@ class OrderController extends AbstractOystController
     public function updateOrder($params)
     {
         if (!empty($params['url']['id'])) {
-            $id_order = Notification::getOrderIdByOystOrderId($params['url']['id']);
+            $id_order = Notification::getOrderIdByOystId($params['url']['id']);
             $order = new Order($id_order);
             if (Validate::isLoadedObject($order)) {
                 $result = array();
