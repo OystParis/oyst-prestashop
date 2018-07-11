@@ -56,8 +56,16 @@ class CheckoutController extends AbstractOystController
 
                     $data = $params['data'];
 
-                    if (!empty($data['id_oyst'])) {
-                        Oyst\Classes\Checkout::createOystCheckoutLink($cart->id, $data['id_oyst']);
+                    if (!empty($data['id_oyst']) && !Notification::cartLinkIsAlreadyDone($cart->id)) {
+                        $notification = new Notification();
+                        $notification->cart_id = $cart->id;
+                        $notification->oyst_id = $data['id_oyst'];
+                        $notification->status = Notification::WAITING_STATUS;
+                        try {
+                            $notification->save();
+                        } catch (Exception $e) {
+                            //Error on notification creation
+                        }
                     }
                     //Products
                     if (!empty($data['items'])) {
