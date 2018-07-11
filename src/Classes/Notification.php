@@ -9,7 +9,8 @@ use ObjectModel;
 class Notification extends ObjectModel
 {
     public $id_notification;
-    public $oyst_order_id;
+    public $oyst_id;
+    public $cart_id;
     public $order_id;
     public $status;
     public $date_add;
@@ -17,19 +18,27 @@ class Notification extends ObjectModel
 
     const START_STATUS = 'start';
     const END_STATUS = 'finished';
+    const WAITING_STATUS = 'waiting';
 
+    /**
+     * @var array
+     */
     public static $definition = array(
         'table' => 'oyst_notification',
         'primary' => 'id_notification',
         'fields' => array(
-            'oyst_order_id' =>  array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true),
-            'order_id' =>       array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),
-            'status' =>         array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true),
-            'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
-            'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
+            'oyst_id' =>    array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true),
+            'cart_id' =>    array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),
+            'order_id' =>   array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),
+            'status' =>     array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true),
+            'date_add' =>   array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
+            'date_upd' =>   array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
         ),
     );
 
+    /**
+     * @return bool
+     */
     public function start()
     {
         $this->status = self::START_STATUS;
@@ -44,6 +53,10 @@ class Notification extends ObjectModel
         return $res;
     }
 
+    /**
+     * @param $id_order
+     * @return bool
+     */
     public function complete($id_order)
     {
         $this->status = self::END_STATUS;
@@ -58,50 +71,90 @@ class Notification extends ObjectModel
         return $res;
     }
 
+    /**
+     * @return bool
+     */
     public function isAlreadyStarted()
     {
         return !empty($this->status) && $this->status == self::START_STATUS;
     }
 
+    /**
+     * @return bool
+     */
     public function isAlreadyFinished()
     {
         return !empty($this->status) && $this->status == self::END_STATUS;
     }
 
-    public static function getNotificationByOystOrderId($oyst_order_id)
+    public static function cartLinkIsAlreadyDone($id_cart)
+    {
+        return (self::getOystIdByCartId($id_cart) !== '');
+    }
+
+    /**
+     * @param $oyst_id
+     * @return null|Notification
+     */
+    public static function getNotificationByOystId($oyst_id)
     {
         $id_notification = Db::getInstance()->getValue("SELECT `id_notification` 
             FROM `"._DB_PREFIX_."oyst_notification` 
-            WHERE `oyst_order_id` = '".$oyst_order_id."' 
+            WHERE `oyst_id` = '".$oyst_id."' 
             ORDER BY `id_notification` DESC");
 
         $notification = null;
         if (empty($id_notification)) {
             $notification = new Notification();
-            $notification->oyst_order_id = $oyst_order_id;
+            $notification->oyst_id = $oyst_id;
         } else {
             $notification = new Notification($id_notification);
         }
         return $notification;
     }
 
-    public static function getOystOrderIdByOrderId($id_order) {
-        $oyst_order_id = Db::getInstance()->getValue("SELECT `oyst_order_id` 
+    /**
+     * @param $id_order
+     * @return string
+     */
+    public static function getOystIdByOrderId($id_order) {
+        $oyst_id = Db::getInstance()->getValue("SELECT `oyst_id` 
             FROM `"._DB_PREFIX_."oyst_notification` 
             WHERE `order_id` = ".$id_order." 
             ORDER BY `id_notification` DESC");
 
-        if (!empty($oyst_order_id)) {
-            return $oyst_order_id;
+        if (!empty($oyst_id)) {
+            return $oyst_id;
         } else {
-            return 0;
+            return '';
         }
     }
 
-    public static function getOrderIdByOystOrderId($id_order_oyst) {
+    /**
+     * @param $id_cart
+     * @return string
+     */
+    public static function getOystIdByCartId($id_cart) {
+        $oyst_id = Db::getInstance()->getValue("SELECT `oyst_id` 
+            FROM `"._DB_PREFIX_."oyst_notification` 
+            WHERE `cart_id` = ".$id_cart." 
+            ORDER BY `id_notification` DESC");
+
+        if (!empty($oyst_id)) {
+            return $oyst_id;
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * @param $id_oyst
+     * @return int
+     */
+    public static function getOrderIdByOystId($id_oyst) {
         $order_id = Db::getInstance()->getValue("SELECT `order_id` 
             FROM `"._DB_PREFIX_."oyst_notification` 
-            WHERE `oyst_order_id` = '".$id_order_oyst."' 
+            WHERE `oyst_id` = '".$id_oyst."' 
             ORDER BY `id_notification` DESC");
 
         if (!empty($order_id)) {

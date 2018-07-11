@@ -23,7 +23,6 @@ namespace Oyst\Classes;
 
 use Db;
 use Configuration;
-use OrderState;
 use Tools;
 
 class InstallManager
@@ -51,7 +50,6 @@ class InstallManager
     {
         $state = true;
         $state &= $this->createNotificationTable();
-        $state &= $this->createCheckoutTable();
         $state &= $this->createCustomerTable();
         $state &= $this->updateConstants();
 
@@ -83,7 +81,6 @@ class InstallManager
     public function uninstall()
     {
         $this->dropNotificationTable();
-        $this->dropCheckoutTable();
         $this->dropCustomerTable();
         $this->removeConfiguration();
     }
@@ -106,28 +103,13 @@ class InstallManager
         $query = "
             CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_notification` (
               `id_notification` int(11) NOT NULL AUTO_INCREMENT,
-              `oyst_order_id` varchar(255) NOT NULL,
+              `oyst_id` varchar(255) NOT NULL,
+              `cart_id` int(11) DEFAULT NULL,
               `order_id` int(11) DEFAULT NULL,
               `status` varchar(255) NOT NULL,
               `date_add` datetime NOT NULL,
               `date_upd` datetime NOT NULL,
               PRIMARY KEY (`id_notification`)
-            ) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8mb4;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
-    public function createCheckoutTable()
-    {
-        $query = "
-            CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."oyst_checkout` (
-                `id_cart` int(11) NOT NULL,
-                `oyst_cart_id` int(11) NOT NULL,
-                PRIMARY KEY (`id_cart`,`oyst_cart_id`)
             ) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8mb4;
         ";
 
@@ -157,18 +139,6 @@ class InstallManager
     {
         $query = "
             DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_notification;
-        ";
-
-        return $this->db->execute($query);
-    }
-
-    /**
-     * @return bool
-     */
-    public function dropCheckoutTable()
-    {
-        $query = "
-            DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_checkout;
         ";
 
         return $this->db->execute($query);
