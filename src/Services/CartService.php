@@ -15,7 +15,7 @@ use Exception;
 use Gender;
 use Language;
 use Message;
-use Oyst\Classes\Checkout;
+use Oyst\Classes\Notification;
 use Pack;
 use Product;
 use Shop;
@@ -53,7 +53,7 @@ class CartService {
             try {
                 $context = Context::getContext();
 
-                $response['id_oyst'] = Checkout::getIdOystFromIdCart($cart->id);
+                $response['id_oyst'] = Notification::getOystIdByCartId($cart->id);
                 $response['ip'] = CustomerService::getInstance()->getLastIpFromIdCustomer($cart->id_customer);
 
                 //Customer

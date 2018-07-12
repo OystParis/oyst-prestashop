@@ -2,8 +2,12 @@
 
 namespace Oyst\Controller;
 
+use Cart;
+use Configuration;
+use Exception;
 use Order;
 use OrderSlip;
+use Oyst;
 use Oyst\Classes\Notification;
 use Oyst\Services\OrderService;
 use Validate;
@@ -76,6 +80,53 @@ class OrderController extends AbstractOystController
             }
         } else {
             $this->respondError(400, 'id_order is missing');
+        }
+    }
+
+    public function createOrder($params)
+    {
+        if (!empty($params['url']['id'])) {
+            $notification = Notification::getNotificationByOystId($params['url']['id']);
+            if (empty($notification)) {
+                $this->respondError(400, 'Notification not found');
+            } else {
+                if ($notification->isAlreadyStarted()) {
+                    $this->respondError(400, 'Order already on creation');
+                } elseif ($notification->isAlreadyFinished()) {
+                    $this->respondError(400, 'Order already created');
+                } else {
+                    $cart = new Cart($notification->cart_id);
+                    if (Validate::isLoadedObject($cart)) {
+                        $notification->start();
+                        $oyst = new Oyst();
+                        $total = (float)($cart->getOrderTotal(true, Cart::BOTH));
+                        try {
+                            if ($oyst->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), $total, $oyst->displayName, NULL, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
+                                $notification->complete($oyst->currentOrder);
+                                $this->respondAsJson('Order created with id : '.$oyst->currentOrder);
+                            } else {
+                                $this->respondError(400, 'Order creation failed');
+                            }
+                        } catch(Exception $e) {
+                            $this->logger->error('Failed to transform cart '.$cart->id.' into order (Exception : '.$e->getMessage().')');
+                            $this->respondError(500, 'Exception on order creation : '.$e->getMessage());
+                        }
+                    } else {
+                        $this->respondError(400, 'Bad id_cart');
+                    }
+                }
+            }
+        } else {
+            $this->respondError(400, 'id_order is missing');
+        }
+    }
+
+    public function createOrderFromCart($params)
+    {
+        if (!empty($params['data']['id_cart'])) {
+
+        } else {
+            $this->respondError(400, 'id_cart is missing');
         }
     }
 }
