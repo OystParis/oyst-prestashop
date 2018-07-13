@@ -45,22 +45,18 @@ class OystOneclickconfirmationModuleFrontController extends ModuleFrontControlle
     {
         parent::init();
 
-        $this->id_cart = (int)(Tools::getValue('id_cart', 0));
+        $this->id_cart = (int)$this->context->cookie->oyst_id_cart;
 
         $redirectLink = 'index.php?controller=history';
 
         $this->id_module = (int)(Tools::getValue('id_module', 0));
         $this->id_order = Order::getOrderByCartId((int)($this->id_cart));
-        $this->secure_key = Tools::getValue('key', false);
         $order = new Order((int)($this->id_order));
-        if (!$this->id_order || !$this->id_module || !$this->secure_key || empty($this->secure_key)) {
+        if (!$this->id_order || !$this->id_module || !$this->context->customer->id) {
             Tools::redirect($redirectLink.(Tools::isSubmit('slowvalidation') ? '&slowvalidation' : ''));
         }
         $this->reference = $order->reference;
-        if (!Validate::isLoadedObject($order) ||
-            $order->id_customer != $this->context->customer->id ||
-            $this->secure_key != $order->secure_key
-        ) {
+        if (!Validate::isLoadedObject($order) || $order->id_customer != $this->context->customer->id) {
             Tools::redirect($redirectLink);
         }
         $module = Module::getInstanceById((int)($this->id_module));
@@ -83,6 +79,9 @@ class OystOneclickconfirmationModuleFrontController extends ModuleFrontControlle
             'id_order_formatted' => sprintf('#%06d', $this->id_order),
         ));
 
-        $this->setTemplate('oneclick-confirmation'.(version_compare(_PS_VERSION_, '1.6.0') ? '.bootstrap' : '').'.tpl');
+        unset($this->context->cookie->oyst_key);
+        unset($this->context->cookie->oyst_id_cart);
+
+        $this->setTemplate('oneclick-confirmation'.(version_compare(_PS_VERSION_, '1.6.0', '>=') ? '.bootstrap' : '').'.tpl');
     }
 }

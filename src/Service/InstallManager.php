@@ -244,6 +244,9 @@ class InstallManager
         PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_ONECLICK);
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_URL_CUSTOM);
         PSConfiguration::deleteByName(Configuration::API_ENV_ONECLICK);
+        PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_PROD);
+        PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_SANDBOX);
+        PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_CUSTOM);
         // Conf custom 1-Click global
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
         PSConfiguration::deleteByName('FC_OYST_BORDER_BTN');
@@ -312,6 +315,16 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_ID_BTN_PAYMENT');
         PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_PAYMENT');
         PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_PAYMENT');
+        // Conf 1-Click custom btn addr
+        PSConfiguration::deleteByName('FC_OYST_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_WIDTH_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_HEIGHT_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_TOP_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_LEFT_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_MARGIN_RIGHT_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_ID_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_ID_SMART_BTN_ADDR');
+        PSConfiguration::deleteByName('FC_OYST_POSITION_BTN_ADDR');
         // Conf 1-Click carriers
         PSConfiguration::deleteByName('FC_OYST_SHIPMENT_DEFAULT');
         PSConfiguration::deleteByName('OYST_ONE_CLICK_CARRIER');
@@ -336,7 +349,9 @@ class InstallManager
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
         PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');
-        PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
+        if (PSConfiguration::hasKey('FC_OYST_SHOULD_AS_STOCK')) {
+            PSConfiguration::deleteByName('FC_OYST_SHOULD_AS_STOCK');
+        }
         PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY_CART');
         PSConfiguration::deleteByName('FC_OYST_ONLY_FOR_IP');
         // Conf 1-Click restrictions

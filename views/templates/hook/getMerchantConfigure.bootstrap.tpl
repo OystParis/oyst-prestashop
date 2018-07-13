@@ -318,6 +318,12 @@
                                         <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                                     </div>
                                 </div>
+                                <div class="form-group clearfix env custom" style="display: none;">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='Endpoint Modal Custom' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7">
+                                        <input type="text" id="OYST_ONECLICKMODAL_URL_CUSTOM" name="OYST_ONECLICKMODAL_URL_CUSTOM" value="{$oyst.OYST_ONECLICKMODAL_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-lg-3">{l s='State payment' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7">
@@ -1047,22 +1053,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Enable advanced stock' mod='oyst'}</label>
-                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                            <span class="switch prestashop-switch fixed-width-lg">
-                                                <input type="radio" name="FC_OYST_SHOULD_AS_STOCK" id="FC_OYST_SHOULD_AS_STOCK_ON" value="1" {if $oyst.FC_OYST_SHOULD_AS_STOCK == 1} checked="checked"{/if}>
-                                                <label for="FC_OYST_SHOULD_AS_STOCK_ON" class="radioCheck">
-                                                    {l s='Yes' mod='oyst'}
-                                                </label>
-                                                <input type="radio" name="FC_OYST_SHOULD_AS_STOCK" id="FC_OYST_SHOULD_AS_STOCK_OFF" value="0" {if $oyst.FC_OYST_SHOULD_AS_STOCK == 0} checked="checked"{/if}>
-                                                <label for="FC_OYST_SHOULD_AS_STOCK_OFF" class="radioCheck">
-                                                    {l s='No' mod='oyst'}
-                                                </label>
-                                                <a class="slide-button btn"></a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Manage quantity for cart' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
                                             <span class="switch prestashop-switch fixed-width-lg">
@@ -1101,7 +1091,6 @@
                                 {else}
                                     <input type="hidden" name="FC_OYST_OC_REDIRECT_CONF" value="{$oyst.FC_OYST_OC_REDIRECT_CONF|intval}"/>
                                     <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
-                                    <input type="hidden" name="FC_OYST_SHOULD_AS_STOCK" value="{$oyst.FC_OYST_SHOULD_AS_STOCK|intval}"/>
                                     <input type="hidden" name="FC_OYST_MANAGE_QUANTITY_CART" value="{$oyst.FC_OYST_MANAGE_QUANTITY_CART|intval}"/>
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>

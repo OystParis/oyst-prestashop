@@ -32,14 +32,14 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.18.0';
+        $this->version = '1.19.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
 
         $this->author = 'Oyst';
-        $this->displayName = $this->l('Oyst - FreePay and 1Click');
-        $this->description = $this->l('FreePay is a full service online payment solution entirely free: 0% commission, 0% installation fee, 0% subscription. With FreePay, eliminate your transaction costs, increase your margins.');
+        $this->displayName = $this->l('Oyst - 1Click');
+        $this->description = $this->l('Oyst is an online shopping solution allowing users to buy in 1-click on any website, from any page (not only any more through the traditional “cart” page).');
         $this->module_key = 'b79be2b346400227a9c886c9239470e4';
         $this->is_eu_compatible = 1;
         $this->currencies = true;
@@ -307,7 +307,6 @@ class Oyst extends FroggyPaymentModule
         // Params 1-Click advanced
         Configuration::updateValue('FC_OYST_DELAY', 15);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);
-        Configuration::updateValue('FC_OYST_SHOULD_AS_STOCK', 1);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
         Configuration::updateValue('FC_OYST_ONLY_FOR_IP', "");
 
@@ -505,10 +504,10 @@ class Oyst extends FroggyPaymentModule
 
         switch ($env) {
             case \Oyst\Service\Configuration::API_ENV_PROD:
-                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PROD);
+                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_PROD).'/1click/script/script.min.js';
                 break;
             case \Oyst\Service\Configuration::API_ENV_SANDBOX:
-                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_SANDBOX);
+                $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_SANDBOX).'/1click/script/script.min.js';
                 break;
             case \Oyst\Service\Configuration::API_ENV_CUSTOM:
                 $oneClickUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_URL_CUSTOM);
@@ -516,6 +515,29 @@ class Oyst extends FroggyPaymentModule
         }
 
         return $oneClickUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOneClickModalUrl()
+    {
+        $oneClickModalUrl = null;
+        $env = Tools::strtolower($this->getOneClickEnvironment());
+
+        switch ($env) {
+            case \Oyst\Service\Configuration::API_ENV_PROD:
+                $oneClickModalUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_MODAL_URL_PROD);
+                break;
+            case \Oyst\Service\Configuration::API_ENV_SANDBOX:
+                $oneClickModalUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_MODAL_URL_SANDBOX);
+                break;
+            case \Oyst\Service\Configuration::API_ENV_CUSTOM:
+                $oneClickModalUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_MODAL_URL_CUSTOM);
+                break;
+        }
+
+        return $oneClickModalUrl;
     }
 
     /**

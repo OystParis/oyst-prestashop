@@ -1,6 +1,6 @@
 {
     "tab": "payments_gateways",
-    "version": "1.18.0",
+    "version": "1.19.0",
     "need_instance": 0,
 
     "hooks": {
@@ -49,6 +49,10 @@
         "OYST_ONECLICK_URL_PROD": "https://cdn.oyst.com",
         "OYST_ONECLICK_URL_SANDBOX": "https://cdn.sandbox.oyst.eu",
         "OYST_ONECLICK_URL_CUSTOM": "",
+
+        "OYST_ONECLICKMODAL_URL_PROD": "https://oneclick.oyst.com",
+        "OYST_ONECLICKMODAL_URL_SANDBOX": "https://oneclick.sandbox.oyst.eu",
+        "OYST_ONECLICKMODAL_URL_CUSTOM": "",
 
         "FC_OYST_REDIRECT_SUCCESS": "ORDER_CONFIRMATION",
         "FC_OYST_REDIRECT_ERROR": "PAYMENT_ERROR",

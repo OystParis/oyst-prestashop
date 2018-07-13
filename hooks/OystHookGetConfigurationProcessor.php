@@ -114,7 +114,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_DELAY'                   => 'int',
         'FC_OYST_BUSINESS_DAYS'           => array('type' => 'multiple', 'field' => 'oyst_days'),
         'FC_OYST_LANG'                    => array('type' => 'multiple', 'field' => 'oyst_lang'),
-        'FC_OYST_SHOULD_AS_STOCK'         => 'int',
         'FC_OYST_MANAGE_QUANTITY'         => 'int',
         'FC_OYST_MANAGE_QUANTITY_CART'    => 'int',
         'FC_OYST_ONLY_FOR_IP'             => 'string',
@@ -131,6 +130,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         OystConfiguration::API_ENV_ONECLICK => 'string',
         OystConfiguration::ONE_CLICK_FEATURE_STATE => 'int',
         OystConfiguration::ONE_CLICK_URL_CUSTOM => 'string',
+        OystConfiguration::ONE_CLICK_MODAL_URL_CUSTOM => 'string',
     );
 
     /** @var array  */

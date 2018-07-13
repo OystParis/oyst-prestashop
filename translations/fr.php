@@ -2,6 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{oyst}prestashop>oyst_9dc8e75bbfc22913d5aa821f8a0b6b48'] = 'Oyst - 1Click';
+$_MODULE['<{oyst}prestashop>oyst_f02ec3a64585faf1432e28cbad8c2cb5'] = 'Oyst permet d’acheter en 1-Click depuis n’importe quelle page de n’importe quel site marchand. Boostez votre taux de conversion jusqu’à x2 sur desktop et x5 sur mobile';
 $_MODULE['<{oyst}prestashop>paymentnotification_59a70e9e7e2b51dbde1027c899d1dd40'] = 'Le prix payé ne correspond au montant du panier.';
 $_MODULE['<{oyst}prestashop>paymentnotification_572f9af7615560af2cba038cc1948287'] = 'Le panier a été modifé, veuillez réessayez.';
 $_MODULE['<{oyst}prestashop>paymentnotification_9c688609b66dcae41c6965d4b97cefb6'] = 'Paiement annulé pour suspicion de fraude';
@@ -155,6 +157,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_4d587804f19493bc89149
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_31159ba8801cef7a7cd6b90eb612c7d0'] = 'Clé API 1-Click Sandbox';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b16e39a55f1dc4b29ab207c121c4b5f1'] = 'Clé API 1-Click Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_b836c9117eff423bbcc953c713249491'] = 'URL MODAL Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_a967b69d22760a1a8ca92af4fa4b7122'] = 'Smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_9f6a3bc372bffcee32c103d45bd3bfa4'] = 'Bords arrondis';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
@@ -197,7 +200,6 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e59278675b8f1e052b22b
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_ea29387282467c818e51540fc1aca0ba'] = 'Url de confirmation pour le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_29ef41c7619b3b7056a3af9068ab4567'] = 'Activer gestion des stocks';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e4a9deb0f5a00aecea80e5623c1f717a'] = 'Activé uniquement pour l\'ip';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_912e8c6b462d9adc724895ffaa09255b'] = 'Adresses IPs séparées par une virgule';
@@ -258,6 +260,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_4d587804f19493bc8914920767d83ea
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_31159ba8801cef7a7cd6b90eb612c7d0'] = 'Clé API 1-Click Sandbox';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_b16e39a55f1dc4b29ab207c121c4b5f1'] = 'Clé API 1-Click Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e984d0bd7cb4da547ed2e344619208ca'] = 'URL CDN Personnalisée';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_b836c9117eff423bbcc953c713249491'] = 'URL MODAL Personnalisée';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_a967b69d22760a1a8ca92af4fa4b7122'] = 'Smart button';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_9f6a3bc372bffcee32c103d45bd3bfa4'] = 'Bords arrondis';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_2fe0f0e99f85ddcee81ff4acef0359d4'] = 'Thème du bouton 1-Click';
@@ -295,7 +298,6 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_e59278675b8f1e052b22b7e5e7d65da
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_ea29387282467c818e51540fc1aca0ba'] = 'Url de confirmation pour le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_29ef41c7619b3b7056a3af9068ab4567'] = 'Activer gestion des stocks';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e4a9deb0f5a00aecea80e5623c1f717a'] = 'Activé uniquement pour l\'ip';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c770d8e0d1d1943ce239c64dbd6acc20'] = 'Ajouter mon IP';

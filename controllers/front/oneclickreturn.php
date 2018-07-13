@@ -39,8 +39,13 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         parent::initContent();
 
         // Get parameters
-        $id_cart = (int)Tools::getValue('id_cart');
-        $key = Tools::getValue('key');
+        $id_cart = (int)$this->context->cookie->oyst_id_cart;
+        $key = $this->context->cookie->oyst_key;
+
+        if ($id_cart == 0 && Configuration::get('FC_OYST_HASH_KEY') != $key) {
+            Tools::redirect('/');
+        }
+
         $oyst = new Oyst();
         $context = Context::getContext();
         $orderService = AbstractOrderServiceFactory::get($oyst, $context);
@@ -49,9 +54,6 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
         // Get cart
         $cart = new Cart($id_cart);
         $customer = new Customer($cart->id_customer);
-        if (Configuration::get('FC_OYST_HASH_KEY') != $key) {
-            die('Wrong security key');
-        }
 
         if ($this->context->cookie->count > 0) {
             $this->context->cookie->count += 1;
@@ -114,7 +116,7 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
                             'oneclickconfirmation'
                         );
                         $id_module = Module::getModuleIdByName('oyst');
-                        $params = $glue.'id_cart='.$cart->id.'&id_order='.$id_order.'&id_module='.$id_module;
+                        $params = $glue.'id_order='.$id_order.'&id_module='.$id_module;
                         $url = $base_url_confirmation.$params.'&key='.$customer->secure_key;
                         break;
                     case 'CUSTOM':

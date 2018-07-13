@@ -45,9 +45,12 @@ function OystOneClick(url, productId, controller)
     this.positionBtn = 'before';
     this.idBtnAddToCart = '#add_to_cart';
     this.idBtnSmartBtn = '#add_to_cart button';
+    this.labelCta = 'Return shop.';
     this.preload = 1;
-    this.shouldAsStock = 0;
-    this.errorText = 'There isn\'t enough product in stock.';
+    this.errorQuantityNullText = 'Quantity null';
+    this.errorProductOutofstockText = 'There isn\'t enough product in stock.';
+    this.oneClickModalUrl;
+    this.isCheckoutCart = true;
 
     this.setExportedCombinations = function (combinations) {
         this.combinations = combinations;
@@ -55,10 +58,6 @@ function OystOneClick(url, productId, controller)
 
     this.setPreload = function (preload) {
         this.preload = preload;
-    };
-
-    this.setShouldAskStock = function (shouldAsStock) {
-        this.shouldAsStock = shouldAsStock;
     };
 
     this.setStockManagement = function (stockManagement) {
@@ -141,8 +140,20 @@ function OystOneClick(url, productId, controller)
         this.idBtnSmartBtn = idBtnSmartBtn;
     };
 
-    this.setErrorText = function (errorText) {
-        this.errorText = errorText;
+    this.setErrorQuantityNullText = function (errorQuantityNullText) {
+        this.errorQuantityNullText = errorQuantityNullText;
+    };
+
+    this.setErrorProductOutofstockText = function (errorProductOutofstockText) {
+        this.errorProductOutofstockText = errorProductOutofstockText;
+    };
+
+    this.setLabelCta = function (labelCta) {
+        this.labelCta = labelCta;
+    };
+
+    this.setOneClickModalUrl = function (oneClickModalUrl) {
+        this.oneClickModalUrl = oneClickModalUrl;
     };
 
     /**
@@ -179,6 +190,22 @@ function OystOneClick(url, productId, controller)
         }
 
         return false;
+    };
+
+    /**
+     * Check is the product is available with quantity selected
+     * @returns {boolean}
+     */
+    this.isProductAvailableByQtySelected = function (product) {
+        var productIsAvailable = true;
+
+        if (product.productAttributeId == 0) {
+            productIsAvailable =  product.quantity <= this.productQuantity;
+        } else {
+            productIsAvailable =  product.quantity <= this.combinations[product.productAttributeId].quantity;
+        }
+
+        return productIsAvailable;
     };
 
     /**
@@ -274,27 +301,6 @@ function OystOneClick(url, productId, controller)
             quantity = 1;
         }
 
-        // if (this.shouldAsStock) {
-        //     if ($('#quantityAvailable').length && parseInt($('#quantityAvailable').html()) < quantity) {
-        //         if (!!$.prototype.fancybox) {
-        //             $.fancybox.open([
-        //               {
-        //                 type: 'inline',
-        //                 autoScale: true,
-        //                 minHeight: 30,
-        //                 content: '<p class="fancybox-error">' + this.errorText + '</p>'
-        //               }
-        //             ], {
-        //               padding: 0
-        //             });
-        //             return;
-        //         } else {
-        //             alert(this.errorText);
-        //             return;
-        //         }
-        //     }
-        // }
-
         return {
             productId: this.productId,
             productAttributeId: productAttributeId,
@@ -310,23 +316,61 @@ function OystOneClick(url, productId, controller)
 
         params.controller = this.controller;
 
-        if (this.preload) {
-            params.preload = this.preload;
-            this.setPreload(0);
-        } else {
-            params.preload = this.preload;
-        }
+        params.preload = this.preload;
 
+        params.labelCta = this.labelCta;
         params.oneClick = true;
         params.token = '{SuggestToAddSecurityToken}';
 
-        $.post(this.url, params, function (json) {
-            if (json.state) {
-                oystCallBack(null, json.url);
+        if (params.preload) {
+            oystCallBack(null, this.oneClickModalUrl+'/?isCheckoutCart='+this.isCheckoutCart);
+        } else {
+            if (params.quantity == 0) {
+                if (!!$.prototype.fancybox) {
+                    $.fancybox.open([
+                    {
+                        type: 'inline',
+                        autoScale: true,
+                        minHeight: 30,
+                        content: '<p class="fancybox-error">'+this.errorQuantityNullText+'</p>'
+                    }
+                    ], {
+                        padding: 0
+                    });
+                    return;
+                } else {
+                    alert(this.errorQuantityNullText);
+                    return;
+                }
+                window.postMessage({type: 'RELOAD_BUTTON'}, '*');
+            } else if (!this.isProductAvailableByQtySelected(params)) {
+                if (!!$.prototype.fancybox) {
+                    $.fancybox.open([
+                    {
+                        type: 'inline',
+                        autoScale: true,
+                        minHeight: 30,
+                        content: '<p class="fancybox-error">'+this.errorProductOutofstockText+'</p>'
+                        }
+                    ], {
+                        padding: 0
+                    });
+                     return;
+                } else {
+                    alert(this.errorProductOutofstockText);
+                    return;
+                }
+                window.postMessage({type: 'RELOAD_BUTTON'}, '*');
             } else {
-                // display properly the error to try again
-                alert('Error occurred, please try later or contact us');
+                $.post(this.url, params, function (json) {
+                    if (json.state) {
+                        oystCallBack(null, json.url);
+                    } else {
+                        // display properly the error to try again
+                        alert('Error occurred, please try later or contact us');
+                    }
+                });
             }
-        });
+        }
     }
 };
