@@ -131,6 +131,7 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $assign['marginLeftBtn'] = Configuration::get('FC_OYST_MARGIN_LEFT_BTN_'.$suffix_conf);
         $assign['marginRightBtn'] = Configuration::get('FC_OYST_MARGIN_RIGHT_BTN_'.$suffix_conf);
         $assign['oneClickModalUrl'] = $baseOneClickModalUrl;
+        $assign['sticky'] = (int)Configuration::get('FC_OYST_STICKY');
 
         $this->smarty->assign($assign);
 

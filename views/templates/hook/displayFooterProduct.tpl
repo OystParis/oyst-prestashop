@@ -43,7 +43,15 @@
             oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
             oyst.setErrorQuantityNullText("{$error_quantity_null_text|escape:'html':'UTF-8'}");
             oyst.setErrorProductOutofstockText("{$error_product_outofstock_text|escape:'html':'UTF-8'}");
+            oyst.setOneClickModalUrl("{$oneClickModalUrl|escape:'html':'UTF-8'}");
+            oyst.setSticky({$sticky|intval});
             oyst.prepareButton();
+
+            window.addEventListener('message', function (event) {
+                if (event.data.type == 'ORDER_REQUEST') {
+                    oyst.setPreload(0);
+                }
+            });
 
             window.__OYST__ = window.__OYST__ || {};
             window.__OYST__.getOneClickURL = function(callback) {

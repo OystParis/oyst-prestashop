@@ -51,6 +51,7 @@ function OystOneClick(url, productId, controller)
     this.errorProductOutofstockText = 'There isn\'t enough product in stock.';
     this.oneClickModalUrl;
     this.isCheckoutCart = true;
+    this.sticky = true;
 
     this.setExportedCombinations = function (combinations) {
         this.combinations = combinations;
@@ -154,6 +155,10 @@ function OystOneClick(url, productId, controller)
 
     this.setOneClickModalUrl = function (oneClickModalUrl) {
         this.oneClickModalUrl = oneClickModalUrl;
+    };
+
+    this.setSticky = function (sticky) {
+        this.sticky = sticky;
     };
 
     /**
@@ -279,6 +284,9 @@ function OystOneClick(url, productId, controller)
         ).attr(
             'data-smart',
             this.smartBtn ? 'true' : 'false'
+        ).attr(
+            'data-sticky',
+            this.sticky ? 'true' : 'false'
         ));
 
         this.prepareEvents();
@@ -325,7 +333,7 @@ function OystOneClick(url, productId, controller)
         if (params.preload) {
             oystCallBack(null, this.oneClickModalUrl+'/?isCheckoutCart='+this.isCheckoutCart);
         } else {
-            if (params.quantity == 0) {
+            /*if (params.quantity == 0) {
                 if (!!$.prototype.fancybox) {
                     $.fancybox.open([
                     {
@@ -361,7 +369,7 @@ function OystOneClick(url, productId, controller)
                     return;
                 }
                 window.postMessage({type: 'RELOAD_BUTTON'}, '*');
-            } else {
+            } else {*/
                 $.post(this.url, params, function (json) {
                     if (json.state) {
                         oystCallBack(null, json.url);
@@ -370,7 +378,7 @@ function OystOneClick(url, productId, controller)
                         alert('Error occurred, please try later or contact us');
                     }
                 });
-            }
+            //}
         }
     }
 };

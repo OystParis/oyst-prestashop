@@ -1069,6 +1069,22 @@
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Button sticky' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_STICKY" id="FC_OYST_STICKY_ON" value="1" {if $oyst.FC_OYST_STICKY == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_STICKY_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_STICKY" id="FC_OYST_STICKY_OFF" value="0" {if $oyst.FC_OYST_STICKY == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_STICKY_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Enable only for ip' mod='oyst'}</label>
                                         <div class="col-md-6 col-lg-6">
                                             <input type="text" name="FC_OYST_ONLY_FOR_IP" id="FC_OYST_ONLY_FOR_IP" value="{$oyst.FC_OYST_ONLY_FOR_IP|escape:'htmlall':'UTF-8'}"/>
@@ -1092,6 +1108,7 @@
                                     <input type="hidden" name="FC_OYST_OC_REDIRECT_CONF" value="{$oyst.FC_OYST_OC_REDIRECT_CONF|intval}"/>
                                     <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
                                     <input type="hidden" name="FC_OYST_MANAGE_QUANTITY_CART" value="{$oyst.FC_OYST_MANAGE_QUANTITY_CART|intval}"/>
+                                    <input type="hidden" name="FC_OYST_STICKY" value="{$oyst.FC_OYST_STICKY|intval}"/>
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>
