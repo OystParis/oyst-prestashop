@@ -54,6 +54,7 @@ class CartService {
                 $context = Context::getContext();
 
                 $response['id_oyst'] = Notification::getOystIdByCartId($cart->id);
+                $response['internal_id'] = $cart->id;
                 $response['ip'] = CustomerService::getInstance()->getLastIpFromIdCustomer($cart->id_customer);
 
                 //Customer
@@ -97,6 +98,7 @@ class CartService {
                     $taxes[$cart_product['rate']]['amount'] += $cart_product['total_wt'] - $cart_product['total'];
 
                     if ($cart_product['is_gift']) {
+                        $cart_product['oyst_display'] = 'free';
                         $response['promotions']['free_items'][] = $this->formatItem($cart_product);
                     } else {
                         //Pack content
@@ -321,7 +323,6 @@ class CartService {
             //Define fields for formatItem compatibility
             $item_formated['id_product'] = $item_formated['id'];
             $item_formated['id_product_attribute'] = 0;
-            $item_formated['reference_package'] = $item_formated['id_product'].'-'.$item_formated['id_product_attribute'];
             $item_formated['price_wt'] = Product::getPriceStatic($item_formated['id_product'], true);
             $item_formated['price_without_reduction'] = Product::getPriceStatic($item_formated['id_product'], false, null, 6, null, false, false);
             $item_formated['price_without_reduction_wt'] = Product::getPriceStatic($item_formated['id_product'], true, null, 6, null, false, false);
@@ -399,6 +400,11 @@ class CartService {
             $product_type = 'bundle';
         }
 
+        $oyst_display = 'normal';
+        if (!empty($item['oyst_display'])) {
+            $oyst_display = $item['oyst_display'];
+        }
+
         $attributes_variant = array();
         if (!empty($item['id_product_attribute'])) {
             $attributes = Db::getInstance()->executeS("SELECT al.`id_attribute`, al.`name` value_name, agl.`public_name` attribute_name 
@@ -420,9 +426,8 @@ class CartService {
         }
 
         return array(
-            'reference' => $item['id_product'].'-'.$item['id_product_attribute'],
-            'internal_reference' => '',
-            //'reference_package' => (isset($item['reference_package']) ? $item['reference_package'] : ''),
+            'reference' => $item['reference'],
+            'internal_reference' => $item['id_product'].'-'.$item['id_product_attribute'],
             'attributes_variant' => $attributes_variant,
             'quantity' => $item['cart_quantity'],
             'quantity_available' => $item['quantity_available'],
@@ -454,7 +459,7 @@ class CartService {
 //                    'value' => '',
 //                ),
             ),
-            'oyst_display' => 'normal',
+            'oyst_display' => $oyst_display,
             'discounts' => array(
 //                array(
 //                    'id' => 0,

@@ -3601,7 +3601,8 @@
 
             var merchantId = window.__OYST__.merchantId || (0, _utils.getParams)(new URL(src).search)['omid'];
             window.__OYST__.merchantId = merchantId;
-            var scriptUrl = "//cdn.test1.oyst.eu" + '/1click/script/script.min.js';
+            // var scriptUrl = "//cdn.test1.oyst.eu" + '/1click/script/script.min.js';
+            var scriptUrl = "https://oneclick-front.test1.oyst.eu/oyst.min.js";
             var apiBaseUrl = "http://dijon.bwagence.fr:8080" + '/v1';
 
             /****************************************
