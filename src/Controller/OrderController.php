@@ -9,6 +9,7 @@ use Order;
 use OrderSlip;
 use Oyst;
 use Oyst\Classes\Notification;
+use Oyst\Services\CartService;
 use Oyst\Services\OrderService;
 use Validate;
 
@@ -24,13 +25,8 @@ class OrderController extends AbstractOystController
     {
         if (!empty($params['url']['id'])) {
             $id_order = Notification::getOrderIdByOystId($params['url']['id']);
-
-            $response = OrderService::getInstance()->getOrder($id_order);
-            if (empty($response['errors'])) {
-                $this->respondAsJson($response);
-            } else {
-                $this->respondError(400, $response['errors']);
-            }
+            $response = CartService::getInstance()->getCart(Cart::getCartByOrderId($id_order));
+            $this->respondAsJson($response);
         } else {
             $this->respondError(400, 'id_order is missing');
         }
@@ -114,6 +110,41 @@ class OrderController extends AbstractOystController
                     } else {
                         $this->respondError(400, 'Bad id_cart');
                     }
+                }
+            }
+        } else {
+            $this->respondError(400, 'id_order is missing');
+        }
+    }
+
+    public function refundOrder($params)
+    {
+        if (!empty($params['url']['id'])) {
+            if (!empty($params['data']['refund'])) {
+                $id_order = Notification::getOrderIdByOystId($params['url']['id']);
+                $order = new Order($id_order);
+
+                if (!empty($params['data']['refund']['total'])) {
+                    $amount = 0;
+                    $amount_choosen = false;
+                    $products_list = array();
+                    //Get order details
+                    foreach ($order->getProductsDetail() as $order_detail) {
+                        $products_list[] = array(
+                            'id_order_detail' => $order_detail['id_order_detail'],
+                            'unit_price' => $order_detail['unit_price_tax_excl'],
+                            'quantity' => $order_detail['product_quantity'],
+                        );
+                    };
+                    $shipping_cost = $order->total_shipping_tax_excl;
+
+                    if (OrderSlip::create($order, $products_list, $shipping_cost, $amount, $amount_choosen)) {
+                        $this->respondAsJson('Order slip created successfully');
+                    } else {
+                        $this->respondError(400, 'Order slip creation failed');
+                    }
+                } elseif($params['data']['refund']['partial']) {
+                    //TODO Manage partial refund
                 }
             }
         } else {
