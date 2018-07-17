@@ -986,6 +986,10 @@
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_MANAGE_QUANTITY_CART" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY_CART} checked="checked"{/if} />
                                 </div>
+                                <label>{l s='Button sticky' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_STICKY" value="1"{if $oyst.FC_OYST_STICKY} checked="checked"{/if} />
+                                </div>
                                 <br>
                                 <label>{l s='Enable only for ip' mod='oyst'}</label>
                                 <div class="margin-form">
@@ -1007,6 +1011,7 @@
                                 <input type="hidden" name="FC_OYST_OC_REDIRECT_CONF" value="{$oyst.FC_OYST_OC_REDIRECT_CONF|intval}"/>
                                 <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
                                 <input type="hidden" name="FC_OYST_MANAGE_QUANTITY_CART" value="{$oyst.FC_OYST_MANAGE_QUANTITY_CART|intval}"/>
+                                <input type="hidden" name="FC_OYST_STICKY" value="{$oyst.FC_OYST_STICKY|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>

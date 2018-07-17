@@ -44,6 +44,7 @@ function OystOneClickCart(url, controller)
     this.idBtnSmartBtn = '.standard-checkout';
     this.oneClickModalUrl;
     this.isCheckoutCart = true;
+    this.sticky = true;
 
     this.setPreload = function (preload) {
         this.preload = preload;
@@ -125,6 +126,10 @@ function OystOneClickCart(url, controller)
         this.oneClickModalUrl = oneClickModalUrl;
     };
 
+    this.setSticky = function (sticky) {
+        this.sticky = sticky;
+    };
+
     /**
      * Initialize requirements
      */
@@ -163,6 +168,9 @@ function OystOneClickCart(url, controller)
         ).attr(
             'data-smart',
             this.smartBtn ? 'true' : 'false'
+        ).attr(
+            'data-sticky',
+            this.sticky ? 'true' : 'false'
         ));
     };
 

@@ -133,7 +133,7 @@ class OrderService extends AbstractOystService
         $addressToFind = array(
             'name' => $alias,
             'street' => ($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none'),
-            'postcode' => $pickupAddress['postalCode'],
+            'postcode' => $pickupAddress['postal_code'],
             'city' => $pickupAddress['city'],
             'first_name' => $customer->firstname,
             'last_name' => $customer->lastname,
@@ -153,7 +153,7 @@ class OrderService extends AbstractOystService
             $address->lastname = $customer->lastname;
             $address->address1 = ($pickupAddress['street'] != '' ? $pickupAddress['street'] : 'none');
             $address->company = $pickup_name;
-            $address->postcode = ($pickupAddress['postalCode'] != '')? $pickupAddress['postalCode'] : 'none';
+            $address->postcode = ($pickupAddress['postal_code'] != '')? $pickupAddress['postal_code'] : 'none';
             $address->city = ($pickupAddress['city'] != '')? $pickupAddress['city'] : 'none';
             $address->alias = $alias;
             $address->id_country = $countryId;
@@ -444,7 +444,7 @@ class OrderService extends AbstractOystService
                     'MR_Selected_Num' => pSQL($pickupId),
                     'MR_Selected_LgAdr1' => ($pickupAddress['name'] != '')? pSQL($pickupAddress['name']) : 'NULL',
                     'MR_Selected_LgAdr3' => ($pickupAddress['street'] != '')? pSQL($pickupAddress['street']) : 'NULL',
-                    'MR_Selected_CP' => ($pickupAddress['postalCode'] != '')? (int)$pickupAddress['postalCode'] : 'NULL',
+                    'MR_Selected_CP' => ($pickupAddress['postal_code'] != '')? (int)$pickupAddress['postal_code'] : 'NULL',
                     'MR_Selected_Ville' => ($pickupAddress['city'] != '')? pSQL($pickupAddress['city']) : 'NULL',
                     'MR_Selected_Pays' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
                 );

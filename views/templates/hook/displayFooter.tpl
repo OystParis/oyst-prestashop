@@ -47,6 +47,7 @@
                 oyst.setMarginRightBtn("{$marginRightBtn|escape:'html':'UTF-8'}");
                 oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
                 oyst.setOneClickModalUrl("{$oneClickModalUrl|escape:'html':'UTF-8'}");
+                oyst.setSticky({$sticky|intval});
                 oyst.prepareButton();
 
                 window.addEventListener('message', function (event) {

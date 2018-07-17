@@ -21,7 +21,6 @@ $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_c553131fd61f1974f
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_024ae09e98fa72606806543757012ff2'] = 'Le montant saisi n\'est pas bon';
 $_MODULE['<{oyst}prestashop>oysthookdisplayadminorderprocessor_2b7091c33002c6db27a2a5165ce431f8'] = 'Une erreur s\'est produite lors de l\'annulation :';
 $_MODULE['<{oyst}prestashop>oysthookdisplayfooterprocessor_419f3d4a29f6181b733952587fd5f496'] = 'Retour boutique';
-$_MODULE['<{oyst}prestashop>oysthookdisplayfooterproductprocessor_4d2c41ad87059d5fd9ea5283cee720a5'] = 'Il n\'y a pas assez de produits en stock.';
 $_MODULE['<{oyst}prestashop>oysthookdisplayshoppingcartprocessor_419f3d4a29f6181b733952587fd5f496'] = 'Retour boutique.';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_782c8b38bce4f2f6975ca7f33ac8189b'] = 'Historique de commandes';
 $_MODULE['<{oyst}prestashop>oysthookgetconfigurationprocessor_fb077ecba55e5552916bde26d8b9e794'] = 'Confirmation de commande';
@@ -201,6 +200,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_ea29387282467c818e515
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3f2f64b3297a179114438445ea455a93'] = 'Bouton sticky';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e4a9deb0f5a00aecea80e5623c1f717a'] = 'Activé uniquement pour l\'ip';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_912e8c6b462d9adc724895ffaa09255b'] = 'Adresses IPs séparées par une virgule';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c770d8e0d1d1943ce239c64dbd6acc20'] = 'Ajouter mon IP';
@@ -299,6 +299,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_ea29387282467c818e51540fc1aca0b
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_3f2f64b3297a179114438445ea455a93'] = 'Bouton sticky';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e4a9deb0f5a00aecea80e5623c1f717a'] = 'Activé uniquement pour l\'ip';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c770d8e0d1d1943ce239c64dbd6acc20'] = 'Ajouter mon IP';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_912e8c6b462d9adc724895ffaa09255b'] = 'Adresses IPs séparées par une virgule';

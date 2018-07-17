@@ -51,6 +51,7 @@ function OystOneClick(url, productId, controller)
     this.errorProductOutofstockText = 'There isn\'t enough product in stock.';
     this.oneClickModalUrl;
     this.isCheckoutCart = true;
+    this.sticky = true;
 
     this.setExportedCombinations = function (combinations) {
         this.combinations = combinations;
@@ -154,6 +155,10 @@ function OystOneClick(url, productId, controller)
 
     this.setOneClickModalUrl = function (oneClickModalUrl) {
         this.oneClickModalUrl = oneClickModalUrl;
+    };
+
+    this.setSticky = function (sticky) {
+        this.sticky = sticky;
     };
 
     /**
@@ -279,6 +284,9 @@ function OystOneClick(url, productId, controller)
         ).attr(
             'data-smart',
             this.smartBtn ? 'true' : 'false'
+        ).attr(
+            'data-sticky',
+            this.sticky ? 'true' : 'false'
         ));
 
         this.prepareEvents();

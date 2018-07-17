@@ -49,6 +49,7 @@ $(document).ready(function () {
     oyst.setMarginRightBtn(marginRightBtn);
     oyst.setPositionBtn(positionBtn);
     oyst.setOneClickModalUrl(oneClickModalUrl);
+    oyst.setSticky(sticky);
     oyst.prepareButton();
 
     window.addEventListener('message', function (event) {
