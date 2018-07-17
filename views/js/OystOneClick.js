@@ -333,7 +333,7 @@ function OystOneClick(url, productId, controller)
         if (params.preload) {
             oystCallBack(null, this.oneClickModalUrl+'/?isCheckoutCart='+this.isCheckoutCart);
         } else {
-            if (params.quantity == 0) {
+            /*if (params.quantity == 0) {
                 if (!!$.prototype.fancybox) {
                     $.fancybox.open([
                     {
@@ -369,7 +369,7 @@ function OystOneClick(url, productId, controller)
                     return;
                 }
                 window.postMessage({type: 'RELOAD_BUTTON'}, '*');
-            } else {
+            } else {*/
                 $.post(this.url, params, function (json) {
                     if (json.state) {
                         oystCallBack(null, json.url);
@@ -378,7 +378,7 @@ function OystOneClick(url, productId, controller)
                         alert('Error occurred, please try later or contact us');
                     }
                 });
-            }
+            //}
         }
     }
 };
