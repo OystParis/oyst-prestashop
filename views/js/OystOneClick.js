@@ -23,8 +23,8 @@
 /**
  * Manage oneClick process
  */
-function OystOneClick(url, productId, controller) {
-
+function OystOneClick(url, productId, controller)
+{
     this.url = url;
     this.controller = controller;
     this.productId = productId;
@@ -35,7 +35,7 @@ function OystOneClick(url, productId, controller) {
     this.button = '#oneClickContainer';
     this.smartBtn = true;
     this.borderBtn = true;
-    this.themeBtn = 'normal';
+    this.themeBtn = 'default';
     this.colorBtn = '#E91E63';
     this.widthBtn = '';
     this.heightBtn = '';
@@ -45,9 +45,13 @@ function OystOneClick(url, productId, controller) {
     this.positionBtn = 'before';
     this.idBtnAddToCart = '#add_to_cart';
     this.idBtnSmartBtn = '#add_to_cart button';
+    this.labelCta = 'Return shop.';
     this.preload = 1;
-    this.shouldAsStock = 0;
-    this.errorText = 'There isn\'t enough product in stock.';
+    this.errorQuantityNullText = 'Quantity null';
+    this.errorProductOutofstockText = 'There isn\'t enough product in stock.';
+    this.oneClickModalUrl;
+    this.isCheckoutCart = true;
+    this.sticky = true;
 
     this.setExportedCombinations = function (combinations) {
         this.combinations = combinations;
@@ -55,10 +59,6 @@ function OystOneClick(url, productId, controller) {
 
     this.setPreload = function (preload) {
         this.preload = preload;
-    };
-
-    this.setShouldAskStock = function (shouldAsStock) {
-        this.shouldAsStock = shouldAsStock;
     };
 
     this.setStockManagement = function (stockManagement) {
@@ -141,8 +141,24 @@ function OystOneClick(url, productId, controller) {
         this.idBtnSmartBtn = idBtnSmartBtn;
     };
 
-    this.setErrorText = function (errorText) {
-        this.errorText = errorText;
+    this.setErrorQuantityNullText = function (errorQuantityNullText) {
+        this.errorQuantityNullText = errorQuantityNullText;
+    };
+
+    this.setErrorProductOutofstockText = function (errorProductOutofstockText) {
+        this.errorProductOutofstockText = errorProductOutofstockText;
+    };
+
+    this.setLabelCta = function (labelCta) {
+        this.labelCta = labelCta;
+    };
+
+    this.setOneClickModalUrl = function (oneClickModalUrl) {
+        this.oneClickModalUrl = oneClickModalUrl;
+    };
+
+    this.setSticky = function (sticky) {
+        this.sticky = sticky;
     };
 
     /**
@@ -179,6 +195,22 @@ function OystOneClick(url, productId, controller) {
         }
 
         return false;
+    };
+
+    /**
+     * Check is the product is available with quantity selected
+     * @returns {boolean}
+     */
+    this.isProductAvailableByQtySelected = function (product) {
+        var productIsAvailable = true;
+
+        if (product.productAttributeId == 0) {
+            productIsAvailable =  product.quantity <= this.productQuantity;
+        } else {
+            productIsAvailable =  product.quantity <= this.combinations[product.productAttributeId].quantity;
+        }
+
+        return productIsAvailable;
     };
 
     /**
@@ -235,17 +267,26 @@ function OystOneClick(url, productId, controller) {
         }).append($('<div>', {
             id: 'oyst-1click-button'
         }).attr(
-            'data-theme', this.themeBtn
+            'data-theme',
+            this.themeBtn
         ).attr(
-            'data-color', this.colorBtn
+            'data-color',
+            this.colorBtn
         ).attr(
-            'data-width', this.widthBtn
+            'data-width',
+            this.widthBtn
         ).attr(
-            'data-height', this.heightBtn
+            'data-height',
+            this.heightBtn
         ).attr(
-            'data-rounded', this.borderBtn ? 'true' : 'false'
+            'data-rounded',
+            this.borderBtn ? 'true' : 'false'
         ).attr(
-            'data-smart', this.smartBtn ? 'true' : 'false'
+            'data-smart',
+            this.smartBtn ? 'true' : 'false'
+        ).attr(
+            'data-sticky',
+            this.sticky ? 'true' : 'false'
         ));
 
         this.prepareEvents();
@@ -255,7 +296,7 @@ function OystOneClick(url, productId, controller) {
      * On Click, retrieve the right product / combination information
      * @returns {{productId, productAttributeId: *, quantity: (*|jQuery)}}
      */
-    this.getSelectedProduct = function() {
+    this.getSelectedProduct = function () {
 
         var productAttributeId = null;
 
@@ -264,29 +305,9 @@ function OystOneClick(url, productId, controller) {
         }
 
         var quantity = $('input[name="qty"]').val();
-        if (typeof quantity === "undefined")
+        if (typeof quantity === "undefined") {
             quantity = 1;
-
-        // if (this.shouldAsStock) {
-        //     if ($('#quantityAvailable').length && parseInt($('#quantityAvailable').html()) < quantity) {
-        //         if (!!$.prototype.fancybox) {
-        //             $.fancybox.open([
-        //               {
-        //                 type: 'inline',
-        //                 autoScale: true,
-        //                 minHeight: 30,
-        //                 content: '<p class="fancybox-error">' + this.errorText + '</p>'
-        //               }
-        //             ], {
-        //               padding: 0
-        //             });
-        //             return;
-        //         } else {
-        //             alert(this.errorText);
-        //             return;
-        //         }
-        //     }
-        // }
+        }
 
         return {
             productId: this.productId,
@@ -298,28 +319,66 @@ function OystOneClick(url, productId, controller) {
     /**
      * Send request to start oneClick process
      */
-    this.requestOneCLick = function(oystCallBack) {
+    this.requestOneCLick = function (oystCallBack) {
         var params = this.getSelectedProduct();
 
         params.controller = this.controller;
 
-        if (this.preload) {
-          params.preload = this.preload;
-          this.setPreload(0);
-        } else {
-          params.preload = this.preload;
-        }
+        params.preload = this.preload;
 
+        params.labelCta = this.labelCta;
         params.oneClick = true;
         params.token = '{SuggestToAddSecurityToken}';
 
-        $.post(this.url, params, function(json) {
-            if (json.state) {
-                oystCallBack(null, json.url);
-            } else {
-                // display properly the error to try again
-                alert('Error occurred, please try later or contact us');
-            }
-        });
+        if (params.preload) {
+            oystCallBack(null, this.oneClickModalUrl+'/?isCheckoutCart='+this.isCheckoutCart);
+        } else {
+            /*if (params.quantity == 0) {
+                if (!!$.prototype.fancybox) {
+                    $.fancybox.open([
+                    {
+                        type: 'inline',
+                        autoScale: true,
+                        minHeight: 30,
+                        content: '<p class="fancybox-error">'+this.errorQuantityNullText+'</p>'
+                    }
+                    ], {
+                        padding: 0
+                    });
+                    return;
+                } else {
+                    alert(this.errorQuantityNullText);
+                    return;
+                }
+                window.postMessage({type: 'RELOAD_BUTTON'}, '*');
+            } else if (!this.isProductAvailableByQtySelected(params)) {
+                if (!!$.prototype.fancybox) {
+                    $.fancybox.open([
+                    {
+                        type: 'inline',
+                        autoScale: true,
+                        minHeight: 30,
+                        content: '<p class="fancybox-error">'+this.errorProductOutofstockText+'</p>'
+                        }
+                    ], {
+                        padding: 0
+                    });
+                     return;
+                } else {
+                    alert(this.errorProductOutofstockText);
+                    return;
+                }
+                window.postMessage({type: 'RELOAD_BUTTON'}, '*');
+            } else {*/
+                $.post(this.url, params, function (json) {
+                    if (json.state) {
+                        oystCallBack(null, json.url);
+                    } else {
+                        // display properly the error to try again
+                        alert('Error occurred, please try later or contact us');
+                    }
+                });
+            //}
+        }
     }
 };

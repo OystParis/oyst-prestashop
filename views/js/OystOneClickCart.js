@@ -28,18 +28,23 @@ function OystOneClickCart(url, controller)
 
     this.url = url;
     this.controller = controller;
-    this.idBtnCart = '.standard-checkout';
+    this.idBtnAddToCart = '.standard-checkout';
     this.smartBtn = true;
     this.borderBtn = true;
-    this.themeBtn = 'normal';
+    this.themeBtn = 'default';
     this.colorBtn = '#E91E63';
     this.widthBtn = '230px';
     this.heightBtn = '60px';
     this.marginTopBtn = '0px';
     this.marginLeftBtn = '0px';
     this.marginRightBtn = '0px';
+    this.positionBtn = 'before';
     this.labelCta = 'Return shop.';
     this.preload = 1;
+    this.idBtnSmartBtn = '.standard-checkout';
+    this.oneClickModalUrl;
+    this.isCheckoutCart = true;
+    this.sticky = true;
 
     this.setPreload = function (preload) {
         this.preload = preload;
@@ -58,7 +63,7 @@ function OystOneClickCart(url, controller)
             if (widthBtn) {
                 this.widthBtn = widthBtn;
             } else {
-                this.widthBtn = $(this.idBtnCart).width()+'px';
+                this.widthBtn = $(this.idBtnSmartBtn).width()+'px';
             }
         } else if (widthBtn) {
             this.widthBtn = widthBtn;
@@ -72,7 +77,7 @@ function OystOneClickCart(url, controller)
             if (heightBtn) {
                 this.heightBtn = heightBtn;
             } else {
-                this.heightBtn = $(this.idBtnCart).outerHeight()+'px';
+                this.heightBtn = $(this.idBtnSmartBtn).outerHeight()+'px';
             }
         } else if (heightBtn) {
             this.heightBtn = heightBtn;
@@ -101,21 +106,43 @@ function OystOneClickCart(url, controller)
         this.marginRightBtn = marginRightBtn;
     };
 
-    this.setIdBtnCart = function (idBtnCart) {
-        this.idBtnCart = idBtnCart;
-    }
+    this.setPositionBtn = function (positionBtn) {
+        this.positionBtn = positionBtn;
+    };
+
+    this.setIdBtnAddToCart = function (idBtnAddToCart) {
+        this.idBtnAddToCart = idBtnAddToCart;
+    };
+
+    this.setIdSmartBtn = function (idBtnSmartBtn) {
+        this.idBtnSmartBtn = idBtnSmartBtn;
+    };
 
     this.setLabelCta = function (labelCta) {
         this.labelCta = labelCta;
+    };
+
+    this.setOneClickModalUrl = function (oneClickModalUrl) {
+        this.oneClickModalUrl = oneClickModalUrl;
+    };
+
+    this.setSticky = function (sticky) {
+        this.sticky = sticky;
     };
 
     /**
      * Initialize requirements
      */
     this.prepareButton = function () {
-        $(this.idBtnCart).before($('<div>', {
-            id: 'oneClickContainer'
-        }));
+        if (this.positionBtn == 'after') {
+            $(this.idBtnAddToCart).after($('<div>', {
+                id: 'oneClickContainer'
+            }));
+        } else {
+            $(this.idBtnAddToCart).before($('<div>', {
+                id: 'oneClickContainer'
+            }));
+        }
 
         $('#oneClickContainer').css({
             'margin-top': this.marginTopBtn,
@@ -141,6 +168,9 @@ function OystOneClickCart(url, controller)
         ).attr(
             'data-smart',
             this.smartBtn ? 'true' : 'false'
+        ).attr(
+            'data-sticky',
+            this.sticky ? 'true' : 'false'
         ));
     };
 
@@ -151,24 +181,23 @@ function OystOneClickCart(url, controller)
         var params = {};
 
         params.controller = this.controller;
-        if (this.preload) {
-            params.preload = this.preload;
-            this.setPreload(0);
-        } else {
-            params.preload = this.preload;
-        }
+        params.preload = this.preload;
 
         params.labelCta = this.labelCta;
         params.oneClick = true;
         params.token = '{SuggestToAddSecurityToken}';
 
-        $.post(this.url, params, function (json) {
-            if (json.state) {
-                oystCallBack(null, json.url);
-            } else {
-                // display properly the error to try again
-                alert('Error occurred, please try later or contact us');
-            }
-        });
+        if (params.preload) {
+            oystCallBack(null, this.oneClickModalUrl+'/?isCheckoutCart='+this.isCheckoutCart);
+        } else {
+            $.post(this.url, params, function (json) {
+                if (json.state) {
+                    oystCallBack(null, json.url);
+                } else {
+                    // display properly the error to try again
+                    alert('Error occurred, please try later or contact us');
+                }
+            });
+        }
     }
 };
