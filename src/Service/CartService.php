@@ -83,66 +83,6 @@ class CartService extends AbstractOystService
 
         $amount_total  = 0;
 
-        if ($data['context'] && isset($data['context']['id_user'])) {
-            $customer = new Customer((int)$data['context']['id_user']);
-        } else {
-            $customer = $this->getCustomer($data['user']);
-        }
-        if (!Validate::isLoadedObject($customer)) {
-            $this->logger->emergency(
-                'Customer not found or can\'t be found ['.json_encode($customer).']'
-            );
-        }
-
-        $addressRepository = new AddressRepository(Db::getInstance());
-
-        $address = $addressRepository->findAddress($data['user']['address'], $customer);
-
-        if (!Validate::isLoadedObject($address)) {
-            $countryId = (int)Country::getByIso($data['user']['address']['country']);
-            if (0 >= $countryId) {
-                $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
-            }
-
-            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
-            if (isset(Address::$definition['fields']['firstname']['size'])) {
-                $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
-            }
-
-            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
-            if (isset(Address::$definition['fields']['lastname']['size'])) {
-                $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
-            }
-
-            $address = new Address();
-            $address->id_customer = $customer->id;
-            $address->firstname = $firstname;
-            $address->lastname = $lastname;
-            $address->address1 = $data['user']['address']['street'];
-            $address->postcode = $data['user']['address']['postcode'];
-            $address->city = $data['user']['address']['city'];
-            $address->alias = 'OystAddress';
-            $address->id_country = $countryId;
-            $address->phone = $data['user']['phone']? $data['user']['phone'] : '';
-            $address->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
-
-            $address->add();
-        } else {
-            //Fix for retroactivity for missing phone bug or phone
-            if ($address->phone_mobile == '' || $address->phone == '') {
-                $address->phone = $data['user']['phone'];
-                $address->phone_mobile = $data['user']['phone'];
-                $address->update();
-            }
-        }
-
-        $this->logger->info(
-            sprintf(
-                'New notification address [%s]',
-                json_encode($address)
-            )
-        );
-
         // PS core used this context anywhere.. So we need to fill it properly
         // PS core used this context anywhere.. So we need to fill it properly
         if ($data['context'] && isset($data['context']['id_cart'])) {
@@ -150,20 +90,83 @@ class CartService extends AbstractOystService
         } else {
             $this->context->cart = $cart = new Cart();
         }
-        $this->context->customer = $customer;
+        // $this->context->customer = $customer;
         // For debug but when prod pass in context object currency
         $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
 
-        $cart->id_customer = $customer->id;
-        if ($customer->isLogged()) {
+        if ($data['context'] && isset($data['context']['id_user'])) {
+            $customer = new Customer((int)$data['context']['id_user']);
+        }
+
+        if (!Validate::isLoadedObject($customer)) {
+            $this->logger->emergency(
+                'Customer not found or can\'t be found ['.json_encode($customer).']'
+            );
+        }
+
+        if ($customer && $customer->isLogged()) {
+
+            $addressRepository = new AddressRepository(Db::getInstance());
+
+            $address = $addressRepository->findAddress($data['user']['address'], $customer);
+
+            if (!Validate::isLoadedObject($address)) {
+                $countryId = (int)Country::getByIso($data['user']['address']['country']);
+                if (0 >= $countryId) {
+                    $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
+                }
+
+                $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
+                if (isset(Address::$definition['fields']['firstname']['size'])) {
+                    $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+                }
+
+                $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
+                if (isset(Address::$definition['fields']['lastname']['size'])) {
+                    $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+                }
+
+                $address = new Address();
+                $address->id_customer = $customer->id;
+                $address->firstname = $firstname;
+                $address->lastname = $lastname;
+                $address->address1 = $data['user']['address']['street'];
+                $address->postcode = $data['user']['address']['postcode'];
+                $address->city = $data['user']['address']['city'];
+                $address->alias = 'OystAddress';
+                $address->id_country = $countryId;
+                $address->phone = $data['user']['phone']? $data['user']['phone'] : '';
+                $address->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
+
+                $address->add();
+            } else {
+                //Fix for retroactivity for missing phone bug or phone
+                if ($address->phone_mobile == '' || $address->phone == '') {
+                    $address->phone = $data['user']['phone'];
+                    $address->phone_mobile = $data['user']['phone'];
+                    $address->update();
+                }
+            }
+
+            $this->logger->info(
+                sprintf(
+                    'New notification address [%s]',
+                    json_encode($address)
+                )
+            );
+
+            $cart->id_customer = $customer->id;
             $cart->id_address_delivery = $address->id;
             $cart->id_address_invoice = $address->id;
+            $cart->secure_key = $customer->secure_key;
+
         } else {
+            $cart->id_customer = 0;
             $cart->id_address_delivery = 0;
             $cart->id_address_invoice = 0;
+            $cart->secure_key = 0;
         }
         $cart->id_lang = $this->context->language->id;
-        $cart->secure_key = $customer->secure_key;
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
 
@@ -204,16 +207,14 @@ class CartService extends AbstractOystService
                             (int)$idProduct,
                             (int)$idCombination,
                             false,
-                            'down',
-                            $address->id
+                            'down'
                         );
                         $update_qty_result = $cart->updateQty(
                             $quantityOyst,
                             (int)$idProduct,
                             (int)$idCombination,
                             false,
-                            'up',
-                            $address->id
+                            'up'
                         );
 
                         if (!$update_qty_result) {
