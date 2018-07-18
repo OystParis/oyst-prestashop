@@ -550,6 +550,8 @@ class CartService extends AbstractOystService
                             $merchand_discount = new OneClickMerchantDiscount($oyst_price, $cart_rule->name);
                             $oneClickOrderCartEstimate->addMerchantDiscount($merchand_discount);
                         }
+                    } else {
+                        $oneClickOrderCartEstimate->setDiscountCouponError(Tools::displayError('The voucher code is invalid.'));
                     }
                 }
             }
