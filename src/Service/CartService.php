@@ -188,7 +188,7 @@ class CartService extends AbstractOystService
             }
         }
 
-        if ($cart->id && count($cart->getProducts()) > 0) {
+        if ($cart->id && count($cart->getProducts()) > 0 && !$cart->isVirtualCart()) {
             foreach ($cart->getProducts() as $item) {
                 $idProduct = $item['id_product'];
                 $idCombination = $item['id_product_attribute'];
@@ -301,6 +301,9 @@ class CartService extends AbstractOystService
                     return json_encode($shipments);
                 }
             }
+        } elseif ($cart->isVirtualCart()) {
+            $shipments = array();
+            return json_encode($shipments);
         } else {
             $this->logger->emergency(
                 'Items not exist ['.json_encode($data).']'
