@@ -990,6 +990,10 @@
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_STICKY" value="1"{if $oyst.FC_OYST_STICKY} checked="checked"{/if} />
                                 </div>
+                                <label>{l s='Allow discount coupon' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_ALLOW_COUPON" value="1"{if $oyst.FC_OYST_ALLOW_COUPON} checked="checked"{/if} />
+                                </div>
                                 <br>
                                 <label>{l s='Enable only for ip' mod='oyst'}</label>
                                 <div class="margin-form">

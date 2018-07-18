@@ -29,6 +29,7 @@ require_once dirname(__FILE__).'/../vendor/autoload.php';
 function upgrade_module_1_19_0($module)
 {
     Configuration::updateValue('FC_OYST_STICKY', 1);
+    Configuration::updateValue('FC_OYST_ALLOW_COUPON', 1);
 
     return true;
 }

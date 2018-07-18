@@ -67,6 +67,10 @@ class CartService extends AbstractOystService
      */
     public function estimate($data)
     {
+        if (isset($data['discount_coupon'])) {
+            $discount_coupon = $data['discount_coupon'];
+        }
+        $data = $data['order'];
         // Set delay carrier in hours
         $delay = array(
             0 => 72,
@@ -309,6 +313,11 @@ class CartService extends AbstractOystService
         CartRule::autoAddToCart($this->context);
 
         $cart_rules_in_cart = array();
+
+        if (isset($discount_coupon)) {
+            $this->context->cart->addCartRule((int)CartRule::getIdByCode($discount_coupon));
+        }
+
         //Get potential cart rules which was auto added
         $auto_cart_rules = $this->context->cart->getCartRules();
         if (empty($data['context']['ids_cart_rule'])) {

@@ -382,9 +382,13 @@ class OneClickService extends AbstractOystService
             }
 
             $oneClickOrdersParams->setShouldReinitBuffer(false);
-
             $oneClickOrdersParams->setIsCheckoutCart(true);
             $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY_CART'));
+
+            $allowDiscountCoupon = (bool)ConfigurationP::get('FC_OYST_ALLOW_COUPON');
+            if ($allowDiscountCoupon) {
+                $oneClickOrdersParams->setAllowDiscountCoupon($allowDiscountCoupon);
+            }
 
             $this->logger->info(
                 sprintf(
