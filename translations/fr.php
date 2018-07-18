@@ -201,6 +201,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3f2f64b3297a179114438445ea455a93'] = 'Bouton sticky';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c13ed05b0664a24f3103c55d3983b3f2'] = 'Autoriser les coupons de réduction';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e4a9deb0f5a00aecea80e5623c1f717a'] = 'Activé uniquement pour l\'ip';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_912e8c6b462d9adc724895ffaa09255b'] = 'Adresses IPs séparées par une virgule';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_c770d8e0d1d1943ce239c64dbd6acc20'] = 'Ajouter mon IP';
@@ -300,6 +301,7 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_3f2f64b3297a179114438445ea455a93'] = 'Bouton sticky';
+$_MODULE['<{oyst}prestashop>getmerchantconfigure_c13ed05b0664a24f3103c55d3983b3f2'] = 'Autoriser les coupons de réduction';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e4a9deb0f5a00aecea80e5623c1f717a'] = 'Activé uniquement pour l\'ip';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_c770d8e0d1d1943ce239c64dbd6acc20'] = 'Ajouter mon IP';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_912e8c6b462d9adc724895ffaa09255b'] = 'Adresses IPs séparées par une virgule';
