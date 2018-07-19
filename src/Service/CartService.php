@@ -83,185 +83,220 @@ class CartService extends AbstractOystService
 
         $amount_total  = 0;
 
+        // PS core used this context anywhere.. So we need to fill it properly
+        // PS core used this context anywhere.. So we need to fill it properly
+        if ($data['context'] && isset($data['context']['id_cart'])) {
+            $this->context->cart = $cart = new Cart((int)$data['context']['id_cart']);
+        } else {
+            $this->context->cart = $cart = new Cart();
+        }
+        // $this->context->customer = $customer;
+        // For debug but when prod pass in context object currency
+        $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
+
         if ($data['context'] && isset($data['context']['id_user'])) {
             $customer = new Customer((int)$data['context']['id_user']);
-        } else {
-            $customer = $this->getCustomer($data['user']);
         }
+
         if (!Validate::isLoadedObject($customer)) {
             $this->logger->emergency(
                 'Customer not found or can\'t be found ['.json_encode($customer).']'
             );
         }
 
-        $addressRepository = new AddressRepository(Db::getInstance());
+        if ($customer && $customer->isLogged()) {
 
-        $address = $addressRepository->findAddress($data['user']['address'], $customer);
+            $addressRepository = new AddressRepository(Db::getInstance());
 
-        if (!Validate::isLoadedObject($address)) {
-            $countryId = (int)Country::getByIso($data['user']['address']['country']);
-            if (0 >= $countryId) {
-                $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
+            $address = $addressRepository->findAddress($data['user']['address'], $customer);
+
+            if (!Validate::isLoadedObject($address)) {
+                $countryId = (int)Country::getByIso($data['user']['address']['country']);
+                if (0 >= $countryId) {
+                    $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
+                }
+
+                $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
+                if (isset(Address::$definition['fields']['firstname']['size'])) {
+                    $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+                }
+
+                $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
+                if (isset(Address::$definition['fields']['lastname']['size'])) {
+                    $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+                }
+
+                $address = new Address();
+                $address->id_customer = $customer->id;
+                $address->firstname = $firstname;
+                $address->lastname = $lastname;
+                $address->address1 = $data['user']['address']['street'];
+                $address->postcode = $data['user']['address']['postcode'];
+                $address->city = $data['user']['address']['city'];
+                $address->alias = 'OystAddress';
+                $address->id_country = $countryId;
+                $address->phone = $data['user']['phone']? $data['user']['phone'] : '';
+                $address->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
+
+                $address->add();
+            } else {
+                //Fix for retroactivity for missing phone bug or phone
+                if ($address->phone_mobile == '' || $address->phone == '') {
+                    $address->phone = $data['user']['phone'];
+                    $address->phone_mobile = $data['user']['phone'];
+                    $address->update();
+                }
             }
 
-            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
-            if (isset(Address::$definition['fields']['firstname']['size'])) {
-                $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
-            }
+            $this->logger->info(
+                sprintf(
+                    'New notification address [%s]',
+                    json_encode($address)
+                )
+            );
 
-            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
-            if (isset(Address::$definition['fields']['lastname']['size'])) {
-                $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
-            }
+            $cart->id_customer = $customer->id;
+            $cart->id_address_delivery = $address->id;
+            $cart->id_address_invoice = $address->id;
+            $cart->secure_key = $customer->secure_key;
 
-            $address = new Address();
-            $address->id_customer = $customer->id;
-            $address->firstname = $firstname;
-            $address->lastname = $lastname;
-            $address->address1 = $data['user']['address']['street'];
-            $address->postcode = $data['user']['address']['postcode'];
-            $address->city = $data['user']['address']['city'];
-            $address->alias = 'OystAddress';
-            $address->id_country = $countryId;
-            $address->phone = $data['user']['phone'];
-            $address->phone_mobile = $data['user']['phone'];
-
-            $address->add();
         } else {
-            //Fix for retroactivity for missing phone bug or phone
-            if ($address->phone_mobile == '' || $address->phone == '') {
-                $address->phone = $data['user']['phone'];
-                $address->phone_mobile = $data['user']['phone'];
-                $address->update();
-            }
+            $cart->id_customer = 0;
+            $cart->id_address_delivery = 0;
+            $cart->id_address_invoice = 0;
+            $cart->secure_key = 0;
         }
-
-        $this->logger->info(
-            sprintf(
-                'New notification address [%s]',
-                json_encode($address)
-            )
-        );
-
-        // PS core used this context anywhere.. So we need to fill it properly
-        $this->context->cart = $cart = new Cart();
-        $this->context->customer = $customer;
-        // For debug but when prod pass in context object currency
-        $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
-
-        $cart->id_customer = $customer->id;
-        $cart->id_address_delivery = $address->id;
-        $cart->id_address_invoice = $address->id;
         $cart->id_lang = $this->context->language->id;
-        $cart->secure_key = $customer->secure_key;
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
 
-        if (!$cart->add()) {
+        if (!$cart->save()) {
             $this->logger->emergency(
-                'Can\'t create cart ['.json_encode($cart).']'
+                'Can\'t save cart ['.json_encode($cart).']'
             );
             return false;
         }
 
         $oneClickOrderCartEstimate = new OneClickOrderCartEstimate(array());
 
+        $oystProducts = array();
+
         if (isset($data['items'])) {
-            foreach ($data['items'] as $item) {
-                $idProduct = $item['product']['reference'];
-                $idCombination = 0;
+            foreach ($data['items'] as $key => $itemOyst) {
+                $oystProducts[$itemOyst['product']['reference']]= $itemOyst['quantity'];
+            }
+        }
 
-                if (false  !== strpos($idProduct, ';')) {
-                    $p = explode(';', $idProduct);
-                    $idProduct = $p[0];
-                    $idCombination = $p[1];
-                }
-
-                $product = new Product($idProduct);
-
-                if (!$product->active || !$product->available_for_order) {
-                    header('HTTP/1.1 400 Bad request');
-                    header('Content-Type: application/json');
-                    die(json_encode(array(
-                        'code' => 'product-unavailable',
-                        'message' => 'Unvailable product',
-                    )));
-                }
-
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
-                    if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, $item['product']['quantity']);
-                    }
-                }
-
-                $update_qty_result = $cart->updateQty($item['quantity'], (int)$idProduct, (int)$idCombination, false, 'up', $address->id);
-
-                if (PSConfiguration::get('FC_OYST_SHOULD_AS_STOCK') && _PS_VERSION_ >= '1.6.0.0') {
-                    if ($product->advanced_stock_management == 0) {
-                        StockAvailable::updateQuantity($idProduct, $idCombination, -$item['product']['quantity']);
-                    }
-                }
-
-                if (!$update_qty_result) {
-                    header('HTTP/1.1 400 Bad request');
-                    header('Content-Type: application/json');
-                    die(json_encode(array(
-                        'code' => 'stock-unavailable',
-                        'message' => 'Unvailable stock',
-                    )));
-                }
-
-                // Add items
-                $price = $product->getPrice(
-                    true,
-                    $idCombination,
-                    6,
-                    null,
-                    false,
-                    true,
-                    $item['quantity']
-                );
-
-                $without_reduc_price = $product->getPriceWithoutReduct(
-                    false,
-                    $idCombination
-                );
-
-                $title = is_array($product->name) ? reset($product->name) : $product->name;
+        if ($cart->id && count($cart->getProducts()) > 0) {
+            foreach ($cart->getProducts() as $item) {
+                $idProduct = $item['id_product'];
+                $idCombination = $item['id_product_attribute'];
+                $quantity = $item['cart_quantity'];
 
                 if ($idCombination > 0) {
-                    $combination = new Combination($idCombination);
-                    if (!Validate::isLoadedObject($combination)) {
-                        $this->logger->emergency(
-                            'Combination not exist ['.json_encode($data).']'
-                        );
-                    }
+                    $reference = (string)$idProduct.';'.$idCombination;
+                } else {
+                    $reference = (string)$idProduct;
+                }
 
-                    // Get attributes for title
-                    if ($combination && $combination->id) {
-                        $productRepository = new ProductRepository(Db::getInstance());
-                        $attributesInfo = $productRepository->getAttributesCombination($combination);
-                        foreach ($attributesInfo as $attributeInfo) {
-                            $title .= ' '.$attributeInfo['value'];
+                if (count($oystProducts) > 0 && in_array($reference, array_keys($oystProducts))) {
+                    $quantityOyst = $oystProducts[$reference];
+                    if ($quantityOyst != $item['cart_quantity']) {
+                        $cart->updateQty(
+                            $item['cart_quantity'],
+                            (int)$idProduct,
+                            (int)$idCombination,
+                            false,
+                            'down'
+                        );
+                        $update_qty_result = $cart->updateQty(
+                            $quantityOyst,
+                            (int)$idProduct,
+                            (int)$idCombination,
+                            false,
+                            'up'
+                        );
+
+                        if (!$update_qty_result) {
+                            header('HTTP/1.1 400 Bad request');
+                            header('Content-Type: application/json');
+                            die(json_encode(array(
+                                'code' => 'stock-unavailable',
+                                'message' => 'Unvailable stock',
+                            )));
                         }
                     }
+                } else {
+                    $cart->deleteProduct($idProduct, $idCombination);
                 }
 
-                $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
-                // Set amount total for cart rule with discount
-                $amount_total += $price;
+                if (count($oystProducts) > 0) {
+                    $product = new Product($idProduct);
 
-                $oneClickItem = new OneClickItem(
-                    (string)$item['product']['reference'],
-                    $amount,
-                    (int)$item['quantity']
-                );
+                    if (!$product->active || !$product->available_for_order) {
+                        header('HTTP/1.1 400 Bad request');
+                        header('Content-Type: application/json');
+                        die(json_encode(array(
+                            'code' => 'product-unavailable',
+                            'message' => 'Unvailable product',
+                        )));
+                    }
 
-                $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
-                if ($amount != $crossed_out_amount) {
-                    $oneClickItem->__set('crossedOutAmount', $crossed_out_amount);
+                    // Add items
+                    $price = $product->getPrice(
+                        true,
+                        $idCombination,
+                        6,
+                        null,
+                        false,
+                        true,
+                        $quantity
+                    );
+
+                    $without_reduc_price = $product->getPriceWithoutReduct(
+                        false,
+                        $idCombination
+                    );
+
+                    $title = is_array($product->name) ? reset($product->name) : $product->name;
+
+                    if ($idCombination > 0) {
+                        $combination = new Combination($idCombination);
+                        if (!Validate::isLoadedObject($combination)) {
+                            $this->logger->emergency(
+                                'Combination not exist ['.json_encode($data).']'
+                            );
+                        }
+
+                        // Get attributes for title
+                        if ($combination && $combination->id) {
+                            $productRepository = new ProductRepository(Db::getInstance());
+                            $attributesInfo = $productRepository->getAttributesCombination($combination);
+                            foreach ($attributesInfo as $attributeInfo) {
+                                $title .= ' '.$attributeInfo['value'];
+                            }
+                        }
+                    }
+
+                    $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
+                    // Set amount total for cart rule with discount
+                    $amount_total += $price;
+
+                    $oneClickItem = new OneClickItem(
+                        (string)$idProduct,
+                        $amount,
+                        (int)$quantity
+                    );
+
+                    $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
+                    if ($amount != $crossed_out_amount) {
+                        $oneClickItem->__set('crossedOutAmount', $crossed_out_amount);
+                    }
+                    $oneClickOrderCartEstimate->addItem($oneClickItem);
+                } else {
+                    $shipments = array();
+                    return json_encode($shipments);
                 }
-                $oneClickOrderCartEstimate->addItem($oneClickItem);
             }
         } else {
             $this->logger->emergency(
@@ -311,15 +346,13 @@ class CartService extends AbstractOystService
 
         $type = OystCarrier::HOME_DELIVERY;
 
+        $oyst_business_days = PSConfiguration::get('FC_OYST_BUSINESS_DAYS');
+        $business_days = explode(',', $oyst_business_days);
+
         // Add carriers
         foreach ($carriersAvailables as $shipment) {
             $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1); // Get id carrier
-
-            $id_reference = Db::getInstance()->getValue(
-                'SELECT `id_reference`
-                FROM `'._DB_PREFIX_.'carrier`
-                WHERE id_carrier = '.(int)$id_carrier
-            );
+            $id_reference = $this->getReferenceCarrier($id_carrier);
 
             $type_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_".$id_reference);
             $delay_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_DELAY_".$id_reference);
@@ -351,6 +384,19 @@ class CartService extends AbstractOystService
                     $delay_shipment = $delay[(int)$carrier->grade];
                 }
 
+                if ($oyst_business_days) {
+                    $delay_current = new \DateTime("NOW");
+                    $delay_current->add(new \DateInterval("PT".$delay_shipment."H"));
+                    $day_of_week = (int)$delay_current->format('N');
+                    if (!in_array($day_of_week, $business_days)) {
+                        do {
+                            $delay_shipment += 24;
+                            $delay_current->add(new \DateInterval("PT24H"));
+                            $new_day_of_week = (int)$delay_current->format('N');
+                        } while (!in_array($new_day_of_week, $business_days));
+                    }
+                }
+
                 $oneClickShipment = new OneClickShipmentCatalogLess(
                     $oystPrice,
                     $delay_shipment,
@@ -376,10 +422,7 @@ class CartService extends AbstractOystService
             foreach ($carriersAvailables as $shipment) {
                 $carrier_desintifier = Cart::desintifier($shipment['id_carrier']);
                 $id_carrier = (int)Tools::substr($carrier_desintifier, 0, -1);
-                $id_reference = Db::getInstance()->getValue('
-                    SELECT `id_reference`
-                    FROM `'._DB_PREFIX_.'carrier`
-                    WHERE id_carrier = '.(int)$id_carrier);
+                $id_reference = $this->getReferenceCarrier($id_carrier);
                 if ($id_reference == $id_default_carrier) {
                     $is_primary = true;
                 }
@@ -505,9 +548,15 @@ class CartService extends AbstractOystService
         }
 
         if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
-            require_once dirname(__FILE__).'/../../../giftonordermodule/Giftonorder.php';
             if ($data['context']['id_cart'] && (int)$data['context']['id_cart'] > 0) {
-                $giftInCart = \Giftonorder::getGiftsInCart($data['context']['id_cart']);
+                $sql = 'SELECT go.*
+                        FROM `'._DB_PREFIX_.'giftonorder_order` as go
+                        WHERE go.id_cart = '.(int)$data['context']['id_cart'];
+
+                $giftInCart = Db::getInstance()->ExecuteS($sql);
+                if (!$giftInCart) {
+                    $giftInCart = array();
+                }
                 if (count($giftInCart) > 0) {
                     foreach ($giftInCart as $gift) {
                         $idCombination = $gift['id_combination'];
@@ -566,6 +615,37 @@ class CartService extends AbstractOystService
             }
         }
 
+        // Get carrier selected
+        if ($data['shipment'] != null) {
+            $id_carrier_selected = (int)$data['shipment']['id'];
+        } else {
+            $carrier = Carrier::getCarrierByReference($id_default_carrier);
+            if (Validate::isLoadedObject($carrier)) {
+                $id_carrier_selected = $carrier->id;
+            }
+
+            if ($id_carrier_selected === null) {
+                foreach ($carriersAvailables as $shipment) {
+                    // Get id carrier
+                    $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1);
+                    $id_reference = $this->getReferenceCarrier($id_carrier);
+
+                    $type_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_".$id_reference);
+                    if ($type_shipment === OystCarrier::HOME_DELIVERY) {
+                        $id_carrier_selected = $id_carrier;
+                        break;
+                    }
+                }
+            }
+        }
+
+        $cart_amount = $cart->getOrderTotal(true, Cart::BOTH, $cart->getProducts(), $id_carrier_selected);
+
+        if ($cart_amount > 0) {
+            $cart_amount_oyst = new OystPrice($cart_amount, Context::getContext()->currency->iso_code);
+            $oneClickOrderCartEstimate->setCartAmount($cart_amount_oyst);
+        }
+
         $this->logger->info(
             sprintf(
                 'New notification oneClickOrderCartEstimate [%s]',
@@ -574,8 +654,24 @@ class CartService extends AbstractOystService
         );
 
         // Delete cart for module relaunch cart
-        $cart->delete();
+        // $cart->delete();
 
         return $oneClickOrderCartEstimate->toJson();
+    }
+
+    /**
+     * Return reference by carrier
+     * @param  int $id_carrier
+     * @return int $id_reference
+     */
+    public function getReferenceCarrier($id_carrier)
+    {
+        $id_reference = Db::getInstance()->getValue(
+            'SELECT `id_reference`
+            FROM `'._DB_PREFIX_.'carrier`
+            WHERE id_carrier = '.(int)$id_carrier
+        );
+
+        return $id_reference;
     }
 }

@@ -25,6 +25,9 @@
     <script type="text/javascript">
         $( document).ready(function(){
             var oyst = new OystOneClickCart({$shopUrl|cat:'/modules/oyst/oneClick.php?key='|cat:"$secureKey"|json_encode}, "{$controller|escape:'html':'UTF-8'}");
+            oyst.setIdBtnAddToCart("{$idBtnAddToCart|escape:'html':'UTF-8'}");
+            oyst.setIdSmartBtn("{$idSmartBtn|escape:'html':'UTF-8'}");
+            oyst.setPositionBtn("{$positionBtn|escape:'html':'UTF-8'}");
             oyst.setSmartBtn({$smartBtn|intval});
             oyst.setBorderBtn({$borderBtn|intval});
             oyst.setThemeBtn("{$themeBtn|escape:'html':'UTF-8'}");
@@ -35,7 +38,6 @@
             oyst.setMarginLeftBtn("{$marginLeftBtn|escape:'html':'UTF-8'}");
             oyst.setMarginRightBtn("{$marginRightBtn|escape:'html':'UTF-8'}");
             oyst.setLabelCta("{$oyst_label_cta|escape:'html':'UTF-8'}");
-            oyst.setIdBtnCart("{$idBtnCart|escape:'html':'UTF-8'}");
             oyst.prepareButton();
 
             window.__OYST__ = window.__OYST__ || {};
