@@ -194,7 +194,7 @@ class CartService {
                         $available_carriers[] = array(
                             'label' => $carrier_obj->name,
                             'reference' => $carrier_obj->id_reference,
-                            'delivery_delay' => $carrier_obj->delay,
+                            'delivery_delay' => '48', //Temp fix value, 48h TODO
                             'amount_tax_incl' => $cart->getCarrierCost($id_carrier, true),
                             'amount_tax_excl' => $cart->getCarrierCost($id_carrier, false),
                         );
@@ -209,16 +209,28 @@ class CartService {
 
                 //Applied carrier
                 if (!empty($cart->id_carrier)) {
-                    $selected_carrier_obj = new Carrier($cart->id_carrier, $this->id_lang);
-                    if (Validate::isLoadedObject($selected_carrier_obj)) {
-                        $response['shipping']['method_applied'] = array(
-                            'label' => $selected_carrier_obj->name,
-                            'reference' => $selected_carrier_obj->id_reference,
-                            'delivery_delay' => $selected_carrier_obj->delay,
-                            'amount_tax_incl' => $cart->getCarrierCost($cart->id_carrier, true),
-                            'amount_tax_excl' => $cart->getCarrierCost($cart->id_carrier, false),
-                        );
+                    $selected_carrier_id = $cart->id_carrier;
+                } else {
+                    //Get default shipping from store preferences
+                    $delivery_option = $cart->getDeliveryOption();
+                    if (!empty($delivery_option[$cart->id_address_delivery])) {
+                        $tmp = explode(',', $delivery_option[$cart->id_address_delivery]);
+                        $selected_carrier_id = $tmp[0];
+                    } else {
+                        //Get first carrier if no one match with preferences
+                        $selected_carrier_id = $carriers[0];
                     }
+                }
+
+                $selected_carrier_obj = new Carrier($selected_carrier_id, $this->id_lang);
+                if (Validate::isLoadedObject($selected_carrier_obj)) {
+                    $response['shipping']['method_applied'] = array(
+                        'label' => $selected_carrier_obj->name,
+                        'reference' => $selected_carrier_obj->id_reference,
+                        'delivery_delay' => '48', //Temp fix value, 48h TODO
+                        'amount_tax_incl' => $cart->getCarrierCost($cart->id_carrier, true),
+                        'amount_tax_excl' => $cart->getCarrierCost($cart->id_carrier, false),
+                    );
                 }
 
                 //Addresses
