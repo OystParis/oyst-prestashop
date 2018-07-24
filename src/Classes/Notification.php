@@ -117,7 +117,8 @@ class Notification extends ObjectModel
      * @param $id_order
      * @return string
      */
-    public static function getOystIdByOrderId($id_order) {
+    public static function getOystIdByOrderId($id_order)
+    {
         $oyst_id = Db::getInstance()->getValue("SELECT `oyst_id` 
             FROM `"._DB_PREFIX_."oyst_notification` 
             WHERE `order_id` = ".$id_order." 
@@ -134,7 +135,8 @@ class Notification extends ObjectModel
      * @param $id_cart
      * @return string
      */
-    public static function getOystIdByCartId($id_cart) {
+    public static function getOystIdByCartId($id_cart)
+    {
         $oyst_id = Db::getInstance()->getValue("SELECT `oyst_id` 
             FROM `"._DB_PREFIX_."oyst_notification` 
             WHERE `cart_id` = ".$id_cart." 
@@ -151,7 +153,8 @@ class Notification extends ObjectModel
      * @param $id_oyst
      * @return int
      */
-    public static function getOrderIdByOystId($id_oyst) {
+    public static function getOrderIdByOystId($id_oyst)
+    {
         $order_id = Db::getInstance()->getValue("SELECT `order_id` 
             FROM `"._DB_PREFIX_."oyst_notification` 
             WHERE `oyst_id` = '".$id_oyst."' 
@@ -159,6 +162,24 @@ class Notification extends ObjectModel
 
         if (!empty($order_id)) {
             return $order_id;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * @param $id_oyst
+     * @return int
+     */
+    public static function getCartIdByOystId($id_oyst)
+    {
+        $cart_id = Db::getInstance()->getValue("SELECT `cart_id` 
+            FROM `"._DB_PREFIX_."oyst_notification` 
+            WHERE `oyst_id` = '".$id_oyst."' 
+            ORDER BY `id_notification` DESC");
+
+        if (!empty($cart_id)) {
+            return $cart_id;
         } else {
             return 0;
         }
