@@ -203,15 +203,15 @@ class CartService {
 
                 $response['shipping'] = array(
                     'address' => array(),
-                    'carriers_available' => $available_carriers,
-                    'carrier_applied' => array(),
+                    'methods_available' => $available_carriers,
+                    'method_applied' => array(),
                 );
 
                 //Applied carrier
                 if (!empty($cart->id_carrier)) {
                     $selected_carrier_obj = new Carrier($cart->id_carrier, $this->id_lang);
                     if (Validate::isLoadedObject($selected_carrier_obj)) {
-                        $response['shipping']['carrier_applied'] = array(
+                        $response['shipping']['method_applied'] = array(
                             'label' => $selected_carrier_obj->name,
                             'reference' => $selected_carrier_obj->id_reference,
                             'delivery_delay' => $selected_carrier_obj->delay,
@@ -343,12 +343,12 @@ class CartService {
     public function formatAddress(Address $address)
     {
         return array(
-            'alias' => 'Adresse oyst',
+            'alias' => $address->alias,
             'company' => $address->company,
             'lastname' => $address->lastname,
             'firstname' => $address->firstname,
-            'address1' => $address->address1,
-            'address2' => $address->address2,
+            'street1' => $address->address1,
+            'street2' => $address->address2,
             'postcode' => $address->postcode,
             'city' => $address->city,
             'country' => array(

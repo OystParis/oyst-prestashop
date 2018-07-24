@@ -45,8 +45,14 @@ class CheckoutController extends AbstractOystController
     {
         $returned_errors = array();
         if (!empty($params['url']['id'])) {
+            $id_oyst = $params['url']['id'];
             if (!empty($params['data'])) {
-                $cart = new Cart((int)$params['url']['id']);
+                if (isset($params['data']['internal_id'])) {
+                    $cart_id = $params['data']['internal_id'];
+                } else {
+                    $cart_id = Notification::getCartIdByOystId($id_oyst);
+                }
+                $cart = new Cart($cart_id);
                 if (Validate::isLoadedObject($cart)) {
                     $errors = [];
                     $context = Context::getContext();
@@ -55,11 +61,10 @@ class CheckoutController extends AbstractOystController
                     $context->shop = new Shop($cart->id_shop);
 
                     $data = $params['data'];
-
-                    if (!empty($data['id_oyst']) && !Notification::cartLinkIsAlreadyDone($cart->id)) {
+                    if (!empty($id_oyst) && !Notification::cartLinkIsAlreadyDone($cart->id)) {
                         $notification = new Notification();
                         $notification->cart_id = $cart->id;
-                        $notification->oyst_id = $data['id_oyst'];
+                        $notification->oyst_id = $id_oyst;
                         $notification->status = Notification::WAITING_STATUS;
                         try {
                             $notification->save();
@@ -71,7 +76,7 @@ class CheckoutController extends AbstractOystController
                     if (!empty($data['items'])) {
                         $cart_products = $cart->getProducts(false, false, null, false);
                         foreach ($data['items'] as $product) {
-                            $ids = explode('-', $product['reference']);
+                            $ids = explode('-', $product['internal_reference']);
                             $id_product = (isset($ids[0]) ? $ids[0] : 0);
                             $id_product_attribute = (isset($ids[1]) ? $ids[1] : 0);
 
@@ -134,12 +139,34 @@ class CheckoutController extends AbstractOystController
                     $id_customer = 0;
                     $id_address_delivery = 0;
                     $id_address_invoice = 0;
+
                     //First, search customer (id, email)
                     //If found => set customer id to cart and check his addresses
                     if (!empty($data['user'])) {
                         $customer_service = CustomerService::getInstance();
                         $object_service = ObjectService::getInstance();
                         $finded_customer = $customer_service->searchCustomer($data['user']);
+
+                        //Mapping for addresses
+                        $mapping_fields = array(
+                            'street1' => 'address1',
+                            'street2' => 'address2',
+                        );
+
+                        foreach ($mapping_fields as $oyst_name => $prestashop_name) {
+                            if (isset($data['shipping']['address'][$oyst_name])) {
+                                $data['shipping']['address'][$prestashop_name] = $data['shipping']['address'][$oyst_name];
+                            }
+                            if (isset($data['billing']['address'][$oyst_name])) {
+                                $data['shipping']['address'][$prestashop_name] = $data['shipping']['address'][$oyst_name];
+                            }
+                        }
+                        if (isset($data['shipping']['address'])) {
+                            $data['shipping']['address']['alias'] = 'Oyst';
+                        }
+                        if (isset($data['billing']['billing'])) {
+                            $data['billing']['address']['alias'] = 'Oyst';
+                        }
 
                         //If customer is not finded and we have informations for create him => do it
                         if (empty($finded_customer['customer_obj'])) {
@@ -178,6 +205,7 @@ class CheckoutController extends AbstractOystController
                             $result = $object_service->createObject('Address', $data['shipping']['address']);
                             if (empty($result['errors'])) {
                                 $result['object']->id_customer = $id_customer;
+                                $result['object']->alias .= ' '.$result['object']->id;
                                 $result['object']->save();
                                 $id_address_delivery = $result['id'];
                                 $finded_customer['addresses'] = json_decode(json_encode($result['object']), true);
@@ -188,7 +216,7 @@ class CheckoutController extends AbstractOystController
 
                         //Search address invoice
                         if (!empty($finded_customer['addresses'])) {
-                            $id_address_invoice = $this->findExistentAddress($finded_customer['addresses'], $data['shipping']['address']);
+                            $id_address_invoice = $this->findExistentAddress($finded_customer['addresses'], $data['billing']['address']);
 
                             //If not found, create it
                             if (empty($id_address_invoice)) {
@@ -202,6 +230,7 @@ class CheckoutController extends AbstractOystController
                                 $result = $object_service->createObject('Address', $data['billing']['address']);
                                 if (empty($result['errors'])) {
                                     $result['object']->id_customer = $id_customer;
+                                    $result['object']->alias .= ' '.$result['object']->id;
                                     $result['object']->save();
                                     $id_address_invoice = $result['id'];
                                 } else {
@@ -223,8 +252,8 @@ class CheckoutController extends AbstractOystController
                     }
 
                     //Carrier
-                    if (!empty($data['shipping']['carrier_applied']['reference'])) {
-                        $carrier = Carrier::getCarrierByReference($data['shipping']['carrier_applied']['reference']);
+                    if (!empty($data['shipping']['method_applied']['reference'])) {
+                        $carrier = Carrier::getCarrierByReference($data['shipping']['method_applied']['reference']);
                         if (Validate::isLoadedObject($carrier)) {
                             $cart->id_carrier = $carrier->id;
                             $cart->delivery_option = json_encode(array($cart->id_address_delivery => $cart->id_carrier.','));

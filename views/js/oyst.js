@@ -1,20 +1,12 @@
 "use strict";
 
-let firstLoad = true;
-
 window.__OYST__ = window.__OYST__ || {};
 
 window.__OYST__.getCart = async function() {
-    console.log('passage get cart oyst.js');
-
-    if (firstLoad) {
-        firstLoad = false;
-    } else {
-        if (prestashop.page.page_name === 'product') {
-            await addProductToCart();
-        }
-        return getCartId();
+    if (prestashop.page.page_name === 'product') {
+        await addProductToCart();
     }
+    return getCartId();
 };
 //arrow function
 
