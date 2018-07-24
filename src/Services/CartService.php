@@ -256,13 +256,13 @@ class CartService {
 
                 //Totals
                 $response['totals'] = array(
-                    'tax_incl' => array(
+                    'details_tax_incl' => array(
                         'total_items' => $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS),
                         'total_shipping' => $cart->getOrderTotal(true, Cart::ONLY_SHIPPING),
                         'total_discount' => $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS),
                         'total' => $cart->getOrderTotal(true, Cart::BOTH),
                     ),
-                    'tax_excl' => array(
+                    'details_tax_excl' => array(
                         'total_items' => $cart->getOrderTotal(false, Cart::ONLY_PRODUCTS),
                         'total_shipping' => $cart->getOrderTotal(false, Cart::ONLY_SHIPPING),
                         'total_discount' => $cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS),
