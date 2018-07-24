@@ -158,13 +158,13 @@ class CheckoutController extends AbstractOystController
                                 $data['shipping']['address'][$prestashop_name] = $data['shipping']['address'][$oyst_name];
                             }
                             if (isset($data['billing']['address'][$oyst_name])) {
-                                $data['shipping']['address'][$prestashop_name] = $data['shipping']['address'][$oyst_name];
+                                $data['billing']['address'][$prestashop_name] = $data['shipping']['address'][$oyst_name];
                             }
                         }
                         if (isset($data['shipping']['address'])) {
                             $data['shipping']['address']['alias'] = 'Oyst';
                         }
-                        if (isset($data['billing']['billing'])) {
+                        if (isset($data['billing']['address'])) {
                             $data['billing']['address']['alias'] = 'Oyst';
                         }
 
