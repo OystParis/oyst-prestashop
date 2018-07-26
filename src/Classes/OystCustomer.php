@@ -4,7 +4,7 @@ namespace Oyst\Classes;
 
 use Db;
 
-class Customer
+class OystCustomer
 {
     /**
      * @param int $id_customer
