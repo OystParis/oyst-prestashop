@@ -4,14 +4,23 @@ namespace Oyst\Services;
 
 use Address;
 use Carrier;
+use Context;
+use Currency;
 use Customer;
 use Db;
+use Exception;
+use Gender;
+use Language;
 use Order;
 use OrderCarrier;
+use Oyst\Classes\Notification;
+use Oyst\Classes\OrderBuilder;
+use Shop;
 use Validate;
 
 class OrderService {
 
+    private $id_lang;
     private static $instance;
     public static function getInstance()
     {
@@ -21,7 +30,9 @@ class OrderService {
         return self::$instance;
     }
 
-    private function __construct() {}
+    private function __construct() {
+        $this->id_lang = Language::getIdByIso('FR');
+    }
 
     private function __clone() {}
 
@@ -53,23 +64,116 @@ class OrderService {
     {
         $result = array();
         //Get order info (carrier, state etc)
-        $order = new Order($id_order);
+        try {
+            $order = new Order($id_order);
+            if (!empty($order->id_lang)) {
+                $this->id_lang = $order->id_lang;
+            }
+        } catch (Exception $e) {
+            return array('error' => 'Failed to load order object');
+        }
         if (Validate::isLoadedObject($order)) {
-            $result['order'] = json_decode(json_encode($order), true);
-            $carrier = new Carrier($order->id_carrier);
-            if (Validate::isLoadedObject($carrier)) {
-                $result['order']['id_carrier_reference'] = $carrier->id_reference;
+
+            $context = Context::getContext();
+
+            $id_oyst = Notification::getOystIdByOrderId($id_order);
+            $ip = CustomerService::getInstance()->getLastIpFromIdCustomer($order->id_customer);
+            $customer = null;
+            $gender_name = '';
+            if (!empty($order->id_customer)) {
+                $customer = new Customer($order->id_customer);
+                if (Validate::isLoadedObject($customer)) {
+                    $gender = new Gender($customer->id_gender, $this->id_lang);
+                    if (Validate::isLoadedObject($gender)) {
+                        $gender_name = $gender->name;
+                    }
+                } else {
+                    $customer = null;
+                }
             }
 
-            //Get order details
-            $result['products'] = $order->getProductsDetail();
+            $order_state = $order->getCurrentOrderState();
 
-            //Get customer infos
-            $result['customer'] = new Customer($order->id_customer);
+            $order_details = $order->getProducts();
 
-            //Get addresses (invoice + delivery)
-            $result['address_delivery'] = new Address($order->id_address_delivery);
-            $result['address_invoice'] = new Address($order->id_address_invoice);
+            //Complete cart products and get carriers list
+//            foreach ($cart_products as &$cart_product) {
+//                $cart_product['image'] = $context->link->getImageLink($cart_product['link_rewrite'], $cart_product['id_image']);
+//
+//                if (!empty($cart_product['id_product_attribute'])) {
+//                    $attributes = Db::getInstance()->executeS("SELECT al.`id_attribute`, al.`name` value_name, agl.`public_name` attribute_name
+//                            FROM "._DB_PREFIX_."product_attribute_combination pac
+//                            INNER JOIN "._DB_PREFIX_."attribute a ON a.id_attribute = pac.id_attribute
+//                            INNER JOIN "._DB_PREFIX_."attribute_lang al ON (pac.id_attribute = al.id_attribute AND al.id_lang=".$this->id_lang.")
+//                            INNER JOIN "._DB_PREFIX_."attribute_group_lang agl ON (a.id_attribute_group = agl.id_attribute_group AND agl.id_lang=".$this->id_lang.")
+//                            WHERE pac.id_product_attribute=".$cart_product['id_product_attribute']);
+//
+//                    $cart_product['attributes'] = $attributes;
+//                }
+//            }
+
+            $cart_rules = $order->getCartRules();
+
+            //Addresses
+            $address_delivery = null;
+            if (!empty($order->id_address_delivery)) {
+                $address = new Address($order->id_address_delivery);
+                if (Validate::isLoadedObject($address)) {
+                    $address_delivery = $address;
+                }
+            }
+
+            //Applied carrier
+            if (!empty($order->id_carrier)) {
+                $selected_carrier_id = $order->id_carrier;
+            } else {
+                $selected_carrier_id = 0;
+            }
+
+            $selected_carrier_obj = new Carrier($selected_carrier_id, $this->id_lang);
+            if (!Validate::isLoadedObject($selected_carrier_obj)) {
+                $selected_carrier_obj = null;
+            }
+
+            $address_invoice = null;
+            if (!empty($order->id_address_invoice)) {
+                $address = new Address($order->id_address_invoice);
+                if (Validate::isLoadedObject($address)) {
+                    $address_invoice = $address;
+                }
+            }
+
+            //Shop
+            $shop = null;
+            $response['shop'] = array();
+            $shop_obj = new Shop($order->id_shop);
+            if (Validate::isLoadedObject($shop_obj)) {
+                $shop = $shop_obj;
+            }
+
+            //Currency
+            $currency = new Currency($order->id_currency);
+            if (!Validate::isLoadedObject($currency)) {
+                $currency = null;
+            }
+
+            $checkoutBuilder = new OrderBuilder($this->id_lang);
+            return $checkoutBuilder->buildOrder(
+                $id_oyst,
+                $ip,
+                $order,
+                $order_state,
+                $customer,
+                $gender_name,
+                $order_details,
+                $cart_rules,
+                $context,
+                $selected_carrier_obj,
+                $address_delivery,
+                $address_invoice,
+                $shop,
+                $currency
+            );
         } else {
             $result['errors'] = "Order not exists";
         }
