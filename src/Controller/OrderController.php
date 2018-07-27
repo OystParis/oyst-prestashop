@@ -25,7 +25,7 @@ class OrderController extends AbstractOystController
     {
         if (!empty($params['url']['id'])) {
             $id_order = Notification::getOrderIdByOystId($params['url']['id']);
-            $response = CartService::getInstance()->getCart(Cart::getCartByOrderId($id_order));
+            $response = OrderService::getInstance()->getOrder($id_order);
             $this->respondAsJson($response);
         } else {
             $this->respondError(400, 'id_order is missing');
@@ -99,7 +99,7 @@ class OrderController extends AbstractOystController
                         try {
                             if ($oyst->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), $total, $oyst->displayName, NULL, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
                                 $notification->complete($oyst->currentOrder);
-                                $this->respondAsJson('Order created with id : '.$oyst->currentOrder);
+                                $this->respondAsJson(OrderService::getInstance()->getOrder($oyst->currentOrder));
                             } else {
                                 $this->respondError(400, 'Order creation failed');
                             }
