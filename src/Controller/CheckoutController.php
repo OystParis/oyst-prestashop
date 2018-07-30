@@ -258,7 +258,7 @@ class CheckoutController extends AbstractOystController
                             $cart->id_carrier = $carrier->id;
                             $cart->delivery_option = json_encode(array($cart->id_address_delivery => $cart->id_carrier.','));
                         } else {
-                            $errors[] = 'Carrier not founded';
+                            $errors[] = 'Carrier '.$data['shipping']['method_applied']['reference'].' not founded';
                         }
                         //TODO Manage access point here (with module exception etc)
                     }
