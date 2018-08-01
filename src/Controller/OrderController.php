@@ -9,7 +9,6 @@ use Order;
 use OrderSlip;
 use Oyst;
 use Oyst\Classes\Notification;
-use Oyst\Services\CartService;
 use Oyst\Services\OrderService;
 use Validate;
 
@@ -45,28 +44,6 @@ class OrderController extends AbstractOystController
                         $result['change_order_state'] = array('success' => true);
                     } else {
                         $result['change_order_state'] = array('error' => 'The order already has this status');
-                    }
-                }
-
-                if (!empty($params['data']['refund'])) {
-                    $amount = 0;
-                    $amount_choosen = false;
-                    $products_list = array();
-                    //Get order details
-                    foreach ($order->getProductsDetail() as $order_detail) {
-                        $products_list[] = array(
-                            'id_order_detail' => $order_detail['id_order_detail'],
-                            'unit_price' => $order_detail['unit_price_tax_excl'],
-                            'quantity' => $order_detail['product_quantity'],
-                        );
-                    };
-
-                    $shipping_cost = $order->total_shipping_tax_excl;
-
-                    if (OrderSlip::create($order, $products_list, $shipping_cost, $amount, $amount_choosen)) {
-                        $result['refund'] = 'Order slip created successfully';
-                    } else {
-                        $result['refund'] = 'Order slip creation failed';
                     }
                 }
 
