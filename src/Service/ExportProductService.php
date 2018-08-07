@@ -126,7 +126,7 @@ class ExportProductService extends AbstractOystService
      * @return OystProduct[]
      * @throws Exception
      */
-    public function transformProductLess($id_product, $id_combination, $quantity)
+    public function transformProductLess($id_product, $id_combination, $quantity, $usetax = true)
     {
         // Tricks requirements for PrestaShop
         // $this->context->cart = new Cart();
@@ -141,7 +141,7 @@ class ExportProductService extends AbstractOystService
             return null;
         }
 
-        if (!($oystProduct = $this->productTransformer->transform($product, $quantity, $id_combination))) {
+        if (!($oystProduct = $this->productTransformer->transform($product, $quantity, $id_combination, $usetax))) {
             $this->logger->alert(sprintf('Product %d won\'t be exported', $id_product));
             return null;
         }
@@ -153,7 +153,8 @@ class ExportProductService extends AbstractOystService
                 $oystProductVariation = $this->productTransformer->transformCombination(
                     $product,
                     $combination,
-                    $quantity
+                    $quantity,
+                    $usetax
                 );
                 if ($oystProductVariation) {
                     $variations = array($oystProductVariation);

@@ -117,6 +117,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_MANAGE_QUANTITY'         => 'int',
         'FC_OYST_MANAGE_QUANTITY_CART'    => 'int',
         'FC_OYST_STICKY'                  => 'int',
+        'FC_OYST_ALLOW_COUPON'            => 'int',
         'FC_OYST_ONLY_FOR_IP'             => 'string',
         'FC_OYST_LANG'                    => array('type' => 'multiple', 'field' => 'oyst_lang'),
         OystConfiguration::API_KEY_PROD_FREEPAY => 'string',

@@ -100,7 +100,7 @@ class ProductService extends AbstractOystService
      */
     public function delete(OystProduct $product)
     {
-        $this->requester->call('deleteProduct', array($product->getRef()));
+        $this->requester->call('deleteProduct', array($product->__get('reference')));
 
         return $this->requester->getApiClient()->getLastHttpCode() == "200";
     }

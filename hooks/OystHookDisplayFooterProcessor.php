@@ -117,7 +117,6 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         $assign['restriction_languages'] = $restriction_languages;
         $assign['stockManagement'] = Configuration::get('PS_STOCK_MANAGEMENT');
         $assign['controller'] = $controller;
-        $assign['styles_custom'] = $this->addButtonWrapperStyles();
         $assign['error_quantity_null_text'] = Tools::displayError('Null quantity.');
         $assign['error_product_outofstock_text'] = Tools::displayError('There is not enough product in stock.');
 
@@ -156,6 +155,10 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
                 'JSOneClickUrl' => $JSOneClickUrl,
             ));
         }
+
+        $this->smarty->assign(array(
+            'styles_custom' => $this->addButtonWrapperStyles()
+        ));
 
         return $this->module->fcdisplay(__FILE__, 'displayFooter.tpl');
     }

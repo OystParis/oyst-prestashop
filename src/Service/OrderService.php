@@ -68,22 +68,23 @@ class OrderService extends AbstractOystService
     {
         $oystAddress = $oystUser['address'];
         $address = $this->addressRepository->findAddress($oystAddress, $customer);
+
+        $countryId = (int)Country::getByIso($oystAddress['country']);
+        if (0 >= $countryId) {
+            $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
+        }
+
+        $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['first_name']);
+        if (isset(Address::$definition['fields']['firstname']['size'])) {
+            $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+        }
+
+        $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['last_name']);
+        if (isset(Address::$definition['fields']['lastname']['size'])) {
+            $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+        }
+
         if (!Validate::isLoadedObject($address)) {
-            $countryId = (int)Country::getByIso('fr');
-            if (0 >= $countryId) {
-                $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
-            }
-
-            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['first_name']);
-            if (isset(Address::$definition['fields']['firstname']['size'])) {
-                $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
-            }
-
-            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $oystAddress['last_name']);
-            if (isset(Address::$definition['fields']['lastname']['size'])) {
-                $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
-            }
-
             $address = new Address;
             $address->id_customer = $customer->id;
             $address->firstname = $firstname;
@@ -105,6 +106,27 @@ class OrderService extends AbstractOystService
             }
 
             $address->add();
+        } else {
+            $address->id_customer = $customer->id;
+            $address->firstname = $firstname;
+            $address->lastname = $lastname;
+            $address->address1 = $oystAddress['street'];
+            $address->postcode = $oystAddress['postcode'];
+            $address->city = $oystAddress['city'];
+            $address->alias = 'OystAddress';
+            $address->id_country = $countryId;
+            $address->phone = $oystUser['phone'];
+            $address->phone_mobile = $oystUser['phone'];
+
+            if (isset($oystAddress['company_name'])) {
+                $address->company = $oystAddress['company_name'];
+            }
+
+            if (isset($oystAddress['complementary'])) {
+                $address->address2 = $oystAddress['complementary'];
+            }
+
+            $address->update();
         }
 
         return $address;
@@ -420,97 +442,99 @@ class OrderService extends AbstractOystService
                 'payment_id = "'.pSQL($oystOrderInfo['id']).'" AND `status` = "start"'
             );
 
-            // Insert data on table mr_selected for pickup mondial relay
-            $pickupAddress = $oystOrderInfo['shipment']['pickup_store']['address'];
-            $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
-            $carrierInfo = $oystOrderInfo['shipment']['carrier'];
+            if (isset($oystOrderInfo['shipment']['pickup_store']['address'])) {
+                // Insert data on table mr_selected for pickup mondial relay
+                $pickupAddress = $oystOrderInfo['shipment']['pickup_store']['address'];
+                $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
+                $carrierInfo = $oystOrderInfo['shipment']['carrier'];
 
-            if ($carrierInfo['type'] == 'mondial_relay' &&
-                Module::isEnabled('mondialrelay') &&
-                Module::isInstalled('mondialrelay')) {
-                $id_mr_method = (int)Db::getInstance()->getValue(
-                    'SELECT m.id_mr_method
-                    FROM `'._DB_PREFIX_.'mr_method` m
-                    LEFT JOIN `'._DB_PREFIX_.'mr_method_shop` ms ON (ms.id_mr_method = m.id_mr_method)
-                    WHERE m.`id_carrier` = '.(int)$carrierInfo['id'].' AND ms.`id_shop` = '.(int)Context::getContext()->shop->id
-                );
+                if ($carrierInfo['type'] == 'mondial_relay' &&
+                    Module::isEnabled('mondialrelay') &&
+                    Module::isInstalled('mondialrelay')) {
+                    $id_mr_method = (int)Db::getInstance()->getValue(
+                        'SELECT m.id_mr_method
+                        FROM `'._DB_PREFIX_.'mr_method` m
+                        LEFT JOIN `'._DB_PREFIX_.'mr_method_shop` ms ON (ms.id_mr_method = m.id_mr_method)
+                        WHERE m.`id_carrier` = '.(int)$carrierInfo['id'].' AND ms.`id_shop` = '.(int)Context::getContext()->shop->id
+                    );
 
-                $md_data = array();
-                $md_data[] = array(
-                    'id_customer' => (int)$customer->id,
-                    'id_method' => (int)$id_mr_method,
-                    'id_cart' => (int)$cart->id,
-                    'id_order' => (int)$order->id,
-                    'MR_Selected_Num' => pSQL($pickupId),
-                    'MR_Selected_LgAdr1' => ($pickupAddress['name'] != '')? pSQL($pickupAddress['name']) : 'NULL',
-                    'MR_Selected_LgAdr3' => ($pickupAddress['street'] != '')? pSQL($pickupAddress['street']) : 'NULL',
-                    'MR_Selected_CP' => ($pickupAddress['postal_code'] != '')? (int)$pickupAddress['postal_code'] : 'NULL',
-                    'MR_Selected_Ville' => ($pickupAddress['city'] != '')? pSQL($pickupAddress['city']) : 'NULL',
-                    'MR_Selected_Pays' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
-                );
+                    $md_data = array();
+                    $md_data[] = array(
+                        'id_customer' => (int)$customer->id,
+                        'id_method' => (int)$id_mr_method,
+                        'id_cart' => (int)$cart->id,
+                        'id_order' => (int)$order->id,
+                        'MR_Selected_Num' => pSQL($pickupId),
+                        'MR_Selected_LgAdr1' => ($pickupAddress['name'] != '')? pSQL($pickupAddress['name']) : 'NULL',
+                        'MR_Selected_LgAdr3' => ($pickupAddress['street'] != '')? pSQL($pickupAddress['street']) : 'NULL',
+                        'MR_Selected_CP' => ($pickupAddress['postal_code'] != '')? (int)$pickupAddress['postal_code'] : 'NULL',
+                        'MR_Selected_Ville' => ($pickupAddress['city'] != '')? pSQL($pickupAddress['city']) : 'NULL',
+                        'MR_Selected_Pays' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
+                    );
 
-                Db::getInstance()->insert('mr_selected', $md_data);
-            }
-
-            if (($carrierInfo['type'] == 'colissimo_poste' || $carrierInfo['type'] == 'colissimo_commerces') &&
-                (Module::isEnabled('soflexibilite') &&
-                Module::isInstalled('soflexibilite')) ||
-                (Module::isEnabled('socolissimo') &&
-                Module::isInstalled('socolissimo'))
-            ) {
-                if ($carrierInfo['type'] == 'colissimo_poste') {
-                    $delivery_mode = 'BPR';
-                } else {
-                    $delivery_mode = 'A2P';
+                    Db::getInstance()->insert('mr_selected', $md_data);
                 }
 
-                if ($pickupAddress['name'] != '') {
-                    $pickup_name = $pickupAddress['name'];
-                } else {
-                    $pickup_name = 'none';
-                }
-
-                $module = Module::getInstanceByName('soflexibilite');
-
-                $data = array(
-                    'id_cart' => (int)$cart->id,
-                    'id_customer' => (int)$customer->id,
-                    'delivery_mode' => $delivery_mode,
-                    'prid' => pSQL($pickupId),
-                    'prname' => pSQL($pickup_name),
-                    'prfirstname' => pSQL($customer->firstname),
-                    'pradress1' => pSQL($deliveryAddress->address1),
-                    'przipcode' => pSQL($deliveryAddress->postcode),
-                    'prtown' => pSQL($deliveryAddress->country),
-                    'cecountry' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
-                    'cephonenumber' => pSQL(str_replace('+33', '0', $deliveryAddress->phone)),
-                    'ceemail' => pSQL($customer->email),
-                    'cecompanyname' => pSQL($pickup_name),
-                );
-
-                // Check version module soflexibilite
-                if ($module instanceof Module) {
-                    if ($module->version > '3.0' && $module->name == 'soflexibilite') {
-                        $data['cename'] = pSQL($customer->lastname);
-                        $data['cefirstname'] = pSQL($customer->firstname);
+                if (($carrierInfo['type'] == 'colissimo_poste' || $carrierInfo['type'] == 'colissimo_commerces') &&
+                    (Module::isEnabled('soflexibilite') &&
+                    Module::isInstalled('soflexibilite')) ||
+                    (Module::isEnabled('socolissimo') &&
+                    Module::isInstalled('socolissimo'))
+                ) {
+                    if ($carrierInfo['type'] == 'colissimo_poste') {
+                        $delivery_mode = 'BPR';
+                    } else {
+                        $delivery_mode = 'A2P';
                     }
+
+                    if ($pickupAddress['name'] != '') {
+                        $pickup_name = $pickupAddress['name'];
+                    } else {
+                        $pickup_name = 'none';
+                    }
+
+                    $module = Module::getInstanceByName('soflexibilite');
+
+                    $data = array(
+                        'id_cart' => (int)$cart->id,
+                        'id_customer' => (int)$customer->id,
+                        'delivery_mode' => $delivery_mode,
+                        'prid' => pSQL($pickupId),
+                        'prname' => pSQL($pickup_name),
+                        'prfirstname' => pSQL($customer->firstname),
+                        'pradress1' => pSQL($deliveryAddress->address1),
+                        'przipcode' => pSQL($deliveryAddress->postcode),
+                        'prtown' => pSQL($deliveryAddress->city),
+                        'cecountry' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
+                        'cephonenumber' => pSQL(str_replace('+33', '0', $deliveryAddress->phone)),
+                        'ceemail' => pSQL($customer->email),
+                        'cecompanyname' => pSQL($pickup_name),
+                    );
+
+                    // Check version module soflexibilite
+                    if ($module instanceof Module) {
+                        if ($module->version > '3.0' && $module->name == 'soflexibilite') {
+                            $data['cename'] = pSQL($customer->lastname);
+                            $data['cefirstname'] = pSQL($customer->firstname);
+                        }
+                    }
+
+                    Db::getInstance()->insert(
+                        'socolissimo_delivery_info',
+                        $data
+                    );
                 }
 
-                Db::getInstance()->insert(
-                    'socolissimo_delivery_info',
-                    $data
-                );
-            }
-
-            if ($carrierInfo['type'] == 'colissimo' && $pickupId &&
-                Module::isEnabled('chronopost') &&
-                Module::isInstalled('chronopost')) {
-                $md_data = array();
-                $md_data[] = array(
-                    'id_cart' => (int)$cart->id,
-                    'id_pr' => pSQL($pickupId),
-                );
-                Db::getInstance()->insert('chrono_cart_relais', $md_data);
+                if ($carrierInfo['type'] == 'colissimo' && $pickupId &&
+                    Module::isEnabled('chronopost') &&
+                    Module::isInstalled('chronopost')) {
+                    $md_data = array();
+                    $md_data[] = array(
+                        'id_cart' => (int)$cart->id,
+                        'id_pr' => pSQL($pickupId),
+                    );
+                    Db::getInstance()->insert('chrono_cart_relais', $md_data);
+                }
             }
         }
 
@@ -602,9 +626,20 @@ class OrderService extends AbstractOystService
 
             if ($oystOrderInfo['order']['context'] && isset($oystOrderInfo['order']['context']['id_user'])) {
                 $customer = new Customer((int)$oystOrderInfo['order']['context']['id_user']);
+            } elseif ($id_customer = Customer::customerExists($oystOrderInfo['order']['user']['email'], true)) {
+                $customer = new Customer($id_customer);
             } else {
                 $customer = $this->getCustomer($oystOrderInfo['order']['user']);
+
+                // Change id_customer for address
+                if ($oystOrderInfo['order']['context'] && isset($oystOrderInfo['order']['context']['id_address'])) {
+                    $address = new Address($oystOrderInfo['order']['context']['id_address']);
+                    $address->id_customer = $customer->id;
+
+                    $address->update();
+                }
             }
+
             if (!Validate::isLoadedObject($customer)) {
                 $data['error'] = 'Customer not found or can\'t be found';
             }

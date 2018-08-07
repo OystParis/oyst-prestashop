@@ -21,32 +21,33 @@
 
 namespace Oyst\Service;
 
-use Combination;
+use Db;
+use Cart;
+use Oyst;
+use Group;
+use Tools;
+use Module;
+use Address;
+use Context;
+use Country;
+use Product;
+use CartRule;
+use Currency;
+use Customer;
+use Validate;
 use Exception;
+use Combination;
+use StockAvailable;
 use Oyst\Classes\OystUser;
 use Oyst\Classes\OystPrice;
-use Oyst\Classes\OystProduct;
 use Oyst\Classes\OystAddress;
-use Oyst\Classes\OneClickOrderParams;
-use Oyst\Classes\OneClickNotifications;
-use Oyst\Classes\OneClickCustomization;
-use Oyst\Service\Http\CurrentRequest;
-use Product;
-use Validate;
-use Oyst;
-use Context;
-use Currency;
+use Oyst\Classes\OystProduct;
 use Configuration as ConfigurationP;
+use Oyst\Classes\OneClickOrderParams;
+use Oyst\Service\Http\CurrentRequest;
+use Oyst\Classes\OneClickCustomization;
+use Oyst\Classes\OneClickNotifications;
 use Oyst\Factory\AbstractExportProductServiceFactory;
-use Tools;
-use StockAvailable;
-use Module;
-use CartRule;
-use Cart;
-use Address;
-use Db;
-use Customer;
-use Country;
 
 /**
  * Class Oyst\Service\OneClickService
@@ -126,12 +127,22 @@ class OneClickService extends AbstractOystService
         Context::getContext()->currency = new Currency(ConfigurationP::get('PS_CURRENCY_DEFAULT'));
         $exportProductService = AbstractExportProductServiceFactory::get($oyst, Context::getContext());
         $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
+        $customer = $this->context->customer;
 
         // if ($request->hasRequest('labelCta')) {
             $labelCta = $request->getRequestItem('labelCta');
         // } else {
         //     $labelCta = false;
         // }
+
+        // Get usetax for group
+        $usetax = true;
+
+        if ($customer) {
+            if (Group::getPriceDisplayMethod($customer->id_default_group) == 1) {
+                $usetax = false;
+            }
+        }
 
         if ($oyst->displayBtnCart($controller)) {
             // Check validity cart rule ?
@@ -252,7 +263,8 @@ class OneClickService extends AbstractOystService
                     $product_less = $exportProductService->transformProductLess(
                         $product['id_product'],
                         $product['id_product_attribute'],
-                        $product['cart_quantity']
+                        $product['cart_quantity'],
+                        $usetax
                     );
 
                     $customizations = Context::getContext()->cart->getProductCustomization($product['id_product']);
@@ -283,7 +295,8 @@ class OneClickService extends AbstractOystService
                 $product_less = $exportProductService->transformProductLess(
                     $idProduct,
                     $idCombination,
-                    $quantity
+                    $quantity,
+                    $usetax
                 );
 
                 $customizations = Context::getContext()->cart->getProductCustomization($idProduct);
@@ -326,7 +339,6 @@ class OneClickService extends AbstractOystService
 
         if (!isset($data['error'])) {
             $oystUser = null;
-            $customer = $this->context->customer;
             if ($customer->isLogged()) {
                 $oystUser = (new OystUser())
                     ->setFirstName($customer->firstname)
@@ -361,6 +373,21 @@ class OneClickService extends AbstractOystService
                 $oystAddress->setCountry($country_iso);
 
                 $oystUser->addAddress($oystAddress);
+            } else {
+                $address_fake = new Address();
+                $address_fake->firstname = 'FAKE';
+                $address_fake->lastname = 'Customer';
+                $address_fake->address1 = '98 rue de la victoire';
+                $address_fake->postcode = '75000';
+                $address_fake->city = 'Paris';
+                $address_fake->alias = 'OystAddress';
+                $address_fake->id_country = Country::getByIso('FR');
+                $address_fake->phone = '0600000000';
+                $address_fake->phone_mobile = '0600000000';
+
+                $address_fake->add();
+
+                $oystContext['id_address'] = $address_fake->id;
             }
 
             $oneClickOrdersParams = new OneClickOrderParams();
@@ -382,9 +409,13 @@ class OneClickService extends AbstractOystService
             }
 
             $oneClickOrdersParams->setShouldReinitBuffer(false);
-
             $oneClickOrdersParams->setIsCheckoutCart(true);
             $oneClickOrdersParams->setManageQuantity(ConfigurationP::get('FC_OYST_MANAGE_QUANTITY_CART'));
+
+            $allowDiscountCoupon = (bool)ConfigurationP::get('FC_OYST_ALLOW_COUPON');
+            if ($allowDiscountCoupon) {
+                $oneClickOrdersParams->setAllowDiscountCoupon($allowDiscountCoupon);
+            }
 
             $this->logger->info(
                 sprintf(

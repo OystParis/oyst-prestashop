@@ -21,34 +21,35 @@
 
 namespace Oyst\Service;
 
+use Db;
+use Tax;
+use Cart;
+use Group;
+use Image;
+use Tools;
+use Module;
+use Address;
+use Carrier;
+use Context;
+use Country;
+use Product;
+use CartRule;
+use Currency;
+use Customer;
+use Validate;
+use Exception;
+use Combination;
+use TaxCalculator;
+use StockAvailable;
+use Oyst\Classes\OystPrice;
+use Oyst\Classes\OystCarrier;
+use Oyst\Classes\OneClickItem;
+use Configuration as PSConfiguration;
+use Oyst\Repository\AddressRepository;
+use Oyst\Repository\ProductRepository;
 use Oyst\Classes\OneClickMerchantDiscount;
 use Oyst\Classes\OneClickOrderCartEstimate;
 use Oyst\Classes\OneClickShipmentCatalogLess;
-use Oyst\Classes\OneClickItem;
-use Oyst\Classes\OystCarrier;
-use Oyst\Classes\OystPrice;
-use Oyst\Repository\AddressRepository;
-use Oyst\Repository\ProductRepository;
-use Db;
-use Customer;
-use Cart;
-use Address;
-use Tools;
-use Validate;
-use Currency;
-use Context;
-use Product;
-use Tax;
-use TaxCalculator;
-use Carrier;
-use Country;
-use Configuration as PSConfiguration;
-use Exception;
-use StockAvailable;
-use Combination;
-use CartRule;
-use Image;
-use Module;
 
 class CartService extends AbstractOystService
 {
@@ -67,6 +68,10 @@ class CartService extends AbstractOystService
      */
     public function estimate($data)
     {
+        if (isset($data['discount_coupon'])) {
+            $discount_coupon = $data['discount_coupon'];
+        }
+        $data = $data['order'];
         // Set delay carrier in hours
         $delay = array(
             0 => 72,
@@ -83,66 +88,6 @@ class CartService extends AbstractOystService
 
         $amount_total  = 0;
 
-        if ($data['context'] && isset($data['context']['id_user'])) {
-            $customer = new Customer((int)$data['context']['id_user']);
-        } else {
-            $customer = $this->getCustomer($data['user']);
-        }
-        if (!Validate::isLoadedObject($customer)) {
-            $this->logger->emergency(
-                'Customer not found or can\'t be found ['.json_encode($customer).']'
-            );
-        }
-
-        $addressRepository = new AddressRepository(Db::getInstance());
-
-        $address = $addressRepository->findAddress($data['user']['address'], $customer);
-
-        if (!Validate::isLoadedObject($address)) {
-            $countryId = (int)Country::getByIso($data['user']['address']['country']);
-            if (0 >= $countryId) {
-                $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
-            }
-
-            $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
-            if (isset(Address::$definition['fields']['firstname']['size'])) {
-                $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
-            }
-
-            $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
-            if (isset(Address::$definition['fields']['lastname']['size'])) {
-                $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
-            }
-
-            $address = new Address();
-            $address->id_customer = $customer->id;
-            $address->firstname = $firstname;
-            $address->lastname = $lastname;
-            $address->address1 = $data['user']['address']['street'];
-            $address->postcode = $data['user']['address']['postcode'];
-            $address->city = $data['user']['address']['city'];
-            $address->alias = 'OystAddress';
-            $address->id_country = $countryId;
-            $address->phone = $data['user']['phone']? $data['user']['phone'] : '';
-            $address->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
-
-            $address->add();
-        } else {
-            //Fix for retroactivity for missing phone bug or phone
-            if ($address->phone_mobile == '' || $address->phone == '') {
-                $address->phone = $data['user']['phone'];
-                $address->phone_mobile = $data['user']['phone'];
-                $address->update();
-            }
-        }
-
-        $this->logger->info(
-            sprintf(
-                'New notification address [%s]',
-                json_encode($address)
-            )
-        );
-
         // PS core used this context anywhere.. So we need to fill it properly
         // PS core used this context anywhere.. So we need to fill it properly
         if ($data['context'] && isset($data['context']['id_cart'])) {
@@ -150,28 +95,147 @@ class CartService extends AbstractOystService
         } else {
             $this->context->cart = $cart = new Cart();
         }
-        $this->context->customer = $customer;
+
+        $oldIdAddressDelivery = (int)$cart->id_address_delivery;
+
+        // $this->context->customer = $customer;
         // For debug but when prod pass in context object currency
         $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
 
-        $cart->id_customer = $customer->id;
-        if ($customer->isLogged()) {
+        $customer = null;
+
+        if ($data['context'] && isset($data['context']['id_user'])) {
+            $customer = new Customer((int)$data['context']['id_user']);
+        } elseif ($id_customer = Customer::customerExists($data['user']['email'], true)) {
+            $customer = new Customer($id_customer);
+
+            // Delete fake user generated for authorize
+            if ($data['context'] && isset($data['context']['id_address'])) {
+                $address_fake = new Address($data['context']['id_address']);
+                $address_fake->delete();
+            }
+        }
+
+        $usetax = true;
+
+        if ($customer) {
+            if (Group::getPriceDisplayMethod($customer->id_default_group) == 1) {
+                $usetax = false;
+            }
+        }
+
+        $countryId = (int)Country::getByIso($data['user']['address']['country']);
+        if (0 >= $countryId) {
+            $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
+        }
+
+        $id_zone = Country::getIdZone($countryId);
+
+        if ($customer) {
+            if (!Validate::isLoadedObject($customer)) {
+                $this->logger->emergency(
+                    'Customer not found or can\'t be found ['.json_encode($customer).']'
+                );
+            }
+
+            $addressRepository = new AddressRepository(Db::getInstance());
+
+            $address = $addressRepository->findAddress($data['user']['address'], $customer);
+
+            if (!Validate::isLoadedObject($address)) {
+                $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
+                if (isset(Address::$definition['fields']['firstname']['size'])) {
+                    $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+                }
+
+                $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
+                if (isset(Address::$definition['fields']['lastname']['size'])) {
+                    $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+                }
+
+                $address = new Address();
+                $address->id_customer = $customer->id;
+                $address->firstname = $firstname;
+                $address->lastname = $lastname;
+                $address->address1 = $data['user']['address']['street'];
+                $address->postcode = $data['user']['address']['postcode'];
+                $address->city = $data['user']['address']['city'];
+                $address->alias = 'OystAddress';
+                $address->id_country = $countryId;
+                $address->phone = $data['user']['phone']? $data['user']['phone'] : '';
+                $address->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
+
+                $address->add();
+            } else {
+                //Fix for retroactivity for missing phone bug or phone
+                if ($address->phone_mobile == '' || $address->phone == '') {
+                    $address->phone = $data['user']['phone'];
+                    $address->phone_mobile = $data['user']['phone'];
+                    $address->update();
+                }
+            }
+
+            $this->logger->info(
+                sprintf(
+                    'New notification address [%s]',
+                    json_encode($address)
+                )
+            );
+
+            $cart->id_customer = $customer->id;
             $cart->id_address_delivery = $address->id;
             $cart->id_address_invoice = $address->id;
+            $cart->secure_key = $customer->secure_key;
         } else {
-            $cart->id_address_delivery = 0;
-            $cart->id_address_invoice = 0;
+            $cart->id_customer = 0;
+            $cart->secure_key = 0;
+
+
+            if ($data['context'] && isset($data['context']['id_address'])) {
+                $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
+                if (isset(Address::$definition['fields']['firstname']['size'])) {
+                    $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+                }
+
+                $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
+                if (isset(Address::$definition['fields']['lastname']['size'])) {
+                    $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+                }
+
+                $address_fake = new Address($data['context']['id_address']);
+                $address_fake->firstname = $firstname;
+                $address_fake->lastname = $lastname;
+                $address_fake->address1 = $data['user']['address']['street'];
+                $address_fake->postcode = $data['user']['address']['postcode'];
+                $address_fake->city = $data['user']['address']['city'];
+                $address_fake->alias = 'OystAddress';
+                $address_fake->id_country = $countryId;
+                $address_fake->phone = $data['user']['phone']? $data['user']['phone'] : '';
+                $address_fake->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
+
+                $address_fake->update();
+
+                $cart->id_address_delivery = $address_fake->id;
+                $cart->id_address_invoice = $address_fake->id;
+            } else {
+                $cart->id_address_delivery = 0;
+                $cart->id_address_invoice = 0;
+            }
         }
         $cart->id_lang = $this->context->language->id;
-        $cart->secure_key = $customer->secure_key;
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
+
 
         if (!$cart->save()) {
             $this->logger->emergency(
                 'Can\'t save cart ['.json_encode($cart).']'
             );
             return false;
+        }
+
+        if ($oldIdAddressDelivery) {
+            $cart->updateAddressId($oldIdAddressDelivery, $cart->id_address_delivery);
         }
 
         $oneClickOrderCartEstimate = new OneClickOrderCartEstimate(array());
@@ -184,7 +248,9 @@ class CartService extends AbstractOystService
             }
         }
 
-        if ($cart->id && count($cart->getProducts()) > 0) {
+        $products_gift = $cart->getSummaryDetails()['gift_products'];
+
+        if ($cart->id && count($cart->getProducts()) > 0 && !$cart->isVirtualCart()) {
             foreach ($cart->getProducts() as $item) {
                 $idProduct = $item['id_product'];
                 $idCombination = $item['id_product_attribute'];
@@ -199,21 +265,22 @@ class CartService extends AbstractOystService
                 if (count($oystProducts) > 0 && in_array($reference, array_keys($oystProducts))) {
                     $quantityOyst = $oystProducts[$reference];
                     if ($quantityOyst != $item['cart_quantity']) {
-                        $cart->updateQty(
-                            $item['cart_quantity'],
-                            (int)$idProduct,
-                            (int)$idCombination,
-                            false,
-                            'down',
-                            $address->id
-                        );
                         $update_qty_result = $cart->updateQty(
                             $quantityOyst,
                             (int)$idProduct,
                             (int)$idCombination,
                             false,
                             'up',
-                            $address->id
+                            $cart->id_address_delivery
+                        );
+
+                        $cart->updateQty(
+                            $item['cart_quantity'],
+                            (int)$idProduct,
+                            (int)$idCombination,
+                            false,
+                            'down',
+                            $cart->id_address_delivery
                         );
 
                         if (!$update_qty_result) {
@@ -226,7 +293,15 @@ class CartService extends AbstractOystService
                         }
                     }
                 } else {
-                    $cart->deleteProduct($idProduct, $idCombination);
+                    if ($products_gift && count($oystProducts) > 0) {
+                        foreach ($products_gift as $gift) {
+                            if (empty($gift['gift']) && $gift['id_product'] == $idProduct && $gift['id_product_attribute'] == $idCombination) {
+                                $cart->deleteProduct($idProduct, $idCombination);
+                            }
+                        }
+                    } else {
+                        $cart->deleteProduct($idProduct, $idCombination);
+                    }
                 }
 
                 if (count($oystProducts) > 0) {
@@ -243,7 +318,7 @@ class CartService extends AbstractOystService
 
                     // Add items
                     $price = $product->getPrice(
-                        true,
+                        $usetax,
                         $idCombination,
                         6,
                         null,
@@ -253,7 +328,7 @@ class CartService extends AbstractOystService
                     );
 
                     $without_reduc_price = $product->getPriceWithoutReduct(
-                        false,
+                        !$usetax,
                         $idCombination
                     );
 
@@ -282,9 +357,9 @@ class CartService extends AbstractOystService
                     $amount_total += $price;
 
                     $oneClickItem = new OneClickItem(
-                        (string)$idProduct,
+                        $reference,
                         $amount,
-                        (int)$quantity
+                        (int)$quantityOyst
                     );
 
                     $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
@@ -297,11 +372,19 @@ class CartService extends AbstractOystService
                     return json_encode($shipments);
                 }
             }
+        } elseif ($cart->isVirtualCart()) {
+            $shipments = array();
+            return json_encode($shipments);
         } else {
             $this->logger->emergency(
                 'Items not exist ['.json_encode($data).']'
             );
-            return false;
+            header('HTTP/1.1 400 Bad request');
+            header('Content-Type: application/json');
+            die(json_encode(array(
+                'code' => 'stock-unavailable',
+                'message' => 'Unvailable stock',
+            )));
         }
 
         // Manage cart rule
@@ -309,17 +392,23 @@ class CartService extends AbstractOystService
         CartRule::autoAddToCart($this->context);
 
         $cart_rules_in_cart = array();
+
+        if (isset($discount_coupon)) {
+            $this->context->cart->addCartRule((int)CartRule::getIdByCode($discount_coupon));
+        }
+
         //Get potential cart rules which was auto added
-        $auto_cart_rules = $this->context->cart->getCartRules();
+        $test = $this->context->cart->getCartRules();
         if (empty($data['context']['ids_cart_rule'])) {
             $data['context']['ids_cart_rule'] = array();
         }
 
         //Merge id auto_add with existent cart_rule
-        foreach ($auto_cart_rules as $auto_cart_rule) {
+        foreach ($test as $auto_cart_rule) {
             $data['context']['ids_cart_rule'][] = (int)$auto_cart_rule['id_cart_rule'];
             $cart_rules_in_cart[] = (int)$auto_cart_rule['id_cart_rule'];
         }
+
 
         $data['context']['ids_cart_rule'] = array_unique($data['context']['ids_cart_rule']);
 
@@ -541,6 +630,8 @@ class CartService extends AbstractOystService
                             $merchand_discount = new OneClickMerchantDiscount($oyst_price, $cart_rule->name);
                             $oneClickOrderCartEstimate->addMerchantDiscount($merchand_discount);
                         }
+                    } else {
+                        $oneClickOrderCartEstimate->setDiscountCouponError(Tools::displayError('The voucher code is invalid.'));
                     }
                 }
             }
@@ -622,23 +713,33 @@ class CartService extends AbstractOystService
             if (Validate::isLoadedObject($carrier)) {
                 $id_carrier_selected = $carrier->id;
             }
+        }
 
-            if ($id_carrier_selected === null) {
-                foreach ($carriersAvailables as $shipment) {
-                    // Get id carrier
-                    $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1);
-                    $id_reference = $this->getReferenceCarrier($id_carrier);
+        $carrierZone = true;
+        // Get carrier available for zone
+        if ($id_carrier_selected) {
+            $carrierZone = Carrier::checkCarrierZone($id_carrier_selected, $id_zone);
+        }
 
-                    $type_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_".$id_reference);
-                    if ($type_shipment === OystCarrier::HOME_DELIVERY) {
-                        $id_carrier_selected = $id_carrier;
-                        break;
-                    }
+        // If carrier is null or carrier is not available for zone
+        if ($id_carrier_selected === null || !$carrierZone) {
+            foreach ($carriersAvailables as $shipment) {
+                // Get id carrier
+                $id_carrier = (int)Tools::substr(Cart::desintifier($shipment['id_carrier']), 0, -1);
+                $id_reference = $this->getReferenceCarrier($id_carrier);
+
+                // Get type of carrier
+                $type_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_".$id_reference);
+                if ($type_shipment === OystCarrier::HOME_DELIVERY && Carrier::checkCarrierZone($id_carrier, $id_zone)) {
+                    $id_carrier_selected = $id_carrier;
+                    break;
                 }
             }
         }
 
-        $cart_amount = $cart->getOrderTotal(true, Cart::BOTH, $cart->getProducts(), $id_carrier_selected);
+        $with_tax = Tax::getCarrierTaxRate($id_carrier_selected, $cart->id_address_delivery);
+
+        $cart_amount = $cart->getOrderTotal((bool)$with_tax, Cart::BOTH, $cart->getProducts(), $id_carrier_selected);
 
         if ($cart_amount > 0) {
             $cart_amount_oyst = new OystPrice($cart_amount, Context::getContext()->currency->iso_code);
@@ -651,9 +752,6 @@ class CartService extends AbstractOystService
                 $oneClickOrderCartEstimate->toJson()
             )
         );
-
-        // Delete cart for module relaunch cart
-        // $cart->delete();
 
         return $oneClickOrderCartEstimate->toJson();
     }

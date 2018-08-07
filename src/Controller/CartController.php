@@ -46,7 +46,7 @@ class CartController extends AbstractOystController
         Db::getInstance()->insert('oyst_payment_notification', $insert);
 
         $cartService = AbstractCartServiceFactory::get(new Oyst(), Context::getContext());
-        $responseData = $cartService->estimate($data['data']['order']);
+        $responseData = $cartService->estimate($data['data']);
         $this->logger->info(
             sprintf(
                 'New notification order.cart.estimate [%s]',

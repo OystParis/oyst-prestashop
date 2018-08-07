@@ -73,7 +73,7 @@ class ProductTransformer extends AbstractTransformer
      *
      * @return OystProduct
      */
-    public function transform($product, $quantity = 1, $id_combination = 0)
+    public function transform($product, $quantity = 1, $id_combination = 0, $usetax = true)
     {
         $combination = new Combination();
 
@@ -90,10 +90,10 @@ class ProductTransformer extends AbstractTransformer
             if (!Validate::isLoadedObject($combination)) {
                 $this->logger->alert(sprintf('Combination %d can\'t be found for product '.$product->id, $id_combination));
             } else {
-                $oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
+                $oystPrice = new OystPrice($product->getPrice($usetax, $combination->id), $this->context->currency->iso_code);
             }
         } else {
-            $oystPrice = new OystPrice($product->getPrice(true), $this->context->currency->iso_code);
+            $oystPrice = new OystPrice($product->getPrice($usetax), $this->context->currency->iso_code);
         }
 
         $categories = array();
@@ -206,7 +206,7 @@ class ProductTransformer extends AbstractTransformer
      * @param Combination $combination
      * @return OystProduct
      */
-    public function transformCombination(Product $product, Combination $combination, $quantity = 1)
+    public function transformCombination(Product $product, Combination $combination, $quantity = 1, $usetax = true)
     {
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
             $link = new Link();
@@ -216,7 +216,7 @@ class ProductTransformer extends AbstractTransformer
         $oystProductVariation = $this->transform($product);
 
         if ($oystProductVariation && $combination && $combination->id) {
-            $oystPrice = new OystPrice($product->getPrice(true, $combination->id), $this->context->currency->iso_code);
+            $oystPrice = new OystPrice($product->getPrice($usetax, $combination->id), $this->context->currency->iso_code);
 
             $oystProductVariation->__set('reference', (string)$combination->id);
             $oystProductVariation->__set('ean', $combination->ean13);
