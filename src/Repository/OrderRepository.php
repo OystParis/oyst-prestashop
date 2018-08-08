@@ -483,7 +483,7 @@ class OrderRepository extends AbstractOystRepository
         return (bool)$this->db->getValue('
             SELECT COUNT(*)
             FROM '._DB_PREFIX_.'oyst_payment_notification
-            WHERE payment_id = "'.pSQL($orderGuid).'"');
+            WHERE payment_id = "'.pSQL($orderGuid).'" AND (status = "start" OR status = "finished")');
     }
 
     /**

@@ -89,7 +89,6 @@ class CartService extends AbstractOystService
         $amount_total  = 0;
 
         // PS core used this context anywhere.. So we need to fill it properly
-        // PS core used this context anywhere.. So we need to fill it properly
         if ($data['context'] && isset($data['context']['id_cart'])) {
             $this->context->cart = $cart = new Cart((int)$data['context']['id_cart']);
         } else {

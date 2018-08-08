@@ -34,19 +34,22 @@ class CartController extends AbstractOystController
     public function estimateAction()
     {
         $data = $this->request->getJson();
+
+        $cartService = AbstractCartServiceFactory::get(new Oyst(), Context::getContext());
+        $responseData = $cartService->estimate($data['data']);
+
         $insert   = array(
             'id_order'   => 0,
             'id_cart'    => 0,
             'payment_id' => '',
             'event_code' => pSQL($data['event']),
             'event_data' => pSQL(Tools::jsonEncode($data['data'])),
+            'response'   => pSQL($responseData),
             'date_event' => date('Y-m-d H:i:s'),
             'date_add'   => date('Y-m-d H:i:s'),
         );
         Db::getInstance()->insert('oyst_payment_notification', $insert);
 
-        $cartService = AbstractCartServiceFactory::get(new Oyst(), Context::getContext());
-        $responseData = $cartService->estimate($data['data']);
         $this->logger->info(
             sprintf(
                 'New notification order.cart.estimate [%s]',
