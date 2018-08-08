@@ -742,7 +742,11 @@ class CartService extends AbstractOystService
 
         $with_tax = Tax::getCarrierTaxRate($id_carrier_selected, $cart->id_address_delivery);
 
-        $cart_amount = $cart->getOrderTotal((bool)$with_tax, Cart::BOTH, $cart->getProducts(), $id_carrier_selected);
+        // $cart_amount = $cart->getOrderTotal($usetax, Cart::BOTH, $cart->getProducts(), $id_carrier_selected);
+        $cart_shipping_amount = $cart->getOrderTotal($with_tax, Cart::ONLY_SHIPPING, null, $id_carrier_selected);
+        $cart_products_amount = $cart->getOrderTotal($usetax, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING, $cart->getProducts());
+
+        $cart_amount = $cart_products_amount + $cart_shipping_amount;
 
         if ($cart_amount > 0) {
             $cart_amount_oyst = new OystPrice($cart_amount, Context::getContext()->currency->iso_code);
