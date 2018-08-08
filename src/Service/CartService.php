@@ -693,10 +693,14 @@ class CartService extends AbstractOystService
                             }
                         }
 
-                        $giftonorder = new \Giftonorder($gift['id_giftonorder']);
+                        $sql_name_gift = 'SELECT name
+                            FROM ps_giftonorder_lang
+                            WHERE  id_giftonorder ='.(int)$gift['id_giftonorder'].
+                            ' AND  id_lang = '.(int)$this->context->language->id;
+                        $name_gift = Db::getInstance()->getValue($sql_name_gift);
 
                         $oneClickItemFree->__set('title', $title);
-                        $oneClickItemFree->__set('message', $giftonorder->name);
+                        $oneClickItemFree->__set('message', $name_gift);
                         $oneClickItemFree->__set('images', $images);
                         $oneClickOrderCartEstimate->addFreeItems($oneClickItemFree);
                     }
