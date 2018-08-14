@@ -254,12 +254,28 @@ class OneClickService extends AbstractOystService
                     $this->context->cookie->id_cart = $cart->id;
                 }
             } elseif ($products) {
+                $gift_products = $this->context->cart->getSummaryDetails()['gift_products'];
+                $gifts = array();
+
+                if ($gift_products) {
+                    foreach ($gift_products as $gift) {
+                        $gifts[$gift['id_product']] = $gift['id_product_attribute'];
+                    }
+                }
+
                 foreach ($products as $product) {
                     if (Module::isInstalled('giftonordermodule') && Module::isEnabled('giftonordermodule')) {
                         if (count($ids_gift_products) > 0 && in_array($product['id_product'], $ids_gift_products)) {
                             continue;
                         }
                     }
+
+                    if (count($gifts) > 0 &&
+                        isset($gifts[$product['id_product']]) &&
+                        $gifts[$product['id_product']] === $product['id_product_attribute']) {
+                        continue;
+                    }
+
                     $product_less = $exportProductService->transformProductLess(
                         $product['id_product'],
                         $product['id_product_attribute'],

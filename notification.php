@@ -77,7 +77,21 @@ if ($data && isset($data['event'])) {
                     Db::getInstance()->insert('oyst_payment_notification', $insert);
 
                     $orderController->setLogger($logger);
-                    $orderController->createNewOrderAction();
+
+                    try {
+                        $orderController->createNewOrderAction();
+                    } catch (Exception $e) {
+                        Db::getInstance()->update(
+                            'oyst_payment_notification',
+                            array(
+                                'event_code' => pSQL($data['event']),
+                                'status'     => 'order.error',
+                                'error' => json_encode($e->getMessage()),
+                                'date_upd'   => date('Y-m-d H:i:s'),
+                            ),
+                            'payment_id = "'.pSQL($orderGUID).'" AND `event_code` = "order.v2.new"'
+                        );
+                    }
                 } else {
                     $orderId = $orderService->getOrderRepository()->getOrderId($orderGUID);
                     $order = new Order($orderId);

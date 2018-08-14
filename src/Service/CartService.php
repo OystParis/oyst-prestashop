@@ -86,9 +86,6 @@ class CartService extends AbstractOystService
             9 => 24
         );
 
-        $amount_total  = 0;
-
-        // PS core used this context anywhere.. So we need to fill it properly
         // PS core used this context anywhere.. So we need to fill it properly
         if ($data['context'] && isset($data['context']['id_cart'])) {
             $this->context->cart = $cart = new Cart((int)$data['context']['id_cart']);
@@ -108,12 +105,6 @@ class CartService extends AbstractOystService
             $customer = new Customer((int)$data['context']['id_user']);
         } elseif ($id_customer = Customer::customerExists($data['user']['email'], true)) {
             $customer = new Customer($id_customer);
-
-            // Delete fake user generated for authorize
-            if ($data['context'] && isset($data['context']['id_address'])) {
-                $address_fake = new Address($data['context']['id_address']);
-                $address_fake->delete();
-            }
         }
 
         $usetax = true;
@@ -292,19 +283,7 @@ class CartService extends AbstractOystService
                             )));
                         }
                     }
-                } else {
-                    if ($products_gift && count($oystProducts) > 0) {
-                        foreach ($products_gift as $gift) {
-                            if (empty($gift['gift']) && $gift['id_product'] == $idProduct && $gift['id_product_attribute'] == $idCombination) {
-                                $cart->deleteProduct($idProduct, $idCombination);
-                            }
-                        }
-                    } else {
-                        $cart->deleteProduct($idProduct, $idCombination);
-                    }
-                }
 
-                if (count($oystProducts) > 0) {
                     $product = new Product($idProduct);
 
                     if (!$product->active || !$product->available_for_order) {
@@ -354,7 +333,6 @@ class CartService extends AbstractOystService
 
                     $amount = new OystPrice($price, Context::getContext()->currency->iso_code);
                     // Set amount total for cart rule with discount
-                    $amount_total += $price;
 
                     $oneClickItem = new OneClickItem(
                         $reference,
@@ -368,13 +346,27 @@ class CartService extends AbstractOystService
                     }
                     $oneClickOrderCartEstimate->addItem($oneClickItem);
                 } else {
-                    $shipments = array();
-                    return json_encode($shipments);
+                    if ($products_gift && count($oystProducts) > 0) {
+                        foreach ($products_gift as $gift) {
+                            if ($gift['id_product'] != $idProduct && $gift['id_product_attribute'] != $idCombination) {
+                                $cart->deleteProduct($idProduct, $idCombination);
+                            }
+                        }
+                    } else {
+                        $cart->deleteProduct($idProduct, $idCombination);
+                    }
                 }
             }
         } elseif ($cart->isVirtualCart()) {
             $shipments = array();
             return json_encode($shipments);
+        } elseif (count($oystProducts) == 0) {
+            foreach ($cart->getProducts() as $item) {
+                $idProduct = $item['id_product'];
+                $idCombination = $item['id_product_attribute'];
+
+                $cart->deleteProduct($idProduct, $idCombination);
+            }
         } else {
             $this->logger->emergency(
                 'Items not exist ['.json_encode($data).']'
@@ -394,7 +386,11 @@ class CartService extends AbstractOystService
         $cart_rules_in_cart = array();
 
         if (isset($discount_coupon)) {
-            $this->context->cart->addCartRule((int)CartRule::getIdByCode($discount_coupon));
+            if (CartRule::cartRuleExists($discount_coupon)) {
+                $this->context->cart->addCartRule((int)CartRule::getIdByCode($discount_coupon));
+            } else {
+                $oneClickOrderCartEstimate->setDiscountCouponError(Tools::displayError('The voucher code is invalid.'));
+            }
         }
 
         //Get potential cart rules which was auto added
@@ -531,6 +527,8 @@ class CartService extends AbstractOystService
             }
         }
 
+        $cart_products_amount = $cart->getOrderTotal($usetax, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING, $cart->getProducts());
+
         //For each cart_rule, check validity and if it's valid, add it to merchant_discount
         if ($data['context']['ids_cart_rule'] != '') {
             foreach ($data['context']['ids_cart_rule'] as $id_cart_rule) {
@@ -623,9 +621,10 @@ class CartService extends AbstractOystService
                         }
 
                         if ($cart_rule_amount > 0) {
-                            if ($cart_rule_amount > $amount_total) {
-                                $cart_rule_amount = $amount_total;
+                            if ($cart_rule_amount > $cart_products_amount) {
+                                $cart_rule_amount = $cart_products_amount;
                             }
+
                             $oyst_price = new OystPrice($cart_rule_amount, $currency_iso_code);
                             $merchand_discount = new OneClickMerchantDiscount($oyst_price, $cart_rule->name);
                             $oneClickOrderCartEstimate->addMerchantDiscount($merchand_discount);
@@ -694,10 +693,14 @@ class CartService extends AbstractOystService
                             }
                         }
 
-                        $giftonorder = new \Giftonorder($gift['id_giftonorder']);
+                        $sql_name_gift = 'SELECT name
+                            FROM ps_giftonorder_lang
+                            WHERE  id_giftonorder ='.(int)$gift['id_giftonorder'].
+                            ' AND  id_lang = '.(int)$this->context->language->id;
+                        $name_gift = Db::getInstance()->getValue($sql_name_gift);
 
                         $oneClickItemFree->__set('title', $title);
-                        $oneClickItemFree->__set('message', $giftonorder->name);
+                        $oneClickItemFree->__set('message', $name_gift);
                         $oneClickItemFree->__set('images', $images);
                         $oneClickOrderCartEstimate->addFreeItems($oneClickItemFree);
                     }
@@ -737,14 +740,27 @@ class CartService extends AbstractOystService
             }
         }
 
+        $delivery_option[$cart->id_address_delivery] = $id_carrier_selected.',';
+        $cart->setDeliveryOption($delivery_option);
+        $cart->id_carrier = $id_carrier_selected;
+        $cart->save();
+
         $with_tax = Tax::getCarrierTaxRate($id_carrier_selected, $cart->id_address_delivery);
 
-        $cart_amount = $cart->getOrderTotal((bool)$with_tax, Cart::BOTH, $cart->getProducts(), $id_carrier_selected);
+        $cart_shipping_amount = $cart->getOrderTotal($with_tax, Cart::ONLY_SHIPPING, null, $id_carrier_selected);
+        $cart_discount_amount = $cart->getOrderTotal($usetax, Cart::ONLY_DISCOUNTS);
+
+        $cart_amount = ($cart_products_amount + $cart_shipping_amount) - $cart_discount_amount;
 
         if ($cart_amount > 0) {
             $cart_amount_oyst = new OystPrice($cart_amount, Context::getContext()->currency->iso_code);
             $oneClickOrderCartEstimate->setCartAmount($cart_amount_oyst);
         }
+
+        // Remove address for cart
+        $cart->id_address_delivery = 0;
+        $cart->id_address_invoice = 0;
+        $cart->save();
 
         $this->logger->info(
             sprintf(

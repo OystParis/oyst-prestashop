@@ -50,9 +50,24 @@
                 oyst.setSticky({$sticky|intval});
                 oyst.prepareButton();
 
+                var allowOystRedirectSelf = true;
+
                 window.addEventListener('message', function (event) {
                     if (event.data.type == 'ORDER_REQUEST') {
                         oyst.setPreload(0);
+                    }
+
+                    if (event.data.type == "ORDER_COMPLETE"
+                    || event.data.type == "ORDER_CONVERSION") {
+                        allowOystRedirectSelf = false;
+                    }
+
+                    if (event.data.type == "ORDER_CANCEL") {
+                        allowOystRedirectSelf = true;
+                    }
+
+                    if (event.data.type == "MODAL_CLOSE" && allowOystRedirectSelf) {
+                    window.location.reload(false);
                     }
                 });
 

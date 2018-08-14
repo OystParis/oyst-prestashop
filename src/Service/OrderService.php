@@ -262,7 +262,6 @@ class OrderService extends AbstractOystService
             return false;
         }
 
-
         foreach ($products as $productInfo) {
             $custom_qty = 0;
             $product = new Product((int)$productInfo['productId']);
