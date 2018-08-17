@@ -333,52 +333,76 @@ function OystOneClick(url, productId, controller)
         if (params.preload) {
             oystCallBack(null, this.oneClickModalUrl+'/?isCheckoutCart='+this.isCheckoutCart);
         } else {
-            /*if (params.quantity == 0) {
-                if (!!$.prototype.fancybox) {
-                    $.fancybox.open([
-                    {
-                        type: 'inline',
-                        autoScale: true,
-                        minHeight: 30,
-                        content: '<p class="fancybox-error">'+this.errorQuantityNullText+'</p>'
-                    }
-                    ], {
-                        padding: 0
-                    });
-                    return;
-                } else {
-                    alert(this.errorQuantityNullText);
-                    return;
-                }
-                window.postMessage({type: 'RELOAD_BUTTON'}, '*');
-            } else if (!this.isProductAvailableByQtySelected(params)) {
-                if (!!$.prototype.fancybox) {
-                    $.fancybox.open([
-                    {
-                        type: 'inline',
-                        autoScale: true,
-                        minHeight: 30,
-                        content: '<p class="fancybox-error">'+this.errorProductOutofstockText+'</p>'
-                        }
-                    ], {
-                        padding: 0
-                    });
-                     return;
-                } else {
-                    alert(this.errorProductOutofstockText);
-                    return;
-                }
-                window.postMessage({type: 'RELOAD_BUTTON'}, '*');
-            } else {*/
-                $.post(this.url, params, function (json) {
-                    if (json.state) {
-                        oystCallBack(null, json.url);
+            var urlOyst = this.url;
+            $.ajax({
+                type: 'POST',
+                headers: { "cache-control": "no-cache" },
+                url: baseUri + '?rand=' + new Date().getTime(),
+                async: true,
+                cache: false,
+                dataType : "json",
+                data: 'controller=cart&add=1&ajax=true&qty=' + ((params.quantity && params.quantity != null) ? params.quantity : '1') + '&id_product=' + params.productId + '&token=' + static_token + ( (parseInt(params.productAttributeId) && params.productAttributeId != null) ? '&ipa=' + parseInt(params.productAttributeId): '' + '&id_customization=' + ((typeof customizationId !== 'undefined') ? customizationId : 0)),
+                success: function(jsonData,textStatus,jqXHR)
+                {
+                    if (!jsonData.hasError) {
+                        // display modal oyst
+                        $.post(urlOyst, params, function (json) {
+                            if (json.state) {
+                                oystCallBack(null, json.url);
+                            } else {
+                                // display properly the error to try again
+                                alert('Error occurred, please try later or contact us');
+                            }
+                        });
                     } else {
-                        // display properly the error to try again
-                        alert('Error occurred, please try later or contact us');
+                        var errors = '';
+                        var error = '';
+                        for (error in jsonData.errors) {
+                            //IE6 bug fix
+                            if (error != 'indexOf') {
+                                errors += $('<div />').html(jsonData.errors[error]).text() + "\n";
+                            }
+                        }
+                        // display error for add product cart
+                        if (!!$.prototype.fancybox) {
+                            $.fancybox.open([
+                                {
+                                    type: 'inline',
+                                    autoScale: true,
+                                    minHeight: 30,
+                                    content: '<p class="fancybox-error">' + errors + '</p>'
+                                }
+                            ], {
+                                padding: 0
+                            });
+                        } else {
+                            alert(errors);
+                        }
+                        // relaunch button oyst
+                        window.postMessage({type: 'RELOAD_BUTTON'}, '*');
                     }
-                });
-            //}
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    var error = "Impossible to add the product to the cart.<br/>textStatus: '" + textStatus + "'<br/>errorThrown: '" + errorThrown + "'<br/>responseText:<br/>" + XMLHttpRequest.responseText;
+                    if (!!$.prototype.fancybox) {
+                        $.fancybox.open([
+                        {
+                            type: 'inline',
+                            autoScale: true,
+                            minHeight: 30,
+                            content: '<p class="fancybox-error">' + error + '</p>'
+                        }],
+                        {
+                            padding: 0
+                        });
+                    } else {
+                        alert(error);
+                    }
+                    // relaunch button oyst
+                    window.postMessage({type: 'RELOAD_BUTTON'}, '*');
+                }
+            });
         }
     }
 };

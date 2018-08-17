@@ -128,12 +128,7 @@ class OneClickService extends AbstractOystService
         $exportProductService = AbstractExportProductServiceFactory::get($oyst, Context::getContext());
         $this->context->currency = new Currency(Currency::getIdByIsoCode('EUR'));
         $customer = $this->context->customer;
-
-        // if ($request->hasRequest('labelCta')) {
-            $labelCta = $request->getRequestItem('labelCta');
-        // } else {
-        //     $labelCta = false;
-        // }
+        $labelCta = $request->getRequestItem('labelCta');
 
         // Get usetax for group
         $usetax = true;
@@ -204,20 +199,10 @@ class OneClickService extends AbstractOystService
                 $this->getCart();
             }
 
-            $idProduct = (int)$request->getRequestItem('productId');
-            $idCombination = (int)$request->getRequestItem('productAttributeId');
-            $quantity = (int)$request->getRequestItem('quantity');
-
-            Context::getContext()->cart->updateQty($quantity, (int)$idProduct, (int)$idCombination, false, 'up');
-
             $products = Context::getContext()->cart->getProducts();
 
-            if (!$request->hasRequest('productId')) {
-                $data['error'] = 'Missing product';
-            } elseif (!$request->hasRequest('productAttributeId')) {
-                $data['error'] = 'Missing combination, even none selected';
-            } elseif (!$request->hasRequest('quantity')) {
-                $data['error'] = 'Missing quantity';
+            if (!$products) {
+                $data['error'] = 'Missing products';
             }
         }
 
