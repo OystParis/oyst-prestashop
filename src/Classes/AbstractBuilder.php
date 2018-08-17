@@ -159,8 +159,8 @@ abstract class AbstractBuilder
             'label' => $carrier->name,
             'reference' => $carrier->id_reference,
             'delivery_delay' => '48', //Temp fix value, 48h TODO
-            'amount_tax_incl' => $cart->getCarrierCost($carrier->id, true),
-            'amount_tax_excl' => $cart->getCarrierCost($carrier->id, false),
+            'amount_tax_incl' => $cart->getPackageShippingCost($carrier->id, true),
+            'amount_tax_excl' => $cart->getPackageShippingCost($carrier->id, false),
         );
     }
 
