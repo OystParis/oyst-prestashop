@@ -16,6 +16,7 @@ use Oyst\Classes\CheckoutBuilder;
 use Oyst\Classes\Notification;
 use Product;
 use Shop;
+use Tools;
 use Validate;
 use Warehouse;
 
@@ -99,6 +100,22 @@ class CartService {
                         } else {
                             $carriers = array_intersect($carriers, $product_carriers);
                         }
+                    }
+
+                    //Get customizations
+                    $customizations = $cart->getProductCustomization($cart_product['id_product']);
+                    if (!empty($customizations)) {
+                        foreach ($customizations as &$customization) {
+                            if ($customization['type'] == Product::CUSTOMIZE_FILE) {
+                                $customization['type_name'] = 'file';
+                                $customization['value'] = Tools::getShopDomainSsl(true).'/upload/'.$customization['value'];
+                            } elseif ($customization['type'] == Product::CUSTOMIZE_TEXTFIELD) {
+                                $customization['type_name'] = 'textfield';
+                            } else {
+                                $customization['type_name'] = 'undefined';
+                            }
+                        }
+                        $cart_product['customizations'] = $customizations;
                     }
                 }
 

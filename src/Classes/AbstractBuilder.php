@@ -227,21 +227,16 @@ abstract class AbstractBuilder
             $price_without_discount_tax_incl = $item['price_without_reduction']*(1+ $item['rate']/100);
         }
 
-        //Get customizations
-        //if (!empty($item_formated['id_customization'])) {
-        //    $customizations = $cart->getProductCustomization($item_formated['id_product']);
-        //    foreach ($customizations as &$customization) {
-        //        if ($customization['type'] == Product::CUSTOMIZE_FILE) {
-        //            $customization['type_name'] = 'file';
-        //            $customization['value'] = Tools::getShopDomainSsl(true).'/upload/'.$customization['value'];
-        //        } elseif ($customization['type'] == Product::CUSTOMIZE_TEXTFIELD) {
-        //            $customization['type_name'] = 'textfield';
-        //        } else {
-        //            $customization['type_name'] = 'undefined';
-        //        }
-        //    }
-        //    $item_formated['customizations'] = $customizations;
-        //}
+        $user_inputs = array();
+        //Format customizations
+        if (!empty($item['customizations'])) {
+            foreach ($item['customizations'] as $customization) {
+                $user_inputs[] = array(
+                    'key' => $customization['id_customization'].'-'.$customization['index'],
+                    'value' => $customization['value'],
+                );
+            }
+        }
 
         $product_type = 'simple';
         if (isset($item['is_virtual']) && $item['is_virtual']) {
@@ -300,12 +295,7 @@ abstract class AbstractBuilder
             'tax_rate' => $item['rate'],
             'tax_name' => $item['tax_name'],
             'image' => $item['image'],
-            'user_input' => array(
-//                array(
-//                    'key' => '',
-//                    'value' => '',
-//                ),
-            ),
+            'user_input' => $user_inputs,
             'oyst_display' => $oyst_display,
             'discounts' => array(
 //                array(
