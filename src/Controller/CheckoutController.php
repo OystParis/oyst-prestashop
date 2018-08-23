@@ -12,6 +12,7 @@ use Currency;
 use Exception;
 use Oyst;
 use Oyst\Classes\Notification;
+use Oyst\Services\AddressService;
 use Oyst\Services\CartService;
 use Oyst\Services\CustomerService;
 use Oyst\Services\ObjectService;
@@ -144,98 +145,43 @@ class CheckoutController extends AbstractOystController
                     //If found => set customer id to cart and check his addresses
                     if (!empty($data['user'])) {
                         $customer_service = CustomerService::getInstance();
-                        $object_service = ObjectService::getInstance();
                         $finded_customer = $customer_service->searchCustomer($data['user']);
 
-                        //Mapping for addresses
-                        $mapping_fields = array(
-                            'street1' => 'address1',
-                            'street2' => 'address2',
-                        );
-
-                        foreach ($mapping_fields as $oyst_name => $prestashop_name) {
-                            if (isset($data['shipping']['address'][$oyst_name])) {
-                                $data['shipping']['address'][$prestashop_name] = $data['shipping']['address'][$oyst_name];
-                            }
-                            if (isset($data['billing']['address'][$oyst_name])) {
-                                $data['billing']['address'][$prestashop_name] = $data['shipping']['address'][$oyst_name];
-                            }
-                        }
-                        if (isset($data['shipping']['address'])) {
-                            $data['shipping']['address']['alias'] = 'Oyst';
-                        }
-                        if (isset($data['billing']['address'])) {
-                            $data['billing']['address']['alias'] = 'Oyst';
-                        }
-
-                        //If customer is not finded and we have informations for create him => do it
-                        if (empty($finded_customer['customer_obj'])) {
-                            $result = $object_service->createObject('Customer', $data['user']);
-                            $id_customer = $result['id'];
-                            if (!empty($result['errors'])) {
-                                $errors['customer'] = $result['errors'];
-                            }
-                        } else {
-                            //If customer exists, but no address => Create it
+                        //If customer found, search addresses
+                        if (!empty($finded_customer['customer_obj'])) {
                             $id_customer = $finded_customer['customer_obj']->id;
-
-                            //If address defined in data and exists in customer addresses
-                            if (!empty($finded_customer['addresses'])) {
-                                //Search with address informations
-                                if (empty($id_address_delivery)) {
-                                    $id_address_delivery = $this->findExistentAddress($finded_customer['addresses'], $data['shipping']['address']);
-                                }
-                            }
                         }
 
-                        if (!empty($data['user']['id_oyst'])) {
-                            Oyst\Classes\Customer::createOystCustomerLink($id_customer, $data['user']['id_oyst']);
+                        if (!empty($data['user']['id_oyst']) && !empty($id_customer)) {
+                            Oyst\Classes\OystCustomer::createOystCustomerLink($id_customer, $data['user']['id_oyst']);
+                        }
+                    }
+
+                    //Create delivery address if not exists
+                    if (!empty($data['shipping']['address'])) {
+
+                        $address_service = AddressService::getInstance();
+                        $object_service = ObjectService::getInstance();
+                        $data['shipping']['address'] = $address_service->formatAddressForPrestashop($data['shipping']['address']);
+
+                        //If address defined in data and exists in customer addresses
+                        if (!empty($finded_customer['addresses'])) {
+                            //Search with address informations
+                            $id_address_delivery = $address_service->findExistentAddress($finded_customer['addresses'], $data['shipping']['address']);
                         }
 
-                        //Create delivery address if not exists
-                        if (!empty($id_customer) && empty($id_address_delivery) && !empty($data['shipping']['address'])) {
-                            //No address, create it
-                            if (!empty($data['shipping']['address']['country'])) {
-                                if ($id_country = Country::getByIso($data['shipping']['address']['country']['code'])) {
-                                    $data['shipping']['address']['id_country'] = $id_country;
-                                } else {
-                                    $errors[] = "Country code not exists";
-                                }
-                            }
+                        //No address, create it
+                        if (empty($id_address_delivery)) {
                             $result = $object_service->createObject('Address', $data['shipping']['address']);
                             if (empty($result['errors'])) {
-                                $result['object']->id_customer = $id_customer;
+                                if (!empty($id_customer)) {
+                                    $result['object']->id_customer = $id_customer;
+                                }
                                 $result['object']->alias .= ' '.$result['object']->id;
                                 $result['object']->save();
                                 $id_address_delivery = $result['id'];
-                                $finded_customer['addresses'] = json_decode(json_encode($result['object']), true);
                             } else {
                                 $errors['address_delivery'] = $result['errors'];
-                            }
-                        }
-
-                        //Search address invoice
-                        if (!empty($finded_customer['addresses'])) {
-                            $id_address_invoice = $this->findExistentAddress($finded_customer['addresses'], $data['billing']['address']);
-
-                            //If not found, create it
-                            if (empty($id_address_invoice)) {
-                                if (!empty($data['billing']['address']['country']['code'])) {
-                                    if ($id_country = Country::getByIso($data['billing']['address']['country']['code'])) {
-                                        $data['billing']['address']['id_country'] = $id_country;
-                                    } else {
-                                        $errors[] = "Country code not exists";
-                                    }
-                                }
-                                $result = $object_service->createObject('Address', $data['billing']['address']);
-                                if (empty($result['errors'])) {
-                                    $result['object']->id_customer = $id_customer;
-                                    $result['object']->alias .= ' '.$result['object']->id;
-                                    $result['object']->save();
-                                    $id_address_invoice = $result['id'];
-                                } else {
-                                    $errors['address_invoice'] = $result['errors'];
-                                }
                             }
                         }
                     }
@@ -243,7 +189,6 @@ class CheckoutController extends AbstractOystController
                     if (!empty($id_customer)) {
                         $cart->id_customer = $id_customer;
                     }
-
                     if (!empty($id_address_delivery)) {
                         $cart->id_address_delivery = $id_address_delivery;
                     }
@@ -307,35 +252,6 @@ class CheckoutController extends AbstractOystController
         } else {
             $this->respondError(400, 'id_cart is missing');
         }
-    }
-
-
-    private function findExistentAddress($existent_addresses, $address)
-    {
-        $fields_to_find = array(
-            'firstname',
-            'lastname',
-            'address1',
-            'postcode',
-            'city',
-        );
-
-        $id_address = 0;
-
-        //If fields required for searching are all present in data
-        if (count(array_diff($fields_to_find, array_keys($address))) == 0) {
-            foreach ($existent_addresses as $existant_address) {
-                $address_finded = true;
-                foreach ($fields_to_find as $field_to_find) {
-                    $address_finded &= ($existant_address[$field_to_find] == $address[$field_to_find]);
-                }
-                if ($address_finded) {
-                    $id_address = $existant_address['id_address'];
-                    break;
-                }
-            }
-        }
-        return $id_address;
     }
 
     public function createOrderFromCart($params)

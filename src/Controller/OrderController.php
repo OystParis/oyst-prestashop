@@ -2,6 +2,7 @@
 
 namespace Oyst\Controller;
 
+use Address;
 use Cart;
 use Configuration;
 use Exception;
@@ -9,7 +10,10 @@ use Order;
 use OrderSlip;
 use Oyst;
 use Oyst\Classes\Notification;
+use Oyst\Services\AddressService;
+use Oyst\Services\ObjectService;
 use Oyst\Services\OrderService;
+use Symfony\Component\Validator\Constraints\Valid;
 use Validate;
 
 class OrderController extends AbstractOystController
@@ -58,6 +62,7 @@ class OrderController extends AbstractOystController
 
     public function createOrder($params)
     {
+        file_put_contents(__DIR__.'/debug.log', json_encode($params));
         if (!empty($params['url']['id'])) {
             $notification = Notification::getNotificationByOystId($params['url']['id']);
             if (empty($notification)) {
@@ -72,6 +77,71 @@ class OrderController extends AbstractOystController
                     if (Validate::isLoadedObject($cart)) {
                         $notification->start();
                         $oyst = new Oyst();
+
+                        //Create user if not exists
+                        if (empty($cart->id_customer)) {
+                            if (empty($params['data']['user'])) {
+                                $this->respondError(400, 'User is empty');
+                            }
+                            $object_service = ObjectService::getInstance();
+                            $result = $object_service->createObject('Customer', $params['data']['user']);
+                            $cart->id_customer = $result['id'];
+
+                            if (!empty($result['errors'])) {
+                                $errors['customer'] = $result['errors'];
+                            }
+                        }
+
+                        //Associate customer to fake address
+                        $address = new Address($cart->id_address_delivery);
+                        if (!Validate::isLoadedObject($address)) {
+                            //Create delivery address
+                            if (empty($params['data']['shipping']['address'])) {
+                                $this->respondError(400, 'No delivery address found and delivery address not in data');
+                            }
+                            $address_service = AddressService::getInstance();
+                            $params['data']['shipping']['address'] = $address_service->formatAddressForPrestashop($params['data']['shipping']['address']);
+
+                            $result = $object_service->createObject('Address', $params['data']['shipping']['address']);
+                            if (empty($result['errors'])) {
+                                $result['object']->id_customer = $cart->id_customer;
+                                $result['object']->alias .= ' '.$result['object']->id;
+                                $result['object']->save();
+                                $delivery_address = json_decode(json_encode($result['object']), true);
+                                $id_address_delivery = $result['id'];
+                            } else {
+                                $this->respondError(400, 'Error on address delivery creation : '.$result['errors']);
+                            }
+                        } else {
+                            $address->id_customer = $cart->id_customer;
+                            $address->save();
+                            $delivery_address = json_decode(json_encode($address), true);
+                        }
+
+                        if (empty($params['data']['billing']['address'])) {
+                            $this->respondError(400, 'Billing address not in data');
+                        }
+                        //Checked if invoice address is same as delivery address
+                        $id_address_invoice = $address_service->findExistentAddress(array($delivery_address), $params['data']['billing']['address']);
+
+                        if (empty($id_address_invoice)) {
+                            $params['data']['billing']['address'] = $address_service->formatAddressForPrestashop($params['data']['billing']['address']);
+
+                            $result = $object_service->createObject('Address', $params['data']['billing']['address']);
+                            if (empty($result['errors'])) {
+                                $result['object']->id_customer = $cart->id_customer;
+                                $result['object']->alias .= ' '.$result['object']->id;
+                                $result['object']->save();
+                                $id_address_invoice = $result['id'];
+                            } else {
+                                $this->respondError(400, 'Error on invoice address creation : '.$result['errors']);
+                            }
+                        }
+
+                        $cart->id_address_delivery = $id_address_delivery;
+                        $cart->id_address_invoice = $id_address_invoice;
+                        $cart->save();
+
                         $total = (float)($cart->getOrderTotal(true, Cart::BOTH));
                         try {
                             if ($oyst->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), $total, $oyst->displayName, NULL, array(), (int)$cart->id_currency, false, $cart->secure_key)) {

@@ -28,7 +28,7 @@ class CustomerService {
 
         //Search on id
         if (!empty($customer_infos['id_oyst'])) {
-            $id_customer = \Oyst\Classes\Customer::getIdCustomerFromIdCustomerOyst($customer_infos['id_oyst']);
+            $id_customer = \Oyst\Classes\OystCustomer::getIdCustomerFromIdCustomerOyst($customer_infos['id_oyst']);
             $customer = new Customer((int)$id_customer);
             if (Validate::isLoadedObject($customer)) {
                 $addresses = $customer->getAddresses($id_lang_fr);
