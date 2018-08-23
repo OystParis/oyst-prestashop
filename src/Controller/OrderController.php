@@ -58,8 +58,8 @@ class OrderController extends AbstractOystController
 
     public function createOrder($params)
     {
-        if (!empty($params['url']['id'])) {
-            $notification = Notification::getNotificationByOystId($params['url']['id']);
+        if (!empty($params['data'])) {
+            $notification = Notification::getNotificationByOystId($params['data']['oyst_id']);
             if (empty($notification)) {
                 $this->respondError(400, 'Notification not found');
             } else {
@@ -90,7 +90,7 @@ class OrderController extends AbstractOystController
                 }
             }
         } else {
-            $this->respondError(400, 'id_order is missing');
+            $this->respondError(400, 'data is missing');
         }
     }
 
