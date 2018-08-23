@@ -15,7 +15,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
 {
     public function init()
     {
-        //All routes are prefixed by /oyst
+        //All routes are prefixed by /oyst-oneclick
         Route::addRoute('GET', '/v1/checkout/{id}', 'Checkout', 'getCart');
         Route::addRoute('GET', '/v1/config', 'Config', 'getConfig');
         Route::addRoute('GET', '/v1/informations/{name}', 'Information', 'getInformation');
@@ -79,6 +79,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         if (!empty($data)) {
             $params['data'] = $data;
         }
+        file_put_contents(__DIR__.'/data.json', json_encode($params['data']));
         $controller = 'Oyst\\Controller\\'.$route['controller'].'Controller';
 
         $method = $route['method'];

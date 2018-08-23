@@ -13,7 +13,6 @@ use Oyst\Classes\Notification;
 use Oyst\Services\AddressService;
 use Oyst\Services\ObjectService;
 use Oyst\Services\OrderService;
-use Symfony\Component\Validator\Constraints\Valid;
 use Validate;
 
 class OrderController extends AbstractOystController
@@ -62,9 +61,8 @@ class OrderController extends AbstractOystController
 
     public function createOrder($params)
     {
-        file_put_contents(__DIR__.'/debug.log', json_encode($params));
-        if (!empty($params['url']['id'])) {
-            $notification = Notification::getNotificationByOystId($params['url']['id']);
+        if (!empty($params['data'])) {
+            $notification = Notification::getNotificationByOystId($params['data']['oyst_id']);
             if (empty($notification)) {
                 $this->respondError(400, 'Notification not found');
             } else {
@@ -78,12 +76,12 @@ class OrderController extends AbstractOystController
                         $notification->start();
                         $oyst = new Oyst();
 
+                        $object_service = ObjectService::getInstance();
                         //Create user if not exists
                         if (empty($cart->id_customer)) {
                             if (empty($params['data']['user'])) {
                                 $this->respondError(400, 'User is empty');
                             }
-                            $object_service = ObjectService::getInstance();
                             $result = $object_service->createObject('Customer', $params['data']['user']);
                             $cart->id_customer = $result['id'];
 
@@ -94,19 +92,23 @@ class OrderController extends AbstractOystController
 
                         //Associate customer to fake address
                         $address = new Address($cart->id_address_delivery);
+                        $address_service = AddressService::getInstance();
                         if (!Validate::isLoadedObject($address)) {
                             //Create delivery address
                             if (empty($params['data']['shipping']['address'])) {
                                 $this->respondError(400, 'No delivery address found and delivery address not in data');
                             }
-                            $address_service = AddressService::getInstance();
                             $params['data']['shipping']['address'] = $address_service->formatAddressForPrestashop($params['data']['shipping']['address']);
 
                             $result = $object_service->createObject('Address', $params['data']['shipping']['address']);
                             if (empty($result['errors'])) {
                                 $result['object']->id_customer = $cart->id_customer;
                                 $result['object']->alias .= ' '.$result['object']->id;
-                                $result['object']->save();
+                                try {
+                                    $result['object']->save();
+                                } catch (Exception $e) {
+                                    $this->respondError(400, 'Error while creating shipping address : '.$e->getMessage());
+                                }
                                 $delivery_address = json_decode(json_encode($result['object']), true);
                                 $id_address_delivery = $result['id'];
                             } else {
@@ -114,7 +116,12 @@ class OrderController extends AbstractOystController
                             }
                         } else {
                             $address->id_customer = $cart->id_customer;
-                            $address->save();
+                            try {
+                                $address->save();
+                                $id_address_delivery = $address->id;
+                            } catch (Exception $e) {
+                                $this->respondError(400, 'Error while updating shipping address : '.$e->getMessage());
+                            }
                             $delivery_address = json_decode(json_encode($address), true);
                         }
 
@@ -131,7 +138,11 @@ class OrderController extends AbstractOystController
                             if (empty($result['errors'])) {
                                 $result['object']->id_customer = $cart->id_customer;
                                 $result['object']->alias .= ' '.$result['object']->id;
-                                $result['object']->save();
+                                try {
+                                    $result['object']->save();
+                                } catch (Exception $e) {
+                                    $this->respondError(400, 'Error while creating billing address : '.$e->getMessage());
+                                }
                                 $id_address_invoice = $result['id'];
                             } else {
                                 $this->respondError(400, 'Error on invoice address creation : '.$result['errors']);
@@ -140,7 +151,11 @@ class OrderController extends AbstractOystController
 
                         $cart->id_address_delivery = $id_address_delivery;
                         $cart->id_address_invoice = $id_address_invoice;
-                        $cart->save();
+                        try {
+                            $cart->save();
+                        } catch (Exception $e) {
+                            $this->respondError(400, 'Error while updating cart : '.$e->getMessage());
+                        }
 
                         $total = (float)($cart->getOrderTotal(true, Cart::BOTH));
                         try {
@@ -160,7 +175,7 @@ class OrderController extends AbstractOystController
                 }
             }
         } else {
-            $this->respondError(400, 'id_order is missing');
+            $this->respondError(400, 'data is empty');
         }
     }
 
