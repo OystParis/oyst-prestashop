@@ -16,16 +16,16 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
     public function init()
     {
         //All routes are prefixed by /oyst
-        Route::addRoute('GET', '/v1/checkout/{id}', 'Checkout', 'getCart');
         Route::addRoute('GET', '/v1/config', 'Config', 'getConfig');
-        Route::addRoute('GET', '/v1/informations/{name}', 'Information', 'getInformation');
-        Route::addRoute('GET', '/v1/customer/{id}', 'Customer', 'getCustomer');
-        Route::addRoute('GET', '/v1/order/{id}', 'Order', 'getOrder');
         Route::addRoute('PUT', '/v1/config/script-tag', 'Config', 'setScriptTagUrl');
+        Route::addRoute('GET', '/v1/checkout/{id}', 'Checkout', 'getCart');
         Route::addRoute('PUT', '/v1/checkout/{id}', 'Checkout', 'updateCart');
-        Route::addRoute('PUT', '/v1/order/{id}/status', 'Order', 'changeStatus');
         Route::addRoute('POST', '/v1/order/{id}', 'Order', 'createOrder');
+        Route::addRoute('GET', '/v1/order/{id}', 'Order', 'getOrder');
         Route::addRoute('POST', '/v1/order/{id}/refund', 'Order', 'refundOrder');
+        Route::addRoute('PUT', '/v1/order/{id}/status', 'Order', 'changeStatus');
+        Route::addRoute('GET', '/v1/lifecycle/tasks', 'Lifecycle', 'getTasks');
+        Route::addRoute('GET', '/v1/lifecycle/informations', 'Lifecycle', 'getInformations');
 
         $request = new CurrentRequest();
 
