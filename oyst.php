@@ -40,8 +40,8 @@ class Oyst extends PaymentModule
         parent::__construct();
 
         $this->author = 'Oyst';
-        $this->displayName = $this->l('Oyst - FreePay and 1Click');
-        $this->description = $this->l('FreePay is a full service online payment solution entirely free: 0% commission, 0% installation fee, 0% subscription. With FreePay, eliminate your transaction costs, increase your margins.');
+        $this->displayName = $this->l('Oyst - 1Click');
+        $this->description = $this->l('Oyst is an online shopping solution allowing users to buy in 1-click on any website, from any page (not only any more through the traditional "cart" page).');
         $this->module_key = '728233ba4101873905adb6b9ec29f28f';
         $this->is_eu_compatible = 1;
         $this->currencies = true;
