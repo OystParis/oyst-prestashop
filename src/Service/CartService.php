@@ -122,6 +122,17 @@ class CartService extends AbstractOystService
 
         $id_zone = Country::getIdZone($countryId);
 
+        // Get firstname & lastname
+        $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
+        if (isset(Address::$definition['fields']['firstname']['size'])) {
+            $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+        }
+
+        $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
+        if (isset(Address::$definition['fields']['lastname']['size'])) {
+            $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
+        }
+
         if ($customer) {
             if (!Validate::isLoadedObject($customer)) {
                 $this->logger->emergency(
@@ -129,53 +140,47 @@ class CartService extends AbstractOystService
                 );
             }
 
-            $addressRepository = new AddressRepository(Db::getInstance());
+            if ($customer->firstname == $firstname && $customer->lastname == $lastname) {
+                $addressRepository = new AddressRepository(Db::getInstance());
+                $address = $addressRepository->findAddress($data['user']['address'], $customer);
 
-            $address = $addressRepository->findAddress($data['user']['address'], $customer);
+                if (!Validate::isLoadedObject($address)) {
+                    $address = new Address();
+                    $address->id_customer = $customer->id;
+                    $address->firstname = $firstname;
+                    $address->lastname = $lastname;
+                    $address->address1 = $data['user']['address']['street'];
+                    $address->postcode = $data['user']['address']['postcode'];
+                    $address->city = $data['user']['address']['city'];
+                    $address->alias = 'OystAddress';
+                    $address->id_country = $countryId;
+                    $address->phone = $data['user']['phone']? $data['user']['phone'] : '';
+                    $address->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
 
-            if (!Validate::isLoadedObject($address)) {
-                $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
-                if (isset(Address::$definition['fields']['firstname']['size'])) {
-                    $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
+                    $address->add();
+                } else {
+                    //Fix for retroactivity for missing phone bug or phone
+                    if ($address->phone_mobile == '' || $address->phone == '') {
+                        $address->phone = $data['user']['phone'];
+                        $address->phone_mobile = $data['user']['phone'];
+                        $address->update();
+                    }
                 }
 
-                $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
-                if (isset(Address::$definition['fields']['lastname']['size'])) {
-                    $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
-                }
+                $this->logger->info(
+                    sprintf(
+                        'New notification address [%s]',
+                        json_encode($address)
+                    )
+                );
 
-                $address = new Address();
-                $address->id_customer = $customer->id;
-                $address->firstname = $firstname;
-                $address->lastname = $lastname;
-                $address->address1 = $data['user']['address']['street'];
-                $address->postcode = $data['user']['address']['postcode'];
-                $address->city = $data['user']['address']['city'];
-                $address->alias = 'OystAddress';
-                $address->id_country = $countryId;
-                $address->phone = $data['user']['phone']? $data['user']['phone'] : '';
-                $address->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
-
-                $address->add();
+                $cart->id_address_delivery = $address->id;
+                $cart->id_address_invoice = $address->id;
             } else {
-                //Fix for retroactivity for missing phone bug or phone
-                if ($address->phone_mobile == '' || $address->phone == '') {
-                    $address->phone = $data['user']['phone'];
-                    $address->phone_mobile = $data['user']['phone'];
-                    $address->update();
-                }
+                $cart->id_address_delivery = 0;
+                $cart->id_address_invoice = 0;
             }
-
-            $this->logger->info(
-                sprintf(
-                    'New notification address [%s]',
-                    json_encode($address)
-                )
-            );
-
             $cart->id_customer = $customer->id;
-            $cart->id_address_delivery = $address->id;
-            $cart->id_address_invoice = $address->id;
             $cart->secure_key = $customer->secure_key;
         } else {
             $cart->id_customer = 0;
@@ -183,16 +188,6 @@ class CartService extends AbstractOystService
 
 
             if ($data['context'] && isset($data['context']['id_address'])) {
-                $firstname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['first_name']);
-                if (isset(Address::$definition['fields']['firstname']['size'])) {
-                    $firstname = Tools::substr($firstname, 0, Address::$definition['fields']['firstname']['size']);
-                }
-
-                $lastname = preg_replace('/^[0-9!<>,;?=+()@#"°{}_$%:]*$/u', '', $data['user']['address']['last_name']);
-                if (isset(Address::$definition['fields']['lastname']['size'])) {
-                    $lastname = Tools::substr($lastname, 0, Address::$definition['fields']['lastname']['size']);
-                }
-
                 $address_fake = new Address($data['context']['id_address']);
                 $address_fake->firstname = $firstname;
                 $address_fake->lastname = $lastname;
