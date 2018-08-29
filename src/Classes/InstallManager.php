@@ -58,21 +58,23 @@ class InstallManager
             $state &= OystAPIKey::generateAPIKey();
         }
 
-        //Check if HTTP_AUTHORIZATION is catchable in PHP
-        if (!Configuration::get('PS_WEBSERVICE_CGI_HOST')) {
-            $fields = array(
-                'ajax' => 1,
-                'action' => 'check_http_authorization'
-            );
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, Tools::getShopDomainSsl(true).'/module/oyst/ajax?'.http_build_query($fields));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: test'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $response = json_decode(curl_exec($ch), true);
-            curl_close($ch);
-            if (!$response['http_authorization']) {
-                Configuration::updateValue('PS_WEBSERVICE_CGI_HOST', 1);
-                Tools::generateHtaccess();
+        if (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false) {
+            //Check if HTTP_AUTHORIZATION is catchable in PHP
+            if (!Configuration::get('PS_WEBSERVICE_CGI_HOST')) {
+                $fields = array(
+                    'ajax' => 1,
+                    'action' => 'check_http_authorization'
+                );
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, Tools::getShopDomainSsl(true).'/module/oyst/ajax?'.http_build_query($fields));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: test'));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $response = json_decode(curl_exec($ch), true);
+                curl_close($ch);
+                if (!$response['http_authorization']) {
+                    Configuration::updateValue('PS_WEBSERVICE_CGI_HOST', 1);
+                    Tools::generateHtaccess();
+                }
             }
         }
         return $state;
