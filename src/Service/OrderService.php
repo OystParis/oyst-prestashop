@@ -98,11 +98,11 @@ class OrderService extends AbstractOystService
             $address->phone_mobile = $oystUser['phone'];
 
             if (isset($oystAddress['company_name'])) {
-                $address->company = $oystAddress['company_name'];
+                $address->company = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $oystAddress['company_name']));
             }
 
             if (isset($oystAddress['complementary'])) {
-                $address->address2 = $oystAddress['complementary'];
+                $address->address2 = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $oystAddress['complementary']));
             }
 
             $address->add();
@@ -119,11 +119,11 @@ class OrderService extends AbstractOystService
             $address->phone_mobile = $oystUser['phone'];
 
             if (isset($oystAddress['company_name'])) {
-                $address->company = $oystAddress['company_name'];
+                $address->company = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $oystAddress['company_name']));
             }
 
             if (isset($oystAddress['complementary'])) {
-                $address->address2 = $oystAddress['complementary'];
+                $address->address2 = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $oystAddress['complementary']));
             }
 
             $address->update();
