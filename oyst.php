@@ -164,6 +164,7 @@ class Oyst extends PaymentModule
                 'page_name' => $this->getPageName(),
                 'base_url' => Tools::getShopDomainSsl(true),
                 'cart_url' => $this->context->link->getPageLink('cart', Configuration::get('PS_SSL_ENABLED')),
+                'redirect_url' => $this->context->link->getModuleLink('oyst', 'oneclickreturn', array(), Configuration::get('PS_SSL_ENABLED')),
                 'script_tag' => $script_tag,
             ));
             return $this->display(__FILE__, './views/templates/hook/displayFooter.tpl');
