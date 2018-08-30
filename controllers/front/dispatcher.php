@@ -75,7 +75,6 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         }
 
         $data = $request->getJson();
-
         if (!empty($data)) {
             $params['data'] = $data;
         }
@@ -93,10 +92,17 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
                 (!empty($params) ? print_r($params, true) : '')
             )
         );
-        if (empty($params)) {
-            $controller_obj->$method();
+
+        //Check if function need arguments
+        $reflection = new ReflectionMethod($controller, $method);
+        if ($reflection->getNumberOfParameters() == 1) {
+            if (!empty($params)) {
+                $controller_obj->$method($params);
+            } else {
+                $this->printError(400, 'Parameters are missing or invalid');
+            }
         } else {
-            $controller_obj->$method($params);
+            $controller_obj->$method();
         }
         exit;
     }

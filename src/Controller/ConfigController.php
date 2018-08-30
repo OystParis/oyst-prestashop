@@ -16,7 +16,7 @@ class ConfigController extends AbstractOystController
         $this->setLogName('config');
     }
 
-    public function getConfig()
+    public function getEcommerce()
     {
         $results = array();
 
@@ -52,9 +52,13 @@ class ConfigController extends AbstractOystController
         $this->respondAsJson($results);
     }
 
-    public function setScriptTagUrl($params)
+    public function setOyst($params)
     {
-        if (Configuration::updateValue('OYST_SCRIPT_TAG_URL', $params['data']['url'])) {
+        $res = Configuration::updateValue('OYST_MERCHANT_ID', $params['data']['merchant_id']);
+        $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode($params['data']['script_tag'])); //Encode in base64 because prestashop fucked up html tag
+        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', $params['data']['public_endpoints']);
+
+        if ($res) {
             $this->respondAsJson(array('success' => true));
         } else {
             $this->respondError(400, "Error on update");

@@ -156,30 +156,19 @@ class Oyst extends PaymentModule
         return $this->context;
     }
 
-    public function hookHeader($params)
-    {
-        if (Configuration::hasKey('OYST_SCRIPT_TAG_URL')) {
-            if (version_compare(_PS_VERSION_, '1.7', '<')) {
-                $this->context->controller->addJS(Configuration::get('OYST_SCRIPT_TAG_URL'));
-                $this->context->controller->addJS('modules/'.$this->name.'/views/js/oyst.js');
-            } else {
-                $this->context->controller->registerJavascript('modules-oyst-supertag', Configuration::get('OYST_SCRIPT_TAG_URL'), ['position' => 'bottom', 'priority' => 150, 'server' => 'remote']);
-                $this->context->controller->registerJavascript('modules-oyst', 'modules/'.$this->name.'/views/js/oyst.js', ['position' => 'bottom', 'priority' => 150]);
-            }
-        }
-    }
-
     public function hookFooter($params)
     {
         if (Configuration::hasKey('OYST_SCRIPT_TAG') && Configuration::hasKey('OYST_MERCHANT_ID')) {
-            $script_tag = str_replace('[MERCHANT_ID_PLACEHOLDER]', Configuration::get('OYST_MERCHANT_ID'), Configuration::get('OYST_SCRIPT_TAG'));
+            $script_tag = str_replace('[MERCHANT_ID_PLACEHOLDER]', Configuration::get('OYST_MERCHANT_ID'), base64_decode(Configuration::get('OYST_SCRIPT_TAG')));
             $this->context->smarty->assign(array(
                 'page_name' => $this->getPageName(),
-                'base_url' => Shop::getShop(),
-                'cart_url' => '',
-                'sctip_tag' => $script_tag,
+                'base_url' => Tools::getShopDomainSsl(true),
+                'cart_url' => $this->context->link->getPageLink('cart', Configuration::get('PS_SSL_ENABLED')),
+                'script_tag' => $script_tag,
             ));
+            return $this->display(__FILE__, './views/templates/hook/displayFooter.tpl');
         }
+        return '';
     }
 
     private function getPageName()
