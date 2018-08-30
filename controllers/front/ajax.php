@@ -16,7 +16,10 @@ class OystAjaxModuleFrontController extends ModuleFrontController
 
         switch ($_GET['action']) {
             case 'get_id_cart':
-                $id_cart = Context::getContext()->cart->id;
+                $context = Context::getContext();
+                $id_cart = $context->cart->id;
+                //Add id_cart to cookie to retrieve cart on order confirmation
+                $context->cookie->oyst_id_cart = $context->cart->id;
                 die(json_encode(array('id_cart' => $id_cart)));
                 break;
 
