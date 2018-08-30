@@ -70,7 +70,7 @@ class Oyst extends PaymentModule
     {
         $result = parent::install();
 
-        $result &= $this->registerHook('header');
+        $result &= $this->registerHook('footer');
         $result &= $this->registerHook('displayPaymentReturn');
         $result &= $this->registerHook('adminProductsExtra');
 
@@ -156,23 +156,46 @@ class Oyst extends PaymentModule
         return $this->context;
     }
 
-    public function hookHeader($params)
+    public function hookFooter($params)
     {
-        //Only for test
-        if (Tools::getIsset('show-context')) {
-            echo "<pre>";
-            print_r($this->context);
-            echo "</pre>";
-            exit;
+        if (Configuration::hasKey('OYST_SCRIPT_TAG') && Configuration::hasKey('OYST_MERCHANT_ID')) {
+            $script_tag = str_replace('[MERCHANT_ID_PLACEHOLDER]', Configuration::get('OYST_MERCHANT_ID'), base64_decode(Configuration::get('OYST_SCRIPT_TAG')));
+            $this->context->smarty->assign(array(
+                'page_name' => $this->getPageName(),
+                'base_url' => Tools::getShopDomainSsl(true),
+                'cart_url' => $this->context->link->getPageLink('cart', Configuration::get('PS_SSL_ENABLED')),
+                'redirect_url' => $this->context->link->getModuleLink('oyst', 'oneclickreturn', array(), Configuration::get('PS_SSL_ENABLED')),
+                'script_tag' => $script_tag,
+            ));
+            return $this->display(__FILE__, './views/templates/hook/displayFooter.tpl');
         }
-        if (Configuration::hasKey('OYST_SCRIPT_TAG_URL')) {
-            if (version_compare(_PS_VERSION_, '1.7', '<')) {
-                $this->context->controller->addJS(Configuration::get('OYST_SCRIPT_TAG_URL'));
-                $this->context->controller->addJS('modules/'.$this->name.'/views/js/oyst.js');
-            } else {
-                $this->context->controller->registerJavascript('modules-oyst-supertag', Configuration::get('OYST_SCRIPT_TAG_URL'), ['position' => 'bottom', 'priority' => 150, 'server' => 'remote']);
-                $this->context->controller->registerJavascript('modules-oyst', 'modules/'.$this->name.'/views/js/oyst.js', ['position' => 'bottom', 'priority' => 150]);
+        return '';
+    }
+
+    private function getPageName()
+    {
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            // Are we in a payment module
+            $module_name = '';
+            if (Validate::isModuleName(Tools::getValue('module'))) {
+                $module_name = Tools::getValue('module');
             }
+
+            if (!empty($this->context->controller->php_self)) {
+                $page_name = $this->context->controller->php_self;
+            } elseif (Tools::getValue('fc') == 'module' && $module_name != '' && (Module::getInstanceByName($module_name) instanceof PaymentModule)) {
+                $page_name = 'module-payment-submit';
+            }
+            // @retrocompatibility Are we in a module ?
+            elseif (preg_match('#^'.preg_quote($this->context->shop->physical_uri, '#').'modules/([a-zA-Z0-9_-]+?)/(.*)$#', $_SERVER['REQUEST_URI'], $m)) {
+                $page_name = 'module-'.$m[1].'-'.str_replace(array('.php', '/'), array('', '-'), $m[2]);
+            } else {
+                $page_name = Dispatcher::getInstance()->getController();
+                $page_name = (preg_match('/^[0-9]/', $page_name) ? 'page_'.$page_name : $page_name);
+            }
+        } else {
+            $page_name = $this->context->controller->getPageName();
         }
+        return $page_name;
     }
 }
