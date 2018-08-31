@@ -156,13 +156,40 @@ class CartService extends AbstractOystService
                 $address->phone = $data['user']['phone']? $data['user']['phone'] : '';
                 $address->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
 
-                $address->add();
+                if (isset($data['user']['company_name'])) {
+                    $address->company = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['company_name']));
+                }
+
+                if (isset($data['user']['complementary'])) {
+                    $address->address2 = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['complementary']));
+                }
+
+                if (!$address->add()) {
+                    $this->logger->emergency(
+                        'Can\'t create address ['.json_encode($address).']'
+                    );
+                    return false;
+                }
             } else {
                 //Fix for retroactivity for missing phone bug or phone
                 if ($address->phone_mobile == '' || $address->phone == '') {
                     $address->phone = $data['user']['phone'];
                     $address->phone_mobile = $data['user']['phone'];
-                    $address->update();
+                }
+
+                if (isset($data['user']['address']['company_name'])) {
+                    $address->company = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['address']['company_name']));
+                }
+
+                if (isset($data['user']['address']['complementary'])) {
+                    $address->address2 = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['address']['complementary']));
+                }
+
+                if (!$address->update()) {
+                    $this->logger->emergency(
+                        'Can\'t update address ['.json_encode($address).']'
+                    );
+                    return false;
                 }
             }
 

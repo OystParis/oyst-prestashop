@@ -21,7 +21,9 @@
 
 namespace Oyst\Controller;
 
+use Db;
 use Oyst;
+use Order;
 use Context;
 use Oyst\Classes\Enum\AbstractOrderState;
 use Oyst\Factory\AbstractOrderServiceFactory;
@@ -40,12 +42,36 @@ class OrderController extends AbstractOystController
 
             $responseData = $orderService->requestCreateNewOrder($orderId);
 
+            $orderState = '';
+
             if ($responseData['state']) {
                 $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);
+                $orderState = AbstractOrderState::ACCEPTED;
+                $this->logger->info(sprintf("Info creating order: [%s]", json_encode($responseData['state'])));
             } else {
                 $orderService->updateOrderStatus($orderId, AbstractOrderState::DENIED);
+                $orderState = AbstractOrderState::DENIED;
                 $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData['error'])));
             }
+
+            $order_id = $orderService->getOrderRepository()->getOrderId($orderId);
+            if ($order_id) {
+                $order = new Order($order_id);
+            }
+
+            $insert = array(
+                'id_order'   => $order_id ? (int)$order_id : 0,
+                'id_cart'    => $order_id ? (int)$order->id_cart : 0,
+                'payment_id' => pSQL($orderId),
+                'event_code' => 'order.patch',
+                'event_data' => json_encode($json),
+                'response'   => json_encode($state),
+                'status'     => $orderState,
+                'date_event' => date('Y-m-d H:i:s'),
+                'date_add'   => date('Y-m-d H:i:s'),
+                'date_upd'   => date('Y-m-d H:i:s'),
+            );
+            Db::getInstance()->insert('oyst_payment_notification', $insert);
 
             $this->respondAsJson($responseData);
         } else {
