@@ -457,6 +457,8 @@ class CartService extends AbstractOystService
 
         $type = OystCarrier::HOME_DELIVERY;
 
+        $id_zone = Address::getZoneById((int)$cart->id_address_delivery);
+
         $oyst_business_days = PSConfiguration::get('FC_OYST_BUSINESS_DAYS');
         $business_days = explode(',', $oyst_business_days);
 
@@ -478,7 +480,20 @@ class CartService extends AbstractOystService
                 if ($free_shipping) {
                     $amount = 0;
                 } else {
-                    $amount = (float) $shipment['price'];
+                    $shipping_method = $carrier->getShippingMethod();
+
+                    if ($shipping_method == Carrier::SHIPPING_METHOD_WEIGHT) {
+                        $shipping = $carrier->getDeliveryPriceByWeight($cart->getTotalWeight($cart->getProducts(false)), (int)$id_zone);
+
+                        $carrier_tax = Tax::getCarrierTaxRate($id_carrier, $cart->id_address_delivery);
+
+                        if (isset($carrier_tax)) {
+                            $shipping *= 1 + ($carrier_tax / 100);
+                        }
+                        $amount = (float)$shipping;
+                    } else {
+                        $amount = (float)$shipment['price'];
+                    }
                 }
 
                 $oystPrice = new OystPrice($amount, Context::getContext()->currency->iso_code);
