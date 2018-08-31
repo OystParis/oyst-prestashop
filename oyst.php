@@ -19,9 +19,9 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-use Oyst\Classes\OystAPIKey;
-
 require_once dirname(__FILE__) . '/autoload.php';
+
+use Oyst\Classes\OystAPIKey;
 
 /**
  * Class Oyst
@@ -161,7 +161,7 @@ class Oyst extends PaymentModule
         if (Configuration::hasKey('OYST_SCRIPT_TAG') && Configuration::hasKey('OYST_MERCHANT_ID')) {
             $script_tag = str_replace('[MERCHANT_ID_PLACEHOLDER]', Configuration::get('OYST_MERCHANT_ID'), base64_decode(Configuration::get('OYST_SCRIPT_TAG')));
             $this->context->smarty->assign(array(
-                'page_name' => $this->getPageName(),
+                'page_name_oyst' => $this->getPageName(),
                 'base_url' => Tools::getShopDomainSsl(true),
                 'cart_url' => $this->context->link->getPageLink('cart', Configuration::get('PS_SSL_ENABLED')),
                 'redirect_url' => $this->context->link->getModuleLink('oyst', 'oneclickreturn', array(), Configuration::get('PS_SSL_ENABLED')),
