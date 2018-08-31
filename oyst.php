@@ -19,9 +19,9 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-use Oyst\Classes\OystAPIKey;
-
 require_once dirname(__FILE__) . '/autoload.php';
+
+use Oyst\Classes\OystAPIKey;
 
 /**
  * Class Oyst
