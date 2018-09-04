@@ -194,6 +194,10 @@ abstract class AbstractBuilder
      */
     protected function formatAddress($address)
     {
+        if (empty($address)) {
+            return array();
+        }
+
         return array(
             'alias' => $address->alias,
             'company' => $address->company,

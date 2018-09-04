@@ -14,6 +14,7 @@ use Gender;
 use Language;
 use Oyst\Classes\CheckoutBuilder;
 use Oyst\Classes\Notification;
+use Oyst\Services\VersionCompliance\Helper;
 use Product;
 use Shop;
 use Tools;
@@ -48,6 +49,7 @@ class CartService {
 
         if (Validate::isLoadedObject($cart)) {
             try {
+                $helper = new Helper();
                 $context = Context::getContext();
 
                 $id_oyst = Notification::getOystIdByCartId($cart->id);
@@ -66,7 +68,7 @@ class CartService {
                     }
                 }
 
-                $cart_products = $cart->getProductsWithSeparatedGifts();
+                $cart_products = $helper->getCartProductsWithSeparatedGifts($cart);
 
                 //Complete cart products and get carriers list
                 $carriers = array();
