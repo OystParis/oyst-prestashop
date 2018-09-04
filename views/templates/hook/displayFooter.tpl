@@ -1,5 +1,5 @@
 <script>
-    var page_name_oyst = '{$page_name}';
+    var page_name_oyst = '{$page_name_oyst}';
     var base_url = '{$base_url}';
     var cart_url = '{$cart_url}';
     window.__OYST__ = window.__OYST__ || {};
