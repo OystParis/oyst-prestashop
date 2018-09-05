@@ -139,7 +139,6 @@ class CheckoutController extends AbstractOystController
                     //Customer & address
                     $id_customer = 0;
                     $id_address_delivery = 0;
-                    $id_address_invoice = 0;
 
                     //First, search customer (id, email)
                     //If found => set customer id to cart and check his addresses
@@ -150,10 +149,6 @@ class CheckoutController extends AbstractOystController
                         //If customer found, search addresses
                         if (!empty($finded_customer['customer_obj'])) {
                             $id_customer = $finded_customer['customer_obj']->id;
-                        }
-
-                        if (!empty($data['user']['id_oyst']) && !empty($id_customer)) {
-                            Oyst\Classes\OystCustomer::createOystCustomerLink($id_customer, $data['user']['id_oyst']);
                         }
                     }
 
@@ -168,6 +163,8 @@ class CheckoutController extends AbstractOystController
                         if (!empty($finded_customer['addresses'])) {
                             //Search with address informations
                             $id_address_delivery = $address_service->findExistentAddress($finded_customer['addresses'], $data['shipping']['address']);
+                        } else {
+                            //Else, search if it's a cart address
                         }
 
                         //No address, create it
@@ -191,9 +188,6 @@ class CheckoutController extends AbstractOystController
                     }
                     if (!empty($id_address_delivery)) {
                         $cart->id_address_delivery = $id_address_delivery;
-                    }
-                    if (!empty($id_address_invoice)) {
-                        $cart->id_address_invoice = $id_address_invoice;
                     }
 
                     //Carrier

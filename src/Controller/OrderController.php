@@ -85,6 +85,10 @@ class OrderController extends AbstractOystController
                             $result = $object_service->createObject('Customer', $params['data']['user']);
                             $cart->id_customer = $result['id'];
 
+                            if (!empty($params['data']['user']['id_oyst']) && !empty($cart->id_customer)) {
+                                Oyst\Classes\OystCustomer::createOystCustomerLink($cart->id_customer, $params['data']['user']['id_oyst']);
+                            }
+
                             if (!empty($result['errors'])) {
                                 $errors['customer'] = $result['errors'];
                             }
