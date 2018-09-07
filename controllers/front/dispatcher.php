@@ -79,7 +79,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         if (!empty($data)) {
             $params['data'] = $data;
         }
-        file_put_contents(__DIR__.'/data.json', json_encode($params['data']));
+        file_put_contents(__DIR__.'/data.json', date('Y-m-d H:i:s').' - '.$request->getMethod().' '.$request->getRequestUri().' :'.json_encode($data)."\r\n", FILE_APPEND); //FOR DEBUG
         $controller = 'Oyst\\Controller\\'.$route['controller'].'Controller';
 
         $method = $route['method'];

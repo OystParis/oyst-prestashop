@@ -5,6 +5,7 @@ namespace Oyst\Controller;
 use Address;
 use Cart;
 use Configuration;
+use Customer;
 use Exception;
 use Order;
 use OrderSlip;
@@ -84,6 +85,7 @@ class OrderController extends AbstractOystController
                             }
                             $result = $object_service->createObject('Customer', $params['data']['user']);
                             $cart->id_customer = $result['id'];
+                            $cart->secure_key = $result['object']->secure_key;
 
                             if (!empty($params['data']['user']['id_oyst']) && !empty($cart->id_customer)) {
                                 Oyst\Classes\OystCustomer::createOystCustomerLink($cart->id_customer, $params['data']['user']['id_oyst']);
@@ -94,16 +96,54 @@ class OrderController extends AbstractOystController
                             }
                         }
 
-                        //Associate customer to fake address
+                        if (empty($params['data']['shipping']['address'])) {
+                            $this->respondError(400, 'Delivery address not in data');
+                        }
+
                         $address = new Address($cart->id_address_delivery);
                         $address_service = AddressService::getInstance();
-                        if (!Validate::isLoadedObject($address)) {
-                            //Create delivery address
-                            if (empty($params['data']['shipping']['address'])) {
-                                $this->respondError(400, 'No delivery address found and delivery address not in data');
-                            }
+                        if (Validate::isLoadedObject($address)) {
+
                             $params['data']['shipping']['address'] = $address_service->formatAddressForPrestashop($params['data']['shipping']['address']);
 
+                            //Check if cart address is the same as oyst delivery address
+                            $delivery_address = json_decode(json_encode($address), true);
+                            $delivery_address['id_address'] = $delivery_address['id'];
+                            $id_address_delivery = $address_service->findExistentAddress(array($delivery_address), $params['data']['shipping']['address']);
+
+                            //If addresses are different => create oyst address
+                            if (empty($id_address_delivery)) {
+                                //If cart address has no customer, remove it
+                                if ($address->id_customer == 0) {
+                                    $address->delete();
+                                }
+
+                                $result = $object_service->createObject('Address', $params['data']['shipping']['address']);
+                                if (empty($result['errors'])) {
+                                    $result['object']->id_customer = $cart->id_customer;
+                                    $result['object']->alias .= ' '.$result['object']->id;
+                                    try {
+                                        $result['object']->save();
+                                    } catch (Exception $e) {
+                                        $this->respondError(400, 'Error while creating shipping address : '.$e->getMessage());
+                                    }
+                                    $delivery_address = json_decode(json_encode($result['object']), true);
+                                    $delivery_address['id_address'] = $delivery_address['id'];
+                                    $id_address_delivery = $result['id'];
+                                } else {
+                                    $this->respondError(400, 'Error on address delivery creation : '.$result['errors']);
+                                }
+                            } else {
+                                //If same addresses, set address to customer
+                                $address->id_customer = $cart->id_customer;
+                                try {
+                                    $address->update();
+                                } catch (Exception $e) {
+                                    $this->respondError(400, 'Error while updating shipping address : '.$e->getMessage());
+                                }
+                            }
+                        } else {
+                            //If cart address doesn't exists
                             $result = $object_service->createObject('Address', $params['data']['shipping']['address']);
                             if (empty($result['errors'])) {
                                 $result['object']->id_customer = $cart->id_customer;
@@ -114,30 +154,25 @@ class OrderController extends AbstractOystController
                                     $this->respondError(400, 'Error while creating shipping address : '.$e->getMessage());
                                 }
                                 $delivery_address = json_decode(json_encode($result['object']), true);
+                                $delivery_address['id_address'] = $delivery_address['id'];
                                 $id_address_delivery = $result['id'];
                             } else {
                                 $this->respondError(400, 'Error on address delivery creation : '.$result['errors']);
                             }
-                        } else {
-                            $address->id_customer = $cart->id_customer;
-                            try {
-                                $address->save();
-                                $id_address_delivery = $address->id;
-                            } catch (Exception $e) {
-                                $this->respondError(400, 'Error while updating shipping address : '.$e->getMessage());
-                            }
-                            $delivery_address = json_decode(json_encode($address), true);
                         }
+
+                        $cart->id_address_delivery = $id_address_delivery;
 
                         if (empty($params['data']['billing']['address'])) {
                             $this->respondError(400, 'Billing address not in data');
                         }
+
+
                         //Checked if invoice address is same as delivery address
+                        $params['data']['billing']['address'] = $address_service->formatAddressForPrestashop($params['data']['billing']['address']);
                         $id_address_invoice = $address_service->findExistentAddress(array($delivery_address), $params['data']['billing']['address']);
 
                         if (empty($id_address_invoice)) {
-                            $params['data']['billing']['address'] = $address_service->formatAddressForPrestashop($params['data']['billing']['address']);
-
                             $result = $object_service->createObject('Address', $params['data']['billing']['address']);
                             if (empty($result['errors'])) {
                                 $result['object']->id_customer = $cart->id_customer;
@@ -152,7 +187,6 @@ class OrderController extends AbstractOystController
                                 $this->respondError(400, 'Error on invoice address creation : '.$result['errors']);
                             }
                         }
-
                         $cart->id_address_delivery = $id_address_delivery;
                         $cart->id_address_invoice = $id_address_invoice;
                         try {

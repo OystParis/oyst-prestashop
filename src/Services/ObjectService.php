@@ -5,6 +5,7 @@ namespace Oyst\Services;
 use Configuration;
 use Exception;
 use Tools;
+use Validate;
 
 class ObjectService {
 
@@ -38,7 +39,7 @@ class ObjectService {
 
     public function createObject($object_name, $fields)
     {
-        $errors = [];
+        $errors = array();
         $object = null;
         $id = 0;
         $object_required_fields = $this->getRequiredFields($object_name);
@@ -84,6 +85,31 @@ class ObjectService {
         }
         return array(
             'id' => $id,
+            'object' => $object,
+            'errors' => $errors,
+        );
+    }
+
+    public function updateObject($object_name, $fields, $id_object_to_update)
+    {
+        $errors = array();
+        $object = new $object_name($id_object_to_update);
+        if (Validate::isLoadedObject($object)) {
+            foreach ($fields as $field_name => $value) {
+                if (property_exists($object_name, $field_name)) {
+                    $object->$field_name = $value;
+                }
+            }
+            try  {
+                $object->update();
+            } catch (Exception $e) {
+                $errors[] = $e->getMessage();
+            }
+        } else {
+            $errors[] = 'Id not found';
+        }
+
+        return array(
             'object' => $object,
             'errors' => $errors,
         );

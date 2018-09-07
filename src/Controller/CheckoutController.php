@@ -2,6 +2,7 @@
 
 namespace Oyst\Controller;
 
+use Address;
 use Carrier;
 use Cart;
 use CartRule;
@@ -62,15 +63,23 @@ class CheckoutController extends AbstractOystController
                     $context->shop = new Shop($cart->id_shop);
 
                     $data = $params['data'];
-                    if (!empty($id_oyst) && !Notification::cartLinkIsAlreadyDone($cart->id)) {
-                        $notification = new Notification();
-                        $notification->cart_id = $cart->id;
-                        $notification->oyst_id = $id_oyst;
-                        $notification->status = Notification::WAITING_STATUS;
-                        try {
-                            $notification->save();
-                        } catch (Exception $e) {
-                            //Error on notification creation
+                    if (!empty($id_oyst)) {
+                        if (Notification::cartLinkIsAlreadyDone($cart->id)) {
+                            $notification = Notification::getNotificationByCartId($cart->id);
+                            if ($notification->oyst_id != $id_oyst) {
+                                $notification->oyst_id = $id_oyst;
+                                $notification->update();
+                            }
+                        } else {
+                            $notification = new Notification();
+                            $notification->cart_id = $cart->id;
+                            $notification->oyst_id = $id_oyst;
+                            $notification->status = Notification::WAITING_STATUS;
+                            try {
+                                $notification->save();
+                            } catch (Exception $e) {
+                                //Error on notification creation
+                            }
                         }
                     }
                     //Products
@@ -140,15 +149,28 @@ class CheckoutController extends AbstractOystController
                     $id_customer = 0;
                     $id_address_delivery = 0;
 
+                    $is_fake_user = false;
+                    if (empty($data['user']) || $data['user']['email'] == 'no-reply@oyst.com') {
+                        $is_fake_user = true;
+                    }
+
                     //First, search customer (id, email)
                     //If found => set customer id to cart and check his addresses
-                    if (!empty($data['user'])) {
+                    if (!$is_fake_user) {
                         $customer_service = CustomerService::getInstance();
                         $finded_customer = $customer_service->searchCustomer($data['user']);
 
                         //If customer found, search addresses
                         if (!empty($finded_customer['customer_obj'])) {
                             $id_customer = $finded_customer['customer_obj']->id;
+                        }
+                    }
+
+                    $current_delivery_address_obj = null;
+                    if (!empty($cart->id_address_delivery)) {
+                        $current_delivery_address_obj = new Address($cart->id_address_delivery);
+                        if (!Validate::isLoadedObject($current_delivery_address_obj)) {
+                            $current_delivery_address_obj = null;
                         }
                     }
 
@@ -159,12 +181,34 @@ class CheckoutController extends AbstractOystController
                         $object_service = ObjectService::getInstance();
                         $data['shipping']['address'] = $address_service->formatAddressForPrestashop($data['shipping']['address']);
 
+                        //If user is empty, so shipping address is a fake address
+                        if ($is_fake_user) {
+                            $data['shipping']['address']['alias'] = 'Fake address';
+                        }
                         //If address defined in data and exists in customer addresses
                         if (!empty($finded_customer['addresses'])) {
                             //Search with address informations
                             $id_address_delivery = $address_service->findExistentAddress($finded_customer['addresses'], $data['shipping']['address']);
                         } else {
-                            //Else, search if it's a cart address
+                            //Else, search if it's the cart address
+                            if (!empty($current_delivery_address_obj)) {
+                                $current_delivery_address = json_decode(json_encode($current_delivery_address_obj), true);
+                                $current_delivery_address['id_address'] = $current_delivery_address['id'];
+                                //Transform object to array with json encode/decode and compare it to oyst delivery_address
+                                $id_address_delivery = $address_service->findExistentAddress(array($current_delivery_address), $data['shipping']['address']);
+
+                                //If oyst address is different than cart address and cart address was fake address => update it
+                                if ($current_delivery_address_obj->alias == 'Fake address' && empty($id_address_delivery)) {
+                                    $current_delivery_address_obj = $object_service->updateObject('Address', $data['shipping']['address'], $current_delivery_address['id_address']);
+                                    if (!empty($id_customer)) {
+                                        $current_delivery_address_obj['object']->id_customer = $id_customer;
+                                    }
+                                    $current_delivery_address_obj['object']->alias .= ' '.$current_delivery_address_obj['object']->id;
+                                    $current_delivery_address_obj['object']->save();
+
+                                    $id_address_delivery = $current_delivery_address_obj['object']->id;
+                                }
+                            }
                         }
 
                         //No address, create it
@@ -174,7 +218,9 @@ class CheckoutController extends AbstractOystController
                                 if (!empty($id_customer)) {
                                     $result['object']->id_customer = $id_customer;
                                 }
-                                $result['object']->alias .= ' '.$result['object']->id;
+                                if ($result['object']->alias != 'Fake address') {
+                                    $result['object']->alias .= ' '.$result['object']->id;
+                                }
                                 $result['object']->save();
                                 $id_address_delivery = $result['id'];
                             } else {
@@ -187,6 +233,10 @@ class CheckoutController extends AbstractOystController
                         $cart->id_customer = $id_customer;
                     }
                     if (!empty($id_address_delivery)) {
+                        //If new address != current address and current address has no customer => remove current address
+                        if ($id_address_delivery != $cart->id_address_delivery && !empty($current_delivery_address_obj) && $current_delivery_address_obj->id_customer == 0) {
+                            $current_delivery_address_obj->delete();
+                        }
                         $cart->id_address_delivery = $id_address_delivery;
                     }
 
