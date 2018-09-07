@@ -5,6 +5,7 @@ namespace Oyst\Classes;
 use Db;
 use Exception;
 use ObjectModel;
+use Oyst\Classes\VersionCompliance\Helper;
 
 class Notification extends ObjectModel
 {
@@ -44,7 +45,8 @@ class Notification extends ObjectModel
         $this->status = self::START_STATUS;
 
         try {
-            $res = $this->save();
+            $helper = new Helper;
+            $res = $helper->saveObject($this, self::START_STATUS);
         } catch (Exception $e) {
             header($_SERVER['SERVER_PROTOCOL'].' 400 Bad request');
             echo json_encode(array('error' => print_r($e->getMessage())));
@@ -59,10 +61,9 @@ class Notification extends ObjectModel
      */
     public function complete($id_order)
     {
-        $this->status = self::END_STATUS;
-        $this->order_id = $id_order;
         try {
-            $res = $this->save();
+            $helper = new Helper;
+            $res = $helper->saveObject($this, self::END_STATUS, $id_order);
         } catch (Exception $e) {
             header($_SERVER['SERVER_PROTOCOL'].' 400 Bad request');
             echo json_encode(array('error' => print_r($e->getMessage())));
@@ -98,9 +99,9 @@ class Notification extends ObjectModel
      */
     public static function getNotificationByOystId($oyst_id)
     {
-        $id_notification = Db::getInstance()->getValue("SELECT `id_notification` 
-            FROM `"._DB_PREFIX_."oyst_notification` 
-            WHERE `oyst_id` = '".$oyst_id."' 
+        $id_notification = Db::getInstance()->getValue("SELECT `id_notification`
+            FROM `"._DB_PREFIX_."oyst_notification`
+            WHERE `oyst_id` = '".$oyst_id."'
             ORDER BY `id_notification` DESC");
 
         $notification = null;
@@ -119,9 +120,9 @@ class Notification extends ObjectModel
      */
     public static function getOystIdByOrderId($id_order)
     {
-        $oyst_id = Db::getInstance()->getValue("SELECT `oyst_id` 
-            FROM `"._DB_PREFIX_."oyst_notification` 
-            WHERE `order_id` = ".$id_order." 
+        $oyst_id = Db::getInstance()->getValue("SELECT `oyst_id`
+            FROM `"._DB_PREFIX_."oyst_notification`
+            WHERE `order_id` = ".$id_order."
             ORDER BY `id_notification` DESC");
 
         if (!empty($oyst_id)) {
@@ -137,9 +138,9 @@ class Notification extends ObjectModel
      */
     public static function getOystIdByCartId($id_cart)
     {
-        $oyst_id = Db::getInstance()->getValue("SELECT `oyst_id` 
-            FROM `"._DB_PREFIX_."oyst_notification` 
-            WHERE `cart_id` = ".$id_cart." 
+        $oyst_id = Db::getInstance()->getValue("SELECT `oyst_id`
+            FROM `"._DB_PREFIX_."oyst_notification`
+            WHERE `cart_id` = ".$id_cart."
             ORDER BY `id_notification` DESC");
 
         if (!empty($oyst_id)) {
@@ -155,9 +156,9 @@ class Notification extends ObjectModel
      */
     public static function getOrderIdByOystId($id_oyst)
     {
-        $order_id = Db::getInstance()->getValue("SELECT `order_id` 
-            FROM `"._DB_PREFIX_."oyst_notification` 
-            WHERE `oyst_id` = '".$id_oyst."' 
+        $order_id = Db::getInstance()->getValue("SELECT `order_id`
+            FROM `"._DB_PREFIX_."oyst_notification`
+            WHERE `oyst_id` = '".$id_oyst."'
             ORDER BY `id_notification` DESC");
 
         if (!empty($order_id)) {
@@ -173,9 +174,9 @@ class Notification extends ObjectModel
      */
     public static function getCartIdByOystId($id_oyst)
     {
-        $cart_id = Db::getInstance()->getValue("SELECT `cart_id` 
-            FROM `"._DB_PREFIX_."oyst_notification` 
-            WHERE `oyst_id` = '".$id_oyst."' 
+        $cart_id = Db::getInstance()->getValue("SELECT `cart_id`
+            FROM `"._DB_PREFIX_."oyst_notification`
+            WHERE `oyst_id` = '".$id_oyst."'
             ORDER BY `id_notification` DESC");
 
         if (!empty($cart_id)) {

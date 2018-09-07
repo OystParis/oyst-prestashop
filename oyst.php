@@ -21,8 +21,6 @@
 
 require_once dirname(__FILE__) . '/autoload.php';
 
-use Oyst\Classes\OystAPIKey;
-
 /**
  * Class Oyst
  */
@@ -111,7 +109,11 @@ class Oyst extends PaymentModule
      */
     public function getContent()
     {
-        return OystAPIKey::getAPIKey();
+        if (Configuration::hasKey('OYST_API_KEY')) {
+            return Configuration::get('OYST_API_KEY');
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -166,6 +168,7 @@ class Oyst extends PaymentModule
                 'cart_url' => $this->context->link->getPageLink('cart', Configuration::get('PS_SSL_ENABLED')),
                 'redirect_url' => $this->context->link->getModuleLink('oyst', 'oneclickreturn', array(), Configuration::get('PS_SSL_ENABLED')),
                 'script_tag' => $script_tag,
+                'form_selector' => $this->getFormSelector()
             ));
             return $this->display(__FILE__, './views/templates/hook/displayFooter.tpl');
         }
@@ -197,5 +200,16 @@ class Oyst extends PaymentModule
             $page_name = $this->context->controller->getPageName();
         }
         return $page_name;
+    }
+
+    private function getFormSelector()
+    {
+        $form_selector = '#add-to-cart-or-refresh';
+
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            $form_selector = '#buy_block';
+        }
+
+        return $form_selector;
     }
 }

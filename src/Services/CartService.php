@@ -21,8 +21,8 @@ use Tools;
 use Validate;
 use Warehouse;
 
-class CartService {
-
+class CartService
+{
     private $id_lang;
     private static $instance;
     public static function getInstance()
@@ -33,11 +33,15 @@ class CartService {
         return self::$instance;
     }
 
-    private function __construct() {
+    private function __construct()
+    {
         $this->id_lang = Language::getIdByIso('FR');
     }
 
-    private function __clone() {}
+    private function __clone()
+    {
+        //
+    }
 
     public function getCart($id_cart)
     {
@@ -76,7 +80,7 @@ class CartService {
                     $cart_product['image'] = $context->link->getImageLink($cart_product['link_rewrite'], $cart_product['id_image']);
 
                     if (!empty($cart_product['id_product_attribute'])) {
-                        $attributes = Db::getInstance()->executeS("SELECT al.`id_attribute`, al.`name` value_name, agl.`public_name` attribute_name 
+                        $attributes = Db::getInstance()->executeS("SELECT al.`id_attribute`, al.`name` value_name, agl.`public_name` attribute_name
                             FROM "._DB_PREFIX_."product_attribute_combination pac
                             INNER JOIN "._DB_PREFIX_."attribute a ON a.id_attribute = pac.id_attribute
                             INNER JOIN "._DB_PREFIX_."attribute_lang al ON (pac.id_attribute = al.id_attribute AND al.id_lang=".$this->id_lang.")
@@ -202,7 +206,7 @@ class CartService {
                     $shop,
                     $currency
                 );
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $response['errors'][] = $e->getMessage();
             }
         } else {
@@ -210,6 +214,4 @@ class CartService {
         }
         return $response;
     }
-
-
 }
