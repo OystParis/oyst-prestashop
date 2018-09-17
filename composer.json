@@ -1,24 +1,24 @@
 {
-    "repositories": [
-        {
-            "url": "https://github.com/oystparis/oyst-php.git",
-            "type": "vcs"
-        }
-    ],
-    "require": {
-        "php": ">=5.3",
-        "oyst/oyst-php": "^7.0.0",
-        "symfony/serializer": "^2.8.19",
-        "symfony/property-access": "^2.8.19",
-        "psr/log": "^1.0"
-    },
-    "require-dev": {
-        "symfony/var-dumper": "^2.8.32",
-        "wimg/php-compatibility": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Oyst\\": "src/"
-        }
+  "repositories": [
+    {
+      "url": "https://github.com/oystparis/oyst-php.git",
+      "type": "vcs"
     }
+  ],
+  "require": {
+    "php": ">=5.3",
+    "oyst/oyst-php": "7.2.0-beta2",
+    "symfony/serializer": "^2.8.19",
+    "symfony/property-access": "^2.8.19",
+    "psr/log": "^1.0"
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^2.8.32",
+    "wimg/php-compatibility": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Oyst\\": "src/"
+    }
+  }
 }
