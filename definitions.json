@@ -1,6 +1,6 @@
 {
   "tab": "payments_gateways",
-  "version": "v1.21.0-YARC02",
+  "version": "1.21.0-YARC03",
   "need_instance": 0,
 
   "hooks": {
