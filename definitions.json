@@ -1,6 +1,6 @@
 {
   "tab": "payments_gateways",
-  "version": "1.23.0-betaya2",
+  "version": "1.23.0-betaya3",
   "need_instance": 0,
 
   "hooks": {
