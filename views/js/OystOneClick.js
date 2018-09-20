@@ -318,7 +318,9 @@ function OystOneClick(url, productId, controller) {
     alert(params.productId)
     alert(params.productAttributeId)
     alert(params.quantity)
-    if (params.productId === null || params.productId === '') {
+    alert(!!params.productId)
+    alert(params.productAttributeId === 0)
+    if (!!params.productId || params.productAttributeId === 0) {
       oystCallBack(new Error('oops'), null)
       return alert('Sélectionner une taille et une quantité')
     }
