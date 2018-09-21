@@ -315,11 +315,8 @@ function OystOneClick(url, productId, controller) {
    */
   this.requestOneCLick = function(oystCallBack) {
     var params = this.getSelectedProduct()
-    if (
-      params.productId === null ||
-      params.productId === '' ||
-      params.productAttributeId === 0
-    ) {
+
+    if ($('#attributes').length > 0 && $('#idCombination').val() == '') {
       oystCallBack(new Error('oops'), null)
       return alert('Sélectionner une taille ou une quantité')
     }
