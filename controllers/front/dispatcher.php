@@ -16,8 +16,8 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
     public function init()
     {
         //All routes are prefixed by /oyst
-        Route::addRoute('GET', '/v1/config', 'Config', 'getConfig');
-        Route::addRoute('PUT', '/v1/config/script-tag', 'Config', 'setScriptTagUrl');
+        Route::addRoute('GET', '/v1/config/ecommerce', 'Config', 'getEcommerce');
+        Route::addRoute('PUT', '/v1/config/oyst', 'Config', 'setOyst');
         Route::addRoute('GET', '/v1/checkout/{id}', 'Checkout', 'getCart');
         Route::addRoute('PUT', '/v1/checkout/{id}', 'Checkout', 'updateCart');
         Route::addRoute('PUT', '/v1/order/{id}/status', 'Order', 'changeStatus');
@@ -75,7 +75,6 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         }
 
         $data = $request->getJson();
-
         if (!empty($data)) {
             $params['data'] = $data;
         }
@@ -93,10 +92,17 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
                 (!empty($params) ? print_r($params, true) : '')
             )
         );
-        if (empty($params)) {
-            $controller_obj->$method();
+
+        //Check if function need arguments
+        $reflection = new ReflectionMethod($controller, $method);
+        if ($reflection->getNumberOfParameters() == 1) {
+            if (!empty($params)) {
+                $controller_obj->$method($params);
+            } else {
+                $this->printError(400, 'Parameters are missing or invalid');
+            }
         } else {
-            $controller_obj->$method($params);
+            $controller_obj->$method();
         }
         exit;
     }
