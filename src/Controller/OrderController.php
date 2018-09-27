@@ -197,13 +197,13 @@ class OrderController extends AbstractOystController
 
                         $total = (float)($cart->getOrderTotal(true, Cart::BOTH));
                         try {
-                            if ($oyst->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), $total, $oyst->displayName, NULL, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
+                            if ($oyst->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), $total, $oyst->displayName, null, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
                                 $notification->complete($oyst->currentOrder);
                                 $this->respondAsJson(OrderService::getInstance()->getOrder($oyst->currentOrder));
                             } else {
                                 $this->respondError(400, 'Order creation failed');
                             }
-                        } catch(Exception $e) {
+                        } catch (Exception $e) {
                             $this->logger->error('Failed to transform cart '.$cart->id.' into order (Exception : '.$e->getMessage().')');
                             $this->respondError(500, 'Exception on order creation : '.$e->getMessage());
                         }

@@ -3,22 +3,24 @@
 namespace Oyst\Controller;
 
 use Address;
-use Carrier;
+use Db;
 use Cart;
-use CartRule;
-use Configuration;
+use Oyst;
+use Shop;
+use Carrier;
 use Context;
 use Country;
+use CartRule;
 use Currency;
+use Validate;
 use Exception;
-use Oyst;
+use Configuration;
 use Oyst\Classes\Notification;
 use Oyst\Services\AddressService;
 use Oyst\Services\CartService;
-use Oyst\Services\CustomerService;
 use Oyst\Services\ObjectService;
-use Shop;
-use Validate;
+use Oyst\Services\CustomerService;
+use Oyst\Controller\VersionCompliance\Helper;
 
 class CheckoutController extends AbstractOystController
 {
@@ -63,23 +65,12 @@ class CheckoutController extends AbstractOystController
                     $context->shop = new Shop($cart->id_shop);
 
                     $data = $params['data'];
-                    if (!empty($id_oyst)) {
-                        if (Notification::cartLinkIsAlreadyDone($cart->id)) {
-                            $notification = Notification::getNotificationByCartId($cart->id);
-                            if ($notification->oyst_id != $id_oyst) {
-                                $notification->oyst_id = $id_oyst;
-                                $notification->update();
-                            }
-                        } else {
-                            $notification = new Notification();
-                            $notification->cart_id = $cart->id;
-                            $notification->oyst_id = $id_oyst;
-                            $notification->status = Notification::WAITING_STATUS;
-                            try {
-                                $notification->save();
-                            } catch (Exception $e) {
-                                //Error on notification creation
-                            }
+                    if (!empty($id_oyst) && !Notification::cartLinkIsAlreadyDone($cart->id)) {
+                        try {
+                            $helper = new Helper();
+                            $helper->insertNotification($id_oyst, $cart->id, Notification::WAITING_STATUS);
+                        } catch (Exception $e) {
+                            //Error on notification creation
                         }
                     }
                     //Products
@@ -245,7 +236,8 @@ class CheckoutController extends AbstractOystController
                         $carrier = Carrier::getCarrierByReference($data['shipping']['method_applied']['reference']);
                         if (Validate::isLoadedObject($carrier)) {
                             $cart->id_carrier = $carrier->id;
-                            $cart->delivery_option = json_encode(array($cart->id_address_delivery => $cart->id_carrier.','));
+                            $cart->setDeliveryOption(array($cart->id_address_delivery => $carrier->id.','));
+                            // $cart->delivery_option = json_encode(array($cart->id_address_delivery => $cart->id_carrier.','));
                         } else {
                             $errors[] = 'Carrier '.$data['shipping']['method_applied']['reference'].' not founded';
                         }
@@ -327,7 +319,7 @@ class CheckoutController extends AbstractOystController
                 } else {
                     $this->respondError(400, 'Order creation failed');
                 }
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->error('Failed to transform cart '.$cart->id.' into order (Exception : '.$e->getMessage().')');
                 $this->respondError(400, 'Exception on order creation : '.$e->getMessage());
             }
