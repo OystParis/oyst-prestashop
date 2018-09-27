@@ -15,7 +15,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
 {
     public function init()
     {
-        //All routes are prefixed by /oyst
+        //All routes are prefixed by /oyst-oneclick
         Route::addRoute('GET', '/v1/config/ecommerce', 'Config', 'getEcommerce');
         Route::addRoute('PUT', '/v1/config/oyst', 'Config', 'setOyst');
         Route::addRoute('GET', '/v1/checkout/{id}', 'Checkout', 'getCart');

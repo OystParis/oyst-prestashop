@@ -22,7 +22,11 @@ abstract class AbstractBuilder
         $user = array();
 
         if (!empty($customer)) {
-            $phone_mobile = (!empty($address_invoice->phone_mobile) ? $address_invoice->phone_mobile : $address_invoice->phone);
+            if (!empty($address_invoice)) {
+                $phone_mobile = (!empty($address_invoice->phone_mobile) ? $address_invoice->phone_mobile : $address_invoice->phone);
+            } else {
+                $phone_mobile = '06000000';
+            }
             $user = array(
                 'email' => $customer->email,
                 'firstname' => $customer->firstname,
@@ -194,6 +198,9 @@ abstract class AbstractBuilder
      */
     protected function formatAddress($address)
     {
+        if (empty($address)) {
+            return array();
+        }
         return array(
             'alias' => $address->alias,
             'company' => $address->company,

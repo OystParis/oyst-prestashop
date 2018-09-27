@@ -104,10 +104,25 @@ class Notification extends ObjectModel
             ORDER BY `id_notification` DESC");
 
         $notification = null;
-        if (empty($id_notification)) {
-            $notification = new Notification();
-            $notification->oyst_id = $oyst_id;
-        } else {
+        if (!empty($id_notification)) {
+            $notification = new Notification($id_notification);
+        }
+        return $notification;
+    }
+
+    /**
+     * @param $oyst_id
+     * @return null|Notification
+     */
+    public static function getNotificationByCartId($cart_id)
+    {
+        $id_notification = Db::getInstance()->getValue("SELECT `id_notification` 
+            FROM `"._DB_PREFIX_."oyst_notification` 
+            WHERE `cart_id` = '".$cart_id."' 
+            ORDER BY `id_notification` DESC");
+
+        $notification = null;
+        if (!empty($id_notification)) {
             $notification = new Notification($id_notification);
         }
         return $notification;
