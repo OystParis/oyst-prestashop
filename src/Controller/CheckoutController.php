@@ -65,10 +65,10 @@ class CheckoutController extends AbstractOystController
                     $context->shop = new Shop($cart->id_shop);
 
                     $data = $params['data'];
-                    if (!empty($id_oyst) && !Notification::cartLinkIsAlreadyDone($cart->id)) {
+                    if (!empty($id_oyst)) {
                         try {
                             $helper = new Helper();
-                            $helper->insertNotification($id_oyst, $cart->id, Notification::WAITING_STATUS);
+                            $helper->saveNotification($id_oyst, $cart->id, Notification::WAITING_STATUS);
                         } catch (Exception $e) {
                             //Error on notification creation
                         }
