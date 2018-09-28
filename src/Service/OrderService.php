@@ -45,6 +45,7 @@ use CartRule;
 use Oyst;
 use Module;
 use Context;
+use Message;
 
 /**
  * Class OneClickService
@@ -769,6 +770,23 @@ class OrderService extends AbstractOystService
                 'message' => 'Order not found',
             )));
         }
+    }
+
+    public function addNewPrivateMessage($id_order, $message)
+    {
+        if (!$id_order) {
+            return false;
+        }
+        $msg = new Message();
+        $message = strip_tags($message, '<br>');
+        if (!Validate::isCleanHtml($message)) {
+            $message = $this->l('Payment message is not valid, please check your module.');
+        }
+        $msg->message = $message;
+        $msg->id_order = (int)($id_order);
+        $msg->private = 1;
+
+        return $msg->add();
     }
 
     /**

@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.23.1';
+        $this->version = '1.24.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -287,6 +287,29 @@ class Oyst extends FroggyPaymentModule
             Configuration::updateValue('OYST_STATUS_FRAUD', $orderState->id);
         }
 
+        $orderState = new OrderState(Configuration::get('OYST_STATUS_VALIDATION'));
+
+        if (!Validate::isLoadedObject($orderState)) {
+            $orderState->name = array(
+                $langId => 'En attente de validation',
+            );
+            $orderState->color = '#6e6e6e';
+            $orderState->unremovable = true;
+            $orderState->deleted = false;
+            $orderState->delivery = false;
+            $orderState->invoice = false;
+            $orderState->logable = false;
+            $orderState->module_name = $oyst->name;
+            $orderState->paid = false;
+            $orderState->hidden = false;
+            $orderState->shipped = false;
+            $orderState->send_email = false;
+
+            $result &= $orderState->add();
+
+            Configuration::updateValue('OYST_STATUS_VALIDATION', $orderState->id);
+        }
+
         return $result;
     }
 
@@ -297,7 +320,7 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_STATE_PAYMENT_FREEPAY', 2);
 
         // Params 1-Click Global
-        Configuration::updateValue('FC_OYST_STATE_PAYMENT_ONECLICK', 2);
+        Configuration::updateValue('FC_OYST_STATE_PAYMENT_ONECLICK', Configuration::get('OYST_STATUS_VALIDATION'));
         Configuration::updateValue('FC_OYST_BTN_PRODUCT', 1);
         Configuration::updateValue('FC_OYST_SMART_BTN', 1);
         Configuration::updateValue('FC_OYST_BORDER_BTN', 1);

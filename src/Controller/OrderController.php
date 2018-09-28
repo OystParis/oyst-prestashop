@@ -25,6 +25,7 @@ use Db;
 use Oyst;
 use Order;
 use Context;
+use Configuration;
 use Oyst\Classes\Enum\AbstractOrderState;
 use Oyst\Factory\AbstractOrderServiceFactory;
 
@@ -42,21 +43,31 @@ class OrderController extends AbstractOystController
 
             $responseData = $orderService->requestCreateNewOrder($orderId);
 
-            $orderState = '';
-
-            if ($responseData['state']) {
-                $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);
-                $orderState = AbstractOrderState::ACCEPTED;
-                $this->logger->info(sprintf("Info creating order: [%s]", json_encode($responseData['state'])));
-            } else {
-                $orderService->updateOrderStatus($orderId, AbstractOrderState::DENIED);
-                $orderState = AbstractOrderState::DENIED;
-                $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData['error'])));
-            }
-
             $order_id = $orderService->getOrderRepository()->getOrderId($orderId);
             if ($order_id) {
                 $order = new Order($order_id);
+            }
+
+
+            $order_info = $orderService->getOrderInfo($orderId);
+            $status = $order_info['order']['status'];
+
+            $orderState = '';
+
+            if (count($status) == 2) {
+                $orderService->updateOrderStatusPresta($orderId, 'PS_OS_PAYMENT', $json);
+                if ($responseData['state']) {
+                    $orderService->updateOrderStatus($orderId, AbstractOrderState::ACCEPTED);
+                    $orderState = AbstractOrderState::ACCEPTED;
+                    $this->logger->info(sprintf("Info creating order: [%s]", json_encode($responseData['state'])));
+                } else {
+                    $orderService->updateOrderStatus($orderId, AbstractOrderState::DENIED);
+                    $orderState = AbstractOrderState::DENIED;
+                    $this->logger->critical(sprintf("Error creating order: [%s]", json_encode($responseData['error'])));
+                }
+            } else {
+                $orderService->addNewPrivateMessage($order->id, "Order has been already accepted.<br />".json_encode($status));
+                $orderState = AbstractOrderState::PAYMENT_FAILED;
             }
 
             $insert = array(
@@ -65,7 +76,7 @@ class OrderController extends AbstractOystController
                 'payment_id' => pSQL($orderId),
                 'event_code' => 'order.patch',
                 'event_data' => json_encode($json),
-                'response'   => json_encode($state),
+                'response'   => json_encode($responseData),
                 'status'     => $orderState,
                 'date_event' => date('Y-m-d H:i:s'),
                 'date_add'   => date('Y-m-d H:i:s'),
