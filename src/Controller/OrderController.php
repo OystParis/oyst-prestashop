@@ -167,7 +167,6 @@ class OrderController extends AbstractOystController
                             $this->respondError(400, 'Billing address not in data');
                         }
 
-
                         //Checked if invoice address is same as delivery address
                         $params['data']['billing']['address'] = $address_service->formatAddressForPrestashop($params['data']['billing']['address']);
                         $id_address_invoice = $address_service->findExistentAddress(array($delivery_address), $params['data']['billing']['address']);
