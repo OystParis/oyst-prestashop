@@ -765,7 +765,7 @@ class CartService extends AbstractOystService
                         $idCombination = $gift['id_product_attribute'];
                         $reference = $gift['id_product'].';'.$idCombination;
                         $product = new Product($gift['id_product'], false, $this->context->language->id);
-                        $title = is_array($product->name) ? reset($product->name) : $product->name;
+                        $title_bestkit_gift = is_array($product->name) ? reset($product->name) : $product->name;
 
                         if ($idCombination > 0) {
                             $combination = new Combination($idCombination);
@@ -781,7 +781,7 @@ class CartService extends AbstractOystService
                             $productRepository = new ProductRepository(Db::getInstance());
                             $attributesInfo = $productRepository->getAttributesCombination($combination);
                             foreach ($attributesInfo as $attributeInfo) {
-                                $title .= ' '.$attributeInfo['value'];
+                                $title_bestkit_gift .= ' '.$attributeInfo['value'];
                             }
                         }
 
@@ -793,13 +793,13 @@ class CartService extends AbstractOystService
                         );
 
                         $images = array();
-                        foreach (Image::getImages($this->context->language->id, $idProduct, $idCombination) as $image) {
+                        foreach (Image::getImages($this->context->language->id, $gift['id_product'], $idCombination) as $image) {
                             $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
                         }
 
                         //If no image for attribute, search default product image
                         if (empty($images)) {
-                            foreach (Image::getImages($this->context->language->id, $idProduct) as $image) {
+                            foreach (Image::getImages($this->context->language->id, $gift['id_product']) as $image) {
                                 $images[] = $this->context->link->getImageLink(
                                     $product->link_rewrite,
                                     $image['id_image']
@@ -813,7 +813,7 @@ class CartService extends AbstractOystService
                             ' AND  id_lang = '.(int)$this->context->language->id;
                         $name_gift = Db::getInstance()->getValue($sql_name_gift);
 
-                        $oneClickItemFree->__set('title', $title);
+                        $oneClickItemFree->__set('title', $title_bestkit_gift);
                         $oneClickItemFree->__set('message', $name_gift);
                         $oneClickItemFree->__set('images', $images);
                         $oneClickOrderCartEstimate->addFreeItems($oneClickItemFree);
