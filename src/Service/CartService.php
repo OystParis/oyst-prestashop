@@ -750,6 +750,78 @@ class CartService extends AbstractOystService
             }
         }
 
+        if (Module::isInstalled('bestkit_gifts') && Module::isEnabled('bestkit_gifts')) {
+            if ($data['context']['id_cart'] && (int)$data['context']['id_cart'] > 0) {
+                $sql = 'SELECT go.*
+                        FROM `'._DB_PREFIX_.'bestkit_gift_cart` as go
+                        WHERE go.id_cart = '.(int)$data['context']['id_cart'];
+
+                $giftInCart = Db::getInstance()->ExecuteS($sql);
+                if (!$giftInCart) {
+                    $giftInCart = array();
+                }
+                if (count($giftInCart) > 0) {
+                    foreach ($giftInCart as $gift) {
+                        $idCombination = $gift['id_product_attribute'];
+                        $reference = $gift['id_product'].';'.$idCombination;
+                        $product = new Product($gift['id_product'], false, $this->context->language->id);
+                        $title = is_array($product->name) ? reset($product->name) : $product->name;
+
+                        if ($idCombination > 0) {
+                            $combination = new Combination($idCombination);
+                            if (!Validate::isLoadedObject($combination)) {
+                                $this->logger->emergency(
+                                    'Combination not exist ['.json_encode($data).']'
+                                );
+                            }
+                        }
+
+                        // Get attributes for title
+                        if ($combination && $combination->id) {
+                            $productRepository = new ProductRepository(Db::getInstance());
+                            $attributesInfo = $productRepository->getAttributesCombination($combination);
+                            foreach ($attributesInfo as $attributeInfo) {
+                                $title .= ' '.$attributeInfo['value'];
+                            }
+                        }
+
+                        $amount = new OystPrice(0, Context::getContext()->currency->iso_code);
+                        $oneClickItemFree = new OneClickItem(
+                            (string)$reference,
+                            $amount,
+                            1
+                        );
+
+                        $images = array();
+                        foreach (Image::getImages($this->context->language->id, $idProduct, $idCombination) as $image) {
+                            $images[] = $this->context->link->getImageLink($product->link_rewrite, $image['id_image']);
+                        }
+
+                        //If no image for attribute, search default product image
+                        if (empty($images)) {
+                            foreach (Image::getImages($this->context->language->id, $idProduct) as $image) {
+                                $images[] = $this->context->link->getImageLink(
+                                    $product->link_rewrite,
+                                    $image['id_image']
+                                );
+                            }
+                        }
+
+                        $sql_name_gift = 'SELECT name
+                            FROM `'._DB_PREFIX_.'bestkit_gift_rule_lang`
+                            WHERE  id_bestkit_gift_rule ='.(int)$gift['id_bestkit_gift_rule'].
+                            ' AND  id_lang = '.(int)$this->context->language->id;
+                        $name_gift = Db::getInstance()->getValue($sql_name_gift);
+
+                        $oneClickItemFree->__set('title', $title);
+                        $oneClickItemFree->__set('message', $name_gift);
+                        $oneClickItemFree->__set('images', $images);
+                        $oneClickOrderCartEstimate->addFreeItems($oneClickItemFree);
+                    }
+                }
+            }
+        }
+
         // Get carrier selected
         if ($data['shipment'] != null) {
             $id_carrier_selected = (int)$data['shipment']['id'];
