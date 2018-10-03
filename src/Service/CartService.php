@@ -813,7 +813,7 @@ class CartService extends AbstractOystService
                             ' AND  id_lang = '.(int)$this->context->language->id;
                         $name_gift = Db::getInstance()->getValue($sql_name_gift);
 
-                        $oneClickItemFree->__set('title', $title_bestkit_gift);
+                        $oneClickItemFree->__set('title', $name_gift);
                         $oneClickItemFree->__set('message', $name_gift);
                         $oneClickItemFree->__set('images', $images);
                         $oneClickOrderCartEstimate->addFreeItems($oneClickItemFree);
