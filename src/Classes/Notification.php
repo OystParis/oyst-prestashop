@@ -14,6 +14,7 @@ class Notification extends ObjectModel
     public $cart_id;
     public $order_id;
     public $status;
+    public $order_email_data;
     public $date_add;
     public $date_upd;
 
@@ -32,6 +33,7 @@ class Notification extends ObjectModel
             'cart_id' =>    array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),
             'order_id' =>   array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),
             'status' =>     array('type' => self::TYPE_STRING, 'validate' => 'isString', 'required' => true),
+            'order_email_data' =>     array('type' => self::TYPE_STRING, 'validate' => 'isString'),
             'date_add' =>   array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
             'date_upd' =>   array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
         ),
@@ -198,6 +200,17 @@ class Notification extends ObjectModel
             return $cart_id;
         } else {
             return 0;
+        }
+    }
+
+    public function saveOrderEmailData($data)
+    {
+        $this->order_email_data = base64_encode(json_encode($data));
+
+        try {
+            return $this->update();
+        } catch (Exception $e) {
+            return false;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Oyst\Controller;
 use Address;
 use Cart;
 use Configuration;
-use Customer;
+use Context;
 use Exception;
 use Order;
 use OrderSlip;
@@ -196,8 +196,20 @@ class OrderController extends AbstractOystController
 
                         $total = (float)($cart->getOrderTotal(true, Cart::BOTH));
                         try {
-                            if ($oyst->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), $total, $oyst->displayName, null, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
+                            // Tricks for hookActionEmailSendBefore to not send order creation email
+                            $context = Context::getContext();
+                            $context->oyst_skip_mail = true;
+                            //Set notification into context for reference usage on hookActionEmailSendBefore
+                            $context->oyst_current_notification = $notification;
+
+                            if ($oyst->validateOrder($cart->id, Configuration::get('OYST_ORDER_STATUS_PAYMENT_WAITING_VALIDATION'), $total, $oyst->displayName, null, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
                                 $notification->complete($oyst->currentOrder);
+                                // Set id_cart to 0 to avoid cart deletion on front office
+                                $order = new Order($oyst->currentOrder);
+                                if (Validate::isLoadedObject($order)) {
+                                    $order->id_cart = 0;
+                                    $order->update();
+                                }
                                 $this->respondAsJson(OrderService::getInstance()->getOrder($oyst->currentOrder));
                             } else {
                                 $this->respondError(400, 'Order creation failed');

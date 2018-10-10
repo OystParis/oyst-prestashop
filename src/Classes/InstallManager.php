@@ -1,29 +1,13 @@
 <?php
-/**
- * 2013-2016 Froggy Commerce
- *
- * NOTICE OF LICENSE
- *
- * You should have received a licence with this module.
- * If you didn't download this module on Froggy-Commerce.com, ThemeForest.net,
- * Addons.PrestaShop.com, or Oyst.com, please contact us immediately : contact@froggy-commerce.com
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to benefit the updates
- * for newer PrestaShop versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- * @author    Froggy Commerce <contact@froggy-commerce.com>
- * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
- * @license   GNU GENERAL PUBLIC LICENSE
- */
 
 namespace Oyst\Classes;
 
 use Db;
 use Configuration;
+use Language;
+use OrderState;
 use Tools;
+use Validate;
 
 class InstallManager
 {
@@ -77,6 +61,36 @@ class InstallManager
                 }
             }
         }
+
+        $state &= $this->createOrderStates();
+
+        return $state;
+    }
+
+    public function createOrderStates()
+    {
+        $state = true;
+        //Create order status
+        $order_state = new OrderState(Configuration::get('OYST_ORDER_STATUS_PAYMENT_WAITING_VALIDATION'));
+        if (!Validate::isLoadedObject($order_state)) {
+            foreach (Language::getLanguages() as $language) {
+                $order_state->name[$language['id_lang']] = 'En attente de validation chez Oyst';
+            }
+            $order_state->color = '#360088';
+            $order_state->unremovable = true;
+            $order_state->deleted = false;
+            $order_state->delivery = false;
+            $order_state->invoice = false;
+            $order_state->logable = false;
+            $order_state->module_name = 'oyst';
+            $order_state->paid = false;
+            $order_state->hidden = false;
+            $order_state->shipped = false;
+            $order_state->send_email = false;
+            $state &= $order_state->add();
+            Configuration::updateValue('OYST_ORDER_STATUS_PAYMENT_WAITING_VALIDATION', $order_state->id);
+        }
+
         return $state;
     }
 
@@ -109,6 +123,7 @@ class InstallManager
               `cart_id` int(11) DEFAULT NULL,
               `order_id` int(11) DEFAULT NULL,
               `status` varchar(255) NOT NULL,
+              `order_email_data` TEXT DEFAULT NULL,
               `date_add` datetime NOT NULL,
               `date_upd` datetime NOT NULL,
               PRIMARY KEY (`id_notification`)

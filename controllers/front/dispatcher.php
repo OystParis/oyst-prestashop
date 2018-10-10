@@ -23,7 +23,6 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         Route::addRoute('PUT', '/v1/order/{id}/status', 'Order', 'changeStatus');
         Route::addRoute('POST', '/v1/order', 'Order', 'createOrder');
         Route::addRoute('POST', '/v1/order/{id}/refund', 'Order', 'refundOrder');
-        Route::addRoute('PUT', '/v1/order/{id}/status', 'Order', 'changeStatus');
         Route::addRoute('GET', '/v1/lifecycle/tasks', 'Lifecycle', 'getTasks');
         Route::addRoute('GET', '/v1/lifecycle/informations', 'Lifecycle', 'getInformations');
 

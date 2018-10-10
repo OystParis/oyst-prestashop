@@ -73,6 +73,7 @@ class Oyst extends PaymentModule
         $result &= $this->registerHook('footer');
         $result &= $this->registerHook('displayPaymentReturn');
         $result &= $this->registerHook('adminProductsExtra');
+        $result &= $this->registerHook('actionEmailSendBefore');
 
         // Clear cache
         Cache::clean('Module::getModuleIdByName_oyst');
@@ -81,8 +82,6 @@ class Oyst extends PaymentModule
         $result &= $oystDb->install();
         return $result;
     }
-
-
 
     public function loadSQLFile($sql_file)
     {
@@ -111,7 +110,7 @@ class Oyst extends PaymentModule
      */
     public function getContent()
     {
-        // return OystAPIKey::getAPIKey();
+        // Can't use OystApi class because of prestashop 1.5/1.6 and namespace uses bug
         if (Configuration::hasKey('OYST_API_KEY')) {
             return Configuration::get('OYST_API_KEY');
         } else {
@@ -214,5 +213,17 @@ class Oyst extends PaymentModule
         }
 
         return $form_selector;
+    }
+
+    public function hookActionEmailSendBefore($params)
+    {
+        if (isset($this->context->oyst_skip_mail) && isset($this->context->oyst_current_notification) && !empty($this->context->cart->id)) {
+            // Save email informations into notification table
+            if ($this->context->oyst_current_notification->saveOrderEmailData($params)) {
+                //Return false to cancel email sending
+                return false;
+            }
+        }
+        return true;
     }
 }
