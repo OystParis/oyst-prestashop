@@ -88,7 +88,7 @@
             </ul>
             <div class="oyst-admin-tab tab-content">
                 <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab|escape:'htmlall':'UTF-8'}"/>
-                <div role="tabpanel" class="tab-pane{if $oyst.current_tab == '#tab-content-1-click'} active{/if}" id="tab-content-1-click" style="border-top: 0;border-radius: initial;">
+                <div role="tabpanel" class="panel tab-pane active" id="tab-content-1-click" style="border-top: 0;border-radius: initial;">
                     <div class="row">
                         <div class="col-lg-2 col-md-3">
                             <ul class="nav nav-pills nav-stacked" role="tablist">
