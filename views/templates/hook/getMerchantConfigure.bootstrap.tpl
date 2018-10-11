@@ -84,7 +84,7 @@
     <div class="panel oyst_fieldset">
         <div>
             <ul id="oyst-config-menu" class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="{if $oyst.current_tab == '#tab-content-1-click'}active{/if}"><a href="#tab-content-1-click" role="tab" data-toggle="tab">{l s='1-click' mod='oyst'}</a></li>
+                <li role="presentation" class="active"><a href="#tab-content-1-click" role="tab" data-toggle="tab">{l s='1-click' mod='oyst'}</a></li>
             </ul>
             <div class="oyst-admin-tab tab-content">
                 <input type="hidden" id="current_tab_value" name="current_tab" value="{$oyst.current_tab|escape:'htmlall':'UTF-8'}"/>
