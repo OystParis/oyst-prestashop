@@ -64,9 +64,6 @@
         <div class="productTabs">
             <ul id="oyst-config-menu" class="tab">
                 <li class="tab-row">
-                    <a class="tab-page selected" href="#tab-content-FreePay">FreePay</a>
-                </li>
-                <li class="tab-row">
                     <a class="tab-page" href="#tab-content-1-click">1-Click</a>
                 </li>
             </ul>

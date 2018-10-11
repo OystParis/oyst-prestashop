@@ -84,7 +84,6 @@
     <div class="panel oyst_fieldset">
         <div>
             <ul id="oyst-config-menu" class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="{if $oyst.current_tab == '#tab-content-FreePay'}active{/if}"><a href="#tab-content-FreePay" role="tab" data-toggle="tab">{l s='FreePay' mod='oyst'}</a></li>
                 <li role="presentation" class="{if $oyst.current_tab == '#tab-content-1-click'}active{/if}"><a href="#tab-content-1-click" role="tab" data-toggle="tab">{l s='1-click' mod='oyst'}</a></li>
             </ul>
             <div class="oyst-admin-tab tab-content">
