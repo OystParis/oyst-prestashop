@@ -4,6 +4,7 @@ namespace Oyst\Classes;
 
 use Db;
 use Exception;
+use Mail;
 use ObjectModel;
 use Oyst\Classes\VersionCompliance\Helper;
 
@@ -212,5 +213,36 @@ class Notification extends ObjectModel
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    public function sendOrderEmail()
+    {
+        if (!empty($this->order_email_data)) {
+            $data = json_decode(base64_decode($this->order_email_data), true);
+            $res = Mail::send(
+                $data['idLang'],
+                $data['template'],
+                $data['subject'],
+                $data['templateVars'],
+                $data['to'],
+                $data['toName'],
+                $data['from'],
+                $data['fromName'],
+                $data['fileAttachment'],
+                $data['mode_smtp'],
+                $data['templatePath'],
+                $data['die'],
+                $data['idShop'],
+                $data['bcc'],
+                $data['replyTo'],
+                $data['replyToName']
+            );
+
+            if ($res) {
+                $this->order_email_data = null;
+                return $this->update();
+            }
+        }
+        return true;
     }
 }

@@ -8,12 +8,14 @@ use Configuration;
 use Context;
 use Exception;
 use Order;
+use OrderHistory;
 use OrderSlip;
 use Oyst;
 use Oyst\Classes\Notification;
 use Oyst\Services\AddressService;
 use Oyst\Services\ObjectService;
 use Oyst\Services\OrderService;
+use Oyst\Services\OystStatusService;
 use Validate;
 
 class OrderController extends AbstractOystController
@@ -225,6 +227,47 @@ class OrderController extends AbstractOystController
             }
         } else {
             $this->respondError(400, 'data is empty');
+        }
+    }
+
+    public function changeStatus($params)
+    {
+        if (!empty($params['url']['id']) && $params['data']['oystOrder']['status']['code']) {
+            $prestashop_status_name = OystStatusService::getInstance()->getPrestashopStatusFromOystStatus($params['data']['oystOrder']['status']['code']);
+            if (Configuration::hasKey($prestashop_status_name)) {
+                $notification = Notification::getNotificationByOystId($params['url']['id']);
+                if (Validate::isLoadedObject($notification)) {
+                    try {
+                        $order = new Order($notification->order_id);
+                        if (Validate::isLoadedObject($order)) {
+                            if ($order->getCurrentState() != Configuration::get($prestashop_status_name)) {
+                                // If status oyst_payment_captured => send order email to customer
+                                $history = new OrderHistory();
+                                $history->id_order = $notification->order_id;
+                                $history->changeIdOrderState(Configuration::get($prestashop_status_name), $order, true);
+                                $history->addWithemail();
+                                if ($params['data']['oystOrder']['status']['code'] == 'oyst_payment_captured') {
+                                    $notification->sendOrderEmail();
+                                    //Set id_cart to order for cart avoid
+                                    $order->id_cart = $notification->cart_id;
+                                    $order->update();
+                                }
+                            }
+                            $this->respondAsJson(array('success' => 1));
+                        } else {
+                            $this->respondError(400, 'can\'t load order object');
+                        }
+                    } catch(Exception $e) {
+                        $this->respondError(400, 'fail on status change : '.$e->getMessage());
+                    }
+                } else {
+                    $this->respondError(400, 'notification not found');
+                }
+            } else {
+                $this->respondError(400, 'order status not found');
+            }
+        } else {
+            $this->respondError(400, 'missing order_id or status code is empty');
         }
     }
 
