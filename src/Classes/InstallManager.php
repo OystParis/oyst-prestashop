@@ -4,10 +4,8 @@ namespace Oyst\Classes;
 
 use Db;
 use Configuration;
-use Language;
-use OrderState;
+use Oyst\Services\OystStatusService;
 use Tools;
-use Validate;
 
 class InstallManager
 {
@@ -62,43 +60,19 @@ class InstallManager
             }
         }
 
-        $state &= $this->createOrderStates();
-
-        return $state;
-    }
-
-    public function createOrderStates()
-    {
-        $state = true;
-        //Create order status
-        $order_state = new OrderState(Configuration::get('OYST_ORDER_STATUS_PAYMENT_WAITING_VALIDATION'));
-        if (!Validate::isLoadedObject($order_state)) {
-            foreach (Language::getLanguages() as $language) {
-                $order_state->name[$language['id_lang']] = 'En attente de validation chez Oyst';
-            }
-            $order_state->color = '#360088';
-            $order_state->unremovable = true;
-            $order_state->deleted = false;
-            $order_state->delivery = false;
-            $order_state->invoice = false;
-            $order_state->logable = false;
-            $order_state->module_name = 'oyst';
-            $order_state->paid = false;
-            $order_state->hidden = false;
-            $order_state->shipped = false;
-            $order_state->send_email = false;
-            $state &= $order_state->add();
-            Configuration::updateValue('OYST_ORDER_STATUS_PAYMENT_WAITING_VALIDATION', $order_state->id);
-        }
+        $state &= OystStatusService::getInstance()->createAllStatus();
 
         return $state;
     }
 
     public function uninstall()
     {
-        $this->dropNotificationTable();
-        $this->dropCustomerTable();
-        $this->removeConfiguration();
+        $state = true;
+        $state &= $this->dropNotificationTable();
+        $state &= $this->dropCustomerTable();
+        $state &= $this->removeConfiguration();
+
+        return $state;
     }
 
     public function updateConstants()
@@ -175,6 +149,6 @@ class InstallManager
 
     private function removeConfiguration()
     {
-        Configuration::deleteByName('OYST_SCRIPT_TAG_URL');
+        return Configuration::deleteByName('OYST_SCRIPT_TAG_URL');
     }
 }
