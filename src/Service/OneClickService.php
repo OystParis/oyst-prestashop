@@ -485,7 +485,7 @@ class OneClickService extends AbstractOystService
             );
 
             foreach ($products_less as $product) {
-                $product->__set('configuration', array('cannot_update_quantity', !ConfigurationP::get('FC_OYST_MANAGE_QUANTITY_CART')));
+                $product->__set('configuration', array('cannot_update_quantity' => !ConfigurationP::get('FC_OYST_MANAGE_QUANTITY_CART')));
             }
 
             $result = $this->authorizeNewOrder(
