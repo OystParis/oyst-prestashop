@@ -126,15 +126,24 @@ class Oyst extends PaymentModule
             $oyst_api_key = '';
         }
 
+        $module_dir = _MODULE_DIR_.$this->name.'/';
+
         $this->context->smarty->assign([
-            'module_dir' => _MODULE_DIR_.$this->name.'/',
+            'module_dir' => $module_dir,
             'oyst_api_key' => $oyst_api_key,
             'oyst_merchant_id' => Configuration::get('OYST_MERCHANT_ID'),
             'oyst_script_tag' => base64_decode(Configuration::get('OYST_SCRIPT_TAG')),
             'oyst_public_endpoints' => Configuration::get('OYST_PUBLIC_ENDPOINTS'),
         ]);
 
-        return $this->context->smarty->fetch(__DIR__.'/views/templates/hook/getMerchantConfigure.bootstrap.tpl');
+        if (version_compare(_PS_VERSION_, '1.6', '<')) {
+        	$this->context->controller->addCSS($module_dir.'views/css/config-1.5.css');
+        	$template_name = 'getMerchantConfigure.tpl';
+		} else {
+        	$template_name = 'getMerchantConfigure.bootstrap.tpl';
+		}
+
+        return $this->context->smarty->fetch(__DIR__.'/views/templates/hook/'.$template_name);
     }
 
     public function saveConfigForm()

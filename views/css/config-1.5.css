@@ -1,0 +1,39 @@
+.oyst .header {
+    text-align: center;
+}
+
+.oyst .header p {
+    font-size: 16px;
+}
+
+.oyst.configuration input[type="text"] {
+    width: 450px;
+}
+
+.oyst.configuration textarea {
+    width: 450px;
+}
+
+.oyst.configuration p.error {
+    width: 415px;
+}
+
+.oyst a {
+    text-decoration: underline;
+}
+
+.oyst p.help-block {
+    margin-bottom: 0;
+}
+
+div.tab-content {
+    background-color: #ebedf4;
+    border: 1px solid #ccced7;
+    min-height: 404px;
+    padding: 5px 10px 10px;
+}
+
+.oyst-admin-tab.tab-content {
+    clear: both;
+    padding-top: 30px;
+}
