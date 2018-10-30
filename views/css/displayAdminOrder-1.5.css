@@ -1,8 +1,0 @@
-#desc-order-freepay-cancel[disabled],
-#desc-order-freepay-refund[disabled],
-#desc-order-partial_refund[disabled] {
-    pointer-events: none;
-    filter: grayscale(100%);
-    -webkit-filter: grayscale(100%);
-    -moz-filter: grayscale(100%);
-}
