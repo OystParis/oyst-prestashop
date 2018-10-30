@@ -56,7 +56,11 @@ class ConfigController extends AbstractOystController
     {
         $res = Configuration::updateValue('OYST_MERCHANT_ID', $params['data']['merchant_id']);
         $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode($params['data']['script_tag'])); //Encode in base64 because prestashop fucked up html tag
-        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', $params['data']['public_endpoints']);
+        $public_endpoints = [];
+        if (!empty($params['data']['public_endpoints'])) {
+            $public_endpoints = $params['data']['public_endpoints'];
+        }
+        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', json_encode($public_endpoints));
 
         if ($res) {
             $this->respondAsJson(array('success' => true));
