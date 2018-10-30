@@ -113,12 +113,36 @@ class Oyst extends PaymentModule
      */
     public function getContent()
     {
+        if (Tools::isSubmit('submitOystConfiguration')) {
+            if ($this->saveConfigForm()) {
+                $this->context->smarty->assign('result', 'ok');
+            }
+        }
+
         // Can't use OystApi class because of prestashop 1.5/1.6 and namespace uses bug
         if (Configuration::hasKey('OYST_API_KEY')) {
-            return Configuration::get('OYST_API_KEY');
+            $oyst_api_key = Configuration::get('OYST_API_KEY');
         } else {
-            return '';
+            $oyst_api_key = '';
         }
+
+        $this->context->smarty->assign([
+            'module_dir' => _MODULE_DIR_.$this->name.'/',
+            'oyst_api_key' => $oyst_api_key,
+            'oyst_merchant_id' => Configuration::get('OYST_MERCHANT_ID'),
+            'oyst_script_tag' => base64_decode(Configuration::get('OYST_SCRIPT_TAG')),
+            'oyst_public_endpoints' => Configuration::get('OYST_PUBLIC_ENDPOINTS'),
+        ]);
+
+        return $this->context->smarty->fetch(__DIR__.'/views/templates/hook/getMerchantConfigure.bootstrap.tpl');
+    }
+
+    public function saveConfigForm()
+    {
+        $res = Configuration::updateValue('OYST_MERCHANT_ID', Tools::getValue('oyst_merchant_id'));
+        $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode(Tools::getValue('oyst_script_tag')));
+        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', Tools::getValue('oyst_public_endpoints'));
+        return $res;
     }
 
     /**
