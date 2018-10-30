@@ -38,7 +38,7 @@
                 <label class="control-label col-md-4 col-lg-4" for="oyst_script_tag">{l s='Script tag' mod='oyst'}</label>
                 <div class="col-md-8 col-lg-8">
                     <div class="input-group" style="width:60%">
-                        <textarea type="text" id="oyst_script_tag" name="oyst_script_tag" rows="6">{$oyst_script_tag}</textarea>
+                        <textarea id="oyst_script_tag" name="oyst_script_tag" rows="6">{$oyst_script_tag}</textarea>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 <label class="control-label col-md-4 col-lg-4" for="oyst_public_endpoints">{l s='Public endpoint' mod='oyst'}</label>
                 <div class="col-md-8 col-lg-8">
                     <div class="input-group" style="width:60%">
-                        <textarea type="text" id="oyst_public_endpoints" name="oyst_public_endpoints" rows="6">{$oyst_public_endpoints}</textarea>
+                        <textarea id="oyst_public_endpoints" name="oyst_public_endpoints" rows="6">{$oyst_public_endpoints}</textarea>
                     </div>
                 </div>
             </div>
