@@ -22,6 +22,7 @@
 namespace Oyst\Service;
 
 use Db;
+use Cache;
 use Tax;
 use Cart;
 use Group;
@@ -452,8 +453,12 @@ class CartService extends AbstractOystService
             }
         }
 
+        // Clean shipping cost cache
+        Cache::clean('getPackageShippingCost_*');
+
         // Get carriers available
-        $carriersAvailables = $cart->simulateCarriersOutput();
+        $carriersAvailables = $cart->simulateCarriersOutput(null, true);
+
         // Get default shipment
         $id_default_carrier = (int)PSConfiguration::get('FC_OYST_SHIPMENT_DEFAULT');
 
