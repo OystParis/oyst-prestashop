@@ -301,6 +301,8 @@ class CartService extends AbstractOystService
                             $cart->id_address_delivery
                         );
 
+                        $quantity = $quantityOyst;
+
                         if (!$update_qty_result) {
                             header('HTTP/1.1 400 Bad request');
                             header('Content-Type: application/json');
@@ -470,9 +472,7 @@ class CartService extends AbstractOystService
             $type_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_".$id_reference);
             $delay_shipment = PSConfiguration::get("FC_OYST_SHIPMENT_DELAY_".$id_reference);
 
-            if (isset($type_shipment) &&
-                $type_shipment != '0'
-            ) {
+            if (!empty($type_shipment)) {
                 $type = $type_shipment;
 
                 // Get amount with tax
