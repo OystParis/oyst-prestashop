@@ -871,12 +871,6 @@ class CartService extends AbstractOystService
 
         $cart_amount = ($cart_products_amount + $cart_shipping_amount) - $cart_discount_amount;
 
-        foreach ($oneClickOrderCartEstimate->getShipments() as $shipment) {
-            if ($shipment->isPrimary()) {
-                $shipment->setAmount(new OystPrice($cart_shipping_amount, Context::getContext()->currency->iso_code));
-            }
-        }
-
         if ($cart_amount > 0) {
             $cart_amount_oyst = new OystPrice($cart_amount, Context::getContext()->currency->iso_code);
             $oneClickOrderCartEstimate->setCartAmount($cart_amount_oyst);
