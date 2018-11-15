@@ -273,7 +273,6 @@ class CartService extends AbstractOystService
             foreach ($cart->getProducts() as $item) {
                 $idProduct = $item['id_product'];
                 $idCombination = $item['id_product_attribute'];
-                $quantity = $item['cart_quantity'];
 
                 if ($idCombination > 0) {
                     $reference = (string)$idProduct.';'.$idCombination;
@@ -282,27 +281,23 @@ class CartService extends AbstractOystService
                 }
 
                 if (count($oystProducts) > 0 && in_array($reference, array_keys($oystProducts))) {
-                    $quantityOyst = $oystProducts[$reference];
-                    if ($quantityOyst != $item['cart_quantity']) {
+                    $delta_quantity = $oystProducts[$reference] - $item['cart_quantity'];
+
+                    if ($delta_quantity != 0) {
+                        if ($delta_quantity < 0) {
+                            $direction = 'down';
+                        } else {
+                            $direction = 'up';
+                        }
+
                         $update_qty_result = $cart->updateQty(
-                            $quantityOyst,
+                            abs($delta_quantity),
                             (int)$idProduct,
                             (int)$idCombination,
                             false,
-                            'up',
+                            $direction,
                             $cart->id_address_delivery
                         );
-
-                        $cart->updateQty(
-                            $item['cart_quantity'],
-                            (int)$idProduct,
-                            (int)$idCombination,
-                            false,
-                            'down',
-                            $cart->id_address_delivery
-                        );
-
-                        $quantity = $quantityOyst;
 
                         if (!$update_qty_result) {
                             header('HTTP/1.1 400 Bad request');
@@ -333,7 +328,7 @@ class CartService extends AbstractOystService
                         null,
                         false,
                         true,
-                        $quantity
+                        $oystProducts[$reference]
                     );
 
                     $without_reduc_price = $product->getPriceWithoutReduct(
@@ -367,7 +362,7 @@ class CartService extends AbstractOystService
                     $oneClickItem = new OneClickItem(
                         $reference,
                         $amount,
-                        (int)$quantityOyst
+                        (int)$oystProducts[$reference]
                     );
 
                     $crossed_out_amount = new OystPrice($without_reduc_price, Context::getContext()->currency->iso_code);
