@@ -19,11 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-use Oyst\Services\OystStatusService;
-
 require_once dirname(__FILE__) . '/autoload.php';
-
-//use Oyst\Classes\OystAPIKey;
 
 /**
  * Class Oyst
@@ -63,9 +59,7 @@ class Oyst extends PaymentModule
     public function uninstall()
     {
         $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), $this);
-        $oystDb->uninstall();
-
-        return parent::uninstall();
+        return parent::uninstall() && $oystDb->uninstall();
     }
 
     public function install()
@@ -119,12 +113,7 @@ class Oyst extends PaymentModule
             }
         }
 
-        // Can't use OystApi class because of prestashop 1.5/1.6 and namespace uses bug
-        if (Configuration::hasKey('OYST_API_KEY')) {
-            $oyst_api_key = Configuration::get('OYST_API_KEY');
-        } else {
-            $oyst_api_key = '';
-        }
+        $oyst_api_key = \Oyst\Classes\OystAPIKey::getAPIKey();
 
         $module_dir = _MODULE_DIR_.$this->name.'/';
 
@@ -291,7 +280,7 @@ class Oyst extends PaymentModule
                                 try {
                                     $order_obj = new Order($order['internal_id']);
                                     if (Validate::isLoadedObject($order_obj)) {
-                                        $prestashop_status_name = OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_payment_captured');
+										$prestashop_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_payment_captured');
                                         if ($order_obj->getCurrentState() != Configuration::get($prestashop_status_name)) {
                                             $notification = \Oyst\Classes\Notification::getNotificationByOystId($order['oyst_id']);
 
