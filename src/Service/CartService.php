@@ -158,40 +158,41 @@ class CartService extends AbstractOystService
                     $address->phone = $data['user']['phone']? $data['user']['phone'] : '';
                     $address->phone_mobile = $data['user']['phone']? $data['user']['phone'] : '';
 
-                if (isset($data['user']['company_name'])) {
-                    $address->company = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['company_name']));
-                }
+                    if (isset($data['user']['company_name'])) {
+                        $address->company = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['company_name']));
+                    }
 
-                if (isset($data['user']['complementary'])) {
-                    $address->address2 = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['complementary']));
-                }
+                    if (isset($data['user']['complementary'])) {
+                        $address->address2 = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['complementary']));
+                    }
 
-                if (!$address->add()) {
-            $this->logger->emergency(
-                        'Can\'t create address ['.json_encode($address).']'
-                    );
-                    return false;
-                }} else {
-                //Fix for retroactivity for missing phone bug or phone
-                if ($address->phone_mobile == '' || $address->phone == '') {
-                    $address->phone = $data['user']['phone'];
-                    $address->phone_mobile = $data['user']['phone'];}
+                    if (!$address->add()) {
+                        $this->logger->emergency(
+                            'Can\'t create address ['.json_encode($address).']'
+                        );
+                        return false;
+                    }
+                } else {
+                    //Fix for retroactivity for missing phone bug or phone
+                    if ($address->phone_mobile == '' || $address->phone == '') {
+                        $address->phone = $data['user']['phone'];
+                        $address->phone_mobile = $data['user']['phone'];}
 
-                if (isset($data['user']['address']['company_name'])) {
-                    $address->company = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['address']['company_name']));
-                }
+                    if (isset($data['user']['address']['company_name'])) {
+                        $address->company = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['address']['company_name']));
+                    }
 
-                if (isset($data['user']['address']['complementary'])) {
-                    $address->address2 = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['address']['complementary']));
-                }
+                    if (isset($data['user']['address']['complementary'])) {
+                        $address->address2 = trim(preg_replace('/^[0-9!<>,;?=+()@#\"°{}_$%:]*/u', '', $data['user']['address']['complementary']));
+                    }
 
-                if (!$address->update()) {
-                    $this->logger->emergency(
-                        'Can\'t update address ['.json_encode($address).']'
-                    );
-                    return false;
+                    if (!$address->update()) {
+                        $this->logger->emergency(
+                            'Can\'t update address ['.json_encode($address).']'
+                        );
+                        return false;
+                    }
                 }
-            }
 
                 $this->logger->info(
                     sprintf(
@@ -211,7 +212,6 @@ class CartService extends AbstractOystService
         } else {
             $cart->id_customer = 0;
             $cart->secure_key = 0;
-
 
             if ($data['context'] && isset($data['context']['id_address'])) {
                 $address_fake = new Address($data['context']['id_address']);
@@ -237,7 +237,6 @@ class CartService extends AbstractOystService
         $cart->id_lang = $this->context->language->id;
         $cart->id_shop = PSConfiguration::get('PS_SHOP_DEFAULT');
         $cart->id_currency = $this->context->currency->id;
-
 
         if (!$cart->save()) {
             $this->logger->emergency(
