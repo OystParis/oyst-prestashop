@@ -256,10 +256,6 @@
                             <div class="margin-form env custom">
                                 <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                             </div>
-                            <label class="env custom">{l s='Endpoint Modal Custom' mod='oyst'}</label>
-                            <div class="margin-form env custom">
-                                <input type="text" id="OYST_ONECLICKMODAL_URL_CUSTOM" name="OYST_ONECLICKMODAL_URL_CUSTOM" value="{$oyst.OYST_ONECLICKMODAL_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
-                            </div>
                             <label>{l s='State payment' mod='oyst'}</label>
                             <div class="margin-form">
                                 <select id="FC_OYST_STATE_PAYMENT_ONECLICK" name="FC_OYST_STATE_PAYMENT_ONECLICK">

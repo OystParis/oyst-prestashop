@@ -557,7 +557,7 @@ class Oyst extends FroggyPaymentModule
                 $oneClickModalUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_MODAL_URL_SANDBOX);
                 break;
             case \Oyst\Service\Configuration::API_ENV_CUSTOM:
-                $oneClickModalUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_MODAL_URL_CUSTOM);
+                $oneClickModalUrl = '';
                 break;
         }
 

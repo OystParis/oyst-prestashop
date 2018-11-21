@@ -50,7 +50,6 @@
 
     "OYST_ONECLICKMODAL_URL_PROD": "https://oneclick.oyst.com",
     "OYST_ONECLICKMODAL_URL_SANDBOX": "https://oneclick.sandbox.oyst.eu",
-    "OYST_ONECLICKMODAL_URL_CUSTOM": "",
 
     "FC_OYST_REDIRECT_SUCCESS": "ORDER_CONFIRMATION",
     "FC_OYST_REDIRECT_ERROR": "PAYMENT_ERROR",

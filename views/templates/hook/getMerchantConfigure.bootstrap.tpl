@@ -191,12 +191,6 @@
                                         <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
                                     </div>
                                 </div>
-                                <div class="form-group clearfix env custom" style="display: none;">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='Endpoint Modal Custom' mod='oyst'}</label>
-                                    <div class="col-md-7 col-lg-7">
-                                        <input type="text" id="OYST_ONECLICKMODAL_URL_CUSTOM" name="OYST_ONECLICKMODAL_URL_CUSTOM" value="{$oyst.OYST_ONECLICKMODAL_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>
-                                    </div>
-                                </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-lg-3">{l s='State payment' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7">
