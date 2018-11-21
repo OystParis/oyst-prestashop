@@ -87,11 +87,11 @@ function OystOneClickCart(url, controller)
     };
 
     this.setSmartBtn = function (smartBtn) {
-        this.smartBtn = smartBtn;
+        this.smartBtn = castToBool(smartBtn);
     };
 
     this.setBorderBtn = function (borderBtn) {
-        this.borderBtn = borderBtn;
+        this.borderBtn = castToBool(borderBtn);
     };
 
     this.setMarginTopBtn = function (marginTopBtn) {
@@ -127,7 +127,7 @@ function OystOneClickCart(url, controller)
     };
 
     this.setSticky = function (sticky) {
-        this.sticky = sticky;
+        this.sticky = castToBool(sticky);
     };
 
     /**
@@ -200,4 +200,8 @@ function OystOneClickCart(url, controller)
             });
         }
     }
-};
+}
+
+function castToBool(value) {
+    return (value === 'true' || value === 1 || value === '1');
+}
