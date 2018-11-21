@@ -111,7 +111,6 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         'FC_OYST_POSITION_BTN_ADDR'       => 'string',
         'FC_OYST_OC_REDIRECT_CONF'        => 'string',
         'FC_OYST_OC_REDIRECT_CONF_CUSTOM' => 'string',
-        'FC_OYST_DELAY'                   => 'int',
         'FC_OYST_BUSINESS_DAYS'           => array('type' => 'multiple', 'field' => 'oyst_days'),
         'FC_OYST_LANG'                    => array('type' => 'multiple', 'field' => 'oyst_lang'),
         'FC_OYST_MANAGE_QUANTITY'         => 'int',

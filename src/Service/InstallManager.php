@@ -345,7 +345,6 @@ class InstallManager
         }
         PSConfiguration::deleteByName('FC_OYST_BUSINESS_DAYS');
         // Conf 1-Click advanced
-        PSConfiguration::deleteByName('FC_OYST_DELAY');
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
         PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');

@@ -898,12 +898,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Delay' mod='oyst'}</label>
-                                        <div class="col-md-7 col-lg-7">
-                                            <input type="text" id="FC_OYST_DELAY" name="FC_OYST_DELAY" value="{if $oyst.FC_OYST_DELAY}{$oyst.FC_OYST_DELAY|escape:'htmlall':'UTF-8'}{else}15{/if}"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Manage quantity' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
                                             <span class="switch prestashop-switch fixed-width-lg">

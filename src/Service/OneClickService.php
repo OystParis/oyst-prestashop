@@ -416,13 +416,7 @@ class OneClickService extends AbstractOystService
                 $result_products[] = $product->toArray();
             }
 
-            $delay = (int)ConfigurationP::get('FC_OYST_DELAY');
-
-            if (is_numeric($delay) && $delay > 0) {
-                $oneClickOrdersParams->setDelay($delay);
-            } else {
-                $oneClickOrdersParams->setDelay(15);
-            }
+            $oneClickOrdersParams->setDelay(15);
 
             $oneClickOrdersParams->setShouldReinitBuffer(false);
             $oneClickOrdersParams->setIsCheckoutCart(true);
