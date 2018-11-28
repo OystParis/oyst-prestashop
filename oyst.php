@@ -71,6 +71,7 @@ class Oyst extends PaymentModule
         $result &= $this->registerHook('adminProductsExtra');
         $result &= $this->registerHook('actionEmailSendBefore');
         $result &= $this->registerHook('actionOrderHistoryAddAfter');
+        $result &= $this->registerHook('moduleRoutes');
 
         // Clear cache
         Cache::clean('Module::getModuleIdByName_oyst');
@@ -306,5 +307,22 @@ class Oyst extends PaymentModule
                 }
             }
         }
+    }
+
+    public function hookModuleRoutes()
+    {
+        return array(
+            'oyst_rule' => array(
+                'controller' => 'dispatcher',
+                'rule' => 'oyst-oneclick/{request}',
+                'keywords' => array(
+                    'request' => array('regexp' => '.*', 'param' => 'request'),
+                ),
+                'params' => array(
+                    'fc' => 'module',
+                    'module' => 'oyst'
+                ),
+            ),
+        );
     }
 }
