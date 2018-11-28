@@ -255,35 +255,26 @@ class Oyst extends PaymentModule
 
     public function hookActionOrderHistoryAddAfter($params)
     {
-        if (!empty($params['order_history']) && $params['order_history']->id_order_state == Configuration::get('OYST_ORDER_STATUS_PAYMENT_TO_CAPTURE')) {
-            // Call endpoint of connector to call capture
-            if (Configuration::hasKey('OYST_PUBLIC_ENDPOINTS')) {
-                $public_endpoints = json_decode(Configuration::get('OYST_PUBLIC_ENDPOINTS'), true);
-                foreach ($public_endpoints as $public_endpoint) {
-                    if ($public_endpoint['type'] == 'capture') {
-                        $authorization = "Authorization: Bearer ".$public_endpoint['api_key'];
-                        $fields = json_encode([
-                            'orderIds' => [\Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order)]
-                        ]);
-                        $ch = curl_init();
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization));
-                        curl_setopt($ch, CURLOPT_URL, $public_endpoint['url']);
-                        curl_setopt($ch, CURLOPT_POST, 1);
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                        $response_json = curl_exec($ch);
-                        curl_close($ch);
+        if (!empty($params['order_history'])) {
+            if ($params['order_history']->id_order_state == Configuration::get('OYST_ORDER_STATUS_PAYMENT_TO_CAPTURE')) {
+                $order = new Order($params['order_history']->id_order);
+                $amount = $order->getTotalPaid();
+                $fields = json_encode([
+                    'orderIds' => [
+                        \Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order) => $amount
+                    ]
+                ]);
 
-                        $response = json_decode($response_json, true);
+                $endpoint_result = \Oyst\Services\EndpointService::getInstance()->callEndpoint('capture', $fields);
 
-                        if (!empty($response['orders'])) {
-                            foreach ($response['orders'] as $order) {
-                                try {
-                                    $order_obj = new Order($order['internal_id']);
-                                    if (Validate::isLoadedObject($order_obj)) {
-										$prestashop_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_payment_captured');
-                                        if ($order_obj->getCurrentState() != Configuration::get($prestashop_status_name)) {
-                                            $notification = \Oyst\Classes\Notification::getNotificationByOystId($order['oyst_id']);
+                if (!empty($endpoint_result['orders'])) {
+                    foreach ($endpoint_result['orders'] as $order) {
+                        try {
+                            $order_obj = new Order($order['internal_id']);
+                            if (Validate::isLoadedObject($order_obj)) {
+                                $prestashop_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_payment_captured');
+                                if ($order_obj->getCurrentState() != Configuration::get($prestashop_status_name)) {
+                                    $notification = \Oyst\Classes\Notification::getNotificationByOystId($order['oyst_id']);
 
                                             //Set id_cart to order for cart avoid
                                             $order_obj->id_cart = $notification->cart_id;
