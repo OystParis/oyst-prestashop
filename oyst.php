@@ -261,7 +261,9 @@ class Oyst extends PaymentModule
                 $amount = $order->getTotalPaid();
                 $fields = json_encode([
                     'orderIds' => [
-                        \Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order) => $amount
+                        [
+                            \Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order) => $amount
+                        ]
                     ]
                 ]);
 
@@ -276,26 +278,27 @@ class Oyst extends PaymentModule
                                 if ($order_obj->getCurrentState() != Configuration::get($prestashop_status_name)) {
                                     $notification = \Oyst\Classes\Notification::getNotificationByOystId($order['oyst_id']);
 
-                                            //Set id_cart to order for cart avoid
-                                            $order_obj->id_cart = $notification->cart_id;
-                                            $order_obj->update();
-                                            // If status oyst_payment_captured => send order email to customer
-                                            $history = new OrderHistory();
-                                            $history->id_order = $notification->order_id;
-                                            $history->changeIdOrderState(Configuration::get($prestashop_status_name), $order_obj, true);
-                                            $history->addWithemail();
-                                            $notification->sendOrderEmail();
-                                        }
-                                    } else {
-                                        //Can't load object
-                                    }
-                                } catch(Exception $e) {
-                                    //array('error' => 'fail on status change : '.$e->getMessage()));
+                                    //Set id_cart to order for cart avoid
+                                    $order_obj->id_cart = $notification->cart_id;
+                                    $order_obj->update();
+                                    // If status oyst_payment_captured => send order email to customer
+                                    $history = new OrderHistory();
+                                    $history->id_order = $notification->order_id;
+                                    $history->changeIdOrderState(Configuration::get($prestashop_status_name), $order_obj, true);
+                                    $history->addWithemail();
+                                    $notification->sendOrderEmail();
                                 }
+                            } else {
+                                //Can't load object
                             }
+                        } catch (Exception $e) {
+                            //array('error' => 'fail on status change : '.$e->getMessage()));
                         }
                     }
                 }
+            } elseif ($params['order_history']->id_order_state == Configuration::get('PS_OS_REFUND')) {
+                // If switch to status refund => Total refund
+                \Oyst\Services\OrderService::getInstance()->refund($params['order_history']->id_order);
             }
         }
     }

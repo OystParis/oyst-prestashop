@@ -180,4 +180,24 @@ class OrderService {
 
         return $result;
     }
+
+    public function refund($id_order, $amount = 0)
+    {
+        if ($amount === 0) {
+            try {
+                $order = new Order($id_order);
+                $amount = $order->getTotalPaid();
+            } catch (\Exception $e) {}
+        }
+
+        $fields = json_encode([
+            'orderIds' => [
+                [
+                    \Oyst\Classes\Notification::getOystIdByOrderId($id_order) => $amount
+                ]
+            ]
+        ]);
+
+        $endpoint_result = \Oyst\Services\EndpointService::getInstance()->callEndpoint('refund', $fields);
+    }
 }
