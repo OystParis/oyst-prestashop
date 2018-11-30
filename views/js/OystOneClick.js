@@ -73,11 +73,11 @@ function OystOneClick(url, productId, controller) {
   }
 
   this.setSmartBtn = function(smartBtn) {
-    this.smartBtn = smartBtn
+    this.smartBtn = castToBool(smartBtn)
   }
 
   this.setBorderBtn = function(borderBtn) {
-    this.borderBtn = borderBtn
+    this.borderBtn = castToBool(borderBtn)
   }
 
   this.setThemeBtn = function(themeBtn) {
@@ -157,7 +157,7 @@ function OystOneClick(url, productId, controller) {
   }
 
   this.setSticky = function(sticky) {
-    this.sticky = sticky
+    this.sticky = castToBool(sticky)
   }
 
   /**
@@ -345,4 +345,8 @@ function OystOneClick(url, productId, controller) {
       })
     }
   }
+}
+
+function castToBool(value) {
+    return (value === 'true' || value === 1 || value === '1');
 }

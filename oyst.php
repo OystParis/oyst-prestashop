@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.24.5';
+        $this->version = '1.25.0';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -328,7 +328,6 @@ class Oyst extends FroggyPaymentModule
         // Params 1-Click btn cart
         Configuration::updateValue('FC_OYST_ID_BTN_CART', '.cart_navigation .button-medium');
         // Params 1-Click advanced
-        Configuration::updateValue('FC_OYST_DELAY', 15);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
         Configuration::updateValue('FC_OYST_STICKY', 1);
@@ -557,7 +556,7 @@ class Oyst extends FroggyPaymentModule
                 $oneClickModalUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_MODAL_URL_SANDBOX);
                 break;
             case \Oyst\Service\Configuration::API_ENV_CUSTOM:
-                $oneClickModalUrl = Configuration::get(\Oyst\Service\Configuration::ONE_CLICK_MODAL_URL_CUSTOM);
+                $oneClickModalUrl = '';
                 break;
         }
 

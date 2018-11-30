@@ -247,7 +247,6 @@ class InstallManager
         PSConfiguration::deleteByName(Configuration::API_ENV_ONECLICK);
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_PROD);
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_SANDBOX);
-        PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_CUSTOM);
         // Conf custom 1-Click global
         PSConfiguration::deleteByName('FC_OYST_STATE_PAYMENT_ONECLICK');
         PSConfiguration::deleteByName('FC_OYST_BORDER_BTN');
@@ -346,7 +345,6 @@ class InstallManager
         }
         PSConfiguration::deleteByName('FC_OYST_BUSINESS_DAYS');
         // Conf 1-Click advanced
-        PSConfiguration::deleteByName('FC_OYST_DELAY');
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF');
         PSConfiguration::deleteByName('FC_OYST_OC_REDIRECT_CONF_CUSTOM');
         PSConfiguration::deleteByName('FC_OYST_MANAGE_QUANTITY');
