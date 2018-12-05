@@ -300,24 +300,22 @@ class CartService extends AbstractOystService
                         );
 
                         if (!$update_qty_result) {
-                            header('HTTP/1.1 400 Bad request');
-                            header('Content-Type: application/json');
-                            die(json_encode(array(
+                            return json_encode(array(
+                                'error' => true,
                                 'code' => 'stock-unavailable',
                                 'message' => 'Unvailable stock',
-                            )));
+                            ));
                         }
                     }
 
                     $product = new Product($idProduct);
 
                     if (!$product->active || !$product->available_for_order) {
-                        header('HTTP/1.1 400 Bad request');
-                        header('Content-Type: application/json');
-                        die(json_encode(array(
+                        return json_encode(array(
+                            'error' => true,
                             'code' => 'product-unavailable',
                             'message' => 'Unvailable product',
-                        )));
+                        ));
                     }
 
                     // Add items
@@ -396,12 +394,11 @@ class CartService extends AbstractOystService
             $this->logger->emergency(
                 'Items not exist ['.json_encode($data).']'
             );
-            header('HTTP/1.1 400 Bad request');
-            header('Content-Type: application/json');
-            die(json_encode(array(
+            return json_encode(array(
+                'error' => true,
                 'code' => 'stock-unavailable',
                 'message' => 'Unvailable stock',
-            )));
+            ));
         }
 
         // Manage cart rule
@@ -538,12 +535,11 @@ class CartService extends AbstractOystService
         $is_primary = false;
 
         if (empty($carriersAvailables)) {
-            header('HTTP/1.1 400 Bad request');
-            header('Content-Type: application/json');
-            die(json_encode(array(
+            return json_encode(array(
+                'error' => true,
                 'code' => 'no-shipment',
                 'message' => 'Order has no shipment',
-            )));
+            ));
         } else {
             foreach ($carriersAvailables as $shipment) {
                 $carrier_desintifier = Cart::desintifier($shipment['id_carrier']);
@@ -560,12 +556,11 @@ class CartService extends AbstractOystService
             try {
                 $oneClickOrderCartEstimate->setDefaultPrimaryShipmentByType();
             } catch (Exception $e) {
-                header('HTTP/1.1 400 Bad request');
-                header('Content-Type: application/json');
-                die(json_encode(array(
+                return json_encode(array(
+                    'error' => true,
                     'code' => 'no-primary-shipment',
                     'message' => $e->getMessage(),
-                )));
+                ));
             }
         }
 
@@ -870,11 +865,6 @@ class CartService extends AbstractOystService
             $cart_amount_oyst = new OystPrice($cart_amount, Context::getContext()->currency->iso_code);
             $oneClickOrderCartEstimate->setCartAmount($cart_amount_oyst);
         }
-
-        // Remove address for cart
-        $cart->id_address_delivery = 0;
-        $cart->id_address_invoice = 0;
-        $cart->save();
 
         $this->logger->info(
             sprintf(
