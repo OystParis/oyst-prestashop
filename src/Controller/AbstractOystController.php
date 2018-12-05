@@ -65,7 +65,7 @@ abstract class AbstractOystController
     {
         header("HTTP/1.1 200 OK");
         header('Content-Type: application/json');
-        die(json_encode($content));
+        die($content);
     }
 
     /**
@@ -75,6 +75,6 @@ abstract class AbstractOystController
     {
         header("HTTP/1.1 400 Bad request");
         header('Content-Type: application/json');
-        die(json_encode($content));
+        die($content);
     }
 }
