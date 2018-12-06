@@ -69,8 +69,8 @@ class Oyst extends FroggyPaymentModule
         foreach ($filtered_hooks as $filtered_hook) {
             if (strpos($method, $filtered_hook) !== false) {
                 $ip = Tools::getRemoteAddr();
-                if (!empty($ip) && Configuration::hasKey('FC_OYST_ONLY_FOR_IP')) {
-                    $authorized_ips = Configuration::get('FC_OYST_ONLY_FOR_IP');
+                if (!empty($ip) && Configuration::hasKey('FC_OYST_ONLY_FOR_IP', null, Shop::getContextShopGroupID(true), Shop::getContextShopID(true))) {
+                    $authorized_ips = Configuration::get('FC_OYST_ONLY_FOR_IP', null, Shop::getContextShopGroupID(true), Shop::getContextShopID(true));
                     if (!empty($authorized_ips) && strpos($authorized_ips, $ip) === false) {
                         return null;
                     }
