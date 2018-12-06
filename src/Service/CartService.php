@@ -69,6 +69,8 @@ class CartService extends AbstractOystService
      */
     public function estimate($data)
     {
+        $this->context->cookie->iso_code_country = 'FR';
+
         if (isset($data['discount_coupon'])) {
             $discount_coupon = $data['discount_coupon'];
         }
@@ -90,6 +92,7 @@ class CartService extends AbstractOystService
         // PS core used this context anywhere.. So we need to fill it properly
         if ($data['context'] && isset($data['context']['id_cart'])) {
             $this->context->cart = $cart = new Cart((int)$data['context']['id_cart']);
+            $this->context->cookie->id_cart = $data['context']['id_cart'];
         } else {
             $this->context->cart = $cart = new Cart();
         }
