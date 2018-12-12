@@ -1,6 +1,6 @@
 {
   "tab": "payments_gateways",
-  "version": "1.27.0",
+  "version": "1.27.1",
   "need_instance": 0,
 
   "hooks": {
@@ -43,7 +43,6 @@
     "OYST_API_CUSTOM_ENDPOINT_FREEPAY": "",
     "OYST_API_CUSTOM_ENDPOINT_ONECLCK": "",
 
-    "FC_OYST_TRACKER_URL": "https://trk.10ru.pt",
     "OYST_ONECLICK_URL_PROD": "https://cdn.oyst.com",
     "OYST_ONECLICK_URL_SANDBOX": "https://cdn.sandbox.oyst.eu",
     "OYST_ONECLICK_URL_CUSTOM": "",

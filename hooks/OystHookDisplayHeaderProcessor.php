@@ -31,7 +31,6 @@ class OystHookDisplayHeaderProcessor extends FroggyHookProcessor
     public function run()
     {
         $this->smarty->assign('oyst', array(
-            'FC_OYST_TRACKER_URL' => Configuration::get('FC_OYST_TRACKER_URL'),
             'freePayActivated' => (int) Configuration::get('FC_OYST_PAYMENT_FEATURE'),
             'oneClickActivated' => (int) Configuration::get('OYST_ONE_CLICK_FEATURE_STATE'),
             'freePayKeyFilled' => (int) $this->module->getFreePayApiKey() != '',

@@ -17,7 +17,6 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-<script src="{$oyst.FC_OYST_TRACKER_URL|escape:'html':'UTF-8'}"></script>
 <meta name="oyst_tracker_info_freepay_activated" content="{$oyst.freePayActivated|escape:'html':'UTF-8'}">
 <meta name="oyst_tracker_info_oneclick_activated" content="{$oyst.oneClickActivated|escape:'html':'UTF-8'}">
 <meta name="oyst_tracker_info_freepay_apikey" content="{$oyst.freePayKeyFilled|escape:'html':'UTF-8'}">
