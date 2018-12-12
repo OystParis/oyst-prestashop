@@ -23,8 +23,6 @@ namespace Oyst\Controller;
 
 use Oyst;
 use Context;
-use Currency;
-use Configuration;
 use Tools;
 use Db;
 use Oyst\Factory\AbstractCartServiceFactory;
@@ -35,8 +33,19 @@ class CartController extends AbstractOystController
     {
         $data = $this->request->getJson();
 
-        $cartService = AbstractCartServiceFactory::get(new Oyst(), Context::getContext());
-        $responseData = $cartService->estimate($data['data']);
+        $context = Context::getContext();
+        $cart_service = AbstractCartServiceFactory::get(new Oyst(), $context);
+        $response_data = $cart_service->estimate($data['data']);
+
+        // Remove addresses from cart
+        $context->cart->id_address_delivery = 0;
+        $context->cart->id_address_invoice = 0;
+        $context->cart->save();
+
+        $response_data_array = json_decode($response_data, true);
+        if (isset($response_data_array['error']) && $response_data_array['error']) {
+            $this->respondAsError($response_data);
+        }
 
         $insert   = array(
             'id_order'   => 0,
@@ -44,7 +53,7 @@ class CartController extends AbstractOystController
             'payment_id' => '',
             'event_code' => pSQL($data['event']),
             'event_data' => pSQL(Tools::jsonEncode($data['data'])),
-            'response'   => pSQL($responseData),
+            'response'   => pSQL($response_data),
             'date_event' => date('Y-m-d H:i:s'),
             'date_add'   => date('Y-m-d H:i:s'),
         );
@@ -53,12 +62,10 @@ class CartController extends AbstractOystController
         $this->logger->info(
             sprintf(
                 'New notification order.cart.estimate [%s]',
-                $responseData
+                $response_data
             )
         );
 
-        header("HTTP/1.1 200 OK");
-        header('Content-Type: application/json');
-        echo $responseData;
+        $this->respondAsJson($response_data);
     }
 }
