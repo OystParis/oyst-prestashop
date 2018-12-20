@@ -200,6 +200,11 @@ class OrderService extends AbstractOystService
      */
     public function createNewOrder(Customer $customer, Address $invoiceAddress, Address $deliveryAddress, $products, $oystOrderInfo)
     {
+        if (Module::isInstalled('pm_advancedpack')) {
+            include_once _PS_ROOT_DIR_ . '/modules/pm_advancedpack/AdvancedPack.php';
+            include_once _PS_ROOT_DIR_ . '/modules/pm_advancedpack/AdvancedPackCoreClass.php';
+        }
+
         $request = new CurrentRequest();
         $data = $request->getJson();
         $forceResendOrder = (isset($data['notification']) && $data['notification']);
@@ -309,7 +314,11 @@ class OrderService extends AbstractOystService
                 }
             }
             if ($custom_qty < $productInfo['quantity']) {
-                if (!$cart->updateQty($productInfo['quantity']-$custom_qty, $productInfo['productId'], $productInfo['combinationId'])) {
+                //Si le produit est un pack de type Advanced Pack
+                if (Module::isInstalled('pm_advancedpack') && \AdvancedPack::isValidPack($productInfo['productId'])) {
+                    //Ajout du pack via la méthode du module
+                    \AdvancedPack::addPackToCart($productInfo['productId'], $productInfo['quantity'], array(), false);
+                } else if (!$cart->updateQty($productInfo['quantity']-$custom_qty, $productInfo['productId'], $productInfo['combinationId'])) {
                     $this->logger->emergency(
                         sprintf(
                             "Can't add product to cart, please check the quantity.
