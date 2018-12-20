@@ -226,6 +226,17 @@ class OrderService extends AbstractOystService
         }
 
         $this->context->cookie->id_cart = $cart->id;
+        $this->context->cookie->id_customer = $customer->id;
+        if (Module::isInstalled('scaffiliation')) {
+            include_once _PS_MODULE_DIR_.'/scaffiliation/data/classes/SCAffPartner.php';
+            $cart_rules = $cart->getCartRules();
+            foreach ($cart_rules as $cart_rule) {
+                $partner = \SCAffPartner::getFromCouponCode($cart_rule->code);
+                if (!empty($partner['id_partner'])) {
+                    $this->context->cookie->id_partner = $partner['id_partner'];
+                }
+            }
+        }
 
         if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['user_agent'])) {
             $user_agent = $oystOrderInfo['context']['user_agent'];
