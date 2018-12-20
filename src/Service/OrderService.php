@@ -225,6 +225,8 @@ class OrderService extends AbstractOystService
             $this->context->cart = $cart = new Cart();
         }
 
+        $this->context->cookie->id_cart = $cart->id;
+
         if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['user_agent'])) {
             $user_agent = $oystOrderInfo['context']['user_agent'];
         } else {
