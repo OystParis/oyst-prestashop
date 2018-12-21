@@ -238,6 +238,8 @@ class OrderService extends AbstractOystService
             }
         }
 
+        file_put_contents(__DIR__.'/../../../debug.log', date('y-m-d H:i:s')." - [OrderService.php:241] Context : ".print_r($this->context, true)."\r\n", FILE_APPEND);
+
         if ($oystOrderInfo['context'] && isset($oystOrderInfo['context']['user_agent'])) {
             $user_agent = $oystOrderInfo['context']['user_agent'];
         } else {
@@ -360,7 +362,7 @@ class OrderService extends AbstractOystService
         $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
         $cart->setDeliveryOption($delivery_option);
         $cart->update();
-
+        file_put_contents(__DIR__.'/../../../debug.log', date('y-m-d H:i:s')." - [OrderService.php:365] Cart after treatment : ".print_r($cart, true)."\r\n", FILE_APPEND);
         // Yes not used but it will flush the delivery cache, instead, default carrier will be used
         $cart->getOrderTotal();
 
@@ -434,7 +436,7 @@ class OrderService extends AbstractOystService
 
         // Close request to clear up some resources
         curl_close($ch);
-
+        file_put_contents(__DIR__.'/../../../debug.log', date('y-m-d H:i:s')." - [OrderService.php:439] Before validate order\r\n", FILE_APPEND);
         $state = $this->oyst->validateOrder(
             $cart->id,
             $order_state,
@@ -448,6 +450,7 @@ class OrderService extends AbstractOystService
         );
 
         if ($state) {
+            file_put_contents(__DIR__.'/../../../debug.log', date('y-m-d H:i:s')." - [OrderService.php:453] Validate order OK\r\n", FILE_APPEND);
             $order = new Order(Order::getOrderByCartId($cart->id));
             $this->orderRepository->linkOrderToGUID($order, $oystOrderInfo['id']);
 
@@ -590,6 +593,7 @@ class OrderService extends AbstractOystService
 
         $oystOrderInfo = $this->getOrderInfo($orderId);
         if ($oystOrderInfo) {
+            file_put_contents(__DIR__.'/../../../debug.log', date('y-m-d H:i:s')." - [OrderService.php:593] Oyst order info:".print_r($oystOrderInfo, true)."\r\n", FILE_APPEND);
             $products = array();
             foreach ($oystOrderInfo['order']['items'] as $productInfo) {
                 $reference = explode(';', $productInfo['product_reference']);
@@ -683,7 +687,7 @@ class OrderService extends AbstractOystService
             } else {
                 $deliveryAddress = $this->getPickupStoreAddress($customer, $oystOrderInfo['order']['shipment'], $oystOrderInfo['order']['user']['phone']);
             }
-
+            file_put_contents(__DIR__.'/../../../debug.log', date('y-m-d H:i:s')." - [OrderService.php:687] Before create new order call\r\n", FILE_APPEND);
             if (!isset($data['error'])) {
                 $state = $this->createNewOrder($customer, $invoiceAddress, $deliveryAddress, $products, $oystOrderInfo['order']);
                 $data['state'] = $state;

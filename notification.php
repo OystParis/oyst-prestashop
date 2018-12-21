@@ -78,6 +78,7 @@ if ($data && isset($data['event'])) {
 
                     $orderController->setLogger($logger);
 
+                    file_put_contents(__DIR__.'/debug.log', date('y-m-d H:i:s')." - [notification.php:81] Before createNewOrderAction call", FILE_APPEND);
                     try {
                         $orderController->createNewOrderAction();
                     } catch (Exception $e) {

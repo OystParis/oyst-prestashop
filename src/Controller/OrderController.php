@@ -40,7 +40,7 @@ class OrderController extends AbstractOystController
             $context = Context::getContext();
             $orderService = AbstractOrderServiceFactory::get($oyst, $context);
             $orderId = $json['data']['order_id'];
-
+            file_put_contents(__DIR__.'/../../../debug.log', date('y-m-d H:i:s')." - [OrderController.php:43] Oyst json data :".print_r($json, true)."\r\n", FILE_APPEND);
             $responseData = $orderService->requestCreateNewOrder($orderId);
 
             $order_id = $orderService->getOrderRepository()->getOrderId($orderId);
