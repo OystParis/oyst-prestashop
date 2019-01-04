@@ -28,6 +28,7 @@ use Context;
 use Configuration;
 use Oyst\Classes\Enum\AbstractOrderState;
 use Oyst\Factory\AbstractOrderServiceFactory;
+use Oyst\Factory\AbstractCartServiceFactory;
 
 class OrderController extends AbstractOystController
 {
@@ -42,6 +43,11 @@ class OrderController extends AbstractOystController
             $orderId = $json['data']['order_id'];
 
             $responseData = $orderService->requestCreateNewOrder($orderId);
+
+            if (!empty($context->cart->id_customer)) {
+                $cart_service = AbstractCartServiceFactory::get(new Oyst(), $context);
+                $cart_service->deleteCustomerFakeAddress($context->cart->id_customer);
+            }
 
             $order_id = $orderService->getOrderRepository()->getOrderId($orderId);
             if ($order_id) {

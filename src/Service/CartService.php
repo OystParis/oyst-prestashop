@@ -894,4 +894,20 @@ class CartService extends AbstractOystService
 
         return $id_reference;
     }
+
+    public function deleteCustomerFakeAddress($id_customer)
+    {
+        $customer = new Customer($id_customer);
+
+        // Get all customer address
+        $addresses = $customer->getAddresses($this->context->language->id);
+
+        // Search for john doe name
+        foreach ($addresses as $address) {
+            if ($address['alias'] == 'OystAddress' && $address['firstname'] == 'John' && $address['lastname'] == 'Doe') {
+                $address_obj = new Address($address['id_address']);
+                $address_obj->delete();
+            }
+        }
+    }
 }
