@@ -32,14 +32,14 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.28.3-RC1';
+        $this->version = '1.28.4';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
 
         $this->author = 'Oyst';
         $this->displayName = $this->l('Oyst - 1Click');
-        $this->description = $this->l('Oyst is an online shopping solution allowing users to buy in 1-click on any website, from any page (not only any more through the traditional “cart” page).');
+        $this->description = $this->l('Oyst permet d\'acheter en un clic depuis n\'importe quelle page de votre site. Offrez à vos clients une expérience d’achat en un clic');
         $this->module_key = 'b79be2b346400227a9c886c9239470e4';
         $this->is_eu_compatible = 1;
         $this->currencies = true;
