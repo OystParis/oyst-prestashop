@@ -448,6 +448,23 @@ class CartService extends AbstractOystService
             }
         }
 
+        // Check général free shipping condition
+        // Free fees
+        $free_fees_price = 0;
+        if (PSConfiguration::hasKey('PS_SHIPPING_FREE_PRICE')) {
+            $free_fees_price = Tools::convertPrice((float)PSConfiguration::get('PS_SHIPPING_FREE_PRICE'), Currency::getCurrencyInstance((int)$cart->id_currency));
+        }
+        $orderTotalwithDiscounts = $cart->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING, null, null, false);
+        if ($orderTotalwithDiscounts >= (float)($free_fees_price) && (float)($free_fees_price) > 0) {
+            $free_shipping = true;
+        }
+
+        if (PSConfiguration::hasKey('PS_SHIPPING_FREE_WEIGHT')
+            && $cart->getTotalWeight() >= (float)PSConfiguration::get('PS_SHIPPING_FREE_WEIGHT')
+            && (float)PSConfiguration::get('PS_SHIPPING_FREE_WEIGHT') > 0) {
+            $free_shipping = true;
+        }
+
         // Clean shipping cost cache
         Cache::clean('getPackageShippingCost_*');
 
