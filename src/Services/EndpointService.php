@@ -61,6 +61,10 @@ class EndpointService
         if (!empty($this->public_endpoints)) {
             foreach ($this->public_endpoints as $public_endpoint) {
                 if ($public_endpoint['type'] === $type) {
+					//Replace merchant_id
+					if (Configuration::hasKey('OYST_MERCHANT_ID')) {
+						$public_endpoint['url'] = str_replace('[MERCHANT_ID_PLACEHOLDER]', Configuration::get('OYST_MERCHANT_ID'), $public_endpoint['url']);
+					}
                     return $public_endpoint;
                 }
             }
