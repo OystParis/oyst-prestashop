@@ -190,14 +190,11 @@ class OrderService {
             } catch (\Exception $e) {}
         }
 
-        $fields = json_encode([
-            'orderIds' => [
-                [
-                    \Oyst\Classes\Notification::getOystIdByOrderId($id_order) => $amount
-                ]
+        $fields = [
+            'orderAmounts' => [
+            	\Oyst\Classes\Notification::getOystIdByOrderId($id_order) => $amount
             ]
-        ]);
-
+        ];
         $endpoint_result = \Oyst\Services\EndpointService::getInstance()->callEndpoint('refund', $fields);
     }
 }

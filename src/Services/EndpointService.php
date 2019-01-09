@@ -44,7 +44,7 @@ class EndpointService
                 curl_setopt($ch, CURLOPT_URL, $public_endpoint['url']);
                 if (!empty($fields)) {
                     curl_setopt($ch, CURLOPT_POST, 1);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
                 }
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 $response_json = curl_exec($ch);

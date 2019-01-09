@@ -259,13 +259,11 @@ class Oyst extends PaymentModule
             if ($params['order_history']->id_order_state == Configuration::get('OYST_ORDER_STATUS_PAYMENT_TO_CAPTURE')) {
                 $order = new Order($params['order_history']->id_order);
                 $amount = $order->getTotalPaid();
-                $fields = json_encode([
-                    'orderIds' => [
-                        [
-                            \Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order) => $amount
-                        ]
+                $fields = [
+                    'orderAmounts' => [
+                    	\Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order) => $amount
                     ]
-                ]);
+                ];
 
                 $endpoint_result = \Oyst\Services\EndpointService::getInstance()->callEndpoint('capture', $fields);
 
