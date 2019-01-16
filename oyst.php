@@ -19,7 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-require_once dirname(__FILE__) . '/autoload.php';
+require_once dirname(__FILE__).'/autoload.php';
 
 /**
  * Class Oyst
@@ -128,11 +128,11 @@ class Oyst extends PaymentModule
         ]);
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
-        	$this->context->controller->addCSS($module_dir.'views/css/config-1.5.css');
-        	$template_name = 'getMerchantConfigure.tpl';
-		} else {
-        	$template_name = 'getMerchantConfigure.bootstrap.tpl';
-		}
+            $this->context->controller->addCSS($module_dir.'views/css/config-1.5.css');
+            $template_name = 'getMerchantConfigure.tpl';
+        } else {
+            $template_name = 'getMerchantConfigure.bootstrap.tpl';
+        }
 
         return $this->context->smarty->fetch(__DIR__.'/views/templates/hook/'.$template_name);
     }
@@ -262,7 +262,7 @@ class Oyst extends PaymentModule
                 $amount = $order->getTotalPaid();
                 $fields = [
                     'orderAmounts' => [
-                    	\Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order) => $amount
+                        \Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order) => $amount
                     ]
                 ];
 
@@ -319,45 +319,45 @@ class Oyst extends PaymentModule
         );
     }
 
-	public function hookDisplayBackOfficeHeader($params)
-	{
-		if (Tools::isSubmit('partialRefundProduct') && ($refunds = Tools::getValue('partialRefundProduct')) && is_array($refunds)) {
-			$amount = 0;
-			$order_detail_list = array();
-			$full_quantity_list = array();
-			//Calcul refund amount
-			foreach ($refunds as $id_order_detail => $amount_detail) {
-				$quantity = Tools::getValue('partialRefundProductQuantity');
-				if (!$quantity[$id_order_detail]) {
-					continue;
-				}
+    public function hookDisplayBackOfficeHeader($params)
+    {
+        if (Tools::isSubmit('partialRefundProduct') && ($refunds = Tools::getValue('partialRefundProduct')) && is_array($refunds)) {
+            $amount = 0;
+            $order_detail_list = array();
+            $full_quantity_list = array();
+            //Calcul refund amount
+            foreach ($refunds as $id_order_detail => $amount_detail) {
+                $quantity = Tools::getValue('partialRefundProductQuantity');
+                if (!$quantity[$id_order_detail]) {
+                    continue;
+                }
 
-				$full_quantity_list[$id_order_detail] = (int)$quantity[$id_order_detail];
+                $full_quantity_list[$id_order_detail] = (int)$quantity[$id_order_detail];
 
-				$order_detail_list[$id_order_detail] = array(
-					'quantity' => (int)$quantity[$id_order_detail],
-					'id_order_detail' => (int)$id_order_detail
-				);
+                $order_detail_list[$id_order_detail] = array(
+                    'quantity' => (int)$quantity[$id_order_detail],
+                    'id_order_detail' => (int)$id_order_detail
+                );
 
-				$order_detail = new OrderDetail((int)$id_order_detail);
-				if (empty($amount_detail)) {
-					$order_detail_list[$id_order_detail]['unit_price'] = (!Tools::getValue('TaxMethod') ? $order_detail->unit_price_tax_excl : $order_detail->unit_price_tax_incl);
-					$order_detail_list[$id_order_detail]['amount'] = $order_detail->unit_price_tax_incl * $order_detail_list[$id_order_detail]['quantity'];
-				} else {
-					$order_detail_list[$id_order_detail]['amount'] = (float)str_replace(',', '.', $amount_detail);
-					$order_detail_list[$id_order_detail]['unit_price'] = $order_detail_list[$id_order_detail]['amount'] / $order_detail_list[$id_order_detail]['quantity'];
-				}
-				$amount += $order_detail_list[$id_order_detail]['amount'];
-			}
-			$shipping_cost_amount = (float)str_replace(',', '.', Tools::getValue('partialRefundShippingCost')) ? (float)str_replace(',', '.', Tools::getValue('partialRefundShippingCost')) : false;
+                $order_detail = new OrderDetail((int)$id_order_detail);
+                if (empty($amount_detail)) {
+                    $order_detail_list[$id_order_detail]['unit_price'] = (!Tools::getValue('TaxMethod') ? $order_detail->unit_price_tax_excl : $order_detail->unit_price_tax_incl);
+                    $order_detail_list[$id_order_detail]['amount'] = $order_detail->unit_price_tax_incl * $order_detail_list[$id_order_detail]['quantity'];
+                } else {
+                    $order_detail_list[$id_order_detail]['amount'] = (float)str_replace(',', '.', $amount_detail);
+                    $order_detail_list[$id_order_detail]['unit_price'] = $order_detail_list[$id_order_detail]['amount'] / $order_detail_list[$id_order_detail]['quantity'];
+                }
+                $amount += $order_detail_list[$id_order_detail]['amount'];
+            }
+            $shipping_cost_amount = (float)str_replace(',', '.', Tools::getValue('partialRefundShippingCost')) ? (float)str_replace(',', '.', Tools::getValue('partialRefundShippingCost')) : false;
 
-			// If something to refund
-			if ($amount != 0 || $shipping_cost_amount != 0) {
-				\Oyst\Services\OrderService::getInstance()->refund(Tools::getValue('id_order'), $amount + $shipping_cost_amount);
-				$order = new Order(Tools::getValue('id_order'));
-				$prestashop_partial_refud_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_partial_refund');
-				$order->setCurrentState(Configuration::get($prestashop_partial_refud_status_name));
-			}
-		}
-	}
+            // If something to refund
+            if ($amount != 0 || $shipping_cost_amount != 0) {
+                \Oyst\Services\OrderService::getInstance()->refund(Tools::getValue('id_order'), $amount + $shipping_cost_amount);
+                $order = new Order(Tools::getValue('id_order'));
+                $prestashop_partial_refud_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_partial_refund');
+                $order->setCurrentState(Configuration::get($prestashop_partial_refud_status_name));
+            }
+        }
+    }
 }
