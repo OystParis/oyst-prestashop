@@ -85,6 +85,24 @@ class OystStatusService
                 'send_email' => false,
             ]
         ],
+		'oyst_partial_refund' => [
+			'prestashop_name' => 'OYST_ORDER_STATUS_PARTIAL_REFUND',
+			'data' => [
+				'name' => [
+					'fr' => 'Remboursement partiel',
+				],
+				'color' => '#E96756',
+				'unremovable' => true,
+				'deleted' => false,
+				'delivery' => true,
+				'invoice' => true,
+				'logable' => true,
+				'paid' => true,
+				'hidden' => false,
+				'shipped' => false,
+				'send_email' => false,
+			]
+		],
     ];
 
     private static $instance;

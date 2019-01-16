@@ -72,6 +72,7 @@ class Oyst extends PaymentModule
         $result &= $this->registerHook('actionEmailSendBefore');
         $result &= $this->registerHook('actionOrderHistoryAddAfter');
         $result &= $this->registerHook('moduleRoutes');
+        $result &= $this->registerHook('displayBackOfficeHeader');
 
         // Clear cache
         Cache::clean('Module::getModuleIdByName_oyst');
@@ -317,4 +318,46 @@ class Oyst extends PaymentModule
             ),
         );
     }
+
+	public function hookDisplayBackOfficeHeader($params)
+	{
+		if (Tools::isSubmit('partialRefundProduct') && ($refunds = Tools::getValue('partialRefundProduct')) && is_array($refunds)) {
+			$amount = 0;
+			$order_detail_list = array();
+			$full_quantity_list = array();
+			//Calcul refund amount
+			foreach ($refunds as $id_order_detail => $amount_detail) {
+				$quantity = Tools::getValue('partialRefundProductQuantity');
+				if (!$quantity[$id_order_detail]) {
+					continue;
+				}
+
+				$full_quantity_list[$id_order_detail] = (int)$quantity[$id_order_detail];
+
+				$order_detail_list[$id_order_detail] = array(
+					'quantity' => (int)$quantity[$id_order_detail],
+					'id_order_detail' => (int)$id_order_detail
+				);
+
+				$order_detail = new OrderDetail((int)$id_order_detail);
+				if (empty($amount_detail)) {
+					$order_detail_list[$id_order_detail]['unit_price'] = (!Tools::getValue('TaxMethod') ? $order_detail->unit_price_tax_excl : $order_detail->unit_price_tax_incl);
+					$order_detail_list[$id_order_detail]['amount'] = $order_detail->unit_price_tax_incl * $order_detail_list[$id_order_detail]['quantity'];
+				} else {
+					$order_detail_list[$id_order_detail]['amount'] = (float)str_replace(',', '.', $amount_detail);
+					$order_detail_list[$id_order_detail]['unit_price'] = $order_detail_list[$id_order_detail]['amount'] / $order_detail_list[$id_order_detail]['quantity'];
+				}
+				$amount += $order_detail_list[$id_order_detail]['amount'];
+			}
+			$shipping_cost_amount = (float)str_replace(',', '.', Tools::getValue('partialRefundShippingCost')) ? (float)str_replace(',', '.', Tools::getValue('partialRefundShippingCost')) : false;
+
+			// If something to refund
+			if ($amount != 0 || $shipping_cost_amount != 0) {
+				\Oyst\Services\OrderService::getInstance()->refund(Tools::getValue('id_order'), $amount + $shipping_cost_amount);
+				$order = new Order(Tools::getValue('id_order'));
+				$prestashop_partial_refud_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_partial_refund');
+				$order->setCurrentState(Configuration::get($prestashop_partial_refud_status_name));
+			}
+		}
+	}
 }
