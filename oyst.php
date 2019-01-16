@@ -19,7 +19,7 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-require_once dirname(__FILE__) . '/autoload.php';
+require_once dirname(__FILE__).'/autoload.php';
 
 /**
  * Class Oyst
@@ -32,7 +32,7 @@ class Oyst extends PaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '2.0.0';
+        $this->version = '2.0.0-RC29';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
