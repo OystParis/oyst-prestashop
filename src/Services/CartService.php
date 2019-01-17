@@ -158,6 +158,8 @@ class CartService
                         //Get first carrier if no one match with preferences
                         if (!empty($carriers[0])) {
                             $selected_carrier_id = $carriers[0];
+                        } else {
+                            $selected_carrier_id = 0;
                         }
                     }
                 }
