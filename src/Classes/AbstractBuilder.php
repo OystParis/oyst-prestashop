@@ -227,9 +227,10 @@ abstract class AbstractBuilder
      */
     protected function formatItem($item)
     {
+        $price_without_discount_tax_incl = 0;
         if (isset($item['price_without_reduction_wt'])) {
             $price_without_discount_tax_incl = $item['price_without_reduction_wt'];
-        } else {
+        } elseif (isset($item['price_without_reduction'])) {
             $price_without_discount_tax_incl = $item['price_without_reduction']*(1+ $item['rate']/100);
         }
 
