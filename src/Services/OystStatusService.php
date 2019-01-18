@@ -14,7 +14,7 @@ class OystStatusService
             'prestashop_name' => 'PS_OS_CANCELED',
         ],
         'oyst_payment_waiting_validation' => [
-            'prestashop_name' => 'OYST_ORDER_STATUS_PAYMENT_WAITING_VALIDATION',
+            'prestashop_name' => 'OYST_OS_PAY_WAITING_VALIDATION',
             'data' => [
                 'name' => [
                     'fr' => 'En attente de validation chez Oyst',
@@ -32,7 +32,7 @@ class OystStatusService
             ]
         ],
         'oyst_payment_captured' => [
-            'prestashop_name' => 'OYST_ORDER_STATUS_PAYMENT_CAPTURED',
+            'prestashop_name' => 'OYST_OS_PAYMENT_CAPTURED',
             'data' => [
                 'name' => [
                     'fr' => 'Paiement accepté (Oyst)',
@@ -50,7 +50,7 @@ class OystStatusService
             ]
         ],
         'oyst_payment_waiting_to_capture' => [
-            'prestashop_name' => 'OYST_ORDER_STATUS_PAYMENT_WAITING_TO_CAPTURE',
+            'prestashop_name' => 'OYST_OS_PAY_WAITING_TO_CAPTURE',
             'data' => [
                 'name' => [
                     'fr' => 'En attente de capture chez Oyst',
@@ -68,7 +68,7 @@ class OystStatusService
             ]
         ],
         'oyst_payment_to_capture' => [
-            'prestashop_name' => 'OYST_ORDER_STATUS_PAYMENT_TO_CAPTURE',
+            'prestashop_name' => 'OYST_OS_PAYMENT_TO_CAPTURE',
             'data' => [
                 'name' => [
                     'fr' => 'A capturer',
