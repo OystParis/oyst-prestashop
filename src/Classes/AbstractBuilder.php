@@ -228,10 +228,16 @@ abstract class AbstractBuilder
     protected function formatItem($item)
     {
         $price_without_discount_tax_incl = 0;
+        $price_without_discount_tax_excl = 0;
         if (isset($item['price_without_reduction_wt'])) {
             $price_without_discount_tax_incl = $item['price_without_reduction_wt'];
-        } elseif (isset($item['price_without_reduction'])) {
-            $price_without_discount_tax_incl = $item['price_without_reduction']*(1+ $item['rate']/100);
+        }
+
+        if (isset($item['price_without_reduction'])) {
+            $price_without_discount_tax_excl = $item['price_without_reduction'];
+            if (empty($price_without_discount_tax_incl)) {
+                $price_without_discount_tax_incl = $price_without_discount_tax_excl*(1+ $item['rate']/100);
+            }
         }
 
         $user_inputs = array();
@@ -290,7 +296,7 @@ abstract class AbstractBuilder
             'price' => array(
                 'tax_excl' => round($item['price'], 2),
                 'tax_incl' => round($item['price_wt'], 2),
-                'without_discount_tax_excl' => round($item['price_without_reduction'], 2),
+                'without_discount_tax_excl' => round($price_without_discount_tax_excl, 2),
                 'without_discount_tax_incl' => round($price_without_discount_tax_incl, 2),
                 'total_tax_excl' => round($item['total'], 2),
                 'total_tax_incl' => round($item['total_wt'], 2),
