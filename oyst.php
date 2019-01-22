@@ -255,7 +255,7 @@ class Oyst extends PaymentModule
 
     public function hookActionOrderHistoryAddAfter($params)
     {
-        if (!empty($params['order_history']) && $params['order_history']->id_order_state == Configuration::get('OYST_ORDER_STATUS_PAYMENT_TO_CAPTURE')) {
+        if (!empty($params['order_history']) && $params['order_history']->id_order_state == Configuration::get('OYST_OS_PAYMENT_TO_CAPTURE')) {
             // Call endpoint of connector to call capture
             if (Configuration::hasKey('OYST_PUBLIC_ENDPOINTS')) {
                 $public_endpoints = json_decode(Configuration::get('OYST_PUBLIC_ENDPOINTS'), true);
