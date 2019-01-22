@@ -204,7 +204,7 @@ class OrderController extends AbstractOystController
                             //Set notification into context for reference usage on hookActionEmailSendBefore
                             $context->oyst_current_notification = $notification;
 
-                            if ($oyst->validateOrder($cart->id, Configuration::get('OYST_ORDER_STATUS_PAYMENT_WAITING_VALIDATION'), $total, $oyst->displayName, null, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
+                            if ($oyst->validateOrder($cart->id, Configuration::get('OYST_OS_PAY_WAITING_TO_CAPTURE'), $total, $oyst->displayName, null, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
                                 $notification->complete($oyst->currentOrder);
                                 // Set id_cart to 0 to avoid cart deletion on front office
                                 $order = new Order($oyst->currentOrder);
