@@ -39,7 +39,7 @@ class Oyst extends PaymentModule
 
         $this->author = 'Oyst';
         $this->displayName = $this->l('Oyst - 1Click');
-        $this->description = $this->l('Oyst is an online shopping solution allowing users to buy in 1-click on any website, from any page (not only any more through the traditional "cart" page).');
+        $this->description = $this->l('Oyst permet d\'acheter en un clic depuis n\'importe quelle page de votre site. Offrez à vos clients une expérience d\'achat en un clic');
         $this->module_key = '728233ba4101873905adb6b9ec29f28f';
         $this->is_eu_compatible = 1;
         $this->currencies = true;
