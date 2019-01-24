@@ -32,7 +32,7 @@ class Oyst extends PaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '2.0.0-RC30';
+        $this->version = '2.0.0-RC31';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -358,6 +358,40 @@ class Oyst extends PaymentModule
                 $prestashop_partial_refud_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_partial_refund');
                 $order->setCurrentState(Configuration::get($prestashop_partial_refud_status_name));
             }
+        }
+    }
+
+    public function hookDisplayPaymentReturn()
+    {
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+
+            // Load data
+            $id_cart = (int)Tools::getValue('id_cart');
+            $id_order = Order::getOrderByCartId($id_cart);
+            $order = new Order($id_order);
+            $transaction_id = Db::getInstance()->getValue('
+            SELECT `payment_id` FROM `'._DB_PREFIX_.'oyst_payment_notification`
+            WHERE `id_cart` = '.(int)$id_cart);
+
+            // Security check
+            if ($order->secure_key != Tools::getValue('key')) {
+                die('Secure key is invalid');
+            }
+
+            // Assign data
+            $assign = array(
+                'order_reference' => $order->reference,
+                'transaction_id' => $transaction_id,
+            );
+
+            $this->context->smarty->assign($this->name, $assign);
+
+            if (version_compare(_PS_VERSION_, '1.6', '<')) {
+                $template_name = 'displayPaymentReturn.tpl';
+            } else {
+                $template_name = 'displayPaymentReturn.bootstrap.tpl';
+            }
+            return $this->display(__FILE__, $template_name, $this->getCacheId());
         }
     }
 }
