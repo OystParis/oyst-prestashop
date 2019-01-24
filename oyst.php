@@ -72,6 +72,7 @@ class Oyst extends PaymentModule
         $result &= $this->registerHook('actionEmailSendBefore');
         $result &= $this->registerHook('actionOrderHistoryAddAfter');
         $result &= $this->registerHook('moduleRoutes');
+        $result &= $this->registerHook('displayBackOfficeHeader');
 
         // Clear cache
         Cache::clean('Module::getModuleIdByName_oyst');
@@ -127,11 +128,11 @@ class Oyst extends PaymentModule
         ]);
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
-        	$this->context->controller->addCSS($module_dir.'views/css/config-1.5.css');
-        	$template_name = 'getMerchantConfigure.tpl';
-		} else {
-        	$template_name = 'getMerchantConfigure.bootstrap.tpl';
-		}
+            $this->context->controller->addCSS($module_dir.'views/css/config-1.5.css');
+            $template_name = 'getMerchantConfigure.tpl';
+        } else {
+            $template_name = 'getMerchantConfigure.bootstrap.tpl';
+        }
 
         return $this->context->smarty->fetch(__DIR__.'/views/templates/hook/'.$template_name);
     }
@@ -255,56 +256,48 @@ class Oyst extends PaymentModule
 
     public function hookActionOrderHistoryAddAfter($params)
     {
-        if (!empty($params['order_history']) && $params['order_history']->id_order_state == Configuration::get('OYST_OS_PAYMENT_TO_CAPTURE')) {
-            // Call endpoint of connector to call capture
-            if (Configuration::hasKey('OYST_PUBLIC_ENDPOINTS')) {
-                $public_endpoints = json_decode(Configuration::get('OYST_PUBLIC_ENDPOINTS'), true);
-                foreach ($public_endpoints as $public_endpoint) {
-                    if ($public_endpoint['type'] == 'capture') {
-                        $authorization = "Authorization: Bearer ".$public_endpoint['api_key'];
-                        $fields = json_encode([
-                            'orderIds' => [\Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order)]
-                        ]);
-                        $ch = curl_init();
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization));
-                        curl_setopt($ch, CURLOPT_URL, $public_endpoint['url']);
-                        curl_setopt($ch, CURLOPT_POST, 1);
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                        $response_json = curl_exec($ch);
-                        curl_close($ch);
+        if (!empty($params['order_history'])) {
+            if ($params['order_history']->id_order_state == Configuration::get('OYST_ORDER_STATUS_PAYMENT_TO_CAPTURE')) {
+                $order = new Order($params['order_history']->id_order);
+                $amount = $order->getTotalPaid();
+                $fields = [
+                    'orderAmounts' => [
+                        \Oyst\Classes\Notification::getOystIdByOrderId($params['order_history']->id_order) => $amount
+                    ]
+                ];
 
-                        $response = json_decode($response_json, true);
+                $endpoint_result = \Oyst\Services\EndpointService::getInstance()->callEndpoint('capture', $fields);
 
-                        if (!empty($response['orders'])) {
-                            foreach ($response['orders'] as $order) {
-                                try {
-                                    $order_obj = new Order($order['internal_id']);
-                                    if (Validate::isLoadedObject($order_obj)) {
-										$prestashop_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_payment_captured');
-                                        if ($order_obj->getCurrentState() != Configuration::get($prestashop_status_name)) {
-                                            $notification = \Oyst\Classes\Notification::getNotificationByOystId($order['oyst_id']);
+                if (!empty($endpoint_result['orders'])) {
+                    foreach ($endpoint_result['orders'] as $order) {
+                        try {
+                            $order_obj = new Order($order['internal_id']);
+                            if (Validate::isLoadedObject($order_obj)) {
+                                $prestashop_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_payment_captured');
+                                if ($order_obj->getCurrentState() != Configuration::get($prestashop_status_name)) {
+                                    $notification = \Oyst\Classes\Notification::getNotificationByOystId($order['oyst_id']);
 
-                                            //Set id_cart to order for cart avoid
-                                            $order_obj->id_cart = $notification->cart_id;
-                                            $order_obj->update();
-                                            // If status oyst_payment_captured => send order email to customer
-                                            $history = new OrderHistory();
-                                            $history->id_order = $notification->order_id;
-                                            $history->changeIdOrderState(Configuration::get($prestashop_status_name), $order_obj, true);
-                                            $history->addWithemail();
-                                            $notification->sendOrderEmail();
-                                        }
-                                    } else {
-                                        //Can't load object
-                                    }
-                                } catch(Exception $e) {
-                                    //array('error' => 'fail on status change : '.$e->getMessage()));
+                                    //Set id_cart to order for cart avoid
+                                    $order_obj->id_cart = $notification->cart_id;
+                                    $order_obj->update();
+                                    // If status oyst_payment_captured => send order email to customer
+                                    $history = new OrderHistory();
+                                    $history->id_order = $notification->order_id;
+                                    $history->changeIdOrderState(Configuration::get($prestashop_status_name), $order_obj, true);
+                                    $history->addWithemail();
+                                    $notification->sendOrderEmail();
                                 }
+                            } else {
+                                //Can't load object
                             }
+                        } catch (Exception $e) {
+                            //array('error' => 'fail on status change : '.$e->getMessage()));
                         }
                     }
                 }
+            } elseif ($params['order_history']->id_order_state == Configuration::get('PS_OS_REFUND')) {
+                // If switch to status refund => Total refund
+                \Oyst\Services\OrderService::getInstance()->refund($params['order_history']->id_order);
             }
         }
     }
@@ -324,5 +317,47 @@ class Oyst extends PaymentModule
                 ),
             ),
         );
+    }
+
+    public function hookDisplayBackOfficeHeader($params)
+    {
+        if (Tools::isSubmit('partialRefundProduct') && ($refunds = Tools::getValue('partialRefundProduct')) && is_array($refunds)) {
+            $amount = 0;
+            $order_detail_list = array();
+            $full_quantity_list = array();
+            //Calcul refund amount
+            foreach ($refunds as $id_order_detail => $amount_detail) {
+                $quantity = Tools::getValue('partialRefundProductQuantity');
+                if (!$quantity[$id_order_detail]) {
+                    continue;
+                }
+
+                $full_quantity_list[$id_order_detail] = (int)$quantity[$id_order_detail];
+
+                $order_detail_list[$id_order_detail] = array(
+                    'quantity' => (int)$quantity[$id_order_detail],
+                    'id_order_detail' => (int)$id_order_detail
+                );
+
+                $order_detail = new OrderDetail((int)$id_order_detail);
+                if (empty($amount_detail)) {
+                    $order_detail_list[$id_order_detail]['unit_price'] = (!Tools::getValue('TaxMethod') ? $order_detail->unit_price_tax_excl : $order_detail->unit_price_tax_incl);
+                    $order_detail_list[$id_order_detail]['amount'] = $order_detail->unit_price_tax_incl * $order_detail_list[$id_order_detail]['quantity'];
+                } else {
+                    $order_detail_list[$id_order_detail]['amount'] = (float)str_replace(',', '.', $amount_detail);
+                    $order_detail_list[$id_order_detail]['unit_price'] = $order_detail_list[$id_order_detail]['amount'] / $order_detail_list[$id_order_detail]['quantity'];
+                }
+                $amount += $order_detail_list[$id_order_detail]['amount'];
+            }
+            $shipping_cost_amount = (float)str_replace(',', '.', Tools::getValue('partialRefundShippingCost')) ? (float)str_replace(',', '.', Tools::getValue('partialRefundShippingCost')) : false;
+
+            // If something to refund
+            if ($amount != 0 || $shipping_cost_amount != 0) {
+                \Oyst\Services\OrderService::getInstance()->refund(Tools::getValue('id_order'), $amount + $shipping_cost_amount);
+                $order = new Order(Tools::getValue('id_order'));
+                $prestashop_partial_refud_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_partial_refund');
+                $order->setCurrentState(Configuration::get($prestashop_partial_refud_status_name));
+            }
+        }
     }
 }
