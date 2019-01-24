@@ -97,6 +97,15 @@ class CartService extends AbstractOystService
             $this->context->cart = $cart = new Cart();
         }
 
+        //Check if no items => remove cart
+        if (empty($data['items'])) {
+            if (Validate::isLoadedObject($cart)) {
+                $cart->delete();
+            }
+
+            return json_encode(array());
+        }
+
         $oldIdAddressDelivery = (int)$cart->id_address_delivery;
 
         // $this->context->customer = $customer;
