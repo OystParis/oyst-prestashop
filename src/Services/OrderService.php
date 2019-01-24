@@ -18,10 +18,12 @@ use Oyst\Classes\OrderBuilder;
 use Shop;
 use Validate;
 
-class OrderService {
+class OrderService
+{
 
     private $id_lang;
     private static $instance;
+
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
@@ -30,7 +32,8 @@ class OrderService {
         return self::$instance;
     }
 
-    private function __construct() {
+    private function __construct()
+    {
         $this->id_lang = Language::getIdByIso('FR');
     }
 
@@ -179,5 +182,22 @@ class OrderService {
         }
 
         return $result;
+    }
+
+    public function refund($id_order, $amount = 0)
+    {
+        if ($amount === 0) {
+            try {
+                $order = new Order($id_order);
+                $amount = $order->getTotalPaid();
+            } catch (\Exception $e) {}
+        }
+
+        $fields = [
+            'orderAmounts' => [
+                \Oyst\Classes\Notification::getOystIdByOrderId($id_order) => $amount
+            ]
+        ];
+        $endpoint_result = \Oyst\Services\EndpointService::getInstance()->callEndpoint('refund', $fields);
     }
 }
