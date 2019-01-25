@@ -253,9 +253,9 @@ abstract class AbstractBuilder
 
         $product_type = 'simple';
         if (isset($item['is_virtual']) && $item['is_virtual']) {
-            $product_type = 'virtuel';
+            $product_type = 'virtual';
             if (ProductDownload::getIdFromIdProduct($item['id_product'], false)) {
-                $product_type = 'téléchargeable';
+                $product_type = 'downloadable';
             }
         }
         if (isset($item['is_pack']) && $item['is_pack']) {
@@ -277,7 +277,7 @@ abstract class AbstractBuilder
                     'value' => $attribute['value_name']
                 );
             }
-            $product_type = 'configurable';
+            $product_type = 'variant';
         }
 
         return array(
@@ -288,7 +288,7 @@ abstract class AbstractBuilder
             'quantity_available' => $item['quantity_available'],
             'quantity_minimal' => $item['minimal_quantity'],
             'name' => $item['name'],
-            'type' => $product_type, //"simple", "configurable", "virtual", "downloadable", "bundle"},
+            'type' => $product_type, //"simple", "variant", "virtual", "downloadable", "bundle"},
             'description_short' => $item['description_short'],
             'availability_status' => '',//{enum  => "now", "later"},
             'availability_date' => '',
