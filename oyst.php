@@ -32,7 +32,7 @@ class Oyst extends PaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '2.0.0-RC31';
+        $this->version = '2.0.0-RC33';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
