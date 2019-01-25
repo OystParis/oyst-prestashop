@@ -29,8 +29,9 @@ class OrderBuilder extends AbstractBuilder
 
 //        $response['items'] = $this->getItems($order_details);
 
-        $response['discounts'] = $this->getDiscounts($cart_rules, $context);
-        $response['coupons'] = $this->getCoupons($cart_rules, $context);
+        $response['discounts'] = array_merge($this->getDiscounts($cart_rules, $context), $this->getCoupons($cart_rules, $context));
+        $response['coupons'] = array();
+//        $response['coupons'] = $this->getCoupons($cart_rules, $context);
 
         //TODO loyalty points
         $response['user_advantages'] = array(
