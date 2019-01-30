@@ -740,12 +740,8 @@ class OrderService extends AbstractOystService
 
             if ($id_order_state > 0) {
                 if ($order->current_state == $id_order_state) {
-                    header("HTTP/1.1 400 Bad Request");
-                    header('Content-Type: application/json');
-                    die(json_encode(array(
-                        'code' => 'status-already-set',
-                        'message' => 'This status is the current status',
-                    )));
+                    $this->logger->warning(sprintf('Notification received with same status as current (%d)', $id_order_state));
+                    return json_encode(array('state' => true));
                 }
                 $insert = array(
                     'id_order' => (int)$order->id,
