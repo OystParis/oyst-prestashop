@@ -22,9 +22,8 @@ class CheckoutBuilder extends AbstractBuilder
 
         $response['items'] = $this->getItems($cart_products);
 
-        $response['discounts'] = array_merge($this->getDiscounts($cart_rules, $context), $this->getCoupons($cart_rules, $context));
-        $response['coupons'] = array();
-//        $response['coupons'] = $this->getCoupons($cart_rules, $context);
+        $response['discounts'] = $this->getDiscounts($cart_rules, $context);
+        $response['coupons'] = $this->getCoupons($cart_rules, $context);
 
         //TODO loyalty points
         $response['user_advantages'] = array(
