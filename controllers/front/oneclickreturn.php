@@ -33,7 +33,8 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
                     }
                     unset($this->context->cookie->oyst_id_cart);
                     $this->context->cookie->write();
-                    Tools::redirect('index.php?controller=order-confirmation&id_cart='.(int)$cart->id.'&id_module='.(int)$this->module->id.'&id_order='.$this->module->currentOrder.'&key='.$customer->secure_key);
+                    $id_order = Order::getOrderByCartId($cart->id);
+                    Tools::redirect('index.php?controller=order-confirmation&id_cart='.(int)$cart->id.'&id_module='.(int)$this->module->id.'&id_order='.$id_order.'&key='.$customer->secure_key);
                 }
             }
         }
