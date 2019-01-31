@@ -36,3 +36,5 @@
 </p>
 
 <a href="{$link->getPageLink('history', true)|escape:'htmlall':'UTF-8'}" title="{l s='Back to orders' mod='oyst'}"><img src="{$img_dir|escape:'htmlall':'UTF-8'}icon/order.gif" alt="{l s='Back to orders' mod='oyst'}" class="icon" /></a>
+
+{$tracker}

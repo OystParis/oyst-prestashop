@@ -26,6 +26,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+require __DIR__.'/../../src/Service/TrackingService.php';
+
 class OystOneclickconfirmationModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
@@ -77,6 +79,7 @@ class OystOneclickconfirmationModuleFrontController extends ModuleFrontControlle
             'id_order' => $this->id_order,
             'reference_order' => $this->reference,
             'id_order_formatted' => sprintf('#%06d', $this->id_order),
+            'tracker' => TrackingService::getInstance()->getTrackingHtml($this->id_order),
         ));
 
         unset($this->context->cookie->oyst_key);

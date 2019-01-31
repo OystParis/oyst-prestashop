@@ -34,3 +34,5 @@
 <p class="cart_navigation exclusive">
 	<a class="button-exclusive btn btn-default" href="{$link->getPageLink('history', true)|escape:'html':'UTF-8'}" title="{l s='Go to your order history page' mod='oyst'}"><i class="icon-chevron-left"></i>{l s='View your order history' mod='oyst'}</a>
 </p>
+
+{$tracker}
