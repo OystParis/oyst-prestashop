@@ -6,6 +6,7 @@ use Configuration;
 use Currency;
 use Order;
 use Tools;
+use Validate;
 
 class TrackingService
 {
