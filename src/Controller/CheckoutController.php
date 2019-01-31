@@ -107,7 +107,7 @@ class CheckoutController extends AbstractOystController
 						}
 					}
 
-                    if (!empty($data['promotions']['coupons'])) {
+                    if (!empty($data['coupons'])) {
                         $cart_rules = $cart->getCartRules();
                         $cart_rule_codes = array();
                         foreach ($cart_rules as $cart_rule) {
@@ -116,7 +116,7 @@ class CheckoutController extends AbstractOystController
                             }
                         }
 
-                        foreach ($data['promotions']['coupons'] as $coupon) {
+                        foreach ($data['coupons'] as $coupon) {
                             //Check if the coupon is not already in cart
                             if (!in_array($coupon['code'], $cart_rule_codes)) {
                                 if (($cart_rule_obj = new CartRule(CartRule::getIdByCode($coupon['code']))) && Validate::isLoadedObject($cart_rule_obj)) {

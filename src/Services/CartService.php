@@ -50,18 +50,23 @@ class CartService
         if (!empty($cart->id_lang)) {
             $this->id_lang = $cart->id_lang;
         }
+        $context = Context::getContext();
 
         if (Validate::isLoadedObject($cart)) {
+            //Feed context because prestashop can't retrieve it from a server call
+            $context->cart = $cart;
+
             try {
                 $helper = new Helper();
-                $context = Context::getContext();
 
                 $id_oyst = Notification::getOystIdByCartId($cart->id);
-                $ip = CustomerService::getInstance()->getLastIpFromIdCustomer($cart->id_customer);
                 $customer = null;
                 $gender_name = '';
+                $ip = '';
                 if (!empty($cart->id_customer)) {
+                    $ip = CustomerService::getInstance()->getLastIpFromIdCustomer($cart->id_customer);
                     $customer = new Customer($cart->id_customer);
+                    $context->customer = $customer;
                     if (Validate::isLoadedObject($customer)) {
                         $gender = new Gender($customer->id_gender, $this->id_lang);
                         if (Validate::isLoadedObject($gender)) {
