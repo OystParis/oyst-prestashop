@@ -66,16 +66,18 @@ class TrackingService
     protected function getExtraParameters()
     {
         $currency = new Currency($this->order->id_currency);
-        $extraParameters = array(
+        $extra_parameters = array(
             'event=Confirmation%20Displayed',
             'type=track',
             'version=1',
             'extra_parameters[amount]='.$this->order->total_paid_tax_incl,
             'extra_parameters[paymentMethod]='.$this->formatPaymentMethod($this->order->module),
             'extra_parameters[currency]='.$currency->iso_code,
-            'extra_parameters[merchantId]='.PSConfiguration::get('FC_OYST_MERCHANT_ID'),
         );
-        return implode('&', $extraParameters);
+        if (PSConfiguration::hasKey('FC_OYST_MERCHANT_ID')) {
+            $extra_parameters[] = 'extra_parameters[merchantId]='.PSConfiguration::get('FC_OYST_MERCHANT_ID');
+        }
+        return implode('&', $extra_parameters);
     }
 
     protected function formatPaymentMethod($payment_method)
