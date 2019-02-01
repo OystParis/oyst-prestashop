@@ -23,6 +23,7 @@
  * Security
  */
 use Oyst\Repository\ProductRepository;
+use Oyst\Service\TrackingService;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -44,6 +45,13 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
 
         if (Tools::getValue('step') != null) {
             $step = (int)Tools::getValue('step');
+        }
+
+        //Add tracker for confirmation page
+        if (in_array($this->getPageName(), array('orderconfirmation', 'oneclickconfirmation'))) {
+            file_put_contents(__DIR__.'/debug-controller.log', "Mmmm'ok ! : ".TrackingService::getInstance()->getCurrentUrl()."\r\n", FILE_APPEND);
+            $this->smarty->assign('tracker', TrackingService::getInstance()->getTrackingHtml());
+            return $this->module->fcdisplay(__FILE__, 'displayFooterTracker.tpl');
         }
 
         if (!in_array($controller, $this->restrictionPage())) {
@@ -270,5 +278,16 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
         }
 
         return $btn;
+    }
+
+    public function getPageName()
+    {
+        if (preg_match('#^'.preg_quote($this->context->shop->physical_uri, '#').'modules/([a-zA-Z0-9_-]+?)/(.*)$#', $_SERVER['REQUEST_URI'], $m)) {
+            $page_name = 'module-'.$m[1].'-'.str_replace(array('.php', '/'), array('', '-'), $m[2]);
+        } else {
+            $page_name = Dispatcher::getInstance()->getController();
+            $page_name = (preg_match('/^[0-9]/', $page_name) ? 'page_'.$page_name : $page_name);
+        }
+        return $page_name;
     }
 }

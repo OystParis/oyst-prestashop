@@ -1,5 +1,13 @@
 <?php
 
+namespace Oyst\Service;
+
+use Configuration as PSConfiguration;
+use Currency;
+use Order;
+use Tools;
+use Validate;
+
 class TrackingService
 {
     private static $instance;
@@ -40,13 +48,15 @@ class TrackingService
             $id_cart = (int)Tools::getValue('id_cart');
             $id_order = Order::getOrderByCartId($id_cart);
             return new Order($id_order);
+        } elseif (Tools::getIsset('id_order')) {
+            return new Order(Tools::getValue('id_order'));
         }
         return null;
     }
 
     protected function getTrackerBaseUrl()
     {
-        if (Configuration::get('OYST_API_ENV_ONECLICK') == 'prod') {
+        if (PSConfiguration::get('OYST_API_ENV_ONECLICK') == 'prod') {
             return 'https://tkr.11rupt.io/';
         } else {
             return 'https://staging-tkr.11rupt.eu/';
@@ -65,7 +75,7 @@ class TrackingService
         return implode('&', $extraParameters);
     }
 
-    private function getCurrentUrl()
+    public function getCurrentUrl()
     {
         return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     }
