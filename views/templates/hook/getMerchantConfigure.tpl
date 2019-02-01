@@ -264,6 +264,9 @@
                                     {/foreach}
                                 </select>
                             </div>
+                            <div class="margin-form">
+                                <input type="text" id="FC_OYST_MERCHANT_ID" name="FC_OYST_MERCHANT_ID" value="{$oyst.FC_OYST_MERCHANT_ID|escape:'htmlall':'UTF-8'}"/>
+                            </div>
                         </div>
                         <div id="custom-btn-general" class="tab-pane-sub" style="display:none;">
                             {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}

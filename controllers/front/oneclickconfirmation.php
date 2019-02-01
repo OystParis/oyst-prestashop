@@ -26,6 +26,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+require __DIR__.'/../../src/Service/TrackingService.php';
+
 class OystOneclickconfirmationModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
