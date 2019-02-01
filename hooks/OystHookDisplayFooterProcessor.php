@@ -49,7 +49,6 @@ class OystHookDisplayFooterProcessor extends FroggyHookProcessor
 
         //Add tracker for confirmation page
         if (in_array($this->getPageName(), array('orderconfirmation', 'oneclickconfirmation'))) {
-            file_put_contents(__DIR__.'/debug-controller.log', "Mmmm'ok ! : ".TrackingService::getInstance()->getCurrentUrl()."\r\n", FILE_APPEND);
             $this->smarty->assign('tracker', TrackingService::getInstance()->getTrackingHtml());
             return $this->module->fcdisplay(__FILE__, 'displayFooterTracker.tpl');
         }
