@@ -30,10 +30,12 @@ class TrackingService
             if (Validate::isLoadedObject($order)) {
                 $currency = new Currency($order->id_currency);
                 $parameters = [
+                    'event' => 'Confirmation%20Displayed',
+                    'type' => 'track',
+                    'version' => 1,
                     'amount' => $order->total_paid_tax_incl,
-                    'paymentMethod' => $order->module,
+                    'paymentMethod' => $this->formatPaymentMethod($order->module),
                     'currency' => $currency->iso_code,
-                    'referrer' => urlencode($this->getCurrentUrl()),
                     'merchantId' => Configuration::get('OYST_MERCHANT_ID'),
                 ];
             }
@@ -41,8 +43,8 @@ class TrackingService
         return $parameters;
     }
 
-    private function getCurrentUrl()
+    protected function formatPaymentMethod($payment_method)
     {
-        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        return strtolower(str_replace(array('-', ' '), '_', $payment_method));
     }
 }

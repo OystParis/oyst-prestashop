@@ -7,12 +7,6 @@
             <p>{l s='If you have questions, comments or concerns, please contact our' mod='oyst'} <a href="{$link->getPageLink('contact', true)|escape:'htmlall':'UTF-8'}">{l s='expert customer support team' mod='oyst'}</a>.</p>
         </div>
     {/if}
-    <script>
-        {literal}
-        window.__OYST__ = window.__OYST__ || {};
-        {/literal}
-        window.__OYST__.tracking = {$tracking_parameters};
-    </script>
 </div>
 
 
