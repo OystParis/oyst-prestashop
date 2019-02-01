@@ -58,13 +58,15 @@ class CheckoutController extends AbstractOystController
                 }
                 $cart = new Cart($cart_id);
                 if (Validate::isLoadedObject($cart)) {
+                    $data = $params['data'];
+
                     $errors = [];
                     $context = Context::getContext();
+
                     $context->cart = $cart;
                     $context->currency = new Currency($cart->id_currency);
                     $context->shop = new Shop($cart->id_shop);
 
-                    $data = $params['data'];
                     if (!empty($id_oyst)) {
                         try {
                             $helper = new Helper();
@@ -74,8 +76,8 @@ class CheckoutController extends AbstractOystController
                         }
                     }
                     //Products
+					$cart_products = $cart->getProducts(false, false, null, false);
                     if (!empty($data['items'])) {
-                        $cart_products = $cart->getProducts(false, false, null, false);
                         foreach ($data['items'] as $product) {
                             $ids = explode('-', $product['internal_reference']);
                             $id_product = (isset($ids[0]) ? $ids[0] : 0);
@@ -98,7 +100,13 @@ class CheckoutController extends AbstractOystController
                                 }
                             }
                         }
+                    } else {
+                        //Remove all cart items
+                        foreach ($cart_products as $cart_product) {
+                            $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
+                        }
                     }
+
 
                     if (!empty($data['coupons'])) {
                         $cart_rules = $cart->getCartRules();
