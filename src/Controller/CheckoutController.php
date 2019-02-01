@@ -62,13 +62,6 @@ class CheckoutController extends AbstractOystController
 
                     $errors = [];
                     $context = Context::getContext();
-					//If no items in cart = delete cart
-                	if (empty($data['items'])) {
-                		$cart->delete();
-                		$context->cart = null;
-						$this->respondAsJson(array());
-						exit;
-					}
 
                     $context->cart = $cart;
                     $context->currency = new Currency($cart->id_currency);
@@ -84,28 +77,36 @@ class CheckoutController extends AbstractOystController
                     }
                     //Products
 					$cart_products = $cart->getProducts(false, false, null, false);
-					foreach ($data['items'] as $product) {
-						$ids = explode('-', $product['internal_reference']);
-						$id_product = (isset($ids[0]) ? $ids[0] : 0);
-						$id_product_attribute = (isset($ids[1]) ? $ids[1] : 0);
+                    if (!empty($data['items'])) {
+                        foreach ($data['items'] as $product) {
+                            $ids = explode('-', $product['internal_reference']);
+                            $id_product = (isset($ids[0]) ? $ids[0] : 0);
+                            $id_product_attribute = (isset($ids[1]) ? $ids[1] : 0);
 
-						//TODO Manage customization
-						if ($product['quantity'] <= 0) {
-							$cart->deleteProduct($id_product, $id_product_attribute);
-						} else {
-							$cart_product_quantity = 0;
-							foreach ($cart_products as $cart_product) {
-								if ($cart_product['id_product'] == $id_product && $cart_product['id_product_attribute'] == $id_product_attribute) {
-									$cart_product_quantity = $cart_product['cart_quantity'];
-								}
-							}
-							if ($product['quantity'] < $cart_product_quantity) {
-								$cart->updateQty($cart_product_quantity - $product['quantity'], $id_product, $id_product_attribute, false, 'down');
-							} elseif ($product['quantity'] > $cart_product_quantity) {
-								$cart->updateQty($product['quantity'] - $cart_product_quantity, $id_product, $id_product_attribute, false, 'up');
-							}
-						}
-					}
+                            //TODO Manage customization
+                            if ($product['quantity'] <= 0) {
+                                $cart->deleteProduct($id_product, $id_product_attribute);
+                            } else {
+                                $cart_product_quantity = 0;
+                                foreach ($cart_products as $cart_product) {
+                                    if ($cart_product['id_product'] == $id_product && $cart_product['id_product_attribute'] == $id_product_attribute) {
+                                        $cart_product_quantity = $cart_product['cart_quantity'];
+                                    }
+                                }
+                                if ($product['quantity'] < $cart_product_quantity) {
+                                    $cart->updateQty($cart_product_quantity - $product['quantity'], $id_product, $id_product_attribute, false, 'down');
+                                } elseif ($product['quantity'] > $cart_product_quantity) {
+                                    $cart->updateQty($product['quantity'] - $cart_product_quantity, $id_product, $id_product_attribute, false, 'up');
+                                }
+                            }
+                        }
+                    } else {
+                        //Remove all cart items
+                        foreach ($cart_products as $cart_product) {
+                            $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
+                        }
+                    }
+
 
                     if (!empty($data['coupons'])) {
                         $cart_rules = $cart->getCartRules();
