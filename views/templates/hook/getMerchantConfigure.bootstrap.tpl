@@ -201,6 +201,12 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='Merchant ID' mod='oyst'}</label>
+                                    <div class="col-md-7 col-lg-7">
+                                        <input type="text" id="FC_OYST_MERCHANT_ID" name="FC_OYST_MERCHANT_ID" value="{$oyst.FC_OYST_MERCHANT_ID|escape:'htmlall':'UTF-8'}"/>
+                                    </div>
+                                </div>
                             </div>
                             <div role="tabpanel" id="custom-btn-general" class="tab-pane">
                                 {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}

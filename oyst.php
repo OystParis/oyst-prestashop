@@ -352,6 +352,8 @@ class Oyst extends FroggyPaymentModule
         Configuration::updateValue('FC_OYST_LANG', Language::getIdByIso('FR'));
 
         Configuration::updateValue('FC_OYST_BUSINESS_DAYS', '1,2,3,4,5,6');
+
+        Configuration::updateValue('FC_OYST_MERCHANT_ID', '');
     }
 
     public function loadSQLFile($sql_file)

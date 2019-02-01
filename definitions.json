@@ -47,6 +47,8 @@
     "OYST_ONECLICK_URL_SANDBOX": "https://cdn.sandbox.oyst.eu",
     "OYST_ONECLICK_URL_CUSTOM": "",
 
+    "FC_OYST_MERCHANT_ID": "",
+
     "OYST_ONECLICKMODAL_URL_PROD": "https://oneclick.oyst.com",
     "OYST_ONECLICKMODAL_URL_SANDBOX": "https://oneclick.sandbox.oyst.eu",
 
