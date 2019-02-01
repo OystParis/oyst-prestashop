@@ -68,11 +68,19 @@ class TrackingService
         $currency = new Currency($this->order->id_currency);
         $extraParameters = array(
             'extra_parameters[amount]='.$this->order->total_paid_tax_incl,
-            'extra_parameters[paymentMethod]='.$this->order->module,
+            'extra_parameters[paymentMethod]='.$this->formatPaymentMethod($this->order->module),
             'extra_parameters[currency]='.$currency->iso_code,
-            'extra_parameters[referrer]='.urlencode($this->getCurrentUrl()),
+            'extra_parameters[merchantId]='.PSConfiguration::get('FC_OYST_MERCHANT_ID'),
+            'extra_parameters[event]=Confirmation%20Displayed',
+            'extra_parameters[type]=track',
+            'extra_parameters[version]=1',
         );
         return implode('&', $extraParameters);
+    }
+
+    protected function formatPaymentMethod($payment_method)
+    {
+        return strtolower(str_replace(array('-', ' '), '_', $payment_method));
     }
 
     public function getCurrentUrl()
