@@ -32,7 +32,7 @@ class Oyst extends PaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '2.0.0-RC39';
+        $this->version = '2.0.0-RC40';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -190,6 +190,10 @@ class Oyst extends PaymentModule
     public function hookFooter($params)
     {
         if (Configuration::hasKey('OYST_SCRIPT_TAG') && Configuration::hasKey('OYST_MERCHANT_ID')) {
+
+            if (in_array($this->getPageName(), ['order-confirmation'])) {
+                $this->context->smarty->assign('tracking_parameters', json_encode(\Oyst\Services\TrackingService::getInstance()->getTrackingParameters()));
+            }
             $script_tag = str_replace('[MERCHANT_ID_PLACEHOLDER]', Configuration::get('OYST_MERCHANT_ID'), base64_decode(Configuration::get('OYST_SCRIPT_TAG')));
             $this->context->smarty->assign(array(
                 'page_name_oyst' => $this->getPageName(),
@@ -363,20 +367,22 @@ class Oyst extends PaymentModule
 
     public function hookDisplayPaymentReturn()
     {
-        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+        $template_name = 'displayPaymentReturn.bootstrap.tpl';
 
+        $id_cart = (int)Tools::getValue('id_cart');
+        $id_order = Order::getOrderByCartId($id_cart);
+        $order = new Order($id_order);
+
+        // Security check
+        if ($order->secure_key != Tools::getValue('key')) {
+            die('Secure key is invalid');
+        }
+
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
             // Load data
-            $id_cart = (int)Tools::getValue('id_cart');
-            $id_order = Order::getOrderByCartId($id_cart);
-            $order = new Order($id_order);
             $transaction_id = Db::getInstance()->getValue('
             SELECT `payment_id` FROM `'._DB_PREFIX_.'oyst_payment_notification`
             WHERE `id_cart` = '.(int)$id_cart);
-
-            // Security check
-            if ($order->secure_key != Tools::getValue('key')) {
-                die('Secure key is invalid');
-            }
 
             // Assign data
             $assign = array(
@@ -388,10 +394,8 @@ class Oyst extends PaymentModule
 
             if (version_compare(_PS_VERSION_, '1.6', '<')) {
                 $template_name = 'displayPaymentReturn.tpl';
-            } else {
-                $template_name = 'displayPaymentReturn.bootstrap.tpl';
             }
-            return $this->display(__FILE__, $template_name, $this->getCacheId());
         }
+        return $this->display(__FILE__, $template_name, $this->getCacheId());
     }
 }
