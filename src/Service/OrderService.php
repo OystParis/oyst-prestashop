@@ -165,7 +165,13 @@ class OrderService extends AbstractOystService
         $address = $this->addressRepository->findAddress($addressToFind, $customer);
 
         if (!Validate::isLoadedObject($address)) {
-            $countryId = (int)Country::getByIso('fr');
+
+            $iso_code = 'fr';
+            if (!empty($pickupAddress['country'])) {
+                $iso_code = strtolower($pickupAddress['country']);
+            }
+
+            $countryId = (int)Country::getByIso($iso_code);
             if (0 >= $countryId) {
                 $countryId = PSConfiguration::get('PS_COUNTRY_DEFAULT');
             }
@@ -590,6 +596,7 @@ class OrderService extends AbstractOystService
 
         $oystOrderInfo = $this->getOrderInfo($orderId);
         if ($oystOrderInfo) {
+            file_put_contents(__DIR__.'/../../debug.log', date('Y-m-d H:i:s')." - p10 oyst order info : ".print_r($oystOrderInfo, true)."\r\n", FILE_APPEND);
             $products = array();
             foreach ($oystOrderInfo['order']['items'] as $productInfo) {
                 $reference = explode(';', $productInfo['product_reference']);
