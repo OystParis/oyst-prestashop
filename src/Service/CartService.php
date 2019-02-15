@@ -114,9 +114,7 @@ class CartService extends AbstractOystService
 
         $customer = null;
 
-        if ($data['context'] && isset($data['context']['id_user'])) {
-            $customer = new Customer((int)$data['context']['id_user']);
-        } elseif ($id_customer = Customer::customerExists($data['user']['email'], true)) {
+        if ($id_customer = Customer::customerExists($data['user']['email'], true)) {
             $customer = new Customer($id_customer);
         }
 
