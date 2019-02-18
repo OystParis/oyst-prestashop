@@ -111,12 +111,9 @@ class OystOneclickreturnModuleFrontController extends ModuleFrontController
                         $url = $this->context->link->getPageLink('history');
                         break;
                     case 'ORDER_CONFIRMATION':
-                        $base_url_confirmation = $this->context->link->getModuleLink(
-                            'oyst',
-                            'oneclickconfirmation'
-                        );
+                        $base_url_confirmation = $this->context->link->getPageLink('order-confirmation');
                         $id_module = Module::getModuleIdByName('oyst');
-                        $params = $glue.'id_order='.$id_order.'&id_module='.$id_module;
+                        $params = $glue.'id_order='.$id_order.'&id_module='.$id_module.'&id_cart='.$cart->id;
                         $url = $base_url_confirmation.$params.'&key='.$customer->secure_key;
                         break;
                     case 'CUSTOM':

@@ -3,7 +3,6 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{oyst}prestashop>oyst_9dc8e75bbfc22913d5aa821f8a0b6b48'] = 'Oyst - 1Click';
-$_MODULE['<{oyst}prestashop>oyst_f02ec3a64585faf1432e28cbad8c2cb5'] = 'Oyst permet d’acheter en 1-Click depuis n’importe quelle page de n’importe quel site marchand. Boostez votre taux de conversion jusqu’à x2 sur desktop et x5 sur mobile';
 $_MODULE['<{oyst}prestashop>paymentnotification_59a70e9e7e2b51dbde1027c899d1dd40'] = 'Le prix payé ne correspond au montant du panier.';
 $_MODULE['<{oyst}prestashop>paymentnotification_572f9af7615560af2cba038cc1948287'] = 'Le panier a été modifé, veuillez réessayez.';
 $_MODULE['<{oyst}prestashop>paymentnotification_9c688609b66dcae41c6965d4b97cefb6'] = 'Paiement annulé pour suspicion de fraude';
@@ -184,7 +183,6 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_643046d4345b9cfc27072
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_e59278675b8f1e052b22b7e5e7d65da7'] = 'Jour de la semaine';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_ea29387282467c818e51540fc1aca0ba'] = 'Url de confirmation pour le bouton panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_7c716ec85af8e22c87caffb6a007b358'] = 'Ce n\'est pas une URL valide!';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure.bootstrap_3f2f64b3297a179114438445ea455a93'] = 'Bouton sticky';
@@ -283,7 +281,6 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_d656fc298c72d199a2bc51867206b68
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_643046d4345b9cfc270724188d9b54d9'] = 'Jours ouvrés';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_e59278675b8f1e052b22b7e5e7d65da7'] = 'Jour de la semaine';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_ea29387282467c818e51540fc1aca0ba'] = 'Url de confirmation pour le bouton panier';
-$_MODULE['<{oyst}prestashop>getmerchantconfigure_8f497c1a3d15af9e0c215019f26b887d'] = 'Délai de commande';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_67a2832116fd6e31fa47653f6173860f'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_f802bb31c7cb576e800c4a6f4aba3fb1'] = 'Autoriser le client à modifier la quantité des achats depuis la modale de paiement dans la page panier';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_3f2f64b3297a179114438445ea455a93'] = 'Bouton sticky';
@@ -297,3 +294,12 @@ $_MODULE['<{oyst}prestashop>getmerchantconfigure_578c69a9e28d2854ec76d91a682f6df
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_f291ff521a5874e87aa48a59494f835d'] = 'Sélectionner les logs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_5bcaf72e1549cffdd268db003433b371'] = 'Supprimer les logs';
 $_MODULE['<{oyst}prestashop>getmerchantconfigure_1ee8731d9b5c8d4bfb26c7bb6e0a21f3'] = 'Actuellement il n\'y a aucun log de disponible';
+$_MODULE['<{oyst}prestashop>orderconfirmation.bootstrap_88526efe38fd18179a127024aba8c1d7'] = 'Votre commande sur %s a bien été enregistrée.';
+$_MODULE['<{oyst}prestashop>orderconfirmation.bootstrap_e19e31ddb54b493059808ec4f2dab4cb'] = 'Votre numéro de commande est le :';
+$_MODULE['<{oyst}prestashop>orderconfirmation.bootstrap_9be66ab020fd0ffb9dd22756969b8dc7'] = 'Votre numéro de commande a été envoyé par e-mail.';
+$_MODULE['<{oyst}prestashop>orderconfirmation.bootstrap_f5f73bed0ea882264f4da4e924736859'] = 'Voir l\'historique de vos commandes';
+$_MODULE['<{oyst}prestashop>orderconfirmation.bootstrap_241cc604e9c62701f4bc4a2e1848ec13'] = 'Voir l\'historique de vos commandes';
+$_MODULE['<{oyst}prestashop>orderconfirmation_88526efe38fd18179a127024aba8c1d7'] = 'Votre commande sur %s a bien été enregistrée.';
+$_MODULE['<{oyst}prestashop>orderconfirmation_e19e31ddb54b493059808ec4f2dab4cb'] = 'Votre numéro de commande est le :';
+$_MODULE['<{oyst}prestashop>orderconfirmation_b09ffe631344edabac9412ed4c862544'] = 'Votre numéro de commande a été envoyé par e-mail.';
+$_MODULE['<{oyst}prestashop>orderconfirmation_9390390581f54c65d6acfc8da4e17362'] = 'Voir l\'historique de vos commandes';
