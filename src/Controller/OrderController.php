@@ -305,13 +305,4 @@ class OrderController extends AbstractOystController
             $this->respondError(400, 'id_order is missing');
         }
     }
-
-    public function createOrderFromCart($params)
-    {
-        if (!empty($params['data']['id_cart'])) {
-
-        } else {
-            $this->respondError(400, 'id_cart is missing');
-        }
-    }
 }

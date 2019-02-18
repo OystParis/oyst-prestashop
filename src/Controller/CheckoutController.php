@@ -37,7 +37,7 @@ class CheckoutController extends AbstractOystController
             if (empty($response['errors'])) {
                 $this->respondAsJson($response);
             } else {
-                $this->respondError(400, $response['errors']);
+                $this->respondError(400, 'Error while get cart : '.$response['errors']);
             }
         } else {
             $this->respondError(400, 'id_cart is missing');
@@ -277,7 +277,7 @@ class CheckoutController extends AbstractOystController
                     CartRule::autoRemoveFromCart();
 
                     if (!empty($errors)) {
-                        $this->respondError(400, $errors);
+                        $this->respondError(400, 'Error while updating cart : '.print_r($errors, true));
                     }
 
                     $response = CartService::getInstance()->getCart($cart->id);
@@ -285,7 +285,7 @@ class CheckoutController extends AbstractOystController
                         $response = array_merge($response, $returned_errors);
                         $this->respondAsJson($response);
                     } else {
-                        $this->respondError(400, $response['errors']);
+                        $this->respondError(400, 'Error while getting cart informations : '.$response['errors']);
                     }
                 } else {
                     $this->respondError(400, 'Bad id_cart');
@@ -295,44 +295,6 @@ class CheckoutController extends AbstractOystController
             }
         } else {
             $this->respondError(400, 'id_cart is missing');
-        }
-    }
-
-    public function createOrderFromCart($params)
-    {
-        if (empty($params['data']['id_oyst_order'])) {
-            $this->respondError(400, 'id_oyst_order is missing');
-        }
-
-        $cart = new Cart((int)$params['url']['id']);
-        if (Validate::isLoadedObject($cart)) {
-            $notification = Notification::getNotificationByOystId($params['data']['id_oyst_order']);
-
-            if ($notification->isAlreadyFinished()) {
-                $this->respondError(400, 'Order already created');
-            }
-
-            if ($notification->isAlreadyStarted()) {
-                $this->respondError(400, 'Order already on creation');
-            }
-
-            $notification->start();
-            $oyst = new Oyst();
-            $total = (float)($cart->getOrderTotal(true, Cart::BOTH));
-
-            try {
-                if ($oyst->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), $total, $oyst->displayName, NULL, array(), (int)$cart->id_currency, false, $cart->secure_key)) {
-                    $notification->complete($oyst->currentOrder);
-                    $this->logger->info('Cart '.$cart->id.' transformed into order '.$oyst->currentOrder);
-                } else {
-                    $this->respondError(400, 'Order creation failed');
-                }
-            } catch (Exception $e) {
-                $this->logger->error('Failed to transform cart '.$cart->id.' into order (Exception : '.$e->getMessage().')');
-                $this->respondError(400, 'Exception on order creation : '.$e->getMessage());
-            }
-        } else {
-            $this->respondError(400, 'Bad id_cart');
         }
     }
 }
