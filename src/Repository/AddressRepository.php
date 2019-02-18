@@ -49,6 +49,8 @@ class AddressRepository extends AbstractOystRepository
               AND a.firstname = '".$firstname."'
               AND a.lastname = '".$lastname."'
               AND c.id_customer = ".$customer->id."
+              AND a.deleted = 0
+              AND a.active = 1
         ";
 
         if (isset($address['name'])) {
