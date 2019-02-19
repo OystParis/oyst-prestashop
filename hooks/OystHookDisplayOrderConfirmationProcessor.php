@@ -32,15 +32,13 @@ class OystHookDisplayOrderConfirmationProcessor extends FroggyHookProcessor
     {
         if (Tools::getIsset('id_order')) {
             $order = new Order(Tools::getValue('id_order'));
-            if (Validate::isLoadedObject($order)) {
 
-            }
+            $this->context->smarty->assign(array(
+                'id_order' => $order->id,
+                'reference_order' => $order->reference,
+                'id_order_formatted' => sprintf('#%06d', $order->id),
+            ));
         }
-        $this->context->smarty->assign(array(
-            'id_order' => $order->id,
-            'reference_order' => $order->reference,
-            'id_order_formatted' => sprintf('#%06d', $order->id),
-        ));
 
         unset($this->context->cookie->oyst_key);
         unset($this->context->cookie->oyst_id_cart);
