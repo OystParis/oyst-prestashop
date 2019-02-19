@@ -23,7 +23,5 @@
 <div class="box">
     <p>{l s='Your order ID is:' mod='oyst'} <strong>{$reference_order|escape:'htmlall':'UTF-8'}</strong> . {l s='Your order ID has been sent via email.' mod='oyst'}</p>
 </div>
-<p class="cart_navigation exclusive">
-	<a class="button-exclusive btn btn-default" href="{$link->getPageLink('history', true)|escape:'html':'UTF-8'}" title="{l s='Go to your order history page' mod='oyst'}"><i class="icon-chevron-left"></i>{l s='View your order history' mod='oyst'}</a>
-</p>
+
 

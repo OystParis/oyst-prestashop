@@ -24,6 +24,3 @@
     <br /><br />
     {l s='Your order ID is:' mod='oyst'} <strong>{$reference_order|escape:'htmlall':'UTF-8'}</strong> . {l s='Your order ID has been sent to you via e-mail.' mod='oyst'}
 </p>
-
-<a href="{$link->getPageLink('history', true)|escape:'htmlall':'UTF-8'}" title="{l s='Back to orders' mod='oyst'}"><img src="{$img_dir|escape:'htmlall':'UTF-8'}icon/order.gif" alt="{l s='Back to orders' mod='oyst'}" class="icon" /></a>
-
