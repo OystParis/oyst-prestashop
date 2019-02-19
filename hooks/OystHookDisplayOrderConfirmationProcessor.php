@@ -43,6 +43,6 @@ class OystHookDisplayOrderConfirmationProcessor extends FroggyHookProcessor
         unset($this->context->cookie->oyst_key);
         unset($this->context->cookie->oyst_id_cart);
 
-        return $this->module->fcdisplay(__FILE__, 'OrderConfirmation.tpl');
+        return $this->module->fcdisplay(__FILE__, 'displayOrderConfirmation.tpl');
     }
 }
