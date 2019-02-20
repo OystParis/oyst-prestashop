@@ -78,7 +78,9 @@ class CheckoutController extends AbstractOystController
                     //Products
 					$cart_products = $cart->getProducts(false, false, null, false);
                     if (!empty($data['items'])) {
+                        $oyst_product_list = [];
                         foreach ($data['items'] as $product) {
+                            $oyst_product_list[] = $product['internal_reference'];
                             $ids = explode('-', $product['internal_reference']);
                             $id_product = (isset($ids[0]) ? $ids[0] : 0);
                             $id_product_attribute = (isset($ids[1]) ? $ids[1] : 0);
@@ -98,6 +100,14 @@ class CheckoutController extends AbstractOystController
                                 } elseif ($product['quantity'] > $cart_product_quantity) {
                                     $cart->updateQty($product['quantity'] - $cart_product_quantity, $id_product, $id_product_attribute, false, 'up');
                                 }
+                            }
+                        }
+
+                        //Get products in prestashop cart but not in oyst cart (remove from modal)
+                        foreach ($cart_products as $cart_product) {
+                            $ids = $cart_product['id_product'].'-'.$cart_product['id_product_attribute'];
+                            if (!in_array($ids, $oyst_product_list)) {
+                                $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
                             }
                         }
                     } else {
