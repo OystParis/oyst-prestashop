@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.30.0-RC1';
+        $this->version = '1.30.0-RC2';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -514,6 +514,10 @@ class Oyst extends FroggyPaymentModule
 
         if (\Oyst\Service\Configuration::API_ENV_CUSTOM == $env) {
             $apiUrl = Configuration::get(\Oyst\Service\Configuration::API_ENDPOINT_CUSTOM_ONECLICK);
+        }
+
+        if (empty($apiUrl)) {
+            $apiUrl = 'empty_url';
         }
 
         return $apiUrl;
