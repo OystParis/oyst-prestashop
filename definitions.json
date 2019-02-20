@@ -1,6 +1,6 @@
 {
   "tab": "payments_gateways",
-  "version": "1.29.4",
+  "version": "1.30.0-RC3",
   "need_instance": 0,
 
   "hooks": {
@@ -8,7 +8,6 @@
       "displayHeader",
       "displayPayment",
       "displayPaymentReturn",
-      "displayOrderConfirmation",
       "displayAdminOrder",
       "displayFooter",
       "displayBackOfficeHeader",
@@ -32,7 +31,7 @@
     "FC_OYST_MERCHANT_PHONE": "",
 
     "OYST_API_ENV_FREEPAY": "prod",
-    "OYST_API_ENV_ONECLICK": "prod",
+    "OYST_ONE_CLICK_MODE": "test",
 
     "OYST_API_PROD_KEY_FREEPAY": "",
     "OYST_API_SANDBOX_KEY_FREEPAY": "",

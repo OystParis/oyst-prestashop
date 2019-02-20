@@ -1,4 +1,5 @@
-{**
+<?php
+/**
  * 2013-2016 Froggy Commerce
  *
  * NOTICE OF LICENSE
@@ -15,13 +16,28 @@
  *
  * @author    Froggy Commerce <contact@froggy-commerce.com>
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
- * @license GNU GENERAL PUBLIC LICENSE
- *}
+ * @license   GNU GENERAL PUBLIC LICENSE
+ */
 
-<p class="alert alert-success">{l s='Your order on %s is complete.' sprintf=$shop_name mod='oyst'}</p>
+use Oyst\Service\Configuration;
+use Configuration as PSConfiguration;
 
-<div class="box">
-    <p>{l s='Your order ID is:' mod='oyst'} <strong>{$reference_order|escape:'htmlall':'UTF-8'}</strong> . {l s='Your order ID has been sent via email.' mod='oyst'}</p>
-</div>
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
+require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
+function upgrade_module_1_30_0()
+{
+    PSConfiguration::deleteByName('OYST_API_ENV_ONECLICK');
+    PSConfiguration::updateValue(Configuration::ONE_CLICK_MODE, 'test');
+
+    $oyst = new Oyst();
+
+    $sql = "SELECT `id_hook` 
+        FROM `'._DB_PREFIX_.'hook`
+        WHERE `name` = 'displayOrderConfirmation'";
+    $id_hook = Db::getInstance()->getValue($sql);
+    $oyst->unregisterHook($id_hook);
+}
