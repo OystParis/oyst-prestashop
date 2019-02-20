@@ -128,7 +128,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         OystConfiguration::API_ENDPOINT_CUSTOM_FREEPAY => 'string',
         OystConfiguration::API_ENDPOINT_CUSTOM_ONECLICK => 'string',
         OystConfiguration::API_ENV_FREEPAY => 'string',
-        OystConfiguration::API_ENV_ONECLICK => 'string',
+        OystConfiguration::ONE_CLICK_MODE => 'string',
         OystConfiguration::ONE_CLICK_FEATURE_STATE => 'int',
         OystConfiguration::ONE_CLICK_URL_CUSTOM => 'string',
     );
@@ -479,6 +479,10 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         $assign['current_tab'] = Tools::getValue('current_tab') ?: '#tab-content-FreePay';
         $assign['my_ip'] = Tools::getRemoteAddr();
         $assign['days'] = $days;
+        $assign['modes'] = array(
+            'prod' => 'Production',
+            'test' => 'Test',
+        );
 
         $clientPhone = Configuration::get('FC_OYST_MERCHANT_PHONE');
         $isGuest     = Configuration::get('FC_OYST_GUEST');

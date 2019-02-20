@@ -201,33 +201,15 @@
                             <div class="margin-form">
                                 <input type="checkbox" class="form-control" name="OYST_ONE_CLICK_FEATURE_STATE" value="1"{if $oyst.OYST_ONE_CLICK_FEATURE_STATE} checked="checked"{/if} />
                             </div>
-                            <div class="env prod" style="display: none;">
-                                <label>{l s='1-Click API Production Key' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                                    <button type="submit" value="1" name="submitOystConfiguration">
-                                        {l s='Apply' mod='oyst'}
-                                    </button>
-                                    <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                                    {if $oyst.apikey_prod_test_error_oneclick}
-                                    <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                    {/if}
-                                </div>
+                            <label>{l s='Mode' mod='oyst'}</label>
+                            <div class="margin-form">
+                                <select id="OYST_ONE_CLICK_MODE" name="OYST_ONE_CLICK_MODE">
+                                    {foreach from=$oyst.modes key=key item=mode}
+                                        <option value="{$key|escape:'html':'UTF-8'}"{if $oyst.OYST_ONE_CLICK_MODE == $key} selected="selected"{/if}>{$mode|escape:'html':'UTF-8'}</option>
+                                    {/foreach}
+                                </select>
                             </div>
-                            <div class="env sandbox" style="display: none;">
-                                <label>{l s='1-Click API Sandbox Key' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="text" id="OYST_API_SANDBOX_KEY_ONECLICK" name="OYST_API_SANDBOX_KEY_ONECLICK" value="{$oyst.OYST_API_SANDBOX_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                                    <button type="submit" value="1" name="submitOystConfiguration">
-                                        {l s='Apply' mod='oyst'}
-                                    </button>
-                                    <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                                    {if $oyst.apikey_sandbox_test_error_oneclick}
-                                    <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                    {/if}
-                                </div>
-                            </div>
-                            <div class="env custom" style="display: none;">
+                            <div class="env custom">
                                 <label>{l s='1-Click API Custom Key' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="text" id="OYST_API_CUSTOM_KEY_ONECLICK" name="OYST_API_CUSTOM_KEY_ONECLICK" value="{$oyst.OYST_API_CUSTOM_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
@@ -239,14 +221,6 @@
                                     <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
                                     {/if}
                                 </div>
-                            </div>
-                            <label>{l s='Environment' mod='oyst'}</label>
-                            <div class="margin-form">
-                                <select name="OYST_API_ENV_ONECLICK">
-                                    <option value="prod" {if $oyst.OYST_API_ENV_ONECLICK == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
-                                    <option value="sandbox" {if $oyst.OYST_API_ENV_ONECLICK == 'sandbox'}selected="selected"{/if}>{l s='Sandbox' mod='oyst'}</option>
-                                    <option value="custom" {if $oyst.OYST_API_ENV_ONECLICK == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
-                                </select>
                             </div>
                             <label class="env custom">{l s='Endpoint API Custom' mod='oyst'}</label>
                             <div class="margin-form env custom">

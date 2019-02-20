@@ -29,11 +29,6 @@ $(document).ready(function() {
     }).on('change', function () {
         refreshEnvironmentDisplay($(this));
     });
-    $('select[name="OYST_API_ENV_ONECLICK"]').on('change', function () {
-        $('#shipment-collection').empty();
-        $('#add-shipment').attr('disabled', 'disabled');
-        $('#add-shipment-help').show();
-    });
     $('ul#oyst-config-menu a').click(function () {
         var clickedTab = $(this).attr('href');
         $('#current_tab_value').val(clickedTab);

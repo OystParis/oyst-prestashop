@@ -35,7 +35,7 @@ class Configuration
     const ONE_CLICK_MODAL_URL_SANDBOX = 'OYST_ONECLICKMODAL_URL_SANDBOX';
 
     const API_ENV_FREEPAY = 'OYST_API_ENV_FREEPAY';
-    const API_ENV_ONECLICK = 'OYST_API_ENV_ONECLICK';
+    const ONE_CLICK_MODE = 'OYST_ONE_CLICK_MODE';
 
     const API_ENV_PROD = 'prod';
     const API_ENV_SANDBOX = 'sandbox';

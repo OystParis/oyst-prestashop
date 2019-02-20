@@ -56,7 +56,7 @@ class TrackingService
 
     protected function getTrackerBaseUrl()
     {
-        if (PSConfiguration::get('OYST_API_ENV_ONECLICK') == 'prod') {
+        if (PSConfiguration::get('OYST_ONE_CLICK_MODE') == 'prod') {
             return 'https://tkr.11rupt.io/';
         } else {
             return 'https://staging-tkr.11rupt.eu/';

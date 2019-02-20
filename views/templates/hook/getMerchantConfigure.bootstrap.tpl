@@ -124,37 +124,17 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="form-group clearfix env prod" style="display: none;">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Production Key' mod='oyst'}</label>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-lg-3">{l s='Mode' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7">
-                                        <div class="input-group">
-                                            <input type="text" id="OYST_API_PROD_KEY_ONECLICK" name="OYST_API_PROD_KEY_ONECLICK" value="{$oyst.OYST_API_PROD_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
-                                            </span>
-                                        </div>
-                                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                                        {if $oyst.apikey_prod_test_error_oneclick}
-                                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                        {/if}
+                                        <select id="OYST_ONE_CLICK_MODE" name="OYST_ONE_CLICK_MODE">
+                                            {foreach from=$oyst.modes key=key item=mode}
+                                                <option value="{$key|escape:'html':'UTF-8'}"{if $oyst.OYST_ONE_CLICK_MODE == $key} selected="selected"{/if}>{$mode|escape:'html':'UTF-8'}</option>
+                                            {/foreach}
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="form-group clearfix env sandbox" style="display: none;">
-                                    <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Sandbox Key' mod='oyst'}</label>
-                                    <div class="col-md-7 col-lg-7">
-                                        <div class="input-group">
-                                            <input type="text" id="OYST_API_SANDBOX_KEY_ONECLICK" name="OYST_API_SANDBOX_KEY_ONECLICK" value="{$oyst.OYST_API_SANDBOX_KEY_ONECLICK|escape:'htmlall':'UTF-8'}"/>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-info module_form_apply_btn" type="submit" name="submitOystConfiguration">{l s='Apply' mod='oyst'}</button>
-                                            </span>
-                                        </div>
-                                        <p class="help-block">{l s='You don\'t have an API Key yet? Go to' mod='oyst'} <a href="https://backoffice.oyst.com/signup" target="_blank">backoffice.oyst.com</a></p>
-                                        {if $oyst.apikey_sandbox_test_error_oneclick}
-                                            <p class="error"><strong>{l s='Your key seems invalid!' mod='oyst'}</strong></p>
-                                        {/if}
-                                    </div>
-                                </div>
-                                <div class="form-group clearfix env custom" style="display: none;">
+                                <div class="form-group clearfix env custom">
                                     <label class="control-label col-md-3 col-lg-3">{l s='1-Click API Custom Key' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7">
                                         <div class="input-group">
@@ -169,23 +149,13 @@
                                         {/if}
                                     </div>
                                 </div>
-                                <div class="form-group clearfix">
-                                  <label class="control-label col-md-3 col-lg-3">{l s='Environment' mod='oyst'}</label>
-                                    <div class="col-md-7 col-lg-7">
-                                        <select name="OYST_API_ENV_ONECLICK">
-                                            <option value="prod" {if $oyst.OYST_API_ENV_ONECLICK == 'prod'}selected="selected"{/if}>{l s='Production' mod='oyst'}</option>
-                                            <option value="sandbox" {if $oyst.OYST_API_ENV_ONECLICK == 'sandbox'}selected="selected"{/if}>{l s='Sandbox' mod='oyst'}</option>
-                                            <option value="custom" {if $oyst.OYST_API_ENV_ONECLICK == 'custom'}selected="selected"{/if}>{l s='Custom' mod='oyst'}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group clearfix env custom" style="display: none;">
+                                <div class="form-group clearfix env custom">
                                     <label class="control-label col-md-3 col-lg-3">{l s='Endpoint API Custom' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7">
                                         <input type="text" id="OYST_API_CUSTOM_ENDPOINT_ONECLCK" name="OYST_API_CUSTOM_ENDPOINT_ONECLCK" value="{$oyst.OYST_API_CUSTOM_ENDPOINT_ONECLCK|escape:'htmlall':'UTF-8'}"/>
                                     </div>
                                 </div>
-                                <div class="form-group clearfix env custom" style="display: none;">
+                                <div class="form-group clearfix env custom">
                                     <label class="control-label col-md-3 col-lg-3">{l s='Endpoint CDN Custom' mod='oyst'}</label>
                                     <div class="col-md-7 col-lg-7">
                                         <input type="text" id="OYST_ONECLICK_URL_CUSTOM" name="OYST_ONECLICK_URL_CUSTOM" value="{$oyst.OYST_ONECLICK_URL_CUSTOM|escape:'htmlall':'UTF-8'}"/>

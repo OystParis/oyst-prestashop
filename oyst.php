@@ -578,7 +578,7 @@ class Oyst extends FroggyPaymentModule
      */
     public function getOneClickEnvironment()
     {
-        return Configuration::get(\Oyst\Service\Configuration::API_ENV_ONECLICK);
+        return \Oyst\Service\Configuration::API_ENV_CUSTOM;
     }
 
     /**
