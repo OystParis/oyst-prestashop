@@ -1,6 +1,6 @@
 {
   "tab": "payments_gateways",
-  "version": "1.30.0-RC2",
+  "version": "1.30.0-RC3",
   "need_instance": 0,
 
   "hooks": {
@@ -8,7 +8,6 @@
       "displayHeader",
       "displayPayment",
       "displayPaymentReturn",
-      "displayOrderConfirmation",
       "displayAdminOrder",
       "displayFooter",
       "displayBackOfficeHeader",

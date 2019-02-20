@@ -32,4 +32,12 @@ function upgrade_module_1_30_0()
 {
     PSConfiguration::deleteByName('OYST_API_ENV_ONECLICK');
     PSConfiguration::updateValue(Configuration::ONE_CLICK_MODE, 'test');
+
+    $oyst = new Oyst();
+
+    $sql = "SELECT `id_hook` 
+        FROM `'._DB_PREFIX_.'hook`
+        WHERE `name` = 'displayOrderConfirmation'";
+    $id_hook = Db::getInstance()->getValue($sql);
+    $oyst->unregisterHook($id_hook);
 }

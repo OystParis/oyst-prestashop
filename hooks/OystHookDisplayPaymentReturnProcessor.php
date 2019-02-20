@@ -30,30 +30,19 @@ class OystHookDisplayPaymentReturnProcessor extends FroggyHookProcessor
 {
     public function run()
     {
-        // Check if payment is enabled
-        if (Configuration::get('FC_OYST_PAYMENT_FEATURE') != 1) {
-            return '';
+        if (Tools::getIsset('id_order')) {
+            $order = new Order(Tools::getValue('id_order'));
+
+            $this->context->smarty->assign(array(
+                'id_order' => $order->id,
+                'reference_order' => $order->reference,
+                'id_order_formatted' => sprintf('#%06d', $order->id),
+            ));
         }
 
-        // Load data
-        $id_cart = (int)Tools::getValue('id_cart');
-        $id_order = Order::getOrderByCartId($id_cart);
-        $order = new Order($id_order);
-        $transaction_id = Db::getInstance()->getValue('
-        SELECT `payment_id` FROM `'._DB_PREFIX_.'oyst_payment_notification`
-        WHERE `id_cart` = '.(int)$id_cart);
+        unset($this->context->cookie->oyst_key);
+        unset($this->context->cookie->oyst_id_cart);
 
-        // Security check
-        if ($order->secure_key != Tools::getValue('key')) {
-            die('Secure key is invalid');
-        }
-
-        // Assign data
-        $assign = array(
-            'order_reference' => $order->reference,
-            'transaction_id' => $transaction_id,
-        );
-        $this->smarty->assign($this->module->name, $assign);
         return $this->module->fcdisplay(__FILE__, 'displayPaymentReturn.tpl');
     }
 }

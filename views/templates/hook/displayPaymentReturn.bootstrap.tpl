@@ -17,34 +17,11 @@
  * @copyright 2013-2016 Froggy Commerce / 23Prod / Oyst
  * @license GNU GENERAL PUBLIC LICENSE
  *}
-<div id="oyst-confirmation">
-    <div class="alert alert-success">
-        <div class="container-icon-success">
-            <i class="success-confirm-payment"></i>
-        </div>
-        <p>{l s='Your order %s is complete.' sprintf=$oyst.order_reference mod='oyst'}</p>
-        <p>{l s='Payment transaction ID: %s' sprintf=$oyst.transaction_id mod='oyst'}</p><br><br>
-        <p>{l s='If you have questions, comments or concerns, please contact our' mod='oyst'} <a style="color:white" href="{$link->getPageLink('contact', true)|escape:'htmlall':'UTF-8'}">{l s='expert customer support team' mod='oyst'}</a>.</p>
-    </div>
+
+<p class="alert alert-success">{l s='Your order on %s is complete.' sprintf=$shop_name mod='oyst'}</p>
+
+<div class="box">
+    <p>{l s='Your order ID is:' mod='oyst'} <strong>{$reference_order|escape:'htmlall':'UTF-8'}</strong> . {l s='Your order ID has been sent via email.' mod='oyst'}</p>
 </div>
 
-<style>
-    #oyst-confirmation .alert.alert-success:before {
-        content: "";
-        padding-right: 0px!important;
-    }
-    #oyst-confirmation .alert.alert-success > p {
-        font-size: 14px;
-    }
-    #oyst-confirmation .alert.alert-success .container-icon-success {
-        text-align: center;
-        height: 80px;
-        line-height: 80px;
-    }
-    .success-confirm-payment:before {
-        content: "";
-        font-family: "FontAwesome";
-        font-size: 80px;
-        text-align: center;
-    }
-</style>
+
