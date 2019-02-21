@@ -32,7 +32,7 @@ class Oyst extends FroggyPaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '1.30.0-RC3';
+        $this->version = '1.31.0-RC1';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
