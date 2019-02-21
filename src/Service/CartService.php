@@ -329,14 +329,18 @@ class CartService extends AbstractOystService
                     }
 
                     // Add items
-                    $price = $product->getPrice(
+                    $price = Product::getPriceStatic(
+                        $product->id,
                         $usetax,
                         $idCombination,
                         6,
                         null,
                         false,
                         true,
-                        $oystProducts[$reference]
+                        $oystProducts[$reference],
+                        false,
+                        $cart->id_customer,
+                        $cart->id
                     );
 
                     $without_reduc_price = $product->getPriceWithoutReduct(
