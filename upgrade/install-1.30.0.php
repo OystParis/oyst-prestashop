@@ -36,7 +36,7 @@ function upgrade_module_1_30_0()
     $oyst = new Oyst();
 
     $sql = "SELECT `id_hook` 
-        FROM `'._DB_PREFIX_.'hook`
+        FROM `"._DB_PREFIX_."hook`
         WHERE `name` = 'displayOrderConfirmation'";
     $id_hook = Db::getInstance()->getValue($sql);
     return $oyst->unregisterHook($id_hook);
