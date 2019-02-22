@@ -82,7 +82,7 @@ class TrackingService
             'extra_parameters[amount]='.$this->order->total_paid_tax_incl,
             'extra_parameters[paymentMethod]='.$this->formatPaymentMethod($this->order->module),
             'extra_parameters[currency]='.$currency->iso_code,
-            'extra_parameters[userEmail]='.$customer->email,
+            'extra_parameters[userEmail]='.urlencode($customer->email),
         );
 
         if (!empty($oyst_order_id)) {
