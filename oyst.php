@@ -377,6 +377,6 @@ class Oyst extends PaymentModule
                 $template_name = 'displayPaymentReturn.tpl';
             }
         }
-        return $this->display(__FILE__, $template_name, $this->getCacheId());
+        return $this->display(__FILE__, $template_name);
     }
 }
