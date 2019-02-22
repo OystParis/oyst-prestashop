@@ -173,7 +173,7 @@ class Oyst extends PaymentModule
         if (Configuration::hasKey('OYST_SCRIPT_TAG') && Configuration::hasKey('OYST_MERCHANT_ID')) {
 
             if (in_array($this->getPageName(), ['order-confirmation'])) {
-                $this->context->smarty->assign('tracking_parameters', json_encode(\Oyst\Services\TrackingService::getInstance()->getTrackingParameters()));
+                $this->context->smarty->assign('tracking_parameters', \Oyst\Services\TrackingService::getInstance()->getTrackingParameters(true));
             }
             $script_tag = str_replace('[MERCHANT_ID_PLACEHOLDER]', Configuration::get('OYST_MERCHANT_ID'), base64_decode(Configuration::get('OYST_SCRIPT_TAG')));
             $this->context->smarty->assign(array(
