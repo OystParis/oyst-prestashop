@@ -39,5 +39,5 @@ function upgrade_module_1_30_0()
         FROM `'._DB_PREFIX_.'hook`
         WHERE `name` = 'displayOrderConfirmation'";
     $id_hook = Db::getInstance()->getValue($sql);
-    $oyst->unregisterHook($id_hook);
+    return $oyst->unregisterHook($id_hook);
 }
