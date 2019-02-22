@@ -67,12 +67,6 @@ class TrackingService
 
     protected function getExtraParameters()
     {
-        //Get id order oyst
-        $oyst_order_id = Db::getInstance()->getValue('
-            SELECT payment_id
-            FROM '._DB_PREFIX_.'oyst_payment_notification
-            WHERE id_order = '.$this->order->id);
-
         $customer = new Customer($this->order->id_customer);
         $currency = new Currency($this->order->id_currency);
         $extra_parameters = array(
@@ -83,11 +77,10 @@ class TrackingService
             'extra_parameters[paymentMethod]='.$this->formatPaymentMethod($this->order->module),
             'extra_parameters[currency]='.$currency->iso_code,
             'extra_parameters[userEmail]='.urlencode($customer->email),
+            'extra_parameters[orderId]='.$this->order->id,
+            'extra_parameters[userId]='.$customer->id,
         );
 
-        if (!empty($oyst_order_id)) {
-            $extra_parameters[] = 'extra_parameters[orderId]='.$oyst_order_id;
-        }
         if (PSConfiguration::hasKey('FC_OYST_MERCHANT_ID')) {
             $extra_parameters[] = 'extra_parameters[merchantId]='.PSConfiguration::get('FC_OYST_MERCHANT_ID');
         }
