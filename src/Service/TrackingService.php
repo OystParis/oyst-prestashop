@@ -2,8 +2,10 @@
 
 namespace Oyst\Service;
 
+use Db;
 use Configuration as PSConfiguration;
 use Currency;
+use Customer;
 use Order;
 use Tools;
 use Validate;
@@ -65,6 +67,7 @@ class TrackingService
 
     protected function getExtraParameters()
     {
+        $customer = new Customer($this->order->id_customer);
         $currency = new Currency($this->order->id_currency);
         $extra_parameters = array(
             'event=Confirmation%20Displayed',
@@ -73,7 +76,11 @@ class TrackingService
             'extra_parameters[amount]='.$this->order->total_paid_tax_incl,
             'extra_parameters[paymentMethod]='.$this->formatPaymentMethod($this->order->module),
             'extra_parameters[currency]='.$currency->iso_code,
+            'extra_parameters[userEmail]='.urlencode($customer->email),
+            'extra_parameters[orderId]='.$this->order->id,
+            'extra_parameters[userId]='.$customer->id,
         );
+
         if (PSConfiguration::hasKey('FC_OYST_MERCHANT_ID')) {
             $extra_parameters[] = 'extra_parameters[merchantId]='.PSConfiguration::get('FC_OYST_MERCHANT_ID');
         }
