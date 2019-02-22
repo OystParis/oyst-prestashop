@@ -43,7 +43,7 @@ class TrackingService
                     'paymentMethod' => $this->formatPaymentMethod($order->module),
                     'currency' => $currency->iso_code,
                     'merchantId' => Configuration::get('OYST_MERCHANT_ID'),
-                    'email' => urlencode($customer->email),
+                    'userEmail' => urlencode($customer->email),
                     'orderId' => $order->id,
                     'userId' => $customer->id,
                 ];
