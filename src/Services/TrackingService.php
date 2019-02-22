@@ -31,7 +31,7 @@ class TrackingService
             if (Validate::isLoadedObject($order)) {
                 $currency = new Currency($order->id_currency);
                 $results['parameters'] = [
-                    'event' => 'Confirmation%20Displayed',
+                    'event' => 'Confirmation Displayed',
                     'type' => 'track',
                     'version' => 1,
                 ];
@@ -43,7 +43,7 @@ class TrackingService
                     'paymentMethod' => $this->formatPaymentMethod($order->module),
                     'currency' => $currency->iso_code,
                     'merchantId' => Configuration::get('OYST_MERCHANT_ID'),
-                    'userEmail' => urlencode($customer->email),
+                    'userEmail' => $customer->email,
                     'orderId' => $order->id,
                     'userId' => $customer->id,
                 ];
