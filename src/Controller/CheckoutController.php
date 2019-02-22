@@ -37,7 +37,7 @@ class CheckoutController extends AbstractOystController
             if (empty($response['errors'])) {
                 $this->respondAsJson($response);
             } else {
-                $this->respondError(400, 'Error while get cart : '.$response['errors']);
+                $this->respondError(400, 'Error while get cart : '.print_r($response['errors'], true));
             }
         } else {
             $this->respondError(400, 'id_cart is missing');
@@ -295,7 +295,7 @@ class CheckoutController extends AbstractOystController
                         $response = array_merge($response, $returned_errors);
                         $this->respondAsJson($response);
                     } else {
-                        $this->respondError(400, 'Error while getting cart informations : '.$response['errors']);
+                        $this->respondError(400, 'Error while getting cart informations : '.print_r($response['errors'], true));
                     }
                 } else {
                     $this->respondError(400, 'Bad id_cart');
