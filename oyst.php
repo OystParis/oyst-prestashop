@@ -330,7 +330,8 @@ class Oyst extends FroggyPaymentModule
         // Params 1-Click advanced
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY', 1);
         Configuration::updateValue('FC_OYST_MANAGE_QUANTITY_CART', 0);
-        Configuration::updateValue('FC_OYST_STICKY', 1);
+        Configuration::updateValue('FC_OYST_STICKY_PRODUCT', 1);
+        Configuration::updateValue('FC_OYST_STICKY_CART', 1);
         Configuration::updateValue('FC_OYST_ONLY_FOR_IP', "");
 
         // Params 1-Click for btn layer
