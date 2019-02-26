@@ -257,7 +257,7 @@
                                 {/if}
                             </div>
                             <div role="tabpanel" id="custom-btn" class="tab-pane">
-                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid}
+                                {if $oyst.OYST_ONE_CLICK_FEATURE_STATE && $oyst.currentOneClickApiKeyValid || true}
                                     <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Enabled button product' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
@@ -268,6 +268,22 @@
                                                 </label>
                                                 <input type="radio" name="FC_OYST_BTN_PRODUCT" id="FC_OYST_BTN_PRODUCT_OFF" value="0" {if $oyst.FC_OYST_BTN_PRODUCT == 0} checked="checked"{/if}>
                                                 <label for="FC_OYST_BTN_PRODUCT_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Button sticky' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_STICKY_PRODUCT" id="FC_OYST_STICKY_PRODUCT_ON" value="1" {if $oyst.FC_OYST_STICKY_PRODUCT == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_STICKY_PRODUCT_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_STICKY_PRODUCT" id="FC_OYST_STICKY_PRODUCT_OFF" value="0" {if $oyst.FC_OYST_STICKY_PRODUCT == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_STICKY_PRODUCT_OFF" class="radioCheck">
                                                     {l s='No' mod='oyst'}
                                                 </label>
                                                 <a class="slide-button btn"></a>
@@ -357,6 +373,22 @@
                                                 </label>
                                                 <input type="radio" name="FC_OYST_BTN_CART" id="FC_OYST_BTN_CART_OFF" value="0" {if $oyst.FC_OYST_BTN_CART == 0} checked="checked"{/if}>
                                                 <label for="FC_OYST_BTN_CART_OFF" class="radioCheck">
+                                                    {l s='No' mod='oyst'}
+                                                </label>
+                                                <a class="slide-button btn"></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-md-3 col-lg-3">{l s='Button sticky' mod='oyst'}</label>
+                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
+                                            <span class="switch prestashop-switch fixed-width-lg">
+                                                <input type="radio" name="FC_OYST_STICKY_CART" id="FC_OYST_STICKY_CART_ON" value="1" {if $oyst.FC_OYST_STICKY_CART == 1} checked="checked"{/if}>
+                                                <label for="FC_OYST_STICKY_CART_ON" class="radioCheck">
+                                                    {l s='Yes' mod='oyst'}
+                                                </label>
+                                                <input type="radio" name="FC_OYST_STICKY_CART" id="FC_OYST_STICKY_CART_OFF" value="0" {if $oyst.FC_OYST_STICKY_CART == 0} checked="checked"{/if}>
+                                                <label for="FC_OYST_STICKY_CART_OFF" class="radioCheck">
                                                     {l s='No' mod='oyst'}
                                                 </label>
                                                 <a class="slide-button btn"></a>
@@ -906,22 +938,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group clearfix">
-                                        <label class="control-label col-md-3 col-lg-3">{l s='Button sticky' mod='oyst'}</label>
-                                        <div class="col-md-7 col-lg-7" style="height: 31px;">
-                                            <span class="switch prestashop-switch fixed-width-lg">
-                                                <input type="radio" name="FC_OYST_STICKY" id="FC_OYST_STICKY_ON" value="1" {if $oyst.FC_OYST_STICKY == 1} checked="checked"{/if}>
-                                                <label for="FC_OYST_STICKY_ON" class="radioCheck">
-                                                    {l s='Yes' mod='oyst'}
-                                                </label>
-                                                <input type="radio" name="FC_OYST_STICKY" id="FC_OYST_STICKY_OFF" value="0" {if $oyst.FC_OYST_STICKY == 0} checked="checked"{/if}>
-                                                <label for="FC_OYST_STICKY_OFF" class="radioCheck">
-                                                    {l s='No' mod='oyst'}
-                                                </label>
-                                                <a class="slide-button btn"></a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group clearfix">
                                         <label class="control-label col-md-3 col-lg-3">{l s='Allow discount coupon' mod='oyst'}</label>
                                         <div class="col-md-7 col-lg-7" style="height: 31px;">
                                             <span class="switch prestashop-switch fixed-width-lg">
@@ -961,7 +977,8 @@
                                     <input type="hidden" name="FC_OYST_OC_REDIRECT_CONF" value="{$oyst.FC_OYST_OC_REDIRECT_CONF|intval}"/>
                                     <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
                                     <input type="hidden" name="FC_OYST_MANAGE_QUANTITY_CART" value="{$oyst.FC_OYST_MANAGE_QUANTITY_CART|intval}"/>
-                                    <input type="hidden" name="FC_OYST_STICKY" value="{$oyst.FC_OYST_STICKY|intval}"/>
+                                    <input type="hidden" name="FC_OYST_STICKY_PRODUCT" value="{$oyst.FC_OYST_STICKY_PRODUCT|intval}"/>
+                                    <input type="hidden" name="FC_OYST_STICKY_CART" value="{$oyst.FC_OYST_STICKY_CART|intval}"/>
                                     <div class="alert alert-warning" role="alert">
                                         <p>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</p>
                                     </div>

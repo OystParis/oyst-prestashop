@@ -292,6 +292,10 @@
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_BTN_PRODUCT" value="1"{if $oyst.FC_OYST_BTN_PRODUCT} checked="checked"{/if} />
                                 </div>
+                                <label>{l s='Button sticky' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_STICKY_PRODUCT" value="1"{if $oyst.FC_OYST_STICKY_PRODUCT} checked="checked"{/if} />
+                                </div>
                                 <label>{l s='Width' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="text" name="FC_OYST_WIDTH_BTN_PRODUCT" value="{$oyst.FC_OYST_WIDTH_BTN_PRODUCT|escape:'htmlall':'UTF-8'}"/>
@@ -357,6 +361,10 @@
                                 <label>{l s='Enable button cart' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_BTN_CART" value="1"{if $oyst.FC_OYST_BTN_CART} checked="checked"{/if} />
+                                </div>
+                                <label>{l s='Button sticky' mod='oyst'}</label>
+                                <div class="margin-form">
+                                    <input type="checkbox" class="form-control" name="FC_OYST_STICKY_CART" value="1"{if $oyst.FC_OYST_STICKY_CART} checked="checked"{/if} />
                                 </div>
                                 <label>{l s='Width' mod='oyst'}</label>
                                 <div class="margin-form">
@@ -952,10 +960,6 @@
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_MANAGE_QUANTITY_CART" value="1"{if $oyst.FC_OYST_MANAGE_QUANTITY_CART} checked="checked"{/if} />
                                 </div>
-                                <label>{l s='Button sticky' mod='oyst'}</label>
-                                <div class="margin-form">
-                                    <input type="checkbox" class="form-control" name="FC_OYST_STICKY" value="1"{if $oyst.FC_OYST_STICKY} checked="checked"{/if} />
-                                </div>
                                 <label>{l s='Allow discount coupon' mod='oyst'}</label>
                                 <div class="margin-form">
                                     <input type="checkbox" class="form-control" name="FC_OYST_ALLOW_COUPON" value="1"{if $oyst.FC_OYST_ALLOW_COUPON} checked="checked"{/if} />
@@ -981,7 +985,8 @@
                                 <input type="hidden" name="FC_OYST_OC_REDIRECT_CONF" value="{$oyst.FC_OYST_OC_REDIRECT_CONF|intval}"/>
                                 <input type="hidden" name="FC_OYST_MANAGE_QUANTITY" value="{$oyst.FC_OYST_MANAGE_QUANTITY|intval}"/>
                                 <input type="hidden" name="FC_OYST_MANAGE_QUANTITY_CART" value="{$oyst.FC_OYST_MANAGE_QUANTITY_CART|intval}"/>
-                                <input type="hidden" name="FC_OYST_STICKY" value="{$oyst.FC_OYST_STICKY|intval}"/>
+                                <input type="hidden" name="FC_OYST_STICKY_PRODUCT" value="{$oyst.FC_OYST_STICKY_PRODUCT|intval}"/>
+                                <input type="hidden" name="FC_OYST_STICKY_CART" value="{$oyst.FC_OYST_STICKY_CART|intval}"/>
                                 <div class="warn">
                                     <ul>
                                         <li>{l s='1-Click is disabled. Or 1-Click isn\'t configured.' mod='oyst'}</li>

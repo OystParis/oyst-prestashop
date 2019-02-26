@@ -365,7 +365,8 @@ class InstallManager
         PSConfiguration::deleteByName('CONF_OYST_VAR_FOREIGN');
         PSConfiguration::deleteByName('FC_OYST_CATALOG_FEATURE');
 
-        PSConfiguration::deleteByName('FC_OYST_STICKY');
+        PSConfiguration::deleteByName('FC_OYST_STICKY_PRODUCT');
+        PSConfiguration::deleteByName('FC_OYST_STICKY_CART');
         PSConfiguration::deleteByName('FC_OYST_ALLOW_COUPON');
     }
 }
