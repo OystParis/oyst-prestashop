@@ -886,9 +886,18 @@ class CartService extends AbstractOystService
         $cart->id_carrier = $id_carrier_selected;
         $cart->save();
 
-        $with_tax = Tax::getCarrierTaxRate($id_carrier_selected, $cart->id_address_delivery);
+        $country_invoice = null;
+        $address_invoice = new Address($cart->id_address_invoice);
+        if (Validate::isLoadedObject($address_invoice)) {
+            $country_invoice = new Country($address_invoice->id_country);
+        }
 
-        $cart_shipping_amount = $cart->getOrderTotal($with_tax, Cart::ONLY_SHIPPING, null, $id_carrier_selected);
+        if (is_null($id_carrier_selected)) {
+            $cart_shipping_amount = $cart->getTotalShippingCost(null, (bool)$usetax, $country_invoice);
+        } else {
+            $cart_shipping_amount = $cart->getPackageShippingCost((int)$id_carrier_selected, (bool)$usetax, $country_invoice, $cart->getProducts());
+        }
+
         $cart_discount_amount = $cart->getOrderTotal($usetax, Cart::ONLY_DISCOUNTS);
 
         $cart_amount = ($cart_products_amount + $cart_shipping_amount) - $cart_discount_amount;
