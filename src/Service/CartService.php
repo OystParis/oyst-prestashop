@@ -895,7 +895,12 @@ class CartService extends AbstractOystService
         if (is_null($id_carrier_selected)) {
             $cart_shipping_amount = $cart->getTotalShippingCost(null, (bool)$usetax, $country_invoice);
         } else {
-            $cart_shipping_amount = $cart->getPackageShippingCost((int)$id_carrier_selected, (bool)$usetax, $country_invoice, $cart->getProducts());
+            //Sometime, id_address_delivery is not set and this make a bug for shipping TVA calculation
+            $cart_products = $cart->getProducts(true, false, $country_invoice->id);
+            foreach ($cart_products as $key => $cart_product) {
+                $cart_products[$key]['id_address_delivery'] = $address_invoice->id;
+            }
+            $cart_shipping_amount = $cart->getPackageShippingCost((int)$id_carrier_selected, (bool)$usetax, $country_invoice, $cart_products);
         }
 
         $cart_discount_amount = $cart->getOrderTotal($usetax, Cart::ONLY_DISCOUNTS);
