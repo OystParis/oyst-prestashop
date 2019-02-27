@@ -340,7 +340,8 @@ class CartService extends AbstractOystService
                         $oystProducts[$reference],
                         false,
                         $cart->id_customer,
-                        $cart->id
+                        $cart->id,
+                        $cart->id_address_invoice
                     );
 
                     $without_reduc_price = $product->getPriceWithoutReduct(
