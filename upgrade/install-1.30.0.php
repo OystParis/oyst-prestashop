@@ -19,7 +19,6 @@
  * @license   GNU GENERAL PUBLIC LICENSE
  */
 
-use Oyst\Service\Configuration;
 use Configuration as PSConfiguration;
 
 if (!defined('_PS_VERSION_')) {
@@ -31,7 +30,7 @@ require_once dirname(__FILE__) . '/../vendor/autoload.php';
 function upgrade_module_1_30_0()
 {
     PSConfiguration::deleteByName('OYST_API_ENV_ONECLICK');
-    PSConfiguration::updateValue(Configuration::ONE_CLICK_MODE, 'test');
+    PSConfiguration::updateValue('OYST_ONE_CLICK_MODE', 'test');
 
     $oyst = new Oyst();
 

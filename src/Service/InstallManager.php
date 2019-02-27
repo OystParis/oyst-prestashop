@@ -244,7 +244,7 @@ class InstallManager
         PSConfiguration::deleteByName(Configuration::API_KEY_SANDBOX_ONECLICK);
         PSConfiguration::deleteByName(Configuration::API_KEY_CUSTOM_ONECLICK);
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_URL_CUSTOM);
-        PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODE);
+        PSConfiguration::deleteByName('OYST_ONE_CLICK_MODE');
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_PROD);
         PSConfiguration::deleteByName(Configuration::ONE_CLICK_MODAL_URL_SANDBOX);
         // Conf custom 1-Click global

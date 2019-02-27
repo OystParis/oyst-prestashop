@@ -129,7 +129,7 @@ class OystHookGetConfigurationProcessor extends FroggyHookProcessor
         OystConfiguration::API_ENDPOINT_CUSTOM_FREEPAY => 'string',
         OystConfiguration::API_ENDPOINT_CUSTOM_ONECLICK => 'string',
         OystConfiguration::API_ENV_FREEPAY => 'string',
-        OystConfiguration::ONE_CLICK_MODE => 'string',
+        'OYST_ONE_CLICK_MODE' => 'string',
         OystConfiguration::ONE_CLICK_FEATURE_STATE => 'int',
         OystConfiguration::ONE_CLICK_URL_CUSTOM => 'string',
     );
