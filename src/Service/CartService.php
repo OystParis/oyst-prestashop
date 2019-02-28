@@ -423,10 +423,25 @@ class CartService extends AbstractOystService
         $cart_rules_in_cart = array();
 
         if (isset($discount_coupon)) {
+            $default_error = Tools::displayError('The voucher code is invalid.');
             if (CartRule::cartRuleExists($discount_coupon)) {
-                $this->context->cart->addCartRule((int)CartRule::getIdByCode($discount_coupon));
+                $id_coupon = (int)CartRule::getIdByCode($discount_coupon);
+                $cart_rule = new CartRule($id_coupon, $this->context->language->id);
+                if (Validate::isLoadedObject($cart_rule)) {
+                    if ($cart_rule->checkValidity($this->context, true, false)) {
+                        $this->context->cart->addCartRule($id_coupon);
+                    } else {
+                        $error = $cart_rule->checkValidity($this->context, true);
+                        if ($error === false) {
+                            $error = $default_error;
+                        }
+                        $oneClickOrderCartEstimate->setDiscountCouponError($error);
+                    }
+                } else {
+                    $oneClickOrderCartEstimate->setDiscountCouponError($default_error);
+                }
             } else {
-                $oneClickOrderCartEstimate->setDiscountCouponError(Tools::displayError('The voucher code is invalid.'));
+                $oneClickOrderCartEstimate->setDiscountCouponError($default_error);
             }
         }
 
