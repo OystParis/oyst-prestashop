@@ -310,7 +310,7 @@ class CheckoutController extends AbstractOystController
                     if (!empty($cart->id_address_delivery)) {
                         $fake_address = $address_service->getFakeAddress();
                         if (!empty($fake_address) && $fake_address->id == $cart->id_address_delivery) {
-                            $cart->id_address_delivery = 0;
+                            $cart->id_address_delivery = $cart->id_address_invoice = 0;
 
                             try {
                                 $cart->save();
