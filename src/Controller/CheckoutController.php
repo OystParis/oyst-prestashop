@@ -261,7 +261,7 @@ class CheckoutController extends AbstractOystController
                             $current_delivery_address_obj->delete();
                         }
                     }
-                    $cart->id_address_delivery = $id_address_delivery;
+                    $cart->id_address_delivery = $cart->id_address_invoice = $id_address_delivery;
 
                     //Carrier
                     if (!empty($data['shipping']['method_applied']['reference'])) {
