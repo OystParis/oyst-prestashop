@@ -21,6 +21,7 @@ use Oyst\Services\CartService;
 use Oyst\Services\ObjectService;
 use Oyst\Services\CustomerService;
 use Oyst\Controller\VersionCompliance\Helper;
+use Oyst\Services\VersionCompliance\Helper as ServicesHelper;
 
 class CheckoutController extends AbstractOystController
 {
@@ -76,7 +77,9 @@ class CheckoutController extends AbstractOystController
                         }
                     }
                     //Products
-					$cart_products = $cart->getProducts(false, false, null, false);
+                    $helper = new ServicesHelper();
+                    $cart_products = $helper->getCartProductsWithSeparatedGifts($cart);
+
                     if (!empty($data['items'])) {
                         $oyst_product_list = [];
                         foreach ($data['items'] as $product) {
@@ -105,6 +108,11 @@ class CheckoutController extends AbstractOystController
 
                         //Get products in prestashop cart but not in oyst cart (remove from modal)
                         foreach ($cart_products as $cart_product) {
+                            //Exception on free items, don't remove them
+                            if ($cart_product['is_gift']) {
+                                continue;
+                            }
+
                             $ids = $cart_product['id_product'].'-'.$cart_product['id_product_attribute'];
                             if (!in_array($ids, $oyst_product_list)) {
                                 $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
