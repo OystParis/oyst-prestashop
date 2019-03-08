@@ -263,8 +263,6 @@ class CheckoutController extends AbstractOystController
                     }
                     $cart->id_address_delivery = $cart->id_address_invoice = $id_address_delivery;
 
-                    $cart->autosetProductAddress();
-
                     //Carrier
                     if (!empty($data['shipping']['method_applied']['reference'])) {
                         $carrier = Carrier::getCarrierByReference($data['shipping']['method_applied']['reference']);
