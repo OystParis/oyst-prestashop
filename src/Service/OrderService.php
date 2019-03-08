@@ -596,7 +596,6 @@ class OrderService extends AbstractOystService
 
         $oystOrderInfo = $this->getOrderInfo($orderId);
         if ($oystOrderInfo) {
-            file_put_contents(__DIR__.'/../../debug.log', date('Y-m-d H:i:s')." - p10 oyst order info : ".print_r($oystOrderInfo, true)."\r\n", FILE_APPEND);
             $products = array();
             foreach ($oystOrderInfo['order']['items'] as $productInfo) {
                 $reference = explode(';', $productInfo['product_reference']);
