@@ -165,8 +165,6 @@ class OrderController extends AbstractOystController
                             }
                         }
 
-                        $cart->id_address_delivery = $id_address_delivery;
-
                         if (empty($params['data']['billing']['address'])) {
                             $this->respondError(400, 'Billing address not in data');
                         }
@@ -190,8 +188,10 @@ class OrderController extends AbstractOystController
                                 $this->respondError(400, 'Error on invoice address creation : '.print_r($result['errors']));
                             }
                         }
+
                         $cart->id_address_delivery = $id_address_delivery;
                         $cart->id_address_invoice = $id_address_invoice;
+
                         try {
                             $cart->save();
                         } catch (Exception $e) {
