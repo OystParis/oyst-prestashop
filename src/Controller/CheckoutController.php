@@ -268,8 +268,9 @@ class CheckoutController extends AbstractOystController
                         $carrier = Carrier::getCarrierByReference($data['shipping']['method_applied']['reference']);
                         if (Validate::isLoadedObject($carrier)) {
                             $cart->id_carrier = $carrier->id;
-                            $cart->setDeliveryOption(array($cart->id_address_delivery => $carrier->id.','));
-                            // $cart->delivery_option = json_encode(array($cart->id_address_delivery => $cart->id_carrier.','));
+                            $delivery_option = $cart->getDeliveryOption();
+                            $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
+                            $cart->setDeliveryOption($delivery_option);
                         } else {
                             $errors[] = 'Carrier '.$data['shipping']['method_applied']['reference'].' not founded';
                         }
@@ -296,6 +297,8 @@ class CheckoutController extends AbstractOystController
                     } catch (Exception $e) {
                         $errors['cart'] = $e->getMessage();
                     }
+
+                    $cart->setNoMultishipping();
 
                     CartRule::autoAddToCart();
                     CartRule::autoRemoveFromCart();
