@@ -3,10 +3,13 @@
 namespace Oyst\Controller;
 
 use Address;
+use Carrier;
 use Cart;
 use Configuration;
 use Context;
+use Db;
 use Exception;
+use Module;
 use Order;
 use OrderHistory;
 use OrderSlip;
@@ -213,6 +216,40 @@ class OrderController extends AbstractOystController
                                 if (Validate::isLoadedObject($order)) {
                                     $order->id_cart = 0;
                                     $order->update();
+
+                                    if (isset($params['data']['pickup_store']['address'])) {
+                                        // Insert data on table mr_selected for pickup mondial relay
+                                        $pickup_address = $params['data']['pickup_store']['address'];
+                                        $pickup_id = $params['data']['pickup_store']['id'];
+                                        $carrier = new Carrier($cart->id_carrier);
+
+                                        if ($carrier->external_module_name == 'mondialrelay' &&
+                                            Module::isEnabled('mondialrelay') &&
+                                            Module::isInstalled('mondialrelay')) {
+                                            $id_mr_method = (int)Db::getInstance()->getValue(
+                                                "SELECT m.id_mr_method
+                                                FROM `"._DB_PREFIX_."mr_method` m
+                                                LEFT JOIN `"._DB_PREFIX_."mr_method_shop` ms ON (ms.id_mr_method = m.id_mr_method)
+                                                WHERE m.`id_carrier` = ".$carrier->id." AND ms.`id_shop` = ".Context::getContext()->shop->id." AND is_deleted = 0"
+                                            );
+
+                                            $md_data = [];
+                                            $md_data[] = [
+                                                'id_customer' => $cart->id_customer,
+                                                'id_method' => $id_mr_method,
+                                                'id_cart' => $cart->id,
+                                                'id_order' => $order->id,
+                                                'MR_Selected_Num' => pSQL($pickup_id),
+                                                'MR_Selected_LgAdr1' => ($pickup_address['name'] != '') ? pSQL($pickup_address['name']) : 'NULL',
+                                                'MR_Selected_LgAdr3' => ($pickup_address['street'] != '') ? pSQL($pickup_address['street']) : 'NULL',
+                                                'MR_Selected_CP' => ($pickup_address['postal_code'] != '') ? (int)$pickup_address['postal_code'] : 'NULL',
+                                                'MR_Selected_Ville' => ($pickup_address['city'] != '') ? pSQL($pickup_address['city']) : 'NULL',
+                                                'MR_Selected_Pays' => ($pickup_address['country'] != '') ? pSQL($pickup_address['country']) : 'NULL',
+                                            ];
+
+                                            Db::getInstance()->insert('mr_selected', $md_data);
+                                        }
+                                    }
                                 }
                                 $this->respondAsJson(OrderService::getInstance()->getOrder($oyst->currentOrder));
                             } else {
