@@ -16,6 +16,7 @@ use Language;
 use Oyst\Classes\CheckoutBuilder;
 use Oyst\Classes\Notification;
 use Oyst\Services\VersionCompliance\Helper;
+use Oyst\Services\VersionCompliance\Helper as ServicesHelper;
 use Product;
 use Shop;
 use Tools;
@@ -233,7 +234,9 @@ class CartService
         $context->shop = new Shop($cart->id_shop);
 
         //Products
-        $cart_products = $cart->getProducts(false, false, null, false);
+        $helper = new ServicesHelper();
+        $cart_products = $helper->getCartProductsWithSeparatedGifts($cart);
+
         if (!empty($data['items'])) {
             $oyst_product_list = [];
             foreach ($data['items'] as $product) {
@@ -262,6 +265,11 @@ class CartService
 
             //Get products in prestashop cart but not in oyst cart (remove from modal)
             foreach ($cart_products as $cart_product) {
+                //Exception on free items, don't remove them
+                if ($cart_product['is_gift']) {
+                    continue;
+                }
+
                 $ids = $cart_product['id_product'].'-'.$cart_product['id_product_attribute'];
                 if (!in_array($ids, $oyst_product_list)) {
                     $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
@@ -425,8 +433,9 @@ class CartService
             $carrier = Carrier::getCarrierByReference($data['shipping']['method_applied']['reference']);
             if (Validate::isLoadedObject($carrier)) {
                 $cart->id_carrier = $carrier->id;
-                $cart->setDeliveryOption(array($cart->id_address_delivery => $carrier->id.','));
-                // $cart->delivery_option = json_encode(array($cart->id_address_delivery => $cart->id_carrier.','));
+                $delivery_option = $cart->getDeliveryOption();
+                $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
+                $cart->setDeliveryOption($delivery_option);
             } else {
                 $errors[] = 'Carrier '.$data['shipping']['method_applied']['reference'].' not founded';
             }
@@ -453,6 +462,8 @@ class CartService
         } catch (Exception $e) {
             $errors['cart'] = $e->getMessage();
         }
+
+        $cart->setNoMultishipping();
 
         CartRule::autoAddToCart();
         CartRule::autoRemoveFromCart();
