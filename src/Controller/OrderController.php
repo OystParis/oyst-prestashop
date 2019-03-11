@@ -16,6 +16,7 @@ use OrderSlip;
 use Oyst;
 use Oyst\Classes\Notification;
 use Oyst\Services\AddressService;
+use Oyst\Services\CartService;
 use Oyst\Services\ObjectService;
 use Oyst\Services\OrderService;
 use Oyst\Services\OystStatusService;
@@ -81,6 +82,9 @@ class OrderController extends AbstractOystController
                     if (Validate::isLoadedObject($cart)) {
                         $notification->start();
                         $oyst = new Oyst();
+
+                        //Update cart from oyst data to avoid malicious changes
+                        $cart = CartService::getInstance()->updateCart($cart, $params['data']);
 
                         $object_service = ObjectService::getInstance();
                         //Create user if not exists
