@@ -34,7 +34,7 @@ abstract class AbstractBuilder
                 'phone_mobile' => $phone_mobile,
                 'id_oyst' => \Oyst\Classes\OystCustomer::getIdOystFromIdCustomer($customer->id),
                 'gender' => $gender_name,
-                'newsletter' => $customer->newsletter,
+                'newsletter' => (bool)$customer->newsletter,
                 'birthday' => $customer->birthday,
                 'siret' => $customer->siret,
                 'ape' => $customer->ape,

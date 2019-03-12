@@ -419,6 +419,14 @@ class CartService
 
         if (!empty($id_customer)) {
             $cart->id_customer = $id_customer;
+
+            if (isset($data['user']['newsletter']) && $data['user']['newsletter']) {
+                $customer = new Customer($cart->id_customer);
+                if (Validate::isloadedObject($customer)) {
+                    $customer->newsletter = true;
+                    $customer->save();
+                }
+            }
         }
         if (!empty($id_address_delivery)) {
             //If new address != current address and current address has no customer => remove current address
