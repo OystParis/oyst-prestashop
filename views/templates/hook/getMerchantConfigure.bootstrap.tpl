@@ -56,6 +56,25 @@
         </div>
 
         <div class="row">
+            <div class="form-group clearfix">
+                <label class="control-label col-md-4 col-lg-4">{l s='Masquer les erreurs' mod='oyst'}</label>
+                <div class="col-md-8 col-lg-8" style="height: 31px;">
+                    <span class="switch prestashop-switch fixed-width-lg">
+                        <input type="radio" name="oyst_hide_errors" id="oyst_hide_errors_on" value="1" {if $oyst_hide_errors == 1} checked="checked"{/if}>
+                        <label for="oyst_hide_errors_on" class="radioCheck">
+                            {l s='Oui' mod='oyst'}
+                        </label>
+                        <input type="radio" name="oyst_hide_errors" id="oyst_hide_errors_off" value="0" {if $oyst_hide_errors == 0} checked="checked"{/if}>
+                        <label for="FC_OYST_BTN_CART_off" class="radioCheck">
+                            {l s='Non' mod='oyst'}
+                        </label>
+                        <a class="slide-button btn"></a>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="form-group clearfix" style="text-align: center;">
                 <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration" class="btn btn-info">
                     <strong>{l s='Save' mod='oyst'}</strong>

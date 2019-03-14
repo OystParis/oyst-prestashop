@@ -82,6 +82,8 @@ class InstallManager
         if (!Configuration::hasKey(OystAPIKey::CONFIG_KEY)) {
             $state &= OystAPIKey::generateAPIKey();
         }
+        $state &= Configuration::updateValue('OYST_HIDE_ERRORS', 1);
+
         return $state;
     }
 
