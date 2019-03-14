@@ -7,6 +7,7 @@ use Carrier;
 use Cart;
 use Configuration;
 use Context;
+use Customer;
 use Db;
 use Exception;
 use Module;
@@ -102,6 +103,14 @@ class OrderController extends AbstractOystController
 
                             if (!empty($result['errors'])) {
                                 $errors['customer'] = $result['errors'];
+                            }
+                        }
+
+                        if (isset($params['data']['user']['newsletter']) && $params['data']['user']['newsletter']) {
+                            $customer = new Customer($cart->id_customer);
+                            if (Validate::isloadedObject($customer)) {
+                                $customer->newsletter = true;
+                                $customer->save();
                             }
                         }
 
