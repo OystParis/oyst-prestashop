@@ -106,6 +106,7 @@ class Oyst extends PaymentModule
             'oyst_merchant_id' => Configuration::get('OYST_MERCHANT_ID'),
             'oyst_script_tag' => base64_decode(Configuration::get('OYST_SCRIPT_TAG')),
             'oyst_public_endpoints' => Configuration::get('OYST_PUBLIC_ENDPOINTS'),
+            'oyst_hide_errors' => Configuration::get('OYST_HIDE_ERRORS'),
         ]);
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
@@ -123,6 +124,7 @@ class Oyst extends PaymentModule
         $res = Configuration::updateValue('OYST_MERCHANT_ID', Tools::getValue('oyst_merchant_id'));
         $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode(Tools::getValue('oyst_script_tag')));
         $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', Tools::getValue('oyst_public_endpoints'));
+        $res &= Configuration::updateValue('OYST_HIDE_ERRORS', Tools::getValue('oyst_hide_errors'));
         return $res;
     }
 

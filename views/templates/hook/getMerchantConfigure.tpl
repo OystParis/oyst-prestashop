@@ -27,6 +27,11 @@
             <textarea id="oyst_public_endpoints" name="oyst_public_endpoints" rows="6">{$oyst_public_endpoints}</textarea>
         </div>
 
+        <label>{l s='Masquer les erreurs' mod='oyst'}</label>
+        <div class="margin-form">
+            <input type="checkbox" class="form-control" name="oyst_hide_errors" value="1"{if $oyst_hide_errors} checked="checked"{/if} />
+        </div>
+
         <div class="margin-form">
             <button type="submit" value="1" id="module_form_submit_btn" name="submitOystConfiguration">
                 {l s='Save' mod='oyst'}
