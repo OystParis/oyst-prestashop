@@ -13,7 +13,7 @@ class Oyst extends PaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '2.1.7';
+        $this->version = '2.1.8';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -362,15 +362,10 @@ class Oyst extends PaymentModule
         }
 
         if (version_compare(_PS_VERSION_, '1.7', '<')) {
-            // Load data
-            $transaction_id = Db::getInstance()->getValue('
-            SELECT `payment_id` FROM `'._DB_PREFIX_.'oyst_payment_notification`
-            WHERE `id_cart` = '.(int)$id_cart);
 
             // Assign data
             $assign = array(
                 'order_reference' => $order->reference,
-                'transaction_id' => $transaction_id,
             );
 
             $this->context->smarty->assign($this->name, $assign);
