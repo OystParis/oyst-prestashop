@@ -62,11 +62,16 @@ class CheckoutController extends AbstractOystController
                     }
 
                     //Update cart from oyst data to avoid malicious changes
-                    $cart = CartService::getInstance()->updateCart($cart, $params['data']);
+                    $update_result = CartService::getInstance()->updateCart($cart, $params['data']);
 
-//                    if (!empty($errors)) {
-//                        $this->respondError(400, 'Error while updating cart : '.print_r($errors, true));
-//                    }
+                    if (!empty($update_result['errors']['invalid_coupons'])) {
+                        $returned_errors['invalid_coupons'] = true;
+                        unset($update_result['errors']['invalid_coupons']);
+                    }
+
+                    if (!empty($update_result['errors'])) {
+                        $this->respondError(400, 'Error while updating cart : '.print_r($update_result['errors'], true));
+                    }
 
                     $response = CartService::getInstance()->getCart($cart->id);
 
