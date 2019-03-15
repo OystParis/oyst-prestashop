@@ -9,8 +9,10 @@ use Country;
 use CartRule;
 use Configuration;
 use Currency;
+use Context;
 use Exception;
 use Oyst\Controller\VersionCompliance\Helper;
+use Oyst\Services\AddressService;
 use Validate;
 use Oyst\Classes\Notification;
 use Oyst\Services\CartService;
@@ -74,6 +76,22 @@ class CheckoutController extends AbstractOystController
                     }
 
                     $response = CartService::getInstance()->getCart($cart->id);
+
+                    $context = Context::getContext();
+                    $cart = $context->cart;
+                    //Remove id_address_delivery if it's john doe
+                    if (!empty($cart->id_address_delivery)) {
+                        $fake_address = AddressService::getInstance()->getFakeAddress();
+                        if (!empty($fake_address) && $fake_address->id == $cart->id_address_delivery) {
+                            $cart->id_address_delivery = $cart->id_address_invoice = 0;
+
+                            try {
+                                $cart->save();
+                            } catch (Exception $e) {
+                                $errors['cart'] = $e->getMessage();
+                            }
+                        }
+                    }
 
                     if (empty($response['errors'])) {
                         $response = array_merge($response, $returned_errors);

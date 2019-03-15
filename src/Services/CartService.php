@@ -55,7 +55,7 @@ class CartService
         $context = Context::getContext();
 
         if (Validate::isLoadedObject($cart)) {
-            //Feed context because prestashop can't retrieve it from a server call
+            //Fill context because prestashop can't retrieve it from a server call
             $context->cart = $cart;
 
             try {
@@ -475,20 +475,6 @@ class CartService
 
         CartRule::autoAddToCart();
         CartRule::autoRemoveFromCart();
-
-        //Remove id_address_delivery if it's john doe
-        if (!empty($cart->id_address_delivery)) {
-            $fake_address = $address_service->getFakeAddress();
-            if (!empty($fake_address) && $fake_address->id == $cart->id_address_delivery) {
-                $cart->id_address_delivery = $cart->id_address_invoice = 0;
-
-                try {
-                    $cart->save();
-                } catch (Exception $e) {
-                    $errors['cart'] = $e->getMessage();
-                }
-            }
-        }
 
         return [
             'cart' => $cart,
