@@ -85,7 +85,8 @@ class OrderController extends AbstractOystController
                         $oyst = new Oyst();
 
                         //Update cart from oyst data to avoid malicious changes
-                        $cart = CartService::getInstance()->updateCart($cart, $params['data']);
+                        $update_result = CartService::getInstance()->updateCart($cart, $params['data']);
+                        $cart = $update_result['cart'];
 
                         $object_service = ObjectService::getInstance();
                         //Create user if not exists

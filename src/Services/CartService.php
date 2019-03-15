@@ -302,7 +302,7 @@ class CartService
                             } else {
                                 $error_msg = $error;
                             }
-                            $returned_errors['invalid_coupons'][] = array(
+                            $errors['invalid_coupons'][] = array(
                                 'code' => $data['discount_coupon'],
                                 'error' => $error_msg,
                             );
@@ -310,7 +310,7 @@ class CartService
                             $cart->addCartRule($cart_rule_obj->id);
                         }
                     } else {
-                        $returned_errors['invalid_coupons'][] = array(
+                        $errors['invalid_coupons'][] = array(
                             'code' => $data['discount_coupon'],
                             'error' => 'Code node found',
                         );
@@ -490,6 +490,9 @@ class CartService
             }
         }
 
-        return $cart;
+        return [
+            'cart' => $cart,
+            'errors' => $errors,
+        ];
     }
 }
