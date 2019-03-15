@@ -95,6 +95,9 @@ class CheckoutController extends AbstractOystController
 
                     if (empty($response['errors'])) {
                         $response = array_merge($response, $returned_errors);
+                        if (Configuration::hasKey('OYST_HIDE_ERRORS') && Configuration::get('OYST_HIDE_ERRORS')) {
+                            ob_clean();
+                        }
                         $this->respondAsJson($response);
                     } else {
                         $this->respondError(400, 'Error while getting cart informations : '.print_r($response['errors'], true));

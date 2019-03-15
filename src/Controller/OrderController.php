@@ -265,6 +265,9 @@ class OrderController extends AbstractOystController
                                         }
                                     }
                                 }
+                                if (Configuration::hasKey('OYST_HIDE_ERRORS') && Configuration::get('OYST_HIDE_ERRORS')) {
+                                    ob_clean();
+                                }
                                 $this->respondAsJson(OrderService::getInstance()->getOrder($oyst->currentOrder));
                             } else {
                                 $this->respondError(400, 'Order creation failed');

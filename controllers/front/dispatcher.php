@@ -17,6 +17,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
     {
         if (Configuration::hasKey('OYST_HIDE_ERRORS') && Configuration::get('OYST_HIDE_ERRORS')) {
             error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+            ob_start();
         }
 
         //All routes are prefixed by /oyst-oneclick
