@@ -65,7 +65,7 @@
                             {l s='Oui' mod='oyst'}
                         </label>
                         <input type="radio" name="oyst_hide_errors" id="oyst_hide_errors_off" value="0" {if $oyst_hide_errors == 0} checked="checked"{/if}>
-                        <label for="FC_OYST_BTN_CART_off" class="radioCheck">
+                        <label for="oyst_hide_errors_off" class="radioCheck">
                             {l s='Non' mod='oyst'}
                         </label>
                         <a class="slide-button btn"></a>
