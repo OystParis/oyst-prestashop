@@ -402,7 +402,12 @@ class CartService
                         }
                         $id_address_delivery = $result['object']->id;
                     } else {
-                        $result = $object_service->createObject('Address', $data['shipping']['address']);
+                        //Adresse not found, check if current adresse is not link to a customer, if true => update it
+                        if (!empty($current_delivery_address_obj) && $current_delivery_address_obj->id_customer == 0 && $current_delivery_address_obj->alias != AddressService::OYST_FAKE_ADDR_ALIAS) {
+                            $result = $object_service->updateObject('Address', $data['shipping']['address'], $current_delivery_address_obj->id);
+                        } else {
+                            $result = $object_service->createObject('Address', $data['shipping']['address']);
+                        }
                         if (empty($result['errors'])) {
                             if (!empty($id_customer)) {
                                 $result['object']->id_customer = $id_customer;
@@ -428,12 +433,7 @@ class CartService
                 }
             }
         }
-        if (!empty($id_address_delivery)) {
-            //If new address != current address and current address has no customer => remove current address
-            if ($id_address_delivery != $cart->id_address_delivery && !empty($current_delivery_address_obj) && $current_delivery_address_obj->id_customer == 0 && $current_delivery_address_obj->alias != AddressService::OYST_FAKE_ADDR_ALIAS) {
-                $current_delivery_address_obj->delete();
-            }
-        }
+
         $cart->id_address_delivery = $cart->id_address_invoice = $id_address_delivery;
 
         //Carrier
