@@ -96,6 +96,10 @@ class CheckoutController extends AbstractOystController
                     if (empty($response['errors'])) {
                         $response = array_merge($response, $returned_errors);
                         if (Configuration::hasKey('OYST_HIDE_ERRORS') && Configuration::get('OYST_HIDE_ERRORS')) {
+                            $buffer = ob_get_contents();
+                            if (!empty($buffer)) {
+                                $this->logger->warning('Something was print before json : '.$buffer);
+                            }
                             ob_clean();
                         }
                         $this->respondAsJson($response);
