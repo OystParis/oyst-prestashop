@@ -27,6 +27,15 @@
             <textarea id="oyst_public_endpoints" name="oyst_public_endpoints" rows="6">{$oyst_public_endpoints}</textarea>
         </div>
 
+        <label>{l s='Statut à la création des commandes' mod='oyst'}</label>
+        <div class="margin-form">
+            <select name="oyst_order_creation_status">
+                {foreach from=$order_states item=order_state}
+                    <option value="{$order_state.id_order_state}" {if $oyst_order_creation_status == $order_state.id_order_state}selected="selected"{/if}>{$order_state.name}</option>
+                {/foreach}
+            </select>
+        </div>
+
         <label>{l s='Masquer les erreurs' mod='oyst'}</label>
         <div class="margin-form">
             <input type="checkbox" class="form-control" name="oyst_hide_errors" value="1"{if $oyst_hide_errors} checked="checked"{/if} />

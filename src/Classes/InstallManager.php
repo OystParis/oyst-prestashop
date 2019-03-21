@@ -62,6 +62,8 @@ class InstallManager
 
         $state &= OystStatusService::getInstance()->createAllStatus();
 
+        $state &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Configuration::get('OYST_OS_PAYMENT_CAPTURED'));
+
         return $state;
     }
 

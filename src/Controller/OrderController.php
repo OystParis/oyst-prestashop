@@ -293,18 +293,18 @@ class OrderController extends AbstractOystController
     public function changeStatus($params)
     {
         if (!empty($params['url']['id']) && $params['data']['oystOrder']['status']['code']) {
-            $prestashop_status_name = OystStatusService::getInstance()->getPrestashopStatusFromOystStatus($params['data']['oystOrder']['status']['code']);
-            if (Configuration::hasKey($prestashop_status_name)) {
+            $prestashop_status_id = OystStatusService::getInstance()->getPrestashopStatusIdFromOystStatus($params['data']['oystOrder']['status']['code']);
+            if (!empty($prestashop_status_id)) {
                 $notification = Notification::getNotificationByOystId($params['url']['id']);
                 if (Validate::isLoadedObject($notification)) {
                     try {
                         $order = new Order($notification->order_id);
                         if (Validate::isLoadedObject($order)) {
-                            if ($order->getCurrentState() != Configuration::get($prestashop_status_name)) {
+                            if ($order->getCurrentState() != $prestashop_status_id) {
                                 // If status oyst_payment_captured => send order email to customer
                                 $history = new OrderHistory();
                                 $history->id_order = $notification->order_id;
-                                $history->changeIdOrderState(Configuration::get($prestashop_status_name), $order, true);
+                                $history->changeIdOrderState($prestashop_status_id, $order, true);
                                 $history->addWithemail();
                                 if ($params['data']['oystOrder']['status']['code'] == 'oyst_payment_captured') {
                                     $notification->sendOrderEmail();

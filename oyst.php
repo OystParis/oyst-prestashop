@@ -13,7 +13,7 @@ class Oyst extends PaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '2.1.13';
+        $this->version = '2.1.14';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -100,6 +100,8 @@ class Oyst extends PaymentModule
 
         $module_dir = _MODULE_DIR_.$this->name.'/';
 
+        $order_states = OrderState::getOrderStates($this->context->language->id);
+
         $this->context->smarty->assign([
             'module_dir' => $module_dir,
             'oyst_api_key' => $oyst_api_key,
@@ -107,6 +109,8 @@ class Oyst extends PaymentModule
             'oyst_script_tag' => base64_decode(Configuration::get('OYST_SCRIPT_TAG')),
             'oyst_public_endpoints' => Configuration::get('OYST_PUBLIC_ENDPOINTS'),
             'oyst_hide_errors' => Configuration::get('OYST_HIDE_ERRORS'),
+            'order_states' => $order_states,
+            'oyst_order_creation_status' => Configuration::get('OYST_ORDER_CREATION_STATUS'),
         ]);
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
@@ -125,6 +129,7 @@ class Oyst extends PaymentModule
         $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode(Tools::getValue('oyst_script_tag')));
         $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', Tools::getValue('oyst_public_endpoints'));
         $res &= Configuration::updateValue('OYST_HIDE_ERRORS', Tools::getValue('oyst_hide_errors'));
+        $res &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Tools::getValue('oyst_order_creation_status'));
         return $res;
     }
 
@@ -260,8 +265,8 @@ class Oyst extends PaymentModule
                         try {
                             $order_obj = new Order($order['internal_id']);
                             if (Validate::isLoadedObject($order_obj)) {
-                                $prestashop_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_payment_captured');
-                                if ($order_obj->getCurrentState() != Configuration::get($prestashop_status_name)) {
+                                $prestashop_status_id = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusIdFromOystStatus('oyst_payment_captured');
+                                if ($order_obj->getCurrentState() != $prestashop_status_id) {
                                     $notification = \Oyst\Classes\Notification::getNotificationByOystId($order['oyst_id']);
 
                                     //Set id_cart to order for cart avoid
@@ -270,7 +275,7 @@ class Oyst extends PaymentModule
                                     // If status oyst_payment_captured => send order email to customer
                                     $history = new OrderHistory();
                                     $history->id_order = $notification->order_id;
-                                    $history->changeIdOrderState(Configuration::get($prestashop_status_name), $order_obj, true);
+                                    $history->changeIdOrderState(Configuration::get($prestashop_status_id), $order_obj, true);
                                     $history->addWithemail();
                                     $notification->sendOrderEmail();
                                 }
@@ -342,8 +347,12 @@ class Oyst extends PaymentModule
             if ($amount != 0 || $shipping_cost_amount != 0) {
                 \Oyst\Services\OrderService::getInstance()->refund(Tools::getValue('id_order'), $amount + $shipping_cost_amount);
                 $order = new Order(Tools::getValue('id_order'));
-                $prestashop_partial_refud_status_name = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusFromOystStatus('oyst_partial_refund');
-                $order->setCurrentState(Configuration::get($prestashop_partial_refud_status_name));
+                $prestashop_partial_refund_status_id = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusIdFromOystStatus('oyst_partial_refund');
+                if (!empty($prestashop_partial_refund_status_id)) {
+                    $order->setCurrentState($prestashop_partial_refund_status_id);
+                } else {
+                    //TODO throw exception because status not found
+                }
             }
         }
     }
