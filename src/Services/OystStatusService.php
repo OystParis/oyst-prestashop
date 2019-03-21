@@ -156,12 +156,20 @@ class OystStatusService
         return $res;
     }
 
-    public function getPrestashopStatusFromOystStatus($oyst_status)
+    public function getPrestashopStatusIdFromOystStatus($oyst_status)
     {
-        if (isset($this->status[$oyst_status])) {
-            return $this->status[$oyst_status]['prestashop_name'];
+        if ($oyst_status == 'oyst_payment_captured') {
+            $status_name = 'OYST_ORDER_CREATION_STATUS';
+        } elseif (isset($this->status[$oyst_status])) {
+            $status_name = $this->status[$oyst_status]['prestashop_name'];
         } else {
-            return '';
+            $status_name = '';
+        }
+
+        if (!empty($status_name) && Configuration::hasKey($status_name)) {
+            return Configuration::get($status_name);
+        } else {
+            return 0;
         }
     }
 

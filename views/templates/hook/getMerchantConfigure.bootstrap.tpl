@@ -15,8 +15,8 @@
         <div class="row">
             <div class="form-group clearfix">
                 <label class="control-label col-md-4 col-lg-4" for="oyst_api_key">{l s='Access Token' mod='oyst'}</label>
-                <div class="col-md-8 col-lg-8">
-                    <div class="input-group" style="width:60%">
+                <div class="col-md-5 col-lg-5">
+                    <div class="input-group" style="width:100%">
                         <input type="text" id="oyst_api_key" name="oyst_api_key" value="{$oyst_api_key}" readonly/>
                     </div>
                 </div>
@@ -25,8 +25,8 @@
         <div class="row">
             <div class="form-group clearfix">
                 <label class="control-label col-md-4 col-lg-4" for="oyst_merchant_id">{l s='Merchant id' mod='oyst'}</label>
-                <div class="col-md-8 col-lg-8">
-                    <div class="input-group" style="width:60%">
+                <div class="col-md-5 col-lg-5">
+                    <div class="input-group" style="width:100%">
                         <input type="text" id="oyst_merchant_id" name="oyst_merchant_id" value="{$oyst_merchant_id}"/>
                     </div>
                 </div>
@@ -36,8 +36,8 @@
         <div class="row">
             <div class="form-group clearfix">
                 <label class="control-label col-md-4 col-lg-4" for="oyst_script_tag">{l s='Script tag' mod='oyst'}</label>
-                <div class="col-md-8 col-lg-8">
-                    <div class="input-group" style="width:60%">
+                <div class="col-md-5 col-lg-5">
+                    <div class="input-group" style="width:100%">
                         <textarea id="oyst_script_tag" name="oyst_script_tag" rows="6">{$oyst_script_tag}</textarea>
                     </div>
                 </div>
@@ -47,11 +47,22 @@
         <div class="row">
             <div class="form-group clearfix">
                 <label class="control-label col-md-4 col-lg-4" for="oyst_public_endpoints">{l s='Public endpoint' mod='oyst'}</label>
-                <div class="col-md-8 col-lg-8">
-                    <div class="input-group" style="width:60%">
+                <div class="col-md-5 col-lg-5">
+                    <div class="input-group" style="width:100%">
                         <textarea id="oyst_public_endpoints" name="oyst_public_endpoints" rows="6">{$oyst_public_endpoints}</textarea>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="form-group clearfix">
+            <label class="control-label col-md-4 col-lg-4">{l s='Statut à la création des commandes' mod='oyst'}</label>
+            <div class="col-md-5 col-lg-5">
+                <select name="oyst_order_creation_status">
+                    {foreach from=$order_states item=order_state}
+                        <option value="{$order_state.id_order_state}" {if $oyst_order_creation_status == $order_state.id_order_state}selected="selected"{/if}>{$order_state.name}</option>
+                    {/foreach}
+                </select>
             </div>
         </div>
 
