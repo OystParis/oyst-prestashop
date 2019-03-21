@@ -9,7 +9,7 @@ use Validate;
 
 class OystStatusService
 {
-    private $status = [
+    public $status = [
         'oyst_canceled' => [
             'prestashop_name' => 'PS_OS_CANCELED',
         ],
@@ -103,6 +103,24 @@ class OystStatusService
 				'send_email' => false,
 			]
 		],
+        'oyst_fraud_check' => [
+            'prestashop_name' => 'OYST_OS_FRAUD_CHECK',
+            'data' => [
+                'name' => [
+                    'fr' => 'En attente de vérification fraude par Oyst',
+                ],
+                'color' => '#FF8C00',
+                'unremovable' => true,
+                'deleted' => false,
+                'delivery' => false,
+                'invoice' => false,
+                'logable' => false,
+                'paid' => false,
+                'hidden' => false,
+                'shipped' => false,
+                'send_email' => false,
+            ]
+        ],
     ];
 
     private static $instance;
