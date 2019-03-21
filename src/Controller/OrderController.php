@@ -238,8 +238,7 @@ class OrderController extends AbstractOystController
                                         $carrier = new Carrier($cart->id_carrier);
 
                                         if ($carrier->external_module_name == 'mondialrelay' &&
-                                            Module::isEnabled('mondialrelay') &&
-                                            Module::isInstalled('mondialrelay')) {
+                                            Module::isEnabled('mondialrelay')) {
                                             $id_mr_method = (int)Db::getInstance()->getValue(
                                                 "SELECT m.id_mr_method
                                                 FROM `"._DB_PREFIX_."mr_method` m
@@ -262,6 +261,16 @@ class OrderController extends AbstractOystController
                                             ];
 
                                             Db::getInstance()->insert('mr_selected', $md_data);
+                                        }
+
+                                        if (Module::isEnabled('envoidunet')) {
+                                            $envoidunet = Module::getInstanceById(Module::getModuleIdByName('envoidunet'));
+                                            $edn_carrier = $envoidunet->getEdnCarrier($carrier->id_carrier);
+                                            if (!empty($edn_carrier['service']) && $edn_carrier['service'] == 'relay') {
+                                                Db::getInstance()->execute("INSERT INTO `"._DB_PREFIX_."edn_cart_relay` (id_cart, id_relay) 
+                                                    VALUES (".$cart->id.", '".pSql($pickup_id)."') 
+                                                    ON DUPLICATE KEY UPDATE id_relay='".pSql($pickup_id)."'");
+                                            }
                                         }
                                     }
                                 }
