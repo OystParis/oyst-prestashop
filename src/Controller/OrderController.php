@@ -265,7 +265,7 @@ class OrderController extends AbstractOystController
 
                                         if (Module::isEnabled('envoidunet')) {
                                             $envoidunet = Module::getInstanceById(Module::getModuleIdByName('envoidunet'));
-                                            $edn_carrier = $envoidunet->getEdnCarrier($carrier->id_carrier);
+                                            $edn_carrier = $envoidunet->getMapping()->getEdnCarrier($carrier->id);
                                             if (!empty($edn_carrier['service']) && $edn_carrier['service'] == 'relay') {
                                                 Db::getInstance()->execute("INSERT INTO `"._DB_PREFIX_."edn_cart_relay` (id_cart, id_relay) 
                                                     VALUES (".$cart->id.", '".pSql($pickup_id)."') 
