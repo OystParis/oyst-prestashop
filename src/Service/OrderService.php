@@ -470,6 +470,11 @@ class OrderService extends AbstractOystService
                 'payment_id = "'.pSQL($oystOrderInfo['id']).'" AND `status` = "start"'
             );
 
+            $mobile_phone = $deliveryAddress->phone_mobile;
+            if (empty($mobile_phone)) {
+                $mobile_phone = $deliveryAddress->phone;
+            }
+
             if (isset($oystOrderInfo['shipment']['pickup_store']['address'])) {
                 // Insert data on table mr_selected for pickup mondial relay
                 $pickupAddress = $oystOrderInfo['shipment']['pickup_store']['address'];
@@ -534,7 +539,7 @@ class OrderService extends AbstractOystService
                         'przipcode' => pSQL($deliveryAddress->postcode),
                         'prtown' => pSQL($deliveryAddress->city),
                         'cecountry' => pSQL(Country::getIsoById($deliveryAddress->id_country)),
-                        'cephonenumber' => pSQL(str_replace('+33', '0', $deliveryAddress->phone)),
+                        'cephonenumber' => pSQL(str_replace('+33', '0', $mobile_phone)),
                         'ceemail' => pSQL($customer->email),
                         'cecompanyname' => pSQL($pickup_name),
                     );
@@ -553,7 +558,7 @@ class OrderService extends AbstractOystService
                     );
                 }
 
-                if ($carrierInfo['type'] == 'colissimo' && $pickupId &&
+                if ($carrierInfo['type'] == 'chronopost' && $pickupId &&
                     Module::isEnabled('chronopost') &&
                     Module::isInstalled('chronopost')) {
                     $md_data = array();
@@ -562,6 +567,18 @@ class OrderService extends AbstractOystService
                         'id_pr' => pSQL($pickupId),
                     );
                     Db::getInstance()->insert('chrono_cart_relais', $md_data);
+                }
+
+                if ($carrierInfo['type'] == 'colissimo' && $pickupId &&
+                    Module::isEnabled('colissimo') &&
+                    Module::isInstalled('colissimo')) {
+                    $md_data = array();
+                    $md_data[] = array(
+                        'id_cart' => (int)$cart->id,
+                        'id_colissimo_pickup_point' => pSQL($pickupId),
+                        'mobile_phone' => $mobile_phone,
+                    );
+                    Db::getInstance()->insert('colissimo_cart_pickup_point', $md_data);
                 }
             }
         }
