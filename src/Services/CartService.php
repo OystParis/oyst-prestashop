@@ -156,19 +156,7 @@ class CartService
                 if (!empty($cart->id_carrier)) {
                     $selected_carrier_id = $cart->id_carrier;
                 } else {
-                    //Get default shipping from store preferences
-                    $delivery_option = $cart->getDeliveryOption();
-                    if (!empty($delivery_option[$cart->id_address_delivery])) {
-                        $tmp = explode(',', $delivery_option[$cart->id_address_delivery]);
-                        $selected_carrier_id = $tmp[0];
-                    } else {
-                        //Get first carrier if no one match with preferences
-                        if (!empty($carriers[0])) {
-                            $selected_carrier_id = $carriers[0];
-                        } else {
-                            $selected_carrier_id = 0;
-                        }
-                    }
+                    $selected_carrier_id = $this->getCartDefaultShipmentId($cart);
                 }
 
                 $selected_carrier_obj = new Carrier($selected_carrier_id, $this->id_lang);
@@ -436,18 +424,21 @@ class CartService
 
         $cart->id_address_delivery = $cart->id_address_invoice = $id_address_delivery;
 
-        //Carrier
+        //Get oyst shipment
         if (!empty($data['shipping']['method_applied']['reference'])) {
             $carrier = Carrier::getCarrierByReference($data['shipping']['method_applied']['reference']);
-            if (Validate::isLoadedObject($carrier)) {
-                $cart->id_carrier = $carrier->id;
-                $delivery_option = $cart->getDeliveryOption();
-                $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
-                $cart->setDeliveryOption($delivery_option);
-            } else {
-                $errors[] = 'Carrier '.$data['shipping']['method_applied']['reference'].' not founded';
-            }
-            //TODO Manage access point here (with module exception etc)
+        } else {
+            $carrier = new Carrier($this->getCartDefaultShipmentId($cart));
+        }
+
+        //Carrier
+        if (Validate::isLoadedObject($carrier)) {
+            $cart->id_carrier = $carrier->id;
+            $delivery_option = $cart->getDeliveryOption();
+            $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
+            $cart->setDeliveryOption($delivery_option);
+        } else {
+            $errors[] = 'Carrier '.$data['shipping']['method_applied']['reference'].' not founded';
         }
 
         //Messages
@@ -480,5 +471,22 @@ class CartService
             'cart' => $cart,
             'errors' => $errors,
         ];
+    }
+
+    public function getCartDefaultShipmentId($cart)
+    {
+        $delivery_option = $cart->getDeliveryOption();
+        if (!empty($delivery_option[$cart->id_address_delivery])) {
+            $tmp = explode(',', $delivery_option[$cart->id_address_delivery]);
+            $selected_carrier_id = $tmp[0];
+        } else {
+            //Get first carrier if no one match with preferences
+            if (!empty($carriers[0])) {
+                $selected_carrier_id = $carriers[0];
+            } else {
+                $selected_carrier_id = 0;
+            }
+        }
+        return $selected_carrier_id;
     }
 }
