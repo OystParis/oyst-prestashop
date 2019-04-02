@@ -410,18 +410,6 @@ class CartService
             }
         }
 
-        if (!empty($id_customer)) {
-            $cart->id_customer = $id_customer;
-
-            if (isset($data['user']['newsletter']) && $data['user']['newsletter']) {
-                $customer = new Customer($cart->id_customer);
-                if (Validate::isloadedObject($customer)) {
-                    $customer->newsletter = true;
-                    $customer->save();
-                }
-            }
-        }
-
         $cart->id_address_delivery = $cart->id_address_invoice = $id_address_delivery;
 
         //Get oyst shipment
