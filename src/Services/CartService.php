@@ -87,7 +87,6 @@ class CartService
                 $cart_products = $helper->getCartProductsWithSeparatedGifts($cart);
 
                 //Complete cart products and get carriers list
-                $carriers = array();
                 foreach ($cart_products as &$cart_product) {
                     $cart_product['image'] = $context->link->getImageLink($cart_product['link_rewrite'], $cart_product['id_image']);
 
@@ -202,92 +201,6 @@ class CartService
         $context->currency = new Currency($cart->id_currency);
         $context->shop = new Shop($cart->id_shop);
 
-        //Products
-        $helper = new ServicesHelper();
-        $cart_products = $helper->getCartProductsWithSeparatedGifts($cart);
-
-        if (!empty($data['items'])) {
-            $oyst_product_list = [];
-            foreach ($data['items'] as $product) {
-                $oyst_product_list[] = $product['internal_reference'];
-                $ids = explode('-', $product['internal_reference']);
-                $id_product = (isset($ids[0]) ? $ids[0] : 0);
-                $id_product_attribute = (isset($ids[1]) ? $ids[1] : 0);
-
-                //TODO Manage customization
-                if ($product['quantity'] <= 0) {
-                    $cart->deleteProduct($id_product, $id_product_attribute);
-                } else {
-                    $cart_product_quantity = 0;
-                    foreach ($cart_products as $cart_product) {
-                        if ($cart_product['id_product'] == $id_product && $cart_product['id_product_attribute'] == $id_product_attribute) {
-                            $cart_product_quantity = $cart_product['cart_quantity'];
-                        }
-                    }
-                    if ($product['quantity'] < $cart_product_quantity) {
-                        $cart->updateQty($cart_product_quantity - $product['quantity'], $id_product, $id_product_attribute, false, 'down');
-                    } elseif ($product['quantity'] > $cart_product_quantity) {
-                        $cart->updateQty($product['quantity'] - $cart_product_quantity, $id_product, $id_product_attribute, false, 'up');
-                    }
-                }
-            }
-
-            //Get products in prestashop cart but not in oyst cart (remove from modal)
-            foreach ($cart_products as $cart_product) {
-                //Exception on free items, don't remove them
-                if ($cart_product['is_gift']) {
-                    continue;
-                }
-
-                $ids = $cart_product['id_product'].'-'.$cart_product['id_product_attribute'];
-                if (!in_array($ids, $oyst_product_list)) {
-                    $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
-                }
-            }
-        } else {
-            //Remove all cart items
-            foreach ($cart_products as $cart_product) {
-                $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
-            }
-        }
-
-
-        if (!empty($data['coupons'])) {
-            $cart_rules = $cart->getCartRules();
-            $cart_rule_codes = array();
-            foreach ($cart_rules as $cart_rule) {
-                if (!empty($cart_rule['code'])) {
-                    $cart_rule_codes[] = $cart_rule['code'];
-                }
-            }
-
-            foreach ($data['coupons'] as $coupon) {
-                //Check if the coupon is not already in cart
-                if (!in_array($coupon['code'], $cart_rule_codes)) {
-                    if (($cart_rule_obj = new CartRule(CartRule::getIdByCode($coupon['code']))) && Validate::isLoadedObject($cart_rule_obj)) {
-                        if ($error = $cart_rule_obj->checkValidity($context, false, true)) {
-                            if (empty($error)) {
-                                $error_msg = 'Unknown error';
-                            } else {
-                                $error_msg = $error;
-                            }
-                            $errors['invalid_coupons'][] = array(
-                                'code' => $data['discount_coupon'],
-                                'error' => $error_msg,
-                            );
-                        } else {
-                            $cart->addCartRule($cart_rule_obj->id);
-                        }
-                    } else {
-                        $errors['invalid_coupons'][] = array(
-                            'code' => $data['discount_coupon'],
-                            'error' => 'Code node found',
-                        );
-                    }
-                }
-            }
-        }
-
         //Customer & address
         $id_customer = 0;
         $id_address_delivery = 0;
@@ -393,6 +306,96 @@ class CartService
 
         $cart->id_address_delivery = $cart->id_address_invoice = $id_address_delivery;
 
+
+        //Products
+        $helper = new ServicesHelper();
+        $cart_products = $helper->getCartProductsWithSeparatedGifts($cart);
+
+        if (!empty($data['items'])) {
+            $oyst_product_list = [];
+            foreach ($data['items'] as $product) {
+                $oyst_product_list[] = $product['internal_reference'];
+                $ids = explode('-', $product['internal_reference']);
+                $id_product = (isset($ids[0]) ? $ids[0] : 0);
+                $id_product_attribute = (isset($ids[1]) ? $ids[1] : 0);
+
+                //TODO Manage customization
+                if ($product['quantity'] <= 0) {
+                    $cart->deleteProduct($id_product, $id_product_attribute);
+                } else {
+                    $cart_product_quantity = 0;
+                    foreach ($cart_products as $cart_product) {
+                        if ($cart_product['id_product'] == $id_product && $cart_product['id_product_attribute'] == $id_product_attribute) {
+                            $cart_product_quantity = $cart_product['cart_quantity'];
+                        }
+                    }
+                    if ($product['quantity'] < $cart_product_quantity) {
+                        $cart->updateQty($cart_product_quantity - $product['quantity'], $id_product, $id_product_attribute, false, 'down');
+                    } elseif ($product['quantity'] > $cart_product_quantity) {
+                        $cart->updateQty($product['quantity'] - $cart_product_quantity, $id_product, $id_product_attribute, false, 'up');
+                    }
+                }
+            }
+
+            //Get products in prestashop cart but not in oyst cart (remove from modal)
+            foreach ($cart_products as $cart_product) {
+                //Exception on free items, don't remove them
+                if ($cart_product['is_gift']) {
+                    continue;
+                }
+
+                $ids = $cart_product['id_product'].'-'.$cart_product['id_product_attribute'];
+                if (!in_array($ids, $oyst_product_list)) {
+                    $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
+                }
+            }
+        } else {
+            //Remove all cart items
+            foreach ($cart_products as $cart_product) {
+                $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
+            }
+        }
+
+
+        if (!empty($data['coupons'])) {
+            $cart_rules = $cart->getCartRules();
+            $cart_rule_codes = array();
+            foreach ($cart_rules as $cart_rule) {
+                if (!empty($cart_rule['code'])) {
+                    $cart_rule_codes[] = $cart_rule['code'];
+                }
+            }
+
+            foreach ($data['coupons'] as $coupon) {
+                //Check if the coupon is not already in cart
+                if (!in_array($coupon['code'], $cart_rule_codes)) {
+                    if (($cart_rule_obj = new CartRule(CartRule::getIdByCode($coupon['code']))) && Validate::isLoadedObject($cart_rule_obj)) {
+                        if ($error = $cart_rule_obj->checkValidity($context, false, true)) {
+                            if (empty($error)) {
+                                $error_msg = 'Unknown error';
+                            } else {
+                                $error_msg = $error;
+                            }
+                            $errors['invalid_coupons'][] = array(
+                                'code' => $data['discount_coupon'],
+                                'error' => $error_msg,
+                            );
+                        } else {
+                            $cart->addCartRule($cart_rule_obj->id);
+                        }
+                    } else {
+                        $errors['invalid_coupons'][] = array(
+                            'code' => $data['discount_coupon'],
+                            'error' => 'Code node found',
+                        );
+                    }
+                }
+            }
+        }
+
+        CartRule::autoAddToCart();
+        CartRule::autoRemoveFromCart();
+
         //Get oyst shipment
         if (!empty($data['shipping']['method_applied']['reference'])) {
             //Get available shipment for this cart and check if applied shipment is available, if not, get default
@@ -448,9 +451,6 @@ class CartService
         }
 
         $cart->setNoMultishipping();
-
-        CartRule::autoAddToCart();
-        CartRule::autoRemoveFromCart();
 
         return [
             'cart' => $cart,
