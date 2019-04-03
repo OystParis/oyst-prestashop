@@ -225,6 +225,92 @@ class CartService
             $cart->id_customer = $id_customer;
         }
 
+        $current_delivery_address_obj = null;
+        if (!empty($cart->id_address_delivery)) {
+            $current_delivery_address_obj = new Address($cart->id_address_delivery);
+            if (!Validate::isLoadedObject($current_delivery_address_obj)) {
+                $current_delivery_address_obj = null;
+            } else {
+                $id_address_delivery = $current_delivery_address_obj->id;
+            }
+        }
+
+        //Create delivery address if not exists
+        if (!empty($data['shipping']['address'])) {
+            $address_service = AddressService::getInstance();
+            $object_service = ObjectService::getInstance();
+
+            //Search if it's fake address and fake address already exists
+            if ($is_fake_user) {
+                $fake_address = $address_service->getFakeAddress();
+            }
+
+            if (!empty($fake_address)) {
+                $id_address_delivery = $fake_address->id;
+            } else {
+                $data['shipping']['address'] = $address_service->formatAddressForPrestashop($data['shipping']['address']);
+
+                //If user is empty, so shipping address is a fake address
+                if ($is_fake_user) {
+                    $data['shipping']['address']['alias'] = AddressService::OYST_FAKE_ADDR_ALIAS;
+                }
+                //If address defined in data and exists in customer addresses
+                if (!empty($finded_customer['addresses'])) {
+                    //Search with address informations
+                    $id_address_delivery = $address_service->findExistentAddress($finded_customer['addresses'], $data['shipping']['address']);
+                } else {
+                    //Else, search if it's the cart address
+                    if (!empty($current_delivery_address_obj)) {
+                        //Transform object to array with json encode/decode and compare it to oyst delivery_address
+                        $current_delivery_address = json_decode(json_encode($current_delivery_address_obj), true);
+                        $current_delivery_address['id_address'] = $current_delivery_address['id'];
+                        $id_address_delivery = $address_service->findExistentAddress([$current_delivery_address], $data['shipping']['address']);
+                    }
+                }
+
+                //No address, create it or update Oyst address
+                if (empty($id_address_delivery)) {
+                    if (!empty($finded_customer['addresses'])) {
+                        //If customer was found, get Oyst address
+                        $oyst_address = null;
+                        foreach ($finded_customer['addresses'] as $address) {
+                            if ($address['alias'] == AddressService::OYST_CART_ADDR) {
+                                $oyst_address = $address;
+                                break;
+                            }
+                        }
+
+                        //If customer have oyst address, update it
+                        if (!empty($oyst_address)) {
+                            $result = $object_service->updateObject('Address', $data['shipping']['address'], $oyst_address['id_address']);
+                        } else {
+                            $result = $object_service->createObject('Address', $data['shipping']['address']);
+                        }
+                        $id_address_delivery = $result['object']->id;
+                    } else {
+                        //Adresse not found, check if current adresse is not link to a customer, if true => update it
+                        if (!empty($current_delivery_address_obj) && $current_delivery_address_obj->id_customer == 0 && $current_delivery_address_obj->alias != AddressService::OYST_FAKE_ADDR_ALIAS) {
+                            $result = $object_service->updateObject('Address', $data['shipping']['address'], $current_delivery_address_obj->id);
+                        } else {
+                            $result = $object_service->createObject('Address', $data['shipping']['address']);
+                        }
+                        if (empty($result['errors'])) {
+                            if (!empty($id_customer)) {
+                                $result['object']->id_customer = $id_customer;
+                                $result['object']->save();
+                            }
+                            $id_address_delivery = $result['id'];
+                        } else {
+                            $errors['address_delivery'] = $result['errors'];
+                        }
+                    }
+                }
+            }
+        }
+
+        $cart->id_address_delivery = $cart->id_address_invoice = $id_address_delivery;
+
+
         //Products
         $helper = new ServicesHelper();
         $cart_products = $helper->getCartProductsWithSeparatedGifts($cart);
@@ -311,90 +397,8 @@ class CartService
             }
         }
 
-        $current_delivery_address_obj = null;
-        if (!empty($cart->id_address_delivery)) {
-            $current_delivery_address_obj = new Address($cart->id_address_delivery);
-            if (!Validate::isLoadedObject($current_delivery_address_obj)) {
-                $current_delivery_address_obj = null;
-            } else {
-                $id_address_delivery = $current_delivery_address_obj->id;
-            }
-        }
-
-        //Create delivery address if not exists
-        if (!empty($data['shipping']['address'])) {
-            $address_service = AddressService::getInstance();
-            $object_service = ObjectService::getInstance();
-
-            //Search if it's fake address and fake address already exists
-            if ($is_fake_user) {
-                $fake_address = $address_service->getFakeAddress();
-            }
-
-            if (!empty($fake_address)) {
-                $id_address_delivery = $fake_address->id;
-            } else {
-                $data['shipping']['address'] = $address_service->formatAddressForPrestashop($data['shipping']['address']);
-
-                //If user is empty, so shipping address is a fake address
-                if ($is_fake_user) {
-                    $data['shipping']['address']['alias'] = AddressService::OYST_FAKE_ADDR_ALIAS;
-                }
-                //If address defined in data and exists in customer addresses
-                if (!empty($finded_customer['addresses'])) {
-                    //Search with address informations
-                    $id_address_delivery = $address_service->findExistentAddress($finded_customer['addresses'], $data['shipping']['address']);
-                } else {
-                    //Else, search if it's the cart address
-                    if (!empty($current_delivery_address_obj)) {
-                        //Transform object to array with json encode/decode and compare it to oyst delivery_address
-                        $current_delivery_address = json_decode(json_encode($current_delivery_address_obj), true);
-                        $current_delivery_address['id_address'] = $current_delivery_address['id'];
-                        $id_address_delivery = $address_service->findExistentAddress([$current_delivery_address], $data['shipping']['address']);
-                    }
-                }
-
-                //No address, create it or update Oyst address
-                if (empty($id_address_delivery)) {
-                    if (!empty($finded_customer['addresses'])) {
-                        //If customer was found, get Oyst address
-                        $oyst_address = null;
-                        foreach ($finded_customer['addresses'] as $address) {
-                            if ($address['alias'] == AddressService::OYST_CART_ADDR) {
-                                $oyst_address = $address;
-                                break;
-                            }
-                        }
-
-                        //If customer have oyst address, update it
-                        if (!empty($oyst_address)) {
-                            $result = $object_service->updateObject('Address', $data['shipping']['address'], $oyst_address['id_address']);
-                        } else {
-                            $result = $object_service->createObject('Address', $data['shipping']['address']);
-                        }
-                        $id_address_delivery = $result['object']->id;
-                    } else {
-                        //Adresse not found, check if current adresse is not link to a customer, if true => update it
-                        if (!empty($current_delivery_address_obj) && $current_delivery_address_obj->id_customer == 0 && $current_delivery_address_obj->alias != AddressService::OYST_FAKE_ADDR_ALIAS) {
-                            $result = $object_service->updateObject('Address', $data['shipping']['address'], $current_delivery_address_obj->id);
-                        } else {
-                            $result = $object_service->createObject('Address', $data['shipping']['address']);
-                        }
-                        if (empty($result['errors'])) {
-                            if (!empty($id_customer)) {
-                                $result['object']->id_customer = $id_customer;
-                                $result['object']->save();
-                            }
-                            $id_address_delivery = $result['id'];
-                        } else {
-                            $errors['address_delivery'] = $result['errors'];
-                        }
-                    }
-                }
-            }
-        }
-
-        $cart->id_address_delivery = $cart->id_address_invoice = $id_address_delivery;
+        CartRule::autoAddToCart();
+        CartRule::autoRemoveFromCart();
 
 
         //Products
