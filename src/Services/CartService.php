@@ -7,6 +7,7 @@ use Carrier;
 use Cart;
 use CartRule;
 use Context;
+use Country;
 use Currency;
 use Customer;
 use Db;
@@ -57,6 +58,10 @@ class CartService
         if (Validate::isLoadedObject($cart)) {
             //Fill context because prestashop can't retrieve it from a server call
             $context->cart = $cart;
+            $delivery_address = new Address($cart->id_address_delivery);
+            if (Validate::isLoadedObject($delivery_address)) {
+                $context->country = new Country($delivery_address->id_country);
+            }
 
             try {
                 $helper = new Helper();
