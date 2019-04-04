@@ -18,6 +18,7 @@ use Oyst;
 use Oyst\Classes\Notification;
 use Oyst\Services\AddressService;
 use Oyst\Services\CartService;
+use Oyst\Services\CustomerService;
 use Oyst\Services\ObjectService;
 use Oyst\Services\OrderService;
 use Oyst\Services\OystStatusService;
@@ -93,22 +94,33 @@ class OrderController extends AbstractOystController
                         if (empty($cart->id_customer)) {
                             if (empty($params['data']['user'])) {
                                 $this->respondError(400, 'User is empty');
+                            } else {
+                                //If customer not set in cart search if not already exists
+                                $finded_customer = CustomerService::getInstance()->searchCustomer($params['data']['user']);
+                                if (!empty($finded_customer['customer_obj'])) {
+                                    $customer = $finded_customer['customer_obj'];
+                                } else {
+                                    //If not existed, create it
+                                    $customer = $object_service->createObject('Customer', $params['data']['user'])['object'];
+
+                                    if (!empty($result['errors'])) {
+                                        $errors['customer'] = $result['errors'];
+                                    }
+                                }
                             }
-                            $result = $object_service->createObject('Customer', $params['data']['user']);
-                            $cart->id_customer = $result['id'];
-                            $cart->secure_key = $result['object']->secure_key;
+
+                            $cart->id_customer = $customer->id;
+                            $cart->secure_key = $customer->secure_key;
 
                             if (!empty($params['data']['user']['id_oyst']) && !empty($cart->id_customer)) {
                                 Oyst\Classes\OystCustomer::createOystCustomerLink($cart->id_customer, $params['data']['user']['id_oyst']);
                             }
-
-                            if (!empty($result['errors'])) {
-                                $errors['customer'] = $result['errors'];
-                            }
                         }
 
                         if (isset($params['data']['user']['newsletter']) && $params['data']['user']['newsletter']) {
-                            $customer = new Customer($cart->id_customer);
+                            if (empty($customer)) {
+                                $customer = new Customer($cart->id_customer);
+                            }
                             if (Validate::isloadedObject($customer)) {
                                 $customer->newsletter = true;
                                 $customer->save();
