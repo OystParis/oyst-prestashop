@@ -22,6 +22,10 @@
 namespace Oyst\Service;
 
 use Address;
+use ColissimoCartPickupPoint;
+use ColissimoOrder;
+use ColissimoService;
+use ColissimoTools;
 use Order;
 use OrderHistory;
 use Oyst\Repository\AddressRepository;
@@ -36,7 +40,6 @@ use Exception;
 use Oyst\Repository\OrderRepository;
 use Oyst\Service\Http\CurrentRequest;
 use Product;
-use ToolsCore;
 use Validate;
 use Db;
 use Tools;
@@ -479,6 +482,9 @@ class OrderService extends AbstractOystService
                 // Insert data on table mr_selected for pickup mondial relay
                 $pickupAddress = $oystOrderInfo['shipment']['pickup_store']['address'];
                 $pickupId = $oystOrderInfo['shipment']['pickup_store']['id'];
+                $product_code = isset($oystOrderInfo['shipment']['pickup_store']['codeType']) ? pSQL($oystOrderInfo['shipment']['pickup_store']['codeType']) : '';
+                $network = isset($oystOrderInfo['shipment']['pickup_store']['network']) ? pSQL($oystOrderInfo['shipment']['pickup_store']['network']) : '';
+                $iso_country_code = isset($oystOrderInfo['shipment']['pickup_store']['country']) ? pSQL($oystOrderInfo['shipment']['pickup_store']['country']) : 'FR';
                 $carrierInfo = $oystOrderInfo['shipment']['carrier'];
 
                 if ($carrierInfo['type'] == 'mondial_relay' &&
@@ -572,13 +578,43 @@ class OrderService extends AbstractOystService
                 if ($carrierInfo['type'] == 'colissimo' && $pickupId &&
                     Module::isEnabled('colissimo') &&
                     Module::isInstalled('colissimo')) {
-                    $md_data = array();
-                    $md_data[] = array(
-                        'id_cart' => (int)$cart->id,
-                        'id_colissimo_pickup_point' => pSQL($pickupId),
-                        'mobile_phone' => $mobile_phone,
-                    );
-                    Db::getInstance()->insert('colissimo_cart_pickup_point', $md_data);
+
+                    //Load pickup point if exists
+                    $pickup_point = \ColissimoPickupPoint::getPickupPointByIdColissimo($pickupId);
+                    if (!Validate::isLoadedObject($pickup_point)) {
+                        $id_country = Country::getByIso($iso_country_code);
+                        //If not, create it
+                        $pickup_point = new \ColissimoPickupPoint();
+                        $pickup_point->colissimo_id = pSQL($pickupId);
+                        $pickup_point->company_name = pSQL($pickupAddress['name']);
+                        $pickup_point->address1 = pSQL($pickupAddress['street']);
+                        $pickup_point->address2 = '';
+                        $pickup_point->address3 = '';
+                        $pickup_point->city = pSQL($pickupAddress['city']);
+                        $pickup_point->zipcode = pSQL($pickupAddress['postal_code']);
+                        $pickup_point->country = Country::getNameById(PSConfiguration::get('PS_LANG_DEFAULT'), $id_country);
+                        $pickup_point->iso_country = $iso_country_code;
+                        $pickup_point->product_code = $product_code;
+                        $pickup_point->network = $network;
+
+                        try {
+                            $pickup_point->save();
+                        } catch (Exception $e) {}
+                    }
+
+                    ColissimoCartPickupPoint::updateCartPickupPoint($cart->id, $pickup_point->id, $mobile_phone);
+
+                    $destination_type = ColissimoTools::getDestinationTypeByIdCountry($id_country);
+                    $id_colissimo_service = ColissimoService::getServiceIdByIdCarrierDestinationType($id_reference, $destination_type);
+                    $id_colissimo_order = ColissimoOrder::getIdByOrderId((int) $order->id);
+                    $colissimo_order = new ColissimoOrder((int) $id_colissimo_order);
+                    $colissimo_order->id_order = $order->id;
+                    $colissimo_order->id_colissimo_service = $id_colissimo_service;
+                    $colissimo_order->id_colissimo_pickup_point = $pickup_point->id;
+                    $colissimo_order->migration = 0;
+                    try {
+                        $colissimo_order->save();
+                    } catch (Exception $e) {}
                 }
             }
         }
