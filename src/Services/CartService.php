@@ -221,6 +221,96 @@ class CartService
             }
         }
 
+        if (!empty($id_customer)) {
+            $cart->id_customer = $id_customer;
+        }
+
+        //Products
+        $helper = new ServicesHelper();
+        $cart_products = $helper->getCartProductsWithSeparatedGifts($cart);
+
+        if (!empty($data['items'])) {
+            $oyst_product_list = [];
+            foreach ($data['items'] as $product) {
+                $oyst_product_list[] = $product['internal_reference'];
+                $ids = explode('-', $product['internal_reference']);
+                $id_product = (isset($ids[0]) ? $ids[0] : 0);
+                $id_product_attribute = (isset($ids[1]) ? $ids[1] : 0);
+
+                //TODO Manage customization
+                if ($product['quantity'] <= 0) {
+                    $cart->deleteProduct($id_product, $id_product_attribute);
+                } else {
+                    $cart_product_quantity = 0;
+                    foreach ($cart_products as $cart_product) {
+                        if ($cart_product['id_product'] == $id_product && $cart_product['id_product_attribute'] == $id_product_attribute) {
+                            $cart_product_quantity = $cart_product['cart_quantity'];
+                        }
+                    }
+                    if ($product['quantity'] < $cart_product_quantity) {
+                        $cart->updateQty($cart_product_quantity - $product['quantity'], $id_product, $id_product_attribute, false, 'down');
+                    } elseif ($product['quantity'] > $cart_product_quantity) {
+                        $cart->updateQty($product['quantity'] - $cart_product_quantity, $id_product, $id_product_attribute, false, 'up');
+                    }
+                }
+            }
+
+            //Get products in prestashop cart but not in oyst cart (remove from modal)
+            foreach ($cart_products as $cart_product) {
+                //Exception on free items, don't remove them
+                if ($cart_product['is_gift']) {
+                    continue;
+                }
+
+                $ids = $cart_product['id_product'].'-'.$cart_product['id_product_attribute'];
+                if (!in_array($ids, $oyst_product_list)) {
+                    $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
+                }
+            }
+        } else {
+            //Remove all cart items
+            foreach ($cart_products as $cart_product) {
+                $cart->deleteProduct($cart_product['id_product'], $cart_product['id_product_attribute']);
+            }
+        }
+
+
+        if (!empty($data['coupons'])) {
+            $cart_rules = $cart->getCartRules();
+            $cart_rule_codes = array();
+            foreach ($cart_rules as $cart_rule) {
+                if (!empty($cart_rule['code'])) {
+                    $cart_rule_codes[] = $cart_rule['code'];
+                }
+            }
+
+            foreach ($data['coupons'] as $coupon) {
+                //Check if the coupon is not already in cart
+                if (!in_array($coupon['code'], $cart_rule_codes)) {
+                    if (($cart_rule_obj = new CartRule(CartRule::getIdByCode($coupon['code']))) && Validate::isLoadedObject($cart_rule_obj)) {
+                        if ($error = $cart_rule_obj->checkValidity($context, false, true)) {
+                            if (empty($error)) {
+                                $error_msg = 'Unknown error';
+                            } else {
+                                $error_msg = $error;
+                            }
+                            $errors['invalid_coupons'][] = array(
+                                'code' => $data['discount_coupon'],
+                                'error' => $error_msg,
+                            );
+                        } else {
+                            $cart->addCartRule($cart_rule_obj->id);
+                        }
+                    } else {
+                        $errors['invalid_coupons'][] = array(
+                            'code' => $data['discount_coupon'],
+                            'error' => 'Code node found',
+                        );
+                    }
+                }
+            }
+        }
+
         $current_delivery_address_obj = null;
         if (!empty($cart->id_address_delivery)) {
             $current_delivery_address_obj = new Address($cart->id_address_delivery);
