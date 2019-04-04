@@ -1,6 +1,6 @@
 {
   "tab": "payments_gateways",
-  "version": "1.33.4",
+  "version": "1.33.6",
   "need_instance": 0,
 
   "hooks": {
