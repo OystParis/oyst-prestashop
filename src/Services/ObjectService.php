@@ -78,13 +78,11 @@ class ObjectService {
 
             try  {
                 $object->add();
-                $id = $object->id;
             } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
         return array(
-            'id' => $id,
             'object' => $object,
             'errors' => $errors,
         );

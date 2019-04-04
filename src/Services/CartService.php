@@ -299,7 +299,7 @@ class CartService
                                 $result['object']->id_customer = $id_customer;
                                 $result['object']->save();
                             }
-                            $id_address_delivery = $result['id'];
+                            $id_address_delivery = $result['object']->id;
                         } else {
                             $errors['address_delivery'] = $result['errors'];
                         }
@@ -520,7 +520,7 @@ class CartService
             $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
             $cart->setDeliveryOption($delivery_option);
         } else {
-            $errors[] = 'Carrier '.$data['shipping']['method_applied']['reference'].' not founded';
+            $errors[] = 'Carrier '.$data['shipping']['method_applied']['reference'].' not found';
         }
 
         //Messages

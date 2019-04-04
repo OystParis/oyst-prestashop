@@ -161,7 +161,7 @@ class OrderController extends AbstractOystController
                                     }
                                     $delivery_address = json_decode(json_encode($result['object']), true);
                                     $delivery_address['id_address'] = $delivery_address['id'];
-                                    $id_address_delivery = $result['id'];
+                                    $id_address_delivery = $result['object']->id;
                                 } else {
                                     $this->respondError(400, 'Error on address delivery creation : '.print_r($result['errors'], true));
                                 }
@@ -188,7 +188,7 @@ class OrderController extends AbstractOystController
                                 }
                                 $delivery_address = json_decode(json_encode($result['object']), true);
                                 $delivery_address['id_address'] = $delivery_address['id'];
-                                $id_address_delivery = $result['id'];
+                                $id_address_delivery = $result['object']->id;
                             } else {
                                 $this->respondError(400, 'Error on address delivery creation : '.print_r($result['errors'], true));
                             }
@@ -212,7 +212,7 @@ class OrderController extends AbstractOystController
                                 } catch (Exception $e) {
                                     $this->respondError(400, 'Error while creating billing address : '.$e->getMessage());
                                 }
-                                $id_address_invoice = $result['id'];
+                                $id_address_invoice = $result['object']->id;
                             } else {
                                 $this->respondError(400, 'Error on invoice address creation : '.print_r($result['errors']));
                             }
