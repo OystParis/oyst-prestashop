@@ -197,6 +197,30 @@ class CartService
         $context->currency = new Currency($cart->id_currency);
         $context->shop = new Shop($cart->id_shop);
 
+        //Customer & address
+        $id_customer = 0;
+        $id_address_delivery = 0;
+
+        $is_fake_user = false;
+        if (empty($data['user']) || $data['user']['email'] == 'no-reply@oyst.com') {
+            $is_fake_user = true;
+        }
+
+        //First, search customer (id, email)
+        //If found => set customer id to cart and check his addresses
+        if (!$is_fake_user) {
+            $customer_service = CustomerService::getInstance();
+            $finded_customer = $customer_service->searchCustomer($data['user']);
+
+            if (!empty($finded_customer['customer_obj'])) {
+                $id_customer = $finded_customer['customer_obj']->id;
+            }
+        }
+
+        if (!empty($id_customer)) {
+            $cart->id_customer = $id_customer;
+        }
+
         //Products
         $helper = new ServicesHelper();
         $cart_products = $helper->getCartProductsWithSeparatedGifts($cart);
@@ -280,26 +304,6 @@ class CartService
                         );
                     }
                 }
-            }
-        }
-
-        //Customer & address
-        $id_customer = 0;
-        $id_address_delivery = 0;
-
-        $is_fake_user = false;
-        if (empty($data['user']) || $data['user']['email'] == 'no-reply@oyst.com') {
-            $is_fake_user = true;
-        }
-
-        //First, search customer (id, email)
-        //If found => set customer id to cart and check his addresses
-        if (!$is_fake_user) {
-            $customer_service = CustomerService::getInstance();
-            $finded_customer = $customer_service->searchCustomer($data['user']);
-
-            if (!empty($finded_customer['customer_obj'])) {
-                $id_customer = $finded_customer['customer_obj']->id;
             }
         }
 
