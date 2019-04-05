@@ -506,7 +506,6 @@ class CartService
             if (!empty($selected_carrier_obj)) {
                 $carrier = $selected_carrier_obj;
             } else {
-                echo "Get default";
                 $carrier = new Carrier($this->getCartDefaultShipmentId($cart));
             }
         } else {
@@ -520,7 +519,7 @@ class CartService
             $delivery_option[$cart->id_address_delivery] = $cart->id_carrier .",";
             $cart->setDeliveryOption($delivery_option);
         } else {
-            $errors[] = 'Carrier '.$data['shipping']['method_applied']['reference'].' not found';
+            $cart->id_carrier = 0;
         }
 
         //Messages
@@ -592,27 +591,27 @@ class CartService
             $products = $cart->getProducts(true);
         }
         $carriers = array();
-        foreach ($products as $cart_product) {
-            $warehouse_list = Warehouse::getProductWarehouseList($cart_product['id_product'], $cart_product['id_product_attribute'], $cart->id_shop);
-            if (count($warehouse_list) == 0) {
-                $warehouse_list = Warehouse::getProductWarehouseList($cart_product['id_product'], $cart_product['id_product_attribute']);
-            }
-            if (empty($warehouse_list)) {
-                $warehouse_list = array(0 => array('id_warehouse' => 0));
-            }
+        if (!empty($products)) {
+            foreach ($products as $cart_product) {
+                $warehouse_list = Warehouse::getProductWarehouseList($cart_product['id_product'], $cart_product['id_product_attribute'], $cart->id_shop);
+                if (count($warehouse_list) == 0) {
+                    $warehouse_list = Warehouse::getProductWarehouseList($cart_product['id_product'], $cart_product['id_product_attribute']);
+                }
+                if (empty($warehouse_list)) {
+                    $warehouse_list = array(0 => array('id_warehouse' => 0));
+                }
 
-            //Get availables carriers for cart
-            foreach ($warehouse_list as $warehouse) {
-                $product_carriers = Carrier::getAvailableCarrierList(new Product($cart_product['id_product']), $warehouse['id_warehouse'], $cart->id_address_delivery, $cart->id_shop, $cart);
-                if (empty($carriers)) {
-                    $carriers = $product_carriers;
-                } else {
-                    $carriers = array_intersect($carriers, $product_carriers);
+                //Get availables carriers for cart
+                foreach ($warehouse_list as $warehouse) {
+                    $product_carriers = Carrier::getAvailableCarrierList(new Product($cart_product['id_product']), $warehouse['id_warehouse'], $cart->id_address_delivery, $cart->id_shop, $cart);
+                    if (empty($carriers)) {
+                        $carriers = $product_carriers;
+                    } else {
+                        $carriers = array_intersect($carriers, $product_carriers);
+                    }
                 }
             }
         }
-
         return $carriers;
     }
-
 }
