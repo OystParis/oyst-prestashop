@@ -56,23 +56,23 @@ class CheckoutBuilder extends AbstractBuilder
     {
         return array(
             'details_tax_incl' => array(
-                'total_items' => $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS, $cart->getProducts(), $cart->id_carrier, false),
-                'total_shipping' => $cart->getOrderTotal(true, Cart::ONLY_SHIPPING, $cart->getProducts(), $cart->id_carrier, false),
-                'total_discount' => $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS, $cart->getProducts(), $cart->id_carrier, false),
-                'total' => $cart->getOrderTotal(true, Cart::BOTH, $cart->getProducts(), $cart->id_carrier, false),
+                'total_items' => (float)$cart->getOrderTotal(true, Cart::ONLY_PRODUCTS, $cart->getProducts(), $cart->id_carrier, false),
+                'total_shipping' => (float)$cart->getOrderTotal(true, Cart::ONLY_SHIPPING, $cart->getProducts(), $cart->id_carrier, false),
+                'total_discount' => (float)$cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS, $cart->getProducts(), $cart->id_carrier, false),
+                'total' => (float)$cart->getOrderTotal(true, Cart::BOTH, $cart->getProducts(), $cart->id_carrier, false),
             ),
             'details_tax_excl' => array(
-                'total_items' => $cart->getOrderTotal(false, Cart::ONLY_PRODUCTS, $cart->getProducts(), $cart->id_carrier, false),
-                'total_shipping' => $cart->getOrderTotal(false, Cart::ONLY_SHIPPING, $cart->getProducts(), $cart->id_carrier, false),
-                'total_discount' => $cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS, $cart->getProducts(), $cart->id_carrier, false),
-                'total' => $cart->getOrderTotal(false, Cart::BOTH, $cart->getProducts(), $cart->id_carrier, false),
+                'total_items' => (float)$cart->getOrderTotal(false, Cart::ONLY_PRODUCTS, $cart->getProducts(), $cart->id_carrier, false),
+                'total_shipping' => (float)$cart->getOrderTotal(false, Cart::ONLY_SHIPPING, $cart->getProducts(), $cart->id_carrier, false),
+                'total_discount' => (float)$cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS, $cart->getProducts(), $cart->id_carrier, false),
+                'total' => (float)$cart->getOrderTotal(false, Cart::BOTH, $cart->getProducts(), $cart->id_carrier, false),
             ),
             //TODO Separate taxes by tax rate
             'taxes' => array(
                 array(
                     "label" => "TVA total",
-                    "amount" => $cart->getOrderTotal(true, Cart::BOTH)-$cart->getOrderTotal(false, Cart::BOTH, $cart->getProducts(), $cart->id_carrier, false),
-                    "rate" => "20"
+                    "amount" => (float)$cart->getOrderTotal(true, Cart::BOTH)-$cart->getOrderTotal(false, Cart::BOTH, $cart->getProducts(), $cart->id_carrier, false),
+                    "rate" => 20
                 ),
             ),
         );

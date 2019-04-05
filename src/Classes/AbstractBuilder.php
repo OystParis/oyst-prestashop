@@ -49,7 +49,7 @@ abstract class AbstractBuilder
         foreach ($products as $product) {
             if (!isset($taxes[$product['rate']])) {
                 $taxes[$product['rate']] = array(
-                    'rate' => $product['rate'],
+                    'rate' => (float)$product['rate'],
                     'label' => $product['tax_name'],
                     'amount' => 0,
                 );
@@ -95,8 +95,8 @@ abstract class AbstractBuilder
                     $discounts[] = array(
                         'id_discount' => $cart_rule['id_cart_rule'],
                         'label' => $cart_rule['name'],
-                        'amount_tax_incl' => $amount_tax_incl,
-                        'amount_tax_excl' => $amount_tax_excl,
+                        'amount_tax_incl' => (float)$amount_tax_incl,
+                        'amount_tax_excl' => (float)$amount_tax_excl,
                     );
                 }
             }
@@ -115,8 +115,8 @@ abstract class AbstractBuilder
                     $coupons[] = array(
                         'label' => $cart_rule['name'],
                         'code' => $cart_rule['code'],
-                        'amount_tax_incl' => $amount_tax_incl,
-                        'amount_tax_excl' => $amount_tax_excl,
+                        'amount_tax_incl' => (float)$amount_tax_incl,
+                        'amount_tax_excl' => (float)$amount_tax_excl,
                     );
                 }
             }
@@ -162,8 +162,8 @@ abstract class AbstractBuilder
         return array(
             'label' => $carrier->name,
             'reference' => $carrier->id_reference,
-            'amount_tax_incl' => $cart->getPackageShippingCost($carrier->id, true),
-            'amount_tax_excl' => $cart->getPackageShippingCost($carrier->id, false),
+            'amount_tax_incl' => (float)$cart->getPackageShippingCost($carrier->id, true),
+            'amount_tax_excl' => (float)$cart->getPackageShippingCost($carrier->id, false),
         );
     }
 
@@ -176,15 +176,15 @@ abstract class AbstractBuilder
         if (is_object($product_obj)) {
             $item_formated = json_decode(json_encode($product_obj), true);
             //Define fields for formatItem compatibility
-            $item_formated['id_product'] = $item_formated['id'];
+            $item_formated['id_product'] = (int)$item_formated['id'];
             $item_formated['id_product_attribute'] = 0;
-            $item_formated['price_wt'] = Product::getPriceStatic($item_formated['id_product'], true);
-            $item_formated['price_without_reduction'] = Product::getPriceStatic($item_formated['id_product'], false, null, 6, null, false, false);
-            $item_formated['price_without_reduction_wt'] = Product::getPriceStatic($item_formated['id_product'], true, null, 6, null, false, false);
-            $item_formated['total'] = $item_formated['price'];
-            $item_formated['total_wt'] = $item_formated['price_wt'];
-            $item_formated['quantity_available'] = $item_formated['quantity'];
-            $item_formated['rate'] = $product_obj->getTaxesRate();
+            $item_formated['price_wt'] = (float)Product::getPriceStatic($item_formated['id_product'], true);
+            $item_formated['price_without_reduction'] = (float)Product::getPriceStatic($item_formated['id_product'], false, null, 6, null, false, false);
+            $item_formated['price_without_reduction_wt'] = (float)Product::getPriceStatic($item_formated['id_product'], true, null, 6, null, false, false);
+            $item_formated['total'] = (float)$item_formated['price'];
+            $item_formated['total_wt'] = (float)$item_formated['price_wt'];
+            $item_formated['quantity_available'] = (int)$item_formated['quantity'];
+            $item_formated['rate'] = (float)$product_obj->getTaxesRate();
         } else {
             $item_formated = $product_obj;
         }
@@ -284,9 +284,9 @@ abstract class AbstractBuilder
             'reference' => $item['reference'],
             'internal_reference' => $item['id_product'].'-'.$item['id_product_attribute'],
             'attributes_variant' => $attributes_variant,
-            'quantity' => $item['cart_quantity'],
-            'quantity_available' => $item['quantity_available'],
-            'quantity_minimal' => $item['minimal_quantity'],
+            'quantity' => (int)$item['cart_quantity'],
+            'quantity_available' => (int)$item['quantity_available'],
+            'quantity_minimal' => (int)$item['minimal_quantity'],
             'name' => $item['name'],
             'type' => $product_type, //"simple", "variant", "virtual", "downloadable", "bundle"},
             'description_short' => $item['description_short'],
@@ -305,7 +305,7 @@ abstract class AbstractBuilder
             'height' => $item['height'],
             'depth' => $item['depth'],
             'weight' => $item['weight'],
-            'tax_rate' => $item['rate'],
+            'tax_rate' => (float)$item['rate'],
             'tax_name' => $item['tax_name'],
             'image' => $item['image'],
             'user_input' => $user_inputs,
