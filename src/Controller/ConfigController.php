@@ -7,6 +7,7 @@ use Configuration;
 use Country;
 use Language;
 use OrderState;
+use Oyst\Services\ConfigService;
 use Shop;
 
 class ConfigController extends AbstractOystController
@@ -19,7 +20,9 @@ class ConfigController extends AbstractOystController
 
     public function getEcommerce()
     {
-        $results = array();
+        $results = [];
+
+        $config_service = ConfigService::getInstance();
 
         $id_lang = Language::getIdByIso('FR');
         //Get carriers
@@ -32,23 +35,9 @@ class ConfigController extends AbstractOystController
             );
         }
 
-        //Get countries
-        $countries = Country::getCountries($id_lang, true);
-        foreach ($countries as $country) {
-            $results['countries'][] = array(
-                'name' => $country['name'],
-                'code' => $country['iso_code'],
-            );
-        }
-
-        //Get status
-        $order_states = OrderState::getOrderStates($id_lang);
-        foreach ($order_states as $order_state) {
-            $results['order_statuses'][] = array(
-                'label' => $order_state['name'],
-                'code' => $order_state['id_order_state'],
-            );
-        }
+        $results['carriers'] = $config_service->getCarriers();
+        $results['countries'] = $config_service->getCountries();
+        $results['order_statuses'] = $config_service->getOrderStatuses();
 
         //Get shops
         $shops = Shop::getShops(false);
