@@ -39,8 +39,7 @@ class Oyst extends PaymentModule
 
     public function uninstall()
     {
-        $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), $this);
-        return parent::uninstall() && $oystDb->uninstall();
+        return parent::uninstall() && \Oyst\Classes\InstallManager::getInstance()->uninstall();
     }
 
     public function install()
@@ -55,11 +54,12 @@ class Oyst extends PaymentModule
         $result &= $this->registerHook('moduleRoutes');
         $result &= $this->registerHook('displayBackOfficeHeader');
 
-        // Clear cache
-        Cache::clean('Module::getModuleIdByName_oyst');
+        if ($result) {
+			// Clear cache
+			Cache::clean('Module::getModuleIdByName_oyst');
 
-        $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), $this);
-        $result &= $oystDb->install();
+			$result &= \Oyst\Classes\InstallManager::getInstance()->install();
+		}
         return $result;
     }
 
