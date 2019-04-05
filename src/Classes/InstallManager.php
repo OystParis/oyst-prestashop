@@ -9,21 +9,17 @@ use Tools;
 
 class InstallManager
 {
-    /**
-     * @var Db
-     */
-    private $db;
+	private static $instance;
+	public static function getInstance()
+	{
+		if (!isset(self::$instance)) {
+			self::$instance = new InstallManager();
+		}
+		return self::$instance;
+	}
 
-    /**
-     * @var \Oyst
-     */
-    private $oyst;
-
-    public function __construct(Db $db, \Oyst $oyst)
-    {
-        $this->db = $db;
-        $this->oyst = $oyst;
-    }
+	private function __construct() {}
+	private function __clone() {}
 
     /**
      * @return bool
@@ -108,7 +104,7 @@ class InstallManager
             ) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8mb4;
         ";
 
-        return $this->db->execute($query);
+        return Db::getInstance()->execute($query);
     }
 
     /**
@@ -124,7 +120,7 @@ class InstallManager
         ) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8mb4;
         ";
 
-        return $this->db->execute($query);
+        return Db::getInstance()->execute($query);
     }
 
     /**
@@ -136,7 +132,7 @@ class InstallManager
             DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_notification;
         ";
 
-        return $this->db->execute($query);
+        return Db::getInstance()->execute($query);
     }
 
     /**
@@ -148,7 +144,7 @@ class InstallManager
             DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_customer;
         ";
 
-        return $this->db->execute($query);
+        return Db::getInstance()->execute($query);
     }
 
     private function removeConfiguration()
