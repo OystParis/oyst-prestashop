@@ -5,6 +5,7 @@ namespace Oyst\Classes;
 use Db;
 use Configuration;
 use Oyst\Services\OystStatusService;
+use Shop;
 use Tools;
 
 class InstallManager
@@ -31,11 +32,6 @@ class InstallManager
         $state &= $this->createCustomerTable();
         $state &= $this->updateConstants();
 
-        //Generate API key if not exists
-        if (!Configuration::hasKey(OystAPIKey::CONFIG_KEY)) {
-            $state &= OystAPIKey::generateAPIKey();
-        }
-
         if (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false) {
             //Check if HTTP_AUTHORIZATION is catchable in PHP
             if (!Configuration::get('PS_WEBSERVICE_CGI_HOST')) {
@@ -58,8 +54,6 @@ class InstallManager
 
         $state &= OystStatusService::getInstance()->createAllStatus();
 
-        $state &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Configuration::get('OYST_OS_PAYMENT_CAPTURED'));
-
         return $state;
     }
 
@@ -75,12 +69,17 @@ class InstallManager
 
     public function updateConstants()
     {
-        $state = true;
-        //Generate API key if not exists
-        if (!Configuration::hasKey(OystAPIKey::CONFIG_KEY)) {
-            $state &= OystAPIKey::generateAPIKey();
-        }
-        $state &= Configuration::updateValue('OYST_HIDE_ERRORS', 1);
+		$shops = Shop::getShops(true, null, true);
+		$state = true;
+
+		// Setup each shop
+		foreach ($shops as $shop_id) {
+			$shop_group_id = (int)Shop::getGroupFromShop($shop_id, true);
+
+			$state &= OystAPIKey::getShopInstance($shop_group_id, $shop_id)->generateAPIKey(true);
+			$state &= Configuration::updateValue('OYST_HIDE_ERRORS', 1, false, $shop_group_id, $shop_id);
+			$state &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Configuration::get('OYST_OS_PAYMENT_CAPTURED'), false, $shop_group_id, $shop_id);
+		}
 
         return $state;
     }
