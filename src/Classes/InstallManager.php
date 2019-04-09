@@ -72,15 +72,15 @@ class InstallManager
 		$shops = Shop::getShops(true, null, true);
 		$state = true;
 
+		$state &= OystAPIKey::getInstance()->generateAPIKey();
+
 		// Setup each shop
 		foreach ($shops as $shop_id) {
 			$shop_group_id = (int)Shop::getGroupFromShop($shop_id, true);
 
-			$state &= OystAPIKey::getShopInstance($shop_group_id, $shop_id)->generateAPIKey();
 			$state &= Configuration::updateValue('OYST_HIDE_ERRORS', 1, false, $shop_group_id, $shop_id);
 			$state &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Configuration::get('OYST_OS_PAYMENT_CAPTURED'), false, $shop_group_id, $shop_id);
 		}
-
         return $state;
     }
 
