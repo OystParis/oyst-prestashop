@@ -96,22 +96,27 @@ class Oyst extends PaymentModule
             }
         }
 
-        $oyst_api_key = \Oyst\Classes\OystAPIKey::getAPIKey();
-
         $module_dir = _MODULE_DIR_.$this->name.'/';
 
-        $order_states = OrderState::getOrderStates($this->context->language->id);
+		//If multishop and global shop => error
+		if (Shop::getContext() != Shop::CONTEXT_GROUP && Shop::getContext() != Shop::CONTEXT_ALL) {
+			$oyst_api_key = \Oyst\Classes\OystAPIKey::getAPIKey();
 
-        $this->context->smarty->assign([
-            'module_dir' => $module_dir,
-            'oyst_api_key' => $oyst_api_key,
-            'oyst_merchant_id' => Configuration::get('OYST_MERCHANT_ID'),
-            'oyst_script_tag' => base64_decode(Configuration::get('OYST_SCRIPT_TAG')),
-            'oyst_public_endpoints' => Configuration::get('OYST_PUBLIC_ENDPOINTS'),
-            'oyst_hide_errors' => Configuration::get('OYST_HIDE_ERRORS'),
-            'order_states' => $order_states,
-            'oyst_order_creation_status' => Configuration::get('OYST_ORDER_CREATION_STATUS'),
-        ]);
+			$order_states = OrderState::getOrderStates($this->context->language->id);
+
+			$this->context->smarty->assign([
+				'module_dir' => $module_dir,
+				'oyst_api_key' => $oyst_api_key,
+				'oyst_merchant_id' => Configuration::get('OYST_MERCHANT_ID'),
+				'oyst_script_tag' => base64_decode(Configuration::get('OYST_SCRIPT_TAG')),
+				'oyst_public_endpoints' => Configuration::get('OYST_PUBLIC_ENDPOINTS'),
+				'oyst_hide_errors' => Configuration::get('OYST_HIDE_ERRORS'),
+				'order_states' => $order_states,
+				'oyst_order_creation_status' => Configuration::get('OYST_ORDER_CREATION_STATUS'),
+			]);
+		} else {
+			$this->context->smarty->assign('multishop_error', true);
+		}
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
             $this->context->controller->addCSS($module_dir.'views/css/config-1.5.css');
