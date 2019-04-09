@@ -2,36 +2,29 @@
 
 namespace Oyst\Classes;
 
-use Configuration as PSConfiguration;
+use Configuration;
 use Tools;
 
 class OystAPIKey
 {
-	private static $instances = [];
-	private $shop_group_id;
-	private $shop_id;
-
+	private static $instance;
 	const CONFIG_KEY = 'OYST_API_KEY';
 
-	public static function getShopInstance($shop_group_id, $shop_id)
+	public static function getInstance()
 	{
-		$key = $shop_group_id.'-'.$shop_id;
-		if (!isset(self::$instances[$key])) {
-			self::$instances[$key] = new OystAPIKey($shop_group_id, $shop_id);
+		if (!isset(self::$instance)) {
+			self::$instance = new OystAPIKey();
 		}
-		return self::$instances[$key];
+		return self::$instance;
 	}
 
-	private function __construct($shop_group_id, $shop_id) {
-		$this->shop_group_id = $shop_group_id;
-		$this->shop_id = $shop_id;
-	}
+	private function __construct() {}
 
 	private function __clone() {}
 
     public function generateAPIKey($force = false)
     {
-		if (!PSConfiguration::hasKey(self::CONFIG_KEY, false, $this->shop_group_id, $this->shop_id) || $force) {
+		if (!Configuration::hasKey(self::CONFIG_KEY) || $force) {
         	return $this->setAPIKey(Tools::passwdGen(32));
 		}
 		return true;
@@ -39,13 +32,13 @@ class OystAPIKey
 
     public function setAPIKey($key)
     {
-        return PSConfiguration::updateValue(self::CONFIG_KEY, $key, false, $this->shop_group_id, $this->shop_id);
+        return Configuration::updateGlobalValue(self::CONFIG_KEY, $key);
     }
 
     public function getAPIKey()
     {
-        if (PSConfiguration::hasKey(self::CONFIG_KEY, false, $this->shop_group_id, $this->shop_id)) {
-            return PSConfiguration::get(self::CONFIG_KEY, false, $this->shop_group_id, $this->shop_id);
+        if (Configuration::hasKey(self::CONFIG_KEY)) {
+            return Configuration::getGlobalValue(self::CONFIG_KEY);
         } else {
             return '';
         }

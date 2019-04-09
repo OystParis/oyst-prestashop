@@ -100,7 +100,9 @@ class Oyst extends PaymentModule
 
 		//If multishop and global shop => error
 		if (Shop::getContext() != Shop::CONTEXT_GROUP && Shop::getContext() != Shop::CONTEXT_ALL) {
-			$oyst_api_key = \Oyst\Classes\OystAPIKey::getAPIKey();
+			$context_shop_id = (int)Shop::getContextShopID();
+
+			$oyst_api_key = \Oyst\Classes\OystAPIKey::getInstance()->getAPIKey();
 
 			$order_states = OrderState::getOrderStates($this->context->language->id);
 
