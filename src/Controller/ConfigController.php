@@ -7,6 +7,7 @@ use Configuration;
 use Country;
 use Language;
 use OrderState;
+use Shop;
 
 class ConfigController extends AbstractOystController
 {
@@ -46,6 +47,17 @@ class ConfigController extends AbstractOystController
             $results['order_statuses'][] = array(
                 'label' => $order_state['name'],
                 'code' => $order_state['id_order_state'],
+            );
+        }
+
+        //Get shops
+        $shops = Shop::getShops(false);
+        foreach ($shops as $shop) {
+            $shop_obj = new Shop($shop['id_shop']);
+            $results['shops'][] = array(
+                'url' => $shop_obj->getBaseURL(true),
+                'code' => $shop_obj->id,
+                'label' => $shop_obj->name,
             );
         }
 
