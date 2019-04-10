@@ -38,9 +38,6 @@ class Oyst extends PaymentModule
         if (version_compare(_PS_VERSION_, '1.6.0') >= 0) {
             $this->bootstrap = true;
         }
-
-		$this->context_shop_id = (int)Shop::getContextShopID();
-		$this->context_shop_group_id = (int)Shop::getContextShopGroupID();
     }
 
     public function uninstall()
@@ -136,11 +133,11 @@ class Oyst extends PaymentModule
 
     public function saveConfigForm()
     {
-        $res = Configuration::updateValue('OYST_MERCHANT_ID', Tools::getValue('oyst_merchant_id'), false, $this->context_shop_group_id, $this->context_shop_id);
-        $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode(Tools::getValue('oyst_script_tag')), false, $this->context_shop_group_id, $this->context_shop_id);
-        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', Tools::getValue('oyst_public_endpoints'), false, $this->context_shop_group_id, $this->context_shop_id);
-        $res &= Configuration::updateValue('OYST_HIDE_ERRORS', Tools::getValue('oyst_hide_errors'), false, $this->context_shop_group_id, $this->context_shop_id);
-        $res &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Tools::getValue('oyst_order_creation_status'), false, $this->context_shop_group_id, $this->context_shop_id);
+        $res = Configuration::updateValue('OYST_MERCHANT_ID', Tools::getValue('oyst_merchant_id'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
+        $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode(Tools::getValue('oyst_script_tag')), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
+        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', Tools::getValue('oyst_public_endpoints'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
+        $res &= Configuration::updateValue('OYST_HIDE_ERRORS', Tools::getValue('oyst_hide_errors'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
+        $res &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Tools::getValue('oyst_order_creation_status'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
         return $res;
     }
 
