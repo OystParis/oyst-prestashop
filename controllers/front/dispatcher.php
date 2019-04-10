@@ -67,7 +67,7 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
                 $this->printError(401, 'Bad API key');
             }
 
-            if (!OystAPIKey::isKeyActive($key)) {
+            if (!OystAPIKey::getInstance()->isKeyActive($key)) {
                 $this->printError(401, 'Bad API key');
             }
         }
