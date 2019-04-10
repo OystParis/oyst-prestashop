@@ -7,9 +7,6 @@ require_once dirname(__FILE__).'/autoload.php';
  */
 class Oyst extends PaymentModule
 {
-	private $context_shop_id;
-	private $context_shop_group_id;
-
     /**
      * Constructor
      */
