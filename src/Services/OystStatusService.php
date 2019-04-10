@@ -184,8 +184,8 @@ class OystStatusService
             $status_name = '';
         }
 
-        if (!empty($status_name) && Configuration::hasKey($status_name)) {
-            return Configuration::get($status_name);
+        if (!empty($status_name)) {
+            return (int)Configuration::get($status_name);
         } else {
             return 0;
         }
