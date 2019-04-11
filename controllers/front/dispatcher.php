@@ -5,7 +5,6 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require dirname(__FILE__).'/../../vendor/autoload.php';
-require _PS_ROOT_DIR_.'/init.php';
 
 use Oyst\Classes\Route;
 use Oyst\Classes\CurrentRequest;
@@ -15,6 +14,8 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
 {
     public function init()
     {
+        parent::init();
+
         if (Configuration::hasKey('OYST_HIDE_ERRORS') && Configuration::get('OYST_HIDE_ERRORS')) {
             error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
             ob_start();
@@ -138,4 +139,6 @@ class OystDispatcherModuleFrontController extends ModuleFrontController
         }
         die(json_encode(array('error' => $msg)));
     }
+
+    protected function displayMaintenancePage() {}
 }
