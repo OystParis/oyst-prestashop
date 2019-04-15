@@ -37,10 +37,12 @@ class CartController extends AbstractOystController
         $cart_service = AbstractCartServiceFactory::get(new Oyst(), $context);
         $response_data = $cart_service->estimate($data['data']);
 
-        // Remove addresses from cart
-        $context->cart->id_address_delivery = 0;
-        $context->cart->id_address_invoice = 0;
-        $context->cart->save();
+        if ($context->cart->id_customer == 0) {
+            // Remove addresses from cart
+            $context->cart->id_address_delivery = 0;
+            $context->cart->id_address_invoice = 0;
+            $context->cart->save();
+        }
 
         $response_data_array = json_decode($response_data, true);
         if (isset($response_data_array['error']) && $response_data_array['error']) {
