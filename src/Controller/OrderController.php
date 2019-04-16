@@ -7,6 +7,7 @@ use Carrier;
 use Cart;
 use Configuration;
 use Context;
+use Country;
 use Customer;
 use Db;
 use Exception;
@@ -248,14 +249,19 @@ class OrderController extends AbstractOystController
                                         $pickup_address = $params['data']['pickup_store']['address'];
                                         $pickup_id = $params['data']['pickup_store']['id'];
                                         $carrier = new Carrier($cart->id_carrier);
+                                        $product_code = isset($params['data']['pickup_store']['codeType']) ? pSQL($params['data']['pickup_store']['codeType']) : '';
+                                        $network = isset($params['data']['pickup_store']['network']) ? pSQL($params['data']['pickup_store']['network']) : '';
+                                        $iso_country_code = isset($params['data']['pickup_store']['country']) ? pSQL($params['data']['pickup_store']['country']) : 'FR';
+                                        $oyst_carrier_type = $params['data']['shipping']['method_applied']['type'];
+                                        $oyst_invoice_address = $params['data']['billing']['address'];
 
-                                        if ($carrier->external_module_name == 'mondialrelay' &&
+                                        if ($oyst_carrier_type == 'mondial_relay' &&
                                             Module::isEnabled('mondialrelay')) {
                                             $id_mr_method = (int)Db::getInstance()->getValue(
                                                 "SELECT m.id_mr_method
                                                 FROM `"._DB_PREFIX_."mr_method` m
-                                                LEFT JOIN `"._DB_PREFIX_."mr_method_shop` ms ON (ms.id_mr_method = m.id_mr_method)
-                                                WHERE m.`id_carrier` = ".$carrier->id." AND ms.`id_shop` = ".Context::getContext()->shop->id." AND is_deleted = 0"
+                                                LEFT JOIN `"._DB_PREFIX_."mr_method_shop` ms ON (ms.id_mr_method = m.id_mr_method AND ms.`id_shop` = ".Context::getContext()->shop->id.")
+                                                WHERE m.`id_carrier` = ".$carrier->id." AND m.`is_deleted` = 0"
                                             );
 
                                             $md_data = [];
@@ -283,6 +289,114 @@ class OrderController extends AbstractOystController
                                                     VALUES (".$cart->id.", '".pSql($pickup_id)."') 
                                                     ON DUPLICATE KEY UPDATE id_relay='".pSql($pickup_id)."'");
                                             }
+                                        }
+
+                                        if (($oyst_carrier_type == 'colissimo_poste' || $oyst_carrier_type == 'colissimo_commerces') &&
+                                            (Module::isEnabled('soflexibilite') || Module::isEnabled('socolissimo'))
+                                        ) {
+                                            $phone = str_replace('+33', '0', $oyst_invoice_address['phone_mobile']);
+
+                                            if (Module::isEnabled('soflexibilite')) {
+
+                                                $module = Module::getInstanceByName('soflexibilite');
+                                                // Check version module soflexibilite
+                                                if ($module instanceof Module) {
+                                                    if ($module->version > '3.0' && $module->name == 'soflexibilite') {
+                                                        $data['cename'] = pSQL($oyst_invoice_address['lastname']);
+                                                        $data['cefirstname'] = pSQL($oyst_invoice_address['firstname']);
+                                                    }
+                                                }
+
+                                                $delivery = new \SoFlexibiliteDelivery($cart->id, $cart->id_customer);
+                                                $delivery->id_order = $order->id;
+                                                $delivery->id_point = $pickup_id;
+                                                $delivery->firstname = $oyst_invoice_address['firstname'];
+                                                $delivery->lastname = $oyst_invoice_address['lastname'];
+                                                $delivery->company = $oyst_invoice_address['company'];
+                                                $delivery->telephone = $phone;
+                                                $delivery->email = $oyst_invoice_address['email'];
+                                                $delivery->type = $product_code;
+                                                $delivery->libelle = $pickup_address['name'];
+                                                $delivery->indice = '';
+                                                $delivery->postcode = $pickup_address['postal_code'];
+                                                $delivery->city = $pickup_address['city'];
+                                                $delivery->country = $pickup_address['country'];
+                                                $delivery->address1 = $pickup_address['street'];
+                                                $delivery->address2 = '';
+                                                $delivery->lieudit = '';
+                                                $delivery->informations = '';
+                                                $delivery->reseau = $network;
+
+                                                $delivery->saveDelivery();
+
+                                            }elseif (Module::isEnabled('socolissimo')) {
+                                                if ($oyst_carrier_type == 'colissimo_poste') {
+                                                    $delivery_mode = 'BPR';
+                                                } else {
+                                                    $delivery_mode = 'A2P';
+                                                }
+
+                                                $data = array(
+                                                    'id_cart' => $cart->id,
+                                                    'id_customer' => $cart->id_customer,
+                                                    'delivery_mode' => $delivery_mode,
+                                                    'prid' => pSQL($pickup_id),
+                                                    'prname' => ($pickup_address['name'] != '') ? pSQL($pickup_address['name']) : 'none',
+                                                    'prfirstname' => pSQL($oyst_invoice_address['firstname']),
+                                                    'pradress4' => pSQL($pickup_address['street']),
+                                                    'przipcode' => pSQL($pickup_address['postal_code']),
+                                                    'prtown' => pSQL($pickup_address['city']),
+                                                    'cecountry' => pSQL($pickup_address['country']),
+                                                    'cephonenumber' => pSQL($phone),
+                                                    'ceemail' => pSQL($oyst_invoice_address['email']),
+                                                    'cecompanyname' => pSQL($oyst_invoice_address['company']),
+                                                );
+
+                                                Db::getInstance()->insert(
+                                                    'socolissimo_delivery_info',
+                                                    $data
+                                                );
+                                            }
+                                        }
+
+                                        if ($oyst_carrier_type == 'colissimo' && $pickup_id && Module::isEnabled('colissimo')) {
+
+                                            //Load pickup point if exists
+                                            $pickup_point = \ColissimoPickupPoint::getPickupPointByIdColissimo($pickup_id);
+                                            if (!Validate::isLoadedObject($pickup_point)) {
+                                                $id_country = Country::getByIso($iso_country_code);
+                                                //If not, create it
+                                                $pickup_point = new \ColissimoPickupPoint();
+                                                $pickup_point->colissimo_id = pSQL($pickup_id);
+                                                $pickup_point->company_name = pSQL($pickup_address['name']);
+                                                $pickup_point->address1 = pSQL($pickup_address['street']);
+                                                $pickup_point->address2 = '';
+                                                $pickup_point->address3 = '';
+                                                $pickup_point->city = pSQL($pickup_address['city']);
+                                                $pickup_point->zipcode = pSQL($pickup_address['postal_code']);
+                                                $pickup_point->country = Country::getNameById(Configuration::get('PS_LANG_DEFAULT'), $id_country);
+                                                $pickup_point->iso_country = $iso_country_code;
+                                                $pickup_point->product_code = $product_code;
+                                                $pickup_point->network = $network;
+
+                                                try {
+                                                    $pickup_point->save();
+                                                } catch (Exception $e) {}
+                                            }
+
+                                            \ColissimoCartPickupPoint::updateCartPickupPoint($cart->id, $pickup_point->id, $mobile_phone);
+
+                                            $destination_type = \ColissimoTools::getDestinationTypeByIdCountry($id_country);
+                                            $id_colissimo_service = \ColissimoService::getServiceIdByIdCarrierDestinationType($carrier->id_reference, $destination_type);
+                                            $id_colissimo_order = \ColissimoOrder::getIdByOrderId((int) $order->id);
+                                            $colissimo_order = new \ColissimoOrder((int) $id_colissimo_order);
+                                            $colissimo_order->id_order = $order->id;
+                                            $colissimo_order->id_colissimo_service = $id_colissimo_service;
+                                            $colissimo_order->id_colissimo_pickup_point = $pickup_point->id;
+                                            $colissimo_order->migration = 0;
+                                            try {
+                                                $colissimo_order->save();
+                                            } catch (Exception $e) {}
                                         }
                                     }
                                 }
