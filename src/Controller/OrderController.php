@@ -400,7 +400,8 @@ class OrderController extends AbstractOystController
                                         }
                                     }
                                 }
-                                if (Configuration::hasKey('OYST_HIDE_ERRORS') && Configuration::get('OYST_HIDE_ERRORS')) {
+
+                                if (Configuration::get('OYST_HIDE_ERRORS')) {
                                     $buffer = ob_get_contents();
                                     if (!empty($buffer)) {
                                         $this->logger->warning('Something was print before json : '.$buffer);
