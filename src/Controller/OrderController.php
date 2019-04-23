@@ -282,7 +282,6 @@ class OrderController extends AbstractOystController
                                         $delivery->reseau = $network;
                                     }
 
-                                    file_put_contents(__DIR__.'/../../../../debug.log', date('Y-m-d H:i:s')." - ".print_r($delivery, true)." \r\n", FILE_APPEND);
                                     $delivery->saveDelivery();
                                 }
 
