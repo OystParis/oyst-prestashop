@@ -250,12 +250,11 @@ class OrderController extends AbstractOystController
                                 $carrier = new Carrier($cart->id_carrier);
                                 $product_code = isset($params['data']['pickup_store']['codeType']) ? pSQL($params['data']['pickup_store']['codeType']) : '';
                                 $network = isset($params['data']['pickup_store']['network']) ? pSQL($params['data']['pickup_store']['network']) : '';
-                                $oyst_carrier_type = $params['data']['shipping']['method_applied']['type'];
                                 $oyst_invoice_address = $params['data']['billing']['address'];
                                 $phone = str_replace('+33', '0', $oyst_invoice_address['phone_mobile']);
 
                                 //Manage soflexibilite and soliberte, id order is added on hookActionValidateOrder
-                                if (($oyst_carrier_type == 'colissimo_poste' || $oyst_carrier_type == 'colissimo_commerces') &&
+                                if (($carrier->external_module_name == 'soflexibilite' || $carrier->external_module_name == 'soliberte') &&
                                     (Module::isEnabled('soflexibilite') || Module::isEnabled('soliberte'))) {
 
                                     //If soflexibilite
@@ -285,7 +284,7 @@ class OrderController extends AbstractOystController
                                     $delivery->saveDelivery();
                                 }
 
-                                if ($oyst_carrier_type == 'colissimo' && $pickup_id && Module::isEnabled('colissimo')) {
+                                if ($carrier->external_module_name == 'colissimo' && $pickup_id && Module::isEnabled('colissimo')) {
 
                                     //Load pickup point if exists
                                     $pickup_point = \ColissimoPickupPoint::getPickupPointByIdColissimo($pickup_id);
@@ -313,17 +312,12 @@ class OrderController extends AbstractOystController
                                     \ColissimoCartPickupPoint::updateCartPickupPoint($cart->id, $pickup_point->id, $phone);
                                 }
 
-                                if (($oyst_carrier_type == 'colissimo_poste' || $oyst_carrier_type == 'colissimo_commerces') && Module::isEnabled('socolissimo')) {
-                                    if ($oyst_carrier_type == 'colissimo_poste') {
-                                        $delivery_mode = 'BPR';
-                                    } else {
-                                        $delivery_mode = 'A2P';
-                                    }
+                                if ($carrier->external_module_name == 'socolissimo' && Module::isEnabled('socolissimo')) {
 
                                     $data = array(
                                         'id_cart' => $cart->id,
                                         'id_customer' => $cart->id_customer,
-                                        'delivery_mode' => $delivery_mode,
+                                        'delivery_mode' => $product_code,
                                         'prid' => pSQL($pickup_id),
                                         'prname' => ($pickup_address['name'] != '') ? pSQL($pickup_address['name']) : 'none',
                                         'prfirstname' => pSQL($oyst_invoice_address['firstname']),
@@ -354,8 +348,7 @@ class OrderController extends AbstractOystController
                                     if (isset($params['data']['pickup_store']['address'])) {
 
                                         // Insert data on table mr_selected for pickup mondial relay
-                                        if ($oyst_carrier_type == 'mondial_relay' &&
-                                            Module::isEnabled('mondialrelay')) {
+                                        if ($carrier->external_module_name == 'mondialrelay' && Module::isEnabled('mondialrelay')) {
                                             $id_mr_method = (int)Db::getInstance()->getValue(
                                                 "SELECT m.id_mr_method
                                                 FROM `"._DB_PREFIX_."mr_method` m
@@ -390,7 +383,7 @@ class OrderController extends AbstractOystController
                                             }
                                         }
 
-                                        if (($oyst_carrier_type == 'colissimo_poste' || $oyst_carrier_type == 'colissimo_commerces') &&
+                                        if (($carrier->external_module_name == 'soflexibilite' || $carrier->external_module_name == 'soliberte') &&
                                             (Module::isEnabled('soflexibilite') || Module::isEnabled('soliberte'))) {
 
                                             //If soflexibilite
