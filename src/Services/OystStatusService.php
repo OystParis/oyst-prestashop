@@ -169,7 +169,7 @@ class OystStatusService
             $order_state->shipped = $status['data']['shipped'];
             $order_state->send_email = $status['data']['send_email'];
             $res &= $order_state->add();
-            Configuration::updateValue($status['prestashop_name'], $order_state->id);
+            Configuration::updateGlobalValue($status['prestashop_name'], $order_state->id);
         }
         return $res;
     }
@@ -184,8 +184,8 @@ class OystStatusService
             $status_name = '';
         }
 
-        if (!empty($status_name) && Configuration::hasKey($status_name)) {
-            return Configuration::get($status_name);
+        if (!empty($status_name)) {
+            return (int)Configuration::get($status_name);
         } else {
             return 0;
         }

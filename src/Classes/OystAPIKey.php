@@ -2,35 +2,51 @@
 
 namespace Oyst\Classes;
 
-use Configuration as PSConfiguration;
+use Configuration;
 use Tools;
 
 class OystAPIKey
 {
-    const CONFIG_KEY = 'OYST_API_KEY';
+	private static $instance;
+	const CONFIG_KEY = 'OYST_API_KEY';
 
-    public static function generateAPIKey()
+	public static function getInstance()
+	{
+		if (!isset(self::$instance)) {
+			self::$instance = new OystAPIKey();
+		}
+		return self::$instance;
+	}
+
+	private function __construct() {}
+
+	private function __clone() {}
+
+    public function generateAPIKey($force = false)
     {
-        return self::setAPIKey(Tools::passwdGen(32));
+		if (!Configuration::hasKey(self::CONFIG_KEY) || $force) {
+        	return $this->setAPIKey(Tools::passwdGen(32));
+		}
+		return true;
     }
 
-    public static function setAPIKey($key)
+    public function setAPIKey($key)
     {
-        return PSConfiguration::updateValue(self::CONFIG_KEY, $key);
+        return Configuration::updateGlobalValue(self::CONFIG_KEY, $key);
     }
 
-    public static function getAPIKey()
+    public function getAPIKey()
     {
-        if (PSConfiguration::hasKey(self::CONFIG_KEY)) {
-            return PSConfiguration::get(self::CONFIG_KEY);
+        if (Configuration::hasKey(self::CONFIG_KEY)) {
+            return Configuration::getGlobalValue(self::CONFIG_KEY);
         } else {
             return '';
         }
     }
 
-    public static function isKeyActive($key)
+    public function isKeyActive($key)
     {
-        $api_key = self::getAPIKey();
+        $api_key = $this->getAPIKey();
         return (!empty($api_key) && $api_key == $key);
     }
 }

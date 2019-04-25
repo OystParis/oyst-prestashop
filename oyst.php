@@ -13,7 +13,7 @@ class Oyst extends PaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '2.1.22';
+        $this->version = '2.2.1';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -39,8 +39,7 @@ class Oyst extends PaymentModule
 
     public function uninstall()
     {
-        $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), $this);
-        return parent::uninstall() && $oystDb->uninstall();
+        return parent::uninstall() && \Oyst\Classes\InstallManager::getInstance()->uninstall();
     }
 
     public function install()
@@ -55,11 +54,12 @@ class Oyst extends PaymentModule
         $result &= $this->registerHook('moduleRoutes');
         $result &= $this->registerHook('displayBackOfficeHeader');
 
-        // Clear cache
-        Cache::clean('Module::getModuleIdByName_oyst');
+        if ($result) {
+			// Clear cache
+			Cache::clean('Module::getModuleIdByName_oyst');
 
-        $oystDb = new \Oyst\Classes\InstallManager(Db::getInstance(), $this);
-        $result &= $oystDb->install();
+			$result &= \Oyst\Classes\InstallManager::getInstance()->install();
+		}
         return $result;
     }
 
@@ -96,22 +96,27 @@ class Oyst extends PaymentModule
             }
         }
 
-        $oyst_api_key = \Oyst\Classes\OystAPIKey::getAPIKey();
-
         $module_dir = _MODULE_DIR_.$this->name.'/';
 
-        $order_states = OrderState::getOrderStates($this->context->language->id);
+		//If multishop and global shop => error
+		if (Shop::getContext() != Shop::CONTEXT_GROUP && Shop::getContext() != Shop::CONTEXT_ALL) {
+			$oyst_api_key = \Oyst\Classes\OystAPIKey::getInstance()->getAPIKey();
 
-        $this->context->smarty->assign([
-            'module_dir' => $module_dir,
-            'oyst_api_key' => $oyst_api_key,
-            'oyst_merchant_id' => Configuration::get('OYST_MERCHANT_ID'),
-            'oyst_script_tag' => base64_decode(Configuration::get('OYST_SCRIPT_TAG')),
-            'oyst_public_endpoints' => Configuration::get('OYST_PUBLIC_ENDPOINTS'),
-            'oyst_hide_errors' => Configuration::get('OYST_HIDE_ERRORS'),
-            'order_states' => $order_states,
-            'oyst_order_creation_status' => Configuration::get('OYST_ORDER_CREATION_STATUS'),
-        ]);
+			$order_states = OrderState::getOrderStates($this->context->language->id);
+
+			$this->context->smarty->assign([
+				'module_dir' => $module_dir,
+				'oyst_api_key' => $oyst_api_key,
+				'oyst_merchant_id' => Configuration::get('OYST_MERCHANT_ID'),
+				'oyst_script_tag' => base64_decode(Configuration::get('OYST_SCRIPT_TAG')),
+				'oyst_public_endpoints' => Configuration::get('OYST_PUBLIC_ENDPOINTS'),
+				'oyst_hide_errors' => Configuration::get('OYST_HIDE_ERRORS'),
+				'order_states' => $order_states,
+				'oyst_order_creation_status' => Configuration::get('OYST_ORDER_CREATION_STATUS'),
+			]);
+		} else {
+			$this->context->smarty->assign('multishop_error', true);
+		}
 
         if (version_compare(_PS_VERSION_, '1.6', '<')) {
             $this->context->controller->addCSS($module_dir.'views/css/config-1.5.css');
@@ -125,11 +130,11 @@ class Oyst extends PaymentModule
 
     public function saveConfigForm()
     {
-        $res = Configuration::updateValue('OYST_MERCHANT_ID', Tools::getValue('oyst_merchant_id'));
-        $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode(Tools::getValue('oyst_script_tag')));
-        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', Tools::getValue('oyst_public_endpoints'));
-        $res &= Configuration::updateValue('OYST_HIDE_ERRORS', Tools::getValue('oyst_hide_errors'));
-        $res &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Tools::getValue('oyst_order_creation_status'));
+        $res = Configuration::updateValue('OYST_MERCHANT_ID', Tools::getValue('oyst_merchant_id'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
+        $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode(Tools::getValue('oyst_script_tag')), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
+        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', Tools::getValue('oyst_public_endpoints'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
+        $res &= Configuration::updateValue('OYST_HIDE_ERRORS', Tools::getValue('oyst_hide_errors'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
+        $res &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Tools::getValue('oyst_order_creation_status'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
         return $res;
     }
 
@@ -177,12 +182,14 @@ class Oyst extends PaymentModule
 
     public function hookFooter($params)
     {
-        if (Configuration::hasKey('OYST_SCRIPT_TAG') && Configuration::hasKey('OYST_MERCHANT_ID')) {
+    	$script_tag = Configuration::get('OYST_SCRIPT_TAG');
+    	$merchant_id = Configuration::get('OYST_MERCHANT_ID');
+        if (!empty($script_tag) && !empty($merchant_id)) {
 
             if (in_array($this->getPageName(), ['order-confirmation'])) {
                 $this->context->smarty->assign('tracking_parameters', \Oyst\Services\TrackingService::getInstance()->getTrackingParameters(true));
             }
-            $script_tag = str_replace('[MERCHANT_ID_PLACEHOLDER]', Configuration::get('OYST_MERCHANT_ID'), base64_decode(Configuration::get('OYST_SCRIPT_TAG')));
+            $script_tag = str_replace('[MERCHANT_ID_PLACEHOLDER]', $merchant_id, base64_decode($script_tag));
             $this->context->smarty->assign(array(
                 'page_name_oyst' => $this->getPageName(),
                 'base_url' => Tools::getShopDomainSsl(true),

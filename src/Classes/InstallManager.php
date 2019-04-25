@@ -5,25 +5,22 @@ namespace Oyst\Classes;
 use Db;
 use Configuration;
 use Oyst\Services\OystStatusService;
+use Shop;
 use Tools;
 
 class InstallManager
 {
-    /**
-     * @var Db
-     */
-    private $db;
+	private static $instance;
+	public static function getInstance()
+	{
+		if (!isset(self::$instance)) {
+			self::$instance = new InstallManager();
+		}
+		return self::$instance;
+	}
 
-    /**
-     * @var \Oyst
-     */
-    private $oyst;
-
-    public function __construct(Db $db, \Oyst $oyst)
-    {
-        $this->db = $db;
-        $this->oyst = $oyst;
-    }
+	private function __construct() {}
+	private function __clone() {}
 
     /**
      * @return bool
@@ -34,11 +31,6 @@ class InstallManager
         $state &= $this->createNotificationTable();
         $state &= $this->createCustomerTable();
         $state &= $this->updateConstants();
-
-        //Generate API key if not exists
-        if (!Configuration::hasKey(OystAPIKey::CONFIG_KEY)) {
-            $state &= OystAPIKey::generateAPIKey();
-        }
 
         if (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false) {
             //Check if HTTP_AUTHORIZATION is catchable in PHP
@@ -62,8 +54,6 @@ class InstallManager
 
         $state &= OystStatusService::getInstance()->createAllStatus();
 
-        $state &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Configuration::get('OYST_OS_PAYMENT_CAPTURED'));
-
         return $state;
     }
 
@@ -79,13 +69,18 @@ class InstallManager
 
     public function updateConstants()
     {
-        $state = true;
-        //Generate API key if not exists
-        if (!Configuration::hasKey(OystAPIKey::CONFIG_KEY)) {
-            $state &= OystAPIKey::generateAPIKey();
-        }
-        $state &= Configuration::updateValue('OYST_HIDE_ERRORS', 1);
+		$shops = Shop::getShops(true, null, true);
+		$state = true;
 
+		$state &= OystAPIKey::getInstance()->generateAPIKey();
+
+		// Setup each shop
+		foreach ($shops as $shop_id) {
+			$shop_group_id = (int)Shop::getGroupFromShop($shop_id, true);
+
+			$state &= Configuration::updateValue('OYST_HIDE_ERRORS', 1, false, $shop_group_id, $shop_id);
+			$state &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Configuration::get('OYST_OS_PAYMENT_CAPTURED'), false, $shop_group_id, $shop_id);
+		}
         return $state;
     }
 
@@ -108,7 +103,7 @@ class InstallManager
             ) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8mb4;
         ";
 
-        return $this->db->execute($query);
+        return Db::getInstance()->execute($query);
     }
 
     /**
@@ -124,7 +119,7 @@ class InstallManager
         ) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8mb4;
         ";
 
-        return $this->db->execute($query);
+        return Db::getInstance()->execute($query);
     }
 
     /**
@@ -136,7 +131,7 @@ class InstallManager
             DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_notification;
         ";
 
-        return $this->db->execute($query);
+        return Db::getInstance()->execute($query);
     }
 
     /**
@@ -148,7 +143,7 @@ class InstallManager
             DROP TABLE IF EXISTS "._DB_PREFIX_."oyst_customer;
         ";
 
-        return $this->db->execute($query);
+        return Db::getInstance()->execute($query);
     }
 
     private function removeConfiguration()
