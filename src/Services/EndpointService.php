@@ -18,8 +18,9 @@ class EndpointService
     }
 
     private function __construct() {
-        if (Configuration::hasKey('OYST_PUBLIC_ENDPOINTS')) {
-            $this->public_endpoints = json_decode(Configuration::get('OYST_PUBLIC_ENDPOINTS'), true);
+        $endpoint = Configuration::get('OYST_PUBLIC_ENDPOINTS');
+        if (!empty($endpoint)) {
+            $this->public_endpoints = json_decode($endpoint, true);
         }
     }
     private function __clone() {}
@@ -62,7 +63,8 @@ class EndpointService
             foreach ($this->public_endpoints as $public_endpoint) {
                 if ($public_endpoint['type'] === $type) {
 					//Replace merchant_id
-					if (Configuration::hasKey('OYST_MERCHANT_ID')) {
+                    $merchant_id = Configuration::get('OYST_MERCHANT_ID');
+					if (!empty($merchant_id)) {
 						$public_endpoint['url'] = str_replace('[MERCHANT_ID_PLACEHOLDER]', Configuration::get('OYST_MERCHANT_ID'), $public_endpoint['url']);
 					}
                     return $public_endpoint;
