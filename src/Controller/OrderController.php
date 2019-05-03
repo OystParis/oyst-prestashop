@@ -17,6 +17,7 @@ use OrderHistory;
 use OrderSlip;
 use Oyst;
 use Oyst\Classes\Notification;
+use Oyst\Controller\VersionCompliance\Helper;
 use Oyst\Services\AddressService;
 use Oyst\Services\CartService;
 use Oyst\Services\CustomerService;
@@ -78,10 +79,18 @@ class OrderController extends AbstractOystController
             } else {
                 if ($notification->isAlreadyStarted()) {
                     $this->respondError(400, 'Order already on creation');
-                } elseif ($notification->isAlreadyFinished()) {
-                    $this->respondError(400, 'Order already created');
                 } else {
                     $cart = new Cart($notification->cart_id);
+                    if ($notification->isAlreadyFinished()) {
+                        //If order already exists, duplicate cart and update it from payload
+                        $result = $cart->duplicate();
+                        if (!empty($result) && isset($result['cart'])) {
+                            $cart = $result['cart'];
+                        }
+                        $helper = new Helper();
+                        $helper->saveNotification($params['data']['oyst_id'], $cart->id, Notification::WAITING_STATUS);
+                        $notification = Notification::getNotificationByCartId($cart->id);
+                    }
 
                     $context = Context::getContext();
                     $context->cart = $cart;
