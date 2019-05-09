@@ -162,8 +162,8 @@ abstract class AbstractBuilder
         return array(
             'label' => $carrier->name,
             'reference' => $carrier->id_reference,
-            'amount_tax_incl' => (float)$cart->getPackageShippingCost($carrier->id, true),
-            'amount_tax_excl' => (float)$cart->getPackageShippingCost($carrier->id, false),
+            'amount_tax_incl' => (float)$cart->getPackageShippingCost($carrier->id, true, null, null, Address::getZoneById($cart->id_address_delivery)),
+            'amount_tax_excl' => (float)$cart->getPackageShippingCost($carrier->id, false, null, null, Address::getZoneById($cart->id_address_delivery)),
         );
     }
 
