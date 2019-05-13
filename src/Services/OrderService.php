@@ -13,6 +13,7 @@ use Gender;
 use Language;
 use Order;
 use OrderCarrier;
+use OrderHistory;
 use Oyst\Classes\Notification;
 use Oyst\Classes\OrderBuilder;
 use Shop;
@@ -195,9 +196,29 @@ class OrderService
 
         $fields = [
             'orderAmounts' => [
-                \Oyst\Classes\Notification::getOystIdByOrderId($id_order) => $amount
+                Notification::getOystIdByOrderId($id_order) => $amount
             ]
         ];
         $endpoint_result = \Oyst\Services\EndpointService::getInstance()->callEndpoint('refund', $fields);
+    }
+
+    public function cancelOrder($order_id)
+    {
+        $order = new Order($order_id);
+
+        if (Validate::isLoadedObject($order)) {
+            $cancel_os_id = OystStatusService::getInstance()->getPrestashopStatusIdFromOystStatus('oyst_canceled');
+            $history = new OrderHistory();
+            $history->id_order = $order->id;
+            $history->id_employee = 0;
+            $history->changeIdOrderState($cancel_os_id, $order);
+            $history->add();
+
+            //Then we remove the link between this order and oyst
+            $notification = Notification::getNotificationByOrderId($order->id);
+            if (!empty($notification)) {
+                $notification->delete();
+            }
+        }
     }
 }
