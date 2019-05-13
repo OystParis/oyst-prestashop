@@ -132,6 +132,20 @@ class Notification extends ObjectModel
         return $notification;
     }
 
+    public static function getNotificationByOrderId($order_id)
+    {
+        $id_notification = Db::getInstance()->getValue("SELECT `id_notification` 
+            FROM `"._DB_PREFIX_."oyst_notification` 
+            WHERE `order_id` = ".$order_id." 
+            ORDER BY `id_notification` DESC");
+
+        $notification = null;
+        if (!empty($id_notification)) {
+            $notification = new Notification($id_notification);
+        }
+        return $notification;
+    }
+
     /**
      * @param $id_order
      * @return string
@@ -204,6 +218,20 @@ class Notification extends ObjectModel
         }
     }
 
+    public static function getOrderIdByCartId($id_cart)
+    {
+        $order_id = Db::getInstance()->getValue("SELECT `order_id`
+            FROM `"._DB_PREFIX_."oyst_notification`
+            WHERE `cart_id` = ".$id_cart."
+            ORDER BY `id_notification` DESC");
+
+        if (!empty($order_id)) {
+            return $order_id;
+        } else {
+            return 0;
+        }
+    }
+
     public function saveOrderEmailData($data)
     {
         $this->order_email_data = base64_encode(json_encode($data));
@@ -244,5 +272,11 @@ class Notification extends ObjectModel
             }
         }
         return true;
+    }
+
+    public function delete()
+    {
+        //Override delete to avoid hook call because of namespace => This broke hookName and throw an exception
+        return Db::getInstance()->delete($this->def['table'], '`'.bqSQL($this->def['primary']).'` = '.(int)$this->id);
     }
 }

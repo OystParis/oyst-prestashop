@@ -13,7 +13,7 @@ class Oyst extends PaymentModule
     public function __construct()
     {
         $this->name = 'oyst';
-        $this->version = '2.2.3';
+        $this->version = '2.2.4';
         $this->tab = 'payments_gateways';
 
         parent::__construct();
@@ -47,6 +47,7 @@ class Oyst extends PaymentModule
         $result = parent::install();
 
         $result &= $this->registerHook('footer');
+        $result &= $this->registerHook('header');
         $result &= $this->registerHook('displayPaymentReturn');
         $result &= $this->registerHook('adminProductsExtra');
         $result &= $this->registerHook('actionEmailSendBefore');
@@ -170,14 +171,6 @@ class Oyst extends PaymentModule
             '['.date('Y-m-d H:i:s').'] '.$data."\n",
             FILE_APPEND
         );
-    }
-
-    /**
-     * @return Context
-     */
-    public function getContext()
-    {
-        return $this->context;
     }
 
     public function hookFooter($params)
@@ -391,5 +384,22 @@ class Oyst extends PaymentModule
             }
         }
         return $this->display(__FILE__, $template_name);
+    }
+
+    public function hookHeader($params)
+    {
+        //If cart controller and cart is link to an order with oyst => Duplicate cart + reload
+        if ($this->getPageName() == 'order') {
+            $order_id = \Oyst\Classes\Notification::getOrderIdByCartId($this->context->cart->id);
+            if (!empty($order_id)) {
+                $order = new Order($order_id);
+
+                $waiting_capture_os_id = \Oyst\Services\OystStatusService::getInstance()->getPrestashopStatusIdFromOystStatus('oyst_payment_waiting_to_capture');
+                //If current order have status "oyst_waiting_for_captured", cancel it
+                if ($order->getCurrentState() == $waiting_capture_os_id) {
+                    \Oyst\Services\OrderService::getInstance()->cancelOrder($order->id);
+                }
+            }
+        }
     }
 }
