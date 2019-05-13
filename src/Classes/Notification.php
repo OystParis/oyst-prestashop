@@ -218,6 +218,20 @@ class Notification extends ObjectModel
         }
     }
 
+    public static function getOrderIdByCartId($id_cart)
+    {
+        $order_id = Db::getInstance()->getValue("SELECT `order_id`
+            FROM `"._DB_PREFIX_."oyst_notification`
+            WHERE `cart_id` = ".$id_cart."
+            ORDER BY `id_notification` DESC");
+
+        if (!empty($order_id)) {
+            return $order_id;
+        } else {
+            return 0;
+        }
+    }
+
     public function saveOrderEmailData($data)
     {
         $this->order_email_data = base64_encode(json_encode($data));
