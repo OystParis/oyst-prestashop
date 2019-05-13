@@ -82,11 +82,18 @@ class OrderController extends AbstractOystController
                 } else {
                     $cart = new Cart($notification->cart_id);
                     if ($notification->isAlreadyFinished()) {
-                        //If order already exists, duplicate cart and update it from payload
-                        $result = $cart->duplicate();
-                        if (!empty($result) && isset($result['cart'])) {
-                            $cart = $result['cart'];
+                        //If order already exists
+                        $order_id = Notification::getOrderIdByCartId($cart->id);
+                        if (!empty($order_id)) {
+                            $order = new Order($order_id);
+
+                            $waiting_capture_os_id = OystStatusService::getInstance()->getPrestashopStatusIdFromOystStatus('oyst_payment_waiting_to_capture');
+                            //If current order have status "oyst_waiting_for_captured", cancel it
+                            if ($order->getCurrentState() == $waiting_capture_os_id) {
+                                OrderService::getInstance()->cancelOrder($order->id);
+                            }
                         }
+
                         $helper = new Helper();
                         $helper->saveNotification($params['data']['oyst_id'], $cart->id, Notification::WAITING_STATUS);
                         $notification = Notification::getNotificationByCartId($cart->id);
