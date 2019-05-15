@@ -131,13 +131,25 @@ class Oyst extends PaymentModule
 
     public function saveConfigForm()
     {
-        $res = Configuration::updateValue('OYST_MERCHANT_ID', Tools::getValue('oyst_merchant_id'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
-        $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode(Tools::getValue('oyst_script_tag')), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
-        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', Tools::getValue('oyst_public_endpoints'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
-        $res &= Configuration::updateValue('OYST_HIDE_ERRORS', Tools::getValue('oyst_hide_errors'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
-        $res &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Tools::getValue('oyst_order_creation_status'), false, Shop::getContextShopGroupID(), Shop::getContextShopID());
-        return $res;
+    	$res = true;
+		//If no multishop, save global conf
+		if (!Shop::isFeatureActive()) {
+			$res &= $this->saveConfigForShop();
+		}
+
+		$res &= $this->saveConfigForShop(Shop::getContextShopGroupID(), Shop::getContextShopID());
+		return $res;
     }
+
+    private function saveConfigForShop($id_shop = 0, $id_shop_group = 0)
+	{
+        $res = Configuration::updateValue('OYST_MERCHANT_ID', Tools::getValue('oyst_merchant_id'), false, $id_shop_group, $id_shop);
+        $res &= Configuration::updateValue('OYST_SCRIPT_TAG', base64_encode(Tools::getValue('oyst_script_tag')), false, $id_shop_group, $id_shop);
+        $res &= Configuration::updateValue('OYST_PUBLIC_ENDPOINTS', Tools::getValue('oyst_public_endpoints'), false, $id_shop_group, $id_shop);
+        $res &= Configuration::updateValue('OYST_HIDE_ERRORS', Tools::getValue('oyst_hide_errors'), false, $id_shop_group, $id_shop);
+        $res &= Configuration::updateValue('OYST_ORDER_CREATION_STATUS', Tools::getValue('oyst_order_creation_status'), false, $id_shop_group, $id_shop);
+        return $res;
+	}
 
     /**
      * Logging methods
