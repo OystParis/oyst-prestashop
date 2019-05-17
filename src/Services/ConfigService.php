@@ -6,6 +6,7 @@ use Carrier;
 use Country;
 use Language;
 use OrderState;
+use Shop;
 
 class ConfigService
 {
@@ -64,6 +65,22 @@ class ConfigService
             $results[] = [
                 'label' => $order_state['name'],
                 'code' => $order_state['id_order_state'],
+            ];
+        }
+        return $results;
+    }
+
+    public function getShops()
+    {
+        $results = [];
+
+        $shops = Shop::getShops(false);
+        foreach ($shops as $shop) {
+            $shop_obj = new Shop($shop['id_shop']);
+            $results[] = [
+                'url' => $shop_obj->getBaseURL(true),
+                'code' => $shop_obj->id,
+                'label' => $shop_obj->name,
             ];
         }
         return $results;

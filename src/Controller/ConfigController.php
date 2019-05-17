@@ -8,7 +8,6 @@ use Country;
 use Language;
 use OrderState;
 use Oyst\Services\ConfigService;
-use Shop;
 
 class ConfigController extends AbstractOystController
 {
@@ -38,17 +37,7 @@ class ConfigController extends AbstractOystController
         $results['carriers'] = $config_service->getCarriers();
         $results['countries'] = $config_service->getCountries();
         $results['order_statuses'] = $config_service->getOrderStatuses();
-
-        //Get shops
-        $shops = Shop::getShops(false);
-        foreach ($shops as $shop) {
-            $shop_obj = new Shop($shop['id_shop']);
-            $results['shops'][] = array(
-                'url' => $shop_obj->getBaseURL(true),
-                'code' => $shop_obj->id,
-                'label' => $shop_obj->name,
-            );
-        }
+        $results['shops'] = $config_service->getShops();
 
         $this->respondAsJson($results);
     }
